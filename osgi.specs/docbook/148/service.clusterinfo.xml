@@ -141,9 +141,11 @@
   </section>
 
   <section>
-    <title>NodeStatus Service</title>
+    <title>Node Status Service</title>
 
-    <para>The NodeStatus service advertises the availability of a node in the
+    <para>The 
+    <xref linkend="org.osgi.service.clusterinfo.NodeStatus" xrefstyle="hyperlink"/>
+    service advertises the availability of a node in the
     cluster. This node can be any entity in the cluster such as a physical
     machine, a virtual machine, a container or an OSGi framework.</para>
 
@@ -152,7 +154,8 @@
     Optionally additional service properties can be provided such as the
     physical location of the node, the endpoints at which this node can be
     accessed, etc. These service properties can be converted to a
-    <code>NodeStatusDTO</code> to have type-safe access to these properties
+    <xref linkend="org.osgi.service.clusterinfo.dto.NodeStatusDTO" xrefstyle="hyperlink"/>
+    to have type-safe access to these properties
     using the <xref linkend="util.converter"/>.</para>
 
     <table>
@@ -295,13 +298,13 @@
       </tgroup>
     </table>
 
-    <para>The NodeStatus service can also provide access to some dynamic
+    <para>The Node Status service can also provide access to some dynamic
     properties of the node. The <code>getMetrics</code> method allows to query
     key-value pairs, that are specific for that node. For example, for an OSGi
     framework these could be CPU and memory usage, for a database node these
     could be the number of database reads and writes, and for a VM these could
     be metrics made accessible by the cloud provider. In this case the service
-    implementor can provide you with DTOs to have a type-safe way to access
+    implementor can provide DTOs to have a type-safe way to access
     these metrics by converting the returned map to one of these DTOs. For
     example, an implementation could expose JMX metrics together with a
     type-safe DTO:</para>
@@ -344,10 +347,11 @@
   </section>
 
   <section>
-    <title>FrameworkNodeStatus Service</title>
+    <title>Framework Node Status Service</title>
 
     <para>In case the cluster node is an OSGi framework, the
-    FrameworkNodeStatus service is used to represent the node.
+    <xref linkend="org.osgi.service.clusterinfo.FrameworkNodeStatus" xrefstyle="hyperlink"/>
+    service is used to represent the node.
     <code>FrameworkNodeStatus</code> extends <code>NodeStatus</code>, and the
     node id is the OSGi framework UUID. Next to the NodeStatus service
     properties, this service has some additional service properties describing
@@ -438,10 +442,12 @@
 
     <para>Similar to the NodeStatus service, the service properties of the
     FrameworkNodeStatus service can be converted to a
-    <code>FrameworkNodeStatusDTO</code> to have type-safe access to these
+    <xref linkend="org.osgi.service.clusterinfo.dto.FrameworkNodeStatusDTO" xrefstyle="hyperlink"/>
+    to have type-safe access to these
     properties using the <xref linkend="util.converter"/>.</para>
 
-    <para>The FrameworkNodeStatus service also extends the FrameworkManager
+    <para>The Framework Node Status service also extends the 
+    <xref linkend="org.osgi.service.clusterinfo.FrameworkManager" xrefstyle="hyperlink"/>
     interface, which provides a management interface for the OSGi framework.
     This allows a remote management agent to interact with the OSGi framework.
     The FrameworkNodeStatus service can be exported remotely with Remote
@@ -453,8 +459,9 @@
   <section>
     <title>Application-specific NodeStatus metadata</title>
 
-    <para>The NodeStatus service provides a tags property. Here, application
-    specific tags can be assigned to the NodeStatus services. For example, one
+    <para>The Node Status service provides a <code>osgi.clusterinfo.tags</code> 
+    property. Here, application
+    specific tags can be assigned to the <code>NodeStatus</code> services. For example, one
     could assign different roles to the nodes such as "worker", "database",
     "storage", "gateway", etc. These roles are application-specific and should
     be defined by the application developer.</para>
@@ -463,7 +470,7 @@
     with the service property <code>org.osgi.service.clusterinfo.tags</code>
     providing a custom <code>String[]</code> of tags. The Cluster Information
     implementation will add those to the tags property of the
-    FrameworkNodeStatus service that represents the OSGi framework.</para>
+    <code>FrameworkNodeStatus</code> service that represents the OSGi framework.</para>
   </section>
 
   <section>
