@@ -454,6 +454,32 @@
     Services, however alternative mechanisms to distribute this service are
     also permitted. For example, the FrameworkManager interface can also be
     made available through the <xref linkend="service.rest"/>.</para>
+    
+    <para> The following example uses the <code>NodeStatus</code> properties from a 
+    <code>FrameworkNodeStatus</code> service to see what country the framework is running in.
+    If it is running in Germany a bundle specific for that country is 
+    installed: 
+    <programlisting>@Component
+public class FrameworkProvisioner {
+    private static final Converter CONVERTER = Converters.standardConverter();
+
+    @Reference(cardinality = MULTIPLE, policy = DYNAMIC)
+    void addFramework(FrameworkNodeStatus fns, Map&lt;String,?&gt; props) {
+        // Convert the properties to the DTO for type safe access
+        NodeStatusDTO dto = CONVERTER.convert(props).to(NodeStatusDTO.class);
+
+        // Check the ISO 3166-1 alpha 3 country code
+        if ("DEU".equals(dto.country)) {
+            // If this framework runs in Germany, install a special bundle into it
+            try {
+                fns.installBundle("... Germany specific bundle ...");
+            } catch (Exception e) {
+                // log
+            }
+        }
+    }
+}</programlisting>
+    </para>
   </section>
 
   <section>
