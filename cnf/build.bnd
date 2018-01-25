@@ -85,9 +85,9 @@ ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 
 # Documentation
 Bundle-Copyright: ${copyright}
-Bundle-Vendor:    OSGi Alliance http://www.osgi.org/
+Bundle-Vendor:    OSGi Alliance https://www.osgi.org/
 Bundle-Version:   ${build.version}
-Bundle-DocURL:    http://www.osgi.org/
+Bundle-DocURL:    https://www.osgi.org/
 Bundle-SCM:       url=https://osgi.org/git/build.git, \
                   connection=scm:git:https://osgi.org/git/build.git, \
                   developerConnection=scm:git:https://osgi.org/git/build.git
