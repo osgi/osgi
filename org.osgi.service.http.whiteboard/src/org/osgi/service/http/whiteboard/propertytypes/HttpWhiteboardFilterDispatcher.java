@@ -21,6 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.servlet.DispatcherType;
+
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
@@ -47,38 +49,11 @@ public @interface HttpWhiteboardFilterDispatcher {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Values of the {@code osgi.http.whiteboard.filter.dispatcher} service
-	 * property.
-	 */
-	public enum Dispatcher {
-		/**
-		 * The servlet filter is applied to client requests.
-		 */
-		REQUEST,
-		/**
-		 * The servlet filter is applied to include calls to the dispatcher.
-		 */
-		INCLUDE,
-		/**
-		 * The servlet filter is applied to forward calls to the dispatcher.
-		 */
-		FORWARD,
-		/**
-		 * The servlet filter is applied in the asynchronous context.
-		 */
-		ASYNC,
-		/**
-		 * The servlet filter is applied when an error page is called.
-		 */
-		ERROR
-	}
-
-	/**
 	 * Service property identifying dispatcher values for the filter.
 	 * 
 	 * @return The dispatcher values for the filter.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
 	 *      HTTP_WHITEBOARD_FILTER_DISPATCHER
 	 */
-	Dispatcher[] value() default Dispatcher.REQUEST;
+	DispatcherType[] value() default DispatcherType.REQUEST;
 }

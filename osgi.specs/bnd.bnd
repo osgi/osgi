@@ -12,7 +12,7 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
 -buildpath: \
     dmforest;        version=project;packages=**, \
     com.sun.tools;   version=1.5.0, \
-    org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
+    org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec; version=latest, \
     org.apache.aries.javax.inject-api;version=latest, \
     org.apache.aries.javax.cdi-api;version=latest, \
