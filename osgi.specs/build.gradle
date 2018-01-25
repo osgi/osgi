@@ -360,7 +360,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
           param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
-          param('name': 'draft.watermark.image', 'expression': 'draft.png')
+          param('name': 'draft.watermark.image', 'expression': 'proposed-final-draft.png')
           param('name': 'webhelp.base.dir', 'expression': destinationDir)
           param('name': 'webhelp.default.topic', 'expression': "index.html")
           param('name': 'release.version', 'expression': bnd('osgi.release'))

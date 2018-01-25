@@ -87,6 +87,16 @@
     <script type="text/javascript" src="js/highlight.pack.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+
+    <xsl:if test="$book.status = 'draft'">
+      <style>
+        <xsl:text><![CDATA[#scrollable {
+          background: transparent url(../images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
+          background-attachment: local;
+          will-change: transform;
+  }]]></xsl:text>
+      </style>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="user.header.navigation">
@@ -231,6 +241,7 @@ basic format:
 
                 <div id="column-two">
                     <div id="content">
+                      <div id="scrollable">
                         <xsl:call-template name="header.navigation">
                           <xsl:with-param name="prev" select="$prev"/>
                           <xsl:with-param name="next" select="$next"/>
@@ -251,6 +262,7 @@ basic format:
                         </xsl:call-template>
 
                         <xsl:call-template name="user.webhelp.content.footer" />
+                      </div>
                     </div>
 
                     <xsl:call-template name="user.footer.navigation"/>
