@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.transaction.control.jdbc;
+package org.osgi.test.cases.transaction.control.jpa;
 
 import static java.util.Collections.singleton;
-import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.*;
+import static org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory.OSGI_RECOVERY_IDENTIFIER;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -27,18 +26,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.xa.XAResource;
 
-import org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider;
+import org.osgi.service.transaction.control.jpa.JPAEntityManagerProvider;
 import org.osgi.service.transaction.control.recovery.RecoverableXAResource;
-import org.osgi.test.cases.transaction.control.jdbc.control.TestTransactionControl;
-import org.osgi.test.cases.transaction.control.jdbc.control.TransactionTxControl;
+import org.osgi.test.cases.transaction.control.jpa.control.TestTransactionControl;
+import org.osgi.test.cases.transaction.control.jpa.control.TestTxControlImpl;
+import org.osgi.test.cases.transaction.control.jpa.entity.TestEntity;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
+public class JPARecoveryTestCase extends JPAResourceTestCase {
 	
 	private static final String		RECOVERY_ID	= "recover";
-	private JDBCConnectionProvider	provider;
+	private JPAEntityManagerProvider	provider;
 
 	private Connection				unmanaged;
 
@@ -55,7 +57,7 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 	@Override
 	protected void tearDown() {
 		try {
-			jdbcResourceProviderFactory.releaseProvider(provider);
+			jpaResourceProviderFactory.releaseProvider(provider);
 		} catch (Exception e) {
 
 		}
@@ -70,7 +72,7 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 		super.tearDown();
 	}
 
-	private JDBCConnectionProvider getProvider() throws SQLException {
+	private JPAEntityManagerProvider getProvider() throws SQLException {
 
 		if (!xaEnabled) {
 			return null;
@@ -79,13 +81,15 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 		Properties props = new Properties();
 		props.setProperty("url", "jdbc:h2:mem:test");
 
-		Map<String,Object> providerConfig = new HashMap<String,Object>();
-		providerConfig.put(XA_ENLISTMENT_ENABLED, true);
-		providerConfig.put(LOCAL_ENLISTMENT_ENABLED, false);
+		Map<String,Object> emfConfig = new HashMap<>();
+		emfConfig.put("javax.persistence.dataSource",
+				dataSourceFactory.createXADataSource(props));
+
+		Map<String,Object> providerConfig = new HashMap<>();
 		providerConfig.put(OSGI_RECOVERY_IDENTIFIER, RECOVERY_ID);
 
-		return jdbcResourceProviderFactory.getProviderFor(dataSourceFactory,
-				props, providerConfig);
+		return jpaResourceProviderFactory.getProviderFor(emfBuilder, emfConfig,
+				providerConfig);
 	}
 	
 	/**
@@ -95,6 +99,7 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 	 * @throws Exception
 	 */
 	public void testRecoveryIdIsRegisteredWithXAResource() throws Exception {
+
 		if (!recoveryEnabled) {
 			return;
 		}
@@ -105,14 +110,15 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 			unmanaged.commit();
 		}
 
-		TestTransactionControl tran = new TransactionTxControl(false, true);
+		TestTransactionControl tran = new TestTxControlImpl(false, true, true);
 
-		Connection scoped = provider.getResource(tran);
+		EntityManager scoped = provider.getResource(tran);
 
-		ResultSet rs = scoped.createStatement()
-				.executeQuery("SELECT MESSAGE FROM TEST");
-		rs.next();
-		assertEquals("TEST", rs.getString(1));
+		CriteriaQuery<TestEntity> query = scoped.getCriteriaBuilder()
+				.createQuery(TestEntity.class);
+		query.from(TestEntity.class);
+		assertEquals("TEST",
+				scoped.createQuery(query).getSingleResult().message);
 
 		Map<XAResource,String> enlistedXAResources = tran
 				.getEnlistedXAResources();
@@ -134,6 +140,10 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 			return;
 		}
 
+		TestTransactionControl tran = new TestTxControlImpl(false, true, true);
+
+		EntityManager em = provider.getResource(tran);
+
 		ServiceTracker<RecoverableXAResource,RecoverableXAResource> tracker = new ServiceTracker<>(
 				getContext(), RecoverableXAResource.class, null);
 		tracker.open();
@@ -142,11 +152,5 @@ public class JDBCRecoveryTestCase extends JDBCResourceTestCase {
 		assertNotNull(recoveryService);
 
 		assertEquals(RECOVERY_ID, recoveryService.getId());
-
-		jdbcResourceProviderFactory.releaseProvider(provider);
-
-		assertNull(tracker.waitForService(2000));
-
-		tracker.close();
 	}
 }

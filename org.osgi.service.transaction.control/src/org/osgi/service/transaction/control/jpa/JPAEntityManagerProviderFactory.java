@@ -47,6 +47,12 @@ public interface JPAEntityManagerProviderFactory {
 	public static final String	LOCAL_ENLISTMENT_ENABLED	= "osgi.local.enabled";
 
 	/**
+	 * The property used to determine whether XA recovery is enabled for this
+	 * resource provider
+	 */
+	public static String		XA_RECOVERY_ENABLED			= "osgi.recovery.enabled";
+
+	/**
 	 * The property used to determine whether connection pooling is enabled for
 	 * this resource provider
 	 */

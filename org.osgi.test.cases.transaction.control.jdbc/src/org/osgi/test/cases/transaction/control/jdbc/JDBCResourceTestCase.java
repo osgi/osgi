@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.transaction.control.jdbc;
 
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.*;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -60,14 +62,14 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 
 		jdbcResourceProviderBundle = ref.getBundle();
 
-		localEnabled = toBoolean(ref.getProperty("osgi.local.enabled"));
-		xaEnabled = toBoolean(ref.getProperty("osgi.xa.enabled"));
+		localEnabled = toBoolean(ref.getProperty(LOCAL_ENLISTMENT_ENABLED));
+		xaEnabled = toBoolean(ref.getProperty(XA_ENLISTMENT_ENABLED));
 
 		assertTrue(
 				"This transaction control service does not support local or xa transactions",
 				localEnabled || xaEnabled);
 
-		recoveryEnabled = toBoolean(ref.getProperty("osgi.recovery.enabled"));
+		recoveryEnabled = toBoolean(ref.getProperty(XA_RECOVERY_ENABLED));
 	}
 	
 	protected void tearDown() {

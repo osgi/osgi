@@ -1894,7 +1894,11 @@ txControl.required(() -&gt;
           be converted into a DataSource and passed to the
           EntityManageFactoryBuilder using the javax.persistence.jtaDataSource
           property. This allows the same physical database connection to be
-          used by JPA and by JDBC within the same scope.</para>
+          used by JPA and by JDBC within the same scope. Note that when using
+          the <code>osgi.jdbc.provider</code> property to provide a connection
+          to the database the JPA Resource Provider implementation should ignore 
+          configuration properties that cannot be acted upon, for example 
+          connection pool configuration, or setting an XA recovery identifier.</para>
 
           <para>When configured to use JTA transactions most JPA
           implementations require integration with the transaction lifecycle.

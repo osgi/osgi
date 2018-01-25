@@ -43,6 +43,8 @@ public abstract class JPAResourceTestCase extends OSGiTestCase {
 
 	protected boolean												xaEnabled;
 
+	protected boolean																		recoveryEnabled;
+
 	protected void setUp() throws Exception {
 		tracker = new ServiceTracker<>(getContext(),
 				JPAEntityManagerProviderFactory.class, null);
@@ -74,6 +76,8 @@ public abstract class JPAResourceTestCase extends OSGiTestCase {
 		assertTrue(
 				"This transaction control service does not support local or xa transactions",
 				localEnabled || xaEnabled);
+
+		recoveryEnabled = toBoolean(ref.getProperty("osgi.recovery.enabled"));
 	}
 	
 	protected void tearDown() {
