@@ -491,7 +491,7 @@ public class FrameworkProvisioner {
   </section>
 
   <section>
-    <title>Application-specific NodeStatus metadata</title>
+    <title>Application-specific Node Status metadata</title>
 
     <para>The Node Status service provides a <code>osgi.clusterinfo.tags</code> 
     property. Here, application
@@ -500,11 +500,20 @@ public class FrameworkProvisioner {
     "storage", "gateway", etc. These roles are application-specific and should
     be defined by the application developer.</para>
 
-    <para>Other bundles can specify additional tags by registering any service
+    <para>Bundles can specify additional tags to be included in the 
+    <code>FrameworkNodeStatus</code> service representing the current framework 
+    by registering any service
     with the service property <code>org.osgi.service.clusterinfo.tags</code>
     providing a custom <code>String[]</code> of tags. The Cluster Information
     implementation will add those to the tags property of the
-    <code>FrameworkNodeStatus</code> service that represents the OSGi framework.</para>
+    <code>FrameworkNodeStatus</code> service that represents the OSGi framework.
+    For example:
+    <programlisting>// Register an arbitrary service that communicates the tags 
+// to be added to the osgi.clusterinfo.tags service property.
+Dictionary&lt;String, Object&gt; props = new Hashtable&lt;&gt;();
+props.put("org.osgi.service.clusterinfo.tags", 
+    new String [] {"database", "large_box"});
+bundleContext.registerService(MyClass.class, this, props);</programlisting></para>
   </section>
 
   <section>
