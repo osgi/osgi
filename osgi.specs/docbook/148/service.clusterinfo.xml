@@ -309,41 +309,49 @@
     example, an implementation could expose JMX metrics together with a
     type-safe DTO:</para>
 
-    <programlisting>
-	public class JMXMetricsDTO extends DTO {
-		
-		/**
-		 * The number of processors available
-		 */
-		public int availableProcessors;
-		
-		/**
-		 * The average system load
-		 */
-		public float systemLoadAverage; 
-		
-		/**
-		 * The maximal amount of heap memory available to the JVM
-		 */
-		public long heapMemoryMax;
-		
-		/**
-		 * The amount of heap memory used by the JVM
-		 */
-		public long heapMemoryUsed;
-		
-		/**
-		 * The maximal amount of non-heap memory available to the JVM
-		 */
-		public long nonHeapMemoryMax;
-		
-		/**
-		 * The amount of non-heap memory used by the JVM
-		 */
-		public long nonHeapMemoryUsed; 
-	
-	}
-     </programlisting>
+    <programlisting>public class JMXMetricsDTO extends DTO {
+  /**
+   * The number of processors available
+   */
+  public int availableProcessors;
+
+  /**
+   * The average system load
+   */
+  public float systemLoadAverage; 
+
+  /**
+   * The maximal amount of heap memory available to the JVM
+   */
+  public long heapMemoryMax;
+
+  /**
+   * The amount of heap memory used by the JVM
+   */
+  public long heapMemoryUsed;
+
+  /**
+   * The maximal amount of non-heap memory available to the JVM
+   */
+  public long nonHeapMemoryMax;
+
+  /**
+   * The amount of non-heap memory used by the JVM
+   */
+  public long nonHeapMemoryUsed; 
+}</programlisting>
+     <para>Such DTO can be used to obtain metrics from a <code>NodeStatus</code> service as follows:
+     <programlisting>NodeStatus ns = ...; // From service registry
+Map&lt;String, ?&gt; metrics = ns.getMetrics(); // Obtain all metrics for this node
+
+// Convert the metrics map to a DTO for type-safe access
+JMXMetricsDTO dto = Converters.standardConverter().convert(metrics)
+                              .to(JMXMetricsDTO.class);
+
+// Use metrics
+System.out.println("System Load Average: " + dto.systemLoadAverage);
+     </programlisting>   
+     </para>
   </section>
 
   <section>
