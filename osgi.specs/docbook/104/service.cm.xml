@@ -2459,6 +2459,20 @@ ConfigurationPermission[?application,<xref
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+
+      <para>Bundles relying on the Configuration Admin service should require the
+      <code>osgi.implementation</code> capability from the Configuration Admin Service.</para>
+
+      <programlisting>Require-Capability: osgi.implementation;
+  filter:="(&amp;(osgi.implementation=osgi.cm)(version&gt;=<xref
+          endterm="org.osgi.service.cm-version.number"
+          linkend="org.osgi.service.cm"/>)(!(version&gt;=2.0)))"</programlisting>
+          
+      <para>This requirement can be easily generated using the <xref
+      linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
+      xrefstyle="hyperlink"/>
+      annotation.</para>
+
     </section>
 
     <section>
@@ -2698,6 +2712,11 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <listitem>
         <para>Service and implementation capabilities are added.
         See <xref linkend="service.cm-capabilities"/>.</para>
+      </listitem>
+      
+      <listitem>
+        <para>The <xref linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
+      xrefstyle="hyperlink"/> annotation is added.</para>
       </listitem>
     </itemizedlist>
   </section>
