@@ -259,7 +259,6 @@ span.remark {
 
 /* JAVADOC Styles - all must be prefixed by div.section.package */
 
-div.section.package h2.title,
 div.section.package div.section.class h3.title,
 div.section.package div.section.class div.section.field h4.title,
 div.section.package div.section.class div.section.method h4.title,
@@ -271,6 +270,7 @@ div.section.package div.section.summary h3.title {
 	padding: 0.25em;
 }
 
+/*
 div.section.package h2.title > span.number,
 div.section.package div.section.class h3.title > span.number,
 div.section.package div.section.class div.section.field h4.title > span.number,
@@ -289,14 +289,12 @@ div.section.package div.section.summary h3.title:after {
 	color: rgba(255,255,255);
 	float: right;
 }
+*/
 
 div.section.package h2.title {
-	background-color: rgba(0, 67, 112, 0.33);
+	font-size: 2.25em;
 }
 
-div.section.package h2.title:after {
-	content: "[PACKAGE]";
-}
 
 div.section.package div.section.class h3.title {
 	background-color: rgba(0, 67, 112, 0.33);
