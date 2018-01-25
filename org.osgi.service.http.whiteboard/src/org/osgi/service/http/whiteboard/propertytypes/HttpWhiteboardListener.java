@@ -31,7 +31,7 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * This annotation can be used on a Http Whiteboard listener to declare the
  * value of the
  * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
- * HTTP_WHITEBOARD_LISTENER} service property.
+ * HTTP_WHITEBOARD_LISTENER} service property as being {@code Boolean.TRUE}.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -47,14 +47,4 @@ public @interface HttpWhiteboardListener {
 	 * name.
 	 */
 	String PREFIX_ = "osgi.";
-
-	/**
-	 * Service property identifying a Http Whiteboard listener.
-	 * 
-	 * @return Whether the service should be picked up by the Http Whiteboard
-	 *         implementation.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
-	 *      HTTP_WHITEBOARD_LISTENER
-	 */
-	boolean value() default true;
 }
