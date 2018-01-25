@@ -27,9 +27,17 @@ import java.util.Map;
 public interface NodeStatus {
 	
 	/**
-	 * Get the current metrics from the node
+	 * Get the current metrics or other dynamic data from the node. Nodes may
+	 * support custom metrics and as such the caller can request those metrics
+	 * by name. The caller can specify the metric names to avoid having to
+	 * compute and send all metrics over, if the caller is only interested in a
+	 * subset of the available metrics.
 	 * 
-	 * @param names a set of fields that have to be filled in
+	 * @param names a set of metric names that have to be obtained from the
+	 *            node. Of no names are specified all available metrics will be
+	 *            obtained. If a metric is requested that is not available by
+	 *            the node this metric is ignored and not present in the
+	 *            returned map.
 	 * @return Map with the current node metrics
 	 */
 	Map<String, Object> getMetrics(String... names);
