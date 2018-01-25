@@ -505,4 +505,5 @@
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.clusterinfo.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.clusterinfo.dto.xml"/>
 </chapter>
