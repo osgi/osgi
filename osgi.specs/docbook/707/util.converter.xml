@@ -1417,7 +1417,14 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     format. The default <code>Date</code> to <code>String</code> conversion
     produces a String in the format <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If
     we want to produce a String in the format <code>yyMMddHHmmssZ</code>
-    instead a custom converter can be applied: <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+    instead a custom converter can be applied: <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ") {
+  @Override
+  public synchronized StringBuffer format(Date date, StringBuffer toAppendTo, 
+                                          FieldPosition pos) {
+    // Make the method synchronized to support multi threaded access
+    return super.format(date, toAppendTo, pos);
+  }
+};
 ConverterBuilder cb = Converters.newConverterBuilder();
 cb.rule(new TypeRule&lt;&gt;(Date.class, String.class, sdf::format));
 Converter c = cb.build();
@@ -1518,9 +1525,6 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
-
       <bibliomixed xml:id="util.converter-jls.ref"><title>The Java Language
       Specification, Java SE 8
       Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
