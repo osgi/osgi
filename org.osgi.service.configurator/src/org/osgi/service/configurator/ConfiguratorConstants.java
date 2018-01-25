@@ -119,4 +119,14 @@ public final class ConfiguratorConstants {
 	 * @see #PROPERTY_POLICY
 	 */
 	public static final String	POLICY_FORCE			= "force";
+
+	/**
+	 * The name of the extender capability attribute for the Configurator
+	 */
+	public static final String	CONFIGURATOR_EXTENDER_NAME			= "osgi.configurator";
+
+	/**
+	 * The version of the extender capability for the Configurator specification
+	 */
+	public static final String	CONFIGURATOR_SPECIFICATION_VERSION	= "1.0";
 }

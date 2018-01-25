@@ -900,6 +900,14 @@
           linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))";
        configurations="resources/configs"</programlisting>
 
+      <para>To simplify the creation of this requirement the
+       <xref linkend="org.osgi.service.configurator.annotations.RequireConfigurator" 
+       xrefstyle="hyperlink"/> annotation can be used. This annotation can be used
+       as a marker annotation on a package or type, but also allows the 
+       <code>configurations</code> attribute to be defined.</para>
+       
+       <programlisting>@RequireConfigurator("resources/configs")</programlisting>
+
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.extender.namespace"/>.</para>
     </section>
@@ -956,6 +964,7 @@
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.annotations.xml"/>
 
   <section>
     <title>References</title>
