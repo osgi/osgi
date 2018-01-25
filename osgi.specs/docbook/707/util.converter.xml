@@ -754,324 +754,11 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></pa
 
       <section>
         <title>Converting to a map-like structure</title>
-
-        <section>
-          <title>Converting to a Map</title>
-
-          <para>When converting to a Map a separate instance is returned that
-          can be owned by the caller. By default the result is created eagerly
-          and populated with converted content.</para>
-
-          <para>When converting to a <code>java.util.Map</code> the converter
-          can produce a live view over the backing object that changes when
-          the backing object changes. The live view can be enabled by
-          specifying the <xref
-          linkend="org.osgi.util.converter.Specifying.view--"
-          xrefstyle="hyperlink"/> modifier.</para>
-
-          <para>In all cases the object returned is a separate instance that
-          can be owned by the client. When the client modifies the returned
-          object a live view will stop reflecting changes to the backing
-          object.</para>
-
-          <table>
-            <title>Map target creation</title>
-
-            <tgroup cols="2">
-              <colspec colnum="1" colwidth="0.5*"/>
-
-              <thead>
-                <row>
-                  <entry>Target</entry>
-
-                  <entry>Method</entry>
-                </row>
-              </thead>
-
-              <tbody>
-                <row>
-                  <entry>Map interface</entry>
-
-                  <entry>A mutable implementation is created. For example, if
-                  the target type is <code>ConcurrentNavigableMap</code> then
-                  the implementation can create a
-                  <code>ConcurrentSkipListMap</code>.</entry>
-                </row>
-
-                <row>
-                  <entry>Map concrete type</entry>
-
-                  <entry>A new instance is created by calling
-                  <code>Class.newInstance()</code> on the provided type. For
-                  example if the target type is <code>HashMap</code> then the
-                  converter creates a target object by calling
-                  <code>HashMap.class.newInstance()</code>. The converter may
-                  choose to use a call a well-known constructor to optimize
-                  the creation of the map.</entry>
-                </row>
-
-                <row>
-                  <entry><code>java.util.Map</code> with <code>view()</code>
-                  modifier</entry>
-
-                  <entry>A map view over the backing object is created,
-                  changes to the backing object will be reflected in the map,
-                  unless the map is modified by the client.</entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
-
-          <para>When converting from a map-like object to a <code>Map</code>
-          or sub-type, each key-value pair in the source map is converted to
-          desired types of the target map using the generic information if
-          available. Map type information for the target type can be made
-          available by using the <xref
-          linkend="org.osgi.util.converter.Converting.to-TypeReference-"
-          xrefstyle="hyperlink"/> or <xref
-          linkend="org.osgi.util.converter.Converting.to-Type-"
-          xrefstyle="hyperlink"/> methods. If no type information is
-          available, key-value pairs are used in the map as-is.</para>
-        </section>
-
-        <section>
-          <title>Dictionary</title>
-
-          <para>Converting between a map and a <code>Dictionary</code> is done
-          by iterating over the source and inserting the key value pairs in
-          the target, converting them to the requested target type, if known.
-          As with other generic types, target type information for
-          Dictionaries can be provided via a <xref
-          linkend="org.osgi.util.converter.TypeReference"
-          xrefstyle="hyperlink"/>.</para>
-        </section>
-
-        <section>
-          <title>Interface</title>
-
-          <para>Converting a map-like structure into an interface can be a
-          useful way to give a map of untyped data a typed API. The converter
-          synthesizes an interface instance to represent the
-          conversion.</para>
-
-          <para>Note that converting to annotations provides similar
-          functionality with the added benefit of being able to specify
-          default values in the annotation code.</para>
-
-          <section>
-            <title>Converting to an Interface</title>
-
-            <para>When converting into an interface the converter will create
-            a dynamic proxy to implement the interface. The name of the method
-            returning the value should match the key of the map entry, taking
-            into account the mapping rules specified in <xref
-            linkend="util.converter-key.mapping"/>. The key of the map may
-            need to be converted into a <code>String</code> first.</para>
-
-            <para>Conversion is done <emphasis>on demand</emphasis>: only when
-            the method on the interface is actually invoked. This avoids
-            conversion errors on methods for which the information is missing
-            or cannot be converted, but which the caller does not
-            require.</para>
-
-            <para>Note that the converter will not copy the source map when
-            converting to an interface allowing changes to the source map to
-            be reflected live to the proxy. The proxy cannot cache the
-            conversions.</para>
-
-            <para>Interfaces can provide methods for default values by
-            providing a single-argument method override in addition to the
-            no-parameter method matching the key name. If the type of the
-            default does not match the target type it is converted first. For
-            example: <programlisting>interface Config {
-  int my_value(); // no default
-  int my_value(int defVal);
-  int my_value(String defVal); // String value is automatically converted to int
-  boolean my_other_value();
-}
-
-// Usage
-Map&lt;String, Object&gt; myMap = new HashMap&lt;&gt;(); // an example map
-myMap.put("my.other.value", "true");
-Config cfg = converter.convert(myMap).to(Config.class);
-int val = cfg.my_value(17); // if not set then use 17
-boolean val2 = cfg.my_other_value(); // val2=true
-</programlisting> Default values are used when the key is not present in the
-            map for the method. If a key is present with a <code>null</code>
-            value, then <code>null</code> is taken as the value and converted
-            to the target type.</para>
-
-            <para>If no default is specified and a requested value is not
-            present in the map, a <code>ConversionException</code> is
-            thrown.</para>
-          </section>
-
-          <section>
-            <title>Converting from an Interface</title>
-
-            <para>An interface can also be the source of a conversion to
-            another map-like type. The name of each method without parameters
-            is taken as key, taking into account the <xref
-            linkend="util.converter-key.mapping"/>. The method is invoked
-            using reflection to produce the associated value.</para>
-
-            <para>Whether a conversion source object is an interface is
-            determined dynamically. When an object implements multiple
-            interfaces by default the first interface from these that has
-            no-parameter methods is taken as the source type. To select a
-            different interface use the <xref
-            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
-            xrefstyle="hyperlink"/> modifier: <programlisting>  Map m = converter.convert(myMultiInterface).
-      sourceAs(MyInterfaceB.class).to(Map.class);</programlisting> If the
-            source object also has a <code>getProperties()</code> method as
-            described in <xref linkend="util.converter-getProperties"/>, this
-            getProperties() method is used to obtain the map view by default.
-            This behavior can be overridden by using the <xref
-            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
-            xrefstyle="hyperlink"/> modifier.</para>
-          </section>
-        </section>
-
-        <section>
-          <title>Annotation</title>
-
-          <para>Conversion to and from annotations behaves similar to
-          interface conversion with the added capability of specifying a
-          default in the annotation definition.</para>
-
-          <para>When converting to an annotation type, the converter will
-          return an instance of the requested annotation class. As with
-          interfaces, values are only obtained from the conversion source when
-          the annotation method is actually called. If the requested value is
-          not available, the default as specified in the annotation class is
-          used. If no default is specified a <code>ConversionException</code>
-          is thrown.</para>
-
-          <para>Similar to interfaces, conversions to and from annotations
-          also follow the <xref linkend="util.converter-key.mapping"/> for
-          annotation element names. Below a few examples of conversions to an
-          annotation: <programlisting>@interface MyAnnotation {
-  String[] args() default {"arg1", "arg2"};
-}
-
-// Will set sa={"args1", "arg2"}
-String[] sa = converter.convert(new HashMap()).to(MyAnnotation.class).args();
-
-// Will set a={"x", "y", "z"}
-Map m = Collections.singletonMap("args", new String [] {"x", "y", "z"});
-String[] a = converter.convert(m).to(MyAnnotation.class).args();
-
-// Will set a1={}
-Map m1 = Collections.singletonMap("args", null)
-String[] a1 = converter.convert(m1).to(MyAnnotation.class).args();
-
-// Will set a2={""}
-Map m2 = Collections.singletonMap("args", "")
-String[] a2 = converter.convert(m2).to(MyAnnotation.class).args();
-
-// Will set a3={","}
-Map m3 = Collections.singletonMap("args", ",")
-String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisting></para>
-        </section>
-
-        <section>
-          <title>Java Beans</title>
-
-          <para>Java Beans are concrete (non-abstract) classes that follow the
-          Java Bean naming convention. They provide public getters and setters
-          to access their properties and have a public no-parameter
-          constructor. When converting from a Java Bean introspection is used
-          to find the read accessors. A read accessor must have no arguments
-          and a non-<code>void</code> return value. The method name must start
-          with <code>get</code> followed by a capitalized property name, for
-          example <code>getSize()</code> provides access to the property
-          <code>size</code>. For <code>boolean/Boolean</code> properties a
-          prefix of <code>is</code> is also permitted. Properties names follow
-          the <xref linkend="util.converter-key.mapping"/>.</para>
-
-          <para>For the converter to consider an object as a Java Bean the
-          <xref linkend="org.osgi.util.converter.Specifying.sourceAsBean--"
-          xrefstyle="hyperlink"/> or <xref
-          linkend="org.osgi.util.converter.Specifying.targetAsBean--"
-          xrefstyle="hyperlink"/> modifier needs to be invoked, for example:
-          <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
-
-          <para>When converting to a Java Bean, the bean is constructed
-          eagerly. All available properties are set in the bean using the
-          bean's write accessors, that is, public setters methods with a
-          single argument. All methods of the bean class itself and its super
-          classes are considered. When a property cannot be converted this
-          will cause a <xref
-          linkend="org.osgi.util.converter.ConversionException"
-          xrefstyle="hyperlink"/>. If a property is missing in the source, the
-          property will not be set in the bean.</para>
-
-          <para><emphasis>Note: </emphasis>access via indexed bean properties
-          is not supported.</para>
-
-          <para><emphasis>Note: </emphasis>the <code>getClass()</code> method
-          of the <code>java.lang.Object</code> class is not considered an
-          accessor.</para>
-        </section>
-
-        <section>
-          <title>DTOs</title>
-
-          <para>DTOs are classes with public non-static fields and no methods
-          other than the ones provided by the <code>java.lang.Object
-          class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code>
-          class, however objects following the DTO rules that do not extend
-          the DTO class are also treated as DTOs by the converter. DTOs may
-          have static fields, or non-public instance fields. These are ignored
-          by the converter.</para>
-
-          <para>When converting from a DTO to another map-like structure each
-          public instance field is considered. The field name is taken as the
-          key for the map entry, taking into account <xref
-          linkend="util.converter-key.mapping"/>, the field value is taken as
-          the value for the map entry.</para>
-
-          <para>When converting to a DTO, the converter attempts to find
-          fields that match the key of each entry in the source map and then
-          converts the value to the field type before assigning it. The key of
-          the map entries may need to be converted into a String first. Keys
-          are mapped according to <xref
-          linkend="util.converter-key.mapping"/>.</para>
-
-          <para>The DTO is constructed using its no-parameter constructor and
-          each public field is filled with data from the source eagerly.
-          Fields present in the DTO but missing in the source object not be
-          set.</para>
-
-          <para>The converter only considers a type to be a DTO type if it
-          declares no methods. However, if a type needs to be treated as a DTO
-          that has methods, the converter can be instructed to do this using
-          the <xref linkend="org.osgi.util.converter.Specifying.sourceAsDTO--"
-          xrefstyle="hyperlink"/> and <xref
-          linkend="org.osgi.util.converter.Specifying.targetAsDTO--"
-          xrefstyle="hyperlink"/> modifiers.</para>
-        </section>
-
-        <section xml:id="util.converter-getProperties">
-          <title>Types with getProperties()</title>
-
-          <para>The converter uses reflection to find a public
-          <code>java.util.Map getProperties()</code> or
-          <code>java.util.Dictionary getProperties()</code> method on the
-          source type to obtain a map view over the source object. This map
-          view is used to convert the source object to a map-like
-          structure.</para>
-
-          <para>If the source object both implements an interface and also has
-          a public <code>getProperties()</code> method, the converter uses the
-          <code>getProperties()</code> method to obtain the map view. This
-          <code>getProperties()</code> may or may not be part of an
-          implemented interface.</para>
-
-          <para><emphasis>Note: </emphasis>this mechanism can only be used to
-          convert <emphasis>to</emphasis> another type. The reverse is not
-          supported</para>
-        </section>
+        
+        <para>Conversions from one map-like structure to another map-like structure are supported.
+        For example, conversions between a map and an annotation, between a DTO and a Java Bean
+        or between one interface and another interface are all supported.
+        </para>
 
         <section xml:id="util.converter-key.mapping">
           <title>Key Mapping</title>
@@ -1316,19 +1003,338 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </section>
 
         <section>
-          <title>Marker annotations</title>
+          <title>Converting to a Map</title>
 
-          <para>If an annotation is a <emphasis>marker
-          annotation</emphasis>, see 9.7.2 in <xref
-          linkend="util.converter-jls.ref"/>, then the property name is
-          derived from the name of the annotation, as is
-          described above for single-element annotations, and the value of the
-          property is <code>Boolean.TRUE</code>.</para>
+          <para>When converting to a Map a separate instance is returned that
+          can be owned by the caller. By default the result is created eagerly
+          and populated with converted content.</para>
 
-          <para>When converting to a marker annotation the converter checks that the source 
-          has key and value that are consistent with the marker annotation. If they are not,
-          for example if the value is not present or does not convert to <code>Boolean.TRUE</code>, then a
-          conversion will result in a Conversion Exception.</para>
+          <para>When converting to a <code>java.util.Map</code> the converter
+          can produce a live view over the backing object that changes when
+          the backing object changes. The live view can be enabled by
+          specifying the <xref
+          linkend="org.osgi.util.converter.Specifying.view--"
+          xrefstyle="hyperlink"/> modifier.</para>
+
+          <para>In all cases the object returned is a separate instance that
+          can be owned by the client. When the client modifies the returned
+          object a live view will stop reflecting changes to the backing
+          object.</para>
+
+          <table>
+            <title>Map target creation</title>
+
+            <tgroup cols="2">
+              <colspec colnum="1" colwidth="0.5*"/>
+
+              <thead>
+                <row>
+                  <entry>Target</entry>
+
+                  <entry>Method</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>Map interface</entry>
+
+                  <entry>A mutable implementation is created. For example, if
+                  the target type is <code>ConcurrentNavigableMap</code> then
+                  the implementation can create a
+                  <code>ConcurrentSkipListMap</code>.</entry>
+                </row>
+
+                <row>
+                  <entry>Map concrete type</entry>
+
+                  <entry>A new instance is created by calling
+                  <code>Class.newInstance()</code> on the provided type. For
+                  example if the target type is <code>HashMap</code> then the
+                  converter creates a target object by calling
+                  <code>HashMap.class.newInstance()</code>. The converter may
+                  choose to use a call a well-known constructor to optimize
+                  the creation of the map.</entry>
+                </row>
+
+                <row>
+                  <entry><code>java.util.Map</code> with <code>view()</code>
+                  modifier</entry>
+
+                  <entry>A map view over the backing object is created,
+                  changes to the backing object will be reflected in the map,
+                  unless the map is modified by the client.</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>When converting from a map-like object to a <code>Map</code>
+          or sub-type, each key-value pair in the source map is converted to
+          desired types of the target map using the generic information if
+          available. Map type information for the target type can be made
+          available by using the <xref
+          linkend="org.osgi.util.converter.Converting.to-TypeReference-"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.util.converter.Converting.to-Type-"
+          xrefstyle="hyperlink"/> methods. If no type information is
+          available, key-value pairs are used in the map as-is.</para>
+        </section>
+
+        <section>
+          <title>Dictionary</title>
+
+          <para>Converting between a map and a <code>Dictionary</code> is done
+          by iterating over the source and inserting the key value pairs in
+          the target, converting them to the requested target type, if known.
+          As with other generic types, target type information for
+          Dictionaries can be provided via a <xref
+          linkend="org.osgi.util.converter.TypeReference"
+          xrefstyle="hyperlink"/>.</para>
+        </section>
+
+        <section>
+          <title>Interface</title>
+
+          <para>Converting a map-like structure into an interface can be a
+          useful way to give a map of untyped data a typed API. The converter
+          synthesizes an interface instance to represent the
+          conversion.</para>
+
+          <para>Note that converting to annotations provides similar
+          functionality with the added benefit of being able to specify
+          default values in the annotation code.</para>
+
+          <section>
+            <title>Converting to an Interface</title>
+
+            <para>When converting into an interface the converter will create
+            a dynamic proxy to implement the interface. The name of the method
+            returning the value should match the key of the map entry, taking
+            into account the mapping rules specified in <xref
+            linkend="util.converter-key.mapping"/>. The key of the map may
+            need to be converted into a <code>String</code> first.</para>
+
+            <para>Conversion is done <emphasis>on demand</emphasis>: only when
+            the method on the interface is actually invoked. This avoids
+            conversion errors on methods for which the information is missing
+            or cannot be converted, but which the caller does not
+            require.</para>
+
+            <para>Note that the converter will not copy the source map when
+            converting to an interface allowing changes to the source map to
+            be reflected live to the proxy. The proxy cannot cache the
+            conversions.</para>
+
+            <para>Interfaces can provide methods for default values by
+            providing a single-argument method override in addition to the
+            no-parameter method matching the key name. If the type of the
+            default does not match the target type it is converted first. For
+            example: <programlisting>interface Config {
+  int my_value(); // no default
+  int my_value(int defVal);
+  int my_value(String defVal); // String value is automatically converted to int
+  boolean my_other_value();
+}
+
+// Usage
+Map&lt;String, Object&gt; myMap = new HashMap&lt;&gt;(); // an example map
+myMap.put("my.other.value", "true");
+Config cfg = converter.convert(myMap).to(Config.class);
+int val = cfg.my_value(17); // if not set then use 17
+boolean val2 = cfg.my_other_value(); // val2=true
+</programlisting> Default values are used when the key is not present in the
+            map for the method. If a key is present with a <code>null</code>
+            value, then <code>null</code> is taken as the value and converted
+            to the target type.</para>
+
+            <para>If no default is specified and a requested value is not
+            present in the map, a <code>ConversionException</code> is
+            thrown.</para>
+          </section>
+
+          <section>
+            <title>Converting from an Interface</title>
+
+            <para>An interface can also be the source of a conversion to
+            another map-like type. The name of each method without parameters
+            is taken as key, taking into account the <xref
+            linkend="util.converter-key.mapping"/>. The method is invoked
+            using reflection to produce the associated value.</para>
+
+            <para>Whether a conversion source object is an interface is
+            determined dynamically. When an object implements multiple
+            interfaces by default the first interface from these that has
+            no-parameter methods is taken as the source type. To select a
+            different interface use the <xref
+            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
+            xrefstyle="hyperlink"/> modifier: <programlisting>  Map m = converter.convert(myMultiInterface).
+      sourceAs(MyInterfaceB.class).to(Map.class);</programlisting> If the
+            source object also has a <code>getProperties()</code> method as
+            described in <xref linkend="util.converter-getProperties"/>, this
+            getProperties() method is used to obtain the map view by default.
+            This behavior can be overridden by using the <xref
+            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
+            xrefstyle="hyperlink"/> modifier.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>Annotation</title>
+
+          <para>Conversion to and from annotations behaves similar to
+          interface conversion with the added capability of specifying a
+          default in the annotation definition.</para>
+
+          <para>When converting to an annotation type, the converter will
+          return an instance of the requested annotation class. As with
+          interfaces, values are only obtained from the conversion source when
+          the annotation method is actually called. If the requested value is
+          not available, the default as specified in the annotation class is
+          used. If no default is specified a <code>ConversionException</code>
+          is thrown.</para>
+
+          <para>Similar to interfaces, conversions to and from annotations
+          also follow the <xref linkend="util.converter-key.mapping"/> for
+          annotation element names. Below a few examples of conversions to an
+          annotation: <programlisting>@interface MyAnnotation {
+  String[] args() default {"arg1", "arg2"};
+}
+
+// Will set sa={"args1", "arg2"}
+String[] sa = converter.convert(new HashMap()).to(MyAnnotation.class).args();
+
+// Will set a={"x", "y", "z"}
+Map m = Collections.singletonMap("args", new String [] {"x", "y", "z"});
+String[] a = converter.convert(m).to(MyAnnotation.class).args();
+
+// Will set a1={}
+Map m1 = Collections.singletonMap("args", null)
+String[] a1 = converter.convert(m1).to(MyAnnotation.class).args();
+
+// Will set a2={""}
+Map m2 = Collections.singletonMap("args", "")
+String[] a2 = converter.convert(m2).to(MyAnnotation.class).args();
+
+// Will set a3={","}
+Map m3 = Collections.singletonMap("args", ",")
+String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisting></para>
+
+          <section>
+            <title>Marker annotations</title>
+  
+            <para>If an annotation is a <emphasis>marker
+            annotation</emphasis>, see 9.7.2 in <xref
+            linkend="util.converter-jls.ref"/>, then the property name is
+            derived from the name of the annotation, as described
+            for single-element annotations in <xref
+            linkend="util.converter-key.mapping"/>, and the value of the
+            property is <code>Boolean.TRUE</code>.</para>
+  
+            <para>When converting to a marker annotation the converter checks that the source 
+            has key and value that are consistent with the marker annotation. If they are not,
+            for example if the value is not present or does not convert to <code>Boolean.TRUE</code>, then a
+            conversion will result in a Conversion Exception.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>Java Beans</title>
+
+          <para>Java Beans are concrete (non-abstract) classes that follow the
+          Java Bean naming convention. They provide public getters and setters
+          to access their properties and have a public no-parameter
+          constructor. When converting from a Java Bean introspection is used
+          to find the read accessors. A read accessor must have no arguments
+          and a non-<code>void</code> return value. The method name must start
+          with <code>get</code> followed by a capitalized property name, for
+          example <code>getSize()</code> provides access to the property
+          <code>size</code>. For <code>boolean/Boolean</code> properties a
+          prefix of <code>is</code> is also permitted. Properties names follow
+          the <xref linkend="util.converter-key.mapping"/>.</para>
+
+          <para>For the converter to consider an object as a Java Bean the
+          <xref linkend="org.osgi.util.converter.Specifying.sourceAsBean--"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsBean--"
+          xrefstyle="hyperlink"/> modifier needs to be invoked, for example:
+          <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
+
+          <para>When converting to a Java Bean, the bean is constructed
+          eagerly. All available properties are set in the bean using the
+          bean's write accessors, that is, public setters methods with a
+          single argument. All methods of the bean class itself and its super
+          classes are considered. When a property cannot be converted this
+          will cause a <xref
+          linkend="org.osgi.util.converter.ConversionException"
+          xrefstyle="hyperlink"/>. If a property is missing in the source, the
+          property will not be set in the bean.</para>
+
+          <para><emphasis>Note: </emphasis>access via indexed bean properties
+          is not supported.</para>
+
+          <para><emphasis>Note: </emphasis>the <code>getClass()</code> method
+          of the <code>java.lang.Object</code> class is not considered an
+          accessor.</para>
+        </section>
+
+        <section>
+          <title>DTOs</title>
+
+          <para>DTOs are classes with public non-static fields and no methods
+          other than the ones provided by the <code>java.lang.Object
+          class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code>
+          class, however objects following the DTO rules that do not extend
+          the DTO class are also treated as DTOs by the converter. DTOs may
+          have static fields, or non-public instance fields. These are ignored
+          by the converter.</para>
+
+          <para>When converting from a DTO to another map-like structure each
+          public instance field is considered. The field name is taken as the
+          key for the map entry, taking into account <xref
+          linkend="util.converter-key.mapping"/>, the field value is taken as
+          the value for the map entry.</para>
+
+          <para>When converting to a DTO, the converter attempts to find
+          fields that match the key of each entry in the source map and then
+          converts the value to the field type before assigning it. The key of
+          the map entries may need to be converted into a String first. Keys
+          are mapped according to <xref
+          linkend="util.converter-key.mapping"/>.</para>
+
+          <para>The DTO is constructed using its no-parameter constructor and
+          each public field is filled with data from the source eagerly.
+          Fields present in the DTO but missing in the source object not be
+          set.</para>
+
+          <para>The converter only considers a type to be a DTO type if it
+          declares no methods. However, if a type needs to be treated as a DTO
+          that has methods, the converter can be instructed to do this using
+          the <xref linkend="org.osgi.util.converter.Specifying.sourceAsDTO--"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsDTO--"
+          xrefstyle="hyperlink"/> modifiers.</para>
+        </section>
+
+        <section xml:id="util.converter-getProperties">
+          <title>Types with getProperties()</title>
+
+          <para>The converter uses reflection to find a public
+          <code>java.util.Map getProperties()</code> or
+          <code>java.util.Dictionary getProperties()</code> method on the
+          source type to obtain a map view over the source object. This map
+          view is used to convert the source object to a map-like
+          structure.</para>
+
+          <para>If the source object both implements an interface and also has
+          a public <code>getProperties()</code> method, the converter uses the
+          <code>getProperties()</code> method to obtain the map view. This
+          <code>getProperties()</code> may or may not be part of an
+          implemented interface.</para>
+
+          <para><emphasis>Note: </emphasis>this mechanism can only be used to
+          convert <emphasis>to</emphasis> another type. The reverse is not
+          supported</para>
         </section>
 
         <section>
