@@ -49,7 +49,7 @@
 
       <listitem>
         <para><emphasis>Configuration Resource</emphasis> - A JSON resource in
-        a bundle containing configuration. This resource is processed by an 
+        a bundle containing configurations. This resource is processed by an
         implementation of this specification.</para>
       </listitem>
 
@@ -62,8 +62,29 @@
       <listitem>
         <para><emphasis>Configurator</emphasis> - The Configurator implements
         the behavior specified in this specification. It processes
-        configuration resources found in bundles and passes the configuration
-        data on to the Configuration Admin Service.</para>
+        configuration resources and passes the configuration dictionary
+        on to the Configuration Admin Service.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Configuration dictionary</emphasis> - The
+        configuration information when it is passed to the Configuration Admin
+        Service. It consists of a <code>Dictionary</code> object with a number of
+        properties and identifiers.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Persistent Identity (PID)</emphasis> - A configuration
+        dictionary is associated with a unique PID to identify the destination of this
+        data. See <xref linkend="i1233800"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Configuration Object</emphasis> - Implements the
+        <code>Configuration</code> interface and contains the configuration
+        dictionary for a Managed Service or one of the configuration
+        dictionaries for a Managed Service Factory. These objects are
+        manipulated by configuring bundles.</para>
       </listitem>
 
       <listitem>
@@ -72,12 +93,6 @@
         Using the coordinator with configuration updates can minimize the
         volatility in the system. See <xref
         linkend="service.coordinator"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Persistent Identity (PID)</emphasis> - Configuration
-        data is associated with a PID to identify the destination of this
-        data. See <xref linkend="i1233800"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -98,7 +113,7 @@
     <title>Configuration Resources</title>
 
     <para>The Configurator is processing configuration resources containing configurations.
-    The resources can either be part of a bundle or provided to the Configurator 
+    The resources can either be part of a bundle or be provided to the Configurator
     on startup.</para>
     
     <section>
@@ -127,7 +142,7 @@
     is, any text on the same line after <code>//</code> is ignored and any
     text between <code>/* */</code> is ignored.</para>
     
-    <para>Configuration resources provide a set of configurations
+    <para>Configuration resources provide a set of configuration dictionaries
     each with a <emphasis>PID</emphasis> key to target a specific PID
     in the Configuration Admin Service and zero or more configuration values
     for this PID. Keys starting with the prefix <code>:configurator:</code>
@@ -208,40 +223,45 @@
     </section>
       
     <section>
-      <title>PIDs and Factory Configurations</title>
+      <title>PIDs, Factory Configurations and Targeted PIDs</title>
 
-      <para>Configuration resources provide a set of configurations
+      <para>Configuration resources provide a set of configuration dictionaries
       each with a <emphasis>PID</emphasis> key to target a specific PID
       in the Configuration Admin Service.</para>
 
-      <para>Factory configurations can be addressed using the factory PID and 
-      a name by starting with the factory PID, appending the character ~ (tilde)
+      <para>Factory configurations can be addressed using the <emphasis>factory PID</emphasis>
+      and a name by starting with the factory PID, appending the character ~ (tilde)
       and then appending the name. This ensures a well-known name for
-      the factory configuration instance and the <emphasis>PID</emphasis>
-      for such a configuration is exactly this key. The Configurator must use the
-      <code>getFactoryConfiguration()</code> methods on Configuration Admin Service 
-      to create or obtain configurations with the given factory PID and name.</para>
+      the factory configuration instance. The PID for such a configuration is exactly
+      this key. The Configurator must use the <code>getFactoryConfiguration()</code> methods
+      on Configuration Admin Service to create or obtain configurations with the given
+      factory PID and name.</para>
+
+      <para>Targeted PIDs are supported through the configuration resource. In the
+      case of single configurations, the full targeted PID is used as the key. For
+      factory configurations, the key is assembled by chaining the targeted factory
+      PID, the character ~ (tilde) and the name.</para>
 
       <para>The Configurator obtains all configurations with the location value of 
       <code>?</code> to allow the configurations to be received by multiple bundles.</para>
 
       <para>The Configurator uses the <code>Configuration.updateIfDifferent()</code> 
-      method on the <code>Configuration</code> object to avoid any volatility in the system
+      method on the configuration object to avoid any volatility in the system
       if the configuration applied has not been changed.</para>
     </section>
 
     <section>
-      <title>Configuration Properties</title>
+      <title>Configuration Dictionary</title>
 
-      <para>A configuration for Configuration Admin is specified through a JSON
-      object in the configuration resource. It is introduced using the 
-      <emphasis>PID</emphasis> as the key. The value is a JSON object
-      containing the configuration properties and their values.</para>
+      <para>A configuration dictionary for the Configuration Admin Service is
+      specified through a JSON object in the configuration resource. It is introduced
+      using the <emphasis>PID</emphasis> as the key. The value is a JSON object
+      containing the configuration dictionary.</para>
       
-      <para>The Configurator removes any comments and the special
-      <code>:configurator:</code> keys from the configuration object before 
-      converting it to a <code>Configuration</code> object that is provided
-      to the Configuration Admin Service.</para>
+      <para>The Configurator removes any comments and all properties where
+      the key is starting with the special prefix <code>:configurator:</code>
+      from the configuration object before converting it to a configuration
+      dictionary that is provided to the Configuration Admin Service.</para>
 
       <para>The Configurator defines special keys that can be used within
       the configuration object.</para>
