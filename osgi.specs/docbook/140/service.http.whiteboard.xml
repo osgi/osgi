@@ -2003,7 +2003,8 @@ public class SomeResourceService {}</programlisting>
           <row>
             <entry><para><code>osgi.http.whiteboard.listener</code></para></entry>
 
-            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>Boolean |
+            String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>When set to <code>true</code> this listener service
             is handled by the Http Whiteboard implementation. When not set or
@@ -2023,7 +2024,7 @@ public class SomeResourceService {}</programlisting>
     initialized and destroyed is listed below:</para>
 
     <programlisting>@Component
-@HttpWhiteboardListener(true)    
+@HttpWhiteboardListener()    
 public class MyServletRequestListener implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent sre) {
         System.out.println("Request initialized for client: " + 
