@@ -31,7 +31,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 	${replace;${osgi.enterprise.specs};$;\\;version=project}, \
     osgi.annotation;version=latest, \
     osgi.core;version=latest, \
-    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
+    org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
     org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon;version=latest
