@@ -117,22 +117,20 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 							+ InternalConverter.class + " but was " + c);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T to(Class<T> cls) {
 		Type type = cls;
-		return (T) to(type);
+		return to(type);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T to(TypeReference<T> ref) {
-		return (T) to(ref.getType());
+		return to(ref.getType());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object to(Type type) {
+	public <T> T to(Type type) {
 		Class< ? > cls = null;
 		if (type instanceof Class) {
 			cls = (Class< ? >) type;
@@ -160,7 +158,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return null;
 
 		if (object == null)
-			return handleNull(cls);
+			return (T) handleNull(cls);
 
 		targetClass = Util.primitiveToBoxed(cls);
 		if (targetAsClass == null)
@@ -170,12 +168,12 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 
 		if (!isCopyRequiredType(targetAsClass)
 				&& targetAsClass.isAssignableFrom(sourceClass)) {
-			return object;
+			return (T) object;
 		}
 
 		Object res = trySpecialCases();
 		if (res != null)
-			return res;
+			return (T) res;
 
 		if (targetAsClass.isArray()) {
 			return convertToArray(targetAsClass.getComponentType(),
@@ -186,27 +184,27 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		} else if (Collection.class.isAssignableFrom(targetAsClass)) {
 			return convertToCollectionType();
 		} else if (isMapType(targetAsClass, targetAsJavaBean, targetAsDTO)) {
-			return convertToMapType();
+			return (T) convertToMapType();
 		}
 
 		// At this point we know that the target is a 'singular' type: not a
 		// map, collection or array
 		if (Collection.class.isAssignableFrom(sourceClass)) {
-			return convertCollectionToSingleValue(targetAsClass);
+			return (T) convertCollectionToSingleValue(targetAsClass);
 		} else if (isMapType(sourceClass, sourceAsJavaBean, sourceAsDTO)) {
-			return convertMapToSingleValue(targetAsClass);
+			return (T) convertMapToSingleValue(targetAsClass);
 		} else if (object instanceof Map.Entry) {
-			return convertMapEntryToSingleValue(targetAsClass);
+			return (T) convertMapEntryToSingleValue(targetAsClass);
 		} else if ((object = asBoxedArray(object)) instanceof Object[]) {
-			return convertArrayToSingleValue(targetAsClass);
+			return (T) convertArrayToSingleValue(targetAsClass);
 		}
 
 		Object res2 = tryStandardMethods();
 		if (res2 != null) {
-			return res2;
+			return (T) res2;
 		} else {
 			if (hasDefault)
-				return converter.convert(defaultValue)
+				return (T) converter.convert(defaultValue)
 						.sourceAs(sourceAsClass)
 						.targetAs(targetAsClass)
 						.to(targetClass);

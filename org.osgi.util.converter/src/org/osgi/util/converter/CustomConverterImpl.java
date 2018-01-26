@@ -133,22 +133,20 @@ class CustomConverterImpl implements InternalConverter {
 			return this;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public <T> T to(Class<T> cls) {
 			Type type = cls;
-			return (T) to(type);
+			return to(type);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public <T> T to(TypeReference<T> ref) {
-			return (T) to(ref.getType());
+			return to(ref.getType());
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public Object to(Type type) {
+		public <T> T to(Type type) {
 			List<ConverterFunction> tr = typeRules.get(Util.baseType(type));
 			if (tr == null)
 				tr = Collections.emptyList();
@@ -163,11 +161,11 @@ class CustomConverterImpl implements InternalConverter {
 						try {
 							Object res = cf.apply(object, type);
 							if (res != ConverterFunction.CANNOT_HANDLE) {
-								return res;
+								return (T) res;
 							}
 						} catch (Exception ex) {
 							if (hasDefault)
-								return defaultValue;
+								return (T) defaultValue;
 							else
 								throw new ConversionException("Cannot convert "
 										+ object + " to " + type, ex);
@@ -181,7 +179,7 @@ class CustomConverterImpl implements InternalConverter {
 					try {
 						Object handled = eh.apply(object, type);
 						if (handled != ConverterFunction.CANNOT_HANDLE)
-							return handled;
+							return (T) handled;
 					} catch (RuntimeException re) {
 						throw re;
 					} catch (Exception e) {
