@@ -425,7 +425,7 @@
         <para>In some cases binary data is associated with configurations such
         as certificates, security keys or other resources. The Configurator can
         manage this binary data. The bundle developer places the binaries in a
-        location in the configuration bundle and references it from the
+        location in the extendee and references it from the
         configuration resource, marking its type as <code>binary</code>:
         <programlisting>{
   "my.config": {
@@ -747,28 +747,35 @@
     </section>
 
     <section>
-      <title>Using hasPermission</title>
+      <title>Configuration Admin Service</title>
 
-      <para>The Configurator does get the <code>ConfigurationAdmin</code>
-      service on behalf of the extendee. This means that normal
+      <para>The Configurator does get the Configuration Admin
+      Service on behalf of the extendee. This means that normal
       stack-based permission checks will check the Configurator and not the
       extendee. Since the Configurator is getting the service on behalf
       of the extendee, the Configurator must call the
-      <code>Bundle.hasPermission</code> method to validate that the extendee
-      has the necessary permission to get the
-      <code>ConfigurationAdmin</code>.</para>
+      <code>Bundle.hasPermission</code> method or perform similar checks
+      to validate that the extendee has the necessary permission to get the
+      Configuration Admin Service.</para>
     </section>
 
     <section>
       <title>File Permission</title>
 
-      <para>If binaries are used, the Configurator needs to have read/write
+      <para>If binaries are used, the Configurator needs to have read/write/delete
       permission to the configured directory to store the binaries.</para>
 
       <para>A bundle using a binary referenced from a configuration needs to
       have read permission to correct sub directory of the configured binary
-      directory. The sub directory is named after the PID of the
+      directory. The subdirectory is named after the PID of the
       configuration.</para>
+
+      <para>By default binaries are stored in the bundle data are of the
+      Configurator. While this works without security enabled, permission
+      configuration for the extendees gets challenging as the location of the
+      bundle data area is only known at runtime. Therefore with security
+      enabled, the directory holding the binaries should be configured to
+      allow permission configuration for the extendees.</para>
     </section>
   </section>
 

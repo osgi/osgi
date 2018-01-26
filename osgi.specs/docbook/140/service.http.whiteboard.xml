@@ -2042,7 +2042,7 @@ public class MyServletRequestListener implements ServletRequestListener {
   </section>
 
   <section>
-    <title>Lifecycle</title>
+    <title>Life Cycle</title>
 
     <para>If a Whiteboard service is used by a Http Whiteboard implementation,
     the following order of actions are performed:</para>
@@ -2521,13 +2521,14 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
       <para>If a servlet is using the default path to store uploaded data, the
       Http Whiteboard implementation needs <code>FilePermission[path,
-      "read,write"]</code> for that path. As the servlet is reading the data,
+      "read,write,delete"]</code> for that path. As the servlet is reading the data,
       the bundle containing the servlet needs <code>FilePermission[path,
       "read"]</code> for that path.</para>
 
       <para>If a servlet is providing the path to store uploaded data, the
       bundle containing the servlet needs <code>FilePermission[path,
-      "read,write"]</code> for that path. Therefore, it is the responsibility
+      "read,write,delete"]</code> for that path. The Http Whiteboard implementation
+      needs the same permissions for that path. Therefore, it is the responsibility
       of the Http Whiteboard service implementations to use a
       <code>doPrivileged</code> block when performing the write
       operation.</para>
