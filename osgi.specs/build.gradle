@@ -301,9 +301,8 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
 
-        def svgFiles = fileTree('dir': 'docbook/graphics', 'include': '*draft.svg').files
-        imagesFile.eachLine { line ->
-          svgFiles << file("docbook/${book}/${line}")
+        def svgFiles = imagesFile.collect { line ->
+          file("docbook/${book}/${line}")
         }
 
         javaexec {

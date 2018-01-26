@@ -7,6 +7,10 @@
 <xsl:output method="text" encoding="UTF-8" omit-xml-declaration="yes" indent="no" />
 
 <xsl:template match="/">
+    <xsl:if test="/d:book/@status = 'draft'">
+        <xsl:text>../graphics/draft.svg&#xa;</xsl:text>
+        <xsl:text>../graphics/proposed-final-draft.svg&#xa;</xsl:text>
+    </xsl:if>
 	<xsl:for-each select="//d:imagedata">
 	    <xsl:variable name="imagePath">
 	        <xsl:call-template name="relative-uri">
