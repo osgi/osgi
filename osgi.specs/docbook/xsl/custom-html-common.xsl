@@ -91,7 +91,7 @@
     <xsl:if test="$book.status = 'draft'">
       <style>
         <xsl:text><![CDATA[#scrollable {
-          background: transparent url(../images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
+          background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
           background-attachment: local;
           will-change: transform;
   }]]></xsl:text>
