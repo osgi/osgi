@@ -665,26 +665,14 @@ example before
         <xsl:variable name="href.target">
           <xsl:choose>
             <xsl:when test="$calculated.target = ''">
-              <xsl:choose>
-                <xsl:when test="contains($linkend, '.dto')">
-                  <xsl:message>
-                    <xsl:text>LINKEND has no target. Using the URL: </xsl:text>
-                    <xsl:value-of select="$linkend.dto.api.prefix"/>
-                    <xsl:value-of select="$linkend"/>
-                  </xsl:message>
-                  <xsl:value-of select="$linkend.dto.api.prefix"/>
-                  <xsl:value-of select="$linkend"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:message>
-                    <xsl:text>LINKEND has no target. Using the URL: </xsl:text>
-                    <xsl:value-of select="$linkend.core.api.prefix"/>
-                    <xsl:value-of select="$linkend"/>
-                  </xsl:message>
-                  <xsl:value-of select="$linkend.core.api.prefix"/>
-                  <xsl:value-of select="$linkend"/>
-                </xsl:otherwise>
-              </xsl:choose>
+              <!--
+              <xsl:message>
+                <xsl:text>Not linking {</xsl:text>
+                <xsl:value-of select="$content"/>
+                <xsl:text>} using linkend: </xsl:text>
+                <xsl:value-of select="$linkend"/>
+              </xsl:message>
+              -->
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$calculated.target"/>
@@ -696,17 +684,26 @@ example before
           <xsl:with-param name="linkend" select="$linkend"/>
         </xsl:call-template>
 
-        <a>
-          <xsl:apply-templates select="." mode="common.html.attributes"/>
-          <xsl:call-template name="id.attribute"/>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$href.target"/>
-          </xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="$href.target != ''">
+            <a>
+              <xsl:apply-templates select="." mode="common.html.attributes"/>
+              <xsl:call-template name="id.attribute"/>
+              <xsl:attribute name="href">
+                <xsl:value-of select="$href.target"/>
+              </xsl:attribute>
 
-          <xsl:apply-templates select="$target" mode="html.title.attribute"/>
+              <xsl:apply-templates select="$target" mode="html.title.attribute"/>
 
-          <xsl:copy-of select="$content"/>
-        </a>
+              <xsl:copy-of select="$content"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="$target" mode="html.title.attribute"/>
+
+            <xsl:copy-of select="$content"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:copy-of select="$content"/>
