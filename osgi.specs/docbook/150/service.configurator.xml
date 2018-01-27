@@ -591,7 +591,9 @@
     processed. In order to get processed, a bundle must require the
     Configurator extender: <programlisting>Require-Capability: osgi.extender;
   filter := "(&amp;(osgi.extender=osgi.configurator)
-              (version&gt;=1.0)(!(version&gt;=2.0)))"
+              (version&gt;=<xref
+          endterm="org.osgi.service.configurator-version.number"
+          linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))"
     </programlisting> The Configurator must ensure to only process bundles
     that it is wired to by the resolver.</para>
 
@@ -725,9 +727,9 @@
 
       <para>The Configurator manages configurations on behalf of the bundle
       containing the configuration resources. Therefore the Configurator needs
-      to have the <code>ConfigurationPermission[*,</code> <xref
-      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
-      xrefstyle="hyperlink"/> <code>]</code>.</para>
+      to have the 
+      <code>ConfigurationPermission[*,org.osgi.service.cm.ConfigurationPermission.CONFIGURE]</code>.
+      </para>
 
       <para>Every bundle has the implicit right to receive and configure
       configurations with a location that exactly matches the Bundle's
@@ -750,13 +752,10 @@
       <title>Configuration Admin Service</title>
 
       <para>The Configurator does get the Configuration Admin
-      Service on behalf of the extendee. This means that normal
-      stack-based permission checks will check the Configurator and not the
-      extendee. Since the Configurator is getting the service on behalf
-      of the extendee, the Configurator must call the
-      <code>Bundle.hasPermission</code> method or perform similar checks
-      to validate that the extendee has the necessary permission to get the
-      Configuration Admin Service.</para>
+      Service on behalf of the extendee. Therefore the extendee needs to be included
+      in permission checks for getting the Configuration Admin service. The Configurator 
+      needs to perform the required calls to ensure the extendee has the necessary 
+      permission to get the Configuration Admin Service.</para>
     </section>
 
     <section>
@@ -771,9 +770,9 @@
       configuration.</para>
 
       <para>By default binaries are stored in the bundle data are of the
-      Configurator. While this works without security enabled, permission
+      Configurator. While this works without Java security enabled, permission
       configuration for the extendees gets challenging as the location of the
-      bundle data area is only known at runtime. Therefore with security
+      bundle data area is only known at runtime. Therefore with Java security
       enabled, the directory holding the binaries should be configured to
       allow permission configuration for the extendees.</para>
     </section>
