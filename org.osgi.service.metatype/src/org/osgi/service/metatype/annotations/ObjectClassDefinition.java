@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.annotation.bundle.Requirement.Resolution;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.metatype.MetaTypeService;
 
 /**
  * Generate a Meta Type Resource using the annotated type.
@@ -42,6 +47,10 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
+@Requirement(namespace = ExtenderNamespace.EXTENDER_NAMESPACE, //
+		name = MetaTypeService.METATYPE_CAPABILITY_NAME, //
+		version = MetaTypeService.METATYPE_SPECIFICATION_VERSION, //
+		resolution = Resolution.OPTIONAL)
 public @interface ObjectClassDefinition {
 	/**
 	 * The id of this ObjectClassDefinition.

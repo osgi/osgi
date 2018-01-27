@@ -1688,6 +1688,11 @@ public class MyComponent {
             linkend="org.osgi.service.metatype"/>";
     uses:="org.osgi.service.metatype"</programlisting>
 
+        <para>The <xref
+        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeImplementation"
+        xrefstyle="hyperlink"/> annotation can be used to require this
+        capability.</para>
+
         <para>This capability must follow the rules defined for the <xref
         linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
       </listitem>
@@ -1706,6 +1711,11 @@ public class MyComponent {
     version:Version="<xref endterm="org.osgi.service.metatype-version.number"
             linkend="org.osgi.service.metatype"/>";
     uses:="org.osgi.service.metatype"</programlisting>
+
+        <para>The <xref
+        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeExtender"
+        xrefstyle="hyperlink"/> annotation can be used to require this
+        capability.</para>
 
         <para>This capability must follow the rules defined for the <xref
         linkend="service.namespaces-osgi.extender.namespace"/>.</para>
@@ -1775,6 +1785,14 @@ public class MyComponent {
         elements of the ObjectClassDefinition annotation. Tools must replace
         "$" with the fully qualified name of the type annotated by the
         ObjectClassDefinition annotation.</para>
+      </listitem>
+
+      <listitem>
+        <para>The <xref
+        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeExtender"
+        xrefstyle="hyperlink"/> and <xref
+        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeImplementation"
+        xrefstyle="hyperlink"/> annotations were added.</para>
       </listitem>
     </itemizedlist>
   </section>
