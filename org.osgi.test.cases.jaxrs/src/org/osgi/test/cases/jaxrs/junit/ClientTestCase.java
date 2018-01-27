@@ -30,7 +30,7 @@ import javax.ws.rs.client.WebTarget;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.client.PromiseRxInvoker;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
 import org.osgi.util.promise.Promise;
@@ -67,7 +67,7 @@ public class ClientTestCase extends AbstractJAXRSTestCase {
 				target.request().get().getStatusInfo().getStatusCode());
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -106,7 +106,7 @@ public class ClientTestCase extends AbstractJAXRSTestCase {
 		Client c = tracker.getService().build();
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 

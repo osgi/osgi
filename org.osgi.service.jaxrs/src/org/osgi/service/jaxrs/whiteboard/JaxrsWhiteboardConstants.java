@@ -31,7 +31,7 @@ import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.WriterInterceptor;
 
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants;
 import org.osgi.service.jaxrs.runtime.dto.DTOConstants;
 
 /**
@@ -39,8 +39,8 @@ import org.osgi.service.jaxrs.runtime.dto.DTOConstants;
  * 
  * @author $Id$
  */
-public final class JaxRSWhiteboardConstants {
-	private JaxRSWhiteboardConstants() {
+public final class JaxrsWhiteboardConstants {
+	private JaxrsWhiteboardConstants() {
 		// non-instantiable
 	}
 
@@ -195,7 +195,7 @@ public final class JaxRSWhiteboardConstants {
 	 * A JAX-RS Whiteboard implementation can define any number of service
 	 * properties which can be referenced by the target filter. The service
 	 * properties should always include the
-	 * {@link JaxRSServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT
+	 * {@link JaxrsServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT
 	 * osgi.jaxrs.endpoint} service property if the endpoint information is
 	 * known.
 	 * <p>

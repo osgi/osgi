@@ -16,7 +16,7 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
 /**
  * Represents common information about a JAX-RS application service.
@@ -28,7 +28,7 @@ public abstract class BaseApplicationDTO extends BaseDTO {
 
 	/**
 	 * The base URI of the resource defined by
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_APPLICATION_BASE}.
+	 * {@link JaxrsWhiteboardConstants#JAX_RS_APPLICATION_BASE}.
 	 */
 	public String			base;
 

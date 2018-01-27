@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
@@ -31,28 +31,28 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class ServiceUpdateHelper {
 
-	ServiceTracker<JaxRSServiceRuntime,Set<Deferred<Void>>> tracker;
+	ServiceTracker<JaxrsServiceRuntime,Set<Deferred<Void>>> tracker;
 
 	public ServiceUpdateHelper(BundleContext context) {
-		tracker = new ServiceTracker<>(context, JaxRSServiceRuntime.class,
-				new ServiceTrackerCustomizer<JaxRSServiceRuntime,Set<Deferred<Void>>>() {
+		tracker = new ServiceTracker<>(context, JaxrsServiceRuntime.class,
+				new ServiceTrackerCustomizer<JaxrsServiceRuntime,Set<Deferred<Void>>>() {
 
 					@Override
 					public Set<Deferred<Void>> addingService(
-							ServiceReference<JaxRSServiceRuntime> reference) {
+							ServiceReference<JaxrsServiceRuntime> reference) {
 						return new HashSet<>();
 					}
 
 					@Override
 					public void modifiedService(
-							ServiceReference<JaxRSServiceRuntime> reference,
+							ServiceReference<JaxrsServiceRuntime> reference,
 							Set<Deferred<Void>> service) {
 						resolveAll(service);
 					}
 
 					@Override
 					public void removedService(
-							ServiceReference<JaxRSServiceRuntime> reference,
+							ServiceReference<JaxrsServiceRuntime> reference,
 							Set<Deferred<Void>> service) {
 						resolveAll(service);
 					}
@@ -79,7 +79,7 @@ public class ServiceUpdateHelper {
 	}
 
 	public Promise<Void> awaitModification(
-			ServiceReference<JaxRSServiceRuntime> whiteboard, long time) {
+			ServiceReference<JaxrsServiceRuntime> whiteboard, long time) {
 
 		final Set<Deferred<Void>> pending = tracker.getService(whiteboard);
 		if (pending == null) {
@@ -101,17 +101,17 @@ public class ServiceUpdateHelper {
 		});
 	}
 
-	public ServiceReference<JaxRSServiceRuntime> awaitRuntime(long time) {
+	public ServiceReference<JaxrsServiceRuntime> awaitRuntime(long time) {
 		try {
 			Object o = tracker.waitForService(time);
 			if (o != null) {
-				ServiceReference<JaxRSServiceRuntime> ref = tracker
+				ServiceReference<JaxrsServiceRuntime> ref = tracker
 						.getServiceReference();
 				if (ref != null) {
 					return ref;
 				}
 			}
 		} catch (InterruptedException e) {}
-		throw new RuntimeException("No JaxRSServiceRuntime");
+		throw new RuntimeException("No JaxrsServiceRuntime");
 	}
 }

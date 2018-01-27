@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * Component Property Type for the {@code osgi.jaxrs.name} service property.
  * <p>
  * This annotation can be used on a JAX-RS service to declare the value of the
- * {@link org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_NAME}
+ * {@link org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_NAME}
  * service property.
  * 
  * @see "Component Property Types"
@@ -49,7 +49,7 @@ public @interface JaxrsName {
 	 * by the whiteboard.
 	 * 
 	 * @return The JAX-RS service name.
-	 * @see org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_NAME
+	 * @see org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_NAME
 	 */
 	String value();
 }

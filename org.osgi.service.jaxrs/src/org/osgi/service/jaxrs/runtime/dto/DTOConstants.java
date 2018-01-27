@@ -16,7 +16,7 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
 /**
  * Defines standard constants for the DTOs. The error codes are defined to take
@@ -60,21 +60,21 @@ public final class DTOConstants {
 
 	/**
 	 * The service is registered in the service registry with the
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_EXTENSION_SELECT} property and one
+	 * {@link JaxrsWhiteboardConstants#JAX_RS_EXTENSION_SELECT} property and one
 	 * or more of the filters is not matched.
 	 */
 	public static final int	FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE	= 5;
 
 	/**
 	 * The service is registered in the service registry with the
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME} property and a service with
+	 * {@link JaxrsWhiteboardConstants#JAX_RS_NAME} property and a service with
 	 * that name already exists in the runtime
 	 */
 	public static final int	FAILURE_REASON_DUPLICATE_NAME					= 6;
 
 	/**
 	 * The service is registered in the service registry with the
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_APPLICATION_SELECT} property and
+	 * {@link JaxrsWhiteboardConstants#JAX_RS_APPLICATION_SELECT} property and
 	 * the filters is not matched by any running application.
 	 */
 	public static final int	FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE	= 7;

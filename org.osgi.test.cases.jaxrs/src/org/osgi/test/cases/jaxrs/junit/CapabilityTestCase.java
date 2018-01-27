@@ -21,7 +21,7 @@ import static org.osgi.namespace.contract.ContractNamespace.*;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
 import static org.osgi.namespace.service.ServiceNamespace.*;
 import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
-import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +38,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Capability;
 import org.osgi.service.jaxrs.client.SseEventSourceFactory;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 
 public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	
@@ -48,8 +48,8 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 			"javax.ws.rs.container", "javax.ws.rs.sse");
 
 	/**
-	 * A basic test that ensures the provider of the JaxRSServiceRuntime service
-	 * advertises the JaxRSServiceRuntime service capability (151.10.3)
+	 * A basic test that ensures the provider of the JaxrsServiceRuntime service
+	 * advertises the JaxrsServiceRuntime service capability (151.10.3)
 	 * 
 	 * @throws Exception
 	 */
@@ -69,7 +69,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 			List<String> objectClass = o instanceof List ? (List<String>) o
 					: asList(valueOf(o));
 
-			if (objectClass.contains(JaxRSServiceRuntime.class.getName())) {
+			if (objectClass.contains(JaxrsServiceRuntime.class.getName())) {
 				hasCapability = true;
 
 				String usesDirective = cap.getDirectives()
@@ -86,10 +86,10 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 			}
 		}
 		assertTrue(
-				"No osgi.service capability for the JaxRSServiceRuntime service",
+				"No osgi.service capability for the JaxrsServiceRuntime service",
 				hasCapability);
 		assertTrue(
-				"No suitable uses constraint on the runtime package for the JaxRSServiceRuntime service",
+				"No suitable uses constraint on the runtime package for the JaxrsServiceRuntime service",
 				uses);
 	}
 

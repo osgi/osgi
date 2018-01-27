@@ -17,7 +17,7 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
 /**
  * Represents common information about a JAX-RS service.
@@ -28,7 +28,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 public abstract class BaseDTO extends DTO {
 	/**
 	 * The name of the service if it set one using
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, otherwise this value will
+	 * {@link JaxrsWhiteboardConstants#JAX_RS_NAME}, otherwise this value will
 	 * contain the generated name for this service
 	 */
 	public String					name;

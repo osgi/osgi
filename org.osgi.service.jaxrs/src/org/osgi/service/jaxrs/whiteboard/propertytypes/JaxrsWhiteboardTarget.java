@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a JAX-RS resource or extension to declare the
  * value of the
- * {@link org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_WHITEBOARD_TARGET}
+ * {@link org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_WHITEBOARD_TARGET}
  * service property.
  * 
  * @see "Component Property Types"
@@ -51,7 +51,7 @@ public @interface JaxrsWhiteboardTarget {
 	 * to which this service should be bound.
 	 * 
 	 * @return The filter for selecting the whiteboards to bind to.
-	 * @see org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_WHITEBOARD_TARGET
+	 * @see org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_WHITEBOARD_TARGET
 	 */
 	String value();
 }

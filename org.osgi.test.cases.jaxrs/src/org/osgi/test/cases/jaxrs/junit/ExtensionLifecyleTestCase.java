@@ -46,7 +46,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ConfigurableStringReplacer;
@@ -80,7 +80,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSimpleExtension() throws Exception {
 		
 		Dictionary<String, Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime,
 				5000);
@@ -107,7 +107,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 					.registerService(WriterInterceptor.class,
@@ -135,7 +135,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testNameBoundExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -150,7 +150,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 					.registerService(WriterInterceptor.class,
@@ -196,7 +196,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testExtensionOrdering() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -223,7 +223,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 					.registerService(WriterInterceptor.class,
@@ -239,7 +239,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection = helper.awaitModification(runtime, 5000);
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 						Boolean.TRUE);
 				ServiceRegistration<WriterInterceptor> extensionReg2 = getContext()
 						.registerService(WriterInterceptor.class,
@@ -304,8 +304,8 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testResourceRequiresExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
 				"(foo=bar)");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -332,7 +332,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			properties.put("foo", "bar");
 
@@ -362,7 +362,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testExtensionRequiresExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -389,9 +389,9 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
 					"(foo=bar)");
 
 			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
@@ -412,7 +412,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection = helper.awaitModification(runtime, 5000);
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 						Boolean.TRUE);
 				properties.put("foo", "bar");
 
@@ -453,7 +453,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 		String rejectFilter = "(!" + selectFilter + ")";
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -480,9 +480,9 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 					selectFilter);
 			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 					.registerService(WriterInterceptor.class,
@@ -499,7 +499,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection = helper.awaitModification(runtime, 5000);
 
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+						JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 						rejectFilter);
 				extensionReg.setProperties(properties);
 
@@ -514,7 +514,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection = helper.awaitModification(runtime, 5000);
 
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+						JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 						selectFilter);
 				extensionReg.setProperties(properties);
 
@@ -541,7 +541,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testFeatureExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -568,7 +568,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<Feature> extensionReg = getContext()
 					.registerService(Feature.class,
@@ -598,7 +598,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testDynamicFeatureExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -644,7 +644,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection = helper.awaitModification(runtime, 5000);
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 						Boolean.TRUE);
 				ServiceRegistration<DynamicFeature> extensionReg = getContext()
 						.registerService(DynamicFeature.class,
@@ -685,7 +685,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testReaderInterceptorExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -714,7 +714,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<ReaderInterceptor> extensionReg = getContext()
 					.registerService(ReaderInterceptor.class,
@@ -743,7 +743,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testContainerRequestFilterExtension() throws Exception {
 		
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 		
@@ -772,7 +772,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 			
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<ContainerRequestFilter> extensionReg = getContext()
 					.registerService(ContainerRequestFilter.class,
@@ -804,7 +804,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testContainerResponseFilterExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -833,7 +833,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<ContainerResponseFilter> extensionReg = getContext()
 					.registerService(ContainerResponseFilter.class,
@@ -865,7 +865,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testMessageBodyReaderExtension() throws Exception {
 		
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 		
@@ -896,7 +896,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 			
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			@SuppressWarnings("rawtypes")
 			ServiceRegistration<MessageBodyReader> extensionReg = getContext()
@@ -927,7 +927,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testMessageBodyWriterExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -958,7 +958,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			@SuppressWarnings("rawtypes")
 			ServiceRegistration<MessageBodyWriter> extensionReg = getContext()
@@ -989,7 +989,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testParamConverterProviderExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -1017,7 +1017,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			ServiceRegistration<ParamConverterProvider> extensionReg = getContext()
 					.registerService(ParamConverterProvider.class,
@@ -1046,7 +1046,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testExceptionMapperExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -1072,7 +1072,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
 			@SuppressWarnings("rawtypes")
 			ServiceRegistration<ExceptionMapper> extensionReg = getContext()
@@ -1103,8 +1103,8 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testExtensionWhenApplicationChanges() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 				"(foo=bar)");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -1125,7 +1125,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection.getValue();
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test");
 			properties.put("foo", "bar");
 

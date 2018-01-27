@@ -21,8 +21,8 @@ package org.osgi.service.jaxrs.runtime;
  * 
  * @author $Id$
  */
-public final class JaxRSServiceRuntimeConstants {
-	private JaxRSServiceRuntimeConstants() {
+public final class JaxrsServiceRuntimeConstants {
+	private JaxrsServiceRuntimeConstants() {
 		// non-instantiable
 	}
 

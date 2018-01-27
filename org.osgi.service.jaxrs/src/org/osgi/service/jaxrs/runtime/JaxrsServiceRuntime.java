@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,20 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.jaxrs.runtime.dto.RuntimeDTO;
 
 /**
- * The JaxRSServiceRuntime service represents the runtime information of a
+ * The JaxrsServiceRuntime service represents the runtime information of a
  * JAX-RS Whiteboard implementation.
  * <p>
  * It provides access to DTOs representing the current state of the service.
  * <p>
- * The JaxRSServiceRuntime service must be registered with the
- * {@link JaxRSServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT} service
+ * The JaxrsServiceRuntime service must be registered with the
+ * {@link JaxrsServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT} service
  * property.
  *
  * @ThreadSafe
  * @author $Id$
  */
 @ProviderType
-public interface JaxRSServiceRuntime {
+public interface JaxrsServiceRuntime {
 
 	/**
 	 * Return the runtime DTO representing the current state.

@@ -189,26 +189,26 @@
       <title>The JAX-RS Service Runtime Service</title>
 
       <para>The <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
       xrefstyle="hyperlink"/> service represents the runtime state information
       of a JAX-RS Whiteboard instance. This information is provided through
       Data Transfer Objects (DTOs). The architecture of OSGi DTOs is described
       in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
       <para>Each JAX-RS Whiteboard implementation registers exactly one
-      <code>JaxRSServiceRuntime</code> service per JAX-RS Whiteboard. The
+      <code>JaxrsServiceRuntime</code> service per JAX-RS Whiteboard. The
       service properties of the JAX-RS Service Runtime Service can be used to
       target JAX-RS Whiteboard services at specific JAX-RS whiteboards, as
       described by the <code>osgi.jaxrs.whiteboard.target</code> property in
       <xref linkend="service.jaxrs.common.properties"/>.</para>
 
-      <para>The <code>JaxRSServiceRuntime</code> provides service registration
+      <para>The <code>JaxrsServiceRuntime</code> provides service registration
       properties to declare its underlying JAX-RS Whiteboard. These service
       properties can include implementation-specific key-value pairs. They
       also include the following:</para>
 
       <table>
-        <title>Service properties for the <code>JaxRSServiceRuntime</code>
+        <title>Service properties for the <code>JaxrsServiceRuntime</code>
         service</title>
 
         <tgroup cols="3">
@@ -245,7 +245,7 @@
               root context and scheme and authority are not known, the value
               of the property is <code>/</code>. Each entry must end with a
               slash.</para><para>See <xref
-              linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT"
+              linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
@@ -259,7 +259,7 @@
               increase.</para> <para>This allows interested parties to be
               notified of changes to the DTOs by observing Service Events of
               type <code>MODIFIED</code> for the <xref
-              linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+              linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
               xrefstyle="hyperlink"/> service. See
               <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in
               <xref linkend="intro.core.release"
@@ -288,7 +288,7 @@
       DTOs.</para>
 
       <para>The Runtime DTO can be obtained using the <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.getRuntimeDTO--"
+      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime.getRuntimeDTO--"
       xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a
       snapshot of the state of the JAX-RS Runtime, including the JAX-RS
       Whiteboard resources, extensions and applications that are active in
@@ -424,7 +424,7 @@ public String interrogateSession(@PathParam("name") String name,
             different types) then only the higher ranked service is bound and
             the lower ranked service(s) are reflected in the failure DTOs. See
             <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_NAME"
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
@@ -447,7 +447,7 @@ public String interrogateSession(@PathParam("name") String name,
             value:</para><programlisting>(osgi.jaxrs.name=*)</programlisting><para>If
             no matching application exists this is reflected in the failure
             DTOs. See <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT"
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT"
             xrefstyle="hyperlink"/>.</para> <para>† Note that this property is
             not valid for JAX-RS Application services.</para></entry>
           </row>
@@ -473,7 +473,7 @@ public String interrogateSession(@PathParam("name") String name,
             <xref linkend="service.jaxrs.extension.example"/></para> <para>If
             any filter(s) fail to match then this is reflected in the failure
             DTOs. See <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT"
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
@@ -485,15 +485,15 @@ public String interrogateSession(@PathParam("name") String name,
             <entry><para>The value of this service property is an LDAP-style
             filter expression to select the JAX-RS Whiteboard(s) to handle
             this Whiteboard service. The LDAP filter is used to match <xref
-            linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+            linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
             xrefstyle="hyperlink"/> services. Each JAX-RS Whiteboard exposes
-            exactly one <code>JaxRSServiceRuntime</code> service. This
+            exactly one <code>JaxrsServiceRuntime</code> service. This
             property is used to associate the Whiteboard service with the
             JAX-RS Whiteboard that registered the
-            <code>JaxRSServiceRuntime</code> service. If this property is not
+            <code>JaxrsServiceRuntime</code> service. If this property is not
             specified then the service will target all JAX-RS Whiteboards. See
             <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET"
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
@@ -754,7 +754,7 @@ public class Foo {
 
               <entry><para>Declares that this service must be processed by the
               JAX-RS whiteboard when set to <code>true</code>. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_RESOURCE"
+              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_RESOURCE"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -1177,7 +1177,7 @@ public class ConfiguredExtension implements WriterInterceptor {
 
               <entry><para>Declares that this service must be processed by the
               JAX-RS whiteboard when set to <code>true</code>. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_EXTENSION"
+              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -1343,7 +1343,7 @@ public class ConfiguredExtension implements WriterInterceptor {
               JAX-RS whiteboard, and defines the URI, relative to the root
               context of the whiteboard, at which the Application should be
               registered. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE"
+              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -1382,7 +1382,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       default application as an internal detail, then the
       <code>osgi.jaxrs.application.serviceProperties</code> map must exist
       containing the <code>osgi.jaxrs.name</code> of the application and the
-      service properties associated with the JaxRSServiceRuntime
+      service properties associated with the JaxrsServiceRuntime
       service.</para>
     </section>
 
@@ -1429,7 +1429,7 @@ public class MyApplication extends Application {
     <code>osgi.jaxrs.name</code> property. For Whiteboard resources and
     applications (but not extensions), if the registered service has set this
     property then the JAX-RS container must register a <xref
-    linkend="org.osgi.service.jaxrs.runtime.JaxRSEndpoint"
+    linkend="org.osgi.service.jaxrs.runtime.JaxrsEndpoint"
     xrefstyle="hyperlink"/> service identifying the URI(s) that can be used to
     access the service.</para>
 
@@ -1536,7 +1536,7 @@ public class MyApplication extends Application {
         <para><emphasis>Failure to obtain a service instance</emphasis> - In
         the case where a published service is unable to obtained by the JAX-RS
         whiteboard then the service is blacklisted by the container. A failure
-        DTO is made available from the JaxRSServiceRuntime representing the
+        DTO is made available from the JaxrsServiceRuntime representing the
         blacklisted service object.</para>
       </listitem>
 
@@ -1547,7 +1547,7 @@ public class MyApplication extends Application {
         JAX-RS whiteboard service property, but fails to advertise an
         appropriate JAX-RS type, or fails to provide any resource methods then
         this is an error and the service must be blacklisted by the container.
-        A failure DTO is available from the JaxRSServiceRuntime representing
+        A failure DTO is available from the JaxrsServiceRuntime representing
         the blacklisted service object.</para>
       </listitem>
 
@@ -1556,7 +1556,7 @@ public class MyApplication extends Application {
         resources in a single application it is possible that two JAX-RS
         resources will register for the same path across applications. In this
         case the application with the longer base URI is shadowed, and a
-        failure DTO is available from the JaxRSServiceRuntime representing the
+        failure DTO is available from the JaxrsServiceRuntime representing the
         shadowed Application. Note that determining when two JAX-RS
         applications overlap requires an analysis of the resource paths and
         all of sub-resource paths. If any of these paths clash then the
@@ -1793,7 +1793,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
           writing to a media type then it should register this property. If
           the built-in extension is always available then it should also be
           advertised by the <xref linkend="service.jaxrs-service.capability"/>
-          for the JaxRSServiceRuntime.</para>
+          for the JaxrsServiceRuntime.</para>
         </listitem>
       </itemizedlist>
 
@@ -1801,7 +1801,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       support must not require implementation specific mapping metadata (for
       example annotations) and should, at a minimum, work with the OSGi scalar
       types and DTOs. The property key is available as a constant in <xref
-      linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_MEDIA_TYPE"
+      linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_MEDIA_TYPE"
       xrefstyle="hyperlink"/>.</para>
 
       <section>
@@ -1944,7 +1944,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <title>osgi.service Capability</title>
 
       <para>The bundle providing the <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
       xrefstyle="hyperlink"/> service must provide a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace representing this service. This capability must also declare a
@@ -1952,7 +1952,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <code>org.osgi.service.jaxrs.runtime.dto</code> packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime";
+  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime";
   uses:="org.osgi.service.jaxrs.runtime,org.osgi.service.jaxrs.runtime.dto"</programlisting>
 
       <para>The bundle providing the
@@ -2008,7 +2008,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
       <para>Bundles that need to introspect the state of the JAX-RS runtime
       will need
-      <code>ServicePermission[org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime,
+      <code>ServicePermission[org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime,
       GET]</code> to obtain the JAX-RS Service Runtime service and access the
       DTO types.</para>
     </section>

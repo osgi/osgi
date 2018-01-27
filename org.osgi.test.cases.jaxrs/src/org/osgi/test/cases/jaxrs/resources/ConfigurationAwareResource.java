@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.jaxrs.resources;
 
-import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES;
 
 import java.util.Map;
 

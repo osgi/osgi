@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.osgi.service.jaxrs.runtime;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * A JaxRSEndpoint service represents a registered JAX-RS whiteboard resource or
+ * A JaxrsEndpoint service represents a registered JAX-RS whiteboard resource or
  * application.
  * <p>
  * It provides access to service properties representing the service, and the
@@ -28,7 +28,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author $Id$
  */
 @ProviderType
-public interface JaxRSEndpoint {
+public interface JaxrsEndpoint {
 
 	/**
 	 * A service property representing the URI(s) at which this resource or

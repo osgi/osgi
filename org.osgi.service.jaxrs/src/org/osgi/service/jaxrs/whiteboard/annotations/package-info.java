@@ -30,7 +30,7 @@
 @Version(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
 package org.osgi.service.jaxrs.whiteboard.annotations;
 
-import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 

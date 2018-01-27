@@ -28,7 +28,7 @@ import org.osgi.framework.dto.ServiceReferenceDTO;
 public class RuntimeDTO extends DTO {
 
 	/**
-	 * The DTO for the corresponding {@code JaxRSServiceRuntime}. This value is
+	 * The DTO for the corresponding {@code JaxrsServiceRuntime}. This value is
 	 * never {@code null}.
 	 */
 	public ServiceReferenceDTO		serviceDTO;

@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.implementation.ImplementationNamespace;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
 /**
  * This annotation can be used to require the JAX-RS Whiteboard implementation.
@@ -41,8 +41,8 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 		ElementType.TYPE, ElementType.PACKAGE
 })
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
-		name = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_IMPLEMENTATION, //
-		version = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
-public @interface RequireJaxRSWhiteboard {
+		name = JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_IMPLEMENTATION, //
+		version = JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
+public @interface RequireJaxrsWhiteboard {
 	// This is a marker annotation.
 }

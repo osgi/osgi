@@ -17,7 +17,7 @@
 
 package org.osgi.test.cases.jaxrs.junit;
 
-import static org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
+import static org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.test.cases.jaxrs.util.ServiceUpdateHelper;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -47,7 +47,7 @@ public abstract class AbstractJAXRSTestCase extends OSGiTestCase {
 
 	protected ServiceUpdateHelper					helper;
 
-	protected ServiceReference<JaxRSServiceRuntime>	runtime;
+	protected ServiceReference<JaxrsServiceRuntime>	runtime;
 
 	public void setUp() {
 		client = HttpClients.createDefault();

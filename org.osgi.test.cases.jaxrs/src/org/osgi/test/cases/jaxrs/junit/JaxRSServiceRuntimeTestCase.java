@@ -22,7 +22,7 @@ import static java.util.Collections.*;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.*;
-import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.*;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.*;
 
 import java.io.IOException;
 import java.util.Dictionary;
@@ -34,7 +34,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.WriterInterceptor;
 
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.service.jaxrs.runtime.dto.ApplicationDTO;
 import org.osgi.service.jaxrs.runtime.dto.ExtensionDTO;
 import org.osgi.service.jaxrs.runtime.dto.FailedApplicationDTO;
@@ -42,7 +42,7 @@ import org.osgi.service.jaxrs.runtime.dto.FailedExtensionDTO;
 import org.osgi.service.jaxrs.runtime.dto.FailedResourceDTO;
 import org.osgi.service.jaxrs.runtime.dto.ResourceDTO;
 import org.osgi.service.jaxrs.runtime.dto.ResourceMethodInfoDTO;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer.NameBound;
@@ -58,7 +58,7 @@ import org.osgi.util.promise.Promise;
  */
 public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
-	private JaxRSServiceRuntime runtimeService;
+	private JaxrsServiceRuntime runtimeService;
 
 	public void setUp() {
 		super.setUp();
@@ -243,7 +243,7 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	public void testNameBoundDTOs() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 

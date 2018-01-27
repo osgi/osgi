@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
-import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxRSWhiteboard;
+import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxrsWhiteboard;
 
 /**
  * Component Property Type for the {@code osgi.jaxrs.resource} service property.
  * <p>
  * This annotation can be used on a JAX-RS resource to declare the value of the
- * {@link org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_RESOURCE}
+ * {@link org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_RESOURCE}
  * service property.
  * 
  * @see "Component Property Types"
@@ -38,7 +38,7 @@ import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxRSWhiteboard;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@RequireJaxRSWhiteboard
+@RequireJaxrsWhiteboard
 public @interface JaxrsResource {
 	/**
 	 * Prefix for the property name. This value is prepended to each property
@@ -46,12 +46,5 @@ public @interface JaxrsResource {
 	 */
 	String PREFIX_ = "osgi.";
 
-	/**
-	 * Service property identifying a JAX-RS resource for processing by the
-	 * whiteboard.
-	 * 
-	 * @return The JAX-RS resource value.
-	 * @see org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_RESOURCE
-	 */
-	String value() default "true";
+	// This is a marker annotation.
 }

@@ -36,7 +36,7 @@ import org.apache.http.entity.StringEntity;
 import org.junit.Assume;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.applications.ApplicationWithPathAnnotation;
 import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.extensions.ConfigurableStringReplacer;
@@ -62,7 +62,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSimpleSingletonResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -117,7 +117,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSimplePrototypeResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -171,7 +171,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testApplicationBase() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -200,7 +200,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			// leading '/')
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"changed");
 			reg.setProperties(properties);
 
@@ -226,7 +226,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testApplicationPathAnnotation() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -256,7 +256,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			// leading '/'
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"changed");
 			reg.setProperties(properties);
 
@@ -283,8 +283,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -299,8 +299,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -312,7 +312,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection.getValue();
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
 						Boolean.TRUE);
 
 				awaitSelection = helper.awaitModification(runtime, 5000);
@@ -353,7 +353,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name=test2)");
 					resourceReg.setProperties(properties);
 
@@ -381,9 +381,9 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name="
-									+ JaxRSWhiteboardConstants.JAX_RS_DEFAULT_APPLICATION
+									+ JaxrsWhiteboardConstants.JAX_RS_DEFAULT_APPLICATION
 									+ ")");
 					resourceReg.setProperties(properties);
 
@@ -410,7 +410,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name=*)");
 					resourceReg.setProperties(properties);
 
@@ -454,8 +454,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -472,8 +472,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -485,10 +485,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection.getValue();
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
 						Boolean.TRUE);
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 						"(osgi.jaxrs.name=*)");
 
 				awaitSelection = helper.awaitModification(runtime, 5000);
@@ -548,8 +548,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -564,8 +564,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -577,10 +577,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection.getValue();
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
 						Boolean.TRUE);
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 						"(osgi.jaxrs.name=*)");
 
 				awaitSelection = helper.awaitModification(runtime, 5000);
@@ -622,10 +622,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties = new Hashtable<>();
-					properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 							Boolean.TRUE);
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name=t*)");
 					ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 							.registerService(WriterInterceptor.class,
@@ -684,8 +684,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -700,8 +700,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			properties.put("replacer-config", "fizz-buzz");
 			ServiceRegistration<Application> reg2 = getContext()
@@ -716,10 +716,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection.getValue();
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
 						Boolean.TRUE);
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 						"(osgi.jaxrs.name=*)");
 
 				awaitSelection = helper.awaitModification(runtime, 5000);
@@ -764,13 +764,13 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties = new Hashtable<>();
-					properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 							Boolean.TRUE);
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name=*)");
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
 							"(replacer-config=*)");
 					ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 							.registerService(WriterInterceptor.class,
@@ -828,8 +828,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -844,10 +844,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
 					"(replacer-config=*");
 
 			ServiceRegistration<Application> reg2 = getContext()
@@ -862,10 +862,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 				awaitSelection.getValue();
 
 				properties = new Hashtable<>();
-				properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE,
+				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
 						Boolean.TRUE);
 				properties.put(
-						JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 						"(osgi.jaxrs.name=*)");
 
 				awaitSelection = helper.awaitModification(runtime, 5000);
@@ -909,10 +909,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
 					properties = new Hashtable<>();
-					properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 							Boolean.TRUE);
 					properties.put(
-							JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 							"(osgi.jaxrs.name=*)");
 					properties.put("replacer-config", "fizz-buzz");
 					@SuppressWarnings("rawtypes")
@@ -974,9 +974,9 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 		String rejectFilter = "(!" + selectFilter + ")";
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 				selectFilter);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -1004,7 +1004,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			// Change the target
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 					rejectFilter);
 			reg.setProperties(properties);
 
@@ -1017,7 +1017,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			// Reset the target
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 					selectFilter);
 			reg.setProperties(properties);
 
@@ -1051,8 +1051,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -1069,8 +1069,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -1141,7 +1141,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testShadowDefaultPath() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -1165,7 +1165,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/");
 
 			ServiceRegistration<Application> reg2 = getContext()
@@ -1201,7 +1201,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testMoveDefaultApplication() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -1226,9 +1226,9 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test");
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, ".default");
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, ".default");
 
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -1262,7 +1262,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testApplicationServiceProps() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -1304,9 +1304,9 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testApplicationServicePropsInFeature() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -1321,9 +1321,9 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection.getValue();
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
 					Boolean.TRUE);
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 					"(osgi.jaxrs.name=test)");
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
@@ -1334,7 +1334,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					.registerService(Feature.class,
 							ctx -> {
 								value.set(ctx.getConfiguration().getProperty(
-										JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES));
+										JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES));
 								return true;
 							}, properties);
 

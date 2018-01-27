@@ -35,7 +35,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource;
@@ -57,7 +57,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSimpleSingletonResource() throws Exception {
 		
 		Dictionary<String, Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime,
@@ -110,7 +110,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSimplePrototypeResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -174,7 +174,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testContextFieldInjection() throws Exception {
 	
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 	
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 	
@@ -215,7 +215,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testAsyncPrototypeResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -267,8 +267,8 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 		String rejectFilter = "(!" + selectFilter + ")";
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 				selectFilter);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -294,7 +294,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			// Change the target
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 					rejectFilter);
 			reg.setProperties(properties);
 
@@ -307,7 +307,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			// Reset the target
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
 					selectFilter);
 			reg.setProperties(properties);
 
@@ -332,8 +332,8 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	public void testSingletonResourceWhenApplicationChanges() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
 				"(foo=bar)");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
@@ -354,7 +354,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			awaitSelection.getValue();
 
 			properties = new Hashtable<>();
-			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test");
 			properties.put("foo", "bar");
 

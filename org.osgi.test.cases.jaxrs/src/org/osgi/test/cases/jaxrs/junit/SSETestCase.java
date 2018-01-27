@@ -32,7 +32,7 @@ import javax.ws.rs.sse.SseEventSource;
 
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.client.SseEventSourceFactory;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.extensions.StringReplacer;
 import org.osgi.test.cases.jaxrs.resources.SseResource;
 import org.osgi.util.promise.Promise;
@@ -61,7 +61,7 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 		WebTarget target = c.target(baseURI + "/whiteboard/stream");
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -125,7 +125,7 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 		WebTarget target = c.target(baseURI + "/whiteboard/stream");
 
 		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 

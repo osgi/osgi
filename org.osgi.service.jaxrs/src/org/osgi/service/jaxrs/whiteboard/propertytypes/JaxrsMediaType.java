@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a JAX-RS extension or application to declare
  * the value of the
- * {@link org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_MEDIA_TYPE}
+ * {@link org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_MEDIA_TYPE}
  * service property.
  * 
  * @see "Component Property Types"
@@ -51,7 +51,7 @@ public @interface JaxrsMediaType {
 	 * service.
 	 * 
 	 * @return The JAX-RS media types supported.
-	 * @see org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants#JAX_RS_MEDIA_TYPE
+	 * @see org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_MEDIA_TYPE
 	 */
 	String[] value();
 }

@@ -20,11 +20,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.NameBinding;
 import javax.ws.rs.Produces;
 
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 
 /**
  * Represents a JAX-RS Filter service currently being hosted by the
- * {@link JaxRSServiceRuntime}
+ * {@link JaxrsServiceRuntime}
  * 
  * @NotThreadSafe
  * @author $Id$
