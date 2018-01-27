@@ -562,9 +562,22 @@ public final class HttpWhiteboardConstants {
 	 * Servlets or resources registered using this property are treated as an
 	 * invalid registration.
 	 * 
+	 * @see #HTTP_SERVICE_CONTEXT_FILTER
 	 * @since 1.1
 	 */
 	public static final String	HTTP_SERVICE_CONTEXT_PROPERTY						= "osgi.http.whiteboard.context.httpservice";
+
+	/**
+	 * If a servlet filter, error page or listener wants to be registered with
+	 * the Http Context(s) managed by the Http Service, they can select the
+	 * contexts having the {@link #HTTP_SERVICE_CONTEXT_PROPERTY} property using
+	 * this filter.
+	 *
+	 * @see #HTTP_SERVICE_CONTEXT_PROPERTY
+	 * @since 1.1
+	 */
+	public static final String	HTTP_SERVICE_CONTEXT_FILTER							= "("
+			+ HTTP_SERVICE_CONTEXT_PROPERTY + "=*)";
 
 	/**
 	 * The name of the implementation capability for the Http Whiteboard

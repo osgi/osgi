@@ -391,10 +391,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>boolean handleSecurity(HttpServletRequest,
-      HttpServletResponse)</title>
+      <title>Security Handling</title>
 
-      <para>This method is invoked to handle implementation-defined security
+      <para>The <xref
+      linkend="org.osgi.service.http.context.ServletContextHelper.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+      xrefstyle="hyperlink"/> method is invoked to handle implementation-defined security
       on the request. It is invoked before the request is sent to the
       filter-servlet pipeline.</para>
 
@@ -405,7 +406,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
       security handling mechanism to clean up any context associated with the
       current request. <code>finishSecurity()</code> is only called if
       <code>handleSecurity()</code> returned <code>true</code> for the
-      specified request.</para>
+      specified request. If an exception occurs during processing of the
+      pipeline, <code>finishSecurity()</code> is still called. This allows
+      to clean up regardless of the result of the pipeline.</para>
 
       <para>In the case a request is dispatched either using the include or
       forward method <code>handleSecurity()</code> and
@@ -1709,7 +1712,7 @@ public class MyFilter implements Filter {
       <para>Servlet Filters are always run after <xref
       linkend="org.osgi.service.http.context.ServletContextHelper.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
       xrefstyle="hyperlink"/> is called. However in some cases it is necessary
-      to process servlet requests before security is handled. For example when
+      to process servlet requests before security is handled. For example if
       all requests must be logged, even ones that are rejected by security. In
       other scenarios, requests may need to be prepared for the
       <code>handleSecurity()</code> call.</para>
@@ -1791,13 +1794,41 @@ public class MyFilter implements Filter {
       before dispatching, the targeted servlet context is not yet know.
       Therefore the <code>FilterConfig.getServletContext()</code> returns the
       servlet context of the backing implementation, the same context as
-      returned by the request.</para>
+      returned by the request. As a pre-processor instance is not
+      associated with a specific servlet context, it is safe to implement
+      it as a singleton.</para>
 
       <para>When called in the <code>doFilter()</code> method, the
       pre-processor can use the <code>FilterChain</code> to invoke the next
       pre-processor, or if the end of the chain is reached, start processing
       the request. The pre-processor can also terminate the processing and
-      generate a response directly.</para>
+      generate a response directly. Before request processing returns to
+      the pre-processors <xref
+      linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+      xrefstyle="hyperlink"/> is called. If an exception is thrown during
+      request processing, the exception is propagated through
+      the pre-processors.</para>
+
+      <para>The example <code>Preprocessor</code> below logs a message before and after
+      request processing:</para>
+
+    <programlisting>@Component
+public class MyPreprocessor implements Preprocessor {
+
+    @Reference(service=LoggerFactory.class)
+    private Logger logger;
+    
+    public void init(FilterConfig filterConfig) throws ServletException {}
+
+    public void doFilter(ServletRequest request, ServletResponse response, 
+            FilterChain chain) throws IOException, ServletException {
+        logger.debug("Request processing starts");
+        chain.doFilter(request, response);
+        logger.debug("Request processing ends");
+    }
+
+    public void destroy() {}
+}</programlisting>
     </section>
   </section>
 
@@ -2267,7 +2298,7 @@ public class MyServletRequestListener implements ServletRequestListener {
   </section>
 
   <section xml:id="service.http.whiteboard.httpservice.integration">
-    <title>Integration with Http Service contexts</title>
+    <title>Integration with Http Service Contexts</title>
 
     <para>Some systems are implemented using a mixture of Http Whiteboard
     services and Http Service servlets and contexts as specified in the <xref
@@ -2288,7 +2319,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     <para>The following example registers a servlet filter for all servlets
     managed by the Http Service. <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE)
 @HttpWhiteboardFilterPattern("/*")
-@HttpWhiteboardContextSelect("(osgi.http.whiteboard.context.httpservice=*)")
+@HttpWhiteboardContextSelect(HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_FILTER)
 public class MyFilter implements Filter</programlisting> This specification
     does not provide a way to select in individual Http Context from the Http
     Service, however a Http Whiteboard implementation may provide an
@@ -2351,6 +2382,21 @@ public class MyFilter implements Filter</programlisting> This specification
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+
+      <para>Bundles registering services to be picked up by the Http Whiteboard 
+      implementation should require the <code>osgi.implementation</code>. For example:</para>
+
+      <programlisting>Require-Capability: osgi.implementation;
+       filter:="(&amp;(osgi.implementation=osgi.http)
+                 (version&gt;=<xref
+          endterm="org.osgi.service.http.whiteboard-version.number"
+          linkend="org.osgi.service.http.whiteboard"/>)(!(version&gt;=2.0)))";
+       configurations="resources/configs"</programlisting>
+
+      <para>To simplify the creation of this requirement the
+       <xref linkend="org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard" 
+       xrefstyle="hyperlink"/> annotation can be used. This annotation can be used
+       as a marker annotation on a package or type.</para>
     </section>
 
     <section>
@@ -2619,7 +2665,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
       <listitem>
         <para>Added <code>service.changecount</code> service property to Http
-        Service Runtime Service. See table <xref
+        Service Runtime Service. See <xref
         linkend="service.http.whiteboard.httpserviceruntime.properties.table"/></para>
       </listitem>
 
@@ -2630,8 +2676,14 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
       <listitem>
         <para>Added component property types and annotations, see
-        <code>org.osgi.service.http.whiteboard.propertytypes</code> in the API
+        <xref linkend="org.osgi.service.http.whiteboard.propertytypes"
+      xrefstyle="hyperlink"/> in the API
         section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added the <xref linkend="org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard"
+      xrefstyle="hyperlink"/> annotation.</para>
       </listitem>
     </itemizedlist>
   </section>

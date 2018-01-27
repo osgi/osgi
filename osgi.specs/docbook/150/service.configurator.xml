@@ -882,6 +882,9 @@
             endterm="org.osgi.service.configurator-version.number"
             linkend="org.osgi.service.configurator"/>"</programlisting></para>
 
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.extender.namespace"/>.</para>
+
       <para>Bundles providing configuration resources must require the
       <code>osgi.extender</code> capability to opt in to being processed by
       the Configurator. The default location for configuration resources is in
@@ -914,9 +917,6 @@
        <code>configurations</code> attribute to be defined.</para>
        
        <programlisting>@RequireConfigurator("resources/configs")</programlisting>
-
-      <para>This capability must follow the rules defined for the <xref
-      linkend="service.namespaces-osgi.extender.namespace"/>.</para>
     </section>
   </section>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,9 +217,11 @@ public abstract class ServletContextHelper {
 	 * resources which have been setup in
 	 * {@link #handleSecurity(HttpServletRequest, HttpServletResponse)}.
 	 * <p>
-	 * This method is only called if 
-	 * {@link #handleSecurity(HttpServletRequest, HttpServletResponse)} returned 
-	 * {@code true} for the specified request.
+	 * This method is only called if
+	 * {@link #handleSecurity(HttpServletRequest, HttpServletResponse)} returned
+	 * {@code true} for the specified request. This method is called once the
+	 * pipeline finishes processing or if an exception is thrown from within the
+	 * pipeline execution.
 	 * <p>
 	 * The default implementation of this method does nothing.
 	 * 
