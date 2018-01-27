@@ -1859,7 +1859,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource
- @RequireJSON
+ @JSONRequired
  @Produces(MediaType.APPLICATION_JSON)  
  public class MyResource {
   
