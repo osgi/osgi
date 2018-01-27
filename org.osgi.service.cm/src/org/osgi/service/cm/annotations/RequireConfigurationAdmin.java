@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,12 @@ import org.osgi.service.cm.ConfigurationConstants;
  * @since 1.6
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({
+		ElementType.TYPE, ElementType.PACKAGE
+})
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
 		name = ConfigurationConstants.CONFIGURATION_ADMIN_IMPLEMENTATION, //
 		version = ConfigurationConstants.CONFIGURATION_ADMIN_SPECIFICATION_VERSION)
 public @interface RequireConfigurationAdmin {
-	// This is a purely informational annotation and has no elements.
+	// This is a marker annotation.
 }

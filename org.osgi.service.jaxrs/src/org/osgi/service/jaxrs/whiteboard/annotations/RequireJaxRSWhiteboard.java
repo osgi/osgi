@@ -37,10 +37,12 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
  * @since 1.0
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({
+		ElementType.TYPE, ElementType.PACKAGE
+})
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
 		name = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_IMPLEMENTATION, //
 		version = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
 public @interface RequireJaxRSWhiteboard {
-	// This is a purely informational annotation and has no elements.
+	// This is a marker annotation.
 }

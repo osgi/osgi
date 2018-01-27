@@ -37,7 +37,9 @@ import org.osgi.service.event.EventConstants;
  * @since 1.4
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({
+		ElementType.TYPE, ElementType.PACKAGE
+})
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
 		name = EventConstants.EVENT_ADMIN_IMPLEMENTATION, //
 		version = EventConstants.EVENT_ADMIN_SPECIFICATION_VERSION)

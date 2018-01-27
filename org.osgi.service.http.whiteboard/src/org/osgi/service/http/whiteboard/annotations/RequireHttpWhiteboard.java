@@ -37,10 +37,12 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @since 1.0
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({
+		ElementType.TYPE, ElementType.PACKAGE
+})
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
 		name = HttpWhiteboardConstants.HTTP_WHITEBOARD_IMPLEMENTATION, //
 		version = HttpWhiteboardConstants.HTTP_WHITEBOARD_SPECIFICATION_VERSION)
 public @interface RequireHttpWhiteboard {
-	// This is a purely informational annotation and has no elements.
+	// This is a marker annotation.
 }
