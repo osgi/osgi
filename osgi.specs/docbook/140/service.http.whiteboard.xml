@@ -2384,14 +2384,15 @@ public class MyFilter implements Filter</programlisting> This specification
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
 
       <para>Bundles registering services to be picked up by the Http Whiteboard 
-      implementation should require the <code>osgi.implementation</code>. For example:</para>
+      implementation should require the <code>osgi.implementation</code>capability.
+      For example:</para>
 
       <programlisting>Require-Capability: osgi.implementation;
        filter:="(&amp;(osgi.implementation=osgi.http)
                  (version&gt;=<xref
           endterm="org.osgi.service.http.whiteboard-version.number"
-          linkend="org.osgi.service.http.whiteboard"/>)(!(version&gt;=2.0)))";
-       configurations="resources/configs"</programlisting>
+          linkend="org.osgi.service.http.whiteboard"/>)(!(version&gt;=2.0)))"
+      </programlisting>
 
       <para>To simplify the creation of this requirement the
        <xref linkend="org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard" 
