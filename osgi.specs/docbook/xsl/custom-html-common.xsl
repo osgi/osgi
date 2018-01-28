@@ -93,7 +93,11 @@
         <xsl:text><![CDATA[#scrollable {
           background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
           background-attachment: local;
-          will-change: transform;
+  }
+  @media (max-width: 991px) {
+    #scrollable {
+      background-size: 120%;
+    }
   }]]></xsl:text>
       </style>
     </xsl:if>
@@ -373,7 +377,7 @@ basic format:
         mode="webhelptoc">
     <xsl:param name="currentid"/>
     <xsl:param name="depth" select="'1'"/>
-    <xsl:variable name="title">
+    <xsl:variable name="label">
         <xsl:if test="$webhelp.autolabel=1">
             <xsl:variable name="label.markup">
                 <xsl:apply-templates select="." mode="label.markup"/>
@@ -382,6 +386,9 @@ basic format:
                 <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
             </xsl:if>
         </xsl:if>
+    </xsl:variable>
+
+    <xsl:variable name="title">
         <xsl:apply-templates select="." mode="titleabbrev.markup"/>
     </xsl:variable>
 
@@ -400,14 +407,22 @@ basic format:
 
     <xsl:if test="not(self::d:index) or (self::d:index and not($generate.index = 0))">
         <li>
+            <xsl:if test="$depth = 1">
+                <span class="handle">+ </span>
+            </xsl:if>
             <span class="file">
                 <a href="{substring-after($href, $base.dir)}"  tabindex="1">
-                    <xsl:value-of select="$title"/>
+                    <span class="number">
+                        <xsl:value-of select="$label"/>
+                    </span>
+                    <span class="innertitle">
+                        <xsl:value-of select="$title"/>
+                    </span>
                 </a>
             </span>
             <xsl:if test="d:part|d:reference|d:preface|d:chapter|d:bibliography|d:appendix|d:article|d:topic|d:glossary|d:section|d:simplesect|d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:refentry|d:colophon|d:bibliodiv">
                 <ul>
-                    <xsl:if test="not($depth = 2)">
+                    <xsl:if test="not($depth = 3)">
                         <xsl:apply-templates
                                 select="d:part|d:reference|d:preface|d:chapter|d:bibliography|d:appendix|d:article|d:topic|d:glossary|d:section|d:simplesect|d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:refentry|d:colophon|d:bibliodiv"
                                 mode="webhelptoc">

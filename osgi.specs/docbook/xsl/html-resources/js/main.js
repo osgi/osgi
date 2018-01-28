@@ -5,50 +5,59 @@ var fixAnchors = function() {
 	$(anchorElements).after(function() {
 		return "<a class='permalink' href='" + currentUrl + "#" + this.id + "'>&#182;</a>";
 	});
-}
+};
 
 $(function() {
-  var lastSegment = document.location.href.substr(document.location.href.lastIndexOf('/') + 1);
-  var link = document.querySelector("#sidebar a[href='" + lastSegment + "']");
+	var link;
+	var lastSegment = document.location.href.substr(document.location.href.lastIndexOf('/') + 1);
+	if (lastSegment) {
+		link = document.querySelector("#sidebar a[href='" + lastSegment.split("#")[0] + "']");
+	}
 
-  if (!link) {
-    link = document.querySelector("#sidebar a[href='" + lastSegment.split("#")[0] + "']");
-  }
+	var chapter = document.querySelectorAll("#sidebar .filetree > li > span.handle");
+	var i;
 
-  if (link) {
-    link.scrollIntoView();
-  }
+	for (i = 0; i < chapter.length; i++) {
+		chapter[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var panel = this.nextElementSibling.nextElementSibling;
+			if (panel.style.maxHeight){
+				panel.style.maxHeight = null;
+			} else {
+				panel.style.maxHeight = panel.scrollHeight + "px";
+			}
+		});
+	}
 
 	var icon = document.getElementById('mobile-menu-icon');
+	var sidebar = document.getElementById('sidebar');
 
-	if (icon) {
-		icon.addEventListener(
-			'click',
-			function(event) {
-				var sidebar = document.getElementById('sidebar');
+	if (icon && sidebar) {
+		icon.addEventListener('click', function() {
+				icon.classList.toggle('active')
 
-				if (icon && sidebar) {
-					if (icon.classList.contains('active')) {
-						icon.classList.remove('active');
+				if (sidebar.classList.contains('menu-open')) {
+					sidebar.classList.remove('menu-open');
+
+					window.onhashchange = null;
+				}
+				else {
+					sidebar.classList.add('menu-open');
+					link.scrollIntoView(true);
+					var panel = link.parentElement.nextElementSibling;
+					if (panel.style.maxHeight === '0px' || panel.style.maxHeight === null){
+						panel.style.maxHeight = panel.scrollHeight + "px";
 					}
-					else {
-						icon.classList.add('active');
-					}
-
-					if (sidebar.classList.contains('menu-open')) {
+					window.onhashchange = function() {
 						sidebar.classList.remove('menu-open');
-
-						window.onhashchange = null;
-					}
-					else {
-						sidebar.classList.add('menu-open');
-
-						window.onhashchange = function() {
-							sidebar.classList.remove('menu-open');
-						};
-					}
+					};
 				}
 			}
 		);
+	}
+
+	if (link) {
+		link.scrollIntoView(true);
+		link.parentElement.previousElementSibling.click();
 	}
 });
