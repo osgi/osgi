@@ -382,9 +382,11 @@ public String interrogateSession(@PathParam("name") String name,
     <para>JAX-RS Whiteboard services support common service registration
     properties to associate them with a JAX-RS Whiteboard. These properties
     apply to whiteboard resources, extensions and applications except where
-    explicitly stated otherwise.</para>
+    explicitly stated otherwise. Each service property has an associated Component
+    Property Type annotation that can be used to easily apply the property to
+    a Declarative Services Component.</para>
 
-    <table xml:id="service.jaxrs.common.properties.table">
+    <table xml:id="service.jaxrs.common.properties.table" pgwide="1">
       <title>Common properties</title>
 
       <tgroup cols="3">
@@ -396,7 +398,7 @@ public String interrogateSession(@PathParam("name") String name,
 
         <thead>
           <row>
-            <entry>Service Property Name</entry>
+            <entry>Service Property</entry>
 
             <entry>Type</entry>
 
@@ -406,7 +408,12 @@ public String interrogateSession(@PathParam("name") String name,
 
         <tbody>
           <row>
-            <entry><code>osgi.jaxrs.name</code></entry>
+            <entry>
+              <para><code>osgi.jaxrs.name</code></para>
+              <para><xref
+                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsName"
+                xrefstyle="hyperlink"/></para>
+            </entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -429,8 +436,13 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry><code>osgi.jaxrs.application.select</code><emphasis
-            role="strong"><superscript>†</superscript></emphasis></entry>
+            <entry>
+              <para><code>osgi.jaxrs.application.select</code><emphasis
+                role="strong"><superscript>†</superscript></emphasis></para>
+              <para><xref
+                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect"
+                xrefstyle="hyperlink"/></para>
+            </entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -453,7 +465,13 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry><code>osgi.jaxrs.extension.select</code></entry>
+            <entry>
+              <para><code>osgi.jaxrs.extension.select</code></para>
+              <para><xref
+                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtensionSelect"
+                xrefstyle="hyperlink"/>
+              </para>
+            </entry>
 
             <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -478,7 +496,15 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry><code>osgi.jaxrs.whiteboard.target</code></entry>
+            <entry>
+              <para>
+                <code>osgi.jaxrs.whiteboard.target</code>
+              </para>
+              <para><xref
+                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsWhiteboardTarget"
+                xrefstyle="hyperlink"/>
+              </para>
+            </entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -724,7 +750,7 @@ public class Foo {
       linkend="service.jaxrs.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-      <table>
+      <table pgwide="1">
         <title>Service properties for JAX-RS Whiteboard resource
         services.</title>
 
@@ -737,7 +763,7 @@ public class Foo {
 
           <thead>
             <row>
-              <entry>Service Property Name</entry>
+              <entry>Service Property</entry>
 
               <entry>Type</entry>
 
@@ -747,7 +773,12 @@ public class Foo {
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.resource</code></para></entry>
+              <entry>
+                <para><code>osgi.jaxrs.resource</code></para>
+                <para><xref
+                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource"
+                  xrefstyle="hyperlink"/></para>
+              </entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
@@ -1147,7 +1178,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       linkend="service.jaxrs.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-      <table>
+      <table pgwide="1">
         <title>Service properties for JAX-RS Whiteboard extension
         services.</title>
 
@@ -1160,7 +1191,7 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <thead>
             <row>
-              <entry>Service Property Name</entry>
+              <entry>Service Property</entry>
 
               <entry>Type</entry>
 
@@ -1170,7 +1201,13 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.extension</code></para></entry>
+              <entry>
+                <para><code>osgi.jaxrs.extension</code></para>
+                <para><xref
+                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtension"
+                  xrefstyle="hyperlink"/>
+                </para>
+              </entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
@@ -1230,7 +1267,7 @@ public class ConfiguredExtension implements WriterInterceptor {
     <para>The OSGi JAX-RS whiteboard supports direct registration of
     Applications for two reasons:</para>
 
-    <orderedlist>
+    <itemizedlist>
       <listitem>
         <para>To support the use of legacy JAX-RS applications with the
         whiteboard</para>
@@ -1243,7 +1280,7 @@ public class ConfiguredExtension implements WriterInterceptor {
         by whiteboard services using the
         <code>osgi.jaxrs.application.select</code> property.</para>
       </listitem>
-    </orderedlist>
+    </itemizedlist>
 
     <para><code>Application</code>s can be registered with the JAX-RS
     Whiteboard by registering them as Whiteboard services which advertise
@@ -1312,7 +1349,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       xrefstyle="template:Table %n on page %p"/> are supported, except for the
       <code>osgi.jaxrs.application.select</code> property.</para>
 
-      <table>
+      <table pgwide="1">
         <title>Service properties for JAX-RS Whiteboard application
         services.</title>
 
@@ -1325,7 +1362,7 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <thead>
             <row>
-              <entry>Service Property Name</entry>
+              <entry>Service Property</entry>
 
               <entry>Type</entry>
 
@@ -1335,7 +1372,13 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.application.base</code></para></entry>
+              <entry>
+                <para><code>osgi.jaxrs.application.base</code></para>
+                <para><xref
+                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationBase"
+                  xrefstyle="hyperlink"/>
+                </para>
+              </entry>
 
               <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
@@ -1435,7 +1478,7 @@ public class MyApplication extends Application {
 
     <para>The endpoint service must declare the following properties:</para>
 
-    <table>
+    <table pgwide="1">
       <title>Service properties for JAX-RS Whiteboard application
       services.</title>
 
@@ -1646,7 +1689,8 @@ public class MyApplication extends Application {
       All clients are required to support a reactive invoker which returns
       CompletionStage instances, however in OSGi the common representation of
       an asynchronous return is the <code>Promise</code>. This specification
-      therefore provides the <code>PromiseRxInvoker</code> interface which can
+      therefore provides the <xref linkend="org.osgi.service.jaxrs.client.PromiseRxInvoker"
+      xrefstyle="hyperlink"/> interface which can
       be used to obtain Promises from the JAX-RS client.</para>
 
       <para>It is the responsibility of the JAX-RS whiteboard implementation
@@ -1730,9 +1774,9 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
                                         source.close();
                                     } 
                                 }
-                            }
-                        t -&gt; pec.accept(PushEvent.error(t))
-                        () -&gt; pec.accept(PushEvent.close()))
+                            },
+                        t -&gt; pec.accept(PushEvent.error(t)),
+                        () -&gt; pec.accept(PushEvent.close()));
         source.open();
         return source;
     };
@@ -1803,7 +1847,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       types and DTOs. The property key is available as a constant in <xref
       linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_MEDIA_TYPE"
       xrefstyle="hyperlink"/>.</para>
-
+      
       <section>
         <title>Media Type names, wildcards and suffixes</title>
 
@@ -1848,13 +1892,28 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <section>
         <title>Media Type Selection Example</title>
 
-        <para>The most common media type extension used in JAX-RS is to
-        provide JSON support. This specification therefore defines a component
-        property type which can be used to require that JSON support is
-        available. This property type also adds an optional, active-time
-        requirement in the <code>osgi.service</code> namespace for the JSON
-        media type, which ensures that a suitable extension can be provisioned
-        if needed.</para>
+
+        <para>The most commonly required media type for JAX-RS services is 
+        <code>application/json</code>. To this end this specification defines a
+        Component Property annotation <xref 
+        linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JSONRequired"
+        xrefstyle="hyperlink"/> which can be applied to a Declarative Services component to express:</para>
+      
+        <itemizedlist>
+          <listitem>
+            <para>An extension requirement for runtime <code>application/json</code> media type support</para>
+          </listitem>
+          <listitem>
+            <para>A requirement for the JAX-RS whiteboard</para>
+          </listitem>
+          <listitem>
+            <para>An optional active time requirement for <code>application/json</code> media type support,
+            for use in application resolution/assembly.</para>
+          </listitem>
+        </itemizedlist>
+      
+        <para>Custom third-party annotations can easily be created to support additional media types
+        as necessary, and are used as follows:</para>
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
@@ -1871,7 +1930,9 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 }
         </programlisting>
 
-        <para>A corresponding component property type exists for use on a
+        <para>A corresponding component property type (<xref 
+        linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsMediaType"
+        xrefstyle="hyperlink"/>) exists for use on a
         JAX-RS whiteboard extension or application service which provides
         media type support. This can be used to declare that one or more media
         types are supported.</para>
@@ -1965,7 +2026,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
       <programlisting>Provide-Capability: osgi.service;
   objectClass:List&lt;String&gt;="javax.ws.rs.client.ClientBuilder";
-  uses:="javax.ws.rs.client;service.scope="prototype""</programlisting>
+  uses:="javax.ws.rs.client,org.osgi.service.jaxrs.client";
+  service.scope="prototype"</programlisting>
 
       <para>The bundle providing the
       <code>org.osgi.service.jaxrs.client.SseEventSourceFactory</code> service
@@ -2025,6 +2087,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     </section>
   </section>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.client.xml"/>
+  
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.dto.xml"/>
