@@ -1081,7 +1081,7 @@ suffix:     META-INF/persistence.xml</programlisting>
     </section>
 
     <section>
-      <title>Entity Manager Factory lifecycle</title>
+      <title>Entity Manager Factory Life Cycle</title>
 
       <para>The Entity Manager Factory object has a <code>close</code> method.
       This method closes the EntityManagerFactory and all associated Entity
@@ -1419,8 +1419,9 @@ suffix:     META-INF/persistence.xml</programlisting>
           endterm="org.osgi.service.jpa-version.number"
           linkend="org.osgi.service.jpa"/>)(!(version&gt;=2.0)))"</programlisting>
           
-      <para>This requirement can be easily generated using the <code>RequireJPAExtender</code>
-      annotation.</para>
+      <para>This requirement can be easily generated using the 
+      <xref linkend="org.osgi.service.jpa.annotations.RequireJPAExtender"
+      xrefstyle="hyperlink"/> annotation.</para>
 
       <para>The JPA extender must only process a persistence bundle's
       persistence units if the following is true:</para>
@@ -1578,6 +1579,7 @@ Require-Capability: osgi.contract;
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jpa.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jpa.annotations.xml"/>
 
   <section>
     <title>References</title>
@@ -1616,7 +1618,7 @@ Require-Capability: osgi.contract;
         configuration properties when using the <xref
         linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
         xrefstyle="hyperlink"/>. See <xref
-        linkend="service.jpa-std.config.props" xrefstyle="hyperlink"/></para>
+        linkend="service.jpa-std.config.props" /></para>
       </listitem>
 
       <listitem>
@@ -1624,7 +1626,7 @@ Require-Capability: osgi.contract;
         linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
         xrefstyle="hyperlink"/> so that users can query which JPA Provider
         bundle is being used to create the <code>EntityManagerFactory</code>.
-        See <xref linkend="i3095031" xrefstyle="hyperlink"/></para>
+        See <xref linkend="i3095031"/></para>
       </listitem>
 
       <listitem>
@@ -1632,7 +1634,7 @@ Require-Capability: osgi.contract;
         linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
         xrefstyle="hyperlink"/> result in service property updates to any
         related <code>EntityManagerFactory</code> service. See <xref
-        linkend="i3097403" xrefstyle="hyperlink"/></para>
+        linkend="i3097403"/></para>
       </listitem>
 
       <listitem>
