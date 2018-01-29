@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
 	var anchorElements = document.querySelectorAll("h1.title > a.anchor,h2.title > a.anchor,h3.title > a.anchor,h4.title > a.anchor,h5.title > a.anchor,div.figure > a.anchor,div.table > a.anchor");
+	var sidebar = document.getElementById('sidebar');
 	var currentUrl = window.location.href.split('#')[0];
+	var lastSegment = currentUrl.substr(currentUrl.lastIndexOf('/') + 1);
+	var link = document.querySelector("#sidebar a[href='" + lastSegment + "']");
 
 	anchorElements.forEach(function(el) {
 		var a = document.createElement('a');
@@ -22,20 +25,12 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else {
 				this.innerHTML = '- ';
 				panel.style.maxHeight = panel.scrollHeight + "px";
+				link.scrollIntoView();
 			}
 		});
 	});
 
-	var lastSegment = currentUrl.substr(currentUrl.lastIndexOf('/') + 1);
-	var link = document.querySelector("#sidebar a[href='" + lastSegment + "']");
-
-	if (lastSegment && link) {
-		link.parentElement.previousElementSibling.click();
-		link.scrollIntoView();
-	}
-
 	var icon = document.getElementById('mobile-menu-icon');
-	var sidebar = document.getElementById('sidebar');
 
 	if (icon && sidebar) {
 		icon.addEventListener('click', function() {
@@ -56,6 +51,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			}
 		});
+	}
+
+	if (lastSegment && link) {
+		link.parentElement.previousElementSibling.click();
 	}
 
 	hljs.initHighlightingOnLoad();

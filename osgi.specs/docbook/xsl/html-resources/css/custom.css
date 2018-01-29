@@ -185,7 +185,8 @@ div.table-contents td {
 }
 
 #sidebar {
-	bottom: 0;
+	bottom: 0px;
+	max-height: 100%;
 	overflow-y: scroll;
 	position: fixed;
 	top: 122px;
@@ -436,11 +437,11 @@ p.bibliomixed span.title::after {
 		font-size: 1.375em;
 	}
 
-	#content, #fullbody, #sidebar, #tree {
+	#content, #fullbody {
 		width: 100%;
 	}
 
-	#content, #mobile-menu-icon, #sidebar {
+	#content, #mobile-menu-icon {
 		position: fixed;
 	}
 
