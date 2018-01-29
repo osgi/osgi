@@ -29,7 +29,7 @@
     these.</para>
 
     <para>This specification defines a mechanism to feed configurations into
-    the Configuration Admin service through configuration resources. A single
+    the Configuration Admin Service through configuration resources. A single
     configuration resource can feed multiple PIDs with configuration and
     multiple configuration resources can be provided in one or more
     bundles.</para>
@@ -577,7 +577,7 @@
       <para>When a bundle that provides configuration resources is uninstalled,
       the Configurator removes any configurations that it has provided on behalf
       of this bundle from the system. Before it removes a configuration the
-      Configurator checks with Configuration Admin whether the configuration it
+      Configurator checks with the Configuration Admin Service whether the configuration it
       has provided has been changed by another entity. If the configuration has
       not been changed by another entity it is removed. If it has been changed
       then whether the configuration is removed depends on the value of the
@@ -721,31 +721,45 @@
     <para>When the Configurator starts it calls
     <code>bundleContext.getProperty("configurator.initial")</code> to obtain
     initial configurations from the runtime environment. If this property is
-    available its value is processed as follows: <orderedlist>
-        <listitem>
-          <para>If the value starts with a left curly bracket ('{'
+    available its value is processed as follows:
+    <orderedlist>
+      <listitem>
+        <para>If the value starts with a left curly bracket ('{'
           <code>\u007B</code>), ignoring any leading white space, the
           Configurator will interpret the value as a literal configuration
           JSON resource.</para>
-        </listitem>
+      </listitem>
 
-        <listitem>
-          <para>Otherwise the value is treated as a comma-separated list of
+      <listitem>
+        <para>Otherwise the value is treated as a comma-separated list of
           URLs. The Configurator will read the resource at each URL and parse
           it as a JSON Configuration resource. If any errors occur during this
-          process they are logged and the URL is skipped.</para>
-        </listitem>
-      </orderedlist></para>
+          process they are logged and the URL is skipped. The URLs are processed
+          in alphabetical order of their provided value.</para>
+      </listitem>
+    </orderedlist>
+    </para>
+    <para>The ranking of these configurations can be set in the configuration
+    resource as described in <xref linkend="service.configurator-ranking"/>. 
+    The Configurator treats the initial configurations as being provided from 
+    a bundle with the bundle id <code>-1</code>.</para>
+
+    <para>If the framework is restarted, the Configurator needs to check whether 
+    the provided initial configurations are different than on the previous startup. 
+    The implementation is free to use whatever is appropriate to perform this check, 
+    like comparing last modified for the URLs or using a hash etc. If the provided
+    configuration is different than on a previous startup, this is treated like a 
+    bundle update with an updated configuration.</para>
   </section>
 
   <section>
     <title>Life Cycle</title>
 
-    <para>The Configurator uses the Configuration Admin service. Therefore the
-    Configurator implementation should require the Configuration Admin service
+    <para>The Configurator uses the Configuration Admin Service. Therefore the
+    Configurator implementation should require the Configuration Admin Service
     through a service requirement. The Configurator should not start
     processing configuration resources until it has runtime access to the
-    Configuration Admin service.</para>
+    Configuration Admin Service.</para>
 
     <para>The Configurator uses the Configuration Admin Service that is
     visible to both the Configurator itself as well as the bundle that is
@@ -814,13 +828,13 @@
     provisioning or configuration tasks.</para>
 
     <para>Whenever the Configurator is processing configuration resources and
-    interacting with the Configuration Admin service, the Configurator must check
+    interacting with the Configuration Admin Service, the Configurator must check
     whether a Coordinator Service is present. If it is present, the Configurator
     checks for an implicit coordination on the current thread. If such an implicit
     coordination exists, the Configurator does not need to create one. However, if
     such an implicit coordination is not present, the Configurator starts an implicit
     coordination on the current thread when interacting with the Configuration Admin
-    service and ends this coordinator when it is finished doing the current set of
+    Service and ends this coordinator when it is finished doing the current set of
     work. The Configurator does not need to delay applying any changes to the
     Configuration Admin Service until the coordination ends.</para>
   </section>
@@ -854,7 +868,7 @@
 
       <para>The extendee needs
       <code>ServicePermission[&lt;interface&gt;, GET]</code> for the
-      <code>ConfigurationAdmin</code> service.</para>
+      Configuration Admin Service.</para>
     </section>
 
     <section>
@@ -862,7 +876,7 @@
 
       <para>The Configurator does get the Configuration Admin
       Service on behalf of the extendee. Therefore the extendee needs to be included
-      in permission checks for getting the Configuration Admin service. The Configurator 
+      in permission checks for getting the Configuration Admin Service. The Configurator 
       needs to perform the required calls to ensure the extendee has the necessary 
       permission to get the Configuration Admin Service.</para>
     </section>
