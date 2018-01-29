@@ -91,14 +91,10 @@
     <xsl:if test="$book.status = 'draft'">
       <style>
         <xsl:text><![CDATA[#scrollable {
-          background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
-          background-attachment: local;
-  }
-  @media (max-width: 991px) {
-    #scrollable {
-      background-size: 120%;
-    }
-  }]]></xsl:text>
+    background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
+    background-attachment: local;
+    background-size: 120%;
+}]]></xsl:text>
       </style>
     </xsl:if>
 </xsl:template>
@@ -272,11 +268,6 @@ basic format:
                     <xsl:call-template name="user.footer.navigation"/>
                 </div>
             </div>
-
-            <script type="text/javascript">
-                hljs.initHighlightingOnLoad();
-                fixAnchors();
-            </script>
         </body>
     </html>
 
@@ -408,13 +399,19 @@ basic format:
     <xsl:if test="not(self::d:index) or (self::d:index and not($generate.index = 0))">
         <li>
             <xsl:if test="$depth = 1">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="'toc_'"/>
+                    <xsl:value-of select="position()"/>
+                </xsl:attribute>
                 <span class="handle">+ </span>
             </xsl:if>
             <span class="file">
                 <a href="{substring-after($href, $base.dir)}"  tabindex="1">
-                    <span class="number">
-                        <xsl:value-of select="$label"/>
-                    </span>
+                    <xsl:if test="normalize-space($label)">
+                        <span class="number">
+                            <xsl:value-of select="$label"/>
+                        </span>
+                    </xsl:if>
                     <span class="innertitle">
                         <xsl:value-of select="$title"/>
                     </span>
