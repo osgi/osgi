@@ -2609,7 +2609,8 @@ public class UI {
       xml:id="service.zigbee-ref-whiteboard-pattern"><title>Listeners
       considered harmful: The whiteboard pattern</title>Peter Kriens, BJ
       Hargrave for the OSGi Alliance, Technical Whitepaper, August
-      2004.<?line-break ?>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+      2004.<?line-break ?><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.zigbee-ref-zigbee-gateway"><title>ZigBee
       Gateway</title>ZigBee Alliance, 2011.</bibliomixed>

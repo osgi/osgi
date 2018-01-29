@@ -111,8 +111,9 @@
     <bibliolist>
       <bibliomixed xml:id="i310173"><title>Bradner, S., Key words for use in
       RFCs to Indicate Requirement
-      Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
-      1997.</bibliomixed>
+      Levels</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2119.txt"/>, March
+      1997.</biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
