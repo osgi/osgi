@@ -678,11 +678,11 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.sorted--"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para> <para> <xref
                 linkend="org.osgi.util.pushstream.PushStream.sorted-Comparator-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Remembers all items in the stream until the
                 stream ends. At this point the data in the stream will be
@@ -1416,7 +1416,15 @@
       therefore not normally be used for infinite event streams, but instead
       for short, finite streams of data that can be processed rapidly, for
       example as the result of a flatmapping operation. In this scenario
-      reusing the incoming thread improves performance.</para>
+      reusing the incoming thread improves performance. In the following
+      example an incoming list of URLs is registered for download.</para>
+      
+      <programlisting>PushStreamProvider psp = new PushStreamProvider();
+
+PushStream&lt;List&lt;URL&gt;&gt; urls = getURLStream();
+
+urls.flatMap(l -> psp.streamOf(l.stream()))
+    .forEach(url -> registerDownload(url));</programlisting>
 
       <para>For larger Streams of data, or when truly asynchronous operation
       is required, there is a second <xref
