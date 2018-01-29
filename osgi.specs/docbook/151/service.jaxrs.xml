@@ -1123,8 +1123,7 @@ public class ConfiguredExtension implements WriterInterceptor {
         }
         ctx.proceed();
     }
-}
-      </programlisting>
+}</programlisting>
     </section>
 
     <section>
@@ -1230,10 +1229,9 @@ public class ConfiguredExtension implements WriterInterceptor {
       support, and requires the extension from a JAX-RS whiteboard
       resource.</para>
 
-      <programlisting>
- @Component(property="serialize.to=JSON")
- @JaxrsExtension
- public class JsonProvider implements MessageBodyReader,
+      <programlisting>@Component(property="serialize.to=JSON")
+@JaxrsExtension
+public class JsonProvider implements MessageBodyReader,
       MessageBodyWriter {
     ...      
 }
@@ -1436,8 +1434,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       to register a JAX-RS Whiteboard application, and shows how to target an
       additional whiteboard resource to that application.</para>
 
-      <programlisting>
-@Component(service=Application.class)
+      <programlisting>@Component(service=Application.class)
 @JaxrsApplicationBase("example")
 @JaxrsName("myApp")
 public class MyApplication extends Application {
@@ -1708,8 +1705,7 @@ public class MyApplication extends Application {
       <code>PromiseRxInvoker</code> using normal JAX-RS idioms. For
       example:</para>
 
-      <programlisting>
-Client client = clientBuilder.build();
+      <programlisting>Client client = clientBuilder.build();
 Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
     .path("/foo")
     .path("/{name}")
@@ -1737,8 +1733,7 @@ Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
       <code>WebTarget</code> used when building the SseEventSource. A client
       may therefore consume Server Sent Events in the following way:</para>
 
-      <programlisting>
-Client client = clientBuilder.build();
+      <programlisting>Client client = clientBuilder.build();
 
 WebTarget target = client.target(REST_SERVICE_URL)
     .path("/foo")
@@ -1749,8 +1744,7 @@ SseEventSource source = sseFactory.newSource(target);;
     
 source.register(event -&gt; doSomething(event));
     
-source.open();
-</programlisting>
+source.open();</programlisting>
 
       <para>A <code>SseEventSource</code> may easily be converted into a
       <code>PushEventSource</code> (and consequently a
@@ -1758,8 +1752,7 @@ source.open();
       not respond to back-pressure requests and should typically be used with
       a buffer.</para>
 
-      <programlisting>
-SseEventSource source = sseBuilder.newSource(target);
+      <programlisting>SseEventSource source = sseBuilder.newSource(target);
     
 PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         source.register(e -&gt; {
@@ -1779,8 +1772,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
                         () -&gt; pec.accept(PushEvent.close()));
         source.open();
         return source;
-    };
-</programlisting>
+    };</programlisting>
     </section>
   </section>
 
@@ -1927,8 +1919,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     public List&lt;String&gt; getFoos() {
         return Arrays.asList("foo", "bar", "baz");
     }
-}
-        </programlisting>
+}</programlisting>
 
         <para>A corresponding component property type (<xref 
         linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsMediaType"
@@ -1946,8 +1937,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     		context.register(MyJSONCodec.class);
         return true;
     }
-}
-        </programlisting>
+}</programlisting>
       </section>
     </section>
   </section>

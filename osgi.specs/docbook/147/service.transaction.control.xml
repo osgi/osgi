@@ -200,9 +200,7 @@
       instances can then be used in the scoped work. This is demonstrated in
       the following example:</para>
 
-      <programlisting>
-      
-@Reference
+      <programlisting>@Reference
 TransactionControl control;
 
 Connection connection;
@@ -231,9 +229,7 @@ public List&lt;String&gt; listMessages(String message) {
             }
             return results;
         });
-}
-
-      </programlisting>
+}</programlisting>
 
       <para>This example demonstrates how simply clients can execute scoped
       work using the Transaction Control Service. In this case write
@@ -285,12 +281,10 @@ public List&lt;String&gt; listMessages(String message) {
       callable interface <code>throws Exception</code> it is not necessary to
       catch or wrap any exception generated within Scoped Work.</para>
 
-      <programlisting>
-// An SQLException may be raised by the query, 
+      <programlisting>// An SQLException may be raised by the query, 
 // but we don't need to catch it
 control.required(() -&gt; connection.createStatement()
-    .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
-      </programlisting>
+    .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));</programlisting>
 
       <para>An exception indicates that a problem has occurred in a piece of
       code therefore, by default, any exception thrown from inside a
@@ -331,35 +325,27 @@ control.required(() -&gt; connection.createStatement()
         exception type to be thrown a <code>ScopedWorkException</code> can be
         easily unwrapped using the <code>as</code> method.</para>
 
-        <programlisting>
-        
-try {
+        <programlisting>try {
     control.required(() -&gt; connection.createStatement()
         .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
 } catch (ScopedWorkException swe) {
     // This line throws the cause of the ScopedWorkException as
     // an SQLException or as a RuntimeException if appropriate
     throw swe.as(SQLException.class);
-}        
-        
-        </programlisting>
+}</programlisting>
 
         <para>If there is more than one potential checked Exception type that
         should be rethrown then the <code>asOneOf</code> method can be
         used.</para>
 
-        <programlisting>
-        
-try {
+        <programlisting>try {
     control.required(() -&gt; connection.createStatement()
         .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
 } catch (ScopedWorkException swe) {
     // This line throws the cause of the ScopedWorkException as
     // an SQLException or as a RuntimeException if appropriate
     throw swe.asOneOf(SQLRecoverableException.class, SQLTransientException.class);
-}        
-        
-        </programlisting>
+}</programlisting>
       </section>
 
       <section>
@@ -371,15 +357,11 @@ try {
         Transaction to roll back. This can be indicated to the Transaction
         Control Service when the Scope is being declared.</para>
 
-        <programlisting>
-        
-control.build()
+        <programlisting>control.build()
     .noRollbackFor(URISyntaxException.class)
     .required(() -&gt; {
             ...
-        });    
-        
-        </programlisting>
+        });</programlisting>
 
         <para>In this example the Transaction does not roll back for any
         <code>URISyntaxException</code>. Sometimes this is too coarse grained,
@@ -388,9 +370,7 @@ control.build()
         Transaction Control Service <code>ignoreException</code>
         method.</para>
 
-        <programlisting>
-        
-control.required(() -&gt; {
+        <programlisting>control.required(() -&gt; {
         try {    
             // A URISynaxException from here is safe
             ...
@@ -400,9 +380,7 @@ control.required(() -&gt; {
         }
         // A URISynaxException from here is *not* safe
         ...
-    });    
-        
-        </programlisting>
+    });</programlisting>
       </section>
     </section>
 
@@ -467,9 +445,9 @@ control.required(() -&gt; {
     </itemizedlist>
 
     <section>
-      <title>Scope Lifecycle</title>
+      <title>Scope Life Cycle</title>
 
-      <para>The lifecycle of a scope is tied to the execution of a piece of
+      <para>The life cycle of a scope is tied to the execution of a piece of
       scoped work. Unless a scope is being inherited then a scope starts
       immediately before the scoped work executes and ends immediately after
       the scoped work completes, even if the scoped work throws an
@@ -480,15 +458,15 @@ control.required(() -&gt; {
       should then be passed to the relevant method on the TransactionControl
       service:</para>
 
-      <table>
+      <table pgwide="1">
         <title>Methods for executing scoped work</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="1.2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1.5*"/>
 
-          <colspec colnum="3" colwidth="3.3*"/>
+          <colspec colnum="3" colwidth="3.8*"/>
 
           <thead>
             <row>
@@ -502,7 +480,9 @@ control.required(() -&gt; {
 
           <tbody>
             <row>
-              <entry><code>required()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.required-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Unscoped</entry>
 
@@ -511,7 +491,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>required()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.required-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>No Transaction scope</entry>
 
@@ -521,7 +503,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>required()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.required-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Transaction scope</entry>
 
@@ -530,7 +514,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>requiresNew()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.requiresNew-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Unscoped</entry>
 
@@ -539,7 +525,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>requiresNew()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.requiresNew-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>No Transaction scope</entry>
 
@@ -549,7 +537,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>requiresNew()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.requiresNew-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Transaction scope</entry>
 
@@ -559,7 +549,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>supports()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.supports-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Unscoped</entry>
 
@@ -568,7 +560,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>supports()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.supports-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>No Transaction scope</entry>
 
@@ -577,7 +571,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>supports()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.supports-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Transaction scope</entry>
 
@@ -586,7 +582,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>notSupported()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.notSupported-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Unscoped</entry>
 
@@ -595,7 +593,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>notSupported()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.notSupported-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>No Transaction scope</entry>
 
@@ -604,7 +604,9 @@ control.required(() -&gt; {
             </row>
 
             <row>
-              <entry><code>notSupported()</code></entry>
+              <entry><xref
+    linkend="org.osgi.service.transaction.control.TransactionStarter.notSupported-Callable-"
+    xrefstyle="hyperlink"/></entry>
 
               <entry>Transaction scope</entry>
 
@@ -702,9 +704,7 @@ control.required(() -&gt; {
         can be used to simplify the act of rethrowing the cause when using
         this method.</para>
 
-        <programlisting>
-
-try {
+        <programlisting>try {
     txControl.required(() -&gt; {
                 // Do some work in here that may throw IOException
                 // or ClassNotFoundException
@@ -712,8 +712,7 @@ try {
         });
 } catch (ScopedWorkException swe) {
     throw swe.asOneOf(IOException.class, ClassNotFoundException.class);
-}
-          </programlisting>
+}</programlisting>
 
         <para>If the cause of a ScopedWorkException is a checked exception,
         but that exception is not assignable to any of the types passed to the
@@ -767,15 +766,13 @@ try {
         linkend="org.osgi.service.transaction.control.TransactionControl.getRollbackOnly--"
         xrefstyle="hyperlink"/></para>
 
-        <programlisting>
-txControl.required(() -&gt; {
+        <programlisting>txControl.required(() -&gt; {
             // Do some work in here
             ...
             // This work will not be committed!
             txControl.setRollbackOnly();
             return result;
-    });      
-        </programlisting>
+    });</programlisting>
 
         <para>Throwing an exception from the piece of work will, by default,
         cause the transaction to be rolled back. Note that this is different
@@ -787,14 +784,12 @@ txControl.required(() -&gt; {
         means that production code will fail to enforce the correct
         transaction boundaries.</para>
 
-        <programlisting>
-txControl.required(() -&gt; {
+        <programlisting>txControl.required(() -&gt; {
             // Do some work in here
             ...
             // Uh oh – something went wrong!
             throw new IllegalStateException(“Kaboom!”);
-    });  
-        </programlisting>
+    });</programlisting>
       </section>
 
       <section>
@@ -841,8 +836,7 @@ txControl.required(() -&gt; {
         <code>ScopedWorkException</code> in exactly the same way as it would
         when not nested.</para>
 
-        <programlisting>
-txControl.required(() -&gt; {
+        <programlisting>txControl.required(() -&gt; {
             // Do some work in here
             ...
             try {
@@ -853,8 +847,7 @@ txControl.required(() -&gt; {
             } catch (ScopedWorkException swe) {
                 // The transaction is still active, but now marked for rollback
             }
-    });  
-        </programlisting>
+    });</programlisting>
       </section>
 
       <section>
@@ -871,15 +864,13 @@ txControl.required(() -&gt; {
         <para>To indicate that a transaction is read-only the
         TransactionBuilder must be used.</para>
 
-        <programlisting>
-txControl.build()
+        <programlisting>txControl.build()
     .readOnly()
     .required(() -&gt; {
             // Do some work in here
             ...
             return result;
-        });
-        </programlisting>
+        });</programlisting>
 
         <para>The readOnly method provides a hint to the TransactionControl
         service that the scoped work only uses read access to resources. The
@@ -1454,9 +1445,7 @@ txControl.build()
       <para>Resources are created from a Resource Provider using the following
       method:</para>
 
-      <programlisting>
-public &lt;T&gt; T getResource(TransactionControl txControl);
-      </programlisting>
+      <programlisting>public &lt;T&gt; T getResource(TransactionControl txControl);</programlisting>
 
       <para>Typically clients will not use a plain Resource Provider, but will
       search for a specific subclass instead, which reifies the type parameter
@@ -1730,8 +1719,7 @@ public &lt;T&gt; T getResource(TransactionControl txControl);
 
         <para>Setting up data Access with Declarative Services:</para>
 
-        <programlisting>
-@Reference
+        <programlisting>@Reference
 TransactionControl txControl;
 
 @Reference
@@ -1749,13 +1737,11 @@ public void setUp(Config config) {
         
     connection = resourceProviderFactory.getProviderFor(dsf, jdbc, null)
                     .getResource(txControl);
-}
-         </programlisting>
+}</programlisting>
 
         <para>Reading data from a table:</para>
 
-        <programlisting>
-txControl.supports(() -&gt; {
+        <programlisting>txControl.supports(() -&gt; {
         ResultSet rs = connection.createStatement()
                 .executeQuery("Select message from TEST_TABLE");
 
@@ -1770,8 +1756,7 @@ txControl.supports(() -&gt; {
 txControl.required(() -&gt; 
         connection.createStatement()
            .execute("Insert into TEST_TABLE values ( 'Hello World!' )")
-    );
-         </programlisting>
+    );</programlisting>
       </section>
     </section>
 
@@ -1875,11 +1860,9 @@ txControl.required(() -&gt;
           properties as possible inside the persistence descriptor. For
           example:</para>
 
-          <programlisting>
-&lt;persistence-unit name="test-unit"&gt;
+          <programlisting>&lt;persistence-unit name="test-unit"&gt;
   &lt;description&gt;My application's persistence unit&lt;/description&gt;
-&lt;/persistence-unit&gt;
-          </programlisting>
+&lt;/persistence-unit&gt;</programlisting>
 
           <para>Passing String class names and expecting the JPA provider to
           load the Database driver reflectively should be avoided, however a
