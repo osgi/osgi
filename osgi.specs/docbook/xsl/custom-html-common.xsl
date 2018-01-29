@@ -85,7 +85,6 @@
     <link rel="stylesheet" type="text/css" href="css/github.css"/>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
     <script type="text/javascript" src="js/highlight.pack.js"></script>
-    <script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <xsl:if test="$book.status = 'draft'">
