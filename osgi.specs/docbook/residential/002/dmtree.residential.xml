@@ -337,7 +337,7 @@ session.commit();</programlisting>
       <para>During runtime a bundle is wired to several different entities,
       other bundles, fragments, packages, and services. The framework defines
       a general Requirement-Capability model and this model is reflected in
-      the Wiring API in <xref linkend="dmtree.residential.extref.1"/>. The
+      the Wiring API in <xref linkend="intro.core.release" xrefstyle="template:%t"/>. The
       Requirement-Capability model maps to a very generic way of describing
       wires between requirers and providers that is applicable to all of the
       OSGi constructs.</para>
@@ -787,14 +787,4 @@ try {
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.residential-ddf.xml"/>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.service.log-ddf.xml"/>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed xml:id="dmtree.residential.extref.1"><title><xref
-      linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>

@@ -1340,12 +1340,14 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types
-      Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+      Second Edition</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/xmlschema-2/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.repository-resolving.relative.uris"><title>XML Base
       (Second Edition), Resolving Relative
-      URIs</title>https://www.w3.org/TR/xmlbase/#resolution</bibliomixed>
+      URIs</title><biblioid class="uri"><link
+      xlink:href="https://www.w3.org/TR/xmlbase/#resolution"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.repository-ref.service.resolver"><title>Resolver Service

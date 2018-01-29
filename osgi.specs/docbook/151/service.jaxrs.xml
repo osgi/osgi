@@ -2094,25 +2094,26 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
     <bibliolist>
       <bibliomixed xml:id="service.jaxrs-i21217577"><title>Java API for
-      RESTful Web Services Specification 2.0</title>
-      https://jcp.org/en/jsr/detail?id=339</bibliomixed>
+      RESTful Web Services Specification 2.0</title><biblioid class="uri"><link
+      xlink:href="https://jcp.org/en/jsr/detail?id=339"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jaxrs-portable.java.contracts.ref"><title>Portable Java
-      Contract
-      Definitions</title>https://www.osgi.org/portable-java-contract-definitions/</bibliomixed>
+      Contract Definitions</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jaxrs-whiteboard.pattern.ref"><title>Whiteboard
-      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+      Pattern</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.jaxrs-iana.media.types"><title>IANA Media
-      Type Registrations</title>
-      https://www.iana.org/assignments/media-types/media-types.xhtml</bibliomixed>
+      Type Registrations</title><biblioid class="uri"><link
+      xlink:href="https://www.iana.org/assignments/media-types/media-types.xhtml"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.jaxrs-iana.media.type.suffixes"><title>IANA
-      Media Type Suffix Registrations</title>
-      https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml</bibliomixed>
+      Media Type Suffix Registrations</title><biblioid class="uri"><link
+      xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

@@ -1756,7 +1756,8 @@ public class MyComponent {
 
     <bibliolist>
       <bibliomixed
-      xml:id="i1215866"><title>LDAP.</title>http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol</bibliomixed>
+      xml:id="i1215866"><title>LDAP.</title><biblioid class="uri"><link
+      xlink:href="http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
       Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,
@@ -1764,7 +1765,8 @@ public class MyComponent {
 
       <bibliomixed xml:id="service.metatype-jls.ref"><title>The Java Language
       Specification, Java SE 8
-      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

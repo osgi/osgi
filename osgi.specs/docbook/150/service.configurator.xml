@@ -1088,12 +1088,12 @@
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
       <bibliomixed xml:id="service.configurator-json.ref"><title>JSON (JavaScript Object Notation)
-      </title>https://www.json.org</bibliomixed>
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.json.org"/></biblioid></bibliomixed>
       <bibliomixed xml:id="service.configurator-jsmin.ref"><title>JSMin - The JavaScript Minifier
-      </title>https://www.crockford.com/javascript/jsmin.html</bibliomixed>      
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>      
     </bibliolist>
   </section>
 </chapter>

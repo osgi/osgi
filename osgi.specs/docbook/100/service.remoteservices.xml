@@ -1376,16 +1376,20 @@ com.acme.rmi.path = service-id/24</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i1661227"><title>The Fallacies of Distributed
       Computing
-      Explained</title>http://www.rgoarchitects.com/Files/fallacies.pdf</bibliomixed>
+      Explained</title><biblioid class="uri"><link
+      xlink:href="http://www.rgoarchitects.com/Files/fallacies.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1663801"><title>Service Component Architecture
-      (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
+      (SCA)</title><biblioid class="uri"><link
+      xlink:href="http://www.oasis-opencsa.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1674930"><title>SCA Policy Framework
-      specification</title>http://www.oasis-open.org/committees/sca-policy/</bibliomixed>
+      specification</title><biblioid class="uri"><link
+      xlink:href="http://www.oasis-open.org/committees/sca-policy/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1721171"><title>Java Language
-      Specification</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

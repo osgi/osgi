@@ -1402,27 +1402,32 @@ localized/logo.png</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i3110503"><title>Jave Enterprise Edition Release
-      5</title>Java 1.5.0 Packages.
-      http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html</bibliomixed>
+      5</title><biblioid class="uri">Java 1.5.0 Packages <link
+      xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3076362"><title>Java EE Web
-      Applications</title>http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</bibliomixed>
+      Applications</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3076808"><title>Servlet 2.5
-      specification</title>http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</bibliomixed>
+      specification</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3076835"><title>JSP 2.1
-      specification</title>http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html</bibliomixed>
+      specification</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3102743"><title>PAX Web
-      Extender</title>http://team.ops4j.org/wiki/display/paxweb/Pax+Web</bibliomixed>
+      Extender</title><biblioid class="uri"><link
+      xlink:href="http://team.ops4j.org/wiki/display/paxweb/Pax+Web"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3079490"><title>Uniform Resource Locators, RFC
-      1738</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
+      1738</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1738.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3081342"><title>JSR 250 Common Annotations for the
-      Java
-      Platform</title>http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</bibliomixed>
+      Java Platform</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

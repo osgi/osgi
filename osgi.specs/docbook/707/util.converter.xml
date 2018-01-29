@@ -1532,8 +1532,8 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
 
     <bibliolist>
       <bibliomixed xml:id="util.converter-jls.ref"><title>The Java Language
-      Specification, Java SE 8
-      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
+      Specification, Java SE 8 Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

@@ -6785,31 +6785,40 @@ country ::= &lt;java country-code&gt; ('_' &lt;java variant-code&gt;)+</programl
 
     <bibliolist>
       <bibliomixed xml:id="i1954805"><title>Spring
-      Framework</title>http://www.springsource.org/</bibliomixed>
+      Framework</title><biblioid class="uri"><link
+      xlink:href="http://www.springsource.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1954997"><title>Spring Dynamic
-      Modules</title>http://www.springsource.org/osgi</bibliomixed>
+      Modules</title><biblioid class="uri"><link
+      xlink:href="http://www.springsource.org/osgi"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1954924"><title>Guice</title>http://code.google.com/p/google-guice/</bibliomixed>
+      xml:id="i1954924"><title>Guice</title><biblioid class="uri"><link
+      xlink:href="http://code.google.com/p/google-guice/"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1954940"><title>Picocontainer</title>http://www.picocontainer.org/</bibliomixed>
+      xml:id="i1954940"><title>Picocontainer</title><biblioid class="uri"><link
+      xlink:href="http://www.picocontainer.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1704220"><title>Java Beans
-      Specification</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138795.html</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138795.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1807860"><title>XML
-      Namespaces</title>http://www.w3.org/TR/REC-xml-names</bibliomixed>
+      Namespaces</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/REC-xml-names"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Properties
-      format</title>http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html#load%28java.io.InputStream%29</bibliomixed>
+      format</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html#load%28java.io.InputStream%29"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2584676"><title>XML
-      Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
+      Schema</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/XML/Schema"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2930811"><title>OSGi XML
-      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
+      Schemas</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

@@ -829,7 +829,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
     <bibliolist>
       <bibliomixed xml:id="i487605"><title>Java Language
-      Specification</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

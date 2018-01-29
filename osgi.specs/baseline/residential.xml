@@ -4230,14 +4230,6 @@ Human readable information about an exception.
       </table>
    </section>
 </section>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed xml:id="dmtree.residential.extref.1"><title><xref linkend="intro.core.release" xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>
 
   <chapter label="3" revision="$Id: e36c3d3c56383e2ef9dd819a5cd178ffd42500fc $" version="5" xml:id="tr157softwaremodules" xml:base="003/tr157softwaremodules.xml">

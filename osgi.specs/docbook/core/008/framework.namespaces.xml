@@ -1370,7 +1370,8 @@ Bundle B:
 
     <bibliolist>
       <bibliomixed xml:id="i1775657"><title>Specification
-      References</title>https://www.osgi.org/developer/specifications/reference/</bibliomixed>
+      References</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

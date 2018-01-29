@@ -868,13 +868,4 @@ public synchronized void doStuff() {
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.delegate.xml"/>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>

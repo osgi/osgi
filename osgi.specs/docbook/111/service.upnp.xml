@@ -946,13 +946,16 @@
 
     <bibliolist>
       <bibliomixed xml:id="i1586441"><title>UPnP
-      Forum</title>http://www.upnp.org</bibliomixed>
+      Forum</title><biblioid class="uri"><link
+      xlink:href="http://www.upnp.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1325817"><title>XML
-      Schema</title>http://www.w3.org/TR/xmlschema-2</bibliomixed>
+      Schema</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/xmlschema-2"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1325829"><title>ISO 8601 Date And Time
-      formats</title>http://www.iso.ch</bibliomixed>
+      formats</title><biblioid class="uri"><link
+      xlink:href="http://www.iso.ch"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

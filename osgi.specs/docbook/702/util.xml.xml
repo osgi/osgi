@@ -525,21 +525,27 @@ com.acme.saxparser.SAXParserValidating      # Validates</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>XML</title>http://www.w3.org/XML</bibliomixed>
+      <bibliomixed><title>XML</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/XML"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>SAX</title>http://www.saxproject.org/</bibliomixed>
+      <bibliomixed><title>SAX</title><biblioid class="uri"><link
+      xlink:href="http://www.saxproject.org/"/></biblioid></bibliomixed>
 
       <bibliomixed><title>DOM Java Language
-      Binding</title>http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</bibliomixed>
+      Binding</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1255594"><title>JAXP</title>http://jaxp.java.net/</bibliomixed>
+      xml:id="i1255594"><title>JAXP</title><biblioid class="uri"><link
+      xlink:href="http://jaxp.java.net/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1267674"><title>JAR File specification, services
-      directory</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
+      directory</title><biblioid class="uri"><link
+      xlink:href="http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1286146"><title>Xerces 2 Java
-      Parser</title>http://xerces.apache.org/xerces2-j/</bibliomixed>
+      Parser</title><biblioid class="uri"><link
+      xlink:href="http://xerces.apache.org/xerces2-j/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

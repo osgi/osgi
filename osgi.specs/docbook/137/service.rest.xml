@@ -1613,14 +1613,17 @@ client.installBundle({
       Syntax</title>OSGi Core, Chapter 3.2.7 Filter Syntax</bibliomixed>
 
       <bibliomixed xml:id="service.rest-webidl"><title>Web
-      IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
+      IDL</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/WebIDL/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
-      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
+      Schemas</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
-      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+      Pattern</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

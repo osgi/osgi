@@ -959,29 +959,36 @@ getHttpService().registerServlet(
 
     <bibliolist>
       <bibliomixed xml:id="i1231452"><title>HTTP 1.0 Specification
-      RFC-1945</title>http://www.ietf.org/rfc/rfc1945.txt, May
-      1996</bibliomixed>
+      RFC-1945</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1945.txt"/>, May
+      1996</biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1215926"><title>HTTP 1.1 Specification
-      RFC-2616</title>http://www.ietf.org/rfc/rfc2616.txt, June
-      1999</bibliomixed>
+      RFC-2616</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2616.txt"/>, June
+      1999</biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1217577"><title>Java Servlet
-      Technology</title>http://www.oracle.com/technetwork/java/javaee/servlet/index.html</bibliomixed>
+      Technology</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javaee/servlet/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1219807"><title>MIME Multipurpose Internet Mail
-      Extension</title>http://www.mhonarc.org/~ehood/MIME/MIME.html</bibliomixed>
+      Extension</title><biblioid class="uri"><link
+      xlink:href="http://www.mhonarc.org/~ehood/MIME/MIME.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1220020"><title>Assigned MIME Media
-      Types</title>http://www.iana.org/assignments/media-types</bibliomixed>
+      Types</title><biblioid class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1220024"><title>Registration Procedures for new
       MIME media
-      types</title>http://www.ietf.org/rfc/rfc2048.txt</bibliomixed>
+      types</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2048.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1220308"><title>RFC 2617: HTTP Authentication:
       Basic and Digest Access
-      Authentication</title>http://www.ietf.org/rfc/rfc2617.txt</bibliomixed>
+      Authentication</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

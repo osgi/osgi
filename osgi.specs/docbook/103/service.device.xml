@@ -1838,16 +1838,20 @@ class SerialWidget extends ServiceTracker
 
     <bibliolist>
       <bibliomixed xml:id="i1424268"><title>Java Communications
-      API</title>http://www.oracle.com/technetwork/java/index-jsp-141752.html</bibliomixed>
+      API</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/index-jsp-141752.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1270819"><title>USB
-      Specification</title>http://www.usb.org</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://www.usb.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1271836"><title>Universal Plug and
-      Play</title>http://www.upnp.org</bibliomixed>
+      Play</title><biblioid class="uri"><link
+      xlink:href="http://www.upnp.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1271860"><title>Jini, Service Discovery and
-      Usage</title>http://en.wikipedia.org/wiki/Jini</bibliomixed>
+      Usage</title><biblioid class="uri"><link
+      xlink:href="http://en.wikipedia.org/wiki/Jini"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

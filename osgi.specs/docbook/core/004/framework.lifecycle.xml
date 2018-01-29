@@ -3950,49 +3950,63 @@ D: Export-Package: s</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i1296051"><title>The Standard for the Format of
       ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August
-      1982<?line-break ?>http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
+      1982<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc822.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1296055"><title>The Hypertext Transfer Protocol -
       HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
-      1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
+      1997<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2068.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1199923"><title>Java Language
-      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1199796"><title>A String Representation of LDAP
-      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1960.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1200042"><title>Java Security
-      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
+      Architecture</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1201324"><title>Java Package Versioning
-      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1304871"><title>Codes for the Representation of
       Names of Languages</title>ISO 639, International Standards
-      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
+      Organization<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://lcweb.loc.gov/standards/iso639-2/langhome.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2164952"><title>Manifest
-      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
+      Format</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2461629"><title>W3C
-      EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
+      EBNF</title><biblioid class="uri"><link
+      xlink:href="http://www.w3c.org/TR/REC-xml#sec-notation"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2467175"><title>Interval
-      Notation</title>http://www.math.ohio-state.edu/courses/math104/interval.pdf</bibliomixed>
+      Notation</title><biblioid class="uri"><link
+      xlink:href="http://www.math.ohio-state.edu/courses/math104/interval.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3287541"><title>OSGi Reference
-      Names</title>https://www.osgi.org/developer/specifications/reference/</bibliomixed>
+      Names</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3290992"><title>JKS Keystore Format (reverse
-      engineered)</title>http://metastatic.org/source/JKS.html</bibliomixed>
+      engineered)</title><biblioid class="uri"><link
+      xlink:href="http://metastatic.org/source/JKS.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3300085"><title>Java Service Provider
-      Configuration</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Service_Provider</bibliomixed>
+      Configuration</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Service_Provider"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3324333"><title>IETF RFC 1422 A Universally Unique
       IDentifier (UUID) URN
-      Namespace</title>http://www.ietf.org/rfc/rfc4122.txt</bibliomixed>
+      Namespace</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc4122.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

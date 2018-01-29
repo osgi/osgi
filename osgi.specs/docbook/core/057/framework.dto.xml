@@ -485,7 +485,8 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
     <bibliolist>
       <bibliomixed xml:id="framework.dto.references-dto"><title>Data Transfer
-      Object</title>https://en.wikipedia.org/wiki/Data_transfer_object</bibliomixed>
+      Object</title><biblioid class="uri"><link
+      xlink:href="https://en.wikipedia.org/wiki/Data_transfer_object"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

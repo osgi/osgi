@@ -1586,21 +1586,25 @@ Require-Capability: osgi.contract;
 
     <bibliolist>
       <bibliomixed xml:id="i3075794"><title>JPA
-      1.0</title>http://jcp.org/en/jsr/summary?id=220</bibliomixed>
+      1.0</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/en/jsr/summary?id=220"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3075842"><title>JPA
-      2.0</title>http://jcp.org/en/jsr/summary?id=317</bibliomixed>
+      2.0</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3075842.1"><title>JPA
-      2.1</title>http://jcp.org/en/jsr/summary?id=317</bibliomixed>
+      2.1</title><biblioid class="uri"><link
+      xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3091015"><title>Java EE
-      5</title>http://www.oracle.com/technetwork/java/javaee/tech/index.html</bibliomixed>
+      5</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jpa-portable.java.contracts.ref"><title>Portable Java
-      Contract Definitions</title>
-      http://www.osgi.org/Specifications/ReferenceContract</bibliomixed>
+      Contract Definitions</title><biblioid class="uri"><link
+      xlink:href="http://www.osgi.org/Specifications/ReferenceContract"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

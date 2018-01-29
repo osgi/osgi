@@ -930,13 +930,4 @@ public class Example extends MIDlet {
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.application.xml"/>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>

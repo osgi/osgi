@@ -1442,51 +1442,62 @@ http://server.operator.com/service-x? «
 
     <bibliolist>
       <bibliomixed xml:id="i1327494"><title>HMAC: Keyed-Hashing for Message
-      Authentication</title>http://www.ietf.org/rfc/rfc2104.txt Krawczyk ,et.
-      al. 1997.</bibliomixed>
+      Authentication</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2104.txt"/> Krawczyk ,et.
+      al. 1997</biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1278847"><title>NIST, FIPS PUB 180-1: Secure Hash
-      Standard, April 1995.</title></bibliomixed>
+      Standard, April 1995</title></bibliomixed>
 
       <bibliomixed><title>Hypertext Transfer Protocol -
-      HTTP/1.1</title>http://www.ietf.org/rfc/rfc2616.txt Fielding, R., et.
-      al.</bibliomixed>
+      HTTP/1.1</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2616.txt"/> Fielding, R., et.
+      al.</biblioid></bibliomixed>
 
       <bibliomixed><title>Rescorla, E., HTTP over TLS, IETF RFC 2818, May
-      2000</title>http://www.ietf.org/rfc/rfc2818.txt.</bibliomixed>
+      2000</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2818.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1287017"><title>ZIP Archive
-      format</title>http://www.pkware.com/support/zip-app-note/archives</bibliomixed>
+      format</title><biblioid class="uri"><link
+      xlink:href="http://www.pkware.com/support/zip-app-note/archives"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1297476"><title>RFC 2396 - Uniform Resource
       Identifier
-      (URI)</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
+      (URI)</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1296602"><title>MIME
-      Types</title>http://www.ietf.org/rfc/rfc2046.txt<?line-break ?>http://www.iana.org/assignments/media-types</bibliomixed>
+      Types</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2046.txt"/></biblioid><?line-break ?><biblioid
+      class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1326320"><title>3DES</title>W/ Tuchman, "Hellman
       Presents No Shortcut Solution to DES," IEEE Spectrum, v. 16, n. 7 July
-      1979, pp40-41.</bibliomixed>
+      1979, pp40-41</bibliomixed>
 
       <bibliomixed xml:id="i1371344"><title>RFC 1423 Part III: Algorithms,
       Modes, and
-      Identifiers</title>http://www.ietf.org/rfc/rfc1423.txt</bibliomixed>
+      Identifiers</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1423.txt"/></biblioid></bibliomixed>
 
       <bibliomixed><title>PKCS
-      5</title>ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-5v2</bibliomixed>
+      5</title><biblioid class="uri"><link
+      xlink:href="ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-5v2"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1371440"><title>Java Cryptography API (part of
-      Java
-      1.4)</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html/</bibliomixed>
+      Java 1.4)</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1371220"><title>SHA-1</title>U.S. Government,
       Proposed Federal Information Processing Standard for Secure Hash
       Standard, January 1992</bibliomixed>
 
       <bibliomixed><title>Transport Layer
-      Security</title>http://www.ietf.org/rfc/rfc2246.txt, January 1999, The
-      TLS Protocol Version 1.0, T. Dierks &amp; C. Allen.</bibliomixed>
+      Security</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2246.txt"/>, January 1999, The
+      TLS Protocol Version 1.0, T. Dierks &amp; C. Allen</biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

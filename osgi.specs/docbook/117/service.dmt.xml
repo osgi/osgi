@@ -6509,50 +6509,63 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i2165260"><title>OMA DM-TND v1.2
-      draft</title>http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip</bibliomixed>
+      draft</title><biblioid class="uri"><link
+      xlink:href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip"/></biblioid></bibliomixed>
 
       <bibliomixed><title>OMA DM-RepPro v1.2
-      draft:</title>http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-DM-RepPro-V1_2_0-20050131-D.zip</bibliomixed>
+      draft:</title><biblioid class="uri"><link
+      xlink:href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-DM-RepPro-V1_2_0-20050131-D.zip"/></biblioid></bibliomixed>
 
       <bibliomixed><title>IETF RFC2578. Structure of Management
-      Information</title>Version 2 (SMIv2)<?line-break ?>http://www.ietf.org/rfc/rfc2578.txt</bibliomixed>
+      Information</title>Version 2 (SMIv2)<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2578.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1399261"><title>Java™ Management Extensions
       Instrumentation and Agent Specification v1.2, October
-      2002,</title>http://www.oracle.com/technetwork/java/javase/tech/javamanagement-140525.html</bibliomixed>
+      2002,</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javase/tech/javamanagement-140525.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1399277"><title>JSR 9 - Federated Management
       Architecture (FMA) Specification</title>Version 1.0, January
-      2000<?line-break ?>http://www.jcp.org/en/jsr/detailid=9</bibliomixed>
+      2000<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=9"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1399342"><title>WBEM Profile Template,
       DSP1000</title>Status: Draft, Version 1.0 Preliminary, March 11,
-      2004<?line-break ?>http://www.dmtf.org/standards/wbem</bibliomixed>
+      2004<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.dmtf.org/standards/wbem"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1399257"><title>SNMP</title>http://www.wtcs.org/snmp4tpc/snmp_rfc.htm#rfc</bibliomixed>
+      xml:id="i1399257"><title>SNMP</title><biblioid class="uri"><link
+      xlink:href="http://www.wtcs.org/snmp4tpc/snmp_rfc.htm#rfc"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1418110"><title>RFC 2396 Uniform Resource
       Identifiers (URI): Generic
-      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
+      Syntax</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1662528"><title>MIME Media
-      Types</title>http://www.iana.org/assignments/media-types/</bibliomixed>
+      Types</title><biblioid class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1869240"><title>RFC 3548 The Base16, Base32, and
       Base64 Data
-      Encodings</title>http://www.ietf.org/rfc/rfc3548.txt</bibliomixed>
+      Encodings</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc3548.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1869214"><title>Secure Hash Algorithm
-      1</title>http://www.itl.nist.gov/fipspubs/fip180-1.htm</bibliomixed>
+      1</title><biblioid class="uri"><link
+      xlink:href="http://www.itl.nist.gov/fipspubs/fip180-1.htm"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2409502"><title>TR-069 CPE WAN Management Protocol
       (CWMP)</title>Customer Premises Equipment Wide Area Network Management
-      Protocol (CWMP)<?line-break ?>http://en.wikipedia.org/wiki/TR-069</bibliomixed>
+      Protocol (CWMP)<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://en.wikipedia.org/wiki/TR-069"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2437549"><title>XML Schema Part 2: Datatypes
       Second
-      Edition</title>http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

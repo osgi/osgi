@@ -689,20 +689,25 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <bibliolist>
       <bibliomixed><title>JavaScript
-      Promises</title>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</bibliomixed>
+      Promises</title><biblioid class="uri"><link
+      xlink:href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="util.promise-ref.javascript"><title>JavaScript
-      Promises</title>http://www.html5rocks.com/en/tutorials/es6/promises/</bibliomixed>
+      Promises</title><biblioid class="uri"><link
+      xlink:href="http://www.html5rocks.com/en/tutorials/es6/promises/"/></biblioid></bibliomixed>
 
       <bibliomixed><title>ECMAScript 6
-      drafts</title>http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</bibliomixed>
+      drafts</title><biblioid class="uri"><link
+      xlink:href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="util.promise-ref.monad"><title>Monad</title>https://en.wikipedia.org/wiki/Monad_%28functional_programming%29</bibliomixed>
+      xml:id="util.promise-ref.monad"><title>Monad</title><biblioid class="uri"><link
+      xlink:href="https://en.wikipedia.org/wiki/Monad_%28functional_programming%29"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="util.promise-ref.functional.interfaces"><title>Function
-      Interfaces</title>http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8</bibliomixed>
+      Interfaces</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

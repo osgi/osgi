@@ -732,28 +732,35 @@
     <bibliolist>
       <bibliomixed xml:id="i310173"><title>Bradner, S., Key words for use in
       RFCs to Indicate Requirement
-      Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
-      1997.</bibliomixed>
+      Levels</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2119.txt"/>, March
+      1997.</biblioid></bibliomixed>
 
       <bibliomixed xml:id="i434636"><title>Home Gateway
-      Initiative</title>http://www.homegatewayinitiative.org</bibliomixed>
+      Initiative</title><biblioid class="uri"><link
+      xlink:href="http://www.homegatewayinitiative.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i435333"><title>HG Requirements for HGI Open
       Platform
-      2.0</title>http://www.homegatewayinitiative.org/publis/HGI-RD048-HG_Requirements_for_HGI_Open_Platform_2_0_published_text.pdf</bibliomixed>
+      2.0</title><biblioid class="uri"><link
+      xlink:href="http://www.homegatewayinitiative.org/publis/HGI-RD048-HG_Requirements_for_HGI_Open_Platform_2_0_published_text.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i434644"><title>UPnP™
-      Forum</title>http://upnp.org</bibliomixed>
+      Forum</title><biblioid class="uri"><link
+      xlink:href="http://upnp.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i434640"><title>Broadband
-      Forum</title>http://www.broadband-forum.org</bibliomixed>
+      Forum</title><biblioid class="uri"><link
+      xlink:href="http://www.broadband-forum.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i437630"><title>UPnP Device Architecture
-      1.0</title>http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf</bibliomixed>
+      1.0</title><biblioid class="uri"><link
+      xlink:href="http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i437933"><title>TR-157 Amendment 3 Component
       Objects for
-      CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
+      CWMP</title><biblioid class="uri"><link
+      xlink:href="http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

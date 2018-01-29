@@ -2087,26 +2087,34 @@ qualifier ::= policy ( policy ) *</programlisting>
 
     <bibliolist>
       <bibliomixed
-      xml:id="i3074222"><title>OASIS</title>http://www.oasis-open.org</bibliomixed>
+      xml:id="i3074222"><title>OASIS</title><biblioid class="uri"><link
+      xlink:href="http://www.oasis-open.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3072184"><title>Service Component Architecture
-      (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
+      (SCA)</title><biblioid class="uri"><link
+      xlink:href="http://www.oasis-opencsa.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3072278"><title>SCA Assembly specification v1.1
-      CD03</title>http://docs.oasis-open.org/opencsa/sca-assembly/sca-assembly-1.1-spec.pdf</bibliomixed>
+      CD03</title><biblioid class="uri"><link
+      xlink:href="http://docs.oasis-open.org/opencsa/sca-assembly/sca-assembly-1.1-spec.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3072399"><title>SCA Policy Framework specification
       v1.1
-      CD02</title>http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf<?line-break ?>http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy</bibliomixed>
+      CD02</title><biblioid class="uri"><link
+      xlink:href="http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy"/></biblioid></bibliomixed>
 
       <bibliomixed><title>SCA Bindings
-      specifications</title>http://www.oasis-open.org/committees/sca-bindings/</bibliomixed>
+      specifications</title><biblioid class="uri"><link
+      xlink:href="http://www.oasis-open.org/committees/sca-bindings/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3073536"><title>WS-Policy
-      specification</title>http://www.w3.org/Submission/WS-Policy/</bibliomixed>
+      specification</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/Submission/WS-Policy/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3102308"><title>XML
-      Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
+      Schema</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/XML/Schema"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

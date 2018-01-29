@@ -715,13 +715,16 @@ com.acme.url.application.zip</programlisting></para>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>URLs</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
+      <bibliomixed><title>URLs</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1738.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1260753"><title>MIME Multipurpose Internet Mail
-      Extension</title>http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</bibliomixed>
+      Extension</title><biblioid class="uri"><link
+      xlink:href="http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1260756"><title>Assigned MIME Media
-      Types</title>http://www.iana.org/assignments/media-types</bibliomixed>
+      Types</title><biblioid class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

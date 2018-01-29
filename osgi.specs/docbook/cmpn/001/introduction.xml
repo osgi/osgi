@@ -69,7 +69,8 @@
       <para>This specification is based on the OSGi Core Release 7. This
       specification can be downloaded from:</para>
 
-      <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
+      <programlisting><link
+      xlink:href="https://www.osgi.org/developer/specifications/"/></programlisting>
     </section>
 
     <section>
@@ -649,7 +650,8 @@
 
     <bibliolist>
       <bibliomixed xml:id="i311124"><title>OSGi
-      Specifications</title>https://www.osgi.org/developer/specifications/</bibliomixed>
+      Specifications</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

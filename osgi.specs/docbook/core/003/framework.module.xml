@@ -5673,100 +5673,124 @@ URL(String protocol, String host, String file)</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i3311293"><title>Java Virtual Machine
-      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024180"><title>The Standard for the Format of
       ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August
-      1982<?line-break ?>http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
+      1982<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc822.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024184"><title>The Hypertext Transfer Protocol -
       HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
-      1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
+      1997<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2068.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024191"><title>Java Language
-      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
-      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1960.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024199"><title>Java Security
-      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
+      Architecture</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024203"><title>Java Package Versioning
-      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024206"><title>Codes for the Representation of
       Names of Languages</title>ISO 639, International Standards
-      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
+      Organization<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://lcweb.loc.gov/standards/iso639-2/langhome.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3100827"><title>Zip File Format</title>The Zip
       file format as defined by the java.util.zip package.</bibliomixed>
 
       <bibliomixed xml:id="i3024211"><title>Manifest
-      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
+      Format</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024215"><title>W3C
-      EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
+      EBNF</title><biblioid class="uri"><link
+      xlink:href="http://www.w3c.org/TR/REC-xml#sec-notation"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024221"><title>Mathematical Convention for
       Interval
-      Notation</title>http://planetmath.org/encyclopedia/Interval.html</bibliomixed>
+      Notation</title><biblioid class="uri"><link
+      xlink:href="http://planetmath.org/encyclopedia/Interval.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3086040"><title>RFC 2396 Uniform Resource
       Identifiers URI: Generic
-      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
+      Syntax</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Codes for the Representation of Names of
       Languages</title>ISO 639, International Standards
-      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
+      Organization<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://lcweb.loc.gov/standards/iso639-2/langhome.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
-      Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
+      Type</title><biblioid class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3215677"><title>OSGi Header
-      Registry</title>https://www.osgi.org/bundle-headers-reference/</bibliomixed>
+      Registry</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/bundle-headers-reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module.namespace-registry"><title>OSGi
-      Namespace
-      Registry</title>https://www.osgi.org/capability-namespaces-reference/</bibliomixed>
+      Namespace Registry</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/capability-namespaces-reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
       Specification (Second
-      Edition)</title>http://www.w3.org/TR/2003/REC-PNG-20031110/</bibliomixed>
+      Edition)</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/2003/REC-PNG-20031110/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3222193"><title>Open Source
-      Initiative</title>http://www.opensource.org/</bibliomixed>
+      Initiative</title><biblioid class="uri"><link
+      xlink:href="http://www.opensource.org/"/></biblioid></bibliomixed>
 
       <bibliomixed><title>OSGi Semantic
-      Versioning</title>https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf</bibliomixed>
+      Versioning</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3242547"><title>Specification
-      References</title>https://www.osgi.org/developer/specifications/reference/</bibliomixed>
+      References</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246261"><title>Google
-      Android</title>http://developer.android.com/index.html</bibliomixed>
+      Android</title><biblioid class="uri"><link
+      xlink:href="http://developer.android.com/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246276"><title>Google App
-      Engine</title>https://cloud.google.com/appengine/</bibliomixed>
+      Engine</title><biblioid class="uri"><link
+      xlink:href="https://cloud.google.com/appengine/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246284"><title>Google Web
-      Toolkit</title>http://www.gwtproject.org/</bibliomixed>
+      Toolkit</title><biblioid class="uri"><link
+      xlink:href="http://www.gwtproject.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module-spdx.license.list"><title>Software
       Package Data Exchange (SPDX) License
-      List</title>https://spdx.org/licenses/</bibliomixed>
+      List</title><biblioid class="uri"><link
+      xlink:href="https://spdx.org/licenses/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module-maven.pom.developers"><title>Maven
-      POM Reference,
-      Developers</title>https://maven.apache.org/pom.html#Developers</bibliomixed>
+      POM Reference, Developers</title><biblioid class="uri"><link
+      xlink:href="https://maven.apache.org/pom.html#Developers"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module-maven.pom.scm"><title>Maven POM
-      Reference,
-      SCM</title>https://maven.apache.org/pom.html#SCM</bibliomixed>
+      Reference, SCM</title><biblioid class="uri"><link
+      xlink:href="https://maven.apache.org/pom.html#SCM"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="framework.module-ref.multireleasejar"><title>Multi-release JAR
-      File</title>https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release</bibliomixed>
+      File</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

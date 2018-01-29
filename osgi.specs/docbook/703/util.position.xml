@@ -227,10 +227,12 @@
 
     <bibliolist>
       <bibliomixed><title>World Geodetic System 84
-      (WGS-84)</title>http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html</bibliomixed>
+      (WGS-84)</title><biblioid class="uri"><link
+      xlink:href="http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1255323"><title>Location API for
-      J2ME</title>http://www.jcp.org/jsr/detail/179.jsp</bibliomixed>
+      J2ME</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/jsr/detail/179.jsp"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

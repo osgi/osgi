@@ -887,31 +887,36 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>JMX</title>http://en.wikipedia.org/wiki/JMX</bibliomixed>
+      <bibliomixed><title>JMX</title><biblioid class="uri"><link
+      xlink:href="http://en.wikipedia.org/wiki/JMX"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Java Management Extensions (JMX) Technology
-      Overview</title>http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/overview/JMXoverviewTOC.html</bibliomixed>
+      Overview</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/overview/JMXoverviewTOC.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3067363"><title>JSR 3: Java Management Extensions
-      (JMX)
-      Specification</title>http://www.jcp.org/en/jsr/detailid=3</bibliomixed>
+      (JMX) Specification</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=3"/></biblioid></bibliomixed>
 
       <bibliomixed><title>JSR 255: Java Management Extensions (JMX)
-      Specification, version
-      2.0</title>http://www.jcp.org/en/jsr/detailid=255</bibliomixed>
+      Specification, version 2.0</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=255"/></biblioid></bibliomixed>
 
       <bibliomixed><title>JSR 160: JavaTM Management Extensions (JMX) Remote
-      API</title>http://www.jcp.org/en/jsr/detailid=160</bibliomixed>
+      API</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=160"/></biblioid></bibliomixed>
 
       <bibliomixed><title>JSR 262: Web Services Connector for Java Management
-      Extensions (JMX)
-      Agents</title>http://www.jcp.org/en/jsr/detailid=262</bibliomixed>
+      Extensions (JMX) Agents</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=262"/></biblioid></bibliomixed>
 
       <bibliomixed><title>JavaTM Management Extensions (JMXTM)API
-      Specification</title>http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/spec.html</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/spec.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3160796"><title>Using JConsole to Monitor
-      Applications</title>http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html</bibliomixed>
+      Applications</title><biblioid class="uri"><link
+      xlink:href="http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

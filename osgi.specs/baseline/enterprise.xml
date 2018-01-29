@@ -47833,14 +47833,6 @@ Notification that a Coordination has terminated as a
       </section>
    </section>
 </section>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release" xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>
 
   <chapter label="132" revision="$Id: f1dc188cdbec4eb4fed88fb5fa1013ac59bd78eb $" version="5" xml:id="service.repository" xml:base="../132/service.repository.xml">
@@ -63662,14 +63654,6 @@ Invoke the specified method as a "fire-and-forget" asynchronous task with
       </section>
    </section>
 </section>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title><xref linkend="intro.core.release" xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>
 
   <chapter xmlns:ns5="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1998/Math/MathML" xmlns:ns3="http://www.w3.org/1999/xhtml" label="140" revision="$Id: 4f3277d57789eacff9a8c6fca0986e244106d0af $" version="5" xml:id="service.http.whiteboard" xml:base="../140/service.http.whiteboard.xml">

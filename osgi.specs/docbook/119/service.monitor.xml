@@ -942,12 +942,12 @@ com.acme.foo/memory.free</programlisting>
       Description</title></bibliomixed>
 
       <bibliomixed xml:id="i1380725"><title>ETSI Performance Management [TS
-      132
-      403]</title>http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf</bibliomixed>
+      132 403]</title><biblioid class="uri"><link
+      xlink:href="http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1400659"><title>RFC-2396 Uniform Resource
-      Identifiers (URI): Generic
-      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
+      Identifiers (URI): Generic Syntax</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

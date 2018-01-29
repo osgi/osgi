@@ -1965,7 +1965,8 @@ PackagePermission  org.osgi.service.application   IMPORT</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i1519349"><title>PNG Image
-      Format</title>http://www.libpng.org/pub/png/</bibliomixed>
+      Format</title><biblioid class="uri"><link
+      xlink:href="http://www.libpng.org/pub/png/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

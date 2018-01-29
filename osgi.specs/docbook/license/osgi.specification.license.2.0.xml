@@ -101,10 +101,10 @@
     <para>This specification can be downloaded from the OSGi Alliance web
     site:</para>
 
-    <programlisting>https://www.osgi.org</programlisting>
+    <programlisting><link xlink:href="https://www.osgi.org"/></programlisting>
 
     <para>Comments about this specification can be raised at:</para>
 
-    <programlisting>https://osgi.org/bugzilla/</programlisting>
+    <programlisting><link xlink:href="https://osgi.org/bugzilla/"/></programlisting>
   </section>
 </preface>

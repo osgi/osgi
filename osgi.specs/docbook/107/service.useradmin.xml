@@ -1063,7 +1063,8 @@ ROLE_REMOVED</programlisting>
 
       <bibliomixed xml:id="i1307810"><title>Java Authentication and
       Authorization
-      Service</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</bibliomixed>
+      Service</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

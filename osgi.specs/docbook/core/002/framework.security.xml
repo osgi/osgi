@@ -1007,39 +1007,49 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i1457637"><title>RFC 2253Lightweight Directory
       Access Protocol (v3): UTF-8 String Representation of Distinguished
-      Names</title>http://www.ietf.org/rfc/rfc2253.txt</bibliomixed>
+      Names</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2253.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1485767"><title>X.509
-      Certificates</title>http://www.ietf.org/rfc/rfc2459.txt</bibliomixed>
+      Certificates</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2459.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1488926"><title>Java Security
-      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
+      Architecture</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1509711"><title>Java Package Versioning
-      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1488938"><title>Manifest
-      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
+      Format</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1483030"><title>Secure Hash
-      Standard</title>http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf</bibliomixed>
+      Standard</title><biblioid class="uri"><link
+      xlink:href="http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
-      Internet Electronic
-      Mail</title>http://www.ietf.org/rfc/rfc1421.txt</bibliomixed>
+      Internet Electronic Mail</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1421.txt"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1484747"><title>DSA</title>http://www.itl.nist.gov/fipspubs/fip186.htm</bibliomixed>
+      xml:id="i1484747"><title>DSA</title><biblioid class="uri"><link
+      xlink:href="http://www.itl.nist.gov/fipspubs/fip186.htm"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="i1484864"><title>RSA</title>http://www.ietf.org/rfc/rfc2313.txt
-      which is superseded by http://www.ietf.org/rfc/rfc2437.txt</bibliomixed>
+      xml:id="i1484864"><title>RSA</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2313.txt
+      which is superseded by http://www.ietf.org/rfc/rfc2437.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
-      #7</title>http://www.rsasecurity.com/rsalabs/node.asp?id=2129</bibliomixed>
+      #7</title><biblioid class="uri"><link
+      xlink:href="http://www.rsasecurity.com/rsalabs/node.asp?id=2129"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1488889"><title>Unicode Normalization UAX #
-      15</title>http://www.unicode.org/reports/tr15/</bibliomixed>
+      15</title><biblioid class="uri"><link
+      xlink:href="http://www.unicode.org/reports/tr15/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
       Directory Services</title>ISBN 1-57870-070-1</bibliomixed>

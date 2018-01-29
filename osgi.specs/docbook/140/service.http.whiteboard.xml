@@ -2604,37 +2604,43 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
     <bibliolist>
       <bibliomixed xml:id="service.http.whiteboard-i21231452"><title>HTTP 1.0
-      Specification RFC-1945</title>http://www.ietf.org/rfc/rfc1945.txt, May
-      1996</bibliomixed>
+      Specification RFC-1945</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1945.txt"/>, May
+      1996</biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21215926"><title>HTTP 1.1
       Specifications RFCs
-      7230-7235</title>https://tools.ietf.org/html/rfc7230,
-      https://tools.ietf.org/html/rfc7231,
-      https://tools.ietf.org/html/rfc7232,
-      https://tools.ietf.org/html/rfc7233,
-      https://tools.ietf.org/html/rfc7234,
-      https://tools.ietf.org/html/rfc7235</bibliomixed>
+      7230-7235</title><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7230"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7231"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7232"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7233"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7234"/></biblioid><?line-break ?><biblioid class="uri"><link
+      xlink:href="https://tools.ietf.org/html/rfc7235"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-http2"><title>HTTP/2
-      Specifications</title>https://http2.github.io</bibliomixed>
+      Specifications</title><biblioid class="uri"><link
+      xlink:href="https://http2.github.io"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
-      Servlet 3.1 Specification</title>
-      https://jcp.org/aboutJava/communityprocess/final/jsr340/</bibliomixed>
+      Servlet 3.1 Specification</title><biblioid class="uri"><link
+      xlink:href="https://jcp.org/aboutJava/communityprocess/final/jsr340/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-portable.java.contracts.ref"><title>Portable
       Java Contract
-      Definitions</title>https://www.osgi.org/portable-java-contract-definitions/</bibliomixed>
+      Definitions</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21220308"><title>RFC 2617:
       HTTP Authentication: Basic and Digest Access
-      Authentication</title>http://www.ietf.org/rfc/rfc2617.txt</bibliomixed>
+      Authentication</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
-      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+      Pattern</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-service.hook.ref"><title>Core Service

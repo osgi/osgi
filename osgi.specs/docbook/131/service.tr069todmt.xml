@@ -3653,23 +3653,29 @@ de-telekom-shell</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i741499"><title>TR-069 Amendment
-      3</title>http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</bibliomixed>
+      3</title><biblioid class="uri"><link
+      xlink:href="http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i694602"><title>TR-106 Amendment
-      3</title>http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf</bibliomixed>
+      3</title><biblioid class="uri"><link
+      xlink:href="http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i731609"><title>XML Schema Part 2: Datatypes Second
-      Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/xmlschema-2/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i741562"><title>SOAP
-      1.1</title>http://www.w3.org/TR/2000/NOTE- SOAP-20000508</bibliomixed>
+      1.1</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/2000/NOTE- SOAP-20000508"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i747814"><title>Extensible Markup Language (XML)
       1.0 (Second
-      Edition)</title>http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter</bibliomixed>
+      Edition)</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i799974"><title>Broadband
-      Forum</title>http://www.broadband-forum.org/</bibliomixed>
+      Forum</title><biblioid class="uri"><link
+      xlink:href="http://www.broadband-forum.org/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

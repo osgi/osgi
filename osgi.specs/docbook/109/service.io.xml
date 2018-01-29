@@ -440,10 +440,12 @@ class DataConnection
 
     <bibliolist>
       <bibliomixed xml:id="i1304655"><title>Java 2 Micro
-      Edition</title>http://www.oracle.com/technetwork/java/javame/index.html</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="http://www.oracle.com/technetwork/java/javame/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed><title>J2ME Foundation
-      Profile</title>http://www.jcp.org/en/jsr/detailid=46</bibliomixed>
+      Profile</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/en/jsr/detailid=46"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

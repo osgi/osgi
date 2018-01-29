@@ -5001,20 +5001,25 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       file format as defined by the java.util.zip package.</bibliomixed>
 
       <bibliomixed xml:id="i3321186"><title>IANA
-      application/vnd.osgi.subsystem</title>www.iana.org/assignments/media-types/application/vnd.osgi.subsystem</bibliomixed>
+      application/vnd.osgi.subsystem</title><biblioid class="uri"><link
+      xlink:href="http://www.iana.org/assignments/media-types/application/vnd.osgi.subsystem"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3323132"><title>RFC 1738 Uniform Resource
-      Locators</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
+      Locators</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc1738.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3323360"><title>Uniform Resource Identifiers
       (URI): Generic
-      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
+      Syntax</title><biblioid class="uri"><link
+      xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3324343"><title>Equinox Region
-      Digraph</title>http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</bibliomixed>
+      Digraph</title><biblioid class="uri"><link
+      xlink:href="http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="subsystems.osi"><title>Open Source
-      initiative</title> http://www.opensource.org/</bibliomixed>
+      initiative</title><biblioid class="uri"><link
+      xlink:href="http://www.opensource.org/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.subsystem-ref.service.resolver"><title>Resolver Service

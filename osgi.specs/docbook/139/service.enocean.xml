@@ -1209,9 +1209,9 @@ enOceanTracker.close(); // close the tracker</programlisting>
 
       <bibliomixed
       xml:id="service.enocean-bibliomixed_id_20140602_17h03_10_5"><title>EnOcean
-      Equipment Profiles v2.6.2</title>EnOcean Alliance,
-      https://www.enocean-alliance.org/en/enocean_standard/, November 19,
-      2014</bibliomixed>
+      Equipment Profiles v2.6.2</title><biblioid class="uri">EnOcean Alliance, <link
+      xlink:href="https://www.enocean-alliance.org/en/enocean_standard/"/>, November 19,
+      2014</biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.enocean-bibliomixed_id_20140602_17h03_19_6"><title>EnOcean
@@ -1230,9 +1230,9 @@ enOceanTracker.close(); // close the tracker</programlisting>
 
       <bibliomixed
       xml:id="service.enocean-bibliomixed_id_20150105_16h26_16_99"><title>EnOcean
-      Remote Commissioning Summary v1.0</title>EnOcean Alliance,
-      https://www.enocean-alliance.org/en/downloads/, December 01,
-      2014</bibliomixed>
+      Remote Commissioning Summary v1.0</title><biblioid class="uri">EnOcean Alliance, <link
+      xlink:href="https://www.enocean-alliance.org/en/downloads/"/>, December 01,
+      2014</biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.enocean-reference.service.pid"><title>Persistent

@@ -1539,8 +1539,8 @@ psp.createStream(ses).
 
     <bibliolist>
       <bibliomixed xml:id="util.pushstream-ref.java8stream"><title>Java 8
-      Stream API</title>
-      https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#package.description</bibliomixed>
+      Stream API</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#package.description"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

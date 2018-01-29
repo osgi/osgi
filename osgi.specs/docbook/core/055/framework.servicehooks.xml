@@ -973,7 +973,8 @@ public void removed( Collection lis ) {
     <bibliolist>
       <bibliomixed
       xml:id="framework.servicehooks-whiteboard.pattern.ref"><title>Whiteboard
-      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+      Pattern</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

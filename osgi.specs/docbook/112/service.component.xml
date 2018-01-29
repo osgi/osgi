@@ -6155,27 +6155,34 @@ public class MyComponent implements AcmeService {}</programlisting>
       <bibliomixed xml:id="i1550732"><title>Automating Service Dependency
       Management in a Service-Oriented Component Model</title>Humberto
       Cervantes, Richard S. Hall, Proceedings of the Sixth Component-Based
-      Software Engineering Workshop, May 2003, pp. 91-96<?line-break ?>http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf</bibliomixed>
+      Software Engineering Workshop, May 2003, pp. 91-96<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Service Binder</title>Humberto Cervantes, Richard S.
-      Hall<?line-break ?>http://gravity.sourceforge.net/servicebinder</bibliomixed>
+      Hall<?line-break ?><biblioid class="uri"><link
+      xlink:href="http://gravity.sourceforge.net/servicebinder"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1567926"><title>Java Properties
-      File</title>http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html</bibliomixed>
+      File</title><biblioid class="uri"><link
+      xlink:href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
-      1.0</title>http://www.w3.org/TR/REC-xml/</bibliomixed>
+      1.0</title><biblioid class="uri"><link
+      xlink:href="http://www.w3.org/TR/REC-xml/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1655737"><title>OSGi XML
-      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
+      Schemas</title><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.component-jvms.ref"><title>The Java Virtual
       Machine Specification, Java SE 8
-      Edition</title>https://docs.oracle.com/javase/specs/jvms/se8/html/index.html</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.component-jls.ref"><title>The Java Language
       Specification, Java SE 8
-      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
+      Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

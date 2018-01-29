@@ -716,19 +716,24 @@ catch( ArithmeticException e ) {
 
     <bibliolist>
       <bibliomixed><title>SI Units
-      information</title>http://physics.nist.gov/cuu/Units</bibliomixed>
+      information</title><biblioid class="uri"><link
+      xlink:href="http://physics.nist.gov/cuu/Units"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1249435"><title>General SI
-      index</title>http://en.wikipedia.org/wiki/SI</bibliomixed>
+      index</title><biblioid class="uri"><link
+      xlink:href="http://en.wikipedia.org/wiki/SI"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1253587"><title>JSR 108 Units
-      Specification</title>http://www.jcp.org/jsr/detail/108.jsp</bibliomixed>
+      Specification</title><biblioid class="uri"><link
+      xlink:href="http://www.jcp.org/jsr/detail/108.jsp"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1254696"><title>A Math Library containing unit
-      handling in Kawa</title>http://www.gnu.org/software/kawa</bibliomixed>
+      handling in Kawa</title><biblioid class="uri"><link
+      xlink:href="http://www.gnu.org/software/kawa"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1364247"><title>Mars Polar Lander
-      failure</title>http://mars.jpl.nasa.gov/msp98/news/mco990930.html</bibliomixed>
+      failure</title><biblioid class="uri"><link
+      xlink:href="http://mars.jpl.nasa.gov/msp98/news/mco990930.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
