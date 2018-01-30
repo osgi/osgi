@@ -17,14 +17,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	chapters.forEach(function(el) {
 		el.addEventListener("click", function() {
-			this.classList.toggle("active");
 			var panel = this.nextElementSibling.nextElementSibling;
-			if (panel.style.maxHeight){
+			if (panel.classList.contains("active")) {
 				this.innerHTML = '+ ';
-				panel.style.maxHeight = null;
+				panel.classList.remove("active");
 			} else {
 				this.innerHTML = '- ';
-				panel.style.maxHeight = panel.scrollHeight + "px";
+				panel.classList.add("active");
 				link.scrollIntoView();
 			}
 		});
@@ -40,21 +39,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 			else {
 				sidebar.style.maxHeight = sidebar.scrollHeight + "px";
-				link.scrollIntoView();
 				window.onhashchange = function() {
 					sidebar.style.maxHeight = null;
 				};
-				var panel = link.parentElement.nextElementSibling;
-				if (panel.style.maxHeight === '0px' || panel.style.maxHeight === null){
-					link.parentElement.previousElementSibling.innerHTML = '- ';
-					panel.style.maxHeight = panel.scrollHeight + "px";
-				}
 			}
 		});
 	}
 
 	if (lastSegment && link) {
-		link.parentElement.previousElementSibling.click();
+		link.scrollIntoView();
 	}
 
 	hljs.initHighlightingOnLoad();

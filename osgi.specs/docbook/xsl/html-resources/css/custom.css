@@ -360,18 +360,19 @@ p.bibliomixed span.title::after {
 }
 
 #tree > li > ul {
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.2s ease-out;
-	background-color: rgb(243, 243, 243);
-	width: 100%;
-	padding-left: 1.2em;
-}
-
-#tree > li > ul {
 	-moz-box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
 	-webkit-box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
+	background-color: rgb(243, 243, 243);
 	box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
+	max-height: 0;
+	overflow: hidden;
+	padding-left: 1.2em;
+	transition: max-height 0.2s ease-out;
+	width: 100%;
+}
+
+#tree > li > ul.active {
+	max-height: 100%;
 }
 
 #tree > li > span.file {

@@ -98,28 +98,6 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template name="user.header.navigation">
-    <xsl:param name="prev"/>
-    <xsl:param name="next"/>
-    <xsl:param name="nav.context"/>
-
-    <xsl:call-template name="webhelpheader">
-        <xsl:with-param name="prev" select="$prev"/>
-        <xsl:with-param name="next" select="$next"/>
-        <xsl:with-param name="nav.context" select="$nav.context"/>
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="user.header.content">
-    <xsl:comment> <!-- KEEP this code. --> </xsl:comment>
-</xsl:template>
-
-<xsl:template name="user.footer.navigation">
-    <xsl:call-template name="webhelptoc">
-        <xsl:with-param name="currentid" select="generate-id(.)"/>
-    </xsl:call-template>
-</xsl:template>
-
 <xsl:template match="/">
 	<xsl:choose>
         <!-- include extra test for Xalan quirk -->
@@ -230,7 +208,7 @@ basic format:
             <div id="fullbody">
                 <xsl:call-template name="body.attributes"/>
 
-                <xsl:call-template name="user.header.navigation">
+                <xsl:call-template name="webhelpheader">
                     <xsl:with-param name="prev" select="$prev"/>
                     <xsl:with-param name="next" select="$next"/>
                     <xsl:with-param name="nav.context" select="$nav.context"/>
@@ -247,24 +225,21 @@ basic format:
                           <xsl:with-param name="nav.context" select="$nav.context"/>
                         </xsl:call-template>
 
-                        <xsl:call-template name="user.header.content"/>
-
                         <xsl:copy-of select="$content"/>
 
                         <xsl:call-template name="user.footer.content"/>
 
-        				<!-- Redundant since the upper navigation bar always visible -->
                         <xsl:call-template name="footer.navigation">
                             <xsl:with-param name="prev" select="$prev"/>
                             <xsl:with-param name="next" select="$next"/>
                             <xsl:with-param name="nav.context" select="$nav.context"/>
                         </xsl:call-template>
-
-                        <xsl:call-template name="user.webhelp.content.footer" />
                       </div>
                     </div>
 
-                    <xsl:call-template name="user.footer.navigation"/>
+                    <xsl:call-template name="webhelptoc">
+                        <xsl:with-param name="currentid" select="generate-id(.)"/>
+                    </xsl:call-template>
                 </div>
             </div>
         </body>
@@ -272,10 +247,6 @@ basic format:
 
     <xsl:value-of select="$chunk.append"/>
 </xsl:template>
-
-<!-- This is for the USERS. Users who want to customize webhelp may over-ride this template to add content to the footer of the content DIV.
- i.e. within <div id="content"> ... </div> -->
-<xsl:template name="user.webhelp.content.footer"/>
 
 <!-- The Header with the company logo -->
 <xsl:template name="webhelpheader">
@@ -397,12 +368,26 @@ basic format:
 
     <xsl:if test="not(self::d:index) or (self::d:index and not($generate.index = 0))">
         <li>
+            <xsl:if test="$currentid = $id">
+                <xsl:attribute name="class">
+                    <xsl:value-of select="'current'"/>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:if test="$depth = 1">
                 <xsl:attribute name="id">
                     <xsl:value-of select="'toc_'"/>
                     <xsl:value-of select="position()"/>
                 </xsl:attribute>
-                <span class="handle">+ </span>
+                <span class="handle">
+                    <xsl:choose>
+                        <xsl:when test="$currentid = $id">
+                            <xsl:text>- </xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>+ </xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
             </xsl:if>
             <span class="file">
                 <a href="{substring-after($href, $base.dir)}"  tabindex="1">
@@ -418,6 +403,11 @@ basic format:
             </span>
             <xsl:if test="d:part|d:reference|d:preface|d:chapter|d:bibliography|d:appendix|d:article|d:topic|d:glossary|d:section|d:simplesect|d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:refentry|d:colophon|d:bibliodiv">
                 <ul>
+                    <xsl:attribute name="class">
+                        <xsl:if test="$currentid = $id">
+                            <xsl:value-of select="'active'"/>
+                        </xsl:if>
+                    </xsl:attribute>
                     <xsl:if test="not($depth = 3)">
                         <xsl:apply-templates
                                 select="d:part|d:reference|d:preface|d:chapter|d:bibliography|d:appendix|d:article|d:topic|d:glossary|d:section|d:simplesect|d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:refentry|d:colophon|d:bibliodiv"
