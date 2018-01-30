@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
  * &#64;Capability(namespace = "my.namespace")
  * public &#64;interface MyCapability {
  *   &#64;Directive("resource")
- *   String value();
+ *   String value() default "";
  * }
  * 
  * &#64;MyCapability("foo")
@@ -45,6 +45,17 @@ import java.lang.annotation.Target;
  * the {@code Capability} and {@code Directive} annotations, will result in a
  * capability in the namespace {@code my.namespace} with the directive
  * {@code resource:=foo}.
+ * <p>
+ * If the element annotated with {@code Directive} is unspecified when applied,
+ * then the directive must not be generated in the generated capability or
+ * requirement clause. For example:
+ * 
+ * <pre>
+ * &#64;MyCapability
+ * public MyClass {}
+ * </pre>
+ * 
+ * will not have the {@code resource} directive in the generated capability.
  * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * generate bundle manifests.
