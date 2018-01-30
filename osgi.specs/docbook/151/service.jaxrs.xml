@@ -207,14 +207,14 @@
       properties can include implementation-specific key-value pairs. They
       also include the following:</para>
 
-      <table>
+      <table pgwide="1">
         <title>Service properties for the <code>JaxrsServiceRuntime</code>
         service</title>
 
         <tgroup cols="3">
           <colspec colnum="1" colwidth="1.9*"/>
 
-          <colspec colnum="2" colwidth="0.8*"/>
+          <colspec colnum="2" colwidth="0.7*"/>
 
           <colspec colnum="3" colwidth="4.2*"/>
 
@@ -390,11 +390,11 @@ public String interrogateSession(@PathParam("name") String name,
       <title>Common properties</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.5*"/>
+        <colspec colnum="1" colwidth="2.2*"/>
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.3*"/>
+        <colspec colnum="3" colwidth="3.9*"/>
 
         <thead>
           <row>
@@ -759,7 +759,7 @@ public class Foo {
 
           <colspec colnum="2" colwidth="0.7*"/>
 
-          <colspec colnum="3" colwidth="3.6*"/>
+          <colspec colnum="3" colwidth="3.9*"/>
 
           <thead>
             <row>
@@ -1186,7 +1186,7 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <colspec colnum="2" colwidth="0.7*"/>
 
-          <colspec colnum="3" colwidth="3.6*"/>
+          <colspec colnum="3" colwidth="3.9*"/>
 
           <thead>
             <row>
@@ -1356,7 +1356,7 @@ public class JsonProvider implements MessageBodyReader,
 
           <colspec colnum="2" colwidth="0.7*"/>
 
-          <colspec colnum="3" colwidth="3.6*"/>
+          <colspec colnum="3" colwidth="3.9*"/>
 
           <thead>
             <row>
@@ -1480,11 +1480,11 @@ public class MyApplication extends Application {
       services.</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.4*"/>
+        <colspec colnum="1" colwidth="2.2*"/>
 
-        <colspec colnum="2" colwidth="0.9*"/>
+        <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.3*"/>
+        <colspec colnum="3" colwidth="3.9*"/>
 
         <thead>
           <row>
