@@ -1565,18 +1565,18 @@ private       ::= '.' symbolic-name</programlisting>
       <title>Creating a Managed Service Factory Configuration Object</title>
 
       <para>The <code>ConfigurationAdmin</code> class provides two sets of
-      methods to create a new instance of a Managed Service Factory. The first
-      set delegates the creation of the unique PID to the Configuration Admin
-      service. The second set allows to influence the generation of the
-      PID.</para>
+      methods to create a new Configuration for a Managed Service Factory. The
+      first set delegates the creation of the unique PID to the Configuration
+      Admin service. The second set allows the caller to influence the
+      generation of the PID.</para>
 
       <para>The <code>ConfigurationAdmin</code> class provides the following
-      two methods generating a unique PID to create a new instance of a
-      Managed Service Factory. A new unique PID is created for the
-      Configuration object by the Configuration Admin service. The scheme used
-      for this PID is defined by the Configuration Admin service and is
-      unrelated to the factory PID, which is chosen by the registering
-      bundle.</para>
+      two methods which generate a unique PID when creating a new
+      Configuration for a Managed Service Factory. A new, unique PID is
+      created for the Configuration object by the Configuration Admin service.
+      The scheme used for this PID is defined by the Configuration Admin
+      service and is unrelated to the factory PID, which is chosen by the
+      registering bundle.</para>
 
       <itemizedlist>
         <listitem>
@@ -1605,12 +1605,14 @@ private       ::= '.' symbolic-name</programlisting>
       </itemizedlist>
 
       <para>The <code>ConfigurationAdmin</code> class provides the following
-      two methods allowing the caller to influence the generation of the PID.
-      The PID for this Configuration object is generated from the provided
-      factory PID and the provided name by starting with the factory PID,
-      appending the character ~ (tilde) and then appending the name. The
-      <code>getFactoryConfiguration</code> method must atomically create and
-      persistently store an object if it does not yet exist.</para>
+      two methods allowing the caller to influence the generation of the PID
+      when creating a new Configuration for a Managed Service Factory. The PID
+      for the Configuration object is generated from the provided factory PID
+      and the provided name by starting with the factory PID, appending a
+      tilde (<code>'~' \u007e</code>), and then appending the name. The
+      <code>getFactoryConfiguration</code> methods must atomically create and
+      persistently store a Configurationobject if it does not yet
+      exist.</para>
 
       <itemizedlist>
         <listitem>
@@ -1645,7 +1647,7 @@ private       ::= '.' symbolic-name</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>Creating a new factory configuration must <emphasis>not</emphasis>
+      <para>Creating a new Configuration must <emphasis>not</emphasis>
       initiate a callback to the Managed Service Factory <code>updated</code>
       method until the properties are set in the <code>Configuration</code>
       object with the <code>update</code> method.</para>
@@ -1712,52 +1714,68 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="org.osgi.service.cm.Configuration.getChangeCount--"
       xrefstyle="hyperlink"/> method.</para>
 
-      <para>The <xref
-      linkend="org.osgi.service.cm.Configuration.update-Dictionary-"
-      xrefstyle="hyperlink"/> method calls in <code>Configuration</code>
+      <para>The <code>update</code> methods in <code>Configuration</code>
       objects are not executed synchronously with the related target services
       <code>updated</code> method. The <code>updated</code> method must be
       called asynchronously. The Configuration Admin service, however, must
       have updated the persistent storage before the <code>update</code>
       method returns.</para>
 
-      <para>The update method must also asynchronously send out a
-      Configuration Event <xref
+      <para>The <code>update</code> methods must also asynchronously send out
+      a Configuration Event <xref
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED"
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
 
-      <para>Invoking the <code>update</code> method results in Configuration
-      Admin service blindly updating the <code>Configuration</code> object and
-      performing the above outlined actions. This even happens if the updated
-      set of properties is the same as the already existing properties in the
+      <para>Invoking the <xref
+      linkend="org.osgi.service.cm.Configuration.update-Dictionary-"
+      xrefstyle="hyperlink"/> method results in Configuration Admin service
+      blindly updating the <code>Configuration</code> object and performing
+      the above outlined actions. This even happens if the updated set of
+      properties is the same as the already existing properties in the
       <code>Configuration</code> object.</para>
 
       <para>To optimize configuration updates if the caller does not know
       whether properties of a <code>Configuration</code> object have changed,
-      <xref
+      the<xref
       linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
-      xrefstyle="hyperlink"/> can be used. The provided
-      dictionary is compared with the existing properties. If there is no
-      change, no action is invoked. If there is any change detected,
-      <code>Configuration.updateIfDifferent</code> acts exactly as
-      <xref
+      xrefstyle="hyperlink"/> method can be used. The provided dictionary is
+      compared with the existing properties. If there is no change, no action
+      is taken. If there is any change detected, <xref
+      linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
+      xrefstyle="hyperlink"/> acts exactly as <xref
       linkend="org.osgi.service.cm.Configuration.update-Dictionary-"
-      xrefstyle="hyperlink"/>. Properties are compared as follows:
-      scalars are compared using <code>equals()</code>, arrays are compared
-      using <code>Arrays.equals()</code>, and collections are compared using
-      <code>equals()</code>. The <code>boolean</code> result of
-      <code>Configuration.updateIfDifferent</code> is <code>true</code> if the
-      Configuration object has been updated.</para>
+      xrefstyle="hyperlink"/>. Properties are compared as follows:</para>
 
-      <para>If the <code>Configuration</code> object has the
-      <xref
+      <itemizedlist>
+        <listitem>
+          <para>Scalars are compared using <code>equals</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>Arrays are compared using <code>Arrays.equals</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>Collections are compared using <code>equals</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>boolean</code> result of <xref
+      linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
+      xrefstyle="hyperlink"/> is <code>true</code> if the Configuration object
+      has been updated.</para>
+
+      <para>If the <code>Configuration</code> object has the <xref
       linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
-      xrefstyle="hyperlink"/> attribute set, calling one of the update methods
-      results in a <xref
+      xrefstyle="hyperlink"/> attribute set, calling one of the
+      <code>update</code> methods results in a <xref
       linkend="org.osgi.service.cm.ReadOnlyConfigurationException"
-      xrefstyle="hyperlink"/> and the
-      configuration is not changed.</para>
+      xrefstyle="hyperlink"/> and the configuration is not changed.</para>
     </section>
 
     <section xml:id="service.cm-multi.locations">
@@ -1956,14 +1974,11 @@ ConfigurationPermission[?application,<xref
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
 
-      <para>If the <code>Configuration</code> object has the
-          <xref
-          linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
-          xrefstyle="hyperlink"/> attribute set, calling the delete method results
-          in a <xref
-          linkend="org.osgi.service.cm.ReadOnlyConfigurationException"
-          xrefstyle="hyperlink"/> and the configuration
-      is not deleted.</para>
+      <para>If the <code>Configuration</code> object has the <xref
+      linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
+      xrefstyle="hyperlink"/> attribute set, calling the delete method results
+      in a <xref linkend="org.osgi.service.cm.ReadOnlyConfigurationException"
+      xrefstyle="hyperlink"/> and the configuration is not deleted.</para>
     </section>
 
     <section>
@@ -1987,32 +2002,29 @@ ConfigurationPermission[?application,<xref
     <section xml:id="service.cm-configuration.attributes">
       <title>Configuration Attributes</title>
 
-      <para>The <code>Configuration</code> object allows to set attributes,
-      similar to setting attributes on files in a file system. Currently only
-      the <xref
+      <para>The <code>Configuration</code> object supports attributes, similar
+      to setting attributes on files in a file system. Currently only the
+      <xref
       linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
-          xrefstyle="hyperlink"/> attribute is supported.</para>
+      xrefstyle="hyperlink"/> attribute is supported.</para>
 
-      <para>Attributes can be set by calling the
-          <xref
-          linkend="org.osgi.service.cm.Configuration.addAttributes-ConfigurationAttribute...-"
-          xrefstyle="hyperlink"/> method and listing the
-      attributes to be added. In the same way attributes can be removed by
-      calling <xref
+      <para>Attributes can be set by calling the <xref
+      linkend="org.osgi.service.cm.Configuration.addAttributes-ConfigurationAttribute...-"
+      xrefstyle="hyperlink"/> method and listing the attributes to be added.
+      In the same way attributes can be removed by calling <xref
       linkend="org.osgi.service.cm.Configuration.removeAttributes-ConfigurationAttribute...-"
-      xrefstyle="hyperlink"/>. Each successful
-      change in attributes is persisted.</para>
+      xrefstyle="hyperlink"/>. Each successful change in attributes is
+      persisted.</para>
 
-      <para>A Bundle can only change the attributes if it has
-          <xref
-          linkend="org.osgi.service.cm.ConfigurationPermission.ATTRIBUTE"
-          xrefstyle="hyperlink"/>. Otherwise a
-      Security Exception is thrown.</para>
+      <para>A Bundle can only change the attributes if it has Configuration
+      Permission with the <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.ATTRIBUTE"
+      xrefstyle="hyperlink"/> action. Otherwise a Security Exception is
+      thrown.</para>
 
-      <para>The currently set attributes can be queried using the
-          <xref
-          linkend="org.osgi.service.cm.Configuration.getAttributes--"
-          xrefstyle="hyperlink"/> method.</para>
+      <para>The currently set attributes can be queried using the <xref
+      linkend="org.osgi.service.cm.Configuration.getAttributes--"
+      xrefstyle="hyperlink"/> method.</para>
     </section>
   </section>
 
@@ -2368,9 +2380,9 @@ ConfigurationPermission[?application,<xref
       services are automatically called for a Managed Service or a Managed
       Service Factory as outlined above. If a bundle needs to get the
       configuration properties processed by the Configuration Plugin services,
-      <xref
+      the <xref
       linkend="org.osgi.service.cm.Configuration.getProcessedProperties-ServiceReference-"
-      xrefstyle="hyperlink"/> provides this view.</para>
+      xrefstyle="hyperlink"/> method provides this view.</para>
 
       <para>The service reference passed into the method must either point to
       a Managed Service or Managed Service Factory registered on behalf of the
@@ -2428,11 +2440,12 @@ ConfigurationPermission[?application,<xref
     <para>If configurations are created, updated or deleted and an implicit
     coordination exists, the Configuration Admin service must delay
     notifications until the coordination terminates. However the configuration
-    changes are persisted immediately. Updating a Managed Service or Managed
-    Service Factory and informing asynchronous listeners is delayed until the
-    coordination terminates, regardless of whether the coordination fails or
-    terminates regularly. Registered synchronous listeners will be informed
-    immediately when the change happens regardless of a coordination.</para>
+    changes must be persisted immediately. Updating a Managed Service or
+    Managed Service Factory and informing asynchronous listeners is delayed
+    until the coordination terminates, regardless of whether the coordination
+    fails or terminates regularly. Registered synchronous listeners will be
+    informed immediately when the change happens regardless of a
+    coordination.</para>
   </section>
 
   <section xml:id="service.cm-capabilities">
@@ -2460,19 +2473,18 @@ ConfigurationPermission[?application,<xref
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
 
-      <para>Bundles relying on the Configuration Admin service should require the
-      <code>osgi.implementation</code> capability from the Configuration Admin Service.</para>
+      <para>Bundles relying on the Configuration Admin service should require
+      the <code>osgi.implementation</code> capability from the Configuration
+      Admin Service.</para>
 
       <programlisting>Require-Capability: osgi.implementation;
   filter:="(&amp;(osgi.implementation=osgi.cm)(version&gt;=<xref
           endterm="org.osgi.service.cm-version.number"
           linkend="org.osgi.service.cm"/>)(!(version&gt;=2.0)))"</programlisting>
-          
+
       <para>This requirement can be easily generated using the <xref
       linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
-      xrefstyle="hyperlink"/>
-      annotation.</para>
-
+      xrefstyle="hyperlink"/> annotation.</para>
     </section>
 
     <section>
@@ -2677,26 +2689,28 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     <title>Changes</title>
 
     <itemizedlist>
-
       <listitem>
-        <para>Support for named factory configurations is added. 
-        See <xref linkend="i1761778"/>.</para>
+        <para>Support for named factory configurations is added. See <xref
+        linkend="i1761778"/>.</para>
       </listitem>
 
       <listitem>
-        <para>New method <code>Configuration.updateIfDifferent</code> is added..
-        See <xref linkend="service.cm-updating.configuration"/>.</para>
+        <para>New method <code>Configuration.updateIfDifferent</code> is
+        added.. See <xref
+        linkend="service.cm-updating.configuration"/>.</para>
       </listitem>
-   
+
       <listitem>
-        <para>Attributes are added to configuration objects and a <code>READ_ONLY</code>
-        attribute is defined. See <xref linkend="service.cm-configuration.attributes"/>
-        and <xref linkend="i1693439"/>.</para>
+        <para>Attributes are added to configuration objects and a
+        <code>READ_ONLY</code> attribute is defined. See <xref
+        linkend="service.cm-configuration.attributes"/> and <xref
+        linkend="i1693439"/>.</para>
       </listitem>
-      
+
       <listitem>
-        <para>Call order and handling of <code>ConfigurationPlugin</code> services is
-        clarified. See <xref linkend="service.cm-plugin.order"/>.</para>        
+        <para>Call order and handling of <code>ConfigurationPlugin</code>
+        services is clarified. See <xref
+        linkend="service.cm-plugin.order"/>.</para>
       </listitem>
 
       <listitem>
@@ -2705,18 +2719,19 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       </listitem>
 
       <listitem>
-        <para>Configuration Admin must support implicit coordinations. See <xref
-        linkend="service.cm-coordinatorsupport"/>.</para>
+        <para>Configuration Admin must support implicit coordinations. See
+        <xref linkend="service.cm-coordinatorsupport"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Service and implementation capabilities are added.
-        See <xref linkend="service.cm-capabilities"/>.</para>
+        <para>Service and implementation capabilities are added. See <xref
+        linkend="service.cm-capabilities"/>.</para>
       </listitem>
-      
+
       <listitem>
-        <para>The <xref linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
-      xrefstyle="hyperlink"/> annotation is added.</para>
+        <para>The <xref
+        linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
+        xrefstyle="hyperlink"/> annotation is added.</para>
       </listitem>
     </itemizedlist>
   </section>

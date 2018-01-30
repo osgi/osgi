@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,23 +36,30 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 		invalidConfigurationPermission("a/b/c", "xxx,");
 		invalidConfigurationPermission("a/b/c", "configure,");
 		invalidConfigurationPermission("a/b/c", "target,   ");
+		invalidConfigurationPermission("a/b/c", "attribute, ");
 		invalidConfigurationPermission("a/b/c", "configureme,");
 		invalidConfigurationPermission("a/b/c", "targetme,");
+		invalidConfigurationPermission("a/b/c", "attributeme,");
 		invalidConfigurationPermission("a/b/c", ",configure");
 		invalidConfigurationPermission("a/b/c", ",target");
+		invalidConfigurationPermission("a/b/c", ",attribute");
 		invalidConfigurationPermission("a/b/c", "   configureme   ");
 		invalidConfigurationPermission("a/b/c", "   targetme     ");
+		invalidConfigurationPermission("a/b/c", "   attributeme     ");
 		invalidConfigurationPermission("a/b/c", "   configur");
 		invalidConfigurationPermission("a/b/c", "   targe");
+		invalidConfigurationPermission("a/b/c", "   attribut");
 		invalidConfigurationPermission("", "   target");
 	}
 
 	public void testActions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
+		ConfigurationPermission p10 = new ConfigurationPermission(
+				"com/foo/service1", "    CONFIGURE,target , attribute   ");
 		ConfigurationPermission p11 = new ConfigurationPermission(
 				"com/foo/service1",
- "    CONFIGURE,target   ");
+				"    CONFIGURE,target   ");
 		ConfigurationPermission p12 = new ConfigurationPermission(
 				"com/foo/service1",
  "TARGET  ,   configure");
@@ -62,6 +69,15 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 		ConfigurationPermission p14 = new ConfigurationPermission(
 				"com/foo/service1",
  "    Configure    ");
+		ConfigurationPermission p15 = new ConfigurationPermission(
+				"com/foo/service1", " aTTribute ");
+
+		assertImplies(p10, p10);
+		assertImplies(p10, p11);
+		assertImplies(p10, p12);
+		assertImplies(p10, p13);
+		assertImplies(p10, p14);
+		assertImplies(p10, p15);
 
 		assertImplies(p11, p11);
 		assertImplies(p11, p12);
@@ -76,17 +92,24 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 		assertImplies(p13, p13);
 		assertImplies(p14, p14);
 
+		assertNotImplies(p13, p10);
 		assertNotImplies(p13, p11);
-		assertNotImplies(p13, p12);
-
-		assertNotImplies(p14, p11);
-		assertNotImplies(p14, p12);
-
 		assertNotImplies(p13, p14);
+		assertNotImplies(p13, p15);
+
+		assertNotImplies(p14, p10);
+		assertNotImplies(p14, p11);
 		assertNotImplies(p14, p13);
+		assertNotImplies(p14, p15);
+
+		assertNotImplies(p15, p10);
+		assertNotImplies(p15, p11);
+		assertNotImplies(p15, p13);
+		assertNotImplies(p15, p14);
 
 		assertNotImplies(p11, op);
 
+		assertEquals(p10, p10);
 		assertEquals(p11, p11);
 		assertEquals(p11, p12);
 		assertEquals(p12, p11);
@@ -94,34 +117,64 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 		assertEquals(p13, p13);
 		assertEquals(p14, p14);
 
+		assertNotEquals(p10, p11);
+		assertNotEquals(p10, p12);
+		assertNotEquals(p10, p13);
+		assertNotEquals(p10, p14);
+		assertNotEquals(p10, p15);
+		assertNotEquals(p11, p10);
 		assertNotEquals(p11, p13);
 		assertNotEquals(p11, p14);
+		assertNotEquals(p11, p15);
+		assertNotEquals(p12, p10);
 		assertNotEquals(p12, p13);
 		assertNotEquals(p12, p14);
+		assertNotEquals(p12, p15);
+		assertNotEquals(p13, p10);
 		assertNotEquals(p13, p11);
 		assertNotEquals(p13, p12);
 		assertNotEquals(p13, p14);
+		assertNotEquals(p13, p15);
+		assertNotEquals(p14, p10);
 		assertNotEquals(p14, p11);
 		assertNotEquals(p14, p12);
 		assertNotEquals(p14, p13);
+		assertNotEquals(p14, p15);
+		assertNotEquals(p15, p10);
+		assertNotEquals(p15, p11);
+		assertNotEquals(p15, p12);
+		assertNotEquals(p15, p13);
+		assertNotEquals(p15, p14);
 
 		PermissionCollection pc = p13.newPermissionCollection();
 
 		checkEnumeration(pc.elements(), true);
 
-		assertNotImplies(pc, p11);
+		assertNotImplies(pc, p10);
 
 		assertAddPermission(pc, p14);
 		assertImplies(pc, p14);
+		assertNotImplies(pc, p10);
 		assertNotImplies(pc, p11);
 		assertNotImplies(pc, p12);
 		assertNotImplies(pc, p13);
+		assertNotImplies(pc, p15);
 
 		assertAddPermission(pc, p13);
+		assertNotImplies(pc, p10);
 		assertImplies(pc, p11);
 		assertImplies(pc, p12);
 		assertImplies(pc, p13);
 		assertImplies(pc, p14);
+		assertNotImplies(pc, p15);
+
+		assertAddPermission(pc, p15);
+		assertImplies(pc, p10);
+		assertImplies(pc, p11);
+		assertImplies(pc, p12);
+		assertImplies(pc, p13);
+		assertImplies(pc, p14);
+		assertImplies(pc, p15);
 
 		assertNotAddPermission(pc, op);
 
@@ -139,13 +192,15 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 		assertImplies(pc, p13);
 		assertImplies(pc, p14);
 
-		pc = p11.newPermissionCollection();
+		pc = p10.newPermissionCollection();
 
-		assertAddPermission(pc, p11);
+		assertAddPermission(pc, p10);
+		assertImplies(pc, p10);
 		assertImplies(pc, p11);
 		assertImplies(pc, p12);
 		assertImplies(pc, p13);
 		assertImplies(pc, p14);
+		assertImplies(pc, p15);
 
 		pc.setReadOnly();
 
@@ -153,10 +208,12 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 
 		checkEnumeration(pc.elements(), false);
 
+		assertSerializable(p10);
 		assertSerializable(p11);
 		assertSerializable(p12);
 		assertSerializable(p13);
 		assertSerializable(p14);
+		assertSerializable(p15);
 	}
 
 	public void testNames() {
@@ -346,11 +403,20 @@ public class ConfigurationPermissionTests extends PermissionTestCase {
 				"target");
 		ConfigurationPermission configure = new ConfigurationPermission("*",
 				"configure");
+		ConfigurationPermission attribute = new ConfigurationPermission("*",
+				"attribute");
 
 		assertImplies(target, target);
 		assertNotImplies(target, configure);
+		assertNotImplies(target, attribute);
+
 		assertNotImplies(configure, target);
 		assertImplies(configure, configure);
+		assertNotImplies(configure, attribute);
+
+		assertNotImplies(attribute, target);
+		assertNotImplies(attribute, configure);
+		assertImplies(attribute, attribute);
 	}
 
 	private void invalidConfigurationPermission(String name, String actions) {
