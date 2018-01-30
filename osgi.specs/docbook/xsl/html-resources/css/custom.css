@@ -383,12 +383,19 @@ p.bibliomixed span.title::after {
 #tree > li > span.handle {
 	font-weight: bold;
 	font-family: monospace;
+	font-size: 1.2em;
 	color: #3D97C2;
 	cursor: pointer;
 	display: block;
 	float: left;
 	width: 1em;
 	margin-left: .2em;
+	line-height: 1em;
+	border-radius: 3px;
+	background-color: #ececec;
+	text-align: center;
+	line-height: 16px;
+	margin-top: 4px;
 }
 
 @media (max-width: 991px) {

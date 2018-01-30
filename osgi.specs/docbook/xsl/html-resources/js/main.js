@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		el.addEventListener("click", function() {
 			var panel = this.nextElementSibling.nextElementSibling;
 			if (panel.classList.contains("active")) {
-				this.innerHTML = '+ ';
 				panel.classList.remove("active");
+				this.innerHTML = '+ ';
 			} else {
-				this.innerHTML = '- ';
 				panel.classList.add("active");
+				this.innerHTML = '- ';
 				link.scrollIntoView();
 			}
 		});
