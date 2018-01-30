@@ -382,11 +382,11 @@ public String interrogateSession(@PathParam("name") String name,
     <para>JAX-RS Whiteboard services support common service registration
     properties to associate them with a JAX-RS Whiteboard. These properties
     apply to whiteboard resources, extensions and applications except where
-    explicitly stated otherwise. Each service property has an associated Component
-    Property Type annotation that can be used to easily apply the property to
-    a Declarative Services Component.</para>
+    explicitly stated otherwise. Each service property has an associated
+    Component Property Type annotation that can be used to easily apply the
+    property to a Declarative Services Component.</para>
 
-    <table xml:id="service.jaxrs.common.properties.table" pgwide="1">
+    <table pgwide="1" xml:id="service.jaxrs.common.properties.table">
       <title>Common properties</title>
 
       <tgroup cols="3">
@@ -408,12 +408,9 @@ public String interrogateSession(@PathParam("name") String name,
 
         <tbody>
           <row>
-            <entry>
-              <para><code>osgi.jaxrs.name</code></para>
-              <para><xref
-                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsName"
-                xrefstyle="hyperlink"/></para>
-            </entry>
+            <entry><para><code>osgi.jaxrs.name</code></para><para><xref
+            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsName"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -436,13 +433,10 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry>
-              <para><code>osgi.jaxrs.application.select</code><emphasis
-                role="strong"><superscript>†</superscript></emphasis></para>
-              <para><xref
-                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect"
-                xrefstyle="hyperlink"/></para>
-            </entry>
+            <entry><para><code>osgi.jaxrs.application.select</code><emphasis
+            role="strong"><superscript>†</superscript></emphasis></para><para><xref
+            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -465,13 +459,9 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry>
-              <para><code>osgi.jaxrs.extension.select</code></para>
-              <para><xref
-                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtensionSelect"
-                xrefstyle="hyperlink"/>
-              </para>
-            </entry>
+            <entry><para><code>osgi.jaxrs.extension.select</code></para><para><xref
+            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtensionSelect"
+            xrefstyle="hyperlink"/> </para></entry>
 
             <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -496,15 +486,10 @@ public String interrogateSession(@PathParam("name") String name,
           </row>
 
           <row>
-            <entry>
-              <para>
-                <code>osgi.jaxrs.whiteboard.target</code>
-              </para>
-              <para><xref
-                linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsWhiteboardTarget"
-                xrefstyle="hyperlink"/>
-              </para>
-            </entry>
+            <entry><para> <code>osgi.jaxrs.whiteboard.target</code>
+            </para><para><xref
+            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsWhiteboardTarget"
+            xrefstyle="hyperlink"/> </para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -773,12 +758,9 @@ public class Foo {
 
           <tbody>
             <row>
-              <entry>
-                <para><code>osgi.jaxrs.resource</code></para>
-                <para><xref
-                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource"
-                  xrefstyle="hyperlink"/></para>
-              </entry>
+              <entry><para><code>osgi.jaxrs.resource</code></para><para><xref
+              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
@@ -1200,13 +1182,9 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <tbody>
             <row>
-              <entry>
-                <para><code>osgi.jaxrs.extension</code></para>
-                <para><xref
-                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtension"
-                  xrefstyle="hyperlink"/>
-                </para>
-              </entry>
+              <entry><para><code>osgi.jaxrs.extension</code></para><para><xref
+              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtension"
+              xrefstyle="hyperlink"/> </para></entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
@@ -1370,13 +1348,9 @@ public class JsonProvider implements MessageBodyReader,
 
           <tbody>
             <row>
-              <entry>
-                <para><code>osgi.jaxrs.application.base</code></para>
-                <para><xref
-                  linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationBase"
-                  xrefstyle="hyperlink"/>
-                </para>
-              </entry>
+              <entry><para><code>osgi.jaxrs.application.base</code></para><para><xref
+              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationBase"
+              xrefstyle="hyperlink"/> </para></entry>
 
               <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
@@ -1482,9 +1456,9 @@ public class MyApplication extends Application {
       <tgroup cols="3">
         <colspec colnum="1" colwidth="2.2*"/>
 
-        <colspec colnum="2" colwidth="0.7*"/>
+        <colspec colnum="2" colwidth="0.9*"/>
 
-        <colspec colnum="3" colwidth="3.9*"/>
+        <colspec colnum="3" colwidth="3.7*"/>
 
         <thead>
           <row>
@@ -1686,9 +1660,10 @@ public class MyApplication extends Application {
       All clients are required to support a reactive invoker which returns
       CompletionStage instances, however in OSGi the common representation of
       an asynchronous return is the <code>Promise</code>. This specification
-      therefore provides the <xref linkend="org.osgi.service.jaxrs.client.PromiseRxInvoker"
-      xrefstyle="hyperlink"/> interface which can
-      be used to obtain Promises from the JAX-RS client.</para>
+      therefore provides the <xref
+      linkend="org.osgi.service.jaxrs.client.PromiseRxInvoker"
+      xrefstyle="hyperlink"/> interface which can be used to obtain Promises
+      from the JAX-RS client.</para>
 
       <para>It is the responsibility of the JAX-RS whiteboard implementation
       to create instances of <code>PromiseRxInvoker</code>. The exact
@@ -1839,7 +1814,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       types and DTOs. The property key is available as a constant in <xref
       linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_MEDIA_TYPE"
       xrefstyle="hyperlink"/>.</para>
-      
+
       <section>
         <title>Media Type names, wildcards and suffixes</title>
 
@@ -1884,28 +1859,32 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <section>
         <title>Media Type Selection Example</title>
 
-
-        <para>The most commonly required media type for JAX-RS services is 
-        <code>application/json</code>. To this end this specification defines a
-        Component Property annotation <xref 
+        <para>The most commonly required media type for JAX-RS services is
+        <code>application/json</code>. To this end this specification defines
+        a Component Property annotation <xref
         linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JSONRequired"
-        xrefstyle="hyperlink"/> which can be applied to a Declarative Services component to express:</para>
-      
+        xrefstyle="hyperlink"/> which can be applied to a Declarative Services
+        component to express:</para>
+
         <itemizedlist>
           <listitem>
-            <para>An extension requirement for runtime <code>application/json</code> media type support</para>
+            <para>An extension requirement for runtime
+            <code>application/json</code> media type support</para>
           </listitem>
+
           <listitem>
             <para>A requirement for the JAX-RS whiteboard</para>
           </listitem>
+
           <listitem>
-            <para>An optional active time requirement for <code>application/json</code> media type support,
-            for use in application resolution/assembly.</para>
+            <para>An optional active time requirement for
+            <code>application/json</code> media type support, for use in
+            application resolution/assembly.</para>
           </listitem>
         </itemizedlist>
-      
-        <para>Custom third-party annotations can easily be created to support additional media types
-        as necessary, and are used as follows:</para>
+
+        <para>Custom third-party annotations can easily be created to support
+        additional media types as necessary, and are used as follows:</para>
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
@@ -1921,12 +1900,12 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     }
 }</programlisting>
 
-        <para>A corresponding component property type (<xref 
+        <para>A corresponding component property type (<xref
         linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsMediaType"
-        xrefstyle="hyperlink"/>) exists for use on a
-        JAX-RS whiteboard extension or application service which provides
-        media type support. This can be used to declare that one or more media
-        types are supported.</para>
+        xrefstyle="hyperlink"/>) exists for use on a JAX-RS whiteboard
+        extension or application service which provides media type support.
+        This can be used to declare that one or more media types are
+        supported.</para>
 
         <programlisting>@Component(scope = ServiceScope.PROTOTYPE)
  @JaxrsExtension
@@ -2078,7 +2057,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.client.xml"/>
-  
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.dto.xml"/>
@@ -2094,8 +2073,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
     <bibliolist>
       <bibliomixed xml:id="service.jaxrs-i21217577"><title>Java API for
-      RESTful Web Services Specification 2.0</title><biblioid class="uri"><link
-      xlink:href="https://jcp.org/en/jsr/detail?id=339"/></biblioid></bibliomixed>
+      RESTful Web Services Specification</title><biblioid class="uri"><link
+      xlink:href="https://jcp.org/en/jsr/detail?id=370"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jaxrs-portable.java.contracts.ref"><title>Portable Java
