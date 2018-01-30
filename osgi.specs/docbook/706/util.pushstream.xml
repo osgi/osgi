@@ -315,12 +315,10 @@
           output events, that is, each input event is mapped to exactly one
           output event.</para>
 
-          <programlisting>
-    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
+          <programlisting>    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
     
     PushStream&lt;Integer&gt; streamOfLengths = 
-            streamOfStrings.map(String::length);
-          </programlisting>
+            streamOfStrings.map(String::length);</programlisting>
 
           <para>If the mapping function throws an Exception then an Error
           Event is propagated down the stream to the next pipeline step. The
@@ -346,8 +344,7 @@
           event data and return a Push Stream containing the flow of
           subsequent events.</para>
 
-          <programlisting>
-    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
+          <programlisting>    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
     
     PushStream&lt;Character&gt; streamOfCharacters = 
             streamOfStrings.flatMap(s -&gt; {
@@ -362,8 +359,7 @@
                                     }
                                 });
                     return pushStreamProvider.createStream(spes);
-                });
-          </programlisting>
+                });</programlisting>
 
           <para>If the flat mapping function throws an Exception then an Error
           Event is propagated down the stream to the next pipeline step. The
@@ -386,12 +382,10 @@
           filter function returns false then it will be discarded, and not
           passed to the next pipeline stage.</para>
 
-          <programlisting>
-    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
+          <programlisting>    PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
     
     PushStream&lt;String&gt; filteredStrings = 
-            streamOfStrings.filter(s -&gt; s.length() == 42);
-          </programlisting>
+            streamOfStrings.filter(s -&gt; s.length() == 42);</programlisting>
 
           <para>If the filtering function throws an Exception then an Error
           Event is propagated down the stream to the next pipeline step. The
@@ -455,11 +449,11 @@
 
             <tbody>
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.adjustBackPressure-LongUnaryOperator-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.adjustBackPressure-ToLongBiFunction-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a transformation function to adjust the
                 back pressure returned by the previous entry in the stream.
@@ -468,9 +462,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.asyncMap-int-int-Function-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a mapping function which will
                 asynchronously calculate the value to be passed to the next
@@ -481,9 +475,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.filter-Predicate-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a selection function to be called with
                 each data event in the stream. If the function returns
@@ -493,9 +487,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.flatMap-Function-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a transformation function to be called
                 with each data event in the stream. Each incoming data element
@@ -505,9 +499,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.fork-int-int-Executor-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Pushes event processing onto one or more threads
                 in the supplied <code>Executor</code> returning a fixed back
@@ -515,9 +509,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.map-Function-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a transformation function to be called
                 with each data event in the stream. The transformed data is
@@ -525,9 +519,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.merge-PushStream-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Merges <code>this</code> stream and another
                 stream into a single stream. The returned stream will not
@@ -535,9 +529,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.sequential--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Forces data events to be delivered sequentially
                 to the next stage of the stream. Events may be delivered on
@@ -546,9 +540,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.split-Predicate...-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a set of filter functions to select
                 elements that should be forwarded downstream. The returned
@@ -595,9 +589,9 @@
 
             <tbody>
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.buffer--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Introduces a buffer before the next stage of the
                 stream. The buffer can be used to provide a circuit breaker,
@@ -605,9 +599,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.buildBuffer--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Introduces a configurable buffer before the next
                 stage of the stream. The buffer can be used to provide a
@@ -616,13 +610,13 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.coalesce-Function-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.coalesce-int-Function-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.coalesce-IntSupplier-Function-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a coalescing function which aggregates
                 one or more data events into a single data event which will be
@@ -632,9 +626,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.distinct--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>A variation of <xref
                 linkend="org.osgi.util.pushstream.PushStream.filter-Predicate-"
@@ -646,9 +640,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.limit-long-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Limits the length of the stream to the defined
                 number of elements. Once that number of elements are received
@@ -657,9 +651,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.limit-Duration-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Limits the time that the stream will remain open
                 to the supplied <code>Duration</code>. Once that time has
@@ -668,9 +662,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.skip-long-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Drops the supplied number of data events from the
                 stream and then forwards any further data
@@ -680,7 +674,7 @@
               <row>
                 <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.sorted--"
-                xrefstyle="hyperlink"/></para> <para> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.sorted-Comparator-"
                 xrefstyle="hyperlink"/></para></entry>
 
@@ -692,9 +686,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.timeout-Duration-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Tracks the time since the last event was
                 received. If no event is received within the supplied Duration
@@ -704,15 +698,15 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.window-Duration-Function-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.window-Duration-Executor-Function-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.window-Supplier-IntSupplier-BiFunction-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.window-Supplier-IntSupplier-Executor-BiFunction-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Collects events over the specified time-limit,
                 passing them to the registered handler function. If no events
@@ -783,9 +777,9 @@
 
             <tbody>
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.collect-Collector-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Uses the Java Collector API to collect the data
                 from events into a single Collection, Map, or other
@@ -793,27 +787,27 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.count--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Counts the number of events that reach the end of
                 the stream pipeline.</para></entry>
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.forEach-Consumer-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a function to be called back with the
                 data from each event in the stream</para></entry>
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.forEachEvent-PushEventConsumer-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Register a <code>PushEventConsumer</code> to be
                 called back with each event in the stream. If negative
@@ -822,9 +816,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.max-Comparator-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Uses a Comparator to find the largest data
                 element in the stream of data. The promise is resolved with
@@ -832,9 +826,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.min-Comparator-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Uses a Comparator to find the smallest data
                 element in the stream of data. The promise is resolved with
@@ -842,13 +836,13 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.reduce-BinaryOperator-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.reduce-T-BinaryOperator-"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.reduce-U-BiFunction-BinaryOperator-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Uses a Binary Operator function to combine event
                 data into a single object. The promise is resolved with the
@@ -856,11 +850,11 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.toArray--"
-                xrefstyle="hyperlink"/> <xref
+                xrefstyle="hyperlink"/></para><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.toArray-IntFunction-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Collects together all of the event data in a
                 single array which is used to resolve the returned
@@ -889,9 +883,9 @@
 
             <tbody>
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.allMatch-Predicate-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Resolves with <code>false</code> if any event
                 reaches the end of the stream pipeline that does not match the
@@ -901,9 +895,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.anyMatch-Predicate-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Resolves with <code>true</code> if any data event
                 reaches the end of the stream pipeline and matches the
@@ -913,9 +907,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.findAny--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Resolves with an Optional representing the data
                 from the first event that reaches the end of the pipeline. If
@@ -925,9 +919,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.findFirst--"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Resolves with an Optional representing the data
                 from the first event that reaches the end of the pipeline. If
@@ -937,9 +931,9 @@
               </row>
 
               <row>
-                <entry><xref
+                <entry><para><xref
                 linkend="org.osgi.util.pushstream.PushStream.noneMatch-Predicate-"
-                xrefstyle="hyperlink"/></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para>Resolves with <code>false</code> if any data
                 event reaches the end of the stream pipeline and matches the
@@ -1418,13 +1412,13 @@
       example as the result of a flatmapping operation. In this scenario
       reusing the incoming thread improves performance. In the following
       example an incoming list of URLs is registered for download.</para>
-      
+
       <programlisting>PushStreamProvider psp = new PushStreamProvider();
 
 PushStream&lt;List&lt;URL&gt;&gt; urls = getURLStream();
 
-urls.flatMap(l -> psp.streamOf(l.stream()))
-    .forEach(url -> registerDownload(url));</programlisting>
+urls.flatMap(l -&gt; psp.streamOf(l.stream()))
+    .forEach(url -&gt; registerDownload(url));</programlisting>
 
       <para>For larger Streams of data, or when truly asynchronous operation
       is required, there is a second <xref
@@ -1492,8 +1486,7 @@ urls.flatMap(l -> psp.streamOf(l.stream()))
       IllegalStateException. The connect Promise can be used to trigger the
       initialization of an event thread, allowing lazier startup.</para>
 
-      <programlisting>
-PushStreamProvider psp = new PushStreamProvider();
+      <programlisting>PushStreamProvider psp = new PushStreamProvider();
 
 SimplePushEventSource&lt;Long&gt; ses = psp.createSimpleEventSource(Long.class))
 
@@ -1519,8 +1512,7 @@ ses.connectPromise().then(onConnect);
 psp.createStream(ses).
   filter(l -&gt; l % 2L == 0).
   limit(5000L).
-  forEach(f -&gt; System.out.println("Consumed event: " + f));          
-          </programlisting>
+  forEach(f -&gt; System.out.println("Consumed event: " + f));</programlisting>
     </section>
   </section>
 
