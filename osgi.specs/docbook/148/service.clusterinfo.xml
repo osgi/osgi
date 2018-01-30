@@ -26,19 +26,19 @@
     dedicated hardware for certain application functionality (for example, a
     database server).</para>
 
-    <para>The unit of management is often no longer a single physical
-    machine. Server infrastructure is nowadays mostly offered in a virtualized
-    fashion, such as hardware virtualization using a hypervisor or operating
-    system virtualization using containers. Potentially these can also be
+    <para>The unit of management is often no longer a single physical machine.
+    Server infrastructure is nowadays mostly offered in a virtualized fashion,
+    such as hardware virtualization using a hypervisor or operating system
+    virtualization using containers. Potentially these can also be
     hierarchically managed, for example having multiple containers running
     inside a virtual machine. Therefore, it becomes key to manage an
     application running on a cluster of such (virtual) machines and/or
     containers.</para>
-    
+
     <para>Also in the context of the Internet of Things (IoT), often a number
     of gateway devices is deployed in the network that connect various sensors
-    and actuators creating a smart environment. Again, it becomes key to discover and
-    manage these devices, and query their capabilities.</para>
+    and actuators creating a smart environment. Again, it becomes key to
+    discover and manage these devices, and query their capabilities.</para>
 
     <para>The OSGi specification already provides chapters describing how to
     deploy software on remote infrastructure, how to call remote services or
@@ -69,16 +69,15 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>NodeStatus</emphasis> - The NodeStatus service
+          <para><emphasis>NodeStatus</emphasis> - The Node Status service
           represents a node in the cluster. This can be any entity in the
           cluster such as a database server, a virtual machine, a container,
           an OSGi framework, etc.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>FrameworkNodeStatus</emphasis> - The
-          FrameworkNodeStatus service represents an OSGi framework in the
-          cluster.</para>
+          <para><emphasis>FrameworkNodeStatus</emphasis> - The Framework Node
+          Status service represents an OSGi framework in the cluster.</para>
         </listitem>
 
         <listitem>
@@ -106,11 +105,11 @@
     <title>OSGi frameworks in a cluster</title>
 
     <para>We distinguish two types of nodes in a cluster. On the one hand we
-    have OSGi frameworks, which publish their presence using a
-    FrameworkNodeStatus service. On the other hand there can be other nodes in
-    the cluster, such as the virtual machines or containers the OSGi
-    frameworks are running on, or an external server such as a database. These
-    can be represented using a NodeStatus service.</para>
+    have OSGi frameworks, which publish their presence using a Framework Node
+    Status service. On the other hand there can be other nodes in the cluster,
+    such as the virtual machines or containers the OSGi frameworks are running
+    on, or an external server such as a database. These can be represented
+    using a Node Status service.</para>
 
     <para>When an OSGi framework is part of a cluster, this means it gets
     access to remote services of any other OSGi framework in that cluster.
@@ -118,17 +117,19 @@
     the cluster is the responsibility of the <xref
     linkend="service.remoteserviceadmin"/>.</para>
 
-    <para>An example cluster deployment is shown in Figure 148.2. Here, a
-    cluster consisting of three virtual machines or containers has deployed a
-    total of four OSGi frameworks. Each OSGi framework has a Cluster
-    Information implementation running that exposes a FrameworkNodeStatus
-    service. Besides these, there can also be an entity managing the virtual
-    machines/containers (for example, the cloud provider), that exposes three
-    NodeStatus services, one for each VM/container. In this case, each
-    FrameworkNodeStatus will have a parent id pointing to the id of the
-    NodeStatus of the VM/container it is deployed on.</para>
+    <para>An example cluster deployment is shown in <xref
+    linkend="service.clusterinfo-figure.cluster.deployment"
+    xrefstyle="template:Figure %n on page %p"/>. Here, a cluster consisting of
+    three virtual machines or containers has deployed a total of four OSGi
+    frameworks. Each OSGi framework has a Cluster Information implementation
+    running that exposes a Framework Node Status service. Besides these, there
+    can also be an entity managing the virtual machines/containers (for
+    example, the cloud provider), that exposes three Node Status services, one
+    for each VM/container. In this case, each Framework Node Status will have
+    a parent id pointing to the id of the Node Status of the VM/container it
+    is deployed on.</para>
 
-    <figure>
+    <figure xml:id="service.clusterinfo-figure.cluster.deployment">
       <title>Example cluster deployment</title>
 
       <mediaobject>
@@ -143,20 +144,19 @@
   <section>
     <title>Node Status Service</title>
 
-    <para>The 
-    <xref linkend="org.osgi.service.clusterinfo.NodeStatus" xrefstyle="hyperlink"/>
-    service advertises the availability of a node in the
-    cluster. This node can be any entity in the cluster such as a physical
+    <para>The <xref linkend="org.osgi.service.clusterinfo.NodeStatus"
+    xrefstyle="hyperlink"/> service advertises the availability of a node in
+    the cluster. This node can be any entity in the cluster such as a physical
     machine, a virtual machine, a container or an OSGi framework.</para>
 
-    <para>The NodeStatus service provides metadata about the node via its
-    service properties. Each NodeStatus must provide an id and cluster name.
+    <para>The Node Status service provides metadata about the node via its
+    service properties. Each Node Status must provide an id and cluster name.
     Optionally additional service properties can be provided such as the
     physical location of the node, the endpoints at which this node can be
-    accessed, etc. These service properties can be converted to a
-    <xref linkend="org.osgi.service.clusterinfo.dto.NodeStatusDTO" xrefstyle="hyperlink"/>
-    to have type-safe access to these properties
-    using the <xref linkend="util.converter"/>.</para>
+    accessed, etc. These service properties can be converted to a <xref
+    linkend="org.osgi.service.clusterinfo.dto.NodeStatusDTO"
+    xrefstyle="hyperlink"/> to have type-safe access to these properties using
+    the <xref linkend="util.converter"/>.</para>
 
     <table>
       <title>Service properties of the NodeStatus service</title>
@@ -304,10 +304,10 @@
     framework these could be CPU and memory usage, for a database node these
     could be the number of database reads and writes, and for a VM these could
     be metrics made accessible by the cloud provider. In this case the service
-    implementor can provide DTOs to have a type-safe way to access
-    these metrics by converting the returned map to one of these DTOs. For
-    example, an implementation could expose JMX metrics together with a
-    type-safe DTO:</para>
+    implementor can provide DTOs to have a type-safe way to access these
+    metrics by converting the returned map to one of these DTOs. For example,
+    an implementation could expose JMX metrics together with a type-safe
+    DTO:</para>
 
     <programlisting>public class JMXMetricsDTO extends DTO {
   /**
@@ -340,28 +340,29 @@
    */
   public long nonHeapMemoryUsed; 
 }</programlisting>
-     <para>Such DTO can be used to obtain metrics from a <code>NodeStatus</code> service as follows:
-     <programlisting>NodeStatus ns = ...; // From service registry
-Map&lt;String, ?&gt; metrics = ns.getMetrics(); // Obtain all metrics for this node
+
+    <para>Such DTO can be used to obtain metrics from a
+    <code>NodeStatus</code> service as follows: <programlisting>// From service registry
+NodeStatus ns = ...;
+// Obtain all metrics for this node
+Map&lt;String, Object&gt; metrics = ns.getMetrics();
 
 // Convert the metrics map to a DTO for type-safe access
 JMXMetricsDTO dto = Converters.standardConverter().convert(metrics)
                               .to(JMXMetricsDTO.class);
 
 // Use metrics
-System.out.println("System Load Average: " + dto.systemLoadAverage);
-     </programlisting>   
-     </para>
+System.out.println("System Load Average: " + dto.systemLoadAverage);</programlisting></para>
   </section>
 
   <section>
     <title>Framework Node Status Service</title>
 
-    <para>In case the cluster node is an OSGi framework, the
-    <xref linkend="org.osgi.service.clusterinfo.FrameworkNodeStatus" xrefstyle="hyperlink"/>
-    service is used to represent the node.
+    <para>In case the cluster node is an OSGi framework, the <xref
+    linkend="org.osgi.service.clusterinfo.FrameworkNodeStatus"
+    xrefstyle="hyperlink"/> service is used to represent the node.
     <code>FrameworkNodeStatus</code> extends <code>NodeStatus</code>, and the
-    node id is the OSGi framework UUID. Next to the NodeStatus service
+    node id is the OSGi framework UUID. Next to the Node Status service
     properties, this service has some additional service properties describing
     the OSGi and Java runtime:</para>
 
@@ -448,31 +449,31 @@ System.out.println("System Load Average: " + dto.systemLoadAverage);
       </tgroup>
     </table>
 
-    <para>Similar to the NodeStatus service, the service properties of the
-    FrameworkNodeStatus service can be converted to a
-    <xref linkend="org.osgi.service.clusterinfo.dto.FrameworkNodeStatusDTO" xrefstyle="hyperlink"/>
-    to have type-safe access to these
-    properties using the <xref linkend="util.converter"/>.</para>
+    <para>Similar to the Node Status service, the service properties of the
+    Framework Node Status service can be converted to a <xref
+    linkend="org.osgi.service.clusterinfo.dto.FrameworkNodeStatusDTO"
+    xrefstyle="hyperlink"/> to have type-safe access to these properties using
+    the <xref linkend="util.converter"/>.</para>
 
-    <para>The Framework Node Status service also extends the 
-    <xref linkend="org.osgi.service.clusterinfo.FrameworkManager" xrefstyle="hyperlink"/>
-    interface, which provides a management interface for the OSGi framework.
-    This allows a remote management agent to interact with the OSGi framework.
-    The FrameworkNodeStatus service can be exported remotely with Remote
-    Services, however alternative mechanisms to distribute this service are
-    also permitted. For example, the FrameworkManager interface can also be
-    made available through the <xref linkend="service.rest"/>.</para>
-    
-    <para> The following example uses the <code>NodeStatus</code> properties from a 
-    <code>FrameworkNodeStatus</code> service to see what country the framework is running in.
-    If it is running in Germany a bundle specific for that country is 
-    installed: 
-    <programlisting>@Component
+    <para>The Framework Node Status service also extends the <xref
+    linkend="org.osgi.service.clusterinfo.FrameworkManager"
+    xrefstyle="hyperlink"/> interface, which provides a management interface
+    for the OSGi framework. This allows a remote management agent to interact
+    with the OSGi framework. The Framework Node Status service can be exported
+    remotely with Remote Services, however alternative mechanisms to
+    distribute this service are also permitted. For example, the
+    FrameworkManager interface can also be made available through the <xref
+    linkend="service.rest"/>.</para>
+
+    <para>The following example uses the <code>NodeStatus</code> properties
+    from a <code>FrameworkNodeStatus</code> service to see what country the
+    framework is running in. If it is running in Germany a bundle specific for
+    that country is installed: <programlisting>@Component
 public class FrameworkProvisioner {
     private static final Converter CONVERTER = Converters.standardConverter();
 
     @Reference(cardinality = MULTIPLE, policy = DYNAMIC)
-    void addFramework(FrameworkNodeStatus fns, Map&lt;String,?&gt; props) {
+    void addFramework(FrameworkNodeStatus fns, Map&lt;String,Object&gt; props) {
         // Convert the properties to the DTO for type safe access
         NodeStatusDTO dto = CONVERTER.convert(props).to(NodeStatusDTO.class);
 
@@ -486,29 +487,27 @@ public class FrameworkProvisioner {
             }
         }
     }
-}</programlisting>
-    </para>
+}</programlisting></para>
   </section>
 
   <section>
     <title>Application-specific Node Status metadata</title>
 
-    <para>The Node Status service provides a <code>osgi.clusterinfo.tags</code> 
-    property. Here, application
-    specific tags can be assigned to the <code>NodeStatus</code> services. For example, one
-    could assign different roles to the nodes such as "worker", "database",
-    "storage", "gateway", etc. These roles are application-specific and should
-    be defined by the application developer.</para>
+    <para>The Node Status service provides a
+    <code>osgi.clusterinfo.tags</code> property. Here, application specific
+    tags can be assigned to the <code>NodeStatus</code> services. For example,
+    one could assign different roles to the nodes such as "worker",
+    "database", "storage", "gateway", etc. These roles are
+    application-specific and should be defined by the application
+    developer.</para>
 
-    <para>Bundles can specify additional tags to be included in the 
-    <code>FrameworkNodeStatus</code> service representing the current framework 
-    by registering any service
-    with the service property <code>org.osgi.service.clusterinfo.tags</code>
-    providing a custom <code>String[]</code> of tags. The Cluster Information
-    implementation will add those to the tags property of the
-    <code>FrameworkNodeStatus</code> service that represents the OSGi framework.
-    For example:
-    <programlisting>// Register an arbitrary service that communicates the tags 
+    <para>Bundles can specify additional tags to be included in the
+    <code>FrameworkNodeStatus</code> service representing the current
+    framework by registering any service with the service property
+    <code>org.osgi.service.clusterinfo.tags</code> providing a custom
+    <code>String[]</code> of tags. The Cluster Information implementation will
+    add those to the tags property of the <code>FrameworkNodeStatus</code>
+    service that represents the OSGi framework. For example: <programlisting>// Register an arbitrary service that communicates the tags 
 // to be added to the osgi.clusterinfo.tags service property.
 Dictionary&lt;String, Object&gt; props = new Hashtable&lt;&gt;();
 props.put("org.osgi.service.clusterinfo.tags", 
@@ -523,9 +522,10 @@ bundleContext.registerService(MyClass.class, this, props);</programlisting></par
       <title>Cluster Tag Permission</title>
 
       <para>The <code>ClusterTagPermission</code> class allows fine-grained
-      control over which bundles may add which tags to the FrameworkNodeStatus
-      service. A bundle can be granted to add a certain tag to the FrameworkNodeStatus,
-      or be granted to add any tag using the * wildcard.</para>
+      control over which bundles may add which tags to the Framework Node
+      Status service. A bundle can be granted to add a certain tag to the
+      Framework Node Status, or be granted to add any tag using the *
+      wildcard.</para>
     </section>
 
     <section>
@@ -540,7 +540,7 @@ bundleContext.registerService(MyClass.class, this, props);</programlisting></par
       <code>ServicePermission[NodeStatus|FrameworkNodeStatus|FrameworkManager,
       GET]</code>.</para>
 
-      <para>Only trusted bundles who must be able to add NodeStatus tags
+      <para>Only trusted bundles who must be able to add Node Status tags
       should be assigned <code>ClusterTagPermission[ClusterTag,
       ADD]</code>.</para>
     </section>
@@ -555,5 +555,6 @@ bundleContext.registerService(MyClass.class, this, props);</programlisting></par
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.clusterinfo.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.clusterinfo.dto.xml"/>
 </chapter>
