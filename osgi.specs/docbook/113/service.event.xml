@@ -372,6 +372,10 @@
 
     <programlisting>topic-scope ::= '*' | ( topic '/*'?  )</programlisting>
 
+    <para>The <xref linkend="org.osgi.service.event.propertytypes.EventTopics"
+    xrefstyle="hyperlink"/> component property type can be used for this
+    property on Declarative Services components.</para>
+
     <para>Event handlers can also be registered with a service property named
     <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"
     xrefstyle="hyperlink"/>. The value of this property must be a string
@@ -387,7 +391,10 @@
     xrefstyle="hyperlink"/> service property then the event properties must
     also match the filter expression. If the filter is an error, then the
     Event Admin service should log a warning and further ignore the Event
-    Handler.</para>
+    Handler. The <xref
+    linkend="org.osgi.service.event.propertytypes.EventFilter"
+    xrefstyle="hyperlink"/> component property type can be used for this
+    property on Declarative Services components.</para>
 
     <para>For example, a bundle wants to see all Log Service events with a
     level of <code>WARNING</code> or <code>ERROR</code>, but it must ignore
@@ -454,6 +461,11 @@
           order.</para>
         </listitem>
       </itemizedlist>
+
+      <para>The <xref
+      linkend="org.osgi.service.event.propertytypes.EventDelivery"
+      xrefstyle="hyperlink"/> component property type can be used for this
+      property on Declarative Services components.</para>
     </section>
   </section>
 
@@ -1122,6 +1134,11 @@ UNREGISTERING</programlisting>
        uses:="org.osgi.service.event";
        version:Version="<xref endterm="org.osgi.service.event-version.number"
           linkend="org.osgi.service.event"/>"</programlisting>
+
+      <para>The <xref
+      linkend="org.osgi.service.event.annotations.RequireEventAdmin"
+      xrefstyle="hyperlink"/> annotation can be used to require this
+      capability.</para>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
