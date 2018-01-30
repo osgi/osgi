@@ -1375,8 +1375,7 @@ com.acme.rmi.path = service-id/24</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i1661227"><title>The Fallacies of Distributed
-      Computing
-      Explained</title><biblioid class="uri"><link
+      Computing Explained</title><biblioid class="uri"><link
       xlink:href="http://www.rgoarchitects.com/Files/fallacies.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1663801"><title>Service Component Architecture
@@ -1398,8 +1397,9 @@ com.acme.rmi.path = service-id/24</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code>
-        <code>osgi.confidential</code> and <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
+        <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code>,
+        <code>osgi.confidential</code>, and <code>osgi.private</code>. See
+        <xref linkend="i1693415"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
