@@ -637,8 +637,9 @@
               <entry><xref linkend="service.cm"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.cm"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.cm"/></code></para><para><code><xref
+              linkend="org.osgi.service.cm.annotations"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.cm-version"
               linkend="service.cm"/></code></entry>
@@ -698,8 +699,10 @@
               <entry><xref linkend="service.event"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.event"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.event"/></code></para><para><code><xref
+              linkend="org.osgi.service.event.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.event.propertytypes"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.event-version"
               linkend="service.event"/></code></entry>
@@ -709,8 +712,9 @@
               <entry><xref linkend="service.remoteserviceadmin"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.remoteserviceadmin"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.remoteserviceadmin"/></code></para><para><code><xref
+              linkend="org.osgi.service.remoteserviceadmin.namespace"/></code></para></entry>
 
               <entry><code><xref
               endterm="org.osgi.service.remoteserviceadmin-version"
@@ -764,8 +768,9 @@
               <entry><xref linkend="service.jpa"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.jpa"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.jpa"/></code></para><para><code><xref
+              linkend="org.osgi.service.jpa.annotations"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.jpa-version"
               linkend="service.jpa"/></code></entry>
@@ -903,7 +908,8 @@
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.clusterinfo"/></code></para></entry>
+              linkend="org.osgi.service.clusterinfo"/></code></para><para><code><xref
+              linkend="org.osgi.service.clusterinfo.dto"/></code></para></entry>
 
               <entry><code><xref
               endterm="org.osgi.service.clusterinfo-version"
@@ -915,7 +921,9 @@
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.configurator"/></code></para></entry>
+              linkend="org.osgi.service.configurator"/></code></para><para><code><xref
+              linkend="org.osgi.service.configurator.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.configurator.namespace"/></code></para></entry>
 
               <entry><code><xref
               endterm="org.osgi.service.configurator-version"
@@ -931,7 +939,8 @@
               linkend="org.osgi.service.jaxrs.runtime.dto"/></code></para><para><code><xref
               linkend="org.osgi.service.jaxrs.whiteboard"/></code></para><para><code><xref
               linkend="org.osgi.service.jaxrs.whiteboard.annotations"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes"/></code></para></entry>
+              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes"/></code></para><para><code><xref
+              linkend="org.osgi.service.jaxrs.client"/></code></para></entry>
 
               <entry><code><xref
               endterm="org.osgi.service.jaxrs.whiteboard-version"
@@ -1018,59 +1027,84 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added <xref linkend="service.transaction.control"/>.</para>
+        <para>Added <xref linkend="service.transaction.control"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="service.clusterinfo"/>.</para>
+        <para>Added <xref linkend="service.clusterinfo"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="service.configurator"/>.</para>
+        <para>Added <xref linkend="service.configurator"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="service.jaxrs"/>.</para>
+        <para>Added <xref linkend="service.jaxrs"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="util.pushstream"/>.</para>
+        <para>Added <xref linkend="util.pushstream"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="util.converter"/>.</para>
+        <para>Added <xref linkend="util.converter"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.remoteservices"/>.</para>
+        <para>Updated <xref linkend="service.remoteservices"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.log"/>.</para>
+        <para>Updated <xref linkend="service.log"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.cm"/>.</para>
+        <para>Updated <xref linkend="service.cm"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.component"/>.</para>
+        <para>Updated <xref linkend="service.metatype"
+        xrefstyle="template:%t"/> to support enhancements to component
+        property type naming.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.jpa"/>.</para>
+        <para>Updated <xref linkend="service.component"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.namespaces"/>.</para>
+        <para>Updated <xref linkend="service.event" xrefstyle="template:%t"/>
+        to add component property types and define capabilities.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.http.whiteboard"/>.</para>
+        <para>Updated <xref linkend="service.jpa"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="util.promise"/>.</para>
+        <para>Updated <xref linkend="service.namespaces"
+        xrefstyle="template:%t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.http.whiteboard"
+        xrefstyle="template:%t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="util.promise"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
@@ -1079,8 +1113,8 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Blueprint Container Specification</emphasis> is now
-        available in OSGi Compendium specification.</para>
+        <para><emphasis>Blueprint Container Specification</emphasis> is
+        available in OSGi Compendium, Chapter 121.</para>
       </listitem>
     </itemizedlist>
   </section>
