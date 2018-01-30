@@ -50,7 +50,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="toc.section.depth">1</xsl:param>
 <xsl:param name="webhelp.autolabel">1</xsl:param>
 <xsl:param name="bibliography.numbered">1</xsl:param>
-<xsl:param name="root.filename">index</xsl:param>
+<xsl:param name="root.filename">toc</xsl:param>
 
 <xsl:param name="draft.watermark.image">draft.png</xsl:param>
 
