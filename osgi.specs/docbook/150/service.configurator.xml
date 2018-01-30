@@ -38,7 +38,7 @@
   <section>
     <title>Entities</title>
 
-    <para>The following entities are used in this specification</para>
+    <para>The following entities are used in this specification.</para>
 
     <itemizedlist>
       <listitem>
@@ -55,28 +55,29 @@
 
       <listitem>
         <para><emphasis>Extendee</emphasis> - The extendee is a bundle
-        containing configuration resources. It is <emphasis>extended</emphasis> by
-        an implementation of this specification.</para>
+        containing configuration resources. It is
+        <emphasis>extended</emphasis> by an implementation of this
+        specification.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Configurator</emphasis> - The Configurator implements
         the behavior specified in this specification. It processes
-        configuration resources and passes the configuration dictionary
-        on to the Configuration Admin Service.</para>
+        configuration resources and passes the configuration dictionary on to
+        the Configuration Admin Service.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Configuration dictionary</emphasis> - The
         configuration information when it is passed to the Configuration Admin
-        Service. It consists of a <code>Dictionary</code> object with a number of
-        properties and identifiers.</para>
+        Service. It consists of a <code>Dictionary</code> object with a number
+        of properties and identifiers.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Persistent Identity (PID)</emphasis> - A configuration
-        dictionary is associated with a unique PID to identify the destination of this
-        data. See <xref linkend="i1233800"/>.</para>
+        dictionary is associated with a unique PID to identify the destination
+        of this data. See <xref linkend="i1233800"/>.</para>
       </listitem>
 
       <listitem>
@@ -112,16 +113,17 @@
   <section xml:id="service.configurator-resources">
     <title>Configuration Resources</title>
 
-    <para>The Configurator is processing configuration resources containing configurations.
-    The resources can either be part of a bundle or be provided to the Configurator
-    on startup.</para>
-    
+    <para>The Configurator is processing configuration resources containing
+    configurations. The resources can either be part of a bundle or be
+    provided to the Configurator on startup.</para>
+
     <section>
       <title>Configuration Resource Format</title>
-      
-      <para>The format for a configuration resource is JSON (see <xref
-      linkend="service.configurator-json.ref"/>) and it must be UTF-8 encoded.
-      An example configuration resource has the following structure:
+
+      <para>The format for a configuration resource is <xref
+      linkend="service.configurator-json.ref"/> and it must be UTF-8 encoded.
+      An example configuration resource has the following structure:</para>
+
       <programlisting>{
     // Resource Format Version
     ":configurator:resource-version" : 1,
@@ -136,135 +138,143 @@
     "pid.b": {
            "a_boolean": true
         }
-}</programlisting> 
-    Comments in the form of JSMin comments (see <xref
-      linkend="service.configurator-jsmin.ref"/>) are supported, that
-    is, any text on the same line after <code>//</code> is ignored and any
-    text between <code>/* */</code> is ignored.</para>
-    
-    <para>Configuration resources provide a set of configuration dictionaries
-    each with a <emphasis>PID</emphasis> key to target a specific PID
-    in the Configuration Admin Service and zero or more configuration values
-    for this PID. Keys starting with the prefix <code>:configurator:</code>
-    contain information about the resource or instructions for the Configurator 
-    and therefore are not interpreted as PIDs containing configurations. 
-    If a key contains an invalid PID, this entry is ignored and the Configurator 
-    should log an error with the Log Service if available.</para>
+}</programlisting>
 
-   <para>The Configurator defines the following special keys on the resource level.</para>
+      <para>Comments in the form of <xref
+      linkend="service.configurator-jsmin.ref"/> comments are supported, that
+      is, any text on the same line after <code>//</code> is ignored and any
+      text between <code>/* */</code> is ignored.</para>
 
-    <table pgwide="1">
-      <title>Resource-level Configurator Keys</title>
+      <para>Configuration resources provide a set of configuration
+      dictionaries each with a <emphasis>PID</emphasis> key to target a
+      specific PID in the Configuration Admin Service and zero or more
+      configuration values for this PID. Keys starting with the prefix
+      <code>:configurator:</code> contain information about the resource or
+      instructions for the Configurator and therefore are not interpreted as
+      PIDs containing configurations. If a key contains an invalid PID, this
+      entry is ignored and the Configurator should log an error with the Log
+      Service if available.</para>
 
-      <tgroup cols="4">
-        <colspec colnum="1" colwidth="1*"/>
+      <para>The Configurator defines the following special keys on the
+      resource level.</para>
 
-        <colspec colnum="2" colwidth="0.75*"/>
+      <table pgwide="1">
+        <title>Resource-level Configurator Keys</title>
 
-        <colspec colnum="3" colwidth="0.75*"/>
+        <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
 
-        <colspec colnum="4" colwidth="2*"/>
+          <colspec colnum="2" colwidth="0.75*"/>
 
-        <thead>
-          <row>
-            <entry>Key</entry>
+          <colspec colnum="3" colwidth="0.75*"/>
 
-            <entry>Value type</entry>
+          <colspec colnum="4" colwidth="2*"/>
 
-            <entry>Syntax</entry>
+          <thead>
+            <row>
+              <entry>Key</entry>
 
-            <entry>Description</entry>
-          </row>
-        </thead>
+              <entry>Value type</entry>
 
-        <tbody>
-          <row>
-            <entry><para><code>:configurator:</code></para><para><code>&#160;resource-version</code></para></entry>
+              <entry>Syntax</entry>
 
-            <entry>Number</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-            <entry><emphasis>integer</emphasis> &gt; 0</entry>
+          <tbody>
+            <row>
+              <entry><para><code>:configurator:</code></para><para><code>&#160;resource-version</code></para></entry>
 
-            <entry>The version of the configuration resource format. This
-            specification only supports version <code>1</code>. If this entry is omitted
-            then version <code>1</code> is assumed. Resources specifying an unsupported 
-            or invalid version are ignored and the Configurator should log an error 
-            with the Log Service if available.</entry>
-          </row>
+              <entry>Number</entry>
 
-          <row>
-            <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
+              <entry><emphasis>integer</emphasis> &gt; 0</entry>
 
-            <entry>String</entry>
+              <entry>The version of the configuration resource format. This
+              specification only supports version <code>1</code>. If this
+              entry is omitted then version <code>1</code> is assumed.
+              Resources specifying an unsupported or invalid version are
+              ignored and the Configurator should log an error with the Log
+              Service if available.</entry>
+            </row>
 
-            <entry><emphasis>symbolic-name</emphasis></entry>
+            <row>
+              <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
 
-            <entry>The symbolic name of the configuration resource. If not
-            specified the symbolic name of the bundle containing the resource
-            is used. <emphasis>Mandatory</emphasis> for configuration
-            resources that do not reside in a bundle.</entry>
-          </row>
+              <entry>String</entry>
 
-          <row>
-            <entry><code>:configurator:version</code></entry>
+              <entry><emphasis>symbolic-name</emphasis></entry>
 
-            <entry>String</entry>
+              <entry>The symbolic name of the configuration resource. If not
+              specified the symbolic name of the bundle containing the
+              resource is used. <emphasis>Mandatory</emphasis> for
+              configuration resources that do not reside in a bundle.</entry>
+            </row>
 
-            <entry><emphasis>version</emphasis></entry>
+            <row>
+              <entry><code>:configurator:version</code></entry>
 
-            <entry>The version of this configuration resource. If not
-            specified the version of the bundle containing the resource is
-            used. <emphasis>Mandatory</emphasis> for configuration resources
-            that do not reside in a bundle.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+              <entry>String</entry>
+
+              <entry><emphasis>version</emphasis></entry>
+
+              <entry>The version of this configuration resource. If not
+              specified the version of the bundle containing the resource is
+              used. <emphasis>Mandatory</emphasis> for configuration resources
+              that do not reside in a bundle.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
-      
+
     <section>
       <title>PIDs, Factory Configurations and Targeted PIDs</title>
 
-      <para>Configuration resources provide a set of configuration dictionaries
-      each with a <emphasis>PID</emphasis> key to target a specific PID
-      in the Configuration Admin Service.</para>
+      <para>Configuration resources provide a set of configuration
+      dictionaries each with a <emphasis>PID</emphasis> key to target a
+      specific PID in the Configuration Admin Service.</para>
 
-      <para>Factory configurations can be addressed using the <emphasis>factory PID</emphasis>
-      and a name by starting with the factory PID, appending the character ~ (tilde)
-      and then appending the name. This ensures a well-known name for
-      the factory configuration instance. The PID for such a configuration is exactly
-      this key. The Configurator must use the <code>getFactoryConfiguration()</code> methods
-      on Configuration Admin Service to create or obtain configurations with the given
-      factory PID and name.</para>
+      <para>Factory configurations can be addressed using the
+      <emphasis>factory PID</emphasis> and a name by starting with the factory
+      PID, appending a tilde (<code>'~' \u007e</code>), and then appending the
+      name. This ensures a well-known name for the factory configuration
+      instance. The PID for such a configuration is exactly this key. The
+      Configurator must use the <code>getFactoryConfiguration</code> methods
+      on Configuration Admin Service to create or obtain configurations with
+      the given factory PID and name.</para>
 
-      <para>Targeted PIDs are supported through the configuration resource. In the
-      case of single configurations, the full targeted PID is used as the key. For
-      factory configurations, the key is assembled by chaining the targeted factory
-      PID, the character ~ (tilde) and the name.</para>
+      <para>Targeted PIDs are supported through the configuration resource. In
+      the case of single configurations, the full targeted PID is used as the
+      key. For factory configurations, the key is assembled by chaining the
+      targeted factory PID, a tilde (<code>'~' \u007e</code>), and the
+      name.</para>
 
-      <para>The Configurator obtains all configurations with the location value of 
-      <code>?</code> to allow the configurations to be received by multiple bundles.</para>
+      <para>The Configurator obtains all configurations with the location
+      value of <code>?</code> to allow the configurations to be received by
+      multiple bundles.</para>
 
-      <para>The Configurator uses the <code>Configuration.updateIfDifferent()</code> 
-      method on the configuration object to avoid any volatility in the system
-      if the configuration applied has not been changed.</para>
+      <para>The Configurator uses the
+      <code>Configuration.updateIfDifferent</code> method on the configuration
+      object to avoid any volatility in the system if the configuration
+      applied has not been changed.</para>
     </section>
 
     <section>
       <title>Configuration Dictionary</title>
 
       <para>A configuration dictionary for the Configuration Admin Service is
-      specified through a JSON object in the configuration resource. It is introduced
-      using the <emphasis>PID</emphasis> as the key. The value is a JSON object
-      containing the configuration dictionary.</para>
-      
-      <para>The Configurator removes any comments and all properties where
-      the key is starting with the special prefix <code>:configurator:</code>
-      from the configuration object before converting it to a configuration
+      specified through a JSON object in the configuration resource. It is
+      introduced using the <emphasis>PID</emphasis> as the key. The value is a
+      JSON object containing the configuration dictionary.</para>
+
+      <para>The Configurator removes any comments and all properties where the
+      key is starting with the special prefix <code>:configurator:</code> from
+      the configuration object before converting it to a configuration
       dictionary that is provided to the Configuration Admin Service.</para>
 
-      <para>The Configurator defines special keys that can be used within
-      the configuration object.</para>
+      <para>The Configurator defines special keys that can be used within the
+      configuration object.</para>
 
       <table pgwide="1">
         <title>PID-level Configurator Keys</title>
@@ -310,10 +320,10 @@
 
               <entry><emphasis>integer</emphasis></entry>
 
-              <entry>The ranking of this configuration. If multiple bundles provide
-              configuration for the same PID ranking rules are used to decide which 
-              configuration gets applied, see <xref linkend="service.configurator-ranking"/>.
-              </entry>
+              <entry>The ranking of this configuration. If multiple bundles
+              provide configuration for the same PID ranking rules are used to
+              decide which configuration gets applied, see <xref
+              linkend="service.configurator-ranking"/>.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -325,9 +335,10 @@
 
       <para>Configuration values support data types as specified with the
       <emphasis>Filter Syntax</emphasis> in the OSGi Core Specification.
-      Configuration resources are specified in JSON, which supports a more basic
-      set of data types. The following table describes how values are converted
-      from JSON to configuration values. 
+      Configuration resources are specified in JSON, which supports a more
+      basic set of data types. The following table describes how values are
+      converted from JSON to configuration values. </para>
+
       <table>
         <title>JSON Conversions</title>
 
@@ -377,8 +388,9 @@
             </row>
           </tbody>
         </tgroup>
-      </table> 
-      If a specific data type is required for a configuration, the
+      </table>
+
+      <para>If a specific data type is required for a configuration, the
       Configurator can be instructed to convert the JSON value to a given data
       type. The target type can be specified by adding a colon <code>:</code>
       and the desired data type to the property name. Supported data types are
@@ -394,63 +406,63 @@
       that preserves order. Both bare <code>Collection</code> as well as typed
       collections that use the generics style notation are supported. If a
       requested conversion cannot be performed, then the configuration is not
-      processed and the Configurator implementation should log an error.</para>
+      processed and the Configurator implementation should log an
+      error.</para>
 
-      <para>An example configuration resource with typed data:
+      <para>An example configuration resource with typed data:</para>
+
       <programlisting>{
   "my.pid": {      
     "port:Integer" : 300,
-    "an.int.array:int[]" : [2, 3, 4],
-    "an.Integer.collection:Collection&lt;Integer&gt;" : [2, 3, 4],
+    "an_int_array:int[]" : [2, 3, 4],
+    "an_Integer_collection:Collection&lt;Integer&gt;" : [2, 3, 4],
     "complex": {
       "a" : 1,
       "b" : "two"
     }
   }
-}
-      </programlisting>
-      The above configuration gets converted to a configuration dictionary with the
-      following entries (in pseudo Java language):
-      <programlisting>
-          Integer port = 300;
-          int[]   an.int.arry = {2, 3, 4};
-          Collection&lt;Integer&gt; an.Integer.collection = {2, 3, 4};
-          String  complex = "{ \"1\" : 1, \"b\" : \"two\" }"
-      </programlisting>
-      
-      </para>
+}</programlisting>
+
+      <para>The above configuration gets converted to a configuration
+      dictionary with the following entries (in pseudo Java language):</para>
+
+      <programlisting>Integer port = 300;
+int[]   an_int_array = {2, 3, 4};
+Collection&lt;Integer&gt; an_Integer_collection = {2, 3, 4};
+String  complex = "{ \"1\" : 1, \"b\" : \"two\" }"</programlisting>
 
       <para>As an alternative of specifying data types for the Configurator,
       consumers of configuration can convert the configuration values to the
       desired type by using the OSGi Converter see <xref
       linkend="util.converter"/>. A convenient way to convert a configuration
       map to the desired data types is by using the Converter to convert it to
-      an annotation instance or by using a Declarative Services configuration
+      an annotation instance or by using a Declarative Services component
       property type.</para>
 
       <section>
         <title>Binary Data</title>
 
         <para>In some cases binary data is associated with configurations such
-        as certificates, security keys or other resources. The Configurator can
-        manage this binary data. The bundle developer places the binaries in a
-        location in the extendee and references it from the
-        configuration resource, marking its type as <code>binary</code>:
+        as certificates, security keys or other resources. The Configurator
+        can manage this binary data. The bundle developer places the binaries
+        in a location in the extendee and references it from the configuration
+        resource, marking its type as <code>binary</code>:</para>
+
         <programlisting>{
   "my.config": {
     "security.enabled": true,
     "public.key:binary" : "/OSGI-INF/files/mykey.pub"
   }
-}
-        </programlisting> 
-        When the Configurator applies the configuration, it
-        extracts the binary file to a public area on the file system. The
-        Configurator creates a subdirectory with as name the PID of the
-        configuration. The PID must be URL-encoded to ensure that it does not
-        contain characters that are illegal on a file system. The binary file is
-        extracted in this subdirectory. The Configurator then applies the
-        configuration with as value for the binary entry the absolute path of
-        the extracted binary file.</para>
+}</programlisting>
+
+        <para>When the Configurator applies the configuration, it extracts the
+        binary file to a public area on the file system. The Configurator
+        creates a subdirectory with as name the PID of the configuration. The
+        PID must be URL-encoded to ensure that it does not contain characters
+        that are illegal on a file system. The binary file is extracted in
+        this subdirectory. The Configurator then applies the configuration
+        with as value for the binary entry the absolute path of the extracted
+        binary file.</para>
 
         <para>A binary data property can also specify an array of binary
         resources by declaring the <code>binary[]</code> data type. Each
@@ -458,14 +470,15 @@
         and the value of the property will be an array of strings, each string
         being the full path of one extracted binary.</para>
 
-        <para>By default a directory called <code>binaries</code> in the bundle
-        data area of the Configurator implementation is used. An alternative
-        location can be specified via the <code>configurator.binaries</code>
-        framework property. The value of this property must be an absolute path
-        on the file system to which the Configurator has write access. If the
-        directory does not exist the Configurator will create it. If the
-        Configurator cannot write to this location, it logs an error and uses
-        the default location instead.</para>
+        <para>By default a directory called <code>binaries</code> in the
+        bundle data area of the Configurator implementation is used. An
+        alternative location can be specified via the
+        <code>configurator.binaries</code> framework property. The value of
+        this property must be an absolute path on the file system to which the
+        Configurator has write access. If the directory does not exist the
+        Configurator will create it. If the Configurator cannot write to this
+        location, it logs an error and uses the default location
+        instead.</para>
 
         <para>When a configuration is removed, its associated binary files are
         also removed from the file system. When a configuration is updated,
@@ -480,69 +493,73 @@
 
       <para>The order in which the Configurator processes bundles is not
       defined. To control which configurations are in effect configuration
-      ranking can be used. Configuration ranking is similar to service ranking;
-      it is an integer which defaults to 0. Configurations with a higher ranking
-      are preferred over configurations with a lower ranking. When multiple
-      configurations arrive over time it is possible that the Configurator
-      changes the effective configuration if a higher ranked configuration
-      arrives later. The design of the Configurator is such that the effective
-      set of configurations once the system stabilizes is consistent, regardless
-      of the order in which bundles are installed and processed.</para>
+      ranking can be used. Configuration ranking is similar to service
+      ranking; it is an integer which defaults to 0. Configurations with a
+      higher ranking are preferred over configurations with a lower ranking.
+      When multiple configurations arrive over time it is possible that the
+      Configurator changes the effective configuration if a higher ranked
+      configuration arrives later. The design of the Configurator is such that
+      the effective set of configurations once the system stabilizes is
+      consistent, regardless of the order in which bundles are installed and
+      processed.</para>
 
       <para>The ranking of a configuration can be specified by adding the
-      <code>:configurator:ranking</code> property. The value of this property is
-      converted to an <code>Integer</code> as defined by the Converter
+      <code>:configurator:ranking</code> property. The value of this property
+      is converted to an <code>Integer</code> as defined by the Converter
       specification. If the value cannot be converted a warning should be
-      logged. When multiple configurations for a given PID have the same ranking
-      the bundle providing the configuration with the lowest bundle ID is
-      preferred. If multiple configurations for the same PID with the same
-      ranking are specified within a single bundle, the first one encountered is
-      used.</para>
-      
-      <para>The following example shows two bundles with a configuration resource
-      containing a configuration for the same PID:
-      <programlisting>{
-  Resource in Bundle A:
+      logged. When multiple configurations for a given PID have the same
+      ranking the bundle providing the configuration with the lowest bundle ID
+      is preferred. If multiple configurations for the same PID with the same
+      ranking are specified within a single bundle, the first one encountered
+      is used.</para>
 
+      <para>The following example shows two bundles with a configuration
+      resource containing a configuration for the same PID:</para>
+
+      <programlisting>Resource in Bundle A:
+{
   "my.pid": {      
     "port:Integer" : 300,
     ":configurator:ranking" : 100
   }
+}
 
-  Resource in Bundle B:
-
+Resource in Bundle B:
+{
   "my.pid": {      
     "port:Integer" : 100,
     ":configurator:ranking" : 10
   }
-      </programlisting>
-      Bundle A contains the configuration with the higher ranking. Therefore, regardless
-      of the installation order of bundle A and B, the configuration from Bundle A will 
-      be in effect after both bundles are installed and processed by the Configurator.
-      </para>
-    </section>    
+}</programlisting>
+
+      <para>Bundle A contains the configuration with the higher ranking.
+      Therefore, regardless of the installation order of bundle A and B, the
+      configuration from Bundle A will be in effect after both bundles are
+      installed and processed by the Configurator.</para>
+    </section>
 
     <section xml:id="service.configurator-policy">
       <title>Overwrite Policies</title>
 
       <para>In an IT operations scenario configurations are often updated by a
       systems administrator to suit the deployments requirements. In such
-      scenarios it may be undesirable to have these modifications overwritten by
-      a software update which includes a configuration resource. In other cases,
-      bundles with configuration resources are used to enforce best practices or
-      compliance with corporate guidelines, which should replace any previous
-      manual settings. This specification defines policies to define the
-      overwrite behavior of the Configurator when configurations have been set
-      or modified by another entity.</para>
+      scenarios it may be undesirable to have these modifications overwritten
+      by a software update which includes a configuration resource. In other
+      cases, bundles with configuration resources are used to enforce best
+      practices or compliance with corporate guidelines, which should replace
+      any previous manual settings. This specification defines policies to
+      define the overwrite behavior of the Configurator when configurations
+      have been set or modified by another entity.</para>
 
       <para>Configuration policies are set by specifying the
       <code>:configurator:policy</code> property. Accepted values are
       <code>default</code> and <code>force</code>. This policy defines the
       behavior when a configuration to be applied was set by another entity in
       the system, or if it was modified by someone from the values set by the
-      Configurator. The default value for this property is <code>default</code>.
-      If the specified value is invalid an error is logged and the default value
-      is used. 
+      Configurator. The default value for this property is
+      <code>default</code>. If the specified value is invalid an error is
+      logged and the default value is used. </para>
+
       <table>
         <title>Applying Configurations: Overwrite Policies</title>
 
@@ -569,19 +586,22 @@
             </row>
           </tbody>
         </tgroup>
-      </table> 
-      The Configurator must keep track of configuration change count
+      </table>
+
+      <para>The Configurator must keep track of configuration change count
       values to identify configurations that were changed by other entities or
       administrators.</para>
 
-      <para>When a bundle that provides configuration resources is uninstalled,
-      the Configurator removes any configurations that it has provided on behalf
-      of this bundle from the system. Before it removes a configuration the
-      Configurator checks with the Configuration Admin Service whether the configuration it
-      has provided has been changed by another entity. If the configuration has
-      not been changed by another entity it is removed. If it has been changed
-      then whether the configuration is removed depends on the value of the
-      <code>configurator:policy</code> property: 
+      <para>When a bundle that provides configuration resources is
+      uninstalled, the Configurator removes any configurations that it has
+      provided on behalf of this bundle from the system. Before it removes a
+      configuration the Configurator checks with the Configuration Admin
+      Service whether the configuration it has provided has been changed by
+      another entity. If the configuration has not been changed by another
+      entity it is removed. If it has been changed then whether the
+      configuration is removed depends on the value of the
+      <code>configurator:policy</code> property: </para>
+
       <table>
         <title>Removing externally modified configurations</title>
 
@@ -609,86 +629,97 @@
           </tbody>
         </tgroup>
       </table>
-      When a configuration is removed the Configurator checks whether
-      another, lower ranked, configuration resource is available. If present the
-      Configurator sets this configuration.</para>
-      
-      <para>The following examples explain the two policy options. In the first example
-      Bundle A contains a configuration for the PID <code>my.pid</code> without
-      specifying the policy. In this case the default policy is used:</para>
+
+      <para>When a configuration is removed the Configurator checks whether
+      another, lower ranked, configuration resource is available. If present
+      the Configurator sets this configuration.</para>
+
+      <para>The following examples explain the two policy options. In the
+      first example Bundle A contains a configuration for the PID
+      <code>my.pid</code> without specifying the policy. In this case the
+      default policy is used:</para>
+
       <programlisting>{
   "my.pid": {      
-    "port:Integer" : 300,
+    "port:Integer" : 300
   }
-      </programlisting>
-      <para>The following actions demonstrate the behaviour of the default policy:</para>
+}</programlisting>
+
+      <para>The following actions demonstrate the behaviour of the default
+      policy:</para>
+
       <orderedlist>
         <listitem>
-          <para>The framework is started without any configuration for PID 
+          <para>The framework is started without any configuration for PID
           <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is installed, the Configurator creates the configuration
-          for PID <code>my.pid</code>.</para>
+          <para>Bundle A is installed, the Configurator creates the
+          configuration for PID <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>An administrator manually changes the configuration for PID 
+          <para>An administrator manually changes the configuration for PID
           <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is updated with an updated configuration for PID 
-          <code>my.pid</code>. The Configurator detects the manual change
-          of the configuration in Configuration Admin Service and does not
-          apply the updated configuration from the bundle.</para>
+          <para>Bundle A is updated with an updated configuration for PID
+          <code>my.pid</code>. The Configurator detects the manual change of
+          the configuration in Configuration Admin Service and does not apply
+          the updated configuration from the bundle.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is uninstalled. The Configurator detects the manual change
-          of the configuration in Configuration Admin Service and does not
-          delete the configuration.</para>
+          <para>Bundle A is uninstalled. The Configurator detects the manual
+          change of the configuration in Configuration Admin Service and does
+          not delete the configuration.</para>
         </listitem>
       </orderedlist>
 
-      <para>In the second example Bundle A contains a configuration for the PID 
-      <code>my.pid</code> this time with the overwrite policy set to 
+      <para>In the second example Bundle A contains a configuration for the
+      PID <code>my.pid</code> this time with the overwrite policy set to
       <code>force</code>.</para>
+
       <programlisting>{
   "my.pid": {      
     "port:Integer" : 300,
     ":configurator:policy" : "force"
   }
-      </programlisting>
-      <para>The following actions demonstrate the behaviour of the force policy:</para>
+}</programlisting>
+
+      <para>The following actions demonstrate the behaviour of the force
+      policy:</para>
+
       <orderedlist>
         <listitem>
-          <para>The framework is started without any configuration for PID 
+          <para>The framework is started without any configuration for PID
           <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is installed, the Configurator creates the configuration
-          for PID <code>my.pid</code>.</para>
+          <para>Bundle A is installed, the Configurator creates the
+          configuration for PID <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>An administrator manually changes the configuration for PID 
+          <para>An administrator manually changes the configuration for PID
           <code>my.pid</code>.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is updated with an updated configuration for PID 
-          <code>my.pid</code>. The Configurator applies the updated configuration.</para>
+          <para>Bundle A is updated with an updated configuration for PID
+          <code>my.pid</code>. The Configurator applies the updated
+          configuration.</para>
         </listitem>
 
         <listitem>
-          <para>Bundle A is uninstalled. The Configurator detects the manual change
-          of the configuration in Configuration Admin Service and deletes
-          the configuration.</para>
+          <para>Bundle A is uninstalled. The Configurator detects the manual
+          change of the configuration in Configuration Admin Service and
+          deletes the configuration.</para>
         </listitem>
-      </orderedlist>    
+      </orderedlist>
     </section>
   </section>
 
@@ -696,60 +727,66 @@
     <title>Bundle Configuration Resources</title>
 
     <para>The Configurator follows the OSGi extender model and looks for JSON
-    configuration resources in installed bundles, if the bundle has opted-in to be
-    processed. In order to get processed, a bundle must require the
-    Configurator extender: <programlisting>Require-Capability: osgi.extender;
+    configuration resources in installed bundles, if the bundle has opted-in
+    to be processed. In order to get processed, a bundle must require the
+    Configurator extender:</para>
+
+    <programlisting>Require-Capability: osgi.extender;
   filter := "(&amp;(osgi.extender=osgi.configurator)
               (version&gt;=<xref
-          endterm="org.osgi.service.configurator-version.number"
-          linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))"
-    </programlisting> The Configurator must ensure to only process bundles
-    that it is wired to by the resolver.</para>
+        endterm="org.osgi.service.configurator-version.number"
+        linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))"</programlisting>
+
+    <para>The Configurator must ensure to only process bundles that it is
+    wired to by the resolver.</para>
 
     <para>By default the configuration resources are in the
     <code>OSGI-INF/configurator</code> directory in the bundle.</para>
 
     <para>Configuration files are UTF-8 encoded and have the
-    <code>.json</code> file extension. Files not having this extension are ignored.
-    The Configurator processes the configuration resources within a single bundle 
-    in lexical order using the full resource path for sorting.</para>
+    <code>.json</code> file extension. Files not having this extension are
+    ignored. The Configurator processes the configuration resources within a
+    single bundle in lexical order using the full resource path for
+    sorting.</para>
   </section>
-      
+
   <section>
     <title>Initial Configurations</title>
 
     <para>When the Configurator starts it calls
     <code>bundleContext.getProperty("configurator.initial")</code> to obtain
     initial configurations from the runtime environment. If this property is
-    available its value is processed as follows:
+    available its value is processed as follows:</para>
+
     <orderedlist>
       <listitem>
         <para>If the value starts with a left curly bracket ('{'
-          <code>\u007B</code>), ignoring any leading white space, the
-          Configurator will interpret the value as a literal configuration
-          JSON resource.</para>
+        <code>\u007B</code>), ignoring any leading white space, the
+        Configurator will interpret the value as a literal configuration JSON
+        resource.</para>
       </listitem>
 
       <listitem>
         <para>Otherwise the value is treated as a comma-separated list of
-          URLs. The Configurator will read the resource at each URL and parse
-          it as a JSON Configuration resource. If any errors occur during this
-          process they are logged and the URL is skipped. The URLs are processed
-          in alphabetical order of their provided value.</para>
+        URLs. The Configurator will read the resource at each URL and parse it
+        as a JSON Configuration resource. If any errors occur during this
+        process they are logged and the URL is skipped. The URLs are processed
+        in alphabetical order of their provided value.</para>
       </listitem>
     </orderedlist>
-    </para>
+
     <para>The ranking of these configurations can be set in the configuration
-    resource as described in <xref linkend="service.configurator-ranking"/>. 
-    The Configurator treats the initial configurations as being provided from 
+    resource as described in <xref linkend="service.configurator-ranking"/>.
+    The Configurator treats the initial configurations as being provided from
     a bundle with the bundle id <code>-1</code>.</para>
 
-    <para>If the framework is restarted, the Configurator needs to check whether 
-    the provided initial configurations are different than on the previous startup. 
-    The implementation is free to use whatever is appropriate to perform this check, 
-    like comparing last modified for the URLs or using a hash etc. If the provided
-    configuration is different than on a previous startup, this is treated like a 
-    bundle update with an updated configuration.</para>
+    <para>If the framework is restarted, the Configurator needs to check
+    whether the provided initial configurations are different than on the
+    previous startup. The implementation is free to use whatever is
+    appropriate to perform this check, like comparing last modified for the
+    URLs or using a hash etc. If the provided configuration is different than
+    on a previous startup, this is treated like a bundle update with an
+    updated configuration.</para>
   </section>
 
   <section>
@@ -798,8 +835,8 @@
     bundles that provided these configurations have been uninstalled, the
     associated configurations must be removed. If a bundle is updated the
     associated configurations are also updated. The Configurator calls
-    <code>updateIfDifferent()</code> on the configuration to avoid volatility
-    in the system if the actual configuration values did not change.</para>
+    <code>updateIfDifferent</code> on the configuration to avoid volatility in
+    the system if the actual configuration values did not change.</para>
 
     <para>When updating or removing configurations, the Configurator must take
     the <xref linkend="service.configurator-policy"/> into account. This means
@@ -824,19 +861,20 @@
     <para>The <xref linkend="service.coordinator"/> defines a mechanism for
     multiple parties to collaborate on a common task without <emphasis>a
     priori</emphasis> knowledge of who will collaborate in that task. The
-    Configurator must participate in such scenarios to coordinate with 
+    Configurator must participate in such scenarios to coordinate with
     provisioning or configuration tasks.</para>
 
     <para>Whenever the Configurator is processing configuration resources and
-    interacting with the Configuration Admin Service, the Configurator must check
-    whether a Coordinator Service is present. If it is present, the Configurator
-    checks for an implicit coordination on the current thread. If such an implicit
-    coordination exists, the Configurator does not need to create one. However, if
-    such an implicit coordination is not present, the Configurator starts an implicit
-    coordination on the current thread when interacting with the Configuration Admin
-    Service and ends this coordinator when it is finished doing the current set of
-    work. The Configurator does not need to delay applying any changes to the
-    Configuration Admin Service until the coordination ends.</para>
+    interacting with the Configuration Admin Service, the Configurator must
+    check whether a Coordinator Service is present. If it is present, the
+    Configurator checks for an implicit coordination on the current thread. If
+    such an implicit coordination exists, the Configurator does not need to
+    create one. However, if such an implicit coordination is not present, the
+    Configurator starts an implicit coordination on the current thread when
+    interacting with the Configuration Admin Service and ends this coordinator
+    when it is finished doing the current set of work. The Configurator does
+    not need to delay applying any changes to the Configuration Admin Service
+    until the coordination ends.</para>
   </section>
 
   <section>
@@ -850,14 +888,13 @@
 
       <para>The Configurator manages configurations on behalf of the bundle
       containing the configuration resources. Therefore the Configurator needs
-      to have the 
-      <code>ConfigurationPermission[*,org.osgi.service.cm.ConfigurationPermission.CONFIGURE]</code>.
-      </para>
+      to have the
+      <code>ConfigurationPermission[*,org.osgi.service.cm.ConfigurationPermission.CONFIGURE]</code>.</para>
 
       <para>Every bundle has the implicit right to receive and configure
       configurations with a location that exactly matches the Bundle's
-      location or that is <code>null</code>. Therefore the extendee
-      does not need to special permissions.</para>
+      location or that is <code>null</code>. Therefore the extendee does not
+      need to special permissions.</para>
     </section>
 
     <section>
@@ -866,26 +903,27 @@
       <para>The Configurator needs <code>ServicePermission[&lt;interface&gt;,
       GET]</code> for the <code>Coordinator</code> service.</para>
 
-      <para>The extendee needs
-      <code>ServicePermission[&lt;interface&gt;, GET]</code> for the
-      Configuration Admin Service.</para>
+      <para>The extendee needs <code>ServicePermission[&lt;interface&gt;,
+      GET]</code> for the Configuration Admin Service.</para>
     </section>
 
     <section>
       <title>Configuration Admin Service</title>
 
-      <para>The Configurator does get the Configuration Admin
-      Service on behalf of the extendee. Therefore the extendee needs to be included
-      in permission checks for getting the Configuration Admin Service. The Configurator 
-      needs to perform the required calls to ensure the extendee has the necessary 
-      permission to get the Configuration Admin Service.</para>
+      <para>The Configurator does get the Configuration Admin Service on
+      behalf of the extendee. Therefore the extendee needs to be included in
+      permission checks for getting the Configuration Admin Service. The
+      Configurator needs to perform the required calls to ensure the extendee
+      has the necessary permission to get the Configuration Admin
+      Service.</para>
     </section>
 
     <section>
       <title>File Permission</title>
 
-      <para>If binaries are used, the Configurator needs to have read/write/delete
-      permission to the configured directory to store the binaries.</para>
+      <para>If binaries are used, the Configurator needs to have
+      read/write/delete permission to the configured directory to store the
+      binaries.</para>
 
       <para>A bundle using a binary referenced from a configuration needs to
       have read permission to correct sub directory of the configured binary
@@ -910,15 +948,13 @@
       <para>The Configurator implementation bundle must provide the <link
       linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
       capability with name <code>osgi.configurator</code> with the version of
-      this specification: 
-      <programlisting>
-        Provide-Capability: osgi.extender;
-         osgi.extender="osgi.configurator";
-         version:Version="<xref
-            endterm="org.osgi.service.configurator-version.number"
-            linkend="org.osgi.service.configurator"/>"
-      </programlisting>
-      </para>
+      this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.extender;
+     osgi.extender="osgi.configurator";
+     version:Version="<xref
+          endterm="org.osgi.service.configurator-version.number"
+          linkend="org.osgi.service.configurator"/>"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.extender.namespace"/>.</para>
@@ -933,168 +969,178 @@
       represents a path inside the bundle. This path is always relative to the
       root of the bundle and may start with a slash <code>/</code>. A path
       value of <code>/</code> indicates the root of the bundle. The
-      Configurator uses <code>Bundle.findEntries()</code> to find all
-      resources with the <code>.json</code> extension in this location. Sub
-      directories are not considered. If the <code>configuration</code>
-      attribute specifies multiple paths, these are visited in the order
-      specified. Duplicate paths are ignored. Paths that do not exist in the
-      bundle are logged as an error and skipped. Resources in a single
-      directory are processed in alphabetical order. For example:</para>
+      Configurator uses <code>Bundle.findEntries</code> to find all resources
+      with the <code>.json</code> extension in this location. Sub directories
+      are not considered. If the <code>configuration</code> attribute
+      specifies multiple paths, these are visited in the order specified.
+      Duplicate paths are ignored. Paths that do not exist in the bundle are
+      logged as an error and skipped. Resources in a single directory are
+      processed in alphabetical order. For example:</para>
 
       <programlisting>Require-Capability: osgi.extender;
-         filter:="(&amp;(osgi.extender=osgi.configurator)
-                 (version&gt;=<xref
+     filter:="(&amp;(osgi.extender=osgi.configurator)
+             (version&gt;=<xref
           endterm="org.osgi.service.configurator-version.number"
           linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))";
-         configurations="resources/configs"</programlisting>
+     configurations="resources/configs"</programlisting>
 
-      <para>To simplify the creation of this requirement the
-      <xref linkend="org.osgi.service.configurator.annotations.RequireConfigurator" 
-      xrefstyle="hyperlink"/> annotation can be used. This annotation can be used
-      as a marker annotation on a package or type, but also allows the 
-      <code>configurations</code> attribute to be defined.</para>
-       
+      <para>To simplify the creation of this requirement the <xref
+      linkend="org.osgi.service.configurator.annotations.RequireConfigurator"
+      xrefstyle="hyperlink"/> annotation can be used. This annotation allows
+      the <code>configurations</code> attribute to be defined is a value other
+      than the default is needed.</para>
+
       <programlisting>@RequireConfigurator("resources/configs")</programlisting>
-    </section>
-
-    <section>
-      <title>osgi.configuration Namespace</title>
-
-      <para>Configuration resources define configuration for one or more PIDs. To declare
-      what configuration is being provided, the <code>osgi.configuration</code> capability
-      namespace can be used. Configuration resources and bundles can define the
-      <code>osgi.configuration</code> capability for each configuration that
-      they define. This capability should have resolve time effectiveness.</para>
-
-      <table pgwide="1">
-        <title>osgi.configuration namespace definition</title>
-
-        <tgroup cols="6">
-          <colspec colnum="1" colwidth="5*"/>
-
-          <colspec colnum="2" colwidth="1*"/>
-
-          <colspec colnum="3" colwidth="1*"/>
-
-          <colspec colnum="4" colwidth="1.5*"/>
-
-          <colspec colnum="5" colwidth="1.5*"/>
-
-          <colspec colnum="6" colwidth="9.5*"/>
-
-          <thead>
-            <row>
-              <entry>Name</entry>
-
-              <entry>Kind</entry>
-
-              <entry>M/O</entry>
-
-              <entry>Type</entry>
-
-              <entry>Syntax</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><code>service.pid</code></entry>
-
-              <entry><code>CA</code></entry>
-
-              <entry><code>O</code><emphasis>†</emphasis></entry>
-
-              <entry><code>String</code></entry>
-
-              <entry><code>qname</code></entry>
-
-              <entry><para>Defines the PID of the
-              configuration.</para></entry>
-            </row>
-
-            <row>
-              <entry><code>service.factoryPid</code></entry>
-
-              <entry><code>CA</code></entry>
-
-              <entry><code>O</code><emphasis>†</emphasis></entry>
-
-              <entry><code>String</code></entry>
-
-              <entry><code>qname</code></entry>
-
-              <entry><para>Defines the factory PID if this is a factory
-              configuration.</para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <para><emphasis>†</emphasis> Note that at least one of
-      <code>service.pid</code> or <code>service.factorypid</code> must be
-      defined. If the configuration is a standard configuration then only the
-      <code>service.pid</code> is used. If the configuration is a factory
-      configuration with an automatically generated identity then only the
-      <code>service.factoryPid</code> is used. If the configuration is a
-      factory configuration with a specified identity then both the
-      <code>service.pid</code> and <code>service.factoryPid</code> are
-      used.</para>
-    </section>
-
-    <section>
-      <title>Configuration Resources in a Repository</title>
-
-      <para>The configuration file format in <xref
-      linkend="service.configurator-resources"/> defines a portable
-      representation of configurations for the Configuration Admin Service.
-      Whilst the Configurator implementation is necessary to process these
-      configurations when they are packaged inside a bundle or provided on startup,
-      these files can also offer significant value to other tools for deployment 
-      and management outside of the Configurator usage.</para>
-
-      <para>If configuration resources are used in an OSGi repository, in order to 
-      integrate with querying and the resolution process, the configuration resources
-      should define the appropriate capabilities.</para>
-
-      <para>In addition to the common requirements and capabilities a
-      standalone configuration resource must declare the following capabilities when
-      in an OSGi repository: 
-      <itemizedlist>
-        <listitem>
-          <para>An <code>osgi.content</code> capability. The mime type of the 
-          configuration resource should be 
-          <code>application/vnd.osgi.configuration+json</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para>An <code>osgi.identity</code> capability. This capability
-          requires that each resource define a symbolic name and version.
-          These can be obtained from the mandatory <code>:configurator:symbolicname</code> 
-          and <code>:configurator:version</code> keys in the configuration resource. 
-          As <code>type</code> attribute the string <code>osgi.configuration</code> must 
-          be used.</para>
-        </listitem>
-      </itemizedlist>
-      </para>
     </section>
   </section>
 
+  <section>
+    <title>osgi.configuration Namespace</title>
+
+    <para>Configuration resources define configuration for one or more PIDs.
+    To declare what configuration is being provided, the
+    <code>osgi.configuration</code> capability namespace can be used.
+    Configuration resources and bundles can define the
+    <code>osgi.configuration</code> capability for each configuration that
+    they define. This capability should have resolve time
+    effectiveness.</para>
+
+    <para>The <code>osgi.configuration</code> Namespace supports the
+    attributes defined in the following table and <xref
+    linkend="org.osgi.service.configurator.namespace.ConfigurationNamespace"
+    xrefstyle="hyperlink"/>.</para>
+
+    <table pgwide="1">
+      <title>osgi.configuration namespace definition</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="5*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="1.5*"/>
+
+        <colspec colnum="6" colwidth="9.5*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>service.pid</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code><emphasis>†</emphasis></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>qname</code></entry>
+
+            <entry><para>Defines the PID of the configuration.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.factoryPid</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code><emphasis>†</emphasis></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>qname</code></entry>
+
+            <entry><para>Defines the factory PID if this is a factory
+            configuration.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para><emphasis>†</emphasis> Note that at least one of
+    <code>service.pid</code> or <code>service.factorypid</code> must be
+    defined. If the configuration is a standard configuration then only the
+    <code>service.pid</code> is used. If the configuration is a factory
+    configuration with an automatically generated identity then only the
+    <code>service.factoryPid</code> is used. If the configuration is a factory
+    configuration with a specified identity then both the
+    <code>service.pid</code> and <code>service.factoryPid</code> are
+    used.</para>
+  </section>
+
+  <section>
+    <title>Configuration Resources in a Repository</title>
+
+    <para>The configuration file format in <xref
+    linkend="service.configurator-resources"/> defines a portable
+    representation of configurations for the Configuration Admin Service.
+    Whilst the Configurator implementation is necessary to process these
+    configurations when they are packaged inside a bundle or provided on
+    startup, these files can also offer significant value to other tools for
+    deployment and management outside of the Configurator usage.</para>
+
+    <para>If configuration resources are used in an OSGi repository, in order
+    to integrate with querying and the resolution process, the configuration
+    resources should define the appropriate capabilities.</para>
+
+    <para>In addition to the common requirements and capabilities, a
+    standalone configuration resource must declare the following capabilities
+    when in an OSGi repository: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>An <code>osgi.content</code> capability. The mime type of the
+        configuration resource should be
+        <code>application/vnd.osgi.configuration+json</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para>An <code>osgi.identity</code> capability. This capability
+        requires that each resource define a symbolic name and version. These
+        can be obtained from the mandatory
+        <code>:configurator:symbolicname</code> and
+        <code>:configurator:version</code> keys in the configuration resource.
+        As <code>type</code> attribute the string
+        <code>osgi.configuration</code> must be used.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.annotations.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.namespace.xml"/>
 
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.configurator-json.ref"><title>JSON (JavaScript Object Notation)
-      </title><biblioid class="uri"><link
+      <bibliomixed xml:id="service.configurator-json.ref"><title>JSON
+      (JavaScript Object Notation) </title><biblioid class="uri"><link
       xlink:href="https://www.json.org"/></biblioid></bibliomixed>
-      <bibliomixed xml:id="service.configurator-jsmin.ref"><title>JSMin - The JavaScript Minifier
-      </title><biblioid class="uri"><link
-      xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>      
+
+      <bibliomixed xml:id="service.configurator-jsmin.ref"><title>JSMin (The
+      JavaScript Minifier) </title><biblioid class="uri"><link
+      xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
