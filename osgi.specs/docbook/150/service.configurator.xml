@@ -1083,6 +1083,7 @@
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.xml"/>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.annotations.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.namespace.xml"/>
 
   <section>
     <title>References</title>
