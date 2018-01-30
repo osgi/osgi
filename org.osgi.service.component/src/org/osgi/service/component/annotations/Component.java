@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.component.ComponentConstants;
-
 /**
  * Identify the annotated class as a Service Component.
  * 
@@ -41,9 +37,7 @@ import org.osgi.service.component.ComponentConstants;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@Requirement(namespace = ExtenderNamespace.EXTENDER_NAMESPACE, //
-		name = ComponentConstants.COMPONENT_CAPABILITY_NAME, //
-		version = ComponentConstants.COMPONENT_SPECIFICATION_VERSION)
+@RequireServiceComponentRuntime
 public @interface Component {
 	/**
 	 * The name of this Component.

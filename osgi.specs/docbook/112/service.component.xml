@@ -5994,6 +5994,14 @@ public class MyComponent implements AcmeService {}</programlisting>
               endterm="org.osgi.service.component-version.number"
               linkend="org.osgi.service.component"/>)(!(version&gt;=2.0)))"</programlisting>
 
+          <para>The <xref
+          linkend="org.osgi.service.component.annotations.RequireServiceComponentRuntime"
+          xrefstyle="hyperlink"/> annotation can be used to require this
+          capability. The <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation is meta-annotated with this
+          annotation.</para>
+
           <para>SCR must only process a bundle's service components if one of
           the following is true:</para>
 
@@ -6155,7 +6163,8 @@ public class MyComponent implements AcmeService {}</programlisting>
       <bibliomixed xml:id="i1550732"><title>Automating Service Dependency
       Management in a Service-Oriented Component Model</title>Humberto
       Cervantes, Richard S. Hall, Proceedings of the Sixth Component-Based
-      Software Engineering Workshop, May 2003, pp. 91-96<?line-break ?><biblioid class="uri"><link
+      Software Engineering Workshop, May 2003, pp. 91-96<?line-break ?><biblioid
+      class="uri"><link
       xlink:href="http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Service Binder</title>Humberto Cervantes, Richard S.
@@ -6170,18 +6179,17 @@ public class MyComponent implements AcmeService {}</programlisting>
       1.0</title><biblioid class="uri"><link
       xlink:href="http://www.w3.org/TR/REC-xml/"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i1655737"><title>OSGi XML
-      Schemas</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1655737"><title>OSGi XML Schemas</title><biblioid
+      class="uri"><link
       xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.component-jvms.ref"><title>The Java Virtual
-      Machine Specification, Java SE 8
-      Edition</title><biblioid class="uri"><link
+      Machine Specification, Java SE 8 Edition</title><biblioid
+      class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.component-jls.ref"><title>The Java Language
-      Specification, Java SE 8
-      Edition</title><biblioid class="uri"><link
+      Specification, Java SE 8 Edition</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
