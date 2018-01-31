@@ -21,7 +21,7 @@
   is an object that one bundle registers and another bundle gets. A
   <emphasis>distribution provider</emphasis> can use this loose coupling
   between bundles to <emphasis>export</emphasis> a registered service by
-  creating an<emphasis> endpoint</emphasis>. Vice versa, the distribution
+  creating an <emphasis>endpoint</emphasis>. Vice versa, the distribution
   provider can create a <emphasis>proxy</emphasis> that accesses an endpoint
   and then registers this proxy as an <emphasis>imported</emphasis> service. A
   Framework can contain multiple distribution providers simultaneously, each

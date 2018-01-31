@@ -40,7 +40,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scope - </emphasis>This specification is limited to
+          <para><emphasis>Scope</emphasis> - This specification is limited to
           device control aspects of the UPnP specifications. Aspects
           concerning the TCP/IP layer, like DHCP and limited TTL, are not
           addressed.</para>
@@ -479,7 +479,7 @@
       is recommended to use the UPnP event mechanism to track UPnP state
       variables.</para>
 
-      <para>Additionally, a <code>UPnPStateVariable</code>object can also
+      <para>Additionally, a <code>UPnPStateVariable</code> object can also
       implement the <code>UPnPLocalStateVariable</code> interface if the
       device is implemented locally. That is, the device is not imported from
       the network. The <code>UPnPLocalStateVariable</code> interface provides

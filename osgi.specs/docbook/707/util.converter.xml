@@ -549,7 +549,7 @@ String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</progr
         <code>null</code> value is used to convert into the target
         type.</para>
 
-        <para><emphasis>Note: </emphasis>deviations from this mechanism can be
+        <para><emphasis>Note:</emphasis> deviations from this mechanism can be
         achieved by using a <xref
         linkend="org.osgi.util.converter.ConverterBuilder"
         xrefstyle="hyperlink"/>. For example: <programlisting>// Use an ConverterBuilder to create a customized converter          
@@ -691,7 +691,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></pa
               <xref linkend="util.converter-maps"/>) then
               <code>Map.Entry</code> elements are obtained from it by
               converting the source to a <code>Map</code> (if needed) and then
-              calling<code>Map.entrySet()</code>. Each <code>Map.Entry</code>
+              calling <code>Map.entrySet()</code>. Each <code>Map.Entry</code>
               element is then converted into the target type as described in
               <xref linkend="util.converter-special.cases.map.entry"/> before
               inserting in the target.</para>
@@ -1270,10 +1270,10 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           xrefstyle="hyperlink"/>. If a property is missing in the source, the
           property will not be set in the bean.</para>
 
-          <para><emphasis>Note: </emphasis>access via indexed bean properties
+          <para><emphasis>Note:</emphasis> access via indexed bean properties
           is not supported.</para>
 
-          <para><emphasis>Note: </emphasis>the <code>getClass()</code> method
+          <para><emphasis>Note:</emphasis> the <code>getClass()</code> method
           of the <code>java.lang.Object</code> class is not considered an
           accessor.</para>
         </section>
@@ -1332,7 +1332,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           <code>getProperties()</code> may or may not be part of an
           implemented interface.</para>
 
-          <para><emphasis>Note: </emphasis>this mechanism can only be used to
+          <para><emphasis>Note:</emphasis> this mechanism can only be used to
           convert <emphasis>to</emphasis> another type. The reverse is not
           supported</para>
         </section>

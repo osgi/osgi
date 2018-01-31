@@ -90,7 +90,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Application - </emphasis>A program that has web
+          <para><emphasis>Web Application</emphasis> - A program that has web
           accessible content. A Web Application is defined by <xref
           linkend="i3076362"/>.</para>
         </listitem>
@@ -1336,7 +1336,7 @@ localized/logo.png</programlisting>
       element. This attribute defines whether the <code>web.xml</code>
       descriptor is <emphasis>complete</emphasis>, or whether the classes in
       the bundle should be examined for deployment annotations. If the
-      <code>metadata-complete</code>attribute is set to <code>true</code>, the
+      <code>metadata-complete</code> attribute is set to <code>true</code>, the
       Web Runtime must ignore any servlet annotations present in the class
       files of the Web Application. Otherwise, if the
       <code>metadata-complete</code> attribute is not specified, or is set to

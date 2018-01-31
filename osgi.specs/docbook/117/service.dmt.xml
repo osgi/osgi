@@ -514,7 +514,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Remote manager</emphasis> - The typical client of
-          the Dmt Admin service is a<emphasis> Protocol Adapter</emphasis>. A
+          the Dmt Admin service is a <emphasis>Protocol Adapter</emphasis>. A
           management server external to the device can issue DMT operations
           over some management protocol. The protocol to be used is not
           specified by this specification. For example, OMA DM, TR-069, or
@@ -707,7 +707,7 @@ segment         ::= (~['/'])*</programlisting>
       parsing of URIs.</para>
 
       <para>The full stop has no special meaning in a node name. That is,
-      sequences like<code>..</code> do not imply parent node. The <xref
+      sequences like <code>..</code> do not imply parent node. The <xref
       linkend="org.osgi.service.dmt.Uri.isValidUri-String-"
       xrefstyle="hyperlink"/> method verifies that a URI fulfills all its
       obligations and is valid.</para>
@@ -1710,7 +1710,7 @@ Vendor/RingTones/Bach</programlisting>
 
     <para>For example, if a new ring tone, <code>Grieg</code>, was created in
     <xref linkend="i1465151"/> it would be possible to get the Meta Node
-    for<code>./Vendor/RingSignals/Grieg</code> before the node was created.
+    for <code>./Vendor/RingSignals/Grieg</code> before the node was created.
     This is usually the case for multi nodes. The model is depicted in <xref
     linkend="i1465151"/>.</para>
 
@@ -6009,7 +6009,7 @@ L/2     C</programlisting>
 
       <para>For example, in the TR-069 Protocol Adapter specification there is
       a MIME type for each TR-069 data type. If for a given leaf node the Meta
-      Node's type specifies <code>TR069_MIME_UNSIGNED_INT</code>and the node
+      Node's type specifies <code>TR069_MIME_UNSIGNED_INT</code> and the node
       specifies the format <xref
       linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"
       xrefstyle="hyperlink"/> then the Protocol Adapter must convert the

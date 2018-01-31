@@ -1498,8 +1498,8 @@
       ensure that there is class compatibility between its objects and objects
       from the bundle. A framework will not automatically share packages
       between the launcher code and the bundles. Packages must be explicitly
-      exported from the parent class loader. The<code>
-      org.osgi.framework.system.packages.extra</code> is specifically designed
+      exported from the parent class loader. The
+      <code>org.osgi.framework.system.packages.extra</code> is specifically designed
       to hold any application packages that needs to be shared between the
       OSGi bundles and the application. Packages in that property are added to
       the system packages of the framework, which are packages exported by the

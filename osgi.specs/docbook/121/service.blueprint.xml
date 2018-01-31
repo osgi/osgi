@@ -483,8 +483,8 @@ public class EchoImpl implements Echo {
     override the built-in environment managers.</para>
 
     <para>Top level managers can depend on other top level managers but there
-    are many places where a manager can depend on an <emphasis>inlined
-    </emphasis>manager. In these places, a complete manager can be defined
+    are many places where a manager can depend on an <emphasis>inlined</emphasis>
+    manager. In these places, a complete manager can be defined
     inside another manager. Such inlined managers are always
     <emphasis>anonymous</emphasis>: they must not have an id and must not be
     registered as a top-level manager. Inlined beans are further constrained
@@ -925,7 +925,7 @@ return a</programlisting>
     Bundle-Blueprint manifest header referring to existing resources.</para>
 
     <para>A <emphasis>Blueprint extender</emphasis> is an implementation of
-    this specification and must track<emphasis> </emphasis>blueprint bundles
+    this specification and must track blueprint bundles
     that are <emphasis>type compatible</emphasis> for the Blueprint packages
     and initialize them appropriately. The timing and ordering of the
     initialization process is detailed in the following section.</para>
@@ -1542,8 +1542,8 @@ return a</programlisting>
   <section>
     <title>Blueprint Definitions</title>
 
-    <para>The Blueprint XML resources in a bundle are the<emphasis>
-    definitions</emphasis>. Each definition can include multiple namespaces.
+    <para>The Blueprint XML resources in a bundle are the
+    <emphasis>definitions</emphasis>. Each definition can include multiple namespaces.
     Implementations of the Blueprint core namespace must strictly follow this
     specification, if they add additional behavior they must add additional
     namespaces that are actually used in the definitions to signal the
@@ -3518,7 +3518,7 @@ public class FooListener {
       <title>Enabled</title>
 
       <para>A service manager needs a service object that is referred to by
-      the <code>value</code>Metadata property. This value can in its turn
+      the <code>value</code> Metadata property. This value can in its turn
       depend on other managers transitively. If any of these managers are
       service reference managers, then they can be satisfied or not. If these
       service reference managers are marked to be mandatory, then they
@@ -5225,7 +5225,7 @@ public class Foo {}</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para><code>T&lt;P1..Pn&gt;</code>is <emphasis>compatible</emphasis>
+      <para><code>T&lt;P1..Pn&gt;</code> is <emphasis>compatible</emphasis>
       with an object <code>s</code> of type <code>S</code> when it is
       assignable or it can be converted using the Blueprint built-in type
       converter. The convertability must be verified with the

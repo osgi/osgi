@@ -1329,7 +1329,7 @@ class SerialWidget extends ServiceTracker
     ... converted to underlying WidgetDevice
 }</programlisting>
 
-      <para>A <code>SerialWidgetDriver</code>object is registered with the
+      <para>A <code>SerialWidgetDriver</code> object is registered with the
       Framework in the Bundle Activator start method under the
       <code>Driver</code> interface. The device manager must call the match
       method for each idle Device service that is registered. If it is chosen

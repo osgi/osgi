@@ -235,7 +235,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>A</emphasis> and<emphasis> X</emphasis> are
+          <para><emphasis>A</emphasis> and <emphasis>X</emphasis> are
           equal.</para>
         </listitem>
       </itemizedlist>
@@ -303,7 +303,7 @@
 
       <para>Properties are accessed with the <code>Role.getProperties()</code>
       method and credentials with the
-      <code>User.getCredentials()</code>method. Both methods return a
+      <code>User.getCredentials()</code> method. Both methods return a
       <code>Dictionary</code> object containing key/value pairs. The keys are
       <code>String</code> objects and the values of the
       <code>Dictionary</code> object are limited to <code>String</code> or

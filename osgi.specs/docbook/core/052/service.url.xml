@@ -69,7 +69,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scheme - </emphasis>An identifier for a specific
+          <para><emphasis>Scheme</emphasis> - An identifier for a specific
           protocol. For example, <code>"http"</code> is a scheme for the Hyper
           Text Transfer Protocol. A scheme is implemented in a
           <code>java.net.URLStreamHandler</code> sub-class.</para>
@@ -128,8 +128,7 @@
           implementation of the super class
           (<code>java.net.url.URLStreamHandler</code>). This class also
           handles the setting of the <code>java.net.URL</code> object via the
-          <code>java.net.URLStreamHandlerSetter</code><emphasis>
-          </emphasis>interface.</para>
+          <code>java.net.URLStreamHandlerSetter</code> interface.</para>
         </listitem>
 
         <listitem>
@@ -520,8 +519,8 @@ com.acme.url.application.zip</programlisting></para>
       <para>To aid in the conversion of <code>URLStreamHandler</code>
       implementation classes, the <code>AbstractURLStreamHandlerService</code>
       has been provided. Apart from making the relevant methods public, the
-      <code>AbstractURLStreamHandlerService</code> stores the<code>
-      URLStreamHandlerSetter</code> object in a private variable. To make the
+      <code>AbstractURLStreamHandlerService</code> stores the
+      <code>URLStreamHandlerSetter</code> object in a private variable. To make the
       <code>setURL</code> method work properly, it overrides the
       <code>setURL</code> method to invoke the <code>setURL</code> method on
       the saved <code>URLStreamHandlerSetter</code> object rather then the

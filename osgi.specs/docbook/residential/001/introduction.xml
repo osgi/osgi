@@ -96,7 +96,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Dmt Admin Service Specification - </emphasis>The Dmt
+          <para><emphasis>Dmt Admin Service Specification</emphasis> - The Dmt
           Admin Service specification provides an API for a remote manager to
           manage the device and its diverse services running on it. The Dmt
           Admin provides a generic tree structure, the Device Management Tree

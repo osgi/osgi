@@ -1144,7 +1144,7 @@ Bundle B:
 
       <itemizedlist>
         <listitem>
-          <para><code>source</code>s - An archive containing the source code
+          <para><code>sources</code> - An archive containing the source code
           in the same directory layout as this resource.</para>
         </listitem>
 

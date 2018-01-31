@@ -979,7 +979,7 @@ _-_-_
       is the Unicode for that character. Each character that does not conform
       to the syntax specified in <xref linkend="i760050"/> or the thorn
       character itself must be replaced with the escape sequence. For example,
-      the name 3ABC<code>þ</code> must be translated to:</para>
+      the name <code>3ABCþ</code> must be translated to:</para>
 
       <programlisting>þ0033ABCþ00FE</programlisting>
 
@@ -1232,7 +1232,7 @@ _-_-_
 
       <para>A missing node is a node that is addressed by a path but not
       present in the DMT. For example, the root of the session
-      is<code>./TR-069</code> and the parameter path is <code>A.B.C</code>. If
+      is <code>./TR-069</code> and the parameter path is <code>A.B.C</code>. If
       the DMT contains <code>./TR-069/A</code> but not
       <code>./TR-069/A/B</code> then node <code>B</code> is a missing
       node.</para>

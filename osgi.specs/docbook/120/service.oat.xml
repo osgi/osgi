@@ -386,7 +386,7 @@ public class Example extends MIDlet {
       <para>A reference <emphasis>selects</emphasis> a subset of services in
       the service registry. The primary selector is its
       <emphasis>interface</emphasis>. However, this subset can be further
-      narrowed down with a <emphasis>target </emphasis>filter. The target
+      narrowed down with a <emphasis>target</emphasis> filter. The target
       specifies an OSGi filter expression that is used to additionally qualify
       the subset of appropriate services.</para>
 

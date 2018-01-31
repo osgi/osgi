@@ -2558,7 +2558,7 @@ B: Export-Package: p; «
       <para>Classes can depend on classes in other packages. For example, when
       they extend classes from another package, or these other classes appear
       in method signatures. It can therefore be said that a package
-      <emphasis>use</emphasis>s other packages. These inter-package
+      <emphasis>uses</emphasis> other packages. These inter-package
       dependencies are modeled with the <code>uses</code> directive on the
       Export-Package header.</para>
 
@@ -5313,7 +5313,7 @@ bundle-description  ::= symbolic-name
         </listitem>
 
         <listitem>
-          <para><code>org.osgi.supports.framework.fragment</code>s</para>
+          <para><code>org.osgi.supports.framework.fragments</code></para>
         </listitem>
 
         <listitem>

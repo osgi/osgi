@@ -156,8 +156,8 @@
       they can be obtained with <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getRequiredWires-String-"
       xrefstyle="hyperlink"/>. Bundle Wires that come from a Bundle Wiring's
-      Capability to a requirement are the <emphasis>provided wires,
-      </emphasis>they can be obtained with <xref
+      Capability to a requirement are the <emphasis>provided wires</emphasis>,
+      they can be obtained with <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getProvidedWires-String-"
       xrefstyle="hyperlink"/>. The same requirements and capabilities can be
       used in different wires.</para>

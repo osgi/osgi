@@ -2193,7 +2193,7 @@ txControl.required(() -&gt;
     linkend="org.osgi.service.transaction.control.ResourceProvider"
     xrefstyle="hyperlink"/> services and any factory services that they
     provide. These capabilities must also declare uses constraints for
-    the<code>org.osgi.service.transaction.control</code> package and any other
+    the <code>org.osgi.service.transaction.control</code> package and any other
     packages that they provide. In the case where a more specific type is
     registered (for example JDBCConnectionProvider) then that type should be
     used instead. The service properties that indicate whether the resource

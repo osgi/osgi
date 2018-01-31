@@ -1668,7 +1668,7 @@ public class AsyncServlet extends HttpServlet {
             <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are passed as
-            init parameters to the <code>Filter.init</code>method. The
+            init parameters to the <code>Filter.init</code> method. The
             <code>filter.init.</code> prefix is removed from the parameter
             name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX"
@@ -1811,7 +1811,7 @@ public class MyFilter implements Filter {
               <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
               <entry><para>Properties starting with this prefix are passed as
-              init parameters to the <code>Filter.init</code>method. The
+              init parameters to the <code>Filter.init</code> method. The
               <code>preprocessor.init.</code> prefix is removed from the
               parameter name. See <xref
               linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_PREPROCESSOR_INIT_PARAM_PREFIX"
@@ -2427,7 +2427,7 @@ public class MyFilter implements Filter</programlisting> This specification
 
       <para>Bundles registering services to be picked up by the Http
       Whiteboard implementation should require the
-      <code>osgi.implementation</code>capability. For example:</para>
+      <code>osgi.implementation</code> capability. For example:</para>
 
       <programlisting>Require-Capability: osgi.implementation;
        filter:="(&amp;(osgi.implementation=osgi.http)

@@ -341,7 +341,7 @@
     component configuration, SCR can notify the component of changes in its
     bound references.</para>
 
-    <para>SCR will <emphasis>deactivate </emphasis>a previously activated
+    <para>SCR will <emphasis>deactivate</emphasis> a previously activated
     component configuration when the component becomes disabled, the component
     configuration becomes unsatisfied, or the component configuration is no
     longer needed.</para>
@@ -1340,8 +1340,8 @@ public class HttpResourceImpl {
       services are bound. These changes in the service registry could make one
       or more bound services no longer a target service thereby making
       obsolete any object references that the component has to these service
-      objects. Components therefore must specify a <emphasis>policy
-      </emphasis>how to handle these changes in the set of bound services. A
+      objects. Components therefore must specify a <emphasis>policy</emphasis>
+      how to handle these changes in the set of bound services. A
       <emphasis>policy-option</emphasis> can further refine how changes affect
       bound services.</para>
 
@@ -2626,7 +2626,7 @@ public class Foo implements EventHandler { ... }</programlisting>
       <title>Reference Element</title>
 
       <para>A <emphasis>reference</emphasis> declares a dependency that a
-      component has on a<emphasis> </emphasis>set of target services. A
+      component has on a set of target services. A
       component configuration is not satisfied, unless all its references are
       satisfied. A reference specifies target services by specifying their
       interface and an optional target property.</para>
@@ -4442,7 +4442,7 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para><emphasis>Single Configuration</emphasis>s - If none of the
+        <para><emphasis>Single Configuration</emphasis> - If none of the
         configuration PIDs matches a factory PID, then component
         configurations will obtain additional component properties from
         Configuration Admin.</para>

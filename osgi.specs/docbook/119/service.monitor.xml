@@ -432,7 +432,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.CM_GAUGE"
-          xrefstyle="hyperlink"/> <emphasis> - </emphasis>A numeric counter
+          xrefstyle="hyperlink"/> - A numeric counter
           whose value can vary up or down. An example of a <code>GAUGE</code>
           is a variable which stores the current battery level percentage. The
           value of the Status Variable must be the absolute value not a

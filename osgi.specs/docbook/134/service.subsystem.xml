@@ -81,7 +81,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Scoping - </emphasis>Provide support for isolating
+          <para><emphasis>Scoping</emphasis> - Provide support for isolating
           resources in the collection such that a subset of their capabilities
           (for example packages and services) are available to satisfy
           requirements outside the Subsystem and a subset of their
@@ -238,7 +238,7 @@
       a repository. Depending on the type of Subsystem the Subsystem Manifest
       may describe a <emphasis>sharing policy</emphasis> for the Subsystem,
       such as the packages or services the Subsystem exports or
-      imports.<emphasis> </emphasis>The Deployment Manifest also describes the
+      imports. The Deployment Manifest also describes the
       <emphasis>sharing policy</emphasis> details for the Subsystem and is
       defined by the type of Subsystem and the <emphasis>sharing
       policy</emphasis> described in the Subsystem Manifest.</para>
@@ -270,7 +270,7 @@
       <emphasis>application</emphasis>, <emphasis>composite</emphasis> and
       <emphasis>feature</emphasis>.</para>
 
-      <para>An <emphasis>Application Subsystem </emphasis>is a Scoped
+      <para>An <emphasis>Application Subsystem</emphasis> is a Scoped
       Subsystem with a sharing policy associated with what is often considered
       to be an application. An application does not share (export) any
       capabilities. Any requirements that are not satisfied by the
@@ -281,7 +281,7 @@
       with a fully explicit sharing policy. Capabilities may be explicitly
       imported into, or exported out of, the Composite Subsystem.</para>
 
-      <para>A <emphasis>Feature Subsystem </emphasis>is an Unscoped Subsystem
+      <para>A <emphasis>Feature Subsystem</emphasis> is an Unscoped Subsystem
       and so all its requirements and capabilities are shared.</para>
 
       <para>This specification allows for other types to be defined, including
@@ -1039,7 +1039,7 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
     across an arbitrary number of Regions. For those familiar with the Region
     digraph, see <xref linkend="i3324343"/>, the connections between Subsystem
     Regions is more restrictive than what the full Region digraph
-    specification allows. A <emphasis>visibility path </emphasis>is the path
+    specification allows. A <emphasis>visibility path</emphasis> is the path
     over the sharing policies of the Region tree from a requirement to a
     capability that allows a requirement to get wired to a capability. Since
     all (non-Root) Regions have one and only one Parent Region the
@@ -1179,10 +1179,10 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
     linkend="org.osgi.service.subsystem.Subsystem.install-String-"
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.service.subsystem.Subsystem.install-String-InputStream-"
-    xrefstyle="hyperlink"/> method the <emphasis>Subsystem resource
-    </emphasis>becomes a constituent of the Subsystem which the
+    xrefstyle="hyperlink"/> method the <emphasis>Subsystem resource</emphasis>
+    becomes a constituent of the Subsystem which the
     <code>install</code> method was called on. The <emphasis>Subsystem
-    resource </emphasis>is the Subsystem Archive and may be retrieved by
+    resource</emphasis> is the Subsystem Archive and may be retrieved by
     calling the Subsystem service <xref
     linkend="org.osgi.service.subsystem.Subsystem.getConstituents--"
     xrefstyle="hyperlink"/> method. <xref linkend="i3298109"/> illustrates the
@@ -1263,8 +1263,8 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
 
       <para>In this example Subsystem S1 has been installed. The Scoped
       Subsystem <code>S1</code> has included in its constituents the Unscoped
-      Subsystems <code>U1</code> and <code>U2</code>. Furthermore<code>
-      U1</code> has included the Unscoped Subsystem <code>U2</code> as a
+      Subsystems <code>U1</code> and <code>U2</code>. Furthermore
+      <code>U1</code> has included the Unscoped Subsystem <code>U2</code> as a
       constituent and <code>U2</code> has included the Unscoped Subsystem
       <code>U1</code> as a constituent. This causes Unscoped Subsystem
       <code>U1</code> to have parents <code>S1</code> and <code>U2</code> and
@@ -2156,7 +2156,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>In this example the <code>C</code> and <code>D</code> provide
     capabilities that are required by <code>A</code> and <code>B</code>
-    respectively. The import sharing policy of <code>S</code>2 allows the
+    respectively. The import sharing policy of <code>S2</code> allows the
     capabilities to be imported into <code>S2</code>, but the import sharing
     policy for <code>S1</code> denies the import of one of the capabilities
     and allows the other. In order for <code>A</code> or <code>B</code> to
@@ -2300,10 +2300,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>Depending on how a resource is installed the Subsystems
     implementation considers the resource to be either an <emphasis>explicit
-    resource </emphasis>or <emphasis> implicit resource</emphasis>. An
+    resource</emphasis> or <emphasis>implicit resource</emphasis>. An
     <emphasis>explicit resource</emphasis> is a resource whose installation
     was initiated by an agent outside of the Subsystems implementation.
-    An<emphasis> implicit resource</emphasis> is a resource whose installation
+    An <emphasis>implicit resource</emphasis> is a resource whose installation
     was initiated by the Subsystems implementation during the explicit
     installation of a Subsystem, including the content and dependencies of the
     explicitly installed Subsystem.</para>
@@ -2583,7 +2583,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>A Subsystems implementation must track the resources which are
     installed and determine which Subsystems reference a resource.
-    The<emphasis> reference count</emphasis> indicates the number of installed
+    The <emphasis>reference count</emphasis> indicates the number of installed
     Subsystems which reference an installed resource. The resource references
     and reference counts are used by the Subsystems implementation to
     determine if an installed resource is eligible for garbage collection and
@@ -2683,10 +2683,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
   <section xml:id="i3339345">
     <title>Starting and Stopping Resources</title>
 
-    <para>A Subsystem can be started by calling the Subsystem <emphasis>start
-    </emphasis>method or the Subsystems implementation can automatically start
-    the Subsystem if the Subsystem is <emphasis>ready </emphasis>and the
-    <emphasis>autostart setting </emphasis>of the Subsystem indicates that it
+    <para>A Subsystem can be started by calling the Subsystem <emphasis>start</emphasis>
+    method or the Subsystems implementation can automatically start
+    the Subsystem if the Subsystem is <emphasis>ready</emphasis> and the
+    <emphasis>autostart setting</emphasis> of the Subsystem indicates that it
     must be started.</para>
 
     <para>A Subsystem is <emphasis>ready</emphasis> if the Subsystem's parent
@@ -2720,7 +2720,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>The Subsystems implementation must track the resources which are
     installed and be able to determine when a resource must be started and
-    stopped. To describe this behavior the term<emphasis> active use
+    stopped. To describe this behavior the term <emphasis>active use
     count</emphasis> is used. A active use count indicates the number of
     active Subsystems which reference a resource. The active use count is used
     by the Subsystems implementation in order to determine when a resource is
@@ -3391,7 +3391,7 @@ Subsystem-Content:
       <title>Installing</title>
 
       <para>A Subsystem's install process is initiated using one of the
-      Subsystem service's <emphasis>install </emphasis>methods. The Subsystems
+      Subsystem service's <emphasis>install</emphasis> methods. The Subsystems
       implementation must assign a unique Subsystem identifier that is higher
       than any previous installed Subsystem identifier. Previously installed
       Subsystem identifiers include Subsystems which were uninstalled in a
@@ -3577,8 +3577,8 @@ Subsystem-Content:
       <para>A Subsystem can be started by calling the Subsystem <xref
       linkend="org.osgi.service.subsystem.Subsystem.start--"
       xrefstyle="hyperlink"/> method or the Subsystems implementation can
-      automatically start the Subsystem if the Subsystem is <emphasis>ready
-      </emphasis>and the <emphasis>autostart setting </emphasis>of the
+      automatically start the Subsystem if the Subsystem is <emphasis>ready</emphasis>
+      and the <emphasis>autostart setting</emphasis> of the
       Subsystem indicates that it must be started. When a Subsystem is being
       started the Subsystems implementation must perform the following
       operations synchronously before returning from the <xref
@@ -3598,7 +3598,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>Set the Subsystems <emphasis>autostart setting </emphasis>to
+          <para>Set the Subsystems <emphasis>autostart setting</emphasis> to
           <emphasis>started</emphasis>.</para>
         </listitem>
 
@@ -3610,7 +3610,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If the Subsystem is not <emphasis>ready </emphasis>to be
+          <para>If the Subsystem is not <emphasis>ready</emphasis> to be
           started then the start method returns immediately.</para>
         </listitem>
 
@@ -3721,7 +3721,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>Set the Subsystems <emphasis>autostart setting </emphasis>to
+          <para>Set the Subsystems <emphasis>autostart setting</emphasis> to
           <emphasis>stopped</emphasis>.</para>
         </listitem>
 
@@ -4335,7 +4335,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       parent Region that matches one or more Subsystem-ImportService
       statements must be allowed into the Scoped Subsystem by its associated
       Region's sharing policy. The following example imports services
-      registered under the <code>com.acme.logging.Log</code>interface with a
+      registered under the <code>com.acme.logging.Log</code> interface with a
       service property <code>threshold=error</code>.</para>
 
       <programlisting>Subsystem-ImportService: com.acme.logging.Log;filter:="(threshold=error)"</programlisting>
@@ -4896,8 +4896,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
         <listitem>
           <para><code>location</code> - The location of a Subsystem. For
-          example<code>
-          (location=https://www.acme.com/download/*)</code></para>
+          example
+          <code>(location=https://www.acme.com/download/*)</code></para>
         </listitem>
 
         <listitem>

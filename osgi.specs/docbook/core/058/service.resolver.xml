@@ -1233,7 +1233,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       <itemizedlist>
         <listitem>
           <para>Must contain all mandatory resources
-          <emphasis>R</emphasis><subscript>m </subscript>as provided by <xref
+          <emphasis>R</emphasis><subscript>m</subscript> as provided by <xref
           linkend="org.osgi.service.resolver.ResolveContext.getMandatoryResources--"
           xrefstyle="hyperlink"/>.</para>
         </listitem>
@@ -1248,8 +1248,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         </listitem>
 
         <listitem>
-          <para>Should include optional resources <emphasis>R</emphasis>
-          <subscript>o </subscript>as provided by <xref
+          <para>Should include optional resources <emphasis>R</emphasis><subscript>o</subscript>
+          as provided by <xref
           linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--"
           xrefstyle="hyperlink"/>.</para>
         </listitem>

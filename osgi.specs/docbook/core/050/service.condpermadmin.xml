@@ -85,7 +85,7 @@
         <listitem>
           <para><emphasis>Operator Specific Conditions</emphasis> - It must be
           possible for operators, manufacturers, selected developers, and
-          others to provide custom conditions<emphasis>.</emphasis></para>
+          others to provide custom conditions.</para>
         </listitem>
 
         <listitem>
@@ -1772,7 +1772,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
 
     <programlisting>[ HostCondition "payment" ]</programlisting>
 
-    <para>The majority of the code is in the <code>isSatisfied</code>method
+    <para>The majority of the code is in the <code>isSatisfied</code> method
     which takes an array of <code>Condition</code>. The constructor only
     stores the action.</para>
 
@@ -1873,7 +1873,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
     <para>Each permission must be listed on its own line using the encoded
     form of Permission Info. Comment lines are allowed. They consist of lines
-    starting with a <code>#</code>or <code>//</code>, where leading spaces
+    starting with a <code>#</code> or <code>//</code>, where leading spaces
     must be ignored. Multiple spaces outside quotes must be treated as a
     single space.</para>
 

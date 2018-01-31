@@ -555,7 +555,7 @@ chess.dp</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>DeploymentPackage-Name - </emphasis>A human readable
+          <para><emphasis>DeploymentPackage-Name</emphasis> - A human readable
           of this deployment package. This name can be localized.</para>
         </listitem>
 
@@ -2437,8 +2437,8 @@ Resource-Processor: wire.admin.processor
       </listitem>
     </itemizedlist>
 
-    <para>The <code>INSTALL</code>, <code>UNINSTALL</code> and<code>
-    COMPLETE</code> events have the following property:</para>
+    <para>The <code>INSTALL</code>, <code>UNINSTALL</code> and
+    <code>COMPLETE</code> events have the following property:</para>
 
     <itemizedlist>
       <listitem>

@@ -557,7 +557,7 @@ SHA-256-Digest-Manifest: HmK7445BA7n5UYYI9xZKfSdMAPci44Jn7ZcmoyoiWoM=</programli
 
       <para>The solution is to sign a certificate by another certificate, and
       this process can be repeated several times. This delegation process
-      forms a<emphasis> chain of certificates</emphasis>. All certificates for
+      forms a <emphasis>chain of certificates</emphasis>. All certificates for
       this chain are carried in the PKCS#7 file: if one of those certificates
       can be found in the trusted repository, the other dependent ones can be
       trusted, on the condition that all the certificates are valid. This

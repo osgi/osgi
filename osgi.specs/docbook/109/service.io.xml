@@ -326,8 +326,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>The Connection Factory service must be registered with the<code>
-    IO_SCHEME</code> property to indicate the provided scheme to the Connector
+    <para>The Connection Factory service must be registered with the
+    <code>IO_SCHEME</code> property to indicate the provided scheme to the Connector
     Service. The value of this property must be a
     <code>String[]</code>.</para>
 

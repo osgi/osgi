@@ -675,7 +675,7 @@ javax.naming.directory</programlisting>
       <para>In the following sections the cases for presence or absence of the
       <code>java.naming.factory.initial</code> property are described. Several
       steps in these algorithm iterate over a set of available services. This
-      iteration must always take place in service<emphasis> ranking
+      iteration must always take place in service <emphasis>ranking
       order</emphasis>. Service ranking order follows the ordering of the
       <code>service.ranking</code> service property, which is the highest
       <code>service.ranking</code> value, or when equal, the lowest
@@ -1278,7 +1278,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
 
       <para>The OSGi URL Context handles the complexities by hiding the
       dynamic nature of OSGi. The OSGi URL Context must handle the dynamics by
-      <emphasis>proxying</emphasis> the service objects<emphasis>.</emphasis>
+      <emphasis>proxying</emphasis> the service objects.
       This proxy must implement the interface given in the URL. If the JNDI
       service name instead of a class name is used, then all interfaces under
       which the service is registered must be implemented. If an interface is

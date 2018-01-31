@@ -351,8 +351,8 @@
       binding.ws)</code> then defines that the implementation is the
       <code>Triple-DES</code> encryption algorithm.</para>
 
-      <para>SCA provides a mechanism to define Policy Sets<emphasis>
-      </emphasis>using standard policy languages, such as the <xref
+      <para>SCA provides a mechanism to define Policy Sets
+      using standard policy languages, such as the <xref
       linkend="i3073536"/>.</para>
 
       <para>In order for a service to be correctly configured, the
@@ -1390,7 +1390,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
               <entry><para>The name of the Policy Set. This name can be used
               to refer to the Policy Set from a Binding. The name must be
               combined with the <code>targetNamespace</code> of the
-              <code>sca-config</code>element to give the <code>QName</code>
+              <code>sca-config</code> element to give the <code>QName</code>
               for the Policy Set.</para></entry>
             </row>
 

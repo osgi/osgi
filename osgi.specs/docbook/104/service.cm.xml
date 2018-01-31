@@ -1302,7 +1302,7 @@ private       ::= '.' symbolic-name</programlisting>
       <para>Similar to the Managed Service configuration dictionary, the
       configuration dictionary for a Managed Service Factory is identified by
       a PID. The Managed Service Factory, however, also has a
-      <emphasis>factory </emphasis>PID, which is the PID of the associated
+      <emphasis>factory</emphasis> PID, which is the PID of the associated
       Managed Service Factory. It is used to group all Managed Service Factory
       configuration dictionaries together.</para>
 
@@ -1429,7 +1429,7 @@ private       ::= '.' symbolic-name</programlisting>
           <code>Topic</code> interface so their results can be viewed by an
           online display.</para>
 
-          <para>If the E<code>MailFetcher</code> object is registered, it may
+          <para>If the <code>EMailFetcher</code> object is registered, it may
           safely use the PID of the <code>Configuration</code> object because
           the Configuration Admin service must guarantee its suitability for
           this purpose.</para>
@@ -1737,7 +1737,7 @@ private       ::= '.' symbolic-name</programlisting>
 
       <para>To optimize configuration updates if the caller does not know
       whether properties of a <code>Configuration</code> object have changed,
-      the<xref
+      the <xref
       linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
       xrefstyle="hyperlink"/> method can be used. The provided dictionary is
       compared with the existing properties. If there is no change, no action
@@ -2621,7 +2621,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
 
       <para>Bundles that want to change their own configuration need
       <code>ServicePermission[ConfigurationAdmin, GET]</code>. A bundle with
-      <code>ConfigurationPermission[*,CONFIGURE]</code>is allowed to access
+      <code>ConfigurationPermission[*,CONFIGURE]</code> is allowed to access
       and modify any <code>Configuration</code> object.</para>
 
       <para>Pre-configuration of bundles requires

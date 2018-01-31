@@ -29,7 +29,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Resource - </emphasis>An entity that can be
+          <para><emphasis>Resource</emphasis> - An entity that can be
           installed in an Environment where it will provide its Capabilities
           when all its Requirements are satisfied.</para>
         </listitem>

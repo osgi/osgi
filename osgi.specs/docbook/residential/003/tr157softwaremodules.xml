@@ -327,7 +327,7 @@
             or another OSGi Framework if the framework is nested. If the
             referenced object is deleted, the parameter value must be set to
             an empty string. If this value is an empty string then this is
-            the<emphasis> Primary Execution
+            the <emphasis>Primary Execution
             Environment</emphasis>.</para></entry>
           </row>
 

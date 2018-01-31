@@ -19,8 +19,8 @@
     <title>Introduction</title>
 
     <para>The OSGi Service Layer defines a dynamic collaborative model that is
-    highly integrated with the Life Cycle Layer. The <emphasis>service
-    </emphasis>model is a publish, find and bind model. A service is a normal
+    highly integrated with the Life Cycle Layer. The <emphasis>service</emphasis>
+    model is a publish, find and bind model. A service is a normal
     Java object that is registered under one or more Java interfaces with the
     service registry. Bundles can register services, search for them, or
     receive notifications when their registration state changes.</para>
@@ -1435,7 +1435,7 @@
       </listitem>
 
       <listitem>
-        <para>A <code>Target(String)</code>constructor</para>
+        <para>A <code>Target(String)</code> constructor</para>
       </listitem>
     </itemizedlist>
 

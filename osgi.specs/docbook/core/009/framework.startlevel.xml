@@ -264,7 +264,7 @@
     support all positive <code>int</code> values
     (<code>Integer.MAX_VALUE</code>) for start levels.</para>
 
-    <para>The Framework has an <emphasis>active start level </emphasis>that is
+    <para>The Framework has an <emphasis>active start level</emphasis> that is
     used to decide which bundles can be started. All bundles must be assigned
     a <emphasis>bundle start level.</emphasis> This is the minimum start level
     to start a bundle. The bundle start level can be set with the <xref
@@ -451,7 +451,7 @@
       <title>Starting a Bundle</title>
 
       <para>If a bundle is started by calling the
-      <code>Bundle.start</code>method, then the OSGi Framework must mark the
+      <code>Bundle.start</code> method, then the OSGi Framework must mark the
       bundle as persistently started. The OSGi Framework must not actually
       start a bundle when the active start level is less than the bundle's
       start level. In that case, the state must not change.</para>

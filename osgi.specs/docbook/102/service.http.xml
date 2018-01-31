@@ -233,7 +233,7 @@ getHttpService().unregister("/servletAlias");
     Http Service via the <xref linkend="org.osgi.service.http.HttpService"
     xrefstyle="hyperlink"/> interface. This <code>HttpService</code> interface
     defines the
-    <code>registerResources(String,String,HttpContext)</code>method for
+    <code>registerResources(String,String,HttpContext)</code> method for
     registering a resource into the Http Service URI name-space.</para>
 
     <para>The first parameter is the external alias under which the resource

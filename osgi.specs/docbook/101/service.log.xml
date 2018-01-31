@@ -1349,7 +1349,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         <listitem>
           <para><code>exception.class</code> - (<code>String</code>) The
           fully-qualified class name of the attached exception. Only set if
-          the <code>getException</code>method returns a non-<code>null</code>
+          the <code>getException</code> method returns a non-<code>null</code>
           value.</para>
         </listitem>
 
