@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * The name of the package is stored in the capability attribute of the same
 	 * name as this namespace (osgi.wiring.package). The other directives and
 	 * attributes of the package, from the {@link Constants#EXPORT_PACKAGE
-	 * Export-Package} manifest header, can be found in the cabability's
+	 * Export-Package} manifest header, can be found in the capability's
 	 * {@link BundleCapability#getDirectives() directives} and
 	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
@@ -157,7 +157,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute of the same name as this namespace (osgi.wiring.bundle). The
 	 * other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
-	 * header, can be found in the cabability's
+	 * header, can be found in the capability's
 	 * {@link BundleCapability#getDirectives() directives} and
 	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability
@@ -197,7 +197,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute of the same name as this namespace (osgi.wiring.host). The
 	 * other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
-	 * header, can be found in the cabability's
+	 * header, can be found in the capability's
 	 * {@link BundleCapability#getDirectives() directives} and
 	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability

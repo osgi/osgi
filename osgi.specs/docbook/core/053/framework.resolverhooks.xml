@@ -670,7 +670,7 @@ S A     do not collide, remove from set</programlisting>
       <title>Resolver Hook Limitations</title>
 
       <para>Resolver hooks are system level components. Handlers must be
-      careful not to create an un-resolvable state which is very hard for a
+      careful not to create an unresolvable state which is very hard for a
       developer or a provisioner to diagnose. Resolver Hooks also must not be
       allowed to start another resolve operation, for example by starting a
       bundle or resolving bundles. The framework must detect this and throw an

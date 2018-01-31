@@ -19,7 +19,7 @@
     <title>Introduction</title>
 
     <para>Note: The Permission Admin has been superseded by the Conditional
-    Permission admin. See <xref linkend="service.condpermadmin"/>.</para>
+    Permission Admin. See <xref linkend="service.condpermadmin"/>.</para>
 
     <para>In the Framework, a bundle can have a single set of permissions.
     These permissions are used to verify that a bundle is authorized to

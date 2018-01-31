@@ -1231,7 +1231,7 @@ Tm(DENY)        # virtual</programlisting>
 
       <para>The evaluation always ends because the last entry in each of the
       postponed lists is guaranteed to be a matching policy. As a special
-      case, a postponed list with one entry indicates success. this must be a
+      case, a postponed list with one entry indicates success. This must be a
       matching <code>ALLOW</code> because an immediate <code>DENY</code> would
       have failed earlier.</para>
 
@@ -1963,7 +1963,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
       <para>There is a subtle interaction between mutability and postponement.
       An immutable postponed condition must be treated as a postponed
       conditions. This first result can then be cached. The following table
-      shows the interaction between mutability and postponement.The
+      shows the interaction between mutability and postponement. The
       <emphasis>Direct</emphasis> column indicates the steps during the
       permission check, the <emphasis>After</emphasis> column indicates the
       step when all the permissions are checked and found to allow the

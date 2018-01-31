@@ -788,7 +788,7 @@ attr        ::= &lt;see text&gt;</programlisting>
 
       <para>The evaluation of the approximate match (<code>'~='</code>) filter
       type is implementation specific but should at least ignore case and
-      white space differences. Codes such as soundex or other smart
+      white space differences. Codes such as Soundex or other smart
       <emphasis>closeness</emphasis> comparisons could be used.</para>
 
       <para>Values specified in the filter are compared to values in the

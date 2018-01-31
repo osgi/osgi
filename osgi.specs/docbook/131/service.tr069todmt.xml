@@ -383,7 +383,7 @@ instance-path  ::= table-path instance '.'</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
-      <xref linkend="i747814"/>. The name basically supports the full unicode
+      <xref linkend="i747814"/>. The name basically supports the full Unicode
       character set for letters and digits (including digits for other
       languages), including sets for languages like Hebrew and Chinese.
       Examples of different parameter names are:</para>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -405,7 +405,7 @@ public interface BundleContext extends BundleReference {
 	 * <li>A property named {@link Constants#SERVICE_SCOPE} identifying the
 	 * scope of the service.</li>
 	 * <li>A property named {@link Constants#SERVICE_BUNDLEID} identifying the
-	 * the context bundle.</li>
+	 * context bundle.</li>
 	 * </ul>
 	 * Properties with these names in the specified {@code Dictionary} will be
 	 * ignored.</li>

@@ -867,9 +867,10 @@ public void removed( Collection lis ) {
       bundle is using them, and if a hook is a Service Factory, then the
       actual instance will be properly created.</para>
 
-      <para>The only speciality of the service hooks is that the framework
-      must not use them for the hooks themselves. That is, the Event and Find
-      Hooks can not be used to hide the services from the framework.</para>
+      <para>The only special treatment of the service hooks is that the
+      framework must not use them for the hooks themselves. That is, the Event
+      and Find Hooks can not be used to hide the services from the
+      framework.</para>
     </section>
 
     <section>

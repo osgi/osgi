@@ -406,7 +406,7 @@ SHA-256-Digest-Manifest: HmK7445BA7n5UYYI9xZKfSdMAPci44Jn7ZcmoyoiWoM=</programli
         </listitem>
 
         <listitem>
-          <para>The PCKS#7 resource is a valid signature (either signed using
+          <para>The PKCS#7 resource is a valid signature (either signed using
           RSA or DSA as indicated by the extension) for the signature
           resource.</para>
         </listitem>
@@ -441,7 +441,7 @@ SHA-256-Digest-Manifest: HmK7445BA7n5UYYI9xZKfSdMAPci44Jn7ZcmoyoiWoM=</programli
         </listitem>
       </itemizedlist>
 
-      <para>The signature files for RSA and DSA are stored in a PCKS#7 format.
+      <para>The signature files for RSA and DSA are stored in a PKCS#7 format.
       This is a format that has a structure as defined in <xref
       linkend="i1485209"/>. The PKCS#7 standard provides access to the
       algorithm specific signing information as well as the certificate with
@@ -679,7 +679,7 @@ value       ::= &lt;escaped string&gt;</programlisting>
     Canonical form: cn=bugs bunny,o=acme\+\+,c=us
     Java String:    "cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
 
-      <para>The full unicode character set is available and can be used in
+      <para>The full Unicode character set is available and can be used in
       DNs. String objects must be normalized and put in canonical form before
       being compared.</para>
 

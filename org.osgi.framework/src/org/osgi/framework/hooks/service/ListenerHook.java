@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ public interface ListenerHook {
 		 * service listener. This method can be used to detect this rare
 		 * occurrence.
 		 * 
-		 * @return {@code false} if the listener has not been been removed,
+		 * @return {@code false} if the listener has not been removed,
 		 *         {@code true} otherwise.
 		 */
 		boolean isRemoved();

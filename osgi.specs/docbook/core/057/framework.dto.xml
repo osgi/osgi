@@ -412,7 +412,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
             linkend="org.osgi.framework.wiring.dto.BundleWiringDTO"
             xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
-            <entry><para>The Bundle WiringsData Transfer Objects for the
+            <entry><para>The Bundle Wiring Data Transfer Objects for the
             bundle. The first wiring is the current wiring. If the bundle is
             uninstalled, the result is <code>null</code>.</para></entry>
           </row>

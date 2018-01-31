@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -783,9 +783,8 @@ public interface Constants {
 	 * Manifest header directive value identifying a reexport visibility type. A
 	 * reexport visibility type indicates any packages that are exported by the
 	 * required bundle are re-exported by the requiring bundle. Any arbitrary
-	 * arbitrary matching attributes with which they were exported by the
-	 * required bundle are deleted.
-	 * 
+	 * matching attributes with which they were exported by the required bundle
+	 * are deleted.
 	 * <p>
 	 * The directive value is encoded in the Require-Bundle manifest header
 	 * like:

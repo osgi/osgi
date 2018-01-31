@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,8 @@ public interface Framework extends Bundle {
 	 * {@link #STARTING}, {@link #ACTIVE} or {@link #STOPPING} states.
 	 * 
 	 * <p>
-	 * All framework events fired by this method method are also delivered to
-	 * the specified FrameworkListeners in the order they are specified before
+	 * All framework events fired by this method are also delivered to the
+	 * specified FrameworkListeners in the order they are specified before
 	 * returning from this method. After returning from this method the
 	 * specified listeners are no longer notified of framework events.
 	 * 
