@@ -9,6 +9,7 @@
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
   <?dbhtml filename="index.html" ?>
+
   <title>OSGi Specification License, Version 2.0</title>
 
   <section>
@@ -102,10 +103,10 @@
     <para>This specification can be downloaded from the OSGi Alliance web
     site:</para>
 
-    <programlisting><link xlink:href="https://www.osgi.org"/></programlisting>
+    <para><code><link xlink:href="https://www.osgi.org"/></code></para>
 
     <para>Comments about this specification can be raised at:</para>
 
-    <programlisting><link xlink:href="https://osgi.org/bugzilla/"/></programlisting>
+    <para><code><link xlink:href="https://osgi.org/bugzilla/"/></code></para>
   </section>
 </preface>
