@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,10 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
 package org.osgi.service.jaxrs.runtime;
+
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 
