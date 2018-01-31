@@ -1022,8 +1022,8 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       Specification</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i1488938"><title>Manifest
-      Format</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1488938"><title>Manifest Format</title><biblioid
+      class="uri"><link
       xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1483030"><title>Secure Hash
@@ -1034,14 +1034,14 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       Internet Electronic Mail</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc1421.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed
-      xml:id="i1484747"><title>DSA</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1484747"><title>DSA</title><biblioid
+      class="uri"><link
       xlink:href="http://www.itl.nist.gov/fipspubs/fip186.htm"/></biblioid></bibliomixed>
 
-      <bibliomixed
-      xml:id="i1484864"><title>RSA</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2313.txt
-      which is superseded by http://www.ietf.org/rfc/rfc2437.txt"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="i1484864"><title>RSA</title><biblioid
+      class="uri"><link xlink:href="http://www.ietf.org/rfc/rfc2313.txt"/>
+      which is superseded by <link
+      xlink:href="http://www.ietf.org/rfc/rfc2437.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
       #7</title><biblioid class="uri"><link
