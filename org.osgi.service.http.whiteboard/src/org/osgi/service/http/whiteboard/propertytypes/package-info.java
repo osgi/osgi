@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,10 @@
  * @author $Id$
  */
 
-@Version("1.1")
+@Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION)
 package org.osgi.service.http.whiteboard.propertytypes;
+
+import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 
