@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,11 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * generate bundle manifests or otherwise process the type or package.
+ * <p>
+ * This annotation can be used to annotate an annotation. If the meta-annotated
+ * annotation declares an element of the same name as an element in this
+ * annotation, the element is considered to override the element in this
+ * annotation.
  * 
  * @author $Id$
  */
