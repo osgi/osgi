@@ -16,12 +16,14 @@
 
 package org.osgi.service.cdi.annotations;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 import static org.osgi.service.cdi.PortableExtensionNamespace.CDI_EXTENSION_NAMESPACE;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import org.osgi.annotation.bundle.Requirement;
 
 /**
@@ -32,9 +34,10 @@ import org.osgi.annotation.bundle.Requirement;
  */
 @Documented
 @Retention(CLASS)
-@Target(TYPE)
-@Requirement(
-		namespace = CDI_EXTENSION_NAMESPACE)
+@Target({
+		TYPE, PACKAGE
+})
+@Requirement(namespace = CDI_EXTENSION_NAMESPACE)
 public @interface RequireCdiExtension {
 
 	/**
