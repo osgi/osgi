@@ -16,6 +16,7 @@
 
 package org.osgi.service.jaxrs.whiteboard.annotations;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,6 +36,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
  * 
  * @author $Id$
  */
+@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE

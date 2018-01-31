@@ -19,6 +19,7 @@ package org.osgi.service.jpa.annotations;
 import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
 import static org.osgi.service.jpa.EntityManagerFactoryBuilder.*;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,13 +28,19 @@ import java.lang.annotation.Target;
 import org.osgi.annotation.bundle.Requirement;
 
 /**
- * A convenience annotation for adding a requirement on the JPA Service extender
+ * This annotation can be used to require the JPA extender. It can be used
+ * directly, or as a meta-annotation.
+ *
+ * @author $Id$
  */
-@Requirement(namespace = EXTENDER_NAMESPACE, name = JPA_CAPABILITY_NAME, version = JPA_SPECIFICATION_VERSION)
+@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE
 })
+@Requirement(namespace = EXTENDER_NAMESPACE, //
+		name = JPA_CAPABILITY_NAME, //
+		version = JPA_SPECIFICATION_VERSION)
 public @interface RequireJPAExtender {
 	// A marker annotation indicating a JPA service extender requirement
 }

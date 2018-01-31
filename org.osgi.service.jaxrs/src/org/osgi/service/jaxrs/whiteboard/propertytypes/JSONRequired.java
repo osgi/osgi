@@ -28,12 +28,12 @@ import java.lang.annotation.Target;
 
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxrsWhiteboard;
 
 /**
  * Component Property Type for requiring JSON media type support using the
- * {@link org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants#JAX_RS_MEDIA_TYPE}
- * service property.
+ * {@link JaxrsWhiteboardConstants#JAX_RS_MEDIA_TYPE} service property.
  * <p>
  * This annotation can be used on a JAX-RS resource to declare require that JSON
  * support is available before the resource becomes active. It also adds an
@@ -46,7 +46,10 @@ import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxrsWhiteboard;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 @RequireJaxrsWhiteboard
-@Requirement(namespace = SERVICE_NAMESPACE, filter = JSONRequired.FILTER, resolution = OPTIONAL, effective = EFFECTIVE_ACTIVE)
+@Requirement(namespace = SERVICE_NAMESPACE, //
+		filter = JSONRequired.FILTER, //
+		resolution = OPTIONAL, //
+		effective = EFFECTIVE_ACTIVE)
 @ComponentPropertyType
 public @interface JSONRequired {
 	/**
