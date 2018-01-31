@@ -34,7 +34,6 @@ import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
  * Declarative Services components which use the JAX-RS Whiteboard.
  * 
  * @author $Id$
- * @since 1.0
  */
 @Retention(RetentionPolicy.CLASS)
 @Target({

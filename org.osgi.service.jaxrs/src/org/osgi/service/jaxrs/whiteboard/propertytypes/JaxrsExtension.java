@@ -34,7 +34,6 @@ import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxrsWhiteboard;
  * 
  * @see "Component Property Types"
  * @author $Id$
- * @since 1.0
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)

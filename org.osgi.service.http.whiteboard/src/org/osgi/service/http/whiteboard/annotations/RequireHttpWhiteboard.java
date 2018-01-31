@@ -34,7 +34,6 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * Declarative Services components which use the Http Whiteboard.
  * 
  * @author $Id$
- * @since 1.0
  */
 @Retention(RetentionPolicy.CLASS)
 @Target({
