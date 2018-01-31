@@ -212,11 +212,6 @@ div.table-contents td {
 	width: 100%;
 }
 
-#toc_2 span,
-div.toc span.preface {
-	text-transform: uppercase;
-}
-
 .bibliomixed .title, .figure .title, .table .title {
 	font-style: italic;
 }
