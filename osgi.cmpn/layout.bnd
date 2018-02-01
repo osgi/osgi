@@ -8,6 +8,7 @@ osgi.cmpn.specs = \
      org.osgi.service.async, \
      org.osgi.service.application, \
      org.osgi.service.blueprint, \
+     org.osgi.service.clusterinfo, \
      org.osgi.service.cm, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
