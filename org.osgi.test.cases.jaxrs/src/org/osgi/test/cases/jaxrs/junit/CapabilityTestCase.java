@@ -23,6 +23,7 @@ import static org.osgi.namespace.service.ServiceNamespace.*;
 import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
 import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -123,7 +124,8 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				if (usesDirective != null) {
 					Set<String> packages = new HashSet<String>(Arrays
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
-					uses = packages.contains("javax.ws.rs.client");
+					uses = packages.contains("javax.ws.rs.client") &&
+							packages.contains("org.osgi.service.jaxrs.client");
 				}
 
 				break;
@@ -214,7 +216,10 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 					String usesDirective = cap.getDirectives()
 							.get(CAPABILITY_USES_DIRECTIVE);
 					if (usesDirective != null) {
-						Collection<String> requiredPackages = JAX_RS_PACKAGES;
+						Collection<String> requiredPackages = new ArrayList<>(
+								JAX_RS_PACKAGES);
+						requiredPackages
+								.add("org.osgi.service.jaxrs.whiteboard");
 
 						Set<String> packages = new HashSet<String>(
 								Arrays.asList(usesDirective.trim()
