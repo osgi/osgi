@@ -1172,7 +1172,7 @@ version="1.1">
 
 <xsl:template match="parameter" mode="head">
   <xsl:if test="position()!=1">
-    <xsl:text>,</xsl:text>
+    <xsl:text>, </xsl:text>
   </xsl:if>
   <xsl:value-of select="@typeName" />
   <xsl:value-of select="@dimension" />

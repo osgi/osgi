@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -365,7 +365,7 @@ public class XmlDoclet extends Doclet {
 		String del = "&lt;";
 		for (Type arg : ptype) {
 			sb.append(del);
-			del = ",";
+			del = ", ";
 			print(sb, arg, level);
 		}
 		if (del != "&lt;")
@@ -518,7 +518,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void print(Parameter param, boolean vararg) {
-		String dimension = vararg ? " ..." : param.type().dimension();
+		String dimension = vararg ? "..." : param.type().dimension();
 
 		pw.println("    <parameter name='" + param.name() + "' dimension='"
 				+ dimension + "' typeName='" + printType(param.type(), 1)
