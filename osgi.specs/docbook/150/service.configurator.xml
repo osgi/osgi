@@ -337,7 +337,7 @@
       <emphasis>Filter Syntax</emphasis> in the OSGi Core Specification.
       Configuration resources are specified in JSON, which supports a more
       basic set of data types. The following table describes how values are
-      converted from JSON to configuration values. </para>
+      converted from JSON to configuration values.</para>
 
       <table>
         <title>JSON Conversions</title>
@@ -558,7 +558,7 @@ Resource in Bundle B:
       the system, or if it was modified by someone from the values set by the
       Configurator. The default value for this property is
       <code>default</code>. If the specified value is invalid an error is
-      logged and the default value is used. </para>
+      logged and the default value is used.</para>
 
       <table>
         <title>Applying Configurations: Overwrite Policies</title>
@@ -600,7 +600,7 @@ Resource in Bundle B:
       another entity. If the configuration has not been changed by another
       entity it is removed. If it has been changed then whether the
       configuration is removed depends on the value of the
-      <code>configurator:policy</code> property: </para>
+      <code>configurator:policy</code> property:</para>
 
       <table>
         <title>Removing externally modified configurations</title>
@@ -645,7 +645,7 @@ Resource in Bundle B:
   }
 }</programlisting>
 
-      <para>The following actions demonstrate the behaviour of the default
+      <para>The following actions demonstrate the behavior of the default
       policy:</para>
 
       <orderedlist>
@@ -689,7 +689,7 @@ Resource in Bundle B:
   }
 }</programlisting>
 
-      <para>The following actions demonstrate the behaviour of the force
+      <para>The following actions demonstrate the behavior of the force
       policy:</para>
 
       <orderedlist>
@@ -1103,7 +1103,7 @@ Resource in Bundle B:
 
     <para>In addition to the common requirements and capabilities, a
     standalone configuration resource must declare the following capabilities
-    when in an OSGi repository: </para>
+    when in an OSGi repository:</para>
 
     <itemizedlist>
       <listitem>

@@ -405,8 +405,8 @@
           than taking a purely declarative approach as is done in some other
           Transaction solutions, the Transaction Control Service Specification
           defines a simple programming model to execute specific parts of code
-          under transactional scope. It works very well with Java™ lambas. See
-          <xref linkend="service.transaction.control"/>.</para>
+          under transactional scope. It works very well with Java™ lambdas.
+          See <xref linkend="service.transaction.control"/>.</para>
         </listitem>
       </itemizedlist>
     </section>

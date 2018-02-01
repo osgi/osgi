@@ -36,7 +36,7 @@
     the sometimes fine-grained dependencies and constraints between the
     different resource types. This model, though extremely flexible, leaves
     many details up to the implementation significantly hindering the
-    inter-operability of devices because it does not unify the management
+    interoperability of devices because it does not unify the management
     aspects from the management systems point of view. This specification,
     therefore, introduces the <emphasis>Deployment Admin service</emphasis>
     that standardizes the access to some of the responsibilities of the

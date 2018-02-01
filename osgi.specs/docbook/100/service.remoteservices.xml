@@ -1010,7 +1010,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><emphasis>Ok</emphasis>, A will create an endpoint
+              <entry><para><emphasis>OK</emphasis>, A will create an endpoint
               for the RMI and SOAP alternatives.</para></entry>
             </row>
 
@@ -1050,7 +1050,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><emphasis>Ok</emphasis>, exported on com.soapx by
+              <entry><para><emphasis>OK</emphasis>, exported on com.soapx by
               A, the net.soap is ignored.</para></entry>
             </row>
 
@@ -1089,7 +1089,7 @@ tracker.open();</programlisting>
 
               <entry><para><code>x</code></para></entry>
 
-              <entry><para><emphasis>Ok</emphasis>, two alternative endpoints
+              <entry><para><emphasis>OK</emphasis>, two alternative endpoints
               over RMI (by A) and SOAP (by B) are created. This is a typical
               use case.</para></entry>
             </row>
@@ -1109,7 +1109,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><emphasis>Ok</emphasis>. Synonyms are used to allow
+              <entry><para><emphasis>OK</emphasis>. Synonyms are used to allow
               frameworks that have either A or B installed. In this case A
               exports over SOAP.</para></entry>
             </row>
@@ -1129,7 +1129,7 @@ tracker.open();</programlisting>
 
               <entry><para><code>x</code></para></entry>
 
-              <entry><para><emphasis>Ok</emphasis>. Synonyms are used to allow
+              <entry><para><emphasis>OK</emphasis>. Synonyms are used to allow
               frameworks that have either A or B installed. In this case B
               exports.</para></entry>
             </row>
@@ -1149,7 +1149,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><emphasis>Ok</emphasis>. A creates an endpoint with
+              <entry><para><emphasis>OK</emphasis>. A creates an endpoint with
               default configuration type.</para></entry>
             </row>
 
@@ -1168,7 +1168,7 @@ tracker.open();</programlisting>
 
               <entry><para><code>x</code></para></entry>
 
-              <entry><para><emphasis>Ok</emphasis>. Both A and B each create
+              <entry><para><emphasis>OK</emphasis>. Both A and B each create
               an endpoint with their default configuration
               type.</para></entry>
             </row>
@@ -1188,7 +1188,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><emphasis>Ok</emphasis>. No endpoint is
+              <entry><para><emphasis>OK</emphasis>. No endpoint is
               created.</para></entry>
             </row>
 

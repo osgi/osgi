@@ -202,7 +202,7 @@
 
     <para>The digital signing process used is based on Java JAR signing. The
     process of signing is repeated, restricted and augmented here to improve
-    the inter-operability of OSGi bundles.</para>
+    the interoperability of OSGi bundles.</para>
 
     <section xml:id="i1517861">
       <title>JAR Structure and Manifest</title>

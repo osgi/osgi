@@ -748,7 +748,7 @@
 
       <listitem>
         <para>Updated <xref linkend="util.promise" xrefstyle="template:%t"/>
-        to support controling executors and added new methods.</para>
+        to support controlling executors and added new methods.</para>
       </listitem>
 
       <listitem>

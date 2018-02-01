@@ -47,7 +47,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Pluggability</emphasis> - Allow different vendors to
+          <para><emphasis>Plugability</emphasis> - Allow different vendors to
           provide implementations of this specification.</para>
         </listitem>
 
@@ -678,7 +678,7 @@ public void setLoginTimeout(int seconds)
       <para>The User Transaction service may be used by an Application bundle,
       acting as the Transaction Originator, to demarcate transaction
       boundaries when the bundle has no need to perform resource
-      enlistement.</para>
+      enlistment.</para>
     </section>
 
     <section>
@@ -788,8 +788,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
       Morgan Kaufmann Publishers, ISBN 1.55860-190-2</bibliomixed>
 
       <bibliomixed xml:id="i3073418"><title>Java Platform, Enterprise Edition
-      (Java EE) Specification,
-      v5</title><biblioid class="uri"><link
+      (Java EE) Specification, v5</title><biblioid class="uri"><link
       xlink:href="http://jcp.org/en/jsr/detail?id=244"/></biblioid></bibliomixed>
     </bibliolist>
   </section>

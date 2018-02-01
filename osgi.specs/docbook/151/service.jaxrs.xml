@@ -31,7 +31,7 @@
     annotation mappings which allow Plain Old Java Objects (POJOs) to be
     directly exposed as RESTful web resources; these resources can also be
     grouped together using a JAX-RS <code>Application</code>. Furthermore the
-    specification defines a pluggable model for extending the behavior of the
+    specification defines a plugable model for extending the behavior of the
     application and the features of the JAX-RS container itself. For example
     an extension may define specific error responses that should be sent when
     particular exceptions occur, or an extension may add support for
@@ -59,7 +59,7 @@
 
       <listitem>
         <para><emphasis>Registering Extensions</emphasis> - The JAX-RS
-        specification defines a variety of pluggable extensions. JAX-RS
+        specification defines a variety of plugable extensions. JAX-RS
         extensions can be registered in the Service Registry to include them
         in the handling pipeline.</para>
       </listitem>
@@ -1755,7 +1755,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <title>Portability and Interoperability</title>
 
     <para>The extensions defined by the JAX-RS specification make JAX-RS
-    runtimes highly pluggable, and it is common to extend the behavior of an
+    runtimes highly plugable, and it is common to extend the behavior of an
     application using this model. In many cases the custom behaviors are
     specific to a particular use case, for example mapping a specific
     exception into a <code>Response</code>, and there is no need for

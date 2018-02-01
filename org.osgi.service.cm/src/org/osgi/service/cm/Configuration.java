@@ -219,9 +219,9 @@ public interface Configuration {
 	 * provided properties are different than the currently stored set.
 	 * Properties are compared as follows.
 	 * <ul>
-	 * <li>scalars are compared using equals()</li>
-	 * <li>arrays are compared using Arrays.equals()</li>
-	 * <li>Collections are compared using equals()</li>
+	 * <li>Scalars are compared using {@code equals}</li>
+	 * <li>Arrays are compared using {@code Arrays.equals}</li>
+	 * <li>Collections are compared using {@code equals}</li>
 	 * </ul>
 	 * If the new properties are not different than the current properties, no
 	 * operation is performed. Otherwise, the behavior of this method is

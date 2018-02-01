@@ -501,7 +501,7 @@ javax.naming.directory</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>COS</emphasis> - Corba Object Service (COS) naming
+          <para><emphasis>COS</emphasis> - CORBA Object Service (COS) naming
           service provider</para>
         </listitem>
 
@@ -1278,11 +1278,11 @@ jndi-name ::= &lt;any string&gt;</programlisting>
 
       <para>The OSGi URL Context handles the complexities by hiding the
       dynamic nature of OSGi. The OSGi URL Context must handle the dynamics by
-      <emphasis>proxying</emphasis> the service objects.
-      This proxy must implement the interface given in the URL. If the JNDI
-      service name instead of a class name is used, then all interfaces under
-      which the service is registered must be implemented. If an interface is
-      not compatible with the owning bundle's class space then it must not be
+      <emphasis>proxying</emphasis> the service objects. This proxy must
+      implement the interface given in the URL. If the JNDI service name
+      instead of a class name is used, then all interfaces under which the
+      service is registered must be implemented. If an interface is not
+      compatible with the owning bundle's class space then it must not be
       implemented on the proxy, it must then be ignored. If this results in no
       implemented interfaces then an Illegal Argument Exception must be
       thrown.</para>
@@ -1361,7 +1361,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
 
       <para>The created <code>InitialContext</code> object is a facade for the
       real Context that is requested by the caller. It provides the
-      bootstrapping mechanism for JNDI Provider pluggability. In order to
+      bootstrapping mechanism for JNDI Provider plugability. In order to
       obtain the provider's Context, the <code>InitialContext</code> class
       makes a call to the static <code>getContext</code> method on the
       <code>NamingManager</code> class. The JNDI code in the JRE then
@@ -1583,8 +1583,7 @@ ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
       xlink:href="http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Java Naming and Directory Interface Tutorial from
-      Sun
-      Microsystems</title><biblioid class="uri"><link
+      Sun Microsystems</title><biblioid class="uri"><link
       xlink:href="http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3109941"><title>JNDI Standard Property

@@ -1521,7 +1521,7 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
     <code>Integer</code> property <code>WIREADMIN_EVENTS</code> ("
     <code>wireadmin.events</code>"). This <code>Integer</code> object contains
     a bitmap of all the events in which this Wire Admin Listener service is
-    interested (events have associated constants that can be OR'd together). A
+    interested (events have associated constants that can be ORed together). A
     Wire Admin service must not deliver events to the Wire Admin Listener
     service when that event type is not in the bitmap. If no such property is
     registered, no events are delivered to the Wire Admin Listener

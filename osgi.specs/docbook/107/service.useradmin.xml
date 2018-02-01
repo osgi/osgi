@@ -302,12 +302,11 @@
       users and that are protected by <code>UserAdminPermission</code>.</para>
 
       <para>Properties are accessed with the <code>Role.getProperties()</code>
-      method and credentials with the
-      <code>User.getCredentials()</code> method. Both methods return a
-      <code>Dictionary</code> object containing key/value pairs. The keys are
-      <code>String</code> objects and the values of the
-      <code>Dictionary</code> object are limited to <code>String</code> or
-      <code>byte[ ]</code> objects.</para>
+      method and credentials with the <code>User.getCredentials()</code>
+      method. Both methods return a <code>Dictionary</code> object containing
+      key/value pairs. The keys are <code>String</code> objects and the values
+      of the <code>Dictionary</code> object are limited to <code>String</code>
+      or <code>byte[ ]</code> objects.</para>
 
       <para>This specification does not define any standard keys for the
       properties or credentials. The keys depend on the implementation of the
@@ -1007,7 +1006,7 @@ ROLE_REMOVED</programlisting>
     <section>
       <title>Existing OSGi Mechanism</title>
 
-      <para>JAAS provides a pluggable authentication architecture, which
+      <para>JAAS provides a plugable authentication architecture, which
       enables applications and their underlying authentication services to
       remain independent from each other.</para>
 
@@ -1062,8 +1061,7 @@ ROLE_REMOVED</programlisting>
       JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
 
       <bibliomixed xml:id="i1307810"><title>Java Authentication and
-      Authorization
-      Service</title><biblioid class="uri"><link
+      Authorization Service</title><biblioid class="uri"><link
       xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>

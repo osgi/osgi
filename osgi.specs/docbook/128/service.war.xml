@@ -22,9 +22,9 @@
     applications written in Java. Given the popularity of the Servlet model,
     it is desirable to provide a seamless experience for deploying existing
     and new web applications to Servlet containers operating on the OSGi
-    framework. Previously, the Http Service in the catalogue of OSGi
-    compendium services was the only model specified in OSGi to support the
-    Servlet programming model. However, the Http Service, as defined in that
+    framework. Previously, the Http Service in the catalog of OSGi compendium
+    services was the only model specified in OSGi to support the Servlet
+    programming model. However, the Http Service, as defined in that
     specification, is focused on the run time, as well as manual construction
     of the servlet context, and thus does not actually support the standard
     Servlet packaging and deployment model based on the Web Application
@@ -883,7 +883,7 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
       embedded URL to simplify this processing. The following example shows an
       HTTP URL with some query parameters:</para>
 
-    <programlisting>webbundle:http://www.acme.com/sales?id=123?Bundle-SymbolicName=com.example&amp;
+      <programlisting>webbundle:http://www.acme.com/sales?id=123?Bundle-SymbolicName=com.example&amp;
                                              Web-ContextPath=/</programlisting>
     </section>
 
@@ -1336,8 +1336,8 @@ localized/logo.png</programlisting>
       element. This attribute defines whether the <code>web.xml</code>
       descriptor is <emphasis>complete</emphasis>, or whether the classes in
       the bundle should be examined for deployment annotations. If the
-      <code>metadata-complete</code> attribute is set to <code>true</code>, the
-      Web Runtime must ignore any servlet annotations present in the class
+      <code>metadata-complete</code> attribute is set to <code>true</code>,
+      the Web Runtime must ignore any servlet annotations present in the class
       files of the Web Application. Otherwise, if the
       <code>metadata-complete</code> attribute is not specified, or is set to
       <code>false</code>, the container should process the class files of the
@@ -1401,7 +1401,7 @@ localized/logo.png</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="i3110503"><title>Jave Enterprise Edition Release
+      <bibliomixed xml:id="i3110503"><title>Java Enterprise Edition Release
       5</title><biblioid class="uri">Java 1.5.0 Packages <link
       xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html"/></biblioid></bibliomixed>
 
@@ -1417,8 +1417,8 @@ localized/logo.png</programlisting>
       specification</title><biblioid class="uri"><link
       xlink:href="http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3102743"><title>PAX Web
-      Extender</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3102743"><title>PAX Web Extender</title><biblioid
+      class="uri"><link
       xlink:href="http://team.ops4j.org/wiki/display/paxweb/Pax+Web"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3079490"><title>Uniform Resource Locators, RFC

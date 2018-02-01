@@ -27,7 +27,7 @@
     well as JMS and JCA. SCA enables the precise configuration of the
     communications between its components allowing the configuration to be
     deployed to different SCA runtimes without change. SCA enables
-    inter-operability when used with interoperable protocols, such as
+    interoperability when used with interoperable protocols, such as
     HTTP.</para>
 
     <para>The OSGi Remote Services model, which is based on the chapter about
@@ -38,7 +38,7 @@
     configuration type. It provides a mapping of the SCA distribution
     configuration to the OSGi Remote Services model, as well as the Remote
     Service Admin Endpoint Description, thus enabling OSGi runtimes to be
-    configured for portability and inter-operability.</para>
+    configured for portability and interoperability.</para>
 
     <para>This specification is based on the <xref linkend="i3072278"/> and
     <xref linkend="i3072399"/>.</para>

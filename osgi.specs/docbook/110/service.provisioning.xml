@@ -173,10 +173,10 @@
 
     <orderedlist>
       <listitem>
-        <para>The manifest header InitialProvisioning-Entries of the given ZIP
-        file. This header is defined in <xref linkend="i1442770"/>. If this
-        header is present, but a given entry's path is not named then try the
-        next step.</para>
+        <para>The manifest header <code>InitialProvisioning-Entries</code> of
+        the given ZIP file. This header is defined in <xref
+        linkend="i1442770"/>. If this header is present, but a given entry's
+        path is not named then try the next step.</para>
       </listitem>
 
       <listitem>
@@ -403,15 +403,15 @@
     <section xml:id="i1442770">
       <title>InitialProvisioning-Entries Manifest Header</title>
 
-      <para>The InitialProvisioning-Entries manifest header optionally
-      specifies the type of the entries in the ZIP file. The syntax for this
-      header is:</para>
+      <para>The <code>InitialProvisioning-Entries</code> manifest header
+      optionally specifies the type of the entries in the ZIP file. The syntax
+      for this header is:</para>
 
       <programlisting>InitialProvisioning-Entries ::= ip-entry (',' ip-entry ) *
 ip-entry                    ::= path ( ';' parameter ) *</programlisting>
 
       <para>The entry is the path name of a resource in the ZIP file. This
-      InitialProvisioning-Entries header recognizes the following
+      <code>InitialProvisioning-Entries</code> header recognizes the following
       attribute:</para>
 
       <itemizedlist>
@@ -1443,8 +1443,8 @@ http://server.operator.com/service-x? «
     <bibliolist>
       <bibliomixed xml:id="i1327494"><title>HMAC: Keyed-Hashing for Message
       Authentication</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2104.txt"/> Krawczyk ,et.
-      al. 1997</biblioid></bibliomixed>
+      xlink:href="http://www.ietf.org/rfc/rfc2104.txt"/> Krawczyk ,et. al.
+      1997</biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1278847"><title>NIST, FIPS PUB 180-1: Secure Hash
       Standard, April 1995</title></bibliomixed>
@@ -1463,12 +1463,11 @@ http://server.operator.com/service-x? «
       xlink:href="http://www.pkware.com/support/zip-app-note/archives"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1297476"><title>RFC 2396 - Uniform Resource
-      Identifier
-      (URI)</title><biblioid class="uri"><link
+      Identifier (URI)</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i1296602"><title>MIME
-      Types</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1296602"><title>MIME Types</title><biblioid
+      class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2046.txt"/></biblioid><?line-break ?><biblioid
       class="uri"><link
       xlink:href="http://www.iana.org/assignments/media-types"/></biblioid></bibliomixed>
@@ -1478,12 +1477,10 @@ http://server.operator.com/service-x? «
       1979, pp40-41</bibliomixed>
 
       <bibliomixed xml:id="i1371344"><title>RFC 1423 Part III: Algorithms,
-      Modes, and
-      Identifiers</title><biblioid class="uri"><link
+      Modes, and Identifiers</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc1423.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>PKCS
-      5</title><biblioid class="uri"><link
+      <bibliomixed><title>PKCS 5</title><biblioid class="uri"><link
       xlink:href="ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-5v2"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1371440"><title>Java Cryptography API (part of
@@ -1494,10 +1491,10 @@ http://server.operator.com/service-x? «
       Proposed Federal Information Processing Standard for Secure Hash
       Standard, January 1992</bibliomixed>
 
-      <bibliomixed><title>Transport Layer
-      Security</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2246.txt"/>, January 1999, The
-      TLS Protocol Version 1.0, T. Dierks &amp; C. Allen</biblioid></bibliomixed>
+      <bibliomixed><title>Transport Layer Security</title><biblioid
+      class="uri"><link xlink:href="http://www.ietf.org/rfc/rfc2246.txt"/>,
+      January 1999, The TLS Protocol Version 1.0, T. Dierks &amp; C.
+      Allen</biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

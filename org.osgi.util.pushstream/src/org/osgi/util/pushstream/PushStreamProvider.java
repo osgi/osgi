@@ -591,7 +591,7 @@ public final class PushStreamProvider {
 	 * Build a buffered {@link PushEventConsumer} with custom configuration.
 	 * <p>
 	 * The returned consumer will be buffered from the event source, and will
-	 * honour back pressure requests from its delegate even if the event source
+	 * honor back pressure requests from its delegate even if the event source
 	 * does not.
 	 * <p>
 	 * Buffered consumers are useful for "bursty" event sources which produce a

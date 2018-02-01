@@ -1611,7 +1611,7 @@ private       ::= '.' symbolic-name</programlisting>
       and the provided name by starting with the factory PID, appending a
       tilde (<code>'~' \u007e</code>), and then appending the name. The
       <code>getFactoryConfiguration</code> methods must atomically create and
-      persistently store a Configurationobject if it does not yet
+      persistently store a Configuration object if it does not yet
       exist.</para>
 
       <itemizedlist>

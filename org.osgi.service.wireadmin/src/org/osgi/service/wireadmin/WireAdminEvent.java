@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * Event type values must be unique and disjoint bit values. Event types must be
- * defined as a bit in a 32 bit integer and can thus be bitwise OR'ed together.
+ * defined as a bit in a 32 bit integer and can thus be bitwise ORed together.
  * <p>
  * Security Considerations. {@code WireAdminEvent} objects contain {@code Wire}
  * objects. Care must be taken in the sharing of {@code Wire} objects with other

@@ -32,10 +32,10 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Interoperatbility</emphasis> - Full
-          inter-operability between foreign application models and OSGi
-          services is required. This requires both getting services,
-          registering services, and listening to Framework events.</para>
+          <para><emphasis>Interoperability</emphasis> - Full interoperability
+          between foreign application models and OSGi services is required.
+          This requires both getting services, registering services, and
+          listening to Framework events.</para>
         </listitem>
 
         <listitem>

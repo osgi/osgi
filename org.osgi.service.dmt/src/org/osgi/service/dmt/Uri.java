@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ public final class Uri {
 	 * length of the name does exceed the limit, the following mechanism is used
 	 * to normalize it:
 	 * <ul>
-	 * <li>the SHA 1 digest of the name is calculated</li>
+	 * <li>the SHA-1 digest of the name is calculated</li>
 	 * <li>the digest is encoded with the base 64 algorithm</li>
 	 * <li>all '/' characters in the encoded digest are replaced with '_'</li>
 	 * <li>trailing '=' signs are removed</li>

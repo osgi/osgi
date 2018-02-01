@@ -1709,9 +1709,9 @@ Vendor/RingTones/Bach</programlisting>
     retrieve the meta node of a multi-node any name can be used.</para>
 
     <para>For example, if a new ring tone, <code>Grieg</code>, was created in
-    <xref linkend="i1465151"/> it would be possible to get the Meta Node
-    for <code>./Vendor/RingSignals/Grieg</code> before the node was created.
-    This is usually the case for multi nodes. The model is depicted in <xref
+    <xref linkend="i1465151"/> it would be possible to get the Meta Node for
+    <code>./Vendor/RingSignals/Grieg</code> before the node was created. This
+    is usually the case for multi nodes. The model is depicted in <xref
     linkend="i1465151"/>.</para>
 
     <figure xml:id="i1465151">
@@ -5120,7 +5120,7 @@ SESSION_CLOSED {
           management system would have no way to warn the user that the system
           is modified. There are a number of technical reasons as well (race
           conditions, security holes, and eventing) but the most important
-          reason is the browseability of the device.</para>
+          reason is the browsability of the device.</para>
         </listitem>
 
         <listitem>
@@ -6512,12 +6512,13 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
       draft</title><biblioid class="uri"><link
       xlink:href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>OMA DM-RepPro v1.2
-      draft:</title><biblioid class="uri"><link
+      <bibliomixed><title>OMA DM-RepPro v1.2 draft:</title><biblioid
+      class="uri"><link
       xlink:href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-DM-RepPro-V1_2_0-20050131-D.zip"/></biblioid></bibliomixed>
 
       <bibliomixed><title>IETF RFC2578. Structure of Management
-      Information</title>Version 2 (SMIv2)<?line-break ?><biblioid class="uri"><link
+      Information</title>Version 2 (SMIv2)<?line-break ?><biblioid
+      class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2578.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1399261"><title>Java™ Management Extensions
@@ -6535,22 +6536,20 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
       2004<?line-break ?><biblioid class="uri"><link
       xlink:href="http://www.dmtf.org/standards/wbem"/></biblioid></bibliomixed>
 
-      <bibliomixed
-      xml:id="i1399257"><title>SNMP</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1399257"><title>SNMP</title><biblioid
+      class="uri"><link
       xlink:href="http://www.wtcs.org/snmp4tpc/snmp_rfc.htm#rfc"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1418110"><title>RFC 2396 Uniform Resource
-      Identifiers (URI): Generic
-      Syntax</title><biblioid class="uri"><link
+      Identifiers (URI): Generic Syntax</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i1662528"><title>MIME Media
-      Types</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i1662528"><title>MIME Media Types</title><biblioid
+      class="uri"><link
       xlink:href="http://www.iana.org/assignments/media-types/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1869240"><title>RFC 3548 The Base16, Base32, and
-      Base64 Data
-      Encodings</title><biblioid class="uri"><link
+      Base64 Data Encodings</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc3548.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1869214"><title>Secure Hash Algorithm
@@ -6563,8 +6562,7 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
       xlink:href="http://en.wikipedia.org/wiki/TR-069"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i2437549"><title>XML Schema Part 2: Datatypes
-      Second
-      Edition</title><biblioid class="uri"><link
+      Second Edition</title><biblioid class="uri"><link
       xlink:href="http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
