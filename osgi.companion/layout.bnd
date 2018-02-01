@@ -2,6 +2,7 @@ osgi.companion.jars =\
   osgi.annotation,\
   osgi.core,\
   osgi.cmpn,\
+  osgi.promise,\
   osgi.enterprise,\
   osgi.residential
 
@@ -9,6 +10,7 @@ osgi.companion.jars =\
 -include: ${project.workspace}/osgi.annotation/layout.bnd, \
 	${project.workspace}/osgi.core/layout.bnd, \
 	${project.workspace}/osgi.cmpn/layout.bnd, \
+	${project.workspace}/osgi.promise/layout.bnd, \
 	${project.workspace}/osgi.enterprise/layout.bnd, \
 	${project.workspace}/osgi.residential/layout.bnd
 
