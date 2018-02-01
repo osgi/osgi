@@ -33,6 +33,8 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     osgi.core;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
+    org.apache.aries.javax.inject-api;version=latest, \
+    org.apache.aries.javax.cdi-api;version=latest, \
     org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon;version=latest
 -fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values
