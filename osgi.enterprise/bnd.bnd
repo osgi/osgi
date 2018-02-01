@@ -3,7 +3,7 @@ Bundle-License: Apache-2.0; \
                 description="Apache License, Version 2.0"
 Bundle-Description: \
 	OSGi Enterprise Release ${versionmask;=;${build.version}}, \
-	Interfaces and Classes for use in compiling bundles.
+	Interfaces and Classes for use in compiling bundles
 Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
 
