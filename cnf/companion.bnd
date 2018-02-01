@@ -12,7 +12,7 @@ Bundle-Name: ${-groupid}:${bsn}
 
 -buildrepo: Local
 -releaserepo: Release
--releaserepo.publish: ${env;PUBLISH_REPO}
+-releaserepo.publish: ${def;-snapshot;${env;PUBLISH_REPO}}
 -baseline: *
 -fixupmessages.baseline.bundle: The bundle version * is too low
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
