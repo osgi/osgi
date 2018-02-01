@@ -220,13 +220,6 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
   }
 }
 
-configure(tasks.getByName('core.fo')) {
-  ext.watermark = 'docbook/graphics/proposed-final-draft.svg'
-}
-configure(tasks.getByName('cmpn.fo')) {
-  ext.watermark = 'docbook/graphics/proposed-final-draft.svg'
-}
-
 tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <name>.') { taskName ->
   if (taskName.endsWith('.pdf')) {
     task(taskName) {
@@ -391,13 +384,6 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
       }
     }
   }
-}
-
-configure(tasks.getByName('core.html')) {
-  ext.watermark = 'proposed-final-draft.png'
-}
-configure(tasks.getByName('cmpn.html')) {
-  ext.watermark = 'proposed-final-draft.png'
 }
 
 tasks.addRule('Pattern: <name>.zip: Generate a ZIP archive of the docbook html for the book <name>.') { taskName ->
