@@ -17,7 +17,9 @@
 package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
+
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.cdi.runtime.dto.template.MaximumCardinality;
 import org.osgi.service.cdi.runtime.dto.template.ReferenceTemplateDTO;
 
@@ -71,5 +73,5 @@ public class ReferenceDTO extends DTO {
 	 * </pre> where the maximum cardinality can be obtained from the associated
 	 * {@link ReferenceTemplateDTO}.
 	 */
-	public List<Long>	matches;
+	public List<ServiceReferenceDTO>	matches;
 }

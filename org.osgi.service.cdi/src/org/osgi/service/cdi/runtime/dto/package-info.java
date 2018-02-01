@@ -35,8 +35,8 @@
  * @author $Id$
  */
 
-@Version(CdiConstants.CDI_SPECIFICATION_VERSION)
+@Version(CDIConstants.CDI_SPECIFICATION_VERSION)
 package org.osgi.service.cdi.runtime.dto;
 
 import org.osgi.annotation.versioning.Version;
-import org.osgi.service.cdi.CdiConstants;
+import org.osgi.service.cdi.CDIConstants;

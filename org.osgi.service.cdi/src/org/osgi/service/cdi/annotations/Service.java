@@ -63,7 +63,7 @@ import org.osgi.framework.ServiceFactory;
  */
 @Documented
 @Qualifier
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, TYPE, TYPE_USE})
 public @interface Service {

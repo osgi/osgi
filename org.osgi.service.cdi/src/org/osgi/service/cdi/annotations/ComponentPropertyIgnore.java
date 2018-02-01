@@ -34,7 +34,7 @@ import javax.inject.Qualifier;
  * @author $Id$
  */
 @Documented
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface ComponentPropertyIgnore {

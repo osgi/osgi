@@ -37,7 +37,7 @@ import org.osgi.service.cdi.reference.ReferenceEvent;
  */
 @Documented
 @Qualifier
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface Prototype {

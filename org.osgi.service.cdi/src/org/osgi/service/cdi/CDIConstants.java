@@ -26,8 +26,8 @@ import org.osgi.service.cdi.annotations.PID;
  * @author $Id$
  */
 @ProviderType
-public class CdiConstants {
-	private CdiConstants() {
+public class CDIConstants {
+	private CDIConstants() {
 		// non-instantiable
 	}
 
@@ -78,19 +78,26 @@ public class CdiConstants {
 	public static final String	CDI_CONTAINER_ID_PROPERTY			= "osgi.cdi." + CDI_CONTAINER_ID;
 
 	/**
+	 * A service property applied to
+	 * {@code javax.enterprise.inject.spi.Extension} services, whose value is
+	 * the name of the extension.
+	 */
+	public static final String	CDI_EXTENSION_PROPERTY				= "osgi.cdi.extension";
+
+	/**
 	 * Compile time constant for the Specification Version of CDI Integration.
 	 * <p>
 	 * Used in {@code Version} and {@code Requirement} annotations. The value of
-	 * this compile time constant will change when the specification version of CDI
-	 * Integration is updated.
+	 * this compile time constant will change when the specification version of
+	 * CDI Integration is updated.
 	 */
 	public static final String	CDI_SPECIFICATION_VERSION			= "1.0.0";
 
 	/**
-	 * The 'beans' attribute on the CDI extender requirement.
+	 * The '{@code beans}' attribute on the CDI extender requirement.
 	 * <p>
-	 * The value of this attribute is a comma delimited list of bean CDI bean
-	 * descriptor files to be searched on the {@code Bundle-ClassPath}. For example:
+	 * The value of this attribute is a list of bean CDI bean descriptor file
+	 * paths to be searched on the {@code Bundle-ClassPath}. For example:
 	 *
 	 * <pre>
 	 * Require-Capability: osgi.extender; «
@@ -101,16 +108,31 @@ public class CdiConstants {
 	public static final String	REQUIREMENT_BEANS_ATTRIBUTE			= "beans";
 
 	/**
-	 * The 'osgi.beans' attribute on the CDI extender requirement.
+	 * The '{@code extensions}' attribute on the CDI extender requirement.
 	 * <p>
-	 * The value of this attribute is the name of the OSGi Beans Description file.
-	 * The default value when unspecified is {@code OSGI-INF/cdi/osgi-beans.xml}.
-	 * For example:
+	 * The value of this attribute is a list of service filter strings used to
+	 * match {@code javax.enterprise.inject.spi.Extension} services required by
+	 * the CDI bundle. For example:
 	 *
 	 * <pre>
 	 * Require-Capability: osgi.extender; «
 	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
-	 *  osgi.beans="OSGI-INF/cdi/osgi-beans.xml"
+	 *  extensions:List&lt;String&gt;="(osgi.cdi.extension=Foo)"
+	 * </pre>
+	 */
+	public static final String	REQUIREMENT_EXTENSIONS_ATTRIBUTE	= "extensions";
+
+	/**
+	 * The '{@code osgi.beans}' attribute on the CDI extender requirement.
+	 * <p>
+	 * The value of this attribute is a list of OSGi Beans Description file
+	 * paths to be searched on the {@code Bundle-ClassPath}. The default value
+	 * when unspecified is {@code OSGI-INF/cdi/osgi-beans.xml}. For example:
+	 *
+	 * <pre>
+	 * Require-Capability: osgi.extender; «
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
+	 *  osgi.beans:List&lt;String&gt;="OSGI-INF/cdi/osgi-beans.xml"
 	 * </pre>
 	 */
 	public static final String	REQUIREMENT_OSGI_BEANS_ATTRIBUTE	= "osgi.beans";

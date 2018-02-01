@@ -16,7 +16,8 @@
 
 package org.osgi.service.cdi.runtime.dto;
 
-import java.util.List;
+import java.util.Map;
+
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.runtime.dto.template.ConfigurationTemplateDTO;
 
@@ -36,18 +37,9 @@ public class ConfigurationDTO extends DTO {
 	public ConfigurationTemplateDTO	template;
 
 	/**
-	 * The list of {@code service.pid} of the configurations that match this
-	 * configuration dependency.
+	 * The properties of this configuration.
 	 * <p>
-	 * Must never be {@code null}
-	 * <p>
-	 * Can be empty when three are no matching configurations.
-	 * <p>
-	 * This dependency is satisfied when: <pre>
-	 * 1 <= {@linkplain List#size() size()} <= {@link ConfigurationTemplateDTO#maximumCardinality
-	 * this.template.maximumCardinality.toInt()}
-	 * </pre> .
-	 * <p>
+	 * The configuration dependency is satisfied when not {@code null}.
 	 */
-	public List<String>	matches;
+	public Map<String,Object>		properties;
 }

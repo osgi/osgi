@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
-import org.osgi.service.cdi.CdiConstants;
+import org.osgi.service.cdi.CDIConstants;
 
 /**
  * Identifies a factory component.
@@ -38,7 +38,7 @@ import org.osgi.service.cdi.CdiConstants;
 @ComponentScoped
 @Documented
 @Named
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Stereotype
 @Target(TYPE)
@@ -81,7 +81,7 @@ public @interface FactoryComponent {
 	 *
 	 * <p>
 	 * A special string (<code>"$"</code>) can be used to specify the name of the
-	 * component as a configuration PID. The {@link CdiConstants#CDI_COMPONENT_NAME
+	 * component as a configuration PID. The {@link CDIConstants#CDI_COMPONENT_NAME
 	 * CDI_COMPONENT_NAME} constant holds this special string.
 	 *
 	 * <p>
@@ -91,6 +91,6 @@ public @interface FactoryComponent {
 	 * {@code @FactoryPID(CDI_COMPONENT_NAME)}
 	 * </pre>
 	 */
-	String value() default CdiConstants.CDI_COMPONENT_NAME;
+	String value() default CDIConstants.CDI_COMPONENT_NAME;
 
 }

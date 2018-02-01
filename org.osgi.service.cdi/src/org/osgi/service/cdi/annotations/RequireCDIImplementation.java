@@ -19,7 +19,7 @@ package org.osgi.service.cdi.annotations;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
-import static org.osgi.service.cdi.CdiConstants.*;
+import static org.osgi.service.cdi.CDIConstants.*;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -42,6 +42,6 @@ import org.osgi.annotation.bundle.Requirement;
 		namespace = IMPLEMENTATION_NAMESPACE,
 		name = CDI_CAPABILITY_NAME,
 		version = CDI_SPECIFICATION_VERSION)
-public @interface RequireCdiComponentRuntimeImpl {
+public @interface RequireCDIImplementation {
 	// A marker annotation.
 }

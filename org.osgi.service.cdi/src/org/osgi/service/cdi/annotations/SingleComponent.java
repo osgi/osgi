@@ -37,7 +37,7 @@ import javax.inject.Named;
 @ComponentScoped
 @Documented
 @Named
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Stereotype
 @Target(TYPE)

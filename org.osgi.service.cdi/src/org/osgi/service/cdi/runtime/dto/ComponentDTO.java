@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
+
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO;
 import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
@@ -39,13 +40,13 @@ public class ComponentDTO extends DTO {
 	 * The component instances created by this component.
 	 * <p>
 	 * <ul>
-	 * <li>When {@link #template} is of type {@link Type#CONTAINER} - there will be
-	 * <code>1</code> {@link ComponentInstanceDTO}</li>
+	 * <li>When {@link #template} is of type {@link Type#CONTAINER} - there will
+	 * be <code>1</code> {@link ComponentInstanceDTO}</li>
 	 * <li>When {@link #template} is of type {@link Type#SINGLE} - there will be
 	 * <code>1</code> {@link ComponentInstanceDTO}</li>
-	 * <li>When {@link #template} is of type {@link Type#FACTORY} - there will be
-	 * one {@link ComponentInstanceDTO} for every {@link ConfigurationDTO#matches
-	 * factory configuration object} associated with the factory configuration.</li>
+	 * <li>When {@link #template} is of type {@link Type#FACTORY} - there will
+	 * be one {@link ComponentInstanceDTO} for every factory configuration
+	 * object associated with the factory PID of the component.</li>
 	 * </ul>
 	 * <p>
 	 * Must not be {@code null}

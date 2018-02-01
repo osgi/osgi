@@ -17,13 +17,14 @@
 package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
+
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.cdi.runtime.dto.template.ActivationTemplateDTO;
 
 /**
  * A snapshot of the runtime state of a {@link ComponentInstanceDTO component}
- * activation
+ * activation.
  *
  * @NotThreadSafe
  * @author $Id$
@@ -45,8 +46,8 @@ public class ActivationDTO extends DTO {
 	public ServiceReferenceDTO		service;
 
 	/**
-	 * The list of activation errors which occurred during initialization. An empty
-	 * list means there were no errors.
+	 * The list of errors which occurred during initialization. An empty list
+	 * means there were no errors.
 	 * <p>
 	 * Must not be {@code null}.
 	 */

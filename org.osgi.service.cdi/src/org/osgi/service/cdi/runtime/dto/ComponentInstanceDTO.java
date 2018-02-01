@@ -18,6 +18,7 @@ package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.dto.DTO;
 
 /**
@@ -27,14 +28,6 @@ import org.osgi.dto.DTO;
  * @author $Id$
  */
 public class ComponentInstanceDTO extends DTO {
-
-	/**
-	 * The list of errors reported during attempted creation of the component
-	 * instance.
-	 * <p>
-	 * Must not be {@code null}.
-	 */
-	public List<String>				errors;
 
 	/**
 	 * The configuration dependencies of this component.
@@ -48,6 +41,10 @@ public class ComponentInstanceDTO extends DTO {
 	 * <p>
 	 * Can be empty when the component has no reference dependencies.
 	 * <p>
+	 * The component instance is satisfied when the sum of
+	 * {@link ReferenceDTO#minimumCardinality} equals the size of
+	 * {@link ReferenceDTO#matches} for each value.
+	 * <p>
 	 * Must not be {@code null}.
 	 */
 	public List<ReferenceDTO>		references;
@@ -58,7 +55,7 @@ public class ComponentInstanceDTO extends DTO {
 	 * Contains the merger of all consumed configurations merged in the order of
 	 * {@link #configurations}.
 	 * <p>
-	 * Must not be {@code null}.
+	 * All configuration dependencies are satisfied when not {@code null}.
 	 */
 	public Map<String, Object>		properties;
 

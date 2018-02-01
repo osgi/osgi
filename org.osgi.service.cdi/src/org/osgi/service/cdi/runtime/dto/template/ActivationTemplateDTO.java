@@ -20,13 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A description an activation of a component
+ * Activations represent either immediate instances or service objects produced
+ * by component instances.
  * <p>
  * The content of this DTO is resolved form metadata at initialization time and
  * remains the same between the CDI bundle restarts.
- * <p>
- * Can be either an OSGi service publication or a creation of a bean or both in
- * case of {@link Scope#SINGLETON}.
  *
  * @NotThreadSafe
  * @author $Id$

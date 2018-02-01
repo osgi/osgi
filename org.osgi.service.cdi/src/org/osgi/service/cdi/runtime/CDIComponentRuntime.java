@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.runtime;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -24,24 +25,25 @@ import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 
 /**
- * The {@code CdiRuntime} service represents the CDI Runtime that manages the
- * CDI containers and their life cycle. The {@code CdiRuntime} service allows
- * introspection of the CDI containers managed by CDI Runtime.
+ * The {@link CDIComponentRuntime} service represents the actor that manages the
+ * CDI containers and their life cycle. The {@link CDIComponentRuntime} service
+ * allows introspection of the managed CDI containers.
  * <p>
  * This service must be registered with a {@link Constants#SERVICE_CHANGECOUNT}
  * service property that must be updated each time any of the DTOs available
  * from this service change.
  * <p>
  * Access to this service requires the
- * {@code ServicePermission[CdiRuntime, GET]} permission. It is intended that
- * only administrative bundles should be granted this permission to limit access
- * to the potentially intrusive methods provided by this service.
+ * {@code ServicePermission[CDIComponentRuntime, GET]} permission. It is
+ * intended that only administrative bundles should be granted this permission
+ * to limit access to the potentially intrusive methods provided by this
+ * service.
  *
  * @ThreadSafe
  * @author $Id$
  */
 @ProviderType
-public interface CdiComponentRuntime {
+public interface CDIComponentRuntime {
 	/**
 	 * Returns a collection of container description snapshots for a set of bundles.
 	 *

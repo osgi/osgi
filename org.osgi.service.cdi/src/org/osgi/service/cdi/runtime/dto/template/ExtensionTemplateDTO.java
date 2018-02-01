@@ -17,7 +17,6 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import org.osgi.dto.DTO;
-import org.osgi.framework.Version;
 import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 
 /**
@@ -28,35 +27,13 @@ import org.osgi.service.cdi.runtime.dto.ContainerDTO;
  */
 public class ExtensionTemplateDTO extends DTO {
 	/**
-	 * The name of the extension. The name must be unique within the container.
+	 * The service filter used for finding the extension service.
 	 * <p>
-	 * The value must be associated to a requirement in the
-	 * {@code osgi.cdi.extension} namespace who's attribute
-	 * {@code osgi.cdi.extension} value is equal to {@link #name}.
-	 * <p>
-	 * Must not be {@code null}.
-	 */
-	public String	name;
-
-	/**
-	 * The implementation class name of the extension.
-	 * <p>
-	 * The value must be associated to a requirement in the
-	 * {@code osgi.cdi.extension} namespace who's attribute {@code implementation}
-	 * value is equal to {@link #implementation}.
+	 * The value must be associated to the {@code osgi.cdi} extender requirement
+	 * whose '{@code extension}' attribute contains a value equal to
+	 * {@link #serviceFilter}.
 	 * <p>
 	 * Must not be {@code null}.
 	 */
-	public String	implementation;
-
-	/**
-	 * The version of the extension.
-	 * <p>
-	 * The value must be associated to a requirement in the
-	 * {@code osgi.cdi.extension} namespace who's attribute {@code version} value is
-	 * equal to {@link #version}.
-	 * <p>
-	 * The value may be {@code null} if no version was specified in the requirement.
-	 */
-	public Version	version;
+	public String	serviceFilter;
 }

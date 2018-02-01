@@ -30,7 +30,7 @@ import javax.enterprise.util.AnnotationLiteral;
  * @author $Id$
  */
 @Documented
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface PIDs {

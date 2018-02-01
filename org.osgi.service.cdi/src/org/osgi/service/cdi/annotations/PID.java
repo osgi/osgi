@@ -24,7 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
-import org.osgi.service.cdi.CdiConstants;
+import org.osgi.service.cdi.CDIConstants;
 
 /**
  * Annotation used in collaboration with {@link ComponentScoped} to specify
@@ -35,7 +35,7 @@ import org.osgi.service.cdi.CdiConstants;
 @Documented
 @Qualifier
 @Repeatable(PIDs.class)
-@RequireCdiComponentRuntime
+@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface PID {
@@ -99,7 +99,7 @@ public @interface PID {
 	 *
 	 * <p>
 	 * A special string (<code>"$"</code>) can be used to specify the name of the
-	 * component as a configuration PID. The {@link CdiConstants#CDI_COMPONENT_NAME
+	 * component as a configuration PID. The {@link CDIConstants#CDI_COMPONENT_NAME
 	 * CDI_COMPONENT_NAME} constant holds this special string.
 	 *
 	 * <p>
@@ -109,7 +109,7 @@ public @interface PID {
 	 * {@code @PID(CDI_COMPONENT_NAME)}
 	 * </pre>
 	 */
-	String value() default CdiConstants.CDI_COMPONENT_NAME;
+	String value() default CDIConstants.CDI_COMPONENT_NAME;
 
 	/**
 	 * The configuration policy associated with this PID.

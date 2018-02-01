@@ -17,7 +17,7 @@
 package org.osgi.service.cdi.runtime.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.framework.dto.BundleDTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.cdi.runtime.dto.template.ExtensionTemplateDTO;
 
 /**
@@ -37,9 +37,9 @@ public class ExtensionDTO extends DTO {
 	public ExtensionTemplateDTO	template;
 
 	/**
-	 * The bundle providing the extension.
+	 * The service reference of the extension.
 	 * <p>
-	 * This extension is satisfied when not {@code null}.
+	 * The extension dependency is satisfied when not {@code null}.
 	 */
-	public BundleDTO			bundle;
+	public ServiceReferenceDTO	service;
 }
