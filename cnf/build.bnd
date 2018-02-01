@@ -135,7 +135,7 @@ build.version				= ${osgi.version}.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    OSGi Alliance https://www.osgi.org/
 # Uncomment the following line to build the non-snapshot version.
--snapshot:
+#-snapshot:
 Bundle-Version:   ${build.version}-SNAPSHOT
 Bundle-DocURL:    https://www.osgi.org/
 Git-Descriptor:   ${system-allow-fail;git describe --dirty --always}
