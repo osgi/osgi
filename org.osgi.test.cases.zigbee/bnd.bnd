@@ -3,27 +3,45 @@
 
 Bundle-Description					= ZigBee Test Bundle
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
-	${p}.tbc.*
-Import-Package: ${-signaturetest}, *
+Export-Package: \
+ org.osgi.test.support.step;-noimport:=true
 
-Include-Resource: 
-	
--buildpath							= \
-    org.osgi.test.support;          version=project , \
-	org.osgi.service.zigbee;		version=project	, \
-	osgi.core;						version=4.3.1	, \
-	osgi.cmpn;						version=4.3.1	, \
+Conditional-Package					= org.osgi.test.support.*
+Import-Package: \
+  ${-signaturetest}, \
+  *
+Private-Package: \
+	${p}.*
+
+Test-Cases			= ${testcases}
+-signaturetest = \
+ org.osgi.service.zigbee, \
+ org.osgi.service.zigbee.descriptions, \
+ org.osgi.service.zigbee.descriptors, \
+ org.osgi.service.zigbee.types
+ 
+
+-buildpath: \
+	com.icl.saxon;version=latest,\
+	org.osgi.test.support;version=project,\
+	org.osgi.service.zigbee;version=project,\
+	org.osgi.util.function;version=project,\
+	org.osgi.util.promise;version=project,\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
 	${junit}
 
--runbundles						= \
-	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.zigbee; version=latest
+-runbundles: \
+	org.osgi.util.function;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.impl.service.cm;version=latest,\
+	org.osgi.impl.service.event;version=latest,\
+	org.osgi.impl.service.zigbee;version=latest
 
--runproperties 						= ${runproperties}
-
-Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.zigbee
-
-
+-runproperties = ${runproperties}, \
+    comm.rxtx.disable=true, \
+	org.osgi.service.zigbee.host.path=:testcase:, \
+	org.osgi.service.zigbee.loglevel.debug=true, \
+	org.osgi.service.zigbee.loglevel.warn=true, \
+	org.osgi.service.zigbee.loglevel.info=true, \
+	org.osgi.service.zigbee.loglevel.error=true

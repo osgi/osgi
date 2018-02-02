@@ -1,0 +1,2619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="149"
+         revision="$Id$"
+         version="5" xml:id="service.zigbee"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Device Service Specification for ZigBee™ Technology</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.zigbee-version"
+    linkend="org.osgi.service.zigbee"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The <xref linkend="service.zigbee-ref-zigbee-specification"/> is a
+    standard wireless communication protocol designed for low-cost and
+    low-power devices from the ZigBee Alliance. ZigBee is widely supported by
+    various types of devices such as smart meters, lights and many kinds of
+    sensors in the residential area. OSGi applications need to communicate
+    with those ZigBee devices.</para>
+
+    <para>This specification defines how OSGi bundles can be developed to
+    discover and control ZigBee devices on the one hand, and act as ZigBee
+    devices and interoperate with ZigBee clients on the other hand. In
+    particular, a Java mapping is provided for the standard hierarchical
+    representation of ZigBee devices called the ZigBee Cluster Library. The
+    <xref linkend="service.zigbee-ref-zigbee-cluster-library-specification"/>
+    also describes the external API of a ZigBee Base Driver based upon the
+    OSGi Device Access Specification.</para>
+  </section>
+
+  <section>
+    <title>Essentials</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role="italic">Scope</emphasis> – This specification is
+        limited to general device discovery and control aspects of the ZigBee
+        and the ZigBee Cluster Library specifications. Aspects concerning the
+        representation of specific ZigBee profiles are not addressed.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Transparency</emphasis> – ZigBee devices
+        discovered on the network and devices locally implemented on the
+        platform are represented in the OSGi service registry with the same
+        API.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Lightweight implementation
+        option</emphasis> – The full description of ZigBee device services on
+        the OSGi platform is optional. Some base driver implementations may
+        implement all the classes including ZigBee device description classes
+        while implementations targeting constrained devices are able to
+        implement only the part that is necessary for ZigBee device discovery
+        and control.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Network Selection</emphasis> – It must
+        be possible to restrict the use of the ZigBee protocols to a selection
+        of the connected networks.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Logical node type selection</emphasis> –
+        It is possible to make an OSGi-based device appearing as a ZigBee end
+        device, a ZigBee router or a ZigBee coordinator.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Event handling</emphasis> – Bundles are
+        able to listen to ZigBee events.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Discover and Control ZigBee Endpoints as
+        OSGi services</emphasis> – available ZigBee endpoints are dynamically
+        reified as OSGi services in the service registry.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">Export OSGi services as ZigBee
+        Endpoints</emphasis> – available ZigBee endpoints are dynamically
+        reified as OSGi services in the service registry.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Entities</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role="italic">ZigBee Base Driver</emphasis> – The
+        bundle that implements the bridge between OSGi and ZigBee
+        networks.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Node</emphasis> – A physical
+        ZigBee node. This entity is represented by a ZigBeeNode object. It is
+        registered as an OSGi service by the Base Driver.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Endpoint</emphasis> – A logical
+        device that defines a communication entity within a ZigBee node
+        through which a specific application profile is carried. This concept
+        is represented by a ZigBeeEndpoint object. Registered as an OSGi
+        service, an endpoint can be local (implemented on the Framework) or
+        external (implemented by another device on the network).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Device Description</emphasis> –
+        Statically describes a ZigBee endpoint by providing its input/output
+        clusters and specifies which of described commands and attributes are
+        mandatory or not. This entity is represented by a
+        ZigBeeDeviceDescription object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Device Description Set</emphasis>
+        – A service representing a set of ZigBeeDeviceDescription
+        objects.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Cluster</emphasis> – Represents a
+        ZigBee cluster entity, that is, a set of attributes and commands. It
+        allows the read and write of attribute values, and allows command
+        invocation. This concept is represented by a ZCLCluster object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Cluster Description</emphasis> –
+        Cluster description provides details about available commands and
+        attributes for a specific Cluster. A cluster description should be
+        constant. A cluster description holds either a Client or a Server
+        Cluster description and refers to a global cluster description.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Global Cluster
+        Description</emphasis> – Global cluster description holds the server
+        and client cluster description as well as common information such as
+        cluster id, description and name. This concept is represented by a
+        ZCLGlobalClusterDescription object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Command Description</emphasis> –
+        Statically describes a specific cluster command by giving its name,
+        id, parameters. This entity is represented by a ZCLCommandDescription
+        object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Parameter Description</emphasis>
+        – A ZigBee parameter description has a name, a range and a data type.
+        This entity description is represented by a ZCLParameterDescription
+        object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Attribute</emphasis> – Holds the
+        current value of an existing cluster attribute, it allows easy
+        (de)encoding. This concept is represented by a ZCLAttribute
+        object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Attribute Description</emphasis>
+        – Statically describes a ZigBee Attributes (data type, name, default
+        value). It does not hold any current value. This concept is
+        represented by a ZCLAttributeDescription object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Event Listener Service</emphasis>
+        – A service that listens to events coming from ZigBee devices.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Event</emphasis> – An event
+        generated by a ZigBee node. It contains a modified attribute value of
+        a specific cluster. This concept is represented by a ZigBeeEvent
+        object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Command Response
+        Stream</emphasis> – A stream is a helper that manages asynchronous
+        responses from several endpoints that received a same request message.
+        This entity is represented by a ZigBeeCommandResponseStream. For
+        methods that generates a message to a unique endpoint, a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> is used instead.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Host</emphasis> – The machine
+        that hosts the code to run a ZigBee device or client. It contains
+        information related to the Host. If the host is in the coordinator
+        logical node type, it enables networking configuration. It is
+        registered as an OSGi service. This concept is represented by
+        ZigBeeHost.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Client</emphasis> – An
+        application that is intended to control ZigBee devices
+        services.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Group</emphasis> – Enables group
+        management. It is registered as an OSGi service.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure pgwide="1" xml:id="service.zigbee-figure_id_20160712_18h51_11">
+      <title>ZigBee Service Specification class Diagram
+      org.osgi.service.zigbee package</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentwidth="6in"
+                     fileref="ZigBeeClassDiagram.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Operation Summary</title>
+
+    <para>OSGi applications interact with ZigBee devices through their object
+    representation (proxies) registered in OSGi service registry. To make a
+    ZigBee device available as an OSGi service to ZigBee clients on the
+    framework, an OSGi service object must be registered under the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+    interface with the OSGi framework and an OSGi service must be registered
+    under the <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> interface with the OSGi framework for every
+    endpoint that is contained by the ZigBee node.</para>
+
+    <para>The ZigBee Base Driver is responsible for mapping networked devices
+    into <xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    objects, through the use of a ZigBee radio chip. The latter is represented
+    on the OSGi framework as an object implementing <xref
+    linkend="org.osgi.service.zigbee.ZigBeeHost" xrefstyle="hyperlink"/>
+    interface. This is called a <emphasis role="italic">device
+    import</emphasis> situation (see <xref
+    linkend="service.zigbee-figure_id_20160712_18h54_13"
+    xrefstyle="template:Figure %n on page %p"/>).</para>
+
+    <figure xml:id="service.zigbee-figure_id_20160712_18h54_13">
+      <title>ZigBee device import</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="7in" contentwidth="5.1in"
+                     fileref="DeviceImport-2.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>OSGi bundles may also expose framework-internal (local) <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    instances, registered within the framework (see <xref
+    linkend="service.zigbee-export-figure_id_20160712_18h57_18"
+    xrefstyle="template:Figure %n on page %p"/>). The Base Driver then should
+    emulate those objects as ZigBee endpoints associated to the ZigBee node
+    represented by the underlying ZigBee host (ZigBee chip) on the ZigBee
+    network. This is a <emphasis role="italic">device export</emphasis>
+    situation. For more information about this process, please report to
+    section <xref linkend="service.zigbee.implementinganendpoint"/>.</para>
+
+    <figure xml:id="service.zigbee-export-figure_id_20160712_18h57_18">
+      <title>ZigBee device export</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentwidth="4.5in"
+                     fileref="DeviceExport-2.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>To control ZigBee devices, a bundle should track <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    services in the OSGi service registry and control them appropriately. OSGi
+    applications can browse the clusters (ZCLCluster objects) that are
+    discovered on every registered <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    and attributes (ZCLAttribute objects) that are discovered on every <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>. They
+    can invoke commands on these clusters and get the current value of
+    attributes.</para>
+
+    <para>Several methods obey an asynchronous mechanism. For instance, ZigBee
+    command invocation is made through the call to ZCLCluster invoke method
+    that returns a <link linkend="org.osgi.util.promise.Promise"
+    xrefstyle="hyperlink">Promise</link>. When the command response is
+    received, the Promise is resolved and <link
+    linkend="org.osgi.util.promise.Promise.getValue--"
+    xrefstyle="hyperlink">Promise.getValue()</link> returns the expected
+    response value. The Promise is resolved by the base driver in the device
+    import situation and by the invoked local <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/> in
+    the device export situation. A <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
+    xrefstyle="hyperlink"/> is used instead of a Promise in case of a method
+    that generates a message broadcast (or groupcast) to potentially several
+    endpoints.</para>
+
+    <para>OSGi bundles – called listeners in <xref
+    linkend="service.zigbee-figure_id_20160712_18h51_11"
+    xrefstyle="template:Figure %n"/> – subscribe to attribute value changes
+    through the Whiteboard Pattern (<xref
+    linkend="service.zigbee-ref-whiteboard-pattern"/>). They register an
+    object under the ZCLEventListener interface with properties identifying a
+    ZigBee attribute and a special event filter. This registration is conveyed
+    as a ZigBee configure report command on the ZigBee network in the device
+    import situation. Reports are received by the base driver and transmitted
+    as <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener.notifyEvent-ZigBeeEvent-"
+    xrefstyle="hyperlink"/> method calls on relevant <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener" xrefstyle="hyperlink"/>
+    services in this situation. Local <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    objects directly call these methods to notify listeners with reports in
+    the export situation. The Base Driver conveys events received through a
+    <xref linkend="org.osgi.service.zigbee.ZCLEventListener"
+    xrefstyle="hyperlink"/> to networked the ZigBee endpoints that have
+    subscribed to relevant reports.</para>
+
+    <para>Endpoints, clusters, commands and attributes are specified by ZigBee
+    Alliance or vendor-specific descriptions. Those descriptions may be
+    provided on the OSGi platform by any bundle through the registration of
+    <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet"
+    xrefstyle="hyperlink"/> services (see <xref
+    linkend="service.zigbee-description-figure_id_20160713_9h17_17"
+    xrefstyle="template:Figure %n on page %p"/>). Every service is a set of
+    descriptions that enables applications to retrieve information about the
+    clusters, commands, attributes supported by the described type of
+    endpoint.</para>
+
+    <figure xml:id="service.zigbee-description-figure_id_20160713_9h17_17">
+      <title>Using a set of device descriptions</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentwidth="5.1in"
+                     fileref="device_description_set.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>ZigBee Base Driver</title>
+
+    <para>Most of the functionality described in the operation summary is
+    implemented in a ZigBee base driver. A ZigBee base driver is a bundle that
+    implements the ZigBee protocols and handles the interaction with bundles
+    that use the ZigBee devices. It must discover ZigBee devices on the ZigBee
+    network and map each discovered device into an OSGi registered <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+    service. It must also export, on the ZigBee Network, <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    services (programmatically registered as OSGi services).</para>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> object also provides simple methods to handle
+    standard ZigBee Device Object networking features: <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.getLinksQuality--"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.getRoutingTable--"
+    xrefstyle="hyperlink"/>, and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.leave--"
+    xrefstyle="hyperlink"/>.</para>
+
+    <figure xml:id="service.zigbee-cluster-figure_id_20160713_9h46_22">
+      <title>ZigBee Cluster Library model</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentwidth="4in"
+                     fileref="clusterLibrairie.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>All interfaces corresponding to the ZigBee Cluster Library model
+    (see <xref linkend="service.zigbee-cluster-figure_id_20160713_9h46_22"
+    xrefstyle="template:Figure %n on page %p"/>) must be implemented in order
+    to discover and control asynchronously ZigBee devices. Classes related to
+    the description of these entities named with suffix
+    <code>Description</code> may optionally be implemented. This rule follows
+    the fact that ZigBee device descriptions are not downloadable on the
+    device itself and are often given to developers in an out-of-band
+    manner.</para>
+
+    <para>Several base drivers may be deployed on a residential OSGi device,
+    one for every supported network technology. An OSGi device abstraction
+    layer may then be implemented as a layer of refining drivers above a layer
+    of base drivers. The refining driver is responsible for adapting
+    technology-specific device services registered by the base driver into
+    device services of another model (see AbstractDevice interface in <xref
+    linkend="service.zigbee-basedriver-figure_id_20160713_9h23_46"
+    xrefstyle="template:Figure %n on page %p"/>). In the case of a generic
+    device abstraction layer, the model is agnostic to technologies.</para>
+
+    <figure pgwide="1"
+            xml:id="service.zigbee-basedriver-figure_id_20160713_9h23_46">
+      <title>The ZigBee Base Driver and a refining driver representing devices
+      in an abstract model</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="4in" contentwidth="6in"
+                     fileref="RefinedDriver-2.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The ZigBee Alliance defines their own abstract model with ZigBee
+    Profiles, for example, Home Automation, Lighting, and refining drivers may
+    provide the implementation of all ZigBee standard devices with
+    ZigBee-specific Java interfaces. The AbstractDevice interface of <xref
+    linkend="service.zigbee-basedriver-figure_id_20160713_9h23_46"
+    xrefstyle="template:Figure %n on page %p"/> is then replaced by a
+    ZigBee-specific Java interface in that case. The need and the choice of
+    the abstraction depends on the targeted application domain.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Node</title>
+
+    <para>A ZigBee node represents a physical ZigBee device and should adhere
+    to a specific application profile that can be either public or private.
+    Profiles define the environment of the application, the type of devices
+    and the clusters used for them to communicate.</para>
+
+    <para>A physical device is reified and registered as a <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+    service in the Framework. A ZigBee node holds several ZigBee endpoints
+    that are registered as <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    objects.</para>
+
+    <para>ZigBee nodes properties are defined in the ZigBee Specification.
+    These properties must be registered in the OSGi Framework services
+    registry so they are searchable. <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/> must
+    be registered with the following properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies the IEEE
+        Address of a ZigBee node.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.LOGICAL_TYPE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.description.node.type/Short</code>) specifies a
+        device logical type.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.MANUFACTURER_CODE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.description.manufacturer.code/Integer</code>)
+        specifies a manufacturer code that is allocated by the ZigBee
+        Alliance, relating to the device manufacturer.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.POWER_SOURCE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.power.source/Boolean</code>) is the ZigBee power
+        source, that is, 3rd bit of "MAC Capabilities" in Node Descriptor,
+        which is set to 1 if the current power source is mains power, set to 0
+        otherwise.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.RECEIVER_ON_WHEN_IDLE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.receiver.on.when.idle/Boolean</code>) represents
+        the ZigBee receiver on when idle, that is, 4th bit of "MAC
+        Capabilities" in Node Descriptor, which is set to 1 if the device does
+        not disable its receiver to conserve power during idle periods, set to
+        0 otherwise.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.node.pan.id/Integer</code>)
+        (Personal Area Network Identifier) is a 16-bit value that identifies a
+        ZigBee network. Every <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+        object is associated to a PAN ID, which can be retrieved through the
+        <xref linkend="org.osgi.service.zigbee.ZigBeeNode.getPanId--"
+        xrefstyle="hyperlink"/> method.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.pan.extended.id/BigInteger</code>) Extended PAN ID
+        is a 64-bit numbers that uniquely identify a PAN. It is intended to
+        enhance selection of a PAN and enable recognition of network after PAN
+        ID change (due to a previous conflict). <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getExtendedPanId--"
+        xrefstyle="hyperlink"/> returns the network extended PAN ID if
+        specified.</para>
+
+        <para>Note: <xref linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+        xrefstyle="hyperlink"/> and <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+        xrefstyle="hyperlink"/> are optional, but at least one of these
+        properties MUST be specified.</para>
+      </listitem>
+
+      <listitem>
+        <para><link
+        linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
+        xrefstyle="hyperlink">DEVICE_CATEGORY</link> (see the OSGi Device
+        Access Specification) – (<code>DEVICE_CATEGORY</code>) describes a
+        table of the categories to which the device belongs. One of the values
+        MUST be “ZigBee” (<xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_CATEGORY"
+        xrefstyle="hyperlink"/>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Additional properties (defined in the OSGi Device Access
+    Specification) may be set:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link
+        linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION"
+        xrefstyle="hyperlink">DEVICE_DESCRIPTION</link> – if the complex
+        descriptor of the device is available, the value MUST be set and MUST
+        be the value returned by <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getModelName--"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="org.osgi.service.device.Constants.DEVICE_SERIAL"
+        xrefstyle="hyperlink">DEVICE_SERIAL</link> – if the complex descriptor
+        of the device is available, the value MUST be set and MUST be the
+        value returned by <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getSerialNumber--"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Finally, <code>service.pid</code> property MUST be set.</para>
+
+    <para>ZigBee nodes describes themselves using descriptor data
+    structures:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getNodeDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously
+        resolved with a <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor"
+        xrefstyle="hyperlink"/> object representing the Node Descriptor which
+        contains information about the node capabilities. On failure, the
+        promise is resolved with an exception instead.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getComplexDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously
+        resolved with a <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor"
+        xrefstyle="hyperlink"/> object representing the Complex Descriptor
+        which contains extended information for each device description
+        contained in this node. On failure, the promise is resolved with an
+        exception instead, especially an exception with <xref
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR"
+        xrefstyle="hyperlink"/> error code if no Complex Descriptor is
+        provided.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getPowerDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously
+        resolved with a <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor"
+        xrefstyle="hyperlink"/> object representing the Power Descriptor which
+        contains power-related information of this node. On failure, the
+        promise is resolved with an exception instead, especially an exception
+        with <xref
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR"
+        xrefstyle="hyperlink"/> error code if no Power Descriptor is
+        provided.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getUserDescription--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously
+        resolved with the unique field named “User description” of the User
+        Descriptor, which contains information that allows the user to
+        identify the device using user-friendly character string. On failure,
+        the promise is resolved with an exception instead, especially an
+        exception with <xref
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR"
+        xrefstyle="hyperlink"/> error code if no User Descriptor is
+        provided.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> objects provide <code>invoke</code> methods to
+    send network frames within ZDP layer, while invoking ZigBee Cluster
+    Library (ZCL) commands is enabled on <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>
+    objects. ZCL commands can be however broadcast on a ZigBee node thanks to
+    <code>broadcast</code> methods. Broadcasting enables the sending of a ZCL
+    command to all clusters identified with an identifier of all endpoints
+    available on the targeted ZigBee node.</para>
+
+    <para>All discovered ZigBee nodes in the local networks are registered
+    under the <xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> interface within the OSGi Framework. Every time a
+    ZigBee node appears or quits the network, the associated OSGi service is
+    registered or unregistered in the OSGi service registry. Thanks to the
+    ZigBee Base Driver, the OSGi service availability in the registry mirrors
+    ZigBee device availability on ZigBee networks. Using a remote ZigBee node
+    thus involves tracking <xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> services in the OSGi service registry. The
+    following code illustrates how this can be done. The sample
+    <code>Controller</code> class extends the <code>ServiceTracker</code>
+    class so that it can track all <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+    services and add them to a user interface, such as a remote controller
+    application. The friendly name of this node is retrieved in order to be
+    printed on the user interface.</para>
+
+    <programlisting>class Controller extends ServiceTracker {
+    UI ui;
+    Controller( BundleContext context ) {
+        super( context, ZigBeeNode.class, null );
+    }
+    public Object addingService( ServiceReference ref ) {
+        ZigBeeNode node = (ZigBeeNode)super.addingService(ref);
+        ui.addNode( node );
+        return node;
+    }
+    public void removedService( ServiceReference ref, Object endpoint ) {
+        ui.removeNode( (ZigBeeNode) node );
+        super.removedService(ref);
+    }
+    ...
+}
+
+public class UI {
+    public void addNode(ZigBeeNode node) {
+        final Promise p = node.getUserDescription();
+        p.onResolve(new Runnable() {
+            public void run() {
+                try { 
+                    String friendlyName = (String) p.getValue();
+                    createUINode(node, friendlyName);
+                } catch (InvocationTargetException e) {
+                     log.info("Get User Description command returned "
+                               + "a failure: " + e.getCause() + ”.”);
+                     createUINode(node, "No friendly name");
+                } catch (InterruptedException e) {
+                     e.printStackTrace();
+                }
+            }
+        });
+    }
+...
+}</programlisting>
+  </section>
+
+  <section>
+    <title>ZigBee Endpoint</title>
+
+    <para>Communication between devices is done through an addressable
+    component called ZigBee endpoint which holds a number of ZigBee clusters.
+    A ZigBee cluster represents a functional unit in a device.</para>
+
+    <para>An endpoint defines a communication entity within a device through
+    which a specific application is carried. So, it represents a logical
+    device object used for communication.</para>
+
+    <para>For example, a remote control light might allocate Endpoint 7 for
+    the control of lights in the master bedroom, Endpoint 9 to manage the
+    heating and air conditioning system, and Endpoint 14 for controlling the
+    security system.</para>
+
+    <para>The ZigBee specification defines that a maximum of 240 Endpoints is
+    allowed per <xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/>. Endpoint 0, also called the ZigBee Device Object
+    (ZDO), is reserved for the management operations on both ZigBee node and
+    ZigBee endpoints, endpoint 255 is reserved for broadcasting to all
+    endpoints, endpoints 241-254 are reserved for future use.</para>
+
+    <para>Endpoint 0 and endpoint 255 capabilities are not exposed, only
+    endpoints 1-240 should be registered as services. Endpoints are registered
+    under the <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> interface with the following properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies the IEEE
+        Address of the parent node.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ENDPOINT_ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.id/Short</code>)
+        specifies the endpoint address within the node. Applications shall
+        only use endpoints 1-240.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.PROFILE_ID"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.device.profile.id/Integer</code>) identifies the profile
+        that the endpoint belongs to. The profile can be either a ZigBee
+        Alliance standard profile or a vendor-specific profile. The ZigBee
+        specification defines several profile identifiers, and some others are
+        vendor specific.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.endpoint.host.pid/String</code>) – The ZigBee local host
+        identifier is intended to uniquely identify the ZigBee local host,
+        since there could be many hosts on the same platform. All the
+        endpoints that belong to a specific network MUST specify the value of
+        the associated host number.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.device.id/Integer</code>)
+        identifies the device description supported by this endpoint. Like for
+        profile identifiers, the ZigBee specification defines several device
+        identifiers. Vendors are also able to define specific device
+        identifiers.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_VERSION"
+        xrefstyle="hyperlink"/> – (<code>zigbee.device.version/Integer</code>)
+        specifies the device description version supported by this
+        endpoint.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.INPUT_CLUSTERS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.endpoint.clusters.input/Integer[]</code>) specifies the
+        list of input cluster ids supported by this endpoint. Input cluster
+        are called Server cluster.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.OUTPUT_CLUSTERS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.endpoint.clusters.output/Integer[]</code>) specifies the
+        list of output cluster ids supported by this endpoint. Output cluster
+        are called Client cluster.</para>
+      </listitem>
+
+      <listitem>
+        <para><link
+        linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
+        xrefstyle="hyperlink">DEVICE_CATEGORY</link> (see the OSGi Device
+        Access Specification) – (<code>DEVICE_CATEGORY</code>) describes a
+        table of the categories to which the device belongs. One of the values
+        MUST be “ZigBee” (<xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_CATEGORY"
+        xrefstyle="hyperlink"/>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Finally, <code>service.pid</code> property MUST be set. In device
+    import case, it is a free unique identifier that enables OSGi ZigBee
+    clients to identify any imported endpoint across node reboots. It may
+    concatenate the endpoint IEEE address, a separator, for example, '_', and
+    the endpoint ID. In endpoint export case, it is a free unique identifier
+    that enables the base driver to identify any exported endpoint across
+    local bundle restarts. In this case, <code>service.pid</code> property may
+    concatenate bundle identifier, a separator, for example, '_', and a
+    number.</para>
+
+    <para>A <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> may contain a number of input or output clusters.
+    <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> provides <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getServerCluster-int-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getClientCluster-int-"
+    xrefstyle="hyperlink"/> to return a specific server input or client output
+    cluster.</para>
+
+    <para>Every endpoint must provide a simple descriptor. <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getSimpleDescriptor--"
+    xrefstyle="hyperlink"/> returns a <link
+    linkend="org.osgi.util.promise.Promise"
+    xrefstyle="hyperlink">Promise</link> object that is asynchronously
+    resolved with a <xref
+    linkend="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor"
+    xrefstyle="hyperlink"/> object which contains general information about
+    the endpoint or with an exception in case of a failure.</para>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> interface provides two methods to bind and unbind
+    ZigBee clusters: <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.bind-String-int-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.unbind-String-int-"
+    xrefstyle="hyperlink"/>. The entity that wants to bind clusters is
+    responsible for initializing, maintaining and removing the bindings across
+    <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> service events. This entity is the local OSGi
+    Application that asked this binding or the ZigBee Base Driver if the
+    binding has been requested by a remote ZigBee node.</para>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> interface provides a <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getBoundEndPoints-int-"
+    xrefstyle="hyperlink"/> method that provides the table of bound <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    objects identified by their service PIDs.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Device Description</title>
+
+    <para>A ZigBee endpoint may have a description used to describe his input
+    and output clusters, and which of these clusters are mandatory or
+    optional. A <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription"
+    xrefstyle="hyperlink"/> object provides associated information about an
+    endpoint.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Device Description Set</title>
+
+    <para><xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet"
+    xrefstyle="hyperlink"/> objects may be registered as OSGi services by any
+    bundle. A <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet"
+    xrefstyle="hyperlink"/> provides <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.getDeviceSpecification-int-short-"
+    xrefstyle="hyperlink"/> which returns the device description, if provided,
+    for the identified endpoint, or <code>null</code> otherwise. A <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet"
+    xrefstyle="hyperlink"/> service should be registered with the following
+    properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.VERSION"
+        xrefstyle="hyperlink"/> – (<code>zigbee.profile.version/Short</code>)
+        The application profile version.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.PROFILE_ID"
+        xrefstyle="hyperlink"/> – see <xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+        xrefstyle="hyperlink"/>.<xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.PROFILE_ID"
+        xrefstyle="hyperlink"/> property.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.PROFILE_NAME"
+        xrefstyle="hyperlink"/> – (<code>zigbee.profile.name/String</code>)
+        The profile name.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.MANUFACTURER_CODE"
+        xrefstyle="hyperlink"/> – see <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode"
+        xrefstyle="hyperlink"/>.<xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.MANUFACTURER_CODE"
+        xrefstyle="hyperlink"/> property.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.DEVICES"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.profile.devices/Integer[]</code>) comma separated list
+        of devices identifiers supported by the set.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>ZCL Cluster</title>
+
+    <para>Devices communicate with each other by means of clusters, which may
+    be inputs to or outputs of the device. For example, ZigBee Home Automation
+    profile provides a cluster dedicated to the control of lighting
+    subsystems. Clusters are represented under <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>
+    interface.</para>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZCLCluster"
+    xrefstyle="hyperlink"/> objects combine one or more ZigBee commands (or
+    frames) and <xref linkend="org.osgi.service.zigbee.ZCLAttribute"
+    xrefstyle="hyperlink"/> objects.</para>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZCLCluster"
+    xrefstyle="hyperlink"/> provides some methods for reading and writing
+    attributes values:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLCluster.readAttributes-ZCLAttributeInfo---"
+        xrefstyle="hyperlink"/> – The ZigBee Base driver MAY generate the read
+        attributes command on behalf of the OSGi application that is invoking
+        this method. The latter returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously
+        resolved with a <code>Map</code> of <xref
+        linkend="org.osgi.service.zigbee.ZCLReadStatusRecord"
+        xrefstyle="hyperlink"/> identified by their attribute identifiers. On
+        failure, the promise is resolved with an exception instead.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLCluster.writeAttributes-boolean-Map-"
+        xrefstyle="hyperlink"/> – The ZigBee Base driver generates the write
+        attributes command on behalf of the OSGi application that is invoking
+        this method. The boolean <code>undivided</code> parameter specifies
+        that if any attribute cannot be written, for example, if an attribute
+        is not implemented on the device, or a value to be written is outside
+        the valid range, no attribute values are changed.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZCLCluster"
+    xrefstyle="hyperlink"/> objects use ZCLFrame to invoke ZigBee commands
+    :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-"
+        xrefstyle="hyperlink"/> – a sequence of bytes represents the command
+        frame. The source endpoint is not specified in this method call. To
+        send the appropriate message on the network, the base driver must
+        generate a source endpoint. The latter must not correspond to any
+        exported endpoint.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-String-"
+        xrefstyle="hyperlink"/> – a sequence of bytes represents the command
+        frame, and exportedServicePID is the source endpoint of the command
+        request. In targeted situations, the source endpoint is the valid
+        service PID of an exported endpoint.</para>
+
+        <para>A <link linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> is returned and manages the
+        command response asynchronously.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>ZCL Cluster Description</title>
+
+    <para>A <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLClusterDescription"
+    xrefstyle="hyperlink"/> describes the server or client part of a <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>. It
+    lists the available commands and attributes for this client or server
+    cluster.</para>
+
+    <para>Every cluster client and server may have attributes (see <xref
+    linkend="service.zigbee-ref-zigbee-cluster-library-specification"/>,
+    Chapter 2.2.1), received and generated commands. <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLClusterDescription"
+    xrefstyle="hyperlink"/> provides methods to describe commands, attributes
+    and retrieve general cluster information.</para>
+  </section>
+
+  <section>
+    <title>ZCL Global Cluster Description</title>
+
+    <para><xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription"
+    xrefstyle="hyperlink"/> describes a cluster general information: id, name,
+    description. It provides the <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLClusterDescription"
+    xrefstyle="hyperlink"/> for both client and server part of this
+    cluster.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Command Description</title>
+
+    <para><xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLCommandDescription"
+    xrefstyle="hyperlink"/> describes a ZigBee command.</para>
+
+    <para><xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLCommandDescription"
+    xrefstyle="hyperlink"/> contains <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLParameterDescription"
+    xrefstyle="hyperlink"/> objects which describe the command
+    parameters.</para>
+
+    <para>All clusters (server and client) shall support generation, reception
+    and execution of the default response command.</para>
+
+    <para>Every cluster (server or client) that implements attributes shall
+    support reception of, execution of, and response to all commands to
+    discover, read, write, report, configure reporting of, and read reporting
+    configuration of these attributes. Generation of these commands is
+    application dependent.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Attribute</title>
+
+    <para>A ZigBee cluster is associated with a set of attributes. Every
+    attribute is represented by an object implementing <xref
+    linkend="org.osgi.service.zigbee.ZCLAttribute" xrefstyle="hyperlink"/>
+    interface extending <xref
+    linkend="org.osgi.service.zigbee.ZCLAttributeInfo"
+    xrefstyle="hyperlink"/>. <xref
+    linkend="org.osgi.service.zigbee.ZCLAttribute" xrefstyle="hyperlink"/>
+    provides <xref linkend="org.osgi.service.zigbee.ZCLAttribute.getValue--"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZCLAttribute.setValue-Object-"
+    xrefstyle="hyperlink"/> to retrieve and set the current attribute value
+    with the use of a <link linkend="org.osgi.util.promise.Promise"
+    xrefstyle="hyperlink">Promise</link>, which returns the response
+    asynchronously.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Attribute Description</title>
+
+    <para>A <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription"
+    xrefstyle="hyperlink"/> also extends <xref
+    linkend="org.osgi.service.zigbee.ZCLAttributeInfo" xrefstyle="hyperlink"/>
+    and describes information about a specific <xref
+    linkend="org.osgi.service.zigbee.ZCLAttribute"
+    xrefstyle="hyperlink"/>.</para>
+  </section>
+
+  <section>
+    <title>ZCL Data Type Description</title>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZCLAttributeInfo"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLParameterDescription"
+    xrefstyle="hyperlink"/> provide <xref
+    linkend="org.osgi.service.zigbee.ZCLAttributeInfo.getDataType--"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLParameterDescription.getDataTypeDescription--"
+    xrefstyle="hyperlink"/> methods, respectively, which return <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription"
+    xrefstyle="hyperlink"/> objects. One object is associated to every ZigBee
+    data type, see <xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
+    xrefstyle="hyperlink"/> constants in ZigBee Data Types section
+    below.</para>
+  </section>
+
+  <section>
+    <title>ZCL Simple Type Description</title>
+
+    <para><xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription"
+    xrefstyle="hyperlink"/> extends <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription"
+    xrefstyle="hyperlink"/> interface to provide the following methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription.serialize-ZigBeeDataOutput-Object-"
+        xrefstyle="hyperlink"/> – Serializes a Java object corresponding to
+        the Java data type given by <xref
+        linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.getJavaDataType--"
+        xrefstyle="hyperlink"/>, and adds the result to the given <xref
+        linkend="org.osgi.service.zigbee.ZigBeeDataOutput"
+        xrefstyle="hyperlink"/> according to ZigBee Cluster Library.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription.deserialize-ZigBeeDataInput-"
+        xrefstyle="hyperlink"/> – Deserializes the given data into a Java
+        object of the Java data type given by <xref
+        linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.getJavaDataType--"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Every ZigBee data type is associated to a <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription"
+    xrefstyle="hyperlink"/> implementation, except ZigBee Array, Bag, Set, and
+    Structure types.</para>
+  </section>
+
+  <section>
+    <title>Promise and Response Stream objects</title>
+
+    <para><link linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink">
+    Promise</link> and <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
+    xrefstyle="hyperlink"/> objects handle ZigBee network communication
+    latency and errors. An <code>org.osgi.util.promise.Promise</code> is
+    immediately returned by every method that generates a message exchange
+    with one ZigBee endpoint, that is, the sending of a message to this
+    endpoint and the handling of a unique response from this endpoint. No
+    exception is thrown by this method. The <code>Promise</code> handles the
+    expected result and any occurring error asynchronously. The caller can
+    either get a callback when the Promise is resolved with a value or an
+    error, or the Promise can be used in chaining. Both
+    <code>onResolve(Runnable)</code> callbacks and <code>then(Success,
+    Failure)</code> chaining can be repeated any number of times, even after
+    the Promise has been resolved. When the Promise is resolved, callbacks and
+    chaining are called, <code>Promise.isDone()</code> returns true, and
+    either <code>Promise.getValue()</code> returns a value or
+    <code>Promise.getFailure()</code> returns a relevant
+    <code>Throwable</code>. The type of the value and the type of Throwable
+    are specific to the method returning the <code>Promise</code>. In import
+    situations, the base driver fails the Promise when a timeout is reached
+    before any response is received on the network. The returned failure is
+    then a <xref linkend="org.osgi.service.zigbee.ZigBeeException"
+    xrefstyle="hyperlink"/> with <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.TIMEOUT"
+    xrefstyle="hyperlink"/> error code. The associated timeout is given by
+    <xref
+    linkend="org.osgi.service.zigbee.ZigBeeHost.getCommunicationTimeout--"
+    xrefstyle="hyperlink"/>. It can be set by calling <xref
+    linkend="org.osgi.service.zigbee.ZigBeeHost.setCommunicationTimeout-long-"
+    xrefstyle="hyperlink"/> on the appropriate ZigBeeHost object.</para>
+
+    <para>A <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
+    xrefstyle="hyperlink"/> is immediately returned by every method that
+    generates the sending of a message to potentially several endpoints with
+    the expectation of a response from several of them. No exception is thrown
+    by this method. The caller can register a handler with <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.forEach-Predicate-"
+    xrefstyle="hyperlink"/>. The unique method of the handler is called with a
+    <xref linkend="org.osgi.service.zigbee.ZCLCommandResponse"
+    xrefstyle="hyperlink"/> every time a response is received from one of the
+    targeted endpoints until the <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
+    xrefstyle="hyperlink"/> is closed. The latter is closed either when the
+    handler returns false to the test method or <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.close--"
+    xrefstyle="hyperlink"/> is called. <xref
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
+    xrefstyle="hyperlink"/> is used for the following message invocation
+    types:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Broadcasting: Sending a message to all available endpoints of a
+        specific type and receiving responses from each of them, see <xref
+        linkend="org.osgi.service.zigbee.ZigBeeHost.broadcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Groupcasting: Sending a message to the endpoints of a specific
+        type in a group of endpoints and receiving responses from each of
+        them, see <xref
+        linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Nodecasting: Sending a message to the endpoints of a specific
+        type on a node and receiving responses from each of them, see <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.broadcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>ZigBee Data Types</title>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
+    xrefstyle="hyperlink"/> class provides all standard ZigBee data type
+    identifiers as constants. It should be noted that actual value of these
+    constants do not necessarily match the values assigned in the ZCL
+    specification for these data types.</para>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.types"
+    xrefstyle="hyperlink"/> package contains an implementation class for each
+    of the ZCL scalar data types, with the exception of <xref
+    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
+    xrefstyle="hyperlink"/> . Each of these classes declares a static
+    <code>getInstance()</code> method, that returns a singleton of the class
+    itself. Moreover, because they implement the <xref
+    linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription"
+    xrefstyle="hyperlink"/> interface, they provide methods for getting some
+    metadata information about the ZCL data type they represent, like the
+    relative <xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
+    xrefstyle="hyperlink"/> constant ( <code>getId()</code> method) and the
+    Java class the ZCL data type is mapped to. Methods to marshal and
+    unmarshal the data type into a <xref
+    linkend="org.osgi.service.zigbee.ZigBeeDataInput" xrefstyle="hyperlink"/>
+    stream and from a <xref linkend="org.osgi.service.zigbee.ZigBeeDataOutput"
+    xrefstyle="hyperlink"/> stream according to the ZigBee specification, are
+    provided as well.</para>
+
+    <para>Here is the table of encoding relations between ZigBee types and
+    Java types, used in this specification:</para>
+
+    <table>
+      <title>Mapping of ZCL Data Types to Java</title>
+
+      <tgroup cols="3">
+        <colspec colname="c1" colwidth="2*"/>
+
+        <colspec colname="c2" colwidth="2*"/>
+
+        <colspec colname="c3" colwidth="1*"/>
+
+        <thead>
+          <row>
+            <entry>ZigBeeDataType constant</entry>
+
+            <entry>ZigBee type</entry>
+
+            <entry>Java Type</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>No data</entry>
+
+            <entry><code/></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_8"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>8-bit data</entry>
+
+            <entry><code>Byte</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_16"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>16-bit data</entry>
+
+            <entry><code>Short</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_24"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>24-bit data</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_32"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>32-bit data</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_40"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>40-bit data</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_48"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>48-bit data</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_56"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>56-bit data</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_64"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>64-bit data</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BOOLEAN"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Boolean</entry>
+
+            <entry><code>Boolean</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_8"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>8-bit bitmap</entry>
+
+            <entry><code>Byte</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_16"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>16-bit bitmap</entry>
+
+            <entry><code>Short</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_24"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>24-bit bitmap</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_32"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>32-bit bitmap</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_40"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>40-bit bitmap</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_48"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>48-bit bitmap</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_56"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>56-bit bitmap</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_64"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>64-bit bitmap</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_8"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 8-bit integer</entry>
+
+            <entry><code>Short</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_16"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 16-bit integer</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_24"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 24-bit integer</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_32"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 32-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_40"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 40-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_48"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 48-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_56"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 56-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_64"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unsigned 64-bit integer</entry>
+
+            <entry><code>BigInteger</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_8"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 8-bit integer</entry>
+
+            <entry><code>Byte</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_16"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 16-bit integer</entry>
+
+            <entry><code>Short</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_24"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 24-bit integer</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_32"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 32-bit integer</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_40"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 40-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_48"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 48-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_56"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 56-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_64"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Signed 64-bit integer</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ENUMERATION_8"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>8-bit enumeration</entry>
+
+            <entry><code>Short</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ENUMERATION_16"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>16-bit enumeration</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_SEMI"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Semi-precision float</entry>
+
+            <entry><code>Float</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_SINGLE"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Single precision float</entry>
+
+            <entry><code>Float</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_DOUBLE"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Double</entry>
+
+            <entry><code>Double</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.CHARACTER_STRING"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Character string</entry>
+
+            <entry><code>String</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.OCTET_STRING"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Octet string</entry>
+
+            <entry><code>byte[]</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LONG_CHARACTER_STRING"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Character string</entry>
+
+            <entry><code>String</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LONG_OCTET_STRING"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Octet string</entry>
+
+            <entry><code>byte[]</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ARRAY"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Array</entry>
+
+            <entry><code/></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.STRUCTURE"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Structure</entry>
+
+            <entry><code/></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SET"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Set</entry>
+
+            <entry><code/></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BAG"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Bag</entry>
+
+            <entry><code/></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.CLUSTER_ID"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Cluster ID</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ATTRIBUTE_ID"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Attribute ID</entry>
+
+            <entry><code>Integer</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BACNET_OID"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry><para>BACnet
+            OID<superscript>1</superscript></para><para>(Unsigned 32-bit
+            integer)</para></entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.TIME_OF_DAY"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Time of day</entry>
+
+            <entry><code>byte[4]</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.DATE"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Date</entry>
+
+            <entry><code>byte[4]</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UTC_TIME"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>UTC Time</entry>
+
+            <entry><code>Long</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.IEEE_ADDRESS"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>IEEE address (MAC-48,EUI-48/64)</entry>
+
+            <entry><code>BigInteger</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SECURITY_KEY_128"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>128-bit Security Key</entry>
+
+            <entry><code>byte[8]</code></entry>
+          </row>
+
+          <row>
+            <entry><xref
+            linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
+            xrefstyle="hyperlink"/></entry>
+
+            <entry>Unknown</entry>
+
+            <entry><code/></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para><superscript>1</superscript> BACnet OID (Object identifier) data
+    type is included to allow interworking with BACnet (see <xref
+    linkend="service.zigbee-ref-ashrae-standard"/>). The format is described
+    in the referenced standard.</para>
+  </section>
+
+  <section xml:id="service.zigbee.implementinganendpoint">
+    <title>Implementing a ZigBee Endpoint</title>
+
+    <para>OSGi services can also be exported as ZigBee endpoints to the local
+    networks, in a way that is transparent to typical ZigBee devices
+    endpoints. This allows developers to bridge legacy devices to ZigBee
+    networks. A <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
+    xrefstyle="hyperlink"/> MUST be registered with the following properties
+    to export an OSGi service as a ZigBee endpoint:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ZIGBEE_EXPORT"
+        xrefstyle="hyperlink"/> – To indicate that the endpoint is an
+        exportable endpoint.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An OSGi platform can be connected to multiple ZigBee networks. <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+    xrefstyle="hyperlink"/> are used to select the appropriate network. At
+    least one of these properties MUST be specified. If provided, <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
+    xrefstyle="hyperlink"/> has priority over <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+    xrefstyle="hyperlink"/> to identify the host that is targeted for
+    export.</para>
+
+    <para>In addition, the ZigBeeEndpoint service MUST declare the same
+    properties as an imported endpoint. The bundle registering endpoint
+    services must make sure these properties are set accordingly or that none
+    of these properties are set. In case a ZigBee host is not initialized yet
+    or the base driver is not active on the OSGi framework, an endpoint
+    implementation MAY not have any of the above identifiers.</para>
+
+    <para>If the Base Driver is active and at a ZigBee host is started, then
+    the Base Driver makes an attempt to export the endpoint on the ZigBee
+    network associated to the ZigBee <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+    xrefstyle="hyperlink"/>. The associated ZigBeeNode object MUST be one of
+    the available ZigBeeHost objects. Every time an endpoint is registered or
+    unregistered with both <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ZIGBEE_EXPORT"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+    xrefstyle="hyperlink"/> and/or <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+    xrefstyle="hyperlink"/> properties set, the associated ZigBeeHost service
+    is modified accordingly (<xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.getEndpoints--"
+    xrefstyle="hyperlink"/> returns a different array of ZigBeeEndpoint
+    objects).</para>
+
+    <para>If - and only if - an error is detected on the properties of the
+    ZigBee endpoint to be exported, then the Base Driver calls the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
+    xrefstyle="hyperlink"/> method with a relevant ZigBeeException object as
+    the input argument. The method SHOULD be called even if a ZigBee Host is
+    not started.</para>
+
+    <para>The endpoint has to be registered with an ID that is unique. If the
+    chosen ID already exists as a property of a local endpoint with the same
+    host or if it already exists in an optional cache of the base driver, the
+    base driver calls the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
+    xrefstyle="hyperlink"/> method with the ZigBeeException object as the
+    input argument with <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_EXISTING_ID"
+    xrefstyle="hyperlink"/> error code. The base driver may keep IDs in a
+    cache for endpoints that might come back in the registry. The range of
+    potential IDs is 1-240 according to <xref
+    linkend="service.zigbee-ref-zigbee-specification"/>.</para>
+
+    <para>The reader must note that a same ZigBeeEndpoint object cannot be
+    registered several times with distinct PAN IDs since the<xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getNodeAddress--"
+    xrefstyle="hyperlink"/> method can only return one ZigBee node
+    address.</para>
+
+    <para>If the PAN ID corresponds to more than one ZigBeeHost service, the
+    ZigBeeEndpoint MUST define the Extended PAN ID property which uniquely
+    identifies a ZigBee network. The base driver will call <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
+    xrefstyle="hyperlink"/> with the error code <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_MULTIPLE_HOSTS"
+    xrefstyle="hyperlink"/> if the Extended PAN ID property is not properly
+    defined in this specific situation.</para>
+
+    <para>Moreover, if the HOST PID corresponds to more than one ZigBeeHost,
+    the base driver will also call <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
+    xrefstyle="hyperlink"/> with the error code <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_MULTIPLE_HOSTS"
+    xrefstyle="hyperlink"/>.</para>
+  </section>
+
+  <section>
+    <title>Event API</title>
+
+    <para>Eventing is available in import and export situations:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>External events from the network must be dispatched to listeners
+        inside the OSGi Service Platform. The ZigBee Base driver is
+        responsible for mapping the network events to internal listener
+        events.</para>
+      </listitem>
+
+      <listitem>
+        <para>Implementations of ZigBee endpoints must send out events to
+        local listeners. The ZigBee Base driver dispatches events to the
+        network from its own listeners.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>ZigBee events are sent using the whiteboard pattern, <xref
+    linkend="service.zigbee-ref-whiteboard-pattern"/>, in which a bundle
+    interested in receiving the ZigBee events registers an object implementing
+    the <xref linkend="org.osgi.service.zigbee.ZCLEventListener"
+    xrefstyle="hyperlink"/> interface. The service MUST be registered with
+    <xref linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
+    xrefstyle="hyperlink"/> and/or <xref
+    linkend="org.osgi.service.zigbee.ZigBeeNode.EXTENDED_PAN_ID"
+    xrefstyle="hyperlink"/> properties. These properties indicate the network
+    targeted by the listener since an OSGi platform can host multiple ZigBee
+    networks.</para>
+
+    <para>A filter can be set to limit the events for which a bundle is
+    notified. The ZigBee Base driver must register a <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener" xrefstyle="hyperlink"/>
+    service for every attribute report configured in the configure reporting
+    commands it receives from the network.</para>
+
+    <para>The filter refers to the combination of the properties registered
+    with the <xref linkend="org.osgi.service.zigbee.ZCLEventListener"
+    xrefstyle="hyperlink"/> service. Each <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener" xrefstyle="hyperlink"/>
+    MUST be registered with all the following mandatory properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZCLCluster.ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.cluster.id/Integer</code>)
+        Only events generated by endpoints matching a specific cluster are
+        delivered.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZCLAttribute.ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.attribute.id/Integer</code>)
+        Only events generated by endpoints matching a specific attribute are
+        delivered.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLEventListener.ATTRIBUTE_DATA_TYPE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.attribute.datatype/Short</code>) The Attribute data type
+        field contains the data type of the attribute that is to be reported
+        (see <xref
+        linkend="service.zigbee-ref-zigbee-cluster-library-specification"/>
+        2.4.7.1.4 Attribute Data Type Field).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The optional properties are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.ieee.address/BigInteger</code>) Only events
+        generated by endpoints matching the specific node are
+        delivered.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ENDPOINT_ID"
+        xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.id/Short</code>) Only
+        events matching a specific endpoint are delivered.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLEventListener.MIN_REPORT_INTERVAL"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.attribute.min.report.interval/Integer</code>) The
+        minimum interval, in seconds, between issuing reports of the specified
+        attribute (see <xref
+        linkend="service.zigbee-ref-zigbee-cluster-library-specification"/>. –
+        2.4.7.1.5).</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLEventListener.MAX_REPORT_INTERVAL"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.attribute.max.report.interval/Integer</code>) The
+        maximum interval, in seconds, between issuing reports of the specified
+        attribute (see <xref
+        linkend="service.zigbee-ref-zigbee-cluster-library-specification"/>.
+        2.4.7.1.6).</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZCLEventListener.REPORTABLE_CHANGE"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.attribute.reportable.change/Double</code>) The minimum
+        change to the attribute that will result in a report being issued.
+        This property is mandatory if the data type is <code>analog</code>. If
+        the data type is <code>digital</code>, the base driver will ignore
+        it.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>If the endpoint sets a timeout between two attribute reports, the
+    <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener.notifyTimeOut-int-"
+    xrefstyle="hyperlink"/> method is then called with the timeout argument.
+    In the import situation, the base driver calls this method on the relevant
+    listeners when it receives a configure reporting command with a set
+    TIMEOUT_PERIOD field (see <xref
+    linkend="service.zigbee-ref-zigbee-cluster-library-specification"/> 2.4.7
+    Configure Reporting Command). In the export situation, the local endpoint
+    calls this method on relevant listeners and, in case the base driver is
+    one of the notified listeners, it sends a configure reporting request with
+    the appropriate TIMEOUT_PERIOD field to interested endpoints on the
+    network.</para>
+
+    <para>A ZigBee event is represented by a <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEvent" xrefstyle="hyperlink"/>
+    object.</para>
+
+    <para>If an event is generated by either the local endpoint or via the
+    base driver for an external device, the <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener.notifyEvent-ZigBeeEvent-"
+    xrefstyle="hyperlink"/> method is called on all registered <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener" xrefstyle="hyperlink"/>
+    services for which the source event matches the service properties. The
+    way events must be delivered is the same as described in Delivering Events
+    in the Life Cycle Layer chapter of the <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> specification.</para>
+
+    <para>The ZigBee base driver SHOULD group subscriptions into one configure
+    reporting request to the targeted ZigBee device. It SHOULD also notify
+    every listener with respect to their specific expectations.</para>
+  </section>
+
+  <section>
+    <title>Monitoring Events and Sending Commands</title>
+
+    <para>In the example below, a button of the user interface monitors the
+    state (on or off) of a smart plug and enables the user to switch the plug
+    on and off. To monitor the plug state, a <xref
+    linkend="org.osgi.service.zigbee.ZCLEventListener" xrefstyle="hyperlink"/>
+    is registered with the properties related to the node, endpoint, cluster
+    and attribute representing the plug and its state. When an appropriate
+    event is sent on the network, the base driver (or a local endpoint
+    implementer) notifies the listener. The listener then changes the state
+    value shown by the button. When the user clicks on the button, a command
+    is invoked on the plug.</para>
+
+    <programlisting>public class UIOnOffButton implements ZCLEventListener {
+    public UIOnOffButton(BigInteger ieeeAddress, Short endpointId, Integer 
+            clusterId, Integer attributeId, Short dataType, 
+            BundleContext bc) {
+        Dictionary properties = new Hashtable();
+        properties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
+        properties.put(ZigBeeEndpoint.ENDPOINT_ID, endpointId);
+        properties.put(ZCLCluster.ID, clusterId);
+        properties.put(ZCLAttribute.ID, attributeId);
+        properties.put(ZCLEventListener.ATTRIBUTE_DATA_TYPE, dataType);
+        // events will be filtered by the basedriver call notifyEvent() method
+        // only when the event comes from a node, endpoint, cluster, attribute
+        // matching these properties
+        bc.registerService(ZCLEventListener.class.getName(), this, properties);
+    }
+
+    public void notifyEvent(ZigBeeEvent event) {
+        // change the attribute value of the UICluster
+        Object value = event.getValue();
+        changeUIValue(value);
+    }   
+     
+    public void notifyTimeOut(int timeout) {
+          log.info("Timeout notified");
+    }
+
+    public void onFailure(ZCLException e) {
+          log.info("Failure registering the listener: " + e);
+    }
+        
+    public void changeUIValue(Object value) {
+    ....
+    }
+    
+    public void onClick() {
+        // the button has been clicked
+        // get the ZCLCluster
+        ServiceReference[] srs = bundleContext.getServiceReferences(
+                          ZigBeeEndpoint.class.getName(),
+                          "(&amp;(" + ZigBeeNode.IEEE_ADDRESS + "=" + ieeeAddress 
+                          + ")(" + ZigBeeEndpoint.ENDPOINT_ID + "=" + endpointID 
+                          + "))");
+        if (srs.length&gt;0){
+            ZCLCluster onOffCluster =
+                ((ZigBeeEndpoint) bundleContext.getService(srs[0]))
+                          .getServerCluster(ZCL_ONOFF_CLUSTER_ID);
+            if (onOffCluster != null) {
+                final Promise p = onOffCluster.invoke(new ToggleCommand());
+                p.onResolve(new Runnable() {
+                    public void run(){
+                        try { 
+                            ZCLFrame frame = (ZCLFrame) p.getValue();
+                            log.info("toggle command returned success.");
+                        } catch (InvocationTargetException e) {
+                            log.info("toggle command returned a failure: " 
+                                      + e + ”.”);
+                        } catch (InterruptedException e) {
+                             e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    class ToggleCommand implements ZCLFrame {
+        ...
+    }
+...
+}</programlisting>
+  </section>
+
+  <section>
+    <title>ZCL Exception</title>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.ZCLException"
+    xrefstyle="hyperlink"/> extends the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException" xrefstyle="hyperlink"/>.
+    It holds information about the different ZigBee ZCL layers. Error codes
+    specified by ZigBee Alliance are conveyed by the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.errorCode"
+    xrefstyle="hyperlink"/> field of <xref
+    linkend="org.osgi.service.zigbee.ZCLException" xrefstyle="hyperlink"/>
+    objects.</para>
+  </section>
+
+  <section>
+    <title>ZDP Exception</title>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.ZDPException"
+    xrefstyle="hyperlink"/> extends the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException" xrefstyle="hyperlink"/>.
+    It holds information about the ZigBee ZDP layer. Error codes specified by
+    ZigBee Alliance are conveyed by the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.errorCode"
+    xrefstyle="hyperlink"/> field of <xref
+    linkend="org.osgi.service.zigbee.ZDPException" xrefstyle="hyperlink"/>
+    objects.</para>
+  </section>
+
+  <section>
+    <title>APS Exception</title>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.APSException"
+    xrefstyle="hyperlink"/> extends the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException" xrefstyle="hyperlink"/>.
+    It holds information about the ZigBee APS layer. Error codes specified by
+    ZigBee Alliance are conveyed by the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeException.errorCode"
+    xrefstyle="hyperlink"/> field of <xref
+    linkend="org.osgi.service.zigbee.APSException" xrefstyle="hyperlink"/>
+    objects.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Exception</title>
+
+    <para>Some error codes are specified by the OSGi Alliance:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_EXISTING_ID"
+        xrefstyle="hyperlink"/>– another endpoint exists with the same
+        ID.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_MULTIPLE_HOSTS"
+        xrefstyle="hyperlink"/>– several hosts exist for this PAN ID target or
+        HOST_PID target.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>ZCL Frame</title>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.ZCLFrame"
+    xrefstyle="hyperlink"/> contains a <xref
+    linkend="org.osgi.service.zigbee.ZCLHeader" xrefstyle="hyperlink"/>, and a
+    payload. It must used when invoking a command.</para>
+
+    <para>The <xref linkend="org.osgi.service.zigbee.ZCLHeader"
+    xrefstyle="hyperlink"/> describes the header of a <xref
+    linkend="org.osgi.service.zigbee.ZCLFrame" xrefstyle="hyperlink"/>.</para>
+
+    <para>The transaction id of each <xref
+    linkend="org.osgi.service.zigbee.ZCLHeader" xrefstyle="hyperlink"/> must
+    be managed by the base driver.</para>
+
+    <para>Only getters (not setters) are shared by client applications, the
+    base driver and endpoint implementations. Therefore only getters are
+    specified.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Group</title>
+
+    <para><xref linkend="org.osgi.service.zigbee.ZigBeeGroup"
+    xrefstyle="hyperlink"/> enables group management (that is, it provides
+    <xref linkend="org.osgi.service.zigbee.ZigBeeGroup.joinGroup-String-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeGroup.leaveGroup-String-"
+    xrefstyle="hyperlink"/> methods).</para>
+
+    <para>The creation of groups is made through the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeHost.createGroupService-int-"
+    xrefstyle="hyperlink"/> method.</para>
+
+    <para>A ZigBeeGroup service should be registered with the following
+    property:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeGroup.ID"
+        xrefstyle="hyperlink"/> – (zigbee.group.id/Integer) The 16-bit group
+        address of the device.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>And, the following <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+    properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_CATEGORY"
+        xrefstyle="hyperlink"/></para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeEndpoint.INPUT_CLUSTERS"
+        xrefstyle="hyperlink"/></para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
+        xrefstyle="hyperlink"/></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A <xref linkend="org.osgi.service.zigbee.ZigBeeGroup"
+    xrefstyle="hyperlink"/> service enables the ZigBee groupcasting of command
+    invocation thanks to the <xref
+    linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-String-"
+    xrefstyle="hyperlink"/> methods. A groupcast message is received by the
+    endpoints that are members of the targeted group.</para>
+  </section>
+
+  <section>
+    <title>ZigBee Networking</title>
+
+    <section>
+      <title>Logical node type</title>
+
+      <para>The ZigBee specification defines three types of ZigBee nodes on
+      the network:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ZigBee Coordinator (ZC) – The most capable device, the
+          coordinator forms the root of the network. There is exactly one
+          ZigBee coordinator in every network. It is able to store information
+          about the network, to act as the Trust Center and repository for
+          security keys. <xref
+          linkend="org.osgi.service.zigbee.ZigBeeNode.COORDINATOR"
+          xrefstyle="hyperlink"/> represents the ZigBee coordinator.</para>
+        </listitem>
+
+        <listitem>
+          <para>ZigBee Router (ZR) – A router is capable of extending a ZigBee
+          network by routing data from other ZigBee devices. <xref
+          linkend="org.osgi.service.zigbee.ZigBeeNode.ROUTER"
+          xrefstyle="hyperlink"/> represents a ZigBee router.</para>
+        </listitem>
+
+        <listitem>
+          <para>ZigBee End Device (ZED) – An end device contains just enough
+          functionality to talk to the parent node (either the coordinator or
+          a router); it cannot relay data from other devices. <xref
+          linkend="org.osgi.service.zigbee.ZigBeeNode.ZED"
+          xrefstyle="hyperlink"/> represents a ZigBee end device.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Every discovered <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/> on
+      the network has a logical node type returned by calling the <xref
+      linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getLogicalType--"
+      xrefstyle="hyperlink"/> method on the node's <xref
+      linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor"
+      xrefstyle="hyperlink"/>.</para>
+    </section>
+
+    <section>
+      <title>Network selection</title>
+
+      <para>The base driver provides a <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost" xrefstyle="hyperlink"/>
+      object for every available ZigBee local host. A ZigBee local host can
+      represent a ZigBee chip on a USB dongle, a ZigBee built-in chip or a
+      ZigBee Gateway Device (see <xref
+      linkend="service.zigbee-ref-zigbee-gateway"/>). This object must be
+      registered as a <xref linkend="org.osgi.service.zigbee.ZigBeeHost"
+      xrefstyle="hyperlink"/> service. The <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost" xrefstyle="hyperlink"/>
+      interface has methods to start and stop the host, to store the
+      networking configuration information (channel, channel mask, logical
+      type, PAN ID, Extended PAN ID, security level, network key), and to open
+      the network for devices to join it (<xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.permitJoin-short-"
+      xrefstyle="hyperlink"/>).</para>
+
+      <para><xref linkend="org.osgi.service.zigbee.ZigBeeHost"
+      xrefstyle="hyperlink"/> also enables the broadcast of ZCL commands on a
+      ZigBee network thanks to the <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.broadcast-int-ZCLFrame-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.broadcast-int-ZCLFrame-String-"
+      xrefstyle="hyperlink"/> methods. Broadcasting enables the sending of a
+      ZCL command to all clusters identified with an identifier of all
+      endpoints available on the nodes of a ZigBee network within a number of
+      hops defined by the broadcast radius of the coordinator (see the <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.getBroadcastRadius--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.setBroadcastRadius-short-"
+      xrefstyle="hyperlink"/> methods).</para>
+
+      <para>In ZigBee networks, the coordinator must select a PAN identifier
+      and a channel to start a network. After that, it behaves essentially
+      like a router. The coordinator and routers can allow other devices to
+      join the network and route data.</para>
+
+      <para>After an end device joins a router or coordinator, it is able to
+      transmit or receive data through that router or coordinator. The router
+      or coordinator that allowed an end device to join becomes the parent of
+      the end device. Since the end device can sleep, the parent must be able
+      to buffer or retain incoming data packets targeting the end device until
+      the end device is able to wake up and receive the data.</para>
+    </section>
+
+    <section>
+      <title>Network coordination</title>
+
+      <para>When the <xref linkend="org.osgi.service.zigbee.ZigBeeHost"
+      xrefstyle="hyperlink"/> is configured as the network coordinator, the
+      <xref
+      linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getLogicalType--"
+      xrefstyle="hyperlink"/> method on the node's <xref
+      linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor"
+      xrefstyle="hyperlink"/> MUST return <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode.COORDINATOR"
+      xrefstyle="hyperlink"/>. The <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost" xrefstyle="hyperlink"/>
+      object will then be able to use the following operations for managing
+      the network:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.updateNetworkChannel-byte-"
+          xrefstyle="hyperlink"/> - Updates the network channel.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.setChannelMask-int-"
+          xrefstyle="hyperlink"/> - Sets a new configured channel mask.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.refreshNetwork--"
+          xrefstyle="hyperlink"/> – Requests the base driver to launch new
+          discovery requests and refresh devices service registration
+          according to current devices availability. This method is made
+          mandatory since ZigBee specification allows devices not to notify
+          the network when they leave it.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Networking considerations</title>
+
+      <para>The Network Address is a 16-bit address that is assigned by the
+      coordinator when a node has joined a network and that must be unique for
+      a given network in order for the node to be identified uniquely. <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode" xrefstyle="hyperlink"/>
+      provides <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode.getNetworkAddress--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode.getIEEEAddress--"
+      xrefstyle="hyperlink"/> which returns device network address and device
+      IEEE MAC address.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <section>
+      <title>Security management</title>
+
+      <para>ZigBee security is based on a 128-bit algorithm built on the
+      security model provided by IEEE 802.15.4. ZigBee specification which
+      defines the Trust Center.</para>
+
+      <para>The Trust Center is the device trusted by devices within a network
+      to distribute keys for the purpose of network and end-to-end application
+      configuration management. All members of the network shall recognize
+      exactly one Trust Center, and there shall be exactly one Trust Center in
+      each secure network.</para>
+
+      <para>The security of a network of ZigBee devices is based on link keys
+      and a network key. Unicast communication between entities is secured by
+      means of a 128-bit link key shared by two devices, one of those is
+      normally the Trust Center. Broadcast communications are secured by means
+      of a 128-bit network key shared among all devices in the network. The
+      master key is only used as an initial shared secret between two devices
+      when they perform the Key Establishment to generate Link Keys.</para>
+
+      <para>Security configuration is provided by the <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.getSecurityLevel--"
+      xrefstyle="hyperlink"/> method returning whether the security mode is
+      activated or not on the ZigBee network.</para>
+
+      <para>A <xref linkend="org.osgi.service.zigbee.ZigBeeHost"
+      xrefstyle="hyperlink"/> with a <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode.COORDINATOR"
+      xrefstyle="hyperlink"/> logical node type will acts as a the Trust
+      Center according to the ZigBee specification. It can also be any other
+      device on the network. The Trust Center stores all the shared network
+      keys. The <xref
+      linkend="org.osgi.service.zigbee.ZigBeeHost.getPreconfiguredLinkKey--"
+      xrefstyle="hyperlink"/> method returns the network master key.</para>
+    </section>
+
+    <section>
+      <title>Conditional permission</title>
+
+      <para>When a bundle registers a <xref
+      linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
+      OSGi service, then the base driver exposes this endpoint on the outside
+      ZigBee network and this endpoint has the ability to communicate with the
+      other network devices. The base driver also provides an equivalent
+      behavior when discovering a ZigBee endpoint from the outside network and
+      exposing it as an OSGi Service in the OSGi Framework service registry.
+      It is therefore recommended that
+      <code>ServicePermission[ZigBeeHost|ZigBeeEndpoint|ZCLEventListener,
+      REGISTER|GET]</code> be used sparingly and only for trusted
+      bundles.</para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.descriptions.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.descriptors.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.types.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="service.zigbee-ref-zigbee-specification"><title>ZigBee
+      Specification</title>Document 053474r17, ZigBee Alliance, October 19,
+      2007.</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.zigbee-ref-zigbee-cluster-library-specification"><title>ZigBee
+      Cluster Library Specification</title>Document 075123r04ZB, ZigBee
+      Alliance, May 29, 2012.</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26"><title>Pervasive
+      Service Composition in the Home Network</title>André Bottaro, Anne
+      Gérodolle, Philippe Lalanda, 21st IEEE International Conference on
+      Advanced Information Networking and Applications (AINA-07), Niagara
+      Falls, Canada, May 2007.</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.zigbee-ref-4-bibliomixed_id_20162007_17h49_53"><title>Device
+      and Service Discovery in Home Networks with OSGi</title>Pavlin Dobrev,
+      David Famolari, Christian Kurzke, Brent A. Miller, IEEE Communications
+      magazine, Volume 40, Issue 8, pp. 86-92, August 2002.</bibliomixed>
+
+      <bibliomixed xml:id="service.zigbee-ref-ashrae-standard"><title>ASHRAE
+      135-2004 Standard</title>Data Communication Protocol for Building
+      Automation and Control Networks.</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.zigbee-ref-whiteboard-pattern"><title>Listeners
+      considered harmful: The whiteboard pattern</title>Peter Kriens, BJ
+      Hargrave for the OSGi Alliance, Technical Whitepaper, August
+      2004.<?line-break ?><biblioid class="uri"><link
+      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="service.zigbee-ref-zigbee-gateway"><title>ZigBee
+      Gateway</title>ZigBee Alliance, 2011.</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

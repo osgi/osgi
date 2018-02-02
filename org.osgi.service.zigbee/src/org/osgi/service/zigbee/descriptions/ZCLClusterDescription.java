@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,37 +17,41 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZCL Cluster description
+ * This interface represents a ZCL Cluster description.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLClusterDescription {
 	/**
-	 * @return the cluster identifier
+	 * @return the cluster identifier.
 	 */
 	public int getId();
 
 	/**
-	 * @return an array of cluster's generated command description
+	 * Returns an array of the generated command descriptions.
+	 * 
+	 * @return an array of the generated command descriptions.
 	 */
 	public ZCLCommandDescription[] getGeneratedCommandDescriptions();
 
 	/**
-	 * @return an array of cluster's received command description
+	 * Returns an array of the received command description.
+	 * 
+	 * @return an array of the received command description.
 	 */
 	public ZCLCommandDescription[] getReceivedCommandDescriptions();
 
 	/**
-	 * @return an array of cluster's Attributes description
+	 * Returns an array of the attribute descriptions.
+	 * 
+	 * @return an array of the attribute descriptions.
 	 */
 	public ZCLAttributeDescription[] getAttributeDescriptions();
 
 	/**
-	 * @return an array of cluster's Commands description
+	 * Returns an array of the command descriptions.
+	 * 
+	 * @return an array of the command descriptions.
 	 */
 	public ZCLGlobalClusterDescription getGlobalClusterDescription();
 }

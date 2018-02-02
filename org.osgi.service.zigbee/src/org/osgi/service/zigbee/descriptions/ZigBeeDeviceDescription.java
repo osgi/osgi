@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,43 +17,51 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee device description
+ * This interface represents a ZigBee device description.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeDeviceDescription {
 
 	/**
-	 * @return The device identifier.
+	 * Returns the device identifier.
+	 * 
+	 * @return the device identifier.
 	 */
 	public int getId();
 
 	/**
-	 * @return The device name.
+	 * Returns the device name.
+	 * 
+	 * @return the device name.
 	 */
 	public String getName();
 
 	/**
-	 * @return The device version.
+	 * Returns the device version.
+	 * 
+	 * @return the device version.
 	 */
 	public Integer getVersion();
 
 	/**
-	 * @return The profile identifier.
+	 * Returns the profile identifier.
+	 * 
+	 * @return the profile identifier.
 	 */
 	public int getProfileId();
 
 	/**
-	 * @return An array of server cluster description.
+	 * Returns an array of server cluster descriptions.
+	 * 
+	 * @return an array of server cluster descriptions.
 	 */
 	public ZCLClusterDescription[] getServerClustersDescriptions();
 
 	/**
-	 * @return an array of client cluster description.
+	 * Returns an array of client cluster descriptions.
+	 * 
+	 * @return an array of client cluster descriptions.
 	 */
 	public ZCLClusterDescription[] getClientClustersDescriptions();
 

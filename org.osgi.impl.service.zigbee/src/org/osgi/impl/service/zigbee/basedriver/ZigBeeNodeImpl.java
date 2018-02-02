@@ -1,61 +1,103 @@
+/*
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.impl.service.zigbee.basedriver;
 
-import org.osgi.service.zigbee.ZCLException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.zigbee.event.EndResponse;
+import org.osgi.impl.service.zigbee.event.ZCLCommandResponseImpl;
+import org.osgi.impl.service.zigbee.event.ZCLCommandResponseStreamImpl;
+import org.osgi.service.zigbee.ZCLCommandResponseStream;
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPException;
+import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHandler;
+import org.osgi.service.zigbee.ZigBeeHost;
+import org.osgi.service.zigbee.ZigBeeLinkQuality;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.ZigBeeRoute;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
-import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl.
+ * 
+ * @author $Id$
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 
-	private Long					IEEEAddress;
-	private int						nwkAddress;
-	private String					hostPId;
-	private ZigBeeEndpoint[]		endpoints;
-	private ZigBeeNodeDescriptor	nodeDescriptor;
-	private ZigBeePowerDescriptor	powerDescriptor;
-	private ZigBeeComplexDescriptor	complexDescriptor;
-	private ZigBeeUserDescriptor	userDescriptor;
+	private ZigBeeHost					host;
+	private BigInteger					IEEEAddress;
+	private int							nwkAddress;
+
+	private ZigBeeEndpointImpl[]		endpoints				= new ZigBeeEndpointImpl[0];
+
+	protected ZigBeeNodeDescriptor		nodeDescriptor;
+	protected ZigBeePowerDescriptor		powerDescriptor;
+	protected ZigBeeComplexDescriptor	complexDescriptor;
+	protected String					userDescription;
+
+	private String						nodePid;
+
+	private List						endpointsServiceRegs	= new ArrayList();
 
 	/**
-	 * @param IEEEAddress
-	 * @param nwkAddress
-	 * @param hostPId
-	 * @param endpoints
+	 * If true enables the ZigBeeNode to fail for those methods that could file
+	 * because the feature is not available.
 	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, int nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
+	private boolean						forceFailure			= true;
+	private ServiceRegistration			nodeServiceReg;
+
+	public ZigBeeNodeImpl(BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
+			ZigBeeNodeDescriptor nodeDescriptor, ZigBeePowerDescriptor powerDescriptor, String userdescription) {
 		this.IEEEAddress = IEEEAddress;
-		this.nwkAddress = nwkAddress;
-		this.hostPId = hostPId;
 		this.endpoints = endpoints;
+		this.powerDescriptor = powerDescriptor;
+		this.nodeDescriptor = nodeDescriptor;
+		this.userDescription = userdescription;
+		this.nwkAddress = nwkAddress;
+
+		for (int i = 0; i < endpoints.length; i++) {
+			endpoints[i].setZigBeeNode(this);
+		}
+
 	}
 
-	/**
-	 * @param IEEEAddress
-	 * @param nwkAddress
-	 * @param hostPId
-	 * @param endpoints
-	 * @param nodeDesc
-	 * @param powerDesc
-	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, int nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc) {
-		this.IEEEAddress = IEEEAddress;
-		this.nwkAddress = nwkAddress;
-		this.hostPId = hostPId;
-		this.endpoints = endpoints;
-		this.powerDescriptor = powerDesc;
-		this.nodeDescriptor = nodeDesc;
+	public ZigBeeNodeImpl(ZigBeeHost host, BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
+			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
+		this(IEEEAddress, nwkAddress, endpoints, nodeDesc, powerDesc, userdescription);
+
+		this.host = host;
+
+		nodePid = IEEEAddress.toString() + ".node.pid";
 	}
 
-	public Long getIEEEAddress() {
+	public BigInteger getIEEEAddress() {
 		return this.IEEEAddress;
 	}
 
@@ -63,60 +105,250 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return this.nwkAddress;
 	}
 
-	public String getHostPId() {
-		return this.hostPId;
+	public String getHostPid() {
+		return host.getHostPid();
 	}
 
 	public int getPanId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return host.getPanId();
 	}
 
-	public long getExtendedPanId() {
-		// TODO Auto-generated method stub
-		return -1;
+	public BigInteger getExtendedPanId() {
+		return host.getExtendedPanId();
 	}
 
-	public void getNodeDescriptor(ZigBeeHandler handler) throws ZCLException {
-		// TODO Auto-generated method stub
-		handler.onSuccess(nodeDescriptor);
+	public Promise getNodeDescriptor() {
+		return Promises.resolved(nodeDescriptor);
 	}
 
-	public void getPowerDescriptor(ZigBeeHandler handler) throws ZCLException {
-		// TODO Auto-generated method stub
-		handler.onSuccess(powerDescriptor);
+	public Promise getPowerDescriptor() {
+		return Promises.resolved(powerDescriptor);
 	}
 
-	public void getComplexDescriptor(ZigBeeHandler handler) throws ZCLException {
-		// TODO Auto-generated method stub
-		handler.onSuccess(complexDescriptor);
+	public Promise getComplexDescriptor() {
+		if (nodeDescriptor.isComplexDescriptorAvailable()) {
+			return Promises.resolved(complexDescriptor);
+		} else {
+			return Promises.failed(new ZDPException(ZDPException.NO_DESCRIPTOR, " descriptor is not available"));
+		}
 	}
 
-	public void getUserDescriptor(ZigBeeHandler handler) throws ZCLException {
-		// TODO Auto-generated method stub
-		handler.onSuccess(userDescriptor);
+	public Promise getLinksQuality() throws ZDPException {
+
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+
+		/*
+		 * Return a fake content.
+		 */
+
+		ZigBeeLinkQuality linkQuality = new ZigBeeLinkQuality() {
+
+			public int getRelationship() {
+				return 0;
+			}
+
+			public String getNeighbor() {
+				return "neighbor";
+			}
+
+			public int getLQI() {
+				return 3;
+			}
+
+			public int getDepth() {
+				return 1;
+			}
+		};
+
+		Map linksQualityMap = new HashMap();
+		linksQualityMap.put(nodePid, linkQuality);
+
+		return Promises.resolved(linksQualityMap);
 	}
 
-	public void getLinksQuality(ZigBeeHandler handler) throws ZDPException {
-		// TODO Auto-generated method stub
+	public Promise getRoutingTable() {
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+
+		Map routingTableMap = new HashMap();
+
+		/*
+		 * Return a fake content.
+		 */
+
+		ZigBeeRoute routeEntry = new ZigBeeRoute() {
+			public int getStatus() {
+				return 0;
+			}
+
+			public String getNextHop() {
+				return "";
+			}
+
+			public String getDestination() {
+				return "";
+			}
+		};
+
+		routingTableMap.put(this.nodePid, routeEntry);
+
+		return Promises.resolved(routingTableMap);
 	}
 
-	public void getRoutingTable(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+	public Promise leave() {
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+		return Promises.resolved(null);
 	}
 
-	public void leave(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+	public Promise leave(boolean rejoin, boolean removeChildren) {
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
+	}
+
+	public Promise invoke(int clusterIdReq, ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
+	}
+
+	public Promise getUserDescription() {
+		if (nodeDescriptor.isUserDescriptorAvailable()) {
+			return Promises.resolved(userDescription);
+		} else {
+			return Promises.failed(new ZDPException(ZDPException.NO_DESCRIPTOR, ""));
+		}
+	}
+
+	public Promise setUserDescription(String userDescriptor) {
+		if (nodeDescriptor.isUserDescriptorAvailable()) {
+			this.userDescription = userDescriptor;
+			return Promises.resolved(null);
+		} else {
+			return Promises.failed(new ZDPException(ZDPException.NO_DESCRIPTOR, ""));
+		}
+	}
+
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
+		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
+
+		// Stub out the response by immediately filling it with an Unsupported
+		// Operation Exception and ending it
+		impl.handleResponse(new ZCLCommandResponseImpl(Promises.failed(
+				new UnsupportedOperationException("Not yet implemented"))));
+		impl.handleResponse(new EndResponse());
+
+		return impl;
+	}
+
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID) {
+		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
+
+		// Stub out the response by immediately filling it with an Unsupported
+		// Operation Exception and ending it
+		impl.handleResponse(new ZCLCommandResponseImpl(Promises.failed(
+				new UnsupportedOperationException("Not yet implemented"))));
+		impl.handleResponse(new EndResponse());
+
+		return impl;
+	}
+
+	public ZigBeeEndpoint[] getEndpoints() {
+		if (endpoints == null) {
+			return new ZigBeeEndpoint[0];
+		}
+		return endpoints;
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress + ", hostPId: " + hostPId + ", endpoints: " + endpoints + ", nodeDescriptor: "
-				+ nodeDescriptor
-				+ ", powerDescriptor: " + powerDescriptor + "]";
+		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
+				+ ", hostPId: " + host.getHostPid() + "]";
 	}
 
+	/**
+	 * Activates the node.
+	 * 
+	 * @param bc The BundleContext.
+	 */
+	protected void activate(BundleContext bc) {
+
+		endpointsServiceRegs.clear();
+
+		for (int j = 0; j < endpoints.length; j++) {
+			ZigBeeEndpointImpl endpoint = endpoints[j];
+			Dictionary props = new Hashtable();
+
+			props.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
+			props.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
+			props.put(ZigBeeEndpoint.PROFILE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationProfileId()));
+			props.put(ZigBeeEndpoint.DEVICE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationDeviceId()));
+			props.put(ZigBeeEndpoint.DEVICE_VERSION, new Byte(endpoint.getSimpleDescriptorInternal().getApplicationDeviceVersion()));
+			props.put(ZigBeeEndpoint.HOST_PID, this.getHostPid());
+			props.put(ZigBeeEndpoint.OUTPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getOutputClusters());
+			props.put(ZigBeeEndpoint.INPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getInputClusters());
+			props.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
+			props.put("service.pid", getEndpointServicePid(endpoint));
+
+			ServiceRegistration endpointServiceReg = bc.registerService(ZigBeeEndpoint.class.getName(), endpoint, props);
+			endpointsServiceRegs.add(endpointServiceReg);
+		}
+
+		/*
+		 * The ZigBeeNode must be registered only after its ZigBeeEndpoints have
+		 * been registered.
+		 */
+		Dictionary nodeProperties = new Hashtable();
+
+		nodeProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
+		nodeProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
+		nodeProperties.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
+		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
+		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
+		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+		nodeProperties.put(ZigBeeNode.POWER_SOURCE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
+		nodeProperties.put("service.pid", nodePid);
+
+		nodeProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
+		if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {
+			nodeProperties.put(org.osgi.service.device.Constants.DEVICE_DESCRIPTION, complexDescriptor.getModelName());
+			nodeProperties.put(org.osgi.service.device.Constants.DEVICE_SERIAL, complexDescriptor.getSerialNumber());
+		}
+
+		nodeServiceReg = bc.registerService(ZigBeeNode.class.getName(), this, nodeProperties);
+	}
+
+	/**
+	 * Deactivate the node, unregistering itself and then its ZigBeeEndpoints.
+	 * 
+	 * @param bc The BundleContext
+	 */
+
+	protected void deactivate(BundleContext bc) {
+		/*
+		 * The ZigBeeNode must be unregistered before its ZigBeeEndpoints being
+		 * unregistered.
+		 */
+
+		nodeServiceReg.unregister();
+
+		for (Iterator iterator = endpointsServiceRegs.iterator(); iterator.hasNext();) {
+			ServiceRegistration sReg = (ServiceRegistration) iterator.next();
+			sReg.unregister();
+		}
+
+		endpointsServiceRegs.clear();
+	}
+
+	public String getEndpointServicePid(ZigBeeEndpointImpl endpoint) {
+		return this.getIEEEAddress() + "." + endpoint.getId() + ".endpoint.pid";
+	}
 }

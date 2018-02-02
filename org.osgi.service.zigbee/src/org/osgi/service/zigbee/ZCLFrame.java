@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,41 +16,62 @@
 
 package org.osgi.service.zigbee;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
 
 /**
- * This interface represents a ZCL Frame.
+ * This interface models the ZigBee Cluster Library Frame.
  * 
- * @author <a href="mailto:stefano.lenzi@isti.cnr.it">Stefano "Kismet" Lenzi</a>
- * @author <a href="mailto:francesco.furfari@isti.cnr.it">Francesco Furfari</a>
+ * @author $Id$
  */
 public interface ZCLFrame {
 
 	/**
-	 * Get this ZCLFrame's header
+	 * Returns the header of this frame.
 	 * 
-	 * @return the header
+	 * @return the header of this frame.
 	 */
-	ZCLHeader getHeader();
+	public ZCLHeader getHeader();
 
 	/**
-	 * Get (a copy of this ZCLFrame) payload
+	 * Returns a byte array containing the raw ZCL frame, suitable to be sent on
+	 * the wire. The returned byte array contains the whole ZCL Frame, including
+	 * the ZCL Frame Header and the ZCL Frame payload.
 	 * 
-	 * @return a copy of the payload
+	 * @return a byte array containing a raw ZCL frame, suitable to be sent on
+	 *         the wire. Any modifications issued on the returned array must not
+	 *         affect the internal representation of the ZCLFrame interface
+	 *         implementation.
 	 */
-	byte[] getPayload();
+	public byte[] getBytes();
 
 	/**
-	 * @return this ZCLFrame's inputstream that can be used in order to obtain
-	 *         this ZCLFrame's input bytes.
+	 * Copy in the passed array the internal raw ZCLFrame.
+	 * 
+	 * @param buffer The buffer where to copy the raw ZCL frame.
+	 * 
+	 * @return The actual number of bytes copied.
 	 */
-	ByteArrayInputStream getInputStream();
+	public int getBytes(byte[] buffer);
 
 	/**
-	 * @return this ZCLFrame's outputstream that can be used in order to write
-	 *         data/bytes to this ZCLFrame.
+	 * Retrieve the current size of the internal raw frame (that is the size of
+	 * the byte[] that would be returned if calling the {@link #getBytes()}
+	 * method.
+	 * 
+	 * @return The size of the raw ZCL frame.
 	 */
-	ByteArrayOutputStream getOutputStream();
+	public int getSize();
 
+	/**
+	 * Returns {@link ZigBeeDataInput} for reading the ZCLFrame payload content.
+	 * Every call to this method returns a different instance. The returned
+	 * instances must not share the current position to the underlying
+	 * {@link ZCLFrame} payload.
+	 * 
+	 * @return a {@link DataInput} for the payload of the {@link ZCLFrame}. This
+	 *         method does not generate a copy of the payload.
+	 * 
+	 * @throws IllegalStateException if the InputStream is not available.
+	 */
+	public ZigBeeDataInput getDataInput();
 }

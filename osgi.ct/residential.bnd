@@ -1,5 +1,5 @@
 Bundle-Description: OSGi Residential Release ${versionmask;=;${build.version}} Compliance Tests
 
--includeresource: {legal}
+-includeresource: {legal}, ${resources.residential.tests}
 
 -ctpack: ${build.residential.tests},${jar.residential.tests}

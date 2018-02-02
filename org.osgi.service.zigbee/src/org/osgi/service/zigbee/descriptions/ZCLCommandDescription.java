@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,79 +16,74 @@
 
 package org.osgi.service.zigbee.descriptions;
 
-import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
-
 /**
- * This interface represents a ZCLCommandDescription
+ * This interface represents a ZCLCommandDescription.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLCommandDescription {
 	/**
-	 * @return the command identifier
+	 * Returns the command identifier.
+	 * 
+	 * @return the command identifier.
 	 */
-	int getId();
+	short getId();
 
 	/**
-	 * @return the command name
+	 * Returns the command name.
+	 * 
+	 * @return the command name.
 	 */
 	String getName();
 
 	/**
-	 * @return the command functional description
+	 * Returns the command functional description.
+	 * 
+	 * @return the command functional description.
 	 */
 	String getShortDescription();
 
 	/**
-	 * @return true, if and only if the command is mandatory
+	 * Checks if this command it mandatory.
+	 * 
+	 * @return true, if and only if the command is mandatory.
 	 */
 	boolean isMandatory();
 
 	/**
-	 * @return an array of command's parameters description
+	 * Returns an array of the parameter descriptions.
+	 * 
+	 * @return an array of the parameter descriptions.
 	 */
 	ZCLParameterDescription[] getParameterDescriptions();
 
 	/**
-	 * Serialize javaValues to a ZCLFrame that can them be used in invocations
-	 * (e.g. via ZigBeeCluster, or ZigBeeGroup).
-	 * 
-	 * @param header the ZCLFrame's header
-	 * @param javaValues ordered java values
-	 * @return serialized javaValues as a byte[]
-	 */
-	ZCLFrame serialize(ZCLHeader header, Object[] javaValues);
-
-	/**
-	 * Deserialize ZCLFrame to javaValues. This ZCLFrame is expected to be a
-	 * result of an invocation. (e.g. via ZigBeeCluster, or ZigBeeGroup).
-	 * 
-	 * @param frame the ZCLFrame
-	 * @return deserialized Object[] as javaValues
-	 */
-	Object[] deserialize(ZCLFrame frame);
-
-	/**
-	 * @return the isClusterSpecificCommand value
+	 * @return the isClusterSpecificCommand value.
 	 */
 	boolean isClusterSpecificCommand();
 
 	/**
-	 * Get manufacturerCode
+	 * Returns the manufacturer code.
 	 * 
-	 * Default value is: -1 (no code)
+	 * Default value is: -1 (no code).
 	 * 
-	 * @return the manufacturerCode
+	 * @return the manufacturer code.
 	 */
 	int getManufacturerCode();
 
 	/**
-	 * @return the isClientServerDirection value
+	 * Checks if the command is manufacturer specific.
+	 * 
+	 * @return {@code true} if end only if {@link #getManufacturerCode()} is
+	 *         not. -1.
+	 */
+	public boolean isManufacturerSpecific();
+
+	/**
+	 * Checks if this is a server-side command (that is going from the client to
+	 * server direction).
+	 * 
+	 * @return the isClientServerDirection value.
 	 */
 	boolean isClientServerDirection();
 

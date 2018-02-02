@@ -180,5 +180,12 @@ build.residential.tests = \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.usbinfo, \
     org.osgi.test.cases.useradmin, \
-    org.osgi.test.cases.xml
+    org.osgi.test.cases.xml, \
+    org.osgi.test.cases.zigbee
 
+resources.residential.tests = \
+ ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct.xsd, \
+ ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct-template.xml, \
+ ${workspace}/org.osgi.test.cases.zigbee/zcl.xsd, \
+ ${workspace}/org.osgi.test.cases.zigbee/zcl.xml, \
+ ${workspace}/org.osgi.test.cases.zigbee/README.md

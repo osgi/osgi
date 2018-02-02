@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,96 +18,129 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a power descriptor as described in the ZigBee
- * Specification The Power Descriptor gives a dynamic indication of the power
- * status of the node.
+ * Specification.
+ * <p>
+ * The Power Descriptor gives a dynamic indication of the power status of the
+ * node.
  * 
- * @version 1.0
+ * @noimplement
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeePowerDescriptor {
 
 	/**
-	 * Receiver synchronized with the receiver on when idle subfield of the node
-	 * descriptor.
-	 */
-	public static final short	POWER_MODE_SYNC			= 0;
-
-	/**
-	 * The current power mode.
-	 */
-	public static final short	POWER_MODE_PERIODIC		= 1;
-
-	/**
-	 * The current power mode.
-	 */
-	public static final short	POWER_MODE_STIMULATED	= 2;
-
-	/**
 	 * Current power source level: critical.
 	 */
-	public static final short	CRITICAL_LEVEL			= 0;
+	public static final short	CRITICAL_LEVEL	= 0;
 
 	/**
 	 * Current power source level: 33%.
 	 */
-	public static final short	LOW_LEVEL				= 4;
+	public static final short	LOW_LEVEL		= 1;
 
 	/**
 	 * Current power source level: 66%.
 	 */
-	public static final short	MIDDLE_LEVEL			= 8;
+	public static final short	MIDDLE_LEVEL	= 2;
 
 	/**
 	 * Current power source level: 100%.
 	 */
-	public static final short	FULL_LEVEL				= 12;
+	public static final short	FULL_LEVEL		= 3;
 
 	/**
-	 * Power source: Constant (mains) power.
-	 */
-	public static final short	CONSTANT_POWER			= 1;
-
-	/**
-	 * Power source: Rechargeable battery.
-	 */
-	public static final short	RECHARGEABLE_BATTERY	= 2;
-
-	/**
-	 * Power source: Disposable battery.
-	 */
-	public static final short	DISPOSABLE_BATTERY		= 4;
-
-	/**
+	 * Returns the current power mode.
+	 * 
 	 * @return the current power mode.
 	 */
 	public short getCurrentPowerMode();
 
 	/**
-	 * @return the current power source.
+	 * Returns the current power source field of the Power Descriptor.
+	 * 
+	 * @return the current power source field of the Power Descriptor.
 	 */
 	public short getCurrentPowerSource();
 
 	/**
-	 * @return the current power source level.
+	 * Checks if the currently selected power source is the mains power.
+	 * 
+	 * @return {@code true} if the currently selected power source is the mains
+	 *         power.
+	 */
+	public boolean isMainsPower();
+
+	/**
+	 * Checks if the currently selected power source is the disposable battery.
+	 * 
+	 * @return {@code true} if the currently selected power source is the
+	 *         disposable battery.
+	 */
+	public boolean isDisposableBattery();
+
+	/**
+	 * Checks if the currently selected power source is the rechargeable
+	 * battery.
+	 * 
+	 * @return {@code true} if the currently selected power source is the
+	 *         rechargeable battery.
+	 */
+	public boolean isRechargableBattery();
+
+	/**
+	 * Returns the current power source level.
+	 * 
+	 * @return the current power source level. May be one of
+	 *         {@link #CRITICAL_LEVEL}, {@link #LOW_LEVEL},
+	 *         {@link #MIDDLE_LEVEL}, {@link #FULL_LEVEL}.
 	 */
 	public short getCurrentPowerSourceLevel();
 
 	/**
+	 * Checks if constant (mains) power is available.
+	 * 
 	 * @return true if constant (mains) power is available or false otherwise.
 	 */
 	public boolean isConstantMainsPowerAvailable();
 
 	/**
-	 * @return true if disposable battery is available or false otherwise.
+	 * Checks if a disposable battery is available.
+	 * 
+	 * @return true if a disposable battery is available or false otherwise.
 	 */
 	public boolean isDisposableBatteryAvailable();
 
 	/**
-	 * @return true if rechargeable battery is available or false otherwise.
+	 * Checks if a rechargeable battery is available.
+	 * 
+	 * @return true if a rechargeable battery is available or false otherwise.
 	 */
 	public boolean isRechargableBatteryAvailable();
+
+	/**
+	 * Checks if synchronized with the receiver on-when-idle subfield of the
+	 * node descriptor.
+	 * 
+	 * @return {@code true} if the Current Power Mode field is synchronized on
+	 *         idle.
+	 */
+	public boolean isSyncronizedWithOnIdle();
+
+	/**
+	 * Checks if the Current Power Mode field is periodically on.
+	 * 
+	 * @return {@code true} if the Current Power Mode field is periodically on.
+	 */
+	public boolean isPeriodicallyOn();
+
+	/**
+	 * Checks if the receiver is on when the device is simulated.
+	 * 
+	 * @return {@code true} if the Current Power Mode field tells that the
+	 *         receiver is on when the device is stimulated by pressing a
+	 *         button, for instance.
+	 */
+	public boolean isOnWhenStimulated();
 
 }

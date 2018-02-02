@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<profiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zcl.xsd">
+  <profile profileId="0x0007" name="profileName">
+    <clusters>
+      <cluster id="0x0003" name="First Cluster">
+        <server>
+          <attribute id="0x0008" name="Writable Unsigned Integer 16 Attribute" reportable="false" readOnly="false" dataType="ZigBeeUnsignedInteger16" />
+          <attribute id="0x0006" name="ReadOnly Boolean and Reportable Attribute" reportable="true" readOnly="true" dataType="ZigBeeBoolean" />
+          <command id="0x03" name="On" responseId="0x07" zclFrame="0f0e0d0c0b0a09" />
+        </server>
+        <client>
+          <!-- This is, for example the general command used as an answer to server command id 0x03 -->
+          <command id="0x07" name="A General Command Example" isClusterSpecificCommand="false" zclFrame="0f0e0d0c0b0a09" />
+        </client>
+      </cluster>
+
+      <cluster id="0x0004" name="Another Cluster">
+        <server>
+          <attribute id="0x0008" name="Attribute1" reportable="false" readOnly="true" dataType="ZigBeeUnsignedInteger16" />
+          <attribute id="0x0006" name="Attribute2" reportable="true" readOnly="false" dataType="ZigBeeBoolean" />
+          <attribute id="0x0007" name="Attribute3" reportable="true" readOnly="false" dataType="ZigBeeCharacterString" />
+          <command id="0x03" name="commandName" responseId="0x07" zclFrame="0f0e0d0c0b0a09" />
+        </server>
+        <client>
+          <command id="0x07" name="commandName1" zclFrame="0ff00fff01" />
+        </client>
+      </cluster>
+    </clusters>
+  </profile>
+</profiles>

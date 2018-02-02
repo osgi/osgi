@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1139.6722"
+   height="227.92398"
+   id="svg4487"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="RefinedDriver-2.svg"
+   inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4489">
+    <filter
+       id="filter7801-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7731"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend"
+       style="overflow:visible">
+      <path
+         id="path4577"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7731-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-5"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-8"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7731-7-3"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733-6-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735-1-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737-4-3"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739-2-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7731-7-3-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733-6-1-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735-1-2-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737-4-3-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739-2-3-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="589.67648"
+     inkscape:cy="-0.70194846"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showborder="true"
+     inkscape:window-width="1516"
+     inkscape:window-height="881"
+     inkscape:window-x="-4"
+     inkscape:window-y="271"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata4492">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(145.90475,-18.147903)">
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-8"
+       width="172.67781"
+       height="87"
+       x="-145.90475"
+       y="159.07188"
+       ry="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-8-3"
+       width="172.67781"
+       height="87"
+       x="336.94681"
+       y="159.07188"
+       ry="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.20865691px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 7.3687677,203.61216 376.6910323,0"
+       id="path5127"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       x="2"
+       y="507"
+       width="140"
+       height="50"
+       pointer-events="none"
+       id="rect277"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731)"
+       transform="matrix(0.99979765,0,0,1.0671623,-131.55128,-365.15843)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="12px"
+       id="g15"
+       style="font-size:12px;text-anchor:middle"
+       transform="translate(-401.31399,-346.69875)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="337"
+         y="536"
+         id="text17"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           id="tspan3038">ZigBee Base Driver</tspan>
+      </text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.46807575px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 244.96668,185.93361 56.49519,0"
+       id="path5127-6-1"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-2"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-8-1)"
+       transform="matrix(0.66590658,0,0,1.0028937,-42.68708,67.404671)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="12px"
+       id="g431"
+       style="font-size:12px;text-anchor:middle"
+       transform="translate(-181.66323,-171.37897)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="334.28125"
+         y="361"
+         id="text433"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+      <text
+         x="340"
+         y="375"
+         id="text435"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           id="tspan3036">ZigBeeEndpoint</tspan>
+      </text>
+    </g>
+    <path
+       style="stroke-linejoin:miter"
+       d="m 222.94894,228.40336 c 0.85944,-0.94431 9.07849,-9.93239 18.26454,-19.97352 l 16.7019,-18.25662 0.34131,11.44632 c 0.18773,6.29548 0.37255,15.28357 0.41071,19.97352 l 0.0694,8.52721 -18.67525,0 -18.67524,0 1.56264,-1.71691 z"
+       id="path7438"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       ry="0"
+       y="159.07188"
+       x="821.08966"
+       height="87"
+       width="172.67781"
+       id="rect11730-5-8-3-4"
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.16567039px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 493.81348,203.61216 350.37305,0"
+       id="path5127-6"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-2-9"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-8-1-5)"
+       transform="matrix(0.66590658,0,0,1.0028937,440.30491,67.405111)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica"
+       id="text433-7"
+       y="189.62126"
+       x="635.61005"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan3040">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+       id="text435-9"
+       y="203.62126"
+       x="639.28387"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         id="tspan3078">AbstractDevice</tspan>
+    </text>
+    <path
+       style="stroke-linejoin:miter"
+       d="m 705.94094,228.50822 c 0.85944,-0.94431 9.07849,-9.93239 18.26454,-19.97352 l 16.7019,-18.25662 0.34131,11.44632 c 0.18773,6.29548 0.37255,15.28357 0.41071,19.97352 l 0.0694,8.52721 -18.67525,0 -18.67524,0 1.56264,-1.71691 z"
+       id="path7438-5"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       transform="matrix(0.99979765,0,0,1.0671623,835.44314,-365.15842)"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-7-3)"
+       id="rect277-2-1"
+       pointer-events="none"
+       height="50"
+       width="140"
+       y="507"
+       x="2"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       transform="translate(555.68044,-334.69874)"
+       style="font-size:12px;text-anchor:middle"
+       id="g15-2-1"
+       font-size="12px"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         id="text17-1-3"
+         y="522"
+         x="285">Application interacting</text>
+      <text
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         y="536"
+         x="285"
+         id="text3817">with an abstraction layer</text>
+    </g>
+    <rect
+       x="2"
+       y="507"
+       width="140"
+       height="50"
+       pointer-events="none"
+       id="rect277-2"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-7)"
+       transform="matrix(0.99979765,0,0,1.0671623,351.30028,-365.15841)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="12px"
+       id="g15-2"
+       style="font-size:12px;text-anchor:middle"
+       transform="translate(81.53758,-346.69873)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="325"
+         y="536"
+         id="text17-1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Refining Driver</text>
+    </g>
+    <rect
+       ry="0"
+       y="18.147903"
+       x="336.37537"
+       height="87"
+       width="172.67781"
+       id="rect11730-5-8-3-4-4"
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1972754px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 301.5272,186.54926 0,-124.802725 53.37416,0"
+       id="path3795"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       transform="matrix(0.99979765,0,0,1.0671623,350.72886,-506.0824)"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-7-3-1)"
+       id="rect277-2-1-8"
+       pointer-events="none"
+       height="50"
+       width="140"
+       y="507"
+       x="2"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       transform="translate(72.96616,-481.62272)"
+       style="font-size:12px;text-anchor:middle"
+       id="g15-2-1-8"
+       font-size="12px"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         id="text17-1-3-2"
+         y="528"
+         x="283">Application interacting</text>
+      <text
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         y="542"
+         x="283"
+         id="text3815">with the base driver</text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="15.373825"
+       y="200.33945"
+       id="text11764-1"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7"
+         x="15.373825"
+         y="200.33945"
+         style="font-size:12px">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="86.135941"
+       y="200.55191"
+       id="text11764-5-1-4"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-5-5-0"
+         x="86.135941"
+         y="200.55191"
+         style="font-size:12px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="34.516678"
+       y="200.33945"
+       id="text11764-1-9"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-4"
+         x="34.516678"
+         y="200.33945"
+         style="font-size:12px">imports</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="259.37384"
+       y="201.05374"
+       id="text11764-1-7"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-40"
+         x="259.37384"
+         y="201.05374"
+         style="font-size:12px">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="330.13596"
+       y="201.2662"
+       id="text11764-5-1-4-9"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-5-5-0-4"
+         x="330.13596"
+         y="201.2662"
+         style="font-size:12px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="270.51669"
+       y="201.05374"
+       id="text11764-1-9-8"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-4-8"
+         x="270.51669"
+         y="201.05374"
+         style="font-size:12px">is used by</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="259.51666"
+       y="181.35236"
+       id="text11764-1-7-2"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-40-4"
+         x="259.51666"
+         y="181.35236"
+         style="font-size:12px">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="327.70734"
+       y="57.850533"
+       id="text11764-5-1-4-9-5"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-5-5-0-4-5"
+         x="327.70734"
+         y="57.850533"
+         style="font-size:12px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="261.9166"
+       y="131.10869"
+       id="text11764-1-9-8-1"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-4-8-7"
+         x="261.9166"
+         y="131.10869"
+         style="font-size:12px">is used by</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="497.94525"
+       y="199.76801"
+       id="text11764-1-1"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-1"
+         x="497.94525"
+         y="199.76801"
+         style="font-size:12px">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="568.70734"
+       y="199.98047"
+       id="text11764-5-1-4-5"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-5-5-0-2"
+         x="568.70734"
+         y="199.98047"
+         style="font-size:12px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="517.08813"
+       y="199.76801"
+       id="text11764-1-9-7"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-4-6"
+         x="517.08813"
+         y="199.76801"
+         style="font-size:12px">reifies</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="742.23096"
+       y="200.4823"
+       id="text11764-1-14"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-2"
+         x="742.23096"
+         y="200.4823"
+         style="font-size:12px">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="812.9931"
+       y="200.69476"
+       id="text11764-5-1-4-3"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-5-5-0-22"
+         x="812.9931"
+         y="200.69476"
+         style="font-size:12px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="753.37384"
+       y="200.4823"
+       id="text11764-1-9-1"
+       sodipodi:linespacing="7%"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceExport-2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan11766-7-4-68"
+         x="753.37384"
+         y="200.4823"
+         style="font-size:12px">is used by</tspan></text>
+  </g>
+</svg>

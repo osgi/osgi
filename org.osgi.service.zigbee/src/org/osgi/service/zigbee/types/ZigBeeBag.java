@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,53 +16,42 @@
 
 package org.osgi.service.zigbee.types;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents a ZigBeeBag as described in the ZigBee
- * Specification.
+ * A singleton class that represents the 'Bag' data type, as it is defined in
+ * the ZigBee Cluster Library specification.
  * 
- * @version 1.0
+ * @author $Id$
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeBag implements ZCLDataTypeDescription {
+public class ZigBeeBag
+		implements ZCLDataTypeDescription {
 
-	private static ZigBeeBag	singletonInstance	= new ZigBeeBag();
+	private final static ZigBeeBag instance = new ZigBeeBag();
 
 	private ZigBeeBag() {
-
 	}
 
 	/**
+	 * Gets a singleton instance of this class.
+	 * 
 	 * @return the singleton instance.
 	 */
 	public static ZigBeeBag getInstance() {
-		return singletonInstance;
-	}
-
-	public boolean isAnalog() {
-		// TODO Auto-generated method stub
-		return false;
+		return instance;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Bag";
+	}
+
+	public boolean isAnalog() {
+		return false;
 	}
 
 	public Class getJavaDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getInvalidNumber() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -70,11 +59,4 @@ public class ZigBeeBag implements ZCLDataTypeDescription {
 		return ZigBeeDataTypes.BAG;
 	}
 
-	public void serialize(Object param, ByteArrayOutputStream outdata) {
-		ZigBeeDataTypes.encode(ZigBeeDataTypes.BAG, param, outdata);
-	}
-
-	public Object deserialize(ByteArrayInputStream data) {
-		return ZigBeeDataTypes.decode(ZigBeeDataTypes.BAG, data);
-	}
 }

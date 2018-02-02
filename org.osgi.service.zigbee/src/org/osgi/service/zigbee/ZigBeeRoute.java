@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,59 +17,67 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents an entry of the RoutingTableList (see Table 2.128
- * RoutingTableList Record Format in ZIGBEE SPECIFICATION:
- * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
+ * This interface represents an entry of the RoutingTableList
+ * <p>
+ * See Table 2.128 RoutingTableList Record Format in ZIGBEE SPECIFICATION:
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
- * @version 1.0
+ * @noimplement
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeRoute {
 
 	/**
-	 * Constant value representing an active route
+	 * Constant value representing an active route.
 	 */
-	public static final int	ACTIVE				= 0x00;
+	public static final int	ACTIVE				= 0xf0;
 
 	/**
-	 * Constant value representing a route that is under discovery
+	 * Constant value representing a route that is under discovery.
 	 */
-	public static final int	DISCOVERY_UNDERWAY	= 0x01;
+	public static final int	DISCOVERY_UNDERWAY	= 0xf1;
 
 	/**
-	 * Constant value representing a failed route discovery
+	 * Constant value representing a failed route discovery.
 	 */
-	public static final int	DISCOVERY_FAILED	= 0x02;
+	public static final int	DISCOVERY_FAILED	= 0xf2;
 
 	/**
-	 * Constant value representing an inactive route
+	 * Constant value representing an inactive route.
 	 */
-	public static final int	INACTIVE			= 0x03;
+	public static final int	INACTIVE			= 0xf3;
 
 	/**
-	 * Constant value representing a route which is under validation
+	 * Constant value representing a route which is under validation.
 	 */
-	public static final int	VALIDATION_UNDERWAY	= 0x04;
+	public static final int	VALIDATION_UNDERWAY	= 0xf4;
 
 	/**
-	 * @return the Service.PID of the {@link ZigBeeNode} as destination of this
-	 *         route entry
+	 * Returns the service PID of the {@link ZigBeeNode} as destination of this
+	 * route entry.
+	 * 
+	 * @return the service PID of the {@link ZigBeeNode} as destination of this
+	 *         route entry.
 	 */
 	public String getDestination();
 
 	/**
-	 * @return the Service.PID of the {@link ZigBeeNode} to send the data for
-	 *         reaching the destination
+	 * Returns the service PID of the {@link ZigBeeNode} to send the data for
+	 * reaching the destination.
+	 * 
+	 * @return the service PID of the {@link ZigBeeNode} to send the data for
+	 *         reaching the destination.
 	 */
 	public String getNextHop();
 
 	/**
-	 * @return the status of the RoutingLink as defined by ZigBee Specification:
-	 *         ACTIVE, DISCOVERY_UNDERWAY, DISCOVERY FAILED, INACTIVE,
-	 *         VALIDATION_UNDERDAY
+	 * Returns the status of this route.
+	 * 
+	 * @return the status of this route (or routing link) as defined by ZigBee
+	 *         Specification: {@link #ACTIVE}, {@link #DISCOVERY_UNDERWAY},
+	 *         {@link #DISCOVERY_FAILED}, {@link #INACTIVE},
+	 *         {@link #VALIDATION_UNDERWAY}.
 	 */
 	public int getStatus();
 

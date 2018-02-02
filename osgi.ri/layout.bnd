@@ -136,6 +136,7 @@ build.residential.impls = \
 	org.osgi.impl.service.upnp.cd, \
 	org.osgi.impl.service.usbinfo, \
 	org.osgi.impl.service.useradmin, \
+	org.osgi.impl.service.zigbee, \
     org.osgi.util.function, \
     org.osgi.util.promise, \
     org.osgi.util.xml

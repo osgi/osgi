@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,60 +18,76 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a simple descriptor as described in the ZigBee
- * Specification The Simple Descriptor contains information specific to each
- * endpoint present in the node.
+ * Specification.
+ * <p>
+ * The Simple Descriptor contains information specific to each endpoint present
+ * in the node.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeSimpleDescriptor {
 
 	/**
+	 * Returns the application profile id.
+	 * 
 	 * @return the application profile id.
 	 */
 	public int getApplicationProfileId();
 
 	/**
-	 * @return device id as defined per profile.
+	 * Returns the application device id as defined per profile.
+	 * 
+	 * @return the application device id as defined per profile.
 	 */
 	public int getApplicationDeviceId();
 
 	/**
+	 * Returns the endpoint for which this descriptor is defined.
+	 * 
 	 * @return the endpoint for which this descriptor is defined.
 	 */
 	public short getEndpoint();
 
 	/**
-	 * @return the version of the application.
+	 * Returns the version of the endpoint application.
+	 * 
+	 * @return the version of the endpoint application.
 	 */
 	public byte getApplicationDeviceVersion();
 
 	/**
-	 * @return An array of input(server) cluster identifiers, returns an empty
-	 *         array if does not provides any inputs(servers) clusters.
+	 * Returns an array of input (server) cluster identifiers.
+	 * 
+	 * @return an array of input (server) cluster identifiers, returns an empty
+	 *         array if does not provides any input (server) clusters.
 	 */
 	public int[] getInputClusters();
 
 	/**
-	 * @return An array of output(client) cluster identifiers, returns an empty
-	 *         array if does not provides any outputs(clients) clusters.
+	 * Returns an array of output (client) cluster identifiers.
+	 * 
+	 * @return an array of output (client) cluster identifiers, returns an empty
+	 *         array if does not provides any output (client) clusters.
 	 */
 	public int[] getOutputClusters();
 
 	/**
-	 * @param clusterId the cluster identifier
-	 * @return true if and only if the endpoint implements the given cluster id
-	 *         as an input cluster
+	 * Checks if this endpoint implements the given cluster id as an input
+	 * cluster.
+	 * 
+	 * @param clusterId the cluster identifier.
+	 * @return true if and only if this endpoint implements the given cluster id
+	 *         as an input cluster.
 	 */
 	public boolean providesInputCluster(int clusterId);
 
 	/**
-	 * @param clusterId the cluster identifier
-	 * @return true if and only if the endpoint implements the given cluster id
-	 *         as an output cluster
+	 * Checks if this endpoint implements the given cluster id as an output
+	 * cluster.
+	 * 
+	 * @param clusterId the cluster identifier.
+	 * @return true if and only if this endpoint implements the given cluster id
+	 *         as an output cluster.
 	 */
 	public boolean providesOutputCluster(int clusterId);
 

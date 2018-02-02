@@ -363,6 +363,16 @@
           with controllers connected to a serial port. See <xref
           linkend="service.serial"/>.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis>Device Service Specification for ZigBee™
+          Technology</emphasis> - This specification defines how OSGi bundles
+          can be developed to discover and control ZigBee devices on the one
+          hand, and act as ZigBee devices and interoperate with ZigBee clients
+          on the other hand. In particular, a Java mapping is provided for the
+          standard representation of ZigBee devices and ZigBee clusters. See
+          <xref linkend="service.zigbee"/>.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -402,9 +412,9 @@
     linkend="residential.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 6</title>
+      <title>OSGi Core Release 7</title>
 
-      <para>This specification is based on the OSGi Core Release 6. This
+      <para>This specification is based on the OSGi Core Release 7. This
       specification can be downloaded from:</para>
 
       <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
@@ -690,6 +700,20 @@
 
               <entry><code><xref endterm="org.osgi.service.serial-version"
               linkend="service.serial"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.zigbee"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.zigbee"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.descriptions"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.descriptors"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.types"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.zigbee-version"
+              linkend="service.zigbee"/></code></entry>
             </row>
 
             <row>

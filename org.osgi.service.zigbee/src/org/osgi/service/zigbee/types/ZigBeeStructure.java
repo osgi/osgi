@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,53 +16,42 @@
 
 package org.osgi.service.zigbee.types;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents a ZigBeeStructure as described in the ZigBee
- * Specification.
+ * A singleton class that represents the 'Structure' data type, as it is defined
+ * in the ZigBee Cluster Library specification.
  * 
- * @version 1.0
+ * @author $Id$
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeStructure implements ZCLDataTypeDescription {
+public class ZigBeeStructure
+		implements ZCLDataTypeDescription {
 
-	private static ZigBeeStructure	singletonInstance	= new ZigBeeStructure();
+	private final static ZigBeeStructure instance = new ZigBeeStructure();
 
 	private ZigBeeStructure() {
-
 	}
 
 	/**
+	 * Gets a singleton instance of this class.
+	 * 
 	 * @return the singleton instance.
 	 */
 	public static ZigBeeStructure getInstance() {
-		return singletonInstance;
-	}
-
-	public boolean isAnalog() {
-		// TODO Auto-generated method stub
-		return false;
+		return instance;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Structure";
+	}
+
+	public boolean isAnalog() {
+		return false;
 	}
 
 	public Class getJavaDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getInvalidNumber() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -70,11 +59,4 @@ public class ZigBeeStructure implements ZCLDataTypeDescription {
 		return ZigBeeDataTypes.STRUCTURE;
 	}
 
-	public void serialize(Object param, ByteArrayOutputStream outdata) {
-		ZigBeeDataTypes.encode(ZigBeeDataTypes.STRUCTURE, param, outdata);
-	}
-
-	public Object deserialize(ByteArrayInputStream data) {
-		return ZigBeeDataTypes.decode(ZigBeeDataTypes.STRUCTURE, data);
-	}
 }

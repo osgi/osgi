@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,58 +17,66 @@
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.util.promise.Promise;
 
 /**
- * This interface represents a ZCLAttribute
+ * This interface represents a ZCLAttribute.
+ * <p>
+ * Its extends ZCLAttributeInfo to add methods to read and write the ZCL
+ * attribute from and to the ZigBee node with respectively the
+ * {@link #getValue()} and {@link #setValue(Object)} methods.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
-public interface ZCLAttribute {
+public interface ZCLAttribute extends ZCLAttributeInfo {
 
 	/**
 	 * Property key for the optional attribute id of a ZigBee Event Listener.
 	 */
-	public final static String	ID	= "zigbee.attribute.id";
+	public final static String ID = "zigbee.attribute.id";
 
 	/**
-	 * @return the attribute identifier (i.e. the attribute's ID)
+	 * Gets the current value of the attribute.
+	 * 
+	 * <p>
+	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
+	 * specification, a <em>Read attributes</em> command can have the following
+	 * status: {@link ZCLException#SUCCESS},
+	 * {@link ZCLException#UNSUPPORTED_ATTRIBUTE}, or
+	 * {@link ZCLException#INVALID_VALUE}.
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         The response object returned by {@link Promise#getValue()} is the
+	 *         requested attribute value in the relevant Java data type (see
+	 *         {@link #getDataType()} method and
+	 *         {@link ZCLDataTypeDescription#getJavaDataType()}) or in
+	 *         {@code byte[]} if {@link #getDataType()} returns null. The
+	 *         response object is null if an
+	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE} or
+	 *         {@link ZCLException#INVALID_VALUE} error occurs and the adequate
+	 *         ZCLException is returned by {@link Promise#getFailure()} .
 	 */
-	public int getId();
+	public Promise/* <Object> */ getValue();
 
 	/**
-	 * Gets the current value of the attribute. <br>
+	 * Sets the current value of the attribute.
 	 * 
-	 * The response object given to the handler is the attribute's Java data
-	 * type (see {@link #getDataType()} method) that will contain the current
-	 * attribute value. In case of a failure, onFailure is called with a
-	 * ZCLException.
+	 * <p>
+	 * As described in section <em>2.4.3.3 Effect on Receipt</em> of the ZCL
+	 * specification, a <em>Write attributes</em> command may return the
+	 * following status: {@link ZCLException#SUCCESS},
+	 * {@link ZCLException#UNSUPPORTED_ATTRIBUTE},
+	 * {@link ZCLException#INVALID_DATA_TYPE}, {@link ZCLException#READ_ONLY},
+	 * {@link ZCLException#INVALID_VALUE}, or
+	 * {@link ZDPException#NOT_AUTHORIZED}.
 	 * 
-	 * @param handler the handler
-	 * @throws ZCLException
+	 * @param value the Java value to set.
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getFailure()} returns null if the attribute value
+	 *         has been successfully written. The adequate ZigBeeException is
+	 *         returned otherwise.
 	 */
-	public void getValue(ZigBeeHandler handler) throws ZCLException;
-
-	/**
-	 * Sets the current value of the attribute. <br>
-	 * 
-	 * The response object given to the handler is a boolean set to true if the
-	 * attribute value has been written or false otherwise. In case of a
-	 * failure, onFailure is called with a ZCLException.
-	 * 
-	 * @param value the Java value to set
-	 * @param handler the handler
-	 */
-	public void setValue(Object value, ZigBeeHandler handler);
-
-	/**
-	 * @return the Attribute data type. It may be null if the data type is not
-	 *         retrievable (issue with read attribute and discover attributes
-	 *         commands).
-	 */
-	public ZCLDataTypeDescription getDataType();
+	public Promise/* <Void> */ setValue(Object value);
 
 }

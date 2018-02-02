@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,14 +16,21 @@
 
 package org.osgi.service.zigbee;
 
+import java.util.Map;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.util.promise.Promise;
+
 /**
- * This interface represents a ZCL Cluster
+ * This interface represents a ZCL Cluster. Along with methods to retrieve the
+ * cluster information, like its ID, it provides methods to asynchronously send
+ * commands to the cluster and other methods that wrap most of the ZCL general
+ * commands.
  * 
- * @version 1.0
+ * <p>
+ * Every asynchronous method defined in this interface returns back its result
+ * through the use of a {@link Promise}.
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLCluster {
 
@@ -47,106 +54,230 @@ public interface ZCLCluster {
 	public final static String	NAME	= "zigbee.cluster.name";
 
 	/**
-	 * @return the cluster identifier
+	 * Returns the identifier of this cluster.
+	 * 
+	 * @return the cluster identifier.
 	 */
 	int getId();
 
 	/**
-	 * Get the cluster attribute identified corresponding to given attributeId.
+	 * Returns the cluster {@link ZCLAttribute} identifying that matches the
+	 * given attributeId. {@link ZCLCluster#getAttribute(int, int)} method
+	 * retrieves manufacturer-specific attributes.
 	 * 
-	 * @param attributeId an Attribute identifier
-	 * @param handler the response handler
+	 * @param attributeId the ZCL attribute identifier.
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         In case of success in getting the attribute, the promise will be
+	 *         resolved with a {@link ZCLAttribute} instance. If attributeId do
+	 *         not exist in the cluster, then the promise fails with a
+	 *         {@link ZCLException} with status code
+	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}.
 	 */
-	void getAttribute(int attributeId, ZigBeeHandler handler);
+	Promise /* <ZCLAttribute> */ getAttribute(int attributeId);
 
 	/**
-	 * Get an array of all this Cluster's Attributes.
+	 * Retrieves a {@link ZCLAttribute} object for a manufacturer specific
+	 * attribute. If the {@code code} parameter is -1 it behaves like the
+	 * {@link ZCLCluster#getAttribute(int)} and retrieves the non-manufacturer
+	 * specific attribute {@code attributeId}.
 	 * 
-	 * @param handler the response handler
+	 * @param attributeId the ZCL attribute identifier
+	 * @param code the manufacturer code of the attribute to be retrieved. If -1
+	 *        is used, the method behaves exactly like
+	 *        {@link ZCLCluster#getAttribute(int)}
+	 * 
+	 * @return A {@link Promise} representing the completion of this
+	 *         asynchronous call. The promise will be resolved with the
+	 *         requested {@link ZCLAttribute}. If a command such as ZCL Read
+	 *         Attributes or Discover Attributes has already been called once by
+	 *         the ZigBee host, the Promise can be quickly resolved. The
+	 *         resolution may be longer the first time one of the ZCLCluster
+	 *         methods to get one or all attributes is successfully called. If
+	 *         attributeId do not exist in the cluster, then the promise fails
+	 *         with a {@link ZCLException} with status code
+	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}
 	 */
-	void getAttributes(ZigBeeHandler handler);
+	Promise /* <ZCLAttribute> */ getAttribute(int attributeId, int code);
 
 	/**
-	 * Read a list of attributes. <br>
+	 * Returns an array of {@link ZCLAttribute} objects representing all this
+	 * cluster's attributes.
 	 * 
-	 * As described in "Table 2.11 APSME-GET.confirm Parameters" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * APSME-GET.confirm can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * <p>
+	 * This method returns only standard attributes. To retrieve manufacturer
+	 * specific attributes use method {@link ZCLCluster#getAttributes(int)}
 	 * 
-	 * The response object given to the handler is a Map. For each Map entry,
-	 * the key is the attribute identifier of Integer type and the value is the
-	 * associated attribute value in the corresponding Java wrapper type (or
-	 * null if an UNSUPPORTED_ATTRIBUTE occurred).
-	 * 
-	 * @param attributesIds An array of attributes ids
-	 * @param handler the response handler
+	 * @return A {@link Promise} representing the completion of this
+	 *         asynchronous call. The promise will be resolved with an array of
+	 *         {@link ZCLAttribute} objects.
+	 *
 	 */
-	void readAttributes(int[] attributesIds, ZigBeeHandler handler);
+	Promise /* <ZCLAttribute[]> */ getAttributes();
 
 	/**
-	 * Write a list of attributes. <br>
+	 * Returns an array of {@link ZCLAttribute} objects representing all the
+	 * specific manufacturer attributes available on the cluster.
 	 * 
-	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * APSME-SET.confirm can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * <p>
+	 * This method behaves like the {@link ZCLCluster#getAttributes()} method if
+	 * the passed {@code} value is -1.
 	 * 
-	 * The response object given to the handler is a Map. For each Map entry,
-	 * the key is the attribute identifier of Integer type and the value is the
-	 * associated attribute status, i.e. SUCCESS, INVALID_VALUE, etc. In case
-	 * undivided equals false, onSuccess() is always called to notify the
-	 * response. In case undivided equals true and an error has occurred,
-	 * onFailure is called with a ZCLException.
+	 * @param code The the manufacturer code. Pass -1 to retrieve standard (that
+	 *        is, non-manufacturer specific) attributes.
 	 * 
-	 * @param undivided The write command is undivided or not
-	 * @param attributesRecords An array of attributes records
-	 * @param handler the response handler
+	 * @return A {@link Promise} representing the completion of this
+	 *         asynchronous call. The promise will be resolved with an array of
+	 *         {@link ZCLAttribute} objects. If a command such as ZCL Read
+	 *         Attributes or Discover Attributes has already been called once by
+	 *         the ZigBee host, the Promise can be quickly resolved. The
+	 *         resolution may be longer the first time one of the ZCLCluster
+	 *         methods to get one or all attributes is successfully called.
 	 */
-	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeHandler handler);
+	Promise /* <ZCLAttribute[]> */ getAttributes(int code);
 
 	/**
-	 * Get an array of all the commandIds of the ZigBeeCluster. <br>
+	 * Reads a list of attributes by issuing a ZCL Read Attributes command. The
+	 * attribute list is provided in terms of an array of
+	 * {@link ZCLAttributeInfo} objects.
 	 * 
-	 * This method is implemented for devices implementing a version equal or
-	 * later than 1.2 of the Home Automation Profile or other profiles that
-	 * enable the discovery of command IDs as a general command. When the device
-	 * implements a profile that does not support this feature, the method call
-	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED. <br>
+	 * <p>
+	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
+	 * specification, a <em>Read Attributes</em> command results in a list of
+	 * attribute status records comprising a mix of successful and unsuccessful
+	 * attribute reads.
 	 * 
-	 * The response object given to the handler is a List containing the
-	 * commandIds.
+	 * <p>
+	 * The method returns a promise. The object used to resolve the
+	 * {@link Promise} is a {@code Map<Integer,
+	 * ZCLReadStatusRecord>}. For each Map entry, the key contains the attribute
+	 * identifier and the value, a ZigBee Read Attributes Status Record, which
+	 * is made of the status of the read of this attribute, the ZigBee data type
+	 * of the attribute and the attribute value in the corresponding Java
+	 * wrapper type (or null in case of an unsupported attribute or in case of
+	 * an invalid value). For attributes which data type serialization is not
+	 * supported (that is, {@link ZCLDataTypeDescription#getJavaDataType()}
+	 * returns null), the value is of type byte[].
 	 * 
-	 * @param handler the response handler
+	 * <p>
+	 * When the list of attributes do not fit into a single ZCLFrame, ZigBee
+	 * clusters truncate the list of attributes returned in the response. The
+	 * client has to check the Map of results to send a new request for the
+	 * attributes which values are missing. In export situations, the base
+	 * driver may truncate the read attribute command response sent to networked
+	 * devices in order to obey the rules.
+	 * 
+	 * <p>
+	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
+	 * must be standard attributes or belong to the same manufacturer code,
+	 * otherwise the promise must fail with a {@link IllegalArgumentException}
+	 * exception.
+	 * 
+	 * @param attributes An array of {@link ZCLAttributeInfo}.
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         The promise may fail with an {@link IllegalArgumentException} if
+	 *         the array size is 0 or if one of the array entries is
+	 *         {@code null} or not valid. An {@link IllegalArgumentException} is
+	 *         also thrown if some of {@link ZCLAttributeInfo} are manufacturer
+	 *         specific and other are standard, or even if there are mix of
+	 *         attributes with different manufacturer specific code. If the
+	 *         passed argument is {@code null} the promise must fail with a
+	 *         {@code NullPointerException}.
+	 * 
 	 */
-	void getCommandIds(ZigBeeHandler handler);
+	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
 
 	/**
-	 * Invokes the action. The handler will provide the invocation response in
-	 * an asynchronously way.
+	 * Writes a set of attributes on the cluster using the ZCL <em>Write
+	 * Attributes</em> or the <em>Write Attributes Undivided</em> commands,
+	 * according to the passed {@code undivided} parameter.
+	 * 
+	 * <p>
+	 * The promise resolves with a {@code Map<Integer, Integer>}. If all the
+	 * attributes have been written successfully, the map is empty. In case of
+	 * failure in writing specific attribute(s), the map is filled with entries
+	 * related to those attributes. Every key is set with the id of an attribute
+	 * that was not written successfully, every value with the status returned
+	 * in the associated <em>write attribute response record</em> accordingly
+	 * re-mapped to one of the constants defined in the {@link ZCLException}
+	 * class.
+	 * 
+	 * <p>
+	 * According to the ZigBee Specification all the attributes must be standard
+	 * attributes or, if manufacturer-specific they must have the same
+	 * manufacturer code, otherwise an {@link IllegalArgumentException} occurs.
+	 * 
+	 * @param undivided {@code true} if an undivided write attributes command is
+	 *        requested, {@code false} if not.
+	 * @param attributesAndValues A {@code Map<ZCLAttributeInfo, Object>} of
+	 *        attributes and values to be written. For ZCLAttributeInfo objects
+	 *        which serialization is not supported (that is,
+	 *        {@code getDataType().getJavaDataType()} returns null), the value
+	 *        must be of type byte[].
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         If resolved successfully the promise may return an empty {@code
+	 *         Map<Integer, Integer>}. Otherwise the map will be filled with the
+	 *         status information about the attributes that were not written.
+	 *         The key represents the attributeID and the value the status
+	 *         present in the corresponding attribute record returned by the ZCL
+	 *         Write Attributes response message. The original ZCL status values
+	 *         must be re-mapped to the list of status values listed in the
+	 *         {@link ZCLException} class. The promise may fail with an
+	 *         {@link IllegalArgumentException} if some of
+	 *         {@link ZCLAttributeInfo} are manufacturer specific and other are
+	 *         standard, or even if there are mix of attributes with different
+	 *         manufacturer specific code.
+	 */
+	Promise /* <Map<Integer, Short>> */ writeAttributes(boolean undivided, Map attributesAndValues);
+
+	/**
+	 * Returns an array of all the commandIds of the ZCLCluster.
+	 * 
+	 * <p>
+	 * This method is implemented for ZCL devices compliant version equal or
+	 * later than 1.2 of the Home Automation Profile or other profiles that adds
+	 * a general command that enables discovery of command identifiers. When the
+	 * device implements a profile that does not support this feature, the
+	 * promise fails with a {@link ZCLException} with code
+	 * {@link ZCLException#GENERAL_COMMAND_NOT_SUPPORTED}.
+	 * 
+	 * @return A {@link Promise} representing the completion of this
+	 *         asynchronous call. The promise will be resolved with
+	 *         {@code short[]} containing the command identifiers supported by
+	 *         the cluster.
+	 */
+	Promise /* <short[]> */ getCommandIds();
+
+	/**
+	 * Invokes a command on this cluster with a {@link ZCLFrame}. The returned
+	 * promise provides the invocation response in an asynchronous way.
 	 * 
 	 * The source endpoint is not specified in this method call. To send the
 	 * appropriate message on the network, the base driver must generate a
 	 * source endpoint. The latter must not correspond to any exported endpoint.
 	 * 
-	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
+	 * @param frame The frame containing the command to issue.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler);
+	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame);
 
 	/**
-	 * This method is to be used by applications when the targeted device has to
-	 * distinguish between source endpoints of the message. For instance, alarms
-	 * cluster (see 3.11 Alarms Cluster in [ZCL]) generated events are
-	 * differently interpreted if they come from the oven or from the intrusion
-	 * alert system.
+	 * Invokes a command on this cluster. This method is to be used by
+	 * applications when the targeted device has to distinguish between source
+	 * endpoints of the message. For instance, alarms cluster (see 3.11 Alarms
+	 * Cluster in [ZCL]) generated events are differently interpreted if they
+	 * come from the oven or from the intrusion alert system.
 	 * 
-	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
+	 * @param frame The frame containing the command to issue.
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
+	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame, String exportedServicePID);
 
 }

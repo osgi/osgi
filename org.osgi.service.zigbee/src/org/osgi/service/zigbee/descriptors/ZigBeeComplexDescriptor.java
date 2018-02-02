@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,55 +18,71 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a Complex Descriptor as described in the ZigBee
- * Specification The Complex Descriptor contains extended information for each
- * of the device descriptions contained in the node. The use of the Complex
- * Descriptor is optional.
+ * Specification.
+ * <p>
+ * The Complex Descriptor contains extended information for each of the device
+ * descriptions contained in the node. The use of the Complex Descriptor is
+ * optional.
  * 
- * @version 1.0
+ * @noimplement
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeComplexDescriptor {
 
 	/**
+	 * Returns the language code used for character strings.
+	 * 
 	 * @return the language code used for character strings.
 	 */
 	public String getLanguageCode();
 
 	/**
+	 * Returns the encoding used by characters in the character set.
+	 * 
 	 * @return the encoding used by characters in the character set.
 	 */
 	public String getCharacterSetIdentifier();
 
 	/**
-	 * @return the manufacturer name field.
+	 * Returns the manufacturer name.
+	 * 
+	 * @return the manufacturer name.
 	 */
 	public String getManufacturerName();
 
 	/**
-	 * @return the model name field
+	 * Returns the model name.
+	 * 
+	 * @return the model name.
 	 */
 	public String getModelName();
 
 	/**
-	 * @return the serial number field.
+	 * Returns the serial number.
+	 * 
+	 * @return the serial number.
 	 */
 	public String getSerialNumber();
 
 	/**
-	 * @return the Device URL field.
+	 * Returns the Device URL.
+	 * 
+	 * @return the Device URL.
 	 */
 	public String getDeviceURL();
 
 	/**
+	 * Returns the icon field.
+	 * 
 	 * @return the icon field.
 	 */
 	public byte[] getIcon();
 
 	/**
-	 * @return the icon field URL.
+	 * Returns the icon URL.
+	 * 
+	 * @return the icon URL.
 	 */
 	public String getIconURL();
 

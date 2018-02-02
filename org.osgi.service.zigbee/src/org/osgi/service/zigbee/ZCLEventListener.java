@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,9 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a listener to events from ZigBee Device nodes
+ * This interface represents a listener to events from ZigBee Device nodes.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLEventListener {
 
@@ -56,28 +52,29 @@ public interface ZCLEventListener {
 	public final static String	REPORTABLE_CHANGE	= "zigbee.attribute.reportable.change";
 
 	/**
-	 * Callback method that is invoked for received events. This method must be
-	 * called asynchronously.
+	 * Notifies the reception of an event. This method is called asynchronously.
 	 * 
-	 * @param event a set of events
+	 * @param event a set of events.
 	 */
 	public void notifyEvent(ZigBeeEvent event);
 
 	/**
-	 * Notifies a failure, i.e. when either a
-	 * ZCLException.UNSUPPORTED_ATTRIBUTE, or a
-	 * ZCLException.UNREPORTABLE_ATTRIBUTE, or ZCLException.INVALID_VALUE, or
-	 * ZCLException.INVALID_DATA_TYPE status occurs.
+	 * Notifies that a failure has occurred.
+	 * <p>
+	 * That is, when either a {@link ZCLException#UNSUPPORTED_ATTRIBUTE},
+	 * {@link ZCLException#UNREPORTABLE_TYPE},
+	 * {@link ZCLException#INVALID_VALUE}, or
+	 * {@link ZCLException#INVALID_DATA_TYPE} status occurs.
 	 * 
 	 * @param e the ZCLException.
 	 */
 	public void onFailure(ZCLException e);
 
 	/**
-	 * TIMEOUT_PERIOD is sent from the attribute owner to the listening client
-	 * to say that the interval between reports may exceed MAX_INTERVAL.
+	 * Notifies that the timeout is elapsed. No event will be received in the
+	 * interval.
 	 * 
-	 * @param timeout in seconds
+	 * @param timeout the timeout in seconds.
 	 */
 	public void notifyTimeOut(int timeout);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,158 +16,103 @@
 
 package org.osgi.service.zigbee.descriptors;
 
+import org.osgi.service.zigbee.ZigBeeNode;
+
 /**
  * This interface represents a Node Descriptor as described in the ZigBee
- * Specification The Node Descriptor contains information about the capabilities
- * of the node.
+ * Specification.
+ * <p>
+ * The Node Descriptor contains information about the capabilities of the node.
  * 
- * @version 1.0
+ * @noimplement
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeNodeDescriptor {
 
 	/**
-	 * Frequency mask for the range 868 - 868.6 MHz.
+	 * Returns the logical type of the described node.
+	 * 
+	 * @return one of: {@link ZigBeeNode#COORDINATOR},
+	 *         {@link ZigBeeNode#ROUTER}, {@link ZigBeeNode#ZED}.
 	 */
-	public static final short	FREQUENCY_RANGE_868_MASK			= 1;
+	public short getLogicalType();
 
 	/**
-	 * Frequency mask for the range 902 - 928 MHz
-	 */
-	public static final short	FREQUENCY_RANGE_902_928_MASK		= 4;
-
-	/**
-	 * Frequency mask for the range 2400 - 2483.5 MHz
-	 */
-	public static final short	FREQUENCY_RANGE_2400_2483_MASK		= 8;
-
-	/**
-	 * Primary Trust Center server mask.
-	 */
-	public static final int		PRIMARY_TRUST_CENTER_MASK			= 1;
-
-	/**
-	 * Backup Trust Center server mask.
-	 */
-	public static final int		BACKUP_TRUST_CENTER_MASK			= 2;
-
-	/**
-	 * Primary Binding Table Cache server mask.
-	 */
-	public static final int		PRIMARY_BINDING_TABLE_CACHE_MASK	= 4;
-
-	/**
-	 * Backup Discovery Cache server mask.
-	 */
-	public static final int		BACKUP_BINDING_TABLE_CACHE_MASK		= 8;
-
-	/**
-	 * Frequency mask for the range 2400 - 2483.5 MHz
-	 */
-	public static final int		PRIMARY_DISCOVERY_CACHE_MASK		= 16;
-
-	/**
-	 * Network Manager server mask.
-	 */
-	public static final int		BACKUP_DISCOVERY_CACHE_MASK			= 32;
-
-	/**
-	 * Frequency mask for the range 2400 - 2483.5 MHz
-	 */
-	public static int			NETWORK_MANAGER_MASK				= 64;
-
-	/**
-	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
-	 *         ZigBeeNode.END_DEVICE.
-	 */
-	public Short getLogicalType();
-
-	/**
+	 * Checks if a complex descriptor is available.
+	 * 
 	 * @return true if a complex descriptor is available or false otherwise.
 	 */
 	public boolean isComplexDescriptorAvailable();
 
 	/**
+	 * Checks if a user descriptor is available.
+	 * 
 	 * @return true if a user descriptor is available or false otherwise.
 	 */
 	public boolean isUserDescriptorAvailable();
 
 	/**
-	 * @return an int corresponding to the 5 bits which indicate the frequency
-	 *         range. use the frequency mask constants to get info, which are
-	 *         the ranges actually supported.
+	 * Returns the radio frequency band the node is currently operating on.
+	 * 
+	 * @return returns the information about the radio frequency band the node
+	 *         is currently operating on.
 	 */
-	public short getFrequencyBand();
+	public ZigBeeFrequencyBand getFrequencyBand();
 
 	/**
-	 * @return the manufacurer code field.
+	 * Returns the MAC Capability Flags field information.
+	 * 
+	 * @return the MAC Capability Flags field information.
+	 */
+	public ZigBeeMacCapabiliyFlags getMacCapabilityFlags();
+
+	/**
+	 * Returns the manufacturer code of the described node.
+	 * 
+	 * @return the manufacturer code of the described node.
 	 */
 	public int getManufacturerCode();
 
 	/**
-	 * @return the maximum buffer size field.
+	 * Returns the maximum buffer size of the described node.
+	 * 
+	 * @return the maximum buffer size of the described node.
 	 */
 	public int getMaxBufferSize();
 
 	/**
-	 * @return the maximum incoming transfer size field.
+	 * Returns the maximum incoming transfer size of the described node.
+	 * 
+	 * @return the maximum incoming transfer size of the described node.
 	 */
 	public int getMaxIncomingTransferSize();
 
 	/**
-	 * @return the maximum outgoing transfer size field.
+	 * Returns the maximum outgoing transfer size of the described node.
+	 * 
+	 * @return the maximum outgoing transfer size of the described node.
 	 */
 	public int getMaxOutgoingTransferSize();
 
 	/**
-	 * @return the server mask field.
+	 * Returns the server mask of the described node.
+	 * 
+	 * @return the server mask of the described node.
 	 */
-	public int getServerMask();
+	public ZigBeeServerMask getServerMask();
 
 	/**
-	 * @return true if this node is capable of becoming PAN coordinator or false
-	 *         otherwise.
-	 */
-	public boolean isAlternatePANCoordinator();
-
-	/**
-	 * @return true if this node a full function device false otherwise.
-	 */
-	public boolean isFullFunctionDevice();
-
-	/**
-	 * @return true if the current power source is mains power or false
-	 *         otherwise.
-	 */
-	public boolean isMainsPower();
-
-	/**
-	 * @return true if the device does not disable its receiver to conserve
-	 *         power during idle periods or false otherwise.
-	 */
-	public boolean isReceiverOnWhenIdle();
-
-	/**
-	 * @return true if the device is capable of sending and receiving secured
-	 *         frames or false otherwise.
-	 */
-	public boolean isSecurityCapable();
-
-	/**
-	 * @return true if the device is address allocate or false otherwise.
-	 */
-	public boolean isAddressAllocate();
-
-	/**
+	 * Checks if extended active endpoint list is available.
+	 * 
 	 * @return true if extended active endpoint list is available or false
 	 *         otherwise.
 	 */
 	public boolean isExtendedActiveEndpointListAvailable();
 
 	/**
+	 * Checks if extended simple descriptor is available.
+	 * 
 	 * @return true if extended simple descriptor is available or false
 	 *         otherwise.
 	 */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,105 +18,128 @@ package org.osgi.service.zigbee;
 
 /**
  * This class represents root exception for all the code related to ZigBee/ZCL.
+ * The provided constants names, but not the values, maps to the ZCL error codes
+ * defined in the ZCL specification.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
-public class ZCLException extends RuntimeException {
+public class ZCLException extends ZigBeeException {
 
-	/** generated */
 	private static final long	serialVersionUID					= -7330626950388193679L;
 
-	/** SUCCESS */
-	public static final short	SUCCESS								= 0x00;
+	/** ZCL Success error code. */
+	public static final int		SUCCESS								= 0x00;
 
-	/** FAILURE */
-	public static final short	FAILURE								= 0x01;
+	/** ZCL Failure error code. */
+	public static final int		FAILURE								= 0x01;
 
-	/** MALFORMED_COMMAND */
-	public static final short	MALFORMED_COMMAND					= 0x80;
+	/** ZCL Malformed Command error code. */
+	public static final int		MALFORMED_COMMAND					= 0x02;
 
-	/** CLUSTER_COMMAND_NOT_SUPPORTED */
-	public static final short	CLUSTER_COMMAND_NOT_SUPPORTED		= 0x81;
+	/** ZCL Cluster Command Not Supported error code. */
+	public static final int		CLUSTER_COMMAND_NOT_SUPPORTED		= 0x03;
 
-	/** GENERAL_COMMAND_NOT_SUPPORTED */
-	public static final short	GENERAL_COMMAND_NOT_SUPPORTED		= 0x82;
+	/** ZCL General Command Not Supported error code. */
+	public static final int		GENERAL_COMMAND_NOT_SUPPORTED		= 0x04;
 
-	/** MANUF_CLUSTER_COMMAND_NOT_SUPPORTED */
-	public static final short	MANUF_CLUSTER_COMMAND_NOT_SUPPORTED	= 0x83;
+	/** ZCL Manuf Cluster Command Not Supported error code. */
+	public static final int		MANUF_CLUSTER_COMMAND_NOT_SUPPORTED	= 0x05;
 
-	/** MANUF_GENERAL_COMMAND_NOT_SUPPORTED */
-	public static final short	MANUF_GENERAL_COMMAND_NOT_SUPPORTED	= 0x84;
+	/** ZCL Manuf General Command Not Supported error code. */
+	public static final int		MANUF_GENERAL_COMMAND_NOT_SUPPORTED	= 0x06;
 
-	/** INVALID_FIELD */
-	public static final short	INVALID_FIELD						= 0x85;
+	/** ZCL Invalid Field error code. */
+	public static final int		INVALID_FIELD						= 0x07;
 
-	/** UNSUPPORTED_ATTRIBUTE */
-	public static final short	UNSUPPORTED_ATTRIBUTE				= 0x86;
+	/** ZCL Unsupported Attribute error code. */
+	public static final int		UNSUPPORTED_ATTRIBUTE				= 0x08;
 
-	/** INVALID_VALUE */
-	public static final short	INVALID_VALUE						= 0x87;
+	/** ZCL Invalid Value error code. */
+	public static final int		INVALID_VALUE						= 0x09;
 
-	/** READ_ONLY */
-	public static final short	READ_ONLY							= 0x88;
+	/** ZCL Read Only error code. */
+	public static final int		READ_ONLY							= 0x0a;
 
-	/** INSUFFICIENT_SPACE */
-	public static final short	INSUFFICIENT_SPACE					= 0x89;
+	/** ZCL Insufficient Space error code. */
+	public static final int		INSUFFICIENT_SPACE					= 0x0b;
 
-	/** DUPLICATE_EXISTS */
-	public static final short	DUPLICATE_EXISTS					= 0x8a;
+	/** ZCL Duplicate Exists error code. */
+	public static final int		DUPLICATE_EXISTS					= 0x0c;
 
-	/** NOT_FOUND */
-	public static final short	NOT_FOUND							= 0x8b;
+	/** ZCL Not Found error code. */
+	public static final int		NOT_FOUND							= 0x0d;
 
-	/** UNREPORTABLE_TYPE */
-	public static final short	UNREPORTABLE_TYPE					= 0x8c;
+	/** Unreportable Type error code. */
+	public static final int		UNREPORTABLE_TYPE					= 0x0e;
 
-	/** INVALID_DATA_TYPE */
-	public static final short	INVALID_DATA_TYPE					= 0x8d;
+	/** ZCL Invalid Data Type error code. */
+	public static final int		INVALID_DATA_TYPE					= 0x0f;
 
 	/**
 	 * HARDWARE_FAILURE - in this case, an additional exception describing the
 	 * problem can be nested.
 	 */
-	public static final short	HARDWARE_FAILURE					= 0xc0;
+	public static final int		HARDWARE_FAILURE					= 0x10;
 
 	/**
-	 * SOFTWARE_FAILURE - in this case, an additional exception describing the
-	 * problem can be nested.
+	 * Software Failure error code - in this case, an additional exception
+	 * describing the problem can be nested.
 	 */
-	public static final short	SOFTWARE_FAILURE					= 0xc1;
+	public static final int		SOFTWARE_FAILURE					= 0x11;
 
-	/** CALIBRATION_ERROR */
-	public static final short	CALIBRATION_ERROR					= 0xc2;
-
-	private final int			errorCode;
+	/** ZCL Calibration Error error code. */
+	public static final int		CALIBRATION_ERROR					= 0x12;
 
 	/**
-	 * @param errordesc exception error description
+	 * Creates a {@linkplain ZCLException} containing only a description, but no
+	 * error codes. If issued on this exception the {@link #getErrorCode()} and
+	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
+	 * constant.
+	 * 
+	 * @param errorDesc exception error description.
 	 */
-	public ZCLException(String errordesc) {
-		super(errordesc);
-		errorCode = 0;
+	public ZCLException(String errorDesc) {
+		this(UNKNOWN_ERROR, UNKNOWN_ERROR, errorDesc);
 	}
 
 	/**
-	 * @param errorCode An error code.
+	 * Creates a {@linkplain ZCLException} containing a specific
+	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #ZCLException(String)}.
+	 * 
+	 * @param errorCode One of the error codes defined in this interface or
+	 *        {@link #UNKNOWN_ERROR} if the actual error is not listed in this
+	 *        interface. In this case if the native ZigBee error code is known,
+	 *        it is preferred to use the {@link #ZCLException(int, int, String)}
+	 *        constructor, passing {@link #UNKNOWN_ERROR} as first parameter and
+	 *        the native ZigBee error as the second.
+	 * 
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
 	public ZCLException(int errorCode, String errorDesc) {
-		super(errorDesc);
-		this.errorCode = errorCode;
+		super(errorCode, errorDesc);
 	}
 
 	/**
-	 * @return A ZigBee error code defined a ZigBee Forum working committee or
-	 *         specified by a ZigBee vendor.
+	 * Creates a {@linkplain ZCLException} containing a specific
+	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
+	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #ZCLException(String)}.
+	 * 
+	 * @param errorCode One of the error codes defined in this interface or
+	 *        {@link #UNKNOWN_ERROR} the actual error is not covered in this
+	 *        interface. In this case the {@code zigBeeErrorCode} parameter must
+	 *        be the actual status code returned by the ZigBee stack.
+	 * 
+	 * @param zigBeeErrorCode The actual ZCL status code or
+	 *        {@link #UNKNOWN_ERROR} if this status is unknown.
+	 * 
+	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public int getZigBeeErrorCode() {
-		return errorCode;
+	public ZCLException(int errorCode, int zigBeeErrorCode, String errorDesc) {
+		super(errorCode, zigBeeErrorCode, errorDesc);
 	}
+
 }

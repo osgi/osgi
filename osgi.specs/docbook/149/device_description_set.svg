@@ -1,0 +1,1633 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="745.34412"
+   height="189.40443"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="device_description_set.svg"
+   inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata447">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1516"
+     inkscape:window-height="881"
+     id="namedview445"
+     showgrid="false"
+     inkscape:zoom="0.6370236"
+     inkscape:cx="191.62128"
+     inkscape:cy="186.01176"
+     inkscape:window-x="-4"
+     inkscape:window-y="271"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g11"
+     showguides="false"
+     width="1052.36px"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:showpageshadow="false"
+     showborder="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="false">
+    <sodipodi:guide
+       position="947.42596,-271.30275"
+       orientation="0,1102"
+       id="guide11732" />
+    <sodipodi:guide
+       position="992.95016,-221.06914"
+       orientation="-563,0"
+       id="guide11734" />
+    <sodipodi:guide
+       position="894.83766,327.57616"
+       orientation="0,-1102"
+       id="guide11736" />
+    <sodipodi:guide
+       position="-138.09116,-200.66173"
+       orientation="563,0"
+       id="guide11738" />
+    <sodipodi:guide
+       position="-122.39316,-250.11045"
+       orientation="0,1102"
+       id="guide11740" />
+    <sodipodi:guide
+       position="979.60686,-250.11045"
+       orientation="-563,0"
+       id="guide11742" />
+    <sodipodi:guide
+       position="979.60686,312.88955"
+       orientation="0,-1102"
+       id="guide11744" />
+    <sodipodi:guide
+       position="-122.39316,312.88955"
+       orientation="563,0"
+       id="guide11746" />
+    <sodipodi:guide
+       position="-122.39316,-250.11045"
+       orientation="0,1102"
+       id="guide11748" />
+    <sodipodi:guide
+       position="979.60686,-250.11045"
+       orientation="-563,0"
+       id="guide11750" />
+    <sodipodi:guide
+       position="979.60686,312.88955"
+       orientation="0,-1102"
+       id="guide11752" />
+    <sodipodi:guide
+       position="-122.39316,312.88955"
+       orientation="563,0"
+       id="guide11754" />
+    <sodipodi:guide
+       position="-167.91737,-271.30275"
+       orientation="0,1102"
+       id="guide11756" />
+    <sodipodi:guide
+       position="979.60686,-250.11045"
+       orientation="-563,0"
+       id="guide11758" />
+    <sodipodi:guide
+       position="-122.39316,312.88955"
+       orientation="563,0"
+       id="guide11762" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart"
+       style="overflow:visible">
+      <path
+         id="path4574"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path4556"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path4698"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.8,0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend"
+       style="overflow:visible">
+      <path
+         id="path4577"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         id="path4559"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <linearGradient
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1"
+       id="mx-gradient-ffffff-1-cccccc-1-s-0">
+      <stop
+         offset="0%"
+         style="stop-color:#ffffff"
+         id="stop7" />
+      <stop
+         offset="100%"
+         style="stop-color:#CCCCCC"
+         id="stop9" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-1"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4577-7"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#mx-gradient-ffffff-1-cccccc-1-s-0-9"
+       id="linearGradient7258-0"
+       x1="160.27757"
+       y1="842.17804"
+       x2="160.27757"
+       y2="926.97778"
+       gradientTransform="matrix(1.6627405,0,0,0.60141677,288,0)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1"
+       id="mx-gradient-ffffff-1-cccccc-1-s-0-9">
+      <stop
+         offset="0%"
+         style="stop-color:#ffffff"
+         id="stop7-4" />
+      <stop
+         offset="100%"
+         style="stop-color:#CCCCCC"
+         id="stop9-8" />
+    </linearGradient>
+    <filter
+       id="filter7701"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7703"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7705"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7707"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7709"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7711"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7713"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7715"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7717"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7719"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7721"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7723"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7725"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7727"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7729"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7731"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7741"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7743"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7745"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7747"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7749"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7751"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7753"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7755"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7757"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7759"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7761"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7763"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7765"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7767"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7769"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7771"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7773"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7775"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7777"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7779"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7781"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7783"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7785"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7787"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7789"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7791"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7793"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7795"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7797"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7799"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7821"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7823"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7825"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7827"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7829"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7831"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7833"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7835"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7837"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7839"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7841"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7843"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7845"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7847"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7849"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-8"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4577-2"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-5"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4574-2"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter7741-7"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood7743-5"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7745-7"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7747-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7749-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7751-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7753-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7755-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7757-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7759-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-16"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-2-6"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-2-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-16-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-8-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-5-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-9"
+       style="overflow:visible">
+      <path
+         id="path4577-5"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7801-8-1-7-3"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-6-3"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-1-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-2-1"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+  </defs>
+  <g
+     transform="translate(-121.89316,-122.98493)"
+     id="g11">
+    <rect
+       x="272"
+       y="387"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect43"
+       style="fill:#ffffff;stroke:#000000" />
+    <g
+       font-size="10px"
+       id="g261-58-0"
+       transform="translate(184.49045,-35.815277)"
+       style="font-size:10px;text-anchor:end"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-7"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-2"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-size:12px"
+           id="tspan11846">0..n</tspan>
+      </text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 495.28334,169.5707 0,102.85711"
+       id="path5129-1"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       transform="translate(353.86586,141.39248)"
+       id="g73"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <switch
+         id="switch75">
+        <foreignObject
+           pointer-events="all"
+           width="256"
+           height="50"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           id="foreignObject77">
+          <xhtml:div
+             style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 255px; height: 50px; white-space: nowrap;">
+            <xhtml:p
+               style="margin: 0px; margin-top: 4px; text-align: center;">
+              <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+              <xhtml:br />
+              <xhtml:strong>
+                <xhtml:span
+                   style="font-size: 12px;">
+                  <xhtml:strong>EnOceanChannelDescriptionSet</xhtml:strong>
+                </xhtml:span>
+              </xhtml:strong>
+            </xhtml:p>
+          </xhtml:div>
+        </foreignObject>
+        <text
+           x="128"
+           y="31"
+           font-size="12px"
+           id="text79"
+           style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica">[Object]</text>
+      </switch>
+    </g>
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-3"
+       width="172.67781"
+       height="87"
+       x="121.89316"
+       y="122.98493"
+       ry="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 245.94049,164.6532 257.85715,0"
+       id="path5127-9"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="10px"
+       id="g261-58-0-71-7"
+       transform="translate(357.70336,-102.8855)"
+       style="font-size:10px;text-anchor:end"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-7-1-6"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-2-5-1"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-size:12px"
+           id="tspan11846-2-4">0..n</tspan>
+      </text>
+    </g>
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-0"
+       width="172.67781"
+       height="87"
+       x="694.55945"
+       y="122.98493"
+       ry="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 526.30845,164.38384 257.85715,0"
+       id="path5127"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       x="480"
+       y="108"
+       width="263"
+       height="54"
+       pointer-events="none"
+       id="rect373-4"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7811-1)"
+       transform="matrix(0.57418967,0,0,1.0496639,429.78135,24.780298)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       x="602"
+       y="72"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect91"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="612"
+       y="110"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect99"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="682"
+       y="27"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect109"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="837"
+       y="135"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect117"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="837"
+       y="362"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect167"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="372"
+       y="110"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect175"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="417"
+       y="30"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect193"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="965"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect223"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="965"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect231"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="337"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect251"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="337"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect259"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="107"
+       y="507"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect287"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="457"
+       y="507"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect297"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="532"
+       y="532"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect329"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="611"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect349"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="611"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect357"
+       style="fill:#ffffff;stroke:#000000" />
+    <g
+       font-size="10px"
+       id="g261-58-0-71"
+       transform="translate(259.56803,-102.40259)"
+       style="font-size:10px;text-anchor:end"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-7-1"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-2-5"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-size:12px"
+           id="tspan11846-2">0..n</tspan>
+      </text>
+    </g>
+    <rect
+       x="837"
+       y="106"
+       width="263"
+       height="54"
+       pointer-events="none"
+       id="rect381"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7821)"
+       transform="matrix(0.57418967,0,0,1.0038096,-61.706852,31.88281)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="12px"
+       id="g383"
+       style="font-size:12px;text-anchor:middle"
+       transform="translate(-503.26109,21.39248)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="926.61328"
+         y="130"
+         id="text385"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+      <text
+         x="927.14063"
+         y="142"
+         id="text387"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+        <tspan
+           style="font-weight:bold;text-align:start;text-anchor:start;-inkscape-font-specification:Arial Bold"
+           id="tspan4636">ZigBeeDevice</tspan>
+      </text>
+      <text
+         x="926.40234"
+         y="156"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+         id="text4185">
+        <tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           id="tspan4617">DescriptionSet</tspan>
+      </text>
+    </g>
+    <g
+       id="g5334"
+       transform="translate(-374.00984,275.64657)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g147"
+         transform="translate(783.97211,-18.123193)">
+        <switch
+           id="switch149">
+          <foreignObject
+             id="foreignObject151"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+             height="50"
+             width="256"
+             pointer-events="all">
+            <xhtml:div
+               style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 255px; height: 50px; white-space: nowrap;">
+              <xhtml:p
+                 style="margin: 0px; margin-top: 4px; text-align: center;">
+                <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+                <xhtml:br />
+                <xhtml:strong>
+                  <xhtml:span
+                     style="font-size: 12px;"><xhtml:strong>EnOceanChannel</xhtml:strong>
+
+
+
+
+
+
+
+
+
+
+
+
+Description</xhtml:span>
+                </xhtml:strong>
+              </xhtml:p>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica"
+             id="text153"
+             font-size="12px"
+             y="31"
+             x="128">[Object]</text>
+        </switch>
+      </g>
+      <rect
+         transform="matrix(0.57418967,0,0,1.0038096,314.48536,-237.17139)"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7771)"
+         id="rect405"
+         pointer-events="none"
+         height="54"
+         width="263"
+         y="213"
+         x="833" />
+      <g
+         transform="translate(-91.973196,-211.12319)"
+         style="font-size:12px;text-anchor:middle"
+         id="g407"
+         font-size="12px">
+        <text
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+           id="text409"
+           y="201"
+           x="889.21094">&lt;&lt;Interface&gt;&gt;</text>
+        <text
+           style="text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+           id="text411"
+           y="215"
+           x="888.99414">
+          <tspan
+             id="tspan4613"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold">ZigBeeDevice</tspan>
+        </text>
+        <text
+           id="text4187"
+           style="fill:#000000;font-family:Helvetica"
+           y="229"
+           x="889">
+          <tspan
+             id="tspan4615"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold">Description</tspan>
+        </text>
+      </g>
+    </g>
+    <path
+       style="stroke-linejoin:miter"
+       d="m 535.78301,191.79724 c 0.8594,-0.94431 9.0785,-9.93239 18.2645,-19.97352 l 16.7019,-18.25662 0.3413,11.44632 c 0.1878,6.29548 0.3726,15.28357 0.4107,19.97352 l 0.069,8.52721 -18.6752,0 -18.6752,0 1.5626,-1.71691 z"
+       id="path7438-6-3"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       style="font-size:10px;fill:#000000;font-family:Helvetica"
+       x="501.28168"
+       y="225.15909"
+       id="text355-4-9"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-size:12px"
+         id="tspan11842">has</tspan>
+    </text>
+    <text
+       style="font-size:10px;text-anchor:end;fill:#000000;font-family:Helvetica"
+       x="506.31976"
+       y="206.18472"
+       id="text265-7-8-2-5-7-9-0"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-size:12px"
+         id="tspan11844">1</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-2-3-8"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-8-1-7-3)"
+       transform="matrix(0.66590658,0,0,1.0028937,-14.75864,29.75938)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       font-size="12px"
+       id="g83"
+       style="font-size:12px;text-anchor:middle"
+       transform="matrix(1,0,0,1.0456803,-409.21856,126.81769)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="551.58008"
+         y="24"
+         id="text85"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">A ZigBee Device</text>
+      <text
+         x="550.63672"
+         y="38"
+         id="text87"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Descriptor</text>
+    </g>
+    <g
+       font-size="12px"
+       id="g15-2-8-7"
+       style="font-size:12px;text-anchor:middle"
+       transform="translate(427.28653,-370.48533)"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         x="285.95313"
+         y="522"
+         id="text17-4-0-4"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+        <tspan
+           style="text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+           id="tspan4607-2">A ZigBee Client</tspan>
+      </text>
+      <text
+         x="285.4668"
+         y="536"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+         id="text7304-2-7">
+        <tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+           id="tspan4605-7" />
+      </text>
+    </g>
+    <text
+       style="font-size:10px;fill:#000000;font-family:Helvetica"
+       x="611.72913"
+       y="179.2858"
+       id="text355-4-9-4-4"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-size:12px"
+         id="tspan11842-8-5">informs</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-0-71-7-1"
+       transform="translate(77.3354,-102.61614)"
+       style="font-size:10px;text-anchor:end"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-7-1-6-7"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-2-5-1-4"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-size:12px"
+           id="tspan11846-2-4-0">0..n</tspan>
+      </text>
+    </g>
+    <g
+       font-size="10px"
+       id="g261-58-0-71-4"
+       transform="translate(-20.79993,-102.13323)"
+       style="font-size:10px;text-anchor:end"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-7-1-8"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="326"
+         y="282"
+         id="text265-0-2-5-8"
+         style="fill:#000000;font-family:Helvetica">
+        <tspan
+           style="font-size:12px"
+           id="tspan11846-2-2">1</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:10px;fill:#000000;font-family:Helvetica"
+       x="331.36115"
+       y="179.55516"
+       id="text355-4-9-4-4-4"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\device_description_set.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <tspan
+         style="font-size:12px"
+         id="tspan11842-8-5-5">registers</tspan>
+    </text>
+  </g>
+</svg>

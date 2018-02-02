@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,65 +16,58 @@
 
 package org.osgi.service.zigbee.types;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.osgi.service.zigbee.ZigBeeDataInput;
+import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
-import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents a ZigBeeBitmap24 as described in the ZigBee
- * Specification.
+ * A singleton class that represents the 'Bitmap 24-bit' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
- * @version 1.0
+ * @author $Id$
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeBitmap24 implements ZCLDataTypeDescription {
+public class ZigBeeBitmap24
+		implements ZCLSimpleTypeDescription {
 
-	private static ZigBeeBitmap24	singletonInstance	= new ZigBeeBitmap24();
+	private final static ZigBeeBitmap24 instance = new ZigBeeBitmap24();
 
 	private ZigBeeBitmap24() {
-
 	}
 
 	/**
+	 * Gets a singleton instance of this class.
+	 * 
 	 * @return the singleton instance.
 	 */
 	public static ZigBeeBitmap24 getInstance() {
-		return singletonInstance;
-	}
-
-	public boolean isAnalog() {
-		// TODO Auto-generated method stub
-		return false;
+		return instance;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Bitmap24";
+	}
+
+	public boolean isAnalog() {
+		return false;
 	}
 
 	public Class getJavaDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getInvalidNumber() {
-		// TODO Auto-generated method stub
-		return null;
+		return Integer.class;
 	}
 
 	public short getId() {
 		return ZigBeeDataTypes.BITMAP_24;
 	}
 
-	public void serialize(Object param, ByteArrayOutputStream outdata) {
-		ZigBeeDataTypes.encode(ZigBeeDataTypes.BITMAP_24, param, outdata);
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BITMAP_24, value);
 	}
 
-	public Object deserialize(ByteArrayInputStream data) {
-		return ZigBeeDataTypes.decode(ZigBeeDataTypes.BITMAP_24, data);
+	public Object deserialize(ZigBeeDataInput is) throws IOException {
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BITMAP_24);
 	}
+
 }

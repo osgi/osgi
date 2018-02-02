@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,45 +17,51 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents Cluster global description
+ * This interface represents Cluster global description.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLGlobalClusterDescription {
 
 	/**
-	 * @return the cluster identifier
+	 * Returns the cluster identifier.
+	 * 
+	 * @return the cluster identifier.
 	 */
 	public int getClusterId();
 
 	/**
-	 * @return the cluster name
+	 * Returns the cluster name.
+	 * 
+	 * @return the cluster name.
 	 */
 	public String getClusterName();
 
 	/**
-	 * @return the cluster functional description
+	 * Returns the cluster functional description.
+	 * 
+	 * @return the cluster functional description.
 	 */
 	public String getClusterDescription();
 
 	/**
-	 * @return the cluster functional domain
+	 * Returns the cluster functional domain.
+	 * 
+	 * @return the cluster functional domain.
 	 */
 	public String getClusterFunctionalDomain();
 
 	/**
-	 * @return a ZCLClusterDescription representing the client cluster
-	 *         description
+	 * Returns the client cluster description.
+	 * 
+	 * @return the client cluster description.
 	 */
 	public ZCLClusterDescription getClientClusterDescription();
 
 	/**
-	 * @return a ZCLClusterDescription representing the server cluster
-	 *         description
+	 * Returns the server cluster description.
+	 * 
+	 * @return the server cluster description.
 	 */
 	public ZCLClusterDescription getServerClusterDescription();
 

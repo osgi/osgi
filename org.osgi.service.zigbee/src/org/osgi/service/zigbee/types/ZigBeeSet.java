@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,53 +16,42 @@
 
 package org.osgi.service.zigbee.types;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents a ZigBeeSet as described in the ZigBee
- * Specification.
+ * A singleton class that represents the 'Set' data type, as it is defined in
+ * the ZigBee Cluster Library specification.
  * 
- * @version 1.0
+ * @author $Id$
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeSet implements ZCLDataTypeDescription {
+public class ZigBeeSet
+		implements ZCLDataTypeDescription {
 
-	private static ZigBeeSet	singletonInstance	= new ZigBeeSet();
+	private final static ZigBeeSet instance = new ZigBeeSet();
 
 	private ZigBeeSet() {
-
 	}
 
 	/**
+	 * Gets a singleton instance of this class.
+	 * 
 	 * @return the singleton instance.
 	 */
 	public static ZigBeeSet getInstance() {
-		return singletonInstance;
-	}
-
-	public boolean isAnalog() {
-		// TODO Auto-generated method stub
-		return false;
+		return instance;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Set";
+	}
+
+	public boolean isAnalog() {
+		return false;
 	}
 
 	public Class getJavaDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getInvalidNumber() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -70,11 +59,4 @@ public class ZigBeeSet implements ZCLDataTypeDescription {
 		return ZigBeeDataTypes.SET;
 	}
 
-	public void serialize(Object param, ByteArrayOutputStream outdata) {
-		ZigBeeDataTypes.encode(ZigBeeDataTypes.SET, param, outdata);
-	}
-
-	public Object deserialize(ByteArrayInputStream data) {
-		return ZigBeeDataTypes.decode(ZigBeeDataTypes.SET, data);
-	}
 }
