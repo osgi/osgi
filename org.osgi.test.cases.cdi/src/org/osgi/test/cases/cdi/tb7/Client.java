@@ -41,7 +41,7 @@ public class Client {
 
 			ContainerDTO containerDTO = r.getContainerDTO(_bundle);
 
-			_event.select(ContainerId.Literal.of(containerDTO.id)).fire(containerDTO);
+			_event.select(ContainerId.Literal.of(containerDTO.template.id)).fire(containerDTO);
 		}
 	}
 
