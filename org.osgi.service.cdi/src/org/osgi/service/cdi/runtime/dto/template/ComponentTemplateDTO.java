@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
@@ -100,4 +101,13 @@ public class ComponentTemplateDTO extends DTO {
 	 * Must not be {@code null}.
 	 */
 	public List<String>						beans;
+
+	/**
+	 * The default component properties.
+	 * <p>
+	 * These are merged (and possibly replaced) with runtime properties.
+	 * <p>
+	 * Must not be null. May be empty if no default properties are provided.
+	 */
+	public Map<String,Object>				properties;
 }
