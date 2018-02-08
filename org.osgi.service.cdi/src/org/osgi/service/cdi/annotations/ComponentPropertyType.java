@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,33 +21,24 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Qualifier;
+
+import javax.enterprise.inject.Produces;
 
 /**
- * A meta annotation that can be placed on {@link Qualifier} annotations to
- * exclude them from being used as service properties.
+ * Identify the annotated annotation as a Component Property Type.
  * <p>
- * This annotation is processed only to check the qualifiers used together with
- * {@link Service} and {@link Reference}.
+ * Component Property Type can be applied to beans annotated with
+ * {@link SingleComponent} or {@link FactoryComponent}. They can also be applied
+ * to methods and fields marked as {@link Produces} where the {@link Service}
+ * annotation was used.
+ * <p>
  *
+ * @see "Component Property Types."
  * @author $Id$
  */
 @Documented
-@RequireCDIExtender
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
-public @interface ComponentPropertyIgnore {
-	/**
-	 * Support inline instantiation of the {@link ComponentPropertyIgnore}
-	 * annotation.
-	 */
-	public static final class Literal extends AnnotationLiteral<ComponentPropertyIgnore> implements ComponentPropertyIgnore {
-		/**
-		 * Default instance
-		 */
-		public static final ComponentPropertyIgnore	INSTANCE			= new Literal();
-
-		private static final long					serialVersionUID	= 1L;
-	}
+public @interface ComponentPropertyType {
+	// meta-annotation
 }

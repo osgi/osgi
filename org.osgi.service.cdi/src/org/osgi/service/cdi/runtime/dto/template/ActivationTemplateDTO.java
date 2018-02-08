@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Activations represent either immediate instances or service objects produced
@@ -80,4 +81,15 @@ public class ActivationTemplateDTO {
 	 * an OSGi service
 	 */
 	public List<String>			serviceClasses;
+
+	/**
+	 * The default properties for activations which represent container
+	 * component services. This will never be populated for single or factory
+	 * components.
+	 * <p>
+	 * These are merged (and possibly replaced) with runtime properties.
+	 * <p>
+	 * Must not be null. May be empty if no default properties are provided.
+	 */
+	public Map<String,Object>	properties;
 }
