@@ -92,6 +92,11 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
 		Map<String, Object> configuration = getFrameworkConfiguration();
+		String configuratorInitial = System
+				.getProperty("server.configurator.initial");
+		if (configuratorInitial != null) {
+			configuration.put("configurator.initial", configuratorInitial);
+		}
 		configuration.putAll(getConfiguration());
 		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
 		processFreePortProperties(configuration);

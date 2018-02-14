@@ -16,12 +16,18 @@
 package org.osgi.test.cases.remoteservices.junit;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.osgi.framework.Constants.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -36,7 +42,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.jar.Attributes;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceException;
@@ -102,7 +113,13 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPacakagesXtra = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
-        configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
+		configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+				systemPacakagesXtra);
+		String configuratorInitial = System
+				.getProperty("server.configurator.initial");
+		if (configuratorInitial != null) {
+			configuration.put("configurator.initial", configuratorInitial);
+		}
 		return configuration;
 	}
 
@@ -113,12 +130,9 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		Hashtable properties = registrationTestServiceProperties();
 
 		// install server side test service in the sub-framework
-		TestServiceImpl impl = new TestServiceImpl();
-
-		// register the service in the server side framework on behalf of the System Bundle
-		// the interface package is exported by the System Bundle
-		ServiceRegistration srTestService = getFramework().getBundleContext().registerService(
-				new String[]{A.class.getName(), B.class.getName()}, impl, properties);
+		ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
+				TestServiceImpl.class.getName(), properties, A.class.getName(),
+				B.class.getName());
 		assertNotNull(srTestService);
 
 		System.out.println("registered test service A and B on server side");
@@ -273,15 +287,10 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
 				"osgi.basic");
 
-		// install server side test service in the sub-framework
-		BasicTypesTestServiceImpl impl = new BasicTypesTestServiceImpl();
-
-		// register the service in the server side framework on behalf of the
-		// System Bundle
-		// the interface package is exported by the System Bundle
-		ServiceRegistration<BasicTypes> srTestService = getFramework()
-				.getBundleContext()
-				.registerService(BasicTypes.class, impl, properties);
+		// register the service in the server side framework
+		ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
+				BasicTypesTestServiceImpl.class.getName(), properties,
+				BasicTypes.class.getName());
 
 		System.out
 				.println("registered basic types test service on server side");
@@ -604,15 +613,10 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 		properties.put("osgi.basic.timeout", "3000");
 
-		// install server side test service in the sub-framework
-		SlowServiceImpl impl = new SlowServiceImpl();
-
-		// register the service in the server side framework on behalf of the
-		// System Bundle
-		// the interface package is exported by the System Bundle
-		ServiceRegistration<SlowService> srTestService = getFramework()
-				.getBundleContext()
-				.registerService(SlowService.class, impl, properties);
+		// register the service in the server side framework
+		ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
+				SlowServiceImpl.class.getName(), properties,
+				SlowService.class.getName());
 
 		System.out.println("registered slow test service on server side");
 
@@ -718,15 +722,10 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
 				"osgi.async");
 
-		// install server side test service in the sub-framework
-		AsyncTypesImpl impl = new AsyncTypesImpl();
-
-		// register the service in the server side framework on behalf of the
-		// System Bundle
-		// the interface package is exported by the System Bundle
-		ServiceRegistration<AsyncTypes> srTestService = getFramework()
-				.getBundleContext()
-				.registerService(AsyncTypes.class, impl, properties);
+		// register the service in the server side framework
+		ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
+				AsyncTypesImpl.class.getName(), properties,
+				AsyncTypes.class.getName());
 
 		System.out
 				.println("registered basic types test service on server side");
@@ -810,16 +809,10 @@ public class SimpleTest extends MultiFrameworkTestCase {
 			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
 					"osgi.async");
 
-			// install server side test service in the sub-framework
-			AsyncJava8TypesImpl impl = new AsyncJava8TypesImpl();
-
-			// register the service in the server side framework on behalf of
-			// the
-			// System Bundle
-			// the interface package is exported by the System Bundle
-			ServiceRegistration<AsyncJava8Types> srTestService = getFramework()
-					.getBundleContext()
-					.registerService(AsyncJava8Types.class, impl, properties);
+			// register the service in the server side framework
+			ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
+					AsyncJava8TypesImpl.class.getName(), properties,
+					AsyncJava8Types.class.getName());
 
 			System.out.println(
 					"registered basic types test service on server side");
@@ -1009,5 +1002,61 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		}
 		fail("Framework System Bundle is not exporting package "
 				+ ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON);
+	}
+
+	private ServiceRegistration< ? > installTestBundleAndRegisterServiceObject(
+			String serviceClassName, Dictionary<String,Object> properties,
+			String... ifaces) throws Exception {
+		Bundle bundle = getFramework().getBundleContext()
+				.installBundle("test-bundle", createTestBundle());
+		bundle.start();
+
+		Object object = bundle.loadClass(serviceClassName)
+				.getConstructor()
+				.newInstance();
+
+		return bundle.getBundleContext().registerService(ifaces, object,
+				properties);
+	}
+
+	private InputStream createTestBundle() throws IOException {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			Manifest manifest = new Manifest();
+			Attributes mainAttributes = manifest.getMainAttributes();
+
+			mainAttributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+			mainAttributes.put(new Attributes.Name(BUNDLE_MANIFESTVERSION),
+					"2");
+			mainAttributes.put(new Attributes.Name(BUNDLE_SYMBOLICNAME),
+					ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON + ".bundle");
+			mainAttributes.put(new Attributes.Name(IMPORT_PACKAGE),
+					"org.osgi.util.promise;version=\"[1,2)\",org.osgi.framework");
+
+			try (JarOutputStream jos = new JarOutputStream(baos, manifest)) {
+				Bundle bundle = getContext().getBundle();
+				writePackage(jos, "/org/osgi/test/cases/remoteservices/common",
+						bundle);
+				writePackage(jos, "/org/osgi/test/cases/remoteservices/impl",
+						bundle);
+			}
+			return new ByteArrayInputStream(baos.toByteArray());
+		}
+	}
+
+	private void writePackage(JarOutputStream jos, String path, Bundle bundle)
+			throws IOException {
+		Enumeration<String> paths = bundle.getEntryPaths(path);
+		while (paths.hasMoreElements()) {
+			String name = paths.nextElement();
+			jos.putNextEntry(new ZipEntry(name));
+			try (InputStream is = bundle.getResource(name).openStream()) {
+				byte[] b = new byte[4096];
+				int i;
+				while ((i = is.read(b)) != -1) {
+					jos.write(b, 0, i);
+				}
+				jos.closeEntry();
+			}
+		}
 	}
 }

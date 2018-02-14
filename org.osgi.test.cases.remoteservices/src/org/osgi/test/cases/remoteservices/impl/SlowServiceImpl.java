@@ -16,13 +16,12 @@
 package org.osgi.test.cases.remoteservices.impl;
 
 import org.osgi.test.cases.remoteservices.common.SlowService;
-import org.osgi.test.support.sleep.Sleep;
 
 public class SlowServiceImpl implements SlowService {
 
 	public String goSlow(int millis) {
 		try {
-			Sleep.sleep(millis);
+			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 			throw new RuntimeException("Interrupted", e);
 		}
