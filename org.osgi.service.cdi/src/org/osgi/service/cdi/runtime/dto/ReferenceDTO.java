@@ -60,17 +60,15 @@ public class ReferenceDTO extends DTO {
 	public String		targetFilter;
 
 	/**
-	 * The list of IDs of the services that match this reference.
+	 * The list of service references that match this reference.
 	 * <p>
 	 * Must not be {@code null}
 	 * <p>
 	 * Can be empty when there are no matching services.
 	 * <p>
-	 * This dependency is satisfied when.
-	 * <p>
-	 * <pre>
+	 * This dependency is satisfied when <code>
 	 * {@link #minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt()}
-	 * </pre> where the maximum cardinality can be obtained from the associated
+	 * </code> where the maximum cardinality can be obtained from the associated
 	 * {@link ReferenceTemplateDTO}.
 	 */
 	public List<ServiceReferenceDTO>	matches;
