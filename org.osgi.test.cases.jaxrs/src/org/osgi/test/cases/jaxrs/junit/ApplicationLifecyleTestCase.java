@@ -848,7 +848,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 					"/test2");
 			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
-					"(replacer-config=*");
+					"(replacer-config=*)");
 
 			ServiceRegistration<Application> reg2 = getContext()
 					.registerService(Application.class,
@@ -918,7 +918,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					@SuppressWarnings("rawtypes")
 					ServiceRegistration<ContextResolver> extensionReg = getContext()
 							.registerService(ContextResolver.class,
-									new ExtensionConfigProvider("fizz", "buzz"),
+									new ExtensionConfigProvider("fizz",
+											"fizzbuzz"),
 									properties);
 					try {
 
