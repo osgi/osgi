@@ -29,6 +29,7 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.WriterInterceptor;
@@ -119,16 +120,23 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	}
 
 	private void checkWhiteboardResourceMethod(ResourceMethodInfoDTO infoDTO) {
+		// The spec is a little ambiguous about whether the @Path annotation's
+		// value should be reproduced verbatim or as it would be handled by the
+		// container which adds a leading "/" if it's not present. We therefore
+		// remove the leading / if there is one to be lenient
+		String path = infoDTO.path.startsWith("/") ? infoDTO.path.substring(1)
+				: infoDTO.path;
+
 		switch (infoDTO.method) {
 			case "DELETE" :
-				assertEquals("whiteboard/resource/{name}", infoDTO.path);
+				assertEquals("whiteboard/resource/{name}", path);
 				assertNull(infoDTO.consumingMimeType);
 				assertNotNull(infoDTO.producingMimeType);
 				assertNull(infoDTO.nameBindings);
 				assertEquals(TEXT_PLAIN, infoDTO.producingMimeType[0]);
 				break;
 			case "PUT" :
-				assertEquals("whiteboard/resource/{name}", infoDTO.path);
+				assertEquals("whiteboard/resource/{name}", path);
 				assertNull(infoDTO.consumingMimeType);
 				assertNotNull(infoDTO.producingMimeType);
 				assertNull(infoDTO.nameBindings);
@@ -136,21 +144,21 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 				break;
 			case "POST" :
 				assertEquals("whiteboard/resource/{oldName}/{newName}",
-						infoDTO.path);
+						path);
 				assertNull(infoDTO.consumingMimeType);
 				assertNotNull(infoDTO.producingMimeType);
 				assertNull(infoDTO.nameBindings);
 				assertEquals(TEXT_PLAIN, infoDTO.producingMimeType[0]);
 				break;
 			case "GET" :
-				if ("whiteboard/resource/{name}".equals(infoDTO.path)
-						|| "whiteboard/resource".equals(infoDTO.path)) {
+				if ("whiteboard/resource/{name}".equals(path)
+						|| "whiteboard/resource".equals(path)) {
 					assertNull(infoDTO.consumingMimeType);
 					assertNotNull(infoDTO.producingMimeType);
 					assertNull(infoDTO.nameBindings);
 					assertEquals(TEXT_PLAIN, infoDTO.producingMimeType[0]);
 				} else {
-					fail("Invalid resource path " + infoDTO.path);
+					fail("Invalid resource path " + path);
 				}
 				break;
 			default :
@@ -316,11 +324,13 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
 		for (ResourceMethodInfoDTO dto : resourceDTO.resourceMethods) {
 			switch (dto.path) {
-				case "bound" :
+				case "/whiteboard/name/bound" :
+				case "whiteboard/name/bound" :
 					assertEquals(asList(NameBound.class.getName()),
 							asList(dto.nameBindings));
 					break;
-				case "unbound" :
+				case "/whiteboard/name/unbound" :
+				case "whiteboard/name/unbound" :
 					assertNull(dto.nameBindings);
 					break;
 				default :
@@ -348,8 +358,8 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<SimpleApplication> reg = getContext()
-				.registerService(SimpleApplication.class,
+		ServiceRegistration<Application> reg = getContext()
+				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
@@ -626,8 +636,8 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<SimpleApplication> reg = getContext()
-				.registerService(SimpleApplication.class,
+		ServiceRegistration<Application> reg = getContext()
+				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
@@ -637,8 +647,8 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
 			awaitSelection = helper.awaitModification(runtime, 5000);
 
-			ServiceRegistration<SimpleApplication> reg2 = getContext()
-					.registerService(SimpleApplication.class,
+			ServiceRegistration<Application> reg2 = getContext()
+					.registerService(Application.class,
 							new SimpleApplication(emptySet(),
 									singleton(new WhiteboardResource())),
 							properties);
