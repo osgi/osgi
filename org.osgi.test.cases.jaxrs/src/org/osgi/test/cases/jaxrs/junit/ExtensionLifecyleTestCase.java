@@ -259,7 +259,8 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 					// Promote the second filter to be first
 					awaitSelection = helper.awaitModification(runtime, 5000);
 
-					properties.put(Constants.SERVICE_RANKING, Long.valueOf(10));
+					properties.put(Constants.SERVICE_RANKING,
+							Integer.valueOf(10));
 					extensionReg2.setProperties(properties);
 
 					awaitSelection.getValue();
