@@ -18,7 +18,7 @@ package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
+import org.osgi.service.cdi.ComponentType;
 
 /**
  * Description of a CDI container.
@@ -46,7 +46,7 @@ public class ContainerTemplateDTO extends DTO {
 	 * <p>
 	 * Must not be {@code null}
 	 * <p>
-	 * Has at lest one element for the {@link Type#CONTAINER container component}.
+	 * Has at lest one element for the {@link ComponentType#CONTAINER container component}.
 	 * See <em>Container Component</em>.
 	 */
 	public List<ComponentTemplateDTO>	components;

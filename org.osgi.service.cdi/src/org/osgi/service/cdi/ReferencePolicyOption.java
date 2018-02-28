@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.runtime.dto.template;
+package org.osgi.service.cdi;
 
 /**
- * Defines the possible values for configuration policy.
+ * Defines the possible values of the policy of a satisfied reference towards
+ * new matching services appearing.
  *
  * @author $Id$
  */
-public enum ConfigurationPolicy {
+public enum ReferencePolicyOption {
 	/**
-	 * Defines the optional configuration policy.
+	 * Consume the matching service applying it's {@link ReferencePolicy}
 	 */
-	OPTIONAL,
+	GREEDY,
 	/**
-	 * Defines the required configuration policy.
+	 * Do not consume the matching service
 	 */
-	REQUIRED
+	RELUCTANT
 }

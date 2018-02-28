@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.ComponentType;
 import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
 
 /**
@@ -37,24 +38,6 @@ import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
 public class ComponentTemplateDTO extends DTO {
 
 	/**
-	 * Define the possible values for {@link #type}.
-	 */
-	public static enum Type {
-		/**
-		 * The component is the <em>Container Component</em>.
-		 */
-		CONTAINER,
-		/**
-		 * The component is an <em>Single Component</em>.
-		 */
-		SINGLE,
-		/**
-		 * The component is an <em>Factory Component</em>.
-		 */
-		FACTORY
-	}
-
-	/**
 	 * A name unique within the container.
 	 * <p>
 	 * Must not be {@code null}.
@@ -62,11 +45,11 @@ public class ComponentTemplateDTO extends DTO {
 	public String							name;
 
 	/**
-	 * The {@link Type type} of the component.
+	 * The {@link ComponentType type} of the component.
 	 * <p>
 	 * Must not be {@code null}.
 	 */
-	public Type								type;
+	public ComponentType								type;
 
 	/**
 	 * The configuration dependencies of this component.

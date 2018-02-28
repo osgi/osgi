@@ -19,6 +19,8 @@ package org.osgi.service.cdi.runtime.dto.template;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.service.cdi.ServiceScope;
+
 /**
  * Activations represent either immediate instances or service objects produced
  * by component instances.
@@ -31,47 +33,11 @@ import java.util.Map;
  */
 public class ActivationTemplateDTO {
 	/**
-	 * Possible values for {@link #scope}.
-	 */
-	public enum Scope {
-		/**
-		 * This activation will only ever create one instance
-		 * <p>
-		 * The instance is created after the parent component becomes satisfied and is
-		 * destroyed before the parent component becomes unsatisfied.
-		 * <p>
-		 * If {@link #serviceClasses} is not empty the instance will be registered as an
-		 * OSGi service with <code>service.scope=singleton</code>
-		 */
-		SINGLETON,
-		/**
-		 * This activation will register an OSGi service with
-		 * <code>service.scope=bundle</code>
-		 * <p>
-		 * The service is registered just after all {@link #SINGLETON} activations are
-		 * set up and just before all {@link #SINGLETON} activations are torn down.
-		 * <p>
-		 * The {@link #serviceClasses} is not empty when this scope is used.</code>
-		 */
-		BUNDLE,
-		/**
-		 * This activation will register an OSGi service with
-		 * <code>service.scope=prototype</code>
-		 * <p>
-		 * The service is registered just after all {@link #SINGLETON} activations are
-		 * set up and just before all {@link #SINGLETON} activations are torn down.
-		 * <p>
-		 * The {@link #serviceClasses} is not empty when this scope is used.</code>
-		 */
-		PROTOTYPE
-	}
-
-	/**
-	 * The {@link Scope} of this activation
+	 * The {@link ServiceScope} of this activation
 	 * <p>
 	 * Must not be null.
 	 */
-	public Scope				scope;
+	public ServiceScope				scope;
 
 	/**
 	 * Describes the set of fully qualified names of the interfaces/classes under

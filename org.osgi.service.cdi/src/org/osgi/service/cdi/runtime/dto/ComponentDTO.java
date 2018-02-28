@@ -19,8 +19,8 @@ package org.osgi.service.cdi.runtime.dto;
 import java.util.List;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.ComponentType;
 import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO;
-import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a component.
@@ -40,11 +40,11 @@ public class ComponentDTO extends DTO {
 	 * The component instances created by this component.
 	 * <p>
 	 * <ul>
-	 * <li>When {@link #template} is of type {@link Type#CONTAINER} - there will
+	 * <li>When {@link #template} is of type {@link ComponentType#CONTAINER} - there will
 	 * be <code>1</code> {@link ComponentInstanceDTO}</li>
-	 * <li>When {@link #template} is of type {@link Type#SINGLE} - there will be
+	 * <li>When {@link #template} is of type {@link ComponentType#SINGLE} - there will be
 	 * <code>1</code> {@link ComponentInstanceDTO}</li>
-	 * <li>When {@link #template} is of type {@link Type#FACTORY} - there will
+	 * <li>When {@link #template} is of type {@link ComponentType#FACTORY} - there will
 	 * be one {@link ComponentInstanceDTO} for every factory configuration
 	 * object associated with the factory PID of the component.</li>
 	 * </ul>

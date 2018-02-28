@@ -18,13 +18,17 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
+
 import org.osgi.service.cdi.CDIConstants;
+import org.osgi.service.cdi.ConfigurationPolicy;
 
 /**
  * Annotation used in collaboration with {@link ComponentScoped} to specify
@@ -41,20 +45,6 @@ import org.osgi.service.cdi.CDIConstants;
 public @interface PID {
 
 	/**
-	 * Values available for use with {@link #policy policy}.
-	 */
-	public static enum Policy {
-		/**
-		 * The configuration is not required.
-		 */
-		OPTIONAL,
-		/**
-		 * The configuration is required.
-		 */
-		REQUIRED
-	}
-
-	/**
 	 * Support inline instantiation of the {@link PID} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<PID> implements PID {
@@ -66,11 +56,11 @@ public @interface PID {
 		 * @param policy the policy of the configuration
 		 * @return an instance of {@link PID}
 		 */
-		public static final Literal of(String pid, Policy policy) {
+		public static final Literal of(String pid, ConfigurationPolicy policy) {
 			return new Literal(pid, policy);
 		}
 
-		private Literal(String pid, Policy policy) {
+		private Literal(String pid, ConfigurationPolicy policy) {
 			_pid = pid;
 			_policy = policy;
 		}
@@ -81,12 +71,12 @@ public @interface PID {
 		}
 
 		@Override
-		public Policy policy() {
+		public ConfigurationPolicy policy() {
 			return _policy;
 		}
 
 		private final String _pid;
-		private final Policy	_policy;
+		private final ConfigurationPolicy	_policy;
 
 	}
 
@@ -123,6 +113,6 @@ public @interface PID {
 	 * <p>
 	 * If not specified, the configuration is not required.
 	 */
-	Policy policy() default Policy.OPTIONAL;
+	ConfigurationPolicy policy() default ConfigurationPolicy.OPTIONAL;
 
 }

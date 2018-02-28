@@ -17,6 +17,8 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.ConfigurationPolicy;
+import org.osgi.service.cdi.MaximumCardinality;
 
 /**
  * A description of a configuration dependency of a component

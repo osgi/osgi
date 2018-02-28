@@ -17,6 +17,9 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.MaximumCardinality;
+import org.osgi.service.cdi.ReferencePolicy;
+import org.osgi.service.cdi.ReferencePolicyOption;
 
 /**
  * A description of a reference dependency of a component
@@ -29,36 +32,6 @@ import org.osgi.dto.DTO;
  * @author $Id$
  */
 public class ReferenceTemplateDTO extends DTO {
-	/**
-	 * Defines the possible values of the policy of a reference towards propagating
-	 * service changes to the CDI runtime
-	 */
-	public enum Policy {
-		/**
-		 * Reboot the CDI component that depends on this reference
-		 */
-		STATIC,
-		/**
-		 * Update the CDI reference
-		 */
-		DYNAMIC
-	}
-
-	/**
-	 * Defines the possible values of the policy of a satisfied reference towards
-	 * new matching services appearing.
-	 */
-	public enum PolicyOption {
-		/**
-		 * Consume the matching service applying it's {@link Policy}
-		 */
-		GREEDY,
-		/**
-		 * Do not consume the matching service
-		 */
-		RELUCTANT
-	}
-
 	/**
 	 * A unique within the container and persistent across reboots identified for
 	 * this activation
@@ -108,10 +81,10 @@ public class ReferenceTemplateDTO extends DTO {
 	/**
 	 * Indicates if the reference is dynamic or static in nature.
 	 */
-	public Policy				policy;
+	public ReferencePolicy				policy;
 
 	/**
 	 * Indicates if the reference is greedy or reluctant in nature.
 	 */
-	public PolicyOption			policyOption;
+	public ReferencePolicyOption			policyOption;
 }

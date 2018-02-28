@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.runtime.dto.template;
+package org.osgi.service.cdi;
 
 import java.util.Arrays;
 

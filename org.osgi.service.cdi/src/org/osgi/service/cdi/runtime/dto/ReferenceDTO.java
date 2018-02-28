@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.service.cdi.runtime.dto.template.MaximumCardinality;
+import org.osgi.service.cdi.MaximumCardinality;
 import org.osgi.service.cdi.runtime.dto.template.ReferenceTemplateDTO;
 
 /**
@@ -67,7 +67,7 @@ public class ReferenceDTO extends DTO {
 	 * Can be empty when there are no matching services.
 	 * <p>
 	 * This dependency is satisfied when <code>
-	 * {@link #minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt()}
+	 * {@link #minimumCardinality minimumCardinality} <= matches.size() <= {@link MaximumCardinality#toInt()}
 	 * </code> where the maximum cardinality can be obtained from the associated
 	 * {@link ReferenceTemplateDTO}.
 	 */
