@@ -18,10 +18,13 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
 /**
@@ -90,6 +93,7 @@ public @interface Reference {
 	 * service type derived from the injection point type, otherwise a definition
 	 * error will result.
 	 */
+	@Nonbinding
 	Class<?> value() default Object.class;
 
 	/**
@@ -98,5 +102,6 @@ public @interface Reference {
 	 * <p>
 	 * If not specified, no target property is set.
 	 */
+	@Nonbinding
 	String target() default "";
 }
