@@ -106,7 +106,12 @@ releaserepo             = ${build}/${target-dir}/repo
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd"
 
-
+-workingset = \
+  Build;member=${filter;${p};cnf|licensed|osgi\..*}, \
+  Companion;member=${filterout;${p};cnf|licensed|osgi\..*|org\.osgi\.(impl|test)\..*}, \
+  ReferenceImplementation;member=${filter;${p};org\.osgi\.impl\..*}, \
+  ComplianceTests;member=${filter;${p};org\.osgi\.test\..*}
+  
 # Time options
 # base.modified is used by bnd to not make when files are not changed
 base.modified			= ${fmodified;${build}/build.bnd,${project}/bnd.bnd,${project}/build.gradle}
