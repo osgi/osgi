@@ -15,6 +15,9 @@
  */
 package org.osgi.test.cases.jaxrs.resources;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,16 +42,24 @@ public class SseResource {
 	@Produces(MediaType.SERVER_SENT_EVENTS)
 	public void stream(@Context SseEventSink sink) {
 		new Thread(() -> {
+
+			CompletionStage< ? > cs = CompletableFuture.completedFuture(null);
+
 			try {
 				for (int i = 0; i < 10; i++) {
 					Thread.sleep(500);
-					sse.newEventBuilder().data(i).mediaType(type);
+					cs = cs.thenCombine(sink.send(sse.newEventBuilder()
+							.data(i)
+							.mediaType(type)
+							.build()), (a, b) -> null);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				sink.send(sse.newEvent("error", e.getMessage()));
+				cs = cs.thenCombine(
+						sink.send(sse.newEvent("error", e.getMessage())),
+						(a, b) -> null);
 			}
-			sink.close();
+			cs.whenComplete((a, b) -> sink.close());
 		}).start();
 	}
 }

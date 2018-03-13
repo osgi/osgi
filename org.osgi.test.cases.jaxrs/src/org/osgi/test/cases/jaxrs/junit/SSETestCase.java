@@ -33,7 +33,6 @@ import javax.ws.rs.sse.SseEventSource;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.client.SseEventSourceFactory;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
-import org.osgi.test.cases.jaxrs.extensions.StringReplacer;
 import org.osgi.test.cases.jaxrs.resources.SseResource;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
@@ -101,69 +100,4 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 			clientTracker.close();
 		}
 	}
-
-	/**
-	 * A test that ensures the extension registered with the client can be used
-	 * in the SseEventSource (151.9.3)
-	 * 
-	 * @throws Exception
-	 */
-	public void testJaxRsSseEventSourceExtension() throws Exception {
-
-		ServiceTracker<ClientBuilder,ClientBuilder> clientTracker = new ServiceTracker<>(
-				getContext(), ClientBuilder.class, null);
-		clientTracker.open();
-
-		assertNotNull(clientTracker.waitForService(2000));
-
-		Client c = clientTracker.getService()
-				.register(new StringReplacer("3", "12345"))
-				.build();
-
-		String baseURI = getBaseURI();
-
-		WebTarget target = c.target(baseURI + "/whiteboard/stream");
-
-		Dictionary<String,Object> properties = new Hashtable<>();
-		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
-
-		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
-
-		ServiceRegistration<SseResource> reg = getContext().registerService(
-				SseResource.class, new SseResource(MediaType.TEXT_PLAIN_TYPE),
-				properties);
-
-		try {
-
-			awaitSelection.getValue();
-
-			ServiceTracker<SseEventSourceFactory,SseEventSourceFactory> sseTracker = new ServiceTracker<>(
-					getContext(), SseEventSourceFactory.class, null);
-			sseTracker.open();
-
-			assertNotNull(sseTracker.waitForService(2000));
-
-			AtomicReference<Throwable> ref = new AtomicReference<Throwable>();
-			List<Integer> list = new CopyOnWriteArrayList<>();
-			Semaphore s = new Semaphore(0);
-
-			SseEventSource source = sseTracker.getService().newSource(target);
-
-			source.register(e -> list.add(e.readData(Integer.class)),
-					t -> ref.set(t), s::release);
-
-			source.open();
-
-			assertTrue(s.tryAcquire(10, TimeUnit.SECONDS));
-
-			assertNull(ref.get());
-
-			assertEquals(Arrays.asList(0, 1, 2, 12345, 4, 5, 6, 7, 8, 9), list);
-
-		} finally {
-			reg.unregister();
-			clientTracker.close();
-		}
-	}
-
 }
