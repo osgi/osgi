@@ -52,4 +52,12 @@ public class ComponentDTO extends DTO {
 	 * Must not be {@code null}
 	 */
 	public List<ComponentInstanceDTO>	instances;
+
+	/**
+	 * Indicates if the component is enabled. The default is {@code true}.
+	 * <p>
+	 * A setting of {@code false} on the <em>container component</em> results in
+	 * all components in the bundle being disabled.
+	 */
+	public boolean						enabled	= true;
 }
