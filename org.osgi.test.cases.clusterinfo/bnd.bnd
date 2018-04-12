@@ -11,7 +11,8 @@ Import-Package: ${-signaturetest}, *
 Include-Resource                  = \
    tb1.jar, \
    tb2.jar, \
-   tb3.jar
+   tb3.jar, \
+   tb4.jar
 
 Test-Cases                          = ${testcases}
 -signaturetest                      = org.osgi.service.clusterinfo

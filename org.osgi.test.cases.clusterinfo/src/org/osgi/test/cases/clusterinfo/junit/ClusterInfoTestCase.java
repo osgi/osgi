@@ -19,14 +19,16 @@ package org.osgi.test.cases.clusterinfo.junit;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
 import org.osgi.service.clusterinfo.FrameworkManager;
 import org.osgi.service.clusterinfo.FrameworkNodeStatus;
 import org.osgi.service.clusterinfo.NodeStatus;
@@ -83,7 +85,7 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		assertBundleDTOEquals(dto, dto2);
 
 		assertEquals("A custom header",
-				fm.getBundleHeaders(dto.id).get("Customer-Header").trim());
+				fm.getBundleHeaders(dto.id).get("Custom-Header").trim());
 		boolean foundDTO = false;
 		for (BundleDTO bdto : fm.getBundles()) {
 			if (bdto.id == dto.id) {
@@ -98,7 +100,6 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 						"(&(objectClass=java.lang.String)(testbundle=tb1))")
 						.size());
 		fm.startBundle(dto.id);
-		// TODO startbundle with options
 		
 		Collection<ServiceReferenceDTO> bsrefs = fm.getServiceReferences(
 				"(&(objectClass=java.lang.String)(testbundle=tb1))");
@@ -125,7 +126,7 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 
 		URL tb2URL = getClass().getClassLoader().getResource("tb2.jar");
 		BundleDTO udto = fm.updateBundle(dto.id, tb2URL.toString());
-		// TODO updateBundle(long)
+
 		assertEquals("Service from pre-update bundle should be gone", 0,
 				fm.getServiceReferences(
 						"(&(objectClass=java.lang.String)(testbundle=tb1))")
@@ -133,10 +134,74 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		Collection<ServiceReferenceDTO> usrefs = fm.getServiceReferences(
 				"(&(objectClass=java.lang.String)(testbundle=tb2))");
 		assertEquals(1, usrefs.size());
+		ServiceReferenceDTO usdto = usrefs.iterator().next();
+		assertEquals(usdto.bundle, udto.id);
+		assertEquals("some different value",
+				usdto.properties.get("some.property"));
+		
+		fm.stopBundle(udto.id);
+		assertEquals("TB2 registered service should be gone", 0,
+				fm.getServiceReferences(
+						"(&(objectClass=java.lang.String)(testbundle=tb2))")
+						.size());
+		assertEquals(Bundle.RESOLVED, fm.getBundleState(udto.id));
 
-		// TODO check udto
-		// TODO stopBundle
-		// TODO uninstallBundle
+		int sizeBeforeUninstall = fm.getBundles().size();
+		BundleDTO undto = fm.uninstallBundle(udto.id);
+		assertEquals(undto.id, udto.id);
+		assertEquals(Bundle.UNINSTALLED, undto.state);
+		assertEquals(sizeBeforeUninstall - 1, fm.getBundles().size());
+	}
+
+	public void testFrameworkManager2() throws Exception {
+		BundleContext ctx = getContext();
+		Collection<ServiceReference<FrameworkManager>> srefs = ctx
+				.getServiceReferences(FrameworkManager.class, "(objectClass="
+						+ FrameworkNodeStatus.class.getName() + ")");
+		assertNotNull(srefs);
+
+		assertEquals("One framework manager expected", 1, srefs.size());
+		FrameworkManager fm = ctx.getService(srefs.iterator().next());
+
+		URL tb4URL = getClass().getClassLoader().getResource("tb4.jar");
+		BundleDTO dto = fm.installBundle(tb4URL.toString());
+
+		fm.setBundleStartLevel(dto.id, 123);
+		assertEquals(123, fm.getBundleStartLevel(dto.id));
+		
+		fm.uninstallBundle(dto.id);
+	}
+
+	public void testFrameworkManagerFrameworkStartLevel() throws Exception {
+		BundleContext ctx = getContext();
+		Collection<ServiceReference<FrameworkManager>> srefs = ctx
+				.getServiceReferences(FrameworkManager.class, "(objectClass="
+						+ FrameworkNodeStatus.class.getName() + ")");
+		assertNotNull(srefs);
+
+		assertEquals("One framework manager expected", 1, srefs.size());
+		FrameworkManager fm = ctx.getService(srefs.iterator().next());
+
+		FrameworkStartLevel fwsl = ctx.getBundle(0)
+				.adapt(FrameworkStartLevel.class);
+		FrameworkStartLevelDTO fwsldto = fm.getFrameworkStartLevel();
+
+		assertEquals(fwsl.getInitialBundleStartLevel(),
+				fwsldto.initialBundleStartLevel);
+		assertEquals(fwsl.getStartLevel(), fwsldto.startLevel);
+
+		try {
+			FrameworkStartLevelDTO fwsldto2 = new FrameworkStartLevelDTO();
+			fwsldto2.initialBundleStartLevel = fwsldto.initialBundleStartLevel;
+			fwsldto2.startLevel = 99;
+
+			fm.setFrameworkStartLevel(fwsldto2);
+			assertEquals(fwsl.getInitialBundleStartLevel(),
+					fwsldto2.initialBundleStartLevel);
+			assertEquals(99, fwsldto2.startLevel);
+		} finally {
+			fm.setFrameworkStartLevel(fwsldto);
+		}
 	}
 
 	public void testMetrics() {
@@ -210,24 +275,6 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 				assertEquals(v1, v2);
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private Collection<String> getStringPlusProperty(Object prop) {
-		if (prop == null) {
-			return Collections.emptyList();
-		}
-		if (prop instanceof String) {
-			return Collections.singletonList((String) prop);
-		}
-		if (prop instanceof Collection) {
-			return (Collection<String>) prop;
-		}
-		if (prop instanceof String[]) {
-			return Arrays.asList((String[]) prop);
-		}
-
-		return Collections.emptyList();
 	}
 }
 
