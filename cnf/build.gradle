@@ -3,7 +3,6 @@
  */
 /* After building, we need to refresh the bnd Projects to pickup the bnd plugins built in cnf. */
 task('refresh') {
-  dependsOn compileJava, processResources
   onlyIf {
     compileJava.didWork || processResources.didWork
   }
@@ -19,7 +18,7 @@ task('refresh') {
 }
 
 classes {
-  dependsOn refresh
+  finalizedBy refresh
 }
 
 /* bnd plugins influence bundle contents, so add cnf output to jar inputs */
