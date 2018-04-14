@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+	version="1.1"
+	id="image"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="190px"
+	height="190px"
+	xml:space="preserve"
+>
+
+	<!-- DEBUGGING ONLY -->
+
+	<!-- <rect x="0" y="0" stroke="#000" fill="none" width="100%" height="100%"/> -->
+
+	<!-- REUSABLE PARTS -->
+
+	<defs>
+
+		<!-- OSGi Symbols -->
+
+		<symbol id="impl">
+			<rect x="3" y="3" stroke="black" fill="#000" width="70" height="30"/>
+			<rect x="0.5" y="0.5" stroke="black" stroke-width=".6" fill="#fff" width="70" height="30"/>
+		</symbol>
+		<symbol id="class">
+			<use xlink:href="#impl"/>
+			<text x="2" y="6" fill="#000" style="font-size: 6px; font-family:ProductusOSGiBookc;">&lt;&lt;class&gt;&gt;</text>
+		</symbol>
+		<symbol id="interface">
+			<use xlink:href="#impl"/>
+			<text x="2" y="6" fill="#000" style="font-size: 6px; font-family:ProductusOSGiBookc;">&lt;&lt;interface&gt;&gt;</text>
+		</symbol>
+		<symbol id="service">
+			<use xlink:href="#interface"/>
+			<polygon points="55,34 74,15 74,34" fill="#000"/>
+		</symbol>
+
+		<!-- Example:
+
+		Use inside an SVG block like so:
+
+		<svg x="10" y="10">
+			<use xlink:href="#interface"/>
+			<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+				>Foo</text>
+		</svg>
+
+		-->
+
+		<marker id="arrowHead" markerWidth="10" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+			<path d="M0,0 L10,3 L0,6 z" fill="#000" />
+		</marker>
+
+		<g id="one">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">1</text>
+		</g>
+		<g id="oneton">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">1..n</text>
+		</g>
+		<g id="zeroton">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">0..n</text>
+		</g>
+
+		<!-- End OSGi Symbols -->
+
+	</defs>
+
+	<!-- Scope -->
+	<svg x="10" y="10">
+		<use xlink:href="#impl"/>
+		<text x="2" y="6" fill="#000" style="font-size: 6px; font-family:ProductusOSGiBookc;"
+			><![CDATA[<<annotation>>]]></text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Scope</text>
+	</svg>
+
+	<!-- Line from Scope to Context Implementation -->
+	<g>
+		<polyline points="45,42 45,80" stroke="black" stroke-dasharray="5, 3"/>
+		<text x="47" y="47" fill="#000" style="font-size: 6px; font-family:ProductusOSGiMonoc;"
+			transform="rotate(90 47,47)">identifies</text>
+	</g>
+
+	<!-- Context Implementation -->
+	<svg x="10" y="80">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Context</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Implementation</text>
+	</svg>
+
+	<!-- Line from Context Impl to Context -->
+	<polyline points="82,97 100,97" stroke="black" marker-end="url(#arrowHead)"/>
+
+	<!-- Context -->
+	<svg x="110" y="80">
+		<use xlink:href="#interface"/>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Context</text>
+	</svg>
+
+	<!-- Line from Context Impl to Context Instance -->
+	<g>
+		<polyline points="45,112 45,150" stroke="black" stroke-dasharray="5, 3"/>
+		<use x="47" y="120" xlink:href="#one"/>
+		<use x="47" y="148" xlink:href="#zeroton"/>
+	</g>
+
+	<!-- Context Instance -->
+	<svg x="10" y="150">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Context</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Instance</text>
+	</svg>
+
+	<!-- Line from Context Instance to Contextual Instance -->
+	<g>
+		<polyline points="82,167 110,167" stroke="black" stroke-dasharray="5, 3"/>
+		<use x="84" y="165" xlink:href="#one"/>
+		<use x="98" y="173" xlink:href="#zeroton"/>
+	</g>
+
+	<!-- Contextual Instance -->
+	<svg x="110" y="150">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Contextual</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Instance</text>
+	</svg>
+
+</svg>

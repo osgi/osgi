@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+	version="1.1"
+	id="image"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="370px"
+	height="530px"
+	xml:space="preserve"
+>
+
+	<!-- DEBUGGING ONLY -->
+
+	<!-- <rect x="0" y="0" stroke="#000" fill="none" width="100%" height="100%"/> -->
+
+	<!-- REUSABLE PARTS -->
+
+	<defs>
+
+		<!-- OSGi Symbols -->
+
+		<symbol id="impl">
+			<rect x="3" y="3" stroke="black" fill="#000" width="70" height="30"/>
+			<rect x="0.5" y="0.5" stroke="black" stroke-width=".6" fill="#fff" width="70" height="30"/>
+		</symbol>
+		<symbol id="class">
+			<use xlink:href="#impl"/>
+			<text x="2" y="6" fill="#000" style="font-size: 6px; font-family:ProductusOSGiBookc;">&lt;&lt;class&gt;&gt;</text>
+		</symbol>
+		<symbol id="interface">
+			<use xlink:href="#impl"/>
+			<text x="2" y="6" fill="#000" style="font-size: 6px; font-family:ProductusOSGiBookc;">&lt;&lt;interface&gt;&gt;</text>
+		</symbol>
+		<symbol id="service">
+			<use xlink:href="#impl"/>
+			<polygon points="55,34 74,15 74,34" fill="#000"/>
+		</symbol>
+
+		<!-- Example:
+
+		Use inside an SVG block like so:
+
+		<svg x="10" y="10">
+			<use xlink:href="#interface"/>
+			<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+				>Foo</text>
+		</svg>
+
+		-->
+
+		<marker id="arrowHead" markerWidth="10" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+			<path d="M0,0 L10,3 L0,6 z" fill="#000" />
+		</marker>
+
+		<g id="one">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">1</text>
+		</g>
+		<g id="oneton">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">1..n</text>
+		</g>
+		<g id="zeroton">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">0..n</text>
+		</g>
+		<g id="zerotoone">
+			<text style="font-size: 6px; font-family:ProductusOSGiMonoc;" x="0" y="0">0..1</text>
+		</g>
+
+		<!-- End OSGi Symbols -->
+
+	</defs>
+
+	<!-- START -->
+
+	<!-- Cdi Component Runtime > Container DTO -->
+	<g>
+		<polyline points="130,43 130,54 35,54 35,60.5" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="20" y="57.5"/>
+	</g>
+	<!-- Container DTO > Extension DTO -->
+	<g>
+		<polyline points="35,90 35,125 40,125" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="26" y="132"/>
+	</g>
+	<!-- Container DTO > Component DTO -->
+	<g>
+		<polyline points="20,90 20,225 40,225" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="26" y="232"/>
+	</g>
+	<!-- Extension DTO > Bundle DTO -->
+	<g>
+		<polyline points="75,115 75,175 80,175" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="74" y="182"/>
+	</g>
+	<!-- Component DTO > Component Instance DTO -->
+	<g>
+		<polyline points="75,215 75,275 80,275" stroke="#000" fill="none"/>
+		<text x="66" y="282" style="font-size: 6px; font-family:ProductusOSGiMonoc;"><tspan style="font-family:ProductusSemibold;">(*)</tspan></text>
+	</g>
+	<!-- Component Instance DTO > Configuration DTO -->
+	<g>
+		<polyline points="115,292 115,325 120,325" stroke="#000" fill="none"/>
+		<text x="106" y="332" style="font-size: 6px; font-family:ProductusOSGiMonoc;"><tspan style="font-family:ProductusSemibold;">(**)</tspan></text>
+	</g>
+	<!-- Component Instance DTO > Reference DTO -->
+	<g>
+		<polyline points="100,290 100,375 120,375" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="106" y="382"/>
+	</g>
+	<!-- Component Instance DTO > Activation DTO -->
+	<g>
+		<polyline points="85,290 85,425 120,425" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="106" y="432"/>
+	</g>
+	<!-- Activation DTO > Service Reference DTO -->
+	<g>
+		<polyline points="145,440 145,475 160,475" stroke="#000" fill="none"/>
+		<use xlink:href="#zerotoone" x="146" y="482"/>
+	</g>
+
+	<svg x="100" y="10">
+		<use xlink:href="#service"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Cdi Component</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Runtime</text>
+	</svg>
+
+	<svg x="0" y="60">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Container DTO</text>
+	</svg>
+
+	<svg x="40" y="110">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Extension DTO</text>
+	</svg>
+
+	<svg x="80" y="160">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Bundle DTO</text>
+	</svg>
+
+	<svg x="40" y="210">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Component DTO</text>
+	</svg>
+
+	<svg x="80" y="260">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Component</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Instance DTO</text>
+	</svg>
+
+	<svg x="120" y="310">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Configuration DTO</text>
+	</svg>
+
+	<svg x="120" y="360">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Reference DTO</text>
+	</svg>
+
+	<svg x="120" y="410">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Activation DTO</text>
+	</svg>
+
+	<svg x="160" y="460">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Service</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Reference DTO</text>
+	</svg>
+
+	<!-- TEMPLATES -->
+
+	<!-- Cdi Component Runtime > Container Template DTO -->
+	<g>
+		<polyline points="140,43 140,54 235,54 235,60.5" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="238" y="58"/>
+	</g>
+	<!-- Container Template DTO > Extension Template DTO -->
+	<g>
+		<polyline points="235,93 235,115 240,115" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="226" y="122"/>
+	</g>
+	<!-- Container Template DTO > Component Template DTO -->
+	<g>
+		<polyline points="220,93 220,215 240,215" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="226" y="222"/>
+	</g>
+	<!-- Component Template DTO > Configuration Template DTO -->
+	<g>
+		<polyline points="275,243 275,315 280,315" stroke="#000" fill="none"/>
+		<use xlink:href="#oneton" x="266" y="322"/>
+	</g>
+	<!-- Component Template DTO > Reference Template DTO -->
+	<g>
+		<polyline points="260,243 260,365 280,365" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="266" y="372"/>
+	</g>
+	<!-- Component Template DTO > Reference Template DTO -->
+	<g>
+		<polyline points="245,243 245,415 280,415" stroke="#000" fill="none"/>
+		<use xlink:href="#zeroton" x="266" y="422"/>
+	</g>
+
+	<!-- Container DTO > Container Template DTO -->
+	<g>
+		<polyline points="70,85 200,85" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="194" y="92"/>
+	</g>
+	<!-- Extension DTO > Extension Template DTO -->
+	<g>
+		<polyline points="110,135 240,135" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="234" y="142"/>
+	</g>
+	<!-- Component DTO > Component Template DTO -->
+	<g>
+		<polyline points="110,235 240,235" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="234" y="242"/>
+	</g>
+	<!-- Configuration DTO > Configuration Template DTO -->
+	<g>
+		<polyline points="192,335 280,335" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="274" y="342"/>
+	</g>
+	<!-- Reference DTO > Reference Template DTO -->
+	<g>
+		<polyline points="190,385 330,385" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="274" y="392"/>
+	</g>
+	<!-- Activation DTO > Activation Template DTO -->
+	<g>
+		<polyline points="190,435 330,435" stroke="#000" fill="none"/>
+		<use xlink:href="#one" x="274" y="442"/>
+	</g>
+
+	<svg x="200" y="60">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Container</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<svg x="240" y="110">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Extension</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<svg x="240" y="210">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Component</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<svg x="280" y="310">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Configuration</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<svg x="280" y="360">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Reference</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<svg x="280" y="410">
+		<use xlink:href="#impl"/>
+		<text x="2" y="7" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Activation</text>
+		<text x="2" y="14" fill="#000" style="font-size: 7px; font-family:ProductusSemibold;"
+			>Template DTO</text>
+	</svg>
+
+	<g>
+		<text x="10" y="510" style="font-size: 6px; font-family:ProductusOSGiMonoc;">
+			<tspan style="font-family:ProductusSemibold;">(*)</tspan> CONTAINER = 1, SINGLE = 0..1, FACTORY = 0..n
+		</text>
+		<text x="10" y="520" style="font-size: 6px; font-family:ProductusOSGiMonoc;">
+			<tspan style="font-family:ProductusSemibold;">(**)</tspan> CONTAINER = 0..n, SINGLE = 0..n, FACTORY = 1..n
+		</text>
+	</g>
+</svg>

@@ -1,0 +1,2968 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="152"
+	revision="$Id$"
+	version="5"
+	xml:id="service.cdi"
+	xmlns="http://docbook.org/ns/docbook"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docbook.org/ns/docbook http://docbook.org/xml/5.0/xsd/docbook.xsd">
+
+<title>CDI Integration Specification</title>
+
+<info>
+	<releaseinfo><xref endterm="org.osgi.service.cdi-version"
+	linkend="org.osgi.service.cdi"/></releaseinfo>
+</info>
+
+<section xml:id="service.cdi-intro">
+	<title>Introduction</title>
+
+	<para><emphasis>Contexts and Dependency Injection</emphasis>
+	(<xref linkend="service.cdi-bib.cdi" />) is the standard <emphasis>dependency
+	injection</emphasis> technology for Java. <xref linkend="service.cdi-bib.cdi20" />
+	is the current version.</para>
+
+	<para>The CDI specification is a composition of the following high level
+	features:</para>
+
+	<blockquote>
+		<attribution>CDI</attribution>
+		<itemizedlist>
+			<listitem>
+				<para>A well-defined life cycle for stateful objects bound to
+				life cycle contexts, where the set of contexts is
+				extensible</para>
+			</listitem>
+			<listitem>
+				<para>A sophisticated, typesafe dependency injection
+				mechanism, including the ability to select dependencies at either
+				development or deployment time, without verbose
+				configuration</para>
+			</listitem>
+			<listitem>
+				<para>Support for Java EE modularity and the Java EE
+				component architecture - the modular structure of a Java EE
+				application is taken into account when resolving dependencies
+				between Java EE components</para>
+			</listitem>
+			<listitem>
+				<para>Integration with the Unified Expression Language (EL),
+				allowing any contextual object to be used directly within a JSF or
+				JSP page</para>
+			</listitem>
+			<listitem>
+				<para>The ability to decorate injected objects</para>
+			</listitem>
+			<listitem>
+				<para>The ability to associate interceptors to objects via
+				typesafe interceptor bindings</para>
+			</listitem>
+			<listitem>
+				<para>An event notification model</para>
+			</listitem>
+			<listitem>
+				<para>A web conversation context in addition to the three
+				standard web contexts defined by the Java Servlets
+				specification</para>
+			</listitem>
+			<listitem>
+				<para>A Service Provider Interface (SPI) allowing portable
+				extensions to integrate cleanly with the container</para>
+			</listitem>
+		</itemizedlist>
+	</blockquote>
+
+	<para>This specification describes how OSGi is integrated into the CDI
+	programming model and the interaction with these features.</para>
+
+	<section>
+		<title>Essentials</title>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>Dependency Injection</emphasis> - Provide
+				an advanced dependency injection framework for bundles that can
+				create and wire objects and services together into an
+				application.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Extender Model</emphasis> - Enable the
+				configuration of components inside a bundle based on
+				configuration data provided by the bundle developer. The
+				life cycle of these components is controlled by the extender
+				based on the extended bundle's state.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Unencumbered</emphasis> - Does not require any
+				special bundle activator or other code to be written inside the
+				bundle in order to have components instantiated and
+				configured.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Services</emphasis> - Enable the usage of OSGi
+				services as injected dependencies.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Configuration</emphasis> - Enable the usage of
+				Configuration Admin configuration objects as injected
+				dependencies.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Dependencies</emphasis> - Allow components to
+				depend on configuration objects and services and to register services,
+				with the full breadth of the OSGi capabilities.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Reactive</emphasis> - It must be possible to
+				react to changes in the external dependencies with different
+				policies.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Introspection</emphasis> - It must be possible
+				to introspect the service components.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Business Logic</emphasis> - A focus on writing
+				business logic by using the features of CDI and reusable
+				functionality provided by extensions.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Familiarity</emphasis> - Familiar to Java
+				developers knowledgeable in CDI.</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+		<title>Entities</title>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis role="strong">CDI Entities</emphasis></para>
+				<itemizedlist>
+					<listitem>
+						<para><emphasis>CDI</emphasis> - Contexts and Dependency
+						Injection 2.0.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Bean</emphasis> - A Java class that satisfies
+						the criteria of a bean as defined in CDI and which provides
+						contextual objects that define application state and/or
+						logic.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Producer</emphasis> - A producer method or field
+						acts as a source of objects to be injected. It is an alternative
+						to beans.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Contextual Instance</emphasis> - The object
+						instances produced by beans or producers within a given
+						<emphasis>context</emphasis>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Context</emphasis> - A Service Provider
+						Interface (SPI) defining the life cycle for a set of contextual
+						instances. The context also determines which contextual
+						instances of beans are visible to the contextual instances of
+						other beans. </para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Scope</emphasis> - A (CDI) scope identifies a
+						particular <emphasis>Context</emphasis> implementation. All
+						beans have a scope and are therefore bound to a particular
+						context implementation. A scope is represented by
+						an annotation type. Any contextual instances produced from the
+						bean exist within a context identified by the
+						scope.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Injection Point</emphasis> - A location in a
+						contextual instance or producer which is the target for
+						injection for a contextual instance.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Qualifier</emphasis> - An annotation used to
+						define a quality used for matching. Qualifiers are applied to
+						injection points, beans, producers (among other things). CDI
+						finds beans matching an injection point's type then makes sure
+						the qualifiers of the bean match all those on the injection
+						point.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Stereotype</emphasis> - An annotation
+						meta-annotated with <code>javax.enterprise.inject.Stereotype</code>
+						used to define a recurring role by aggregating a cdi scope
+						and various other aspects into a reusable unit.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Decorators and Interceptors</emphasis> -
+						Actors that intercept certain method invocations of
+						contextual instances. They are implemented using proxies.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Portable Extension</emphasis> - A portable
+						extension uses the CDI SPI to provide additional and reusable
+						functionality to a set of CDI beans.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>CDI Container</emphasis> - For each CDI bundle,
+						required portable extensions are loaded , metadata and bean
+						classes are analyzed to create a bean injection graph. This
+						process is encapsulated by a CDI container.</para>
+					</listitem>
+				</itemizedlist>
+			</listitem>
+			<listitem>
+				<para><emphasis role="strong">Entities defined by this specification</emphasis></para>
+
+				<itemizedlist>
+					<listitem>
+						<para><emphasis>CDI Bundle</emphasis> - An OSGi bundle containing
+						CDI beans.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>CDI Extension Bundle</emphasis> - A bundle providing
+						one or more portable extensions.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>CDI Component Runtime (CCR)</emphasis> - The
+						actor that manages the CDI containers and their life
+						cycle and allows introspection of CDI containers.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Configuration Object</emphasis> - Configuration
+						Admin object which implements the <code>Configuration</code>
+						interface and contains configuration data.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Single Configuration Object</emphasis> - A
+						configuration object whose PID maps to exactly one configuration
+						object.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Factory Configuration Object</emphasis> - A
+						configuration object whose PID maps to multiple configuration
+						objects.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Component</emphasis> - A set of beans
+						whose life cycle is derived from it's dependencies.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Dependency</emphasis> - A configuration object
+						or service upon which beans depend. These dependencies
+						are dynamic in that their life cycle is independently
+						controlled by other actors within the OSGi Framework and
+						CCR must properly accommodate for this.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Configuration Template</emphasis> - The
+						static metadata describing a configuration object dependency.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Reference Template</emphasis> - The
+						static metadata describing a reference dependency.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Component Template</emphasis> - The
+						static definition of a <emphasis>component</emphasis>
+						combining all the metadata defined by its beans, and its
+						dependencies. The component template does not
+						change between restarts of the CDI bundle.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Component Scope</emphasis> - A (CDI) scope
+						defined by this specification that represents the granular
+						life cycle associated with a set of dependencies.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Component Instance</emphasis> - A
+						runtime instance of the component template which
+						observes and reacts to the state of the OSGi Framework
+						based on the metadata of the component template.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Container Component</emphasis> - A component
+						encompassing all beans in the CDI container <emphasis
+						role="strong">not</emphasis> in the component scope. The
+						container component results in a single component
+						instance.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Single Component</emphasis> - A component
+						that encompasses beans that have the
+						<emphasis>Component Scope</emphasis>, whose dependencies may
+						include single configuration objects and services. A single
+						component results in a single component instance.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>Factory Component</emphasis> - A component
+						that encompassed beans having the
+						<emphasis>Component Scope</emphasis>, that are driven by factory
+						configuration objects and whose dependencies may include
+						single configuration objects and services. A factory component
+						results in any number of component instances, one for every
+						factory configuration object.</para>
+					</listitem>
+				</itemizedlist>
+			</listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+		<title>Synopsis</title>
+
+		<para>The CDI Extender reads CDI metadata from started CDI bundles.
+		These metadata are in the form of XML documents and annotation types
+		which define the set of <emphasis>beans</emphasis> available to the CDI
+		container. Beans express dependencies on OSGi configuration objects and
+		services and are assembled into components. The life cycle of a component
+		is driven by the dependencies of its beans.</para>
+
+		<para>There are three types of components:</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>Container Component</emphasis> - Consists of
+				beans not in the <emphasis>component scope</emphasis>. There is
+				exactly one container component per CDI bundle. It's life cycle is
+				synonymous with the CDI container. The container component
+				must be completely satisfied before other component types can be
+				satisfied. The container component may provide multiple
+				services. Altering the state of the container component's static
+				dependencies results in the entire CDI container, and all other
+				component types to be destroyed and recreated.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Single Component</emphasis> - Consists of beans
+				in the component scope. A single component may provide immediate
+				functionality or a service resulting in an immediate instance or
+				a single service registration. Unlike the container component,
+				single components may be created, destroyed and react to changes
+				in the state of it's dependencies in isolation, without affecting
+				the entire CDI container. A single component's life cycle is driven
+				first by the container component, which must be satisfied and second
+				by it's dependencies.</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Factory Component</emphasis> - Identical to a single
+				component in definition and in benefiting from an isolated life cycle
+				with the addition of requiring factory configuration objects. A
+				factory component may provide immediate functionality or a service,
+				resulting in one immediate instance or service registration,
+				respectively, per factory configuration object.</para>
+			</listitem>
+		</itemizedlist>
+
+		<figure>
+			<title>CCR Model</title>
+
+			<mediaobject>
+				<imageobject>
+					<imagedata
+						align="center"
+						contentwidth="370px"
+						fileref="component-model.svg"
+					/>
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+
+	<!-- <section>
+		<title>Readers</title>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>Architects</emphasis>
+				</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Service Programmers</emphasis>
+				</para>
+			</listitem>
+
+			<listitem>
+				<para><emphasis>Deployers</emphasis>
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section> -->
+
+</section>
+
+<section xml:id="service.cdi-components">
+	<title>Components</title>
+
+	<para>A traditional CDI application is composed of beans that have a well-defined
+	life cycle based on the CDI scope they declare. This specification defines a
+	component model in terms of beans and scopes as they are defined in the CDI
+	specification in order to act as a good CDI citizen.</para>
+
+	<para><emphasis>Components</emphasis>
+	are defined by this specification to have the following characteristics:</para>
+
+	<itemizedlist>
+		<listitem>
+			<para>Components exist within a CDI bundle.</para>
+		</listitem>
+
+		<listitem>
+			<para>Components are defined by collections of beans (referred to
+			as component beans).</para>
+		</listitem>
+
+		<listitem>
+			<para>Components may have dependencies on configuration objects
+			and services. These dependencies are described using metadata
+			defined by this specification.</para>
+		</listitem>
+
+		<listitem>
+			<para>Components have properties, referred to as <emphasis>component
+			properties</emphasis>. Some of these are defined by this
+			specification and must be present. Others are aggregated from
+			various configuration sources as defined in <xref
+			linkend="service.cdi-component.properties"/>.</para>
+		</listitem>
+
+		<listitem>
+			<para>Components have unique names within the CDI bundle.</para>
+		</listitem>
+
+		<listitem>
+			<para>Components produce one or more <emphasis>component
+			instances</emphasis>. Component instances are the runtime representation
+			of the component. They independently react to the state of the
+			dependencies declared by their component beans.</para>
+		</listitem>
+	</itemizedlist>
+</section>
+
+<section xml:id="service.cdi-component.scope">
+	<title>Component Scope</title>
+
+	<para>This specification uses the facilities of CDI <xref
+	linkend="service.cdi-bib.cdi.scopes.and.contexts"/> to define a life cycle
+	for beans specifically for supporting a relationship with dynamic
+	dependencies.</para>
+
+	<para>Associated with every CDI scope is an object implementing
+	<code>javax.enterprise.context.spi.Context</code> or
+	<code>javax.enterprise.context.spi.AlterableContext</code>. The life cycle
+	and visibility rules for said scope are defined by this implementation which
+	collaborates with the CDI container to create or
+	destroy contextual instances. Contextual instances associated with the scope
+	exist within a <emphasis>context</emphasis> which acts as a cache,
+	creating new or returning existing contextual instances as needed. These
+	contexts are managed by the CCR in conjunction with the CDI container.</para>
+
+	<figure>
+		<title>CDI Scope Model</title>
+
+		<mediaobject>
+			<imageobject>
+				<imagedata
+					align="center"
+					contentwidth="250px"
+					fileref="cdi-scope-model.svg"
+				/>
+			</imageobject>
+		</mediaobject>
+	</figure>
+
+	<para>The <emphasis>component scope</emphasis> is a <xref
+	linkend="service.cdi-bib.cdi.pseudoscope"/> identified by the <code><link
+	linkend="org.osgi.service.cdi.annotations.ComponentScoped"
+	xrefstyle="hyperlink">@ComponentScoped</link></code> annotation. The
+	<emphasis>component scope</emphasis> allows component instances to use
+	component beans to create or destroy contextual instances when dynamic
+	dependencies are satisfied or unsatisfied without interfering with the life
+	cycle of other component instances (including the <link
+	linkend="service.cdi-container.component" xrefstyle="hyperlink">container
+	component</link>).</para>
+
+	<section xml:id="service.cdi-lifecycle.context.instances">
+		<title>Contexts</title>
+
+		<para>The creation and destruction of the component scope's contexts must
+		adhere to the following process:</para>
+
+		<itemizedlist>
+			<listitem xml:id="service.cdi-component.context.creation">
+				<para>The following steps are taken to create a <emphasis>context</emphasis>:</para>
+
+				<orderedlist>
+					<listitem>
+						<para><emphasis>the context is made active</emphasis> - The method
+						<code>javax.enterprise.context.spi.Context.isActive()</code>
+						must return <code>true</code>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>contextual instances are created and
+						injected</emphasis> - Contextual instances can be
+						retrieved by calling
+						<code>javax.enterprise.context.spi.Context.get(...)</code>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the @Initialized event is fired</emphasis> -
+						On success of 2. the CDI event <code>@Initialized(ComponentScoped.class)</code>
+						is fired synchronously. See <xref
+						linkend="service.cdi-component.context.events"/>.</para>
+
+						<para>When the component is a <emphasis>single
+						component</emphasis>, the event payload is the contextual
+						instance of the bean marked <code>@SingleComponent</code>.</para>
+
+						<para>When the component is a <emphasis>factory
+						component</emphasis> the event
+						payload is the contextual instance of the bean marked
+						<code>@FactoryComponent</code>.</para>
+
+						<para>Any qualifiers defined on the
+						bean of the contextual instance must be attached to the event.</para>
+
+						<para>On failure of 2. errors are logged and made
+						available in <xref
+						linkend="org.osgi.service.cdi.runtime.dto.ActivationDTO.errors" xrefstyle="hyperlink"/>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the context is deactivated</emphasis> - The method
+						<code>javax.enterprise.context.spi.Context.isActive()</code>
+						must return <code>false</code>.</para>
+					</listitem>
+				</orderedlist>
+			</listitem>
+			<listitem xml:id="service.cdi-component.context.destruction">
+				<para>The following steps are taken to destroy a <emphasis>context</emphasis>:</para>
+
+				<orderedlist>
+					<listitem>
+						<para><emphasis>the context is made active</emphasis> - The method
+						<code>javax.enterprise.context.spi.Context.isActive()</code>
+						must return <code>true</code>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the @BeforeDestroy is fired</emphasis> -
+						The CDI event <code>@BeforeDestroy(ComponentScoped.class)</code> is
+						fired synchronously. See <xref
+						linkend="service.cdi-component.context.events"/>.</para>
+
+						<para>When the component is a <emphasis>single
+						component</emphasis> the event payload is the contextual
+						instance of the bean marked <code>@SingleComponent</code>.</para>
+
+						<para>When the component is a <emphasis>factory
+						component</emphasis> the event payload is the contextual
+						instance of the bean marked <code>@FactoryComponent</code>.</para>
+
+						<para>Any qualifiers defined on the bean of the contextual
+						instance must be attached to the event.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>contextual instances are
+						destroyed</emphasis> - Any exceptions are logged.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the context is deactivated</emphasis> - The method
+						<code>javax.enterprise.context.spi.Context.isActive()</code>
+						must return <code>false</code>.</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the context is destroyed</emphasis></para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis>the @Destroyed event is fired</emphasis> -
+						The CDI event <code>@Destroyed(ComponentScoped.class)</code> is
+						fired synchronously. See <xref
+						linkend="service.cdi-component.context.events"/>.</para>
+
+						<para>When the component is a <emphasis>single
+						component</emphasis> the event payload is the contextual
+						instance of the bean marked <code>@SingleComponent</code>.</para>
+
+						<para>When the component is a <emphasis>factory
+						component</emphasis> the event payload is the contextual
+						instance of the bean marked <code>@FactoryComponent</code>.</para>
+
+						<para>Any qualifiers defined on the bean of the contextual
+						instance must be attached to the event.</para>
+
+						<para><emphasis role="strong">Note</emphasis> that the object
+						may not be <emphasis>usable</emphasis> during this event
+						because the context under which it was created is already
+						destroyed.</para>
+					</listitem>
+				</orderedlist>
+			</listitem>
+		</itemizedlist>
+
+		<table xml:id="service.cdi-component.context.events">
+		<title>Component Context Events</title>
+
+		<tgroup cols="3">
+			<colspec colnum="1" colwidth="3*"/>
+
+			<colspec colnum="2" colwidth="2*"/>
+
+			<colspec colnum="3" colwidth="1*"/>
+
+			<thead>
+			<row>
+				<entry>Qualifier</entry>
+
+				<entry>Event type</entry>
+
+				<entry>Condition</entry>
+			</row>
+			</thead>
+
+			<tbody>
+			<row>
+				<entry><code>@Initialized(ComponentScoped.class)</code></entry>
+
+				<entry>the contextual instance of the bean marked
+				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
+
+				<entry>when a context is initialized and ready for
+				use</entry>
+			</row>
+
+			<row>
+				<entry><code>@BeforeDestroy(ComponentScoped.class)</code></entry>
+
+				<entry>the contextual instance of the bean marked
+				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
+
+				<entry>when a context is about to be destroyed, but
+				before actual destruction</entry>
+			</row>
+
+			<row>
+				<entry><code>@Destoyed(ComponentScoped.class)</code></entry>
+
+				<entry>the contextual instance of the bean marked
+				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
+
+				<entry>after a context is destroyed</entry>
+			</row>
+			</tbody>
+		</tgroup>
+		</table>
+
+		<para>The following are the specific scenarios under which
+		<emphasis>contexts</emphasis> are created:</para>
+
+		<orderedlist>
+			<listitem xml:id="service.cdi-context.instance.immediate">
+				<para><emphasis>Immediate instance</emphasis> - A component
+				instance that does not provide a service requires the immediate
+				<link linkend="service.cdi-component.context.creation">creation
+				of a context</link>.</para>
+
+				<para>The context is released and destroyed when the component
+				instance is no longer satisfied or when the CDI container is
+				destroyed.</para>
+			</listitem>
+			<listitem xml:id="service.cdi-context.instance.singleton.service">
+				<para><emphasis>Singleton scoped service</emphasis> - A component
+				instance that provides a singleton scoped service requires the
+				immediate <link
+				linkend="service.cdi-component.context.creation">creation of a
+				context</link>. </para>
+
+				<para>If the component is a <emphasis>single component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@SingleComponent</code> obtained from the context.</para>
+
+				<para>If the component is a <emphasis>factory component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@FactoryComponent</code> obtained from the context.</para>
+
+				<para>The context is released and destroyed when the component
+				instance is no longer satisfied or when the CDI container is
+				destroyed.</para>
+			</listitem>
+			<listitem xml:id="service.cdi-context.instance.bundle.service">
+				<para><emphasis>Bundle scoped service</emphasis> - A component
+				instance that provides a bundle scope service requires the <link
+				linkend="service.cdi-component.context.creation">creation of a
+				context</link> when the
+				<code>ServiceFactory.getService()</code> method is called.</para>
+
+				<para>If the component is a <emphasis>single component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@SingleComponent</code> obtained from the context.</para>
+
+				<para>If the component is a <emphasis>factory component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@FactoryComponent</code> obtained from the context.</para>
+
+				<para>The context is released and destroyed when the
+				<code>ServiceFactory.ungetService()</code> method is called.</para>
+
+				<para>All contexts produced by the service registration
+				are released and destroyed when the component instance is no
+				longer satisfied or when the CDI container is destroyed.</para>
+			</listitem>
+			<listitem xml:id="service.cdi-context.instance.prototype.service">
+				<para><emphasis>Prototyped scoped service</emphasis> - A component
+				instance that provides a prototype scope service requires the <link
+				linkend="service.cdi-component.context.creation">creation of a
+				context</link> when the
+				<code>PrototypeServiceFactory.getService()</code> method is
+				called.</para>
+
+				<para>If the component is a <emphasis>single component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@SingleComponent</code> obtained from the context.</para>
+
+				<para>If the component is a <emphasis>factory component</emphasis>,
+				the service object is the contextual instance of the bean marked
+				<code>@FactoryComponent</code> obtained from the context.</para>
+
+				<para>The context is released and destroyed when the
+				<code>PrototypeServiceFactory.ungetService()</code> method is called.</para>
+
+				<para>All contexts produced by the service registration
+				are released and destroyed when the component instance is no
+				longer satisfied or when the CDI container is destroyed.</para>
+			</listitem>
+		</orderedlist>
+	</section>
+</section>
+
+<section xml:id="service.cdi-container.component">
+	<title>Container Component</title>
+
+	<para>The <emphasis>container component</emphasis> is composed of all the
+	beans available to the CDI container which are <emphasis role="strong">not</emphasis>
+	<xref linkend="org.osgi.service.cdi.annotations.ComponentScoped"
+	xrefstyle="hyperlink"/>.</para>
+
+	<para>The container component draws it's name from the CDI container
+	id. By default, the CDI container id is equal to the
+	<code>Bundle-SymbolicName</code> of the CDI bundle prefixed by
+	'<code>osgi.cdi.</code>'.</para>
+
+	<programlisting><![CDATA[containerId ::= 'osgi.cdi.' bsn
+bsn         ::= < Bundle-SymbolicName >]]></programlisting>
+
+	<para>The container id can be specified using the <xref
+	linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID"
+	xrefstyle="hyperlink"/> attribute of the <link
+	linkend="service.cdi-capabilities.extender" xrefstyle="hyperlink">CDI
+	extender requirement</link> in the bundle manifest. The value must follow
+	the <code>Bundle-SymbolicName</code> syntax. For example:</para>
+
+	<programlisting>Require-Capability: «
+	osgi.extender; «
+		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
+		container.id="my.id"</programlisting>
+
+	<section xml:id="service.cdi-container.component.configuration">
+		<title>Container Component Configuration</title>
+
+		<para>The container component must be configurable using it's
+		container id as a PID; referred to as the <emphasis>container
+		PID</emphasis>.</para>
+
+		<programlisting><![CDATA[containerPID ::= < container id >]]></programlisting>
+
+		<para>Given a bundle with <code>Bundle-SymbolicName</code> equal to
+		<code>com.acme.bar</code> which does not set the <code>container.id</code>
+		attribute in the requirement, the container id would be:</para>
+
+		<programlisting><![CDATA[osgi.cdi.com.acme.bar]]></programlisting>
+
+		<para>From the requirement example above where the container id is set to
+		<code>my.id</code>, the container PID would be:</para>
+
+		<programlisting>my.id</programlisting>
+
+		<para>The configuration object used to satisfy the container PID must
+		be a single configuration object. However the configuration policy for
+		this configuration object is <emphasis>optional</emphasis> and is not
+		required to satisfy the container component.</para>
+	</section>
+
+	<section>
+		<title>Container Component Life Cycle</title>
+
+		<para>The container component is largely synonymous with the CDI
+		container. When the depedencies of the container component are
+		satisfied the CDI container completes it's initialization process and
+		subsequently is fully functional. When the dependencies
+		of the container component are no longer satisfied the CDI container is
+		shutdown and all contextual instances are destroyed.</para>
+
+		<para>A container component with no beans would be immediately satisfied
+		since it specifies no dependencies.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-example.classes">
+	<title>Code Examples</title>
+
+	<para>This specification provides several source code examples. In order to avoid
+	repetition the following Java types are defined and re-used throughout:</para>
+
+	<programlisting><![CDATA[interface Dog {}
+
+interface Hound extends Dog {}
+
+abstract class BassetHound implements Hound {}
+
+class Spot extends BassetHound {}
+
+class Buddy implements Hound {}]]></programlisting>
+</section>
+
+<section xml:id="service.cdi-single.component">
+	<title>Single Component</title>
+
+	<para>A single component is composed of beans that are <code>@ComponentScoped</code>.
+	Additionally, there must be one, and only one bean annotated with the <xref
+	linkend="org.osgi.service.cdi.annotations.SingleComponent"
+	xrefstyle="hyperlink"/> annotation which identifies the root of the
+	component. The remaining beans are those that satisfy it's injection graph
+	according to CDI's rules for <xref
+	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from the root
+	bean and recursing through all injection points until all injection points
+	are resolved.</para>
+
+	<para>Resolution results which contain non-root beans marked with
+	<code>@SingleComponent</code> or <code>@FactoryComponent</code> result in a
+	definition error.</para>
+
+	<para>Any failed resolutions result in a definition error.</para>
+
+	<para>Applying any scope besides <code>@ComponentScoped</code> to a bean
+	marked with <code>@SingleComponent</code> results in a definition error.</para>
+
+	<para>Any <code>@Configuration</code> or <code>@Reference</code> injection point
+	that is resolved by beans which are not provided by CCR results in a definition
+	error.</para>
+
+	<para>A single component has an implicit dependency on the container
+	component. Therefore it may never be satisfied until the container
+	component is satisfied.</para>
+
+	<section>
+		<title>Single Component Naming</title>
+
+		<para>The <code>@SingleComponent</code> annotation is a
+		<emphasis>stereotype</emphasis> which carries the <code>@javax.inject.Named</code>
+		meta-annotation. This indicates that the default component name is:
+		<blockquote><attribution>CDI</attribution><para><quote>the
+		unqualified class name of the bean class, after converting the first
+		character to lower case</quote></para></blockquote> For example:</para>
+
+		<programlisting><![CDATA[// component.name = fido
+@SingleComponent
+class Fido {}]]></programlisting>
+
+		<para>However, the name may be specified by adding
+		<code>@javax.inject.Named</code> directly to the bean and specifying a
+		value whose syntax follows <code>cname</code> defined by the <xref
+		linkend="service.cdi-bib.general.syntax.definitions"/>.</para>
+
+		<programlisting><![CDATA[// component.name = Champ
+@SingleComponent
+@Named("Champ")
+class Fido {}]]></programlisting>
+	</section>
+
+	<section>
+		<title>Single Component Configuration</title>
+
+		<para>By default a single component must be configurable by using it's
+		component name, prefixed by the container PID and a period
+		(<code>.</code>), as a configuration PID. This <emphasis>component PID</emphasis>
+		will be represented throughout the remained of the specification by the symbol
+		<emphasis role="strong">Φ</emphasis> (capital Phi).</para>
+
+
+		<programlisting><![CDATA[Φ           ::= containerPID '.' compName
+containerPID ::= < container PID >
+compName     ::= < component name >]]></programlisting>
+
+		<para>A single component may change or add additional PIDs on which it
+		depends. When multiple PIDs are referenced the order is relevant and
+		affects the aggregation of the configuration objects into a flattened
+		dictionary of component properties. Later PIDs take precedence over earlier
+		PIDs. Also, it must be possible to
+		reposition the component PID within the order. The <xref
+		linkend="org.osgi.service.cdi.annotations.PID" xrefstyle="hyperlink" />
+		annotation is used to control both referenced PIDs and their
+		order.</para>
+
+		<para>The following is an example of a component that is configurable by
+		it's component PID:</para>
+
+		<programlisting><![CDATA[// component pids = [Φ]
+@SingleComponent
+class Fido {}]]></programlisting>
+
+		<para>An example of a component replacing it's component PID with a
+		specific PID:</para>
+
+		<programlisting><![CDATA[// component pids = [com.acme.foo]
+@SingleComponent
+@PID("com.acme.foo")
+class Fido {}]]></programlisting>
+
+		<para>An example of multiple PIDs:</para>
+
+		<programlisting><![CDATA[// component pids = [com.acme.foo, com.gamma.bar]
+@SingleComponent
+@PID("com.acme.foo")
+@PID("com.gamma.bar")
+class Fido {}]]></programlisting>
+
+		<para>Using <code>@PID</code> without arguments refers to the component PID:</para>
+
+		<programlisting><![CDATA[// component pids = [Φ]
+@SingleComponent
+@PID
+class Fido {}]]></programlisting>
+
+		<para>This allows the component PID to be included anywhere in
+		the order:</para>
+
+		<programlisting><![CDATA[// component pids = [com.acme.foo, Φ, com.gamma.bar]
+@SingleComponent
+@PID("com.acme.foo")
+@PID
+@PID("com.gamma.bar")
+class Fido {}]]></programlisting>
+
+		<para>Each <code>@PID</code> annotation may specify a policy for the
+		configuration object. The property <xref
+		linkend="org.osgi.service.cdi.annotations.PID.policy--"
+		xrefstyle="hyperlink"/> is used to specify the value. The possible
+		values are:</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis><xref
+				linkend="org.osgi.service.cdi.ConfigurationPolicy.OPTIONAL"
+				xrefstyle="hyperlink" /></emphasis> -
+				A configuration object is not required.
+				<emphasis>This is the default policy.</emphasis></para>
+			</listitem>
+			<listitem>
+				<para><emphasis><xref
+				linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED"
+				xrefstyle="hyperlink" /></emphasis> -
+				A configuration object is required.</para>
+			</listitem>
+		</itemizedlist>
+
+		<programlisting><![CDATA[// component pids = [com.acme.foo, Φ, com.gamma.bar]
+@SingleComponent
+@PID("com.acme.foo", policy = Policy.REQUIRED)
+@PID
+@PID("com.gamma.bar")
+class Fido {}]]></programlisting>
+
+		<para>It is a definition error to refer to the same PID more than
+		once.</para>
+
+		<para>The configuration objects used to satisfy the single component's
+		referenced PIDs must be single configuration objects.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-factory.component">
+	<title>Factory Component</title>
+
+	<para>A factory component is composed of beans that are <code>@ComponentScoped</code>.
+	Additionally, there must be one, and only one bean annotated with the <xref
+	linkend="org.osgi.service.cdi.annotations.FactoryComponent"
+	xrefstyle="hyperlink"/> annotation which identifies the root of the
+	component. The remaining beans are those that satisfy it's injection graph
+	according to CDI's rules for <xref
+	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from
+	the root and recursing through all injection points until all injection
+	points are resolved.</para>
+
+	<para>The <code>@FactoryComponent</code> annotation indicates that the
+	component is bound to the life cycle of factory configuration objects
+	associated with the factory PID specified in it's <xref
+	linkend="org.osgi.service.cdi.annotations.FactoryComponent.value--"
+	xrefstyle="hyperlink"/> property (or it's default component factory PID).
+	Each factory configuration object
+	associated with this factory PID results in a new <emphasis>component
+	instance</emphasis>. The component properties of the component instance are
+	supplemented by the properties of the factory configuration object.</para>
+
+	<para>Resolution results which contain a non-root bean marked with
+	<code>@SingleComponent</code> or <code>@FactoryComponent</code> result in a
+	definition error.</para>
+
+	<para>Any failed resolutions result in a definition error.</para>
+
+	<para>Applying any scope besides <code>@ComponentScoped</code> to a bean
+	marked with <code>@FactoryComponent</code> results in a definition error.</para>
+
+	<para>Any <code>@Configuration</code> or <code>@Reference</code> injection point
+	that is resolved by beans which are not provided by CCR results in a definition
+	error.</para>
+
+	<para>A factory component has an implicit dependency on the container
+	component. Therefore it may never be satisfied until the container
+	component is satisfied.</para>
+
+	<section>
+		<title>Factory Component Naming</title>
+
+		<para>The <code>@FactoryComponent</code> annotation is a
+		<emphasis>stereotype</emphasis> which carries the <code>@javax.inject.Named</code>
+		meta-annotation. This indicates that the default component name is:
+		<blockquote><attribution>CDI</attribution><para><quote>the
+		unqualified class name of the bean class, after converting the first
+		character to lower case</quote></para></blockquote> For example:</para>
+
+		<programlisting><![CDATA[// component.name = fido
+@FactoryComponent
+class Fido {}]]></programlisting>
+
+		<para>However, the name may be specified by adding
+		<code>@javax.inject.Named</code> directly to the bean and specifying a
+		value whose syntax follows <code>cname</code> defined by the <xref
+		linkend="service.cdi-bib.general.syntax.definitions"/>.</para>
+
+		<programlisting><![CDATA[// component.name = Champ
+@FactoryComponent
+@Named("Champ")
+class Fido {}]]></programlisting>
+	</section>
+
+	<section>
+		<title>Factory Component Configuration</title>
+
+		<para>By default a factory component must be configurable by using it's
+		component name, prefixed by the container PID and a period
+		(<code>.</code>), as a factory PID. This <emphasis>component factory PID</emphasis>
+		will be represented throughout the remained of the specification by the symbol
+		<emphasis role="strong">Σ</emphasis> (capital Sigma).</para>
+
+		<programlisting><![CDATA[Σ            ::= containerPID '.' compName
+containerPID ::= < container PID >
+compName     ::= < component name >]]></programlisting>
+
+		<para>An example of a factory component that is configurable by it's
+		component factory PID:</para>
+
+		<programlisting><![CDATA[// component pids = [Σ]
+@FactoryComponent
+class Fido {}]]></programlisting>
+
+		<para>A factory component may specify a factory PID using it's <xref
+		linkend="org.osgi.service.cdi.annotations.FactoryComponent.value--"
+		xrefstyle="hyperlink" /> property. The value must conform to the syntax
+		defined for the <code>Bundle-SymbolicName</code> header.</para>
+
+		<para>An example of a factory component specifying a factory PID:</para>
+
+		<programlisting><![CDATA[// component pids = [com.acme.foo-####]
+@FactoryComponent("com.acme.foo")
+class Fido {}]]></programlisting>
+
+		<para>A factory component may change or add additional PIDs on which it
+		depends. When multiple PIDs are
+		referenced the order is relevant and affects the aggregation of the
+		configuration objects into a flattened dictionary of component properties.
+		Later PIDs take precedence over earlier PIDs. Also, it must be possible to
+		reposition the component factory PID within the order. The <xref
+		linkend="org.osgi.service.cdi.annotations.PID" xrefstyle="hyperlink" />
+		annotation is used to control both referenced PIDs and their
+		order.</para>
+
+		<para>An example of multiple PIDs:</para>
+
+		<programlisting><![CDATA[// component pids = [com.gamma.bar, com.acme.foo-####]
+@FactoryComponent("com.acme.foo")
+@PID("com.gamma.bar")
+class Fido {}]]></programlisting>
+
+		<para>Each <code>@PID</code> annotation may specify a policy for the
+		configuration dependency. The property <xref
+		linkend="org.osgi.service.cdi.annotations.PID.policy--"
+		xrefstyle="hyperlink"/> is used to specify the value. The possible
+		values are:</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis><xref
+				linkend="org.osgi.service.cdi.ConfigurationPolicy.OPTIONAL"
+				xrefstyle="hyperlink" /></emphasis> -
+				A configuration object is not required.
+				<emphasis>This is the default policy.</emphasis></para>
+			</listitem>
+			<listitem>
+				<para><emphasis><xref
+				linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED"
+				xrefstyle="hyperlink" /></emphasis> -
+				A configuration object is required.</para>
+			</listitem>
+		</itemizedlist>
+
+		<programlisting><![CDATA[// component pids [com.acme.foo, com.gamma.bar, Σ]
+@FactoryComponent
+@PID("com.acme.foo", policy = Policy.REQUIRED)
+@PID("com.gamma.bar")
+class Fido {}]]></programlisting>
+
+		<para>The component factory PID always reserves the highest precedence
+		among specified PIDs and is positioned last in PID ordering for the purpose
+		of aggregation</para>
+
+		<para>A factory component can only reference a single factory PID.</para>
+
+		<para>Notwithstanding the factory PID, it is a definition error to refer
+		to the same PID more than once.</para>
+
+		<para>The configuration object used to satisfy the factory component's
+		component factory PID must be a factory configuration object.</para>
+
+		<para>Configuration objects used to satisfy the PIDs referred to by the
+		<code>@PID</code> annotations must be single configuration objects.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-component.properties">
+	<title>Component Properties</title>
+
+	<para>Each component instance is associated with a set of component
+	properties. The component properties are specified in the following
+	<emphasis>configuration sources</emphasis> (in order of
+	precedence, where the properties provided by earlier lines overwrite those
+	of later lines):</para>
+
+	<orderedlist>
+		<listitem>
+			<para>Properties provided by a factory configuration object whose
+			PID matches to the factory PID specified by the factory component.</para>
+		</listitem>
+
+		<listitem>
+			<para>Properties provided by single configuration objects whose PIDs
+			are matched to and are processed in the order they are specified by
+			the component.</para>
+		</listitem>
+
+		<listitem>
+			<para>Properties specified as Component Property Types on the bean
+			annotated with <code>@SingleComponent</code> or
+			<code>@FactoryComponent</code> must be treated according to <xref
+			linkend="service.cdi-component.property.types"/>.</para>
+		</listitem>
+	</orderedlist>
+
+	<para>The precedence behavior allows certain default values to be
+	specified in component metadata while allowing properties to be
+	replaced and extended by a configuration object.</para>
+
+	<para>Normally, a property value from a higher precedence configuration
+	source replace a property value from a lower precedence configuration
+	source. However, the <code>service.pid</code> property values receive
+	different treatment. For the <code>service.pid</code> property, if the
+	property appears multiple times in the configuration sources, CCR must
+	aggregate all the values found into a
+	<code>Collection&lt;String&gt;</code> having an iteration order such that
+	the first item in the iteration is the property value from the lowest
+	precedence configuration source and the last item in the iteration is the
+	property value from the highest precedence configuration source. If the
+	component refers to multiple PIDs, then the order of the
+	<code>service.pid</code> property values collected from the corresponding
+	configuration objects must match the order in which the PIDs are specified
+	by the component. The values of the <code>service.pid</code>
+	component property are the values as they come from the configuration
+	sources and may container more values than those referred to by the
+	component.</para>
+
+	<para>CCR always adds the following component properties, which cannot be
+	overridden:</para>
+
+	<itemizedlist>
+		<listitem>
+			<para><code>component.name</code> - The component name. The syntax
+			for the <code>component.name</code> follows <code>cname</code>
+			defined by the <xref
+			linkend="service.cdi-bib.general.syntax.definitions"/>.</para>
+		</listitem>
+
+		<listitem>
+			<para><code>component.id</code> - A unique value ( <code>Long</code>)
+			that is larger than all previously assigned values. These values are
+			not persistent across restarts of CCR.</para>
+		</listitem>
+	</itemizedlist>
+
+	<section>
+		<title>Reference Properties</title>
+
+		<para>This specification defines some component properties which are
+		associated with specific component instances. These are called
+		<emphasis>reference properties</emphasis>. The name of a reference
+		property for a reference is the name of the reference appended with a
+		full stop (<code>'.' \u002E</code>) and a suffix unique to the reference
+		property. Reference properties can be set wherever component properties
+		can be set.</para>
+
+		<para>All component property names starting with a reference name
+		followed by a full stop (<code>'.' \u002E</code>) are reserved for use
+		by this specification.</para>
+
+		<para>Following are the reference properties defined by this
+		specification.</para>
+
+		<section xml:id="service.cdi-target.property">
+			<title>Target Property</title>
+
+			<para>The <emphasis>target property</emphasis> is a reference
+			property which aids in the selection of target services for the
+			reference. See <xref linkend="service.cdi-reference.injection"/>.
+			The name of a target property is the name of a reference appended
+			with <code>.target</code>.</para>
+
+			<programlisting><![CDATA[target  ::= refName '.target'
+refName ::= < reference name >]]></programlisting>
+
+			<para>For example, the target property for a reference with the name
+			<code>http</code> would have the name <code>http.target</code>. The
+			value of a target property is a filter string used to select target
+			services for the reference.</para>
+
+			<programlisting><![CDATA[http.target=(osgi.http.whiteboard.context.name=foo)]]></programlisting>
+
+			<para>A default target property value can also be set by the
+			<xref linkend="org.osgi.service.cdi.annotations.Reference.target--"
+			xrefstyle="hyperlink"/> property.</para>
+
+			<para>The target property value must be a valid filter string
+			according to <xref linkend="service.cdi-bib.filter.syntax"/>. An
+			invalid filter string will result in a warning message being
+			logged and the value to be otherwise ignored.</para>
+
+			<para>CCR must support the target property for all components.</para>
+		</section>
+
+		<section xml:id="service.cdi-minimum.cardinality.property">
+			<title>Minimum Cardinality Property</title>
+
+			<para>The initial minimum cardinality of a reference is specified by
+			the optionality of the reference. The minimum cardinality of a
+			reference cannot exceed the multiplicity: a scalar reference has a
+			multiplicity of 1 and a <code>java.util.List</code>, <code>java.util.Collection</code>
+			or <code>java.lang.Iterable</code> reference has a multiplicity of n.</para>
+
+			<para>The <emphasis>minimum cardinality property</emphasis> is a
+			reference property which can be used to raise the
+			minimum cardinality of a reference from its initial value. That is,
+			a <code>0..1</code> cardinality can be raised to a <code>1..1</code>
+			cardinality by setting the reference's minimum cardinality property
+			to <code>1</code>. A <code>0..n</code> cardinality can be raised
+			to a <code>m..n</code> cardinality by setting the reference's minimum
+			cardinality property to <code>m</code> such that <code>m</code> is a
+			positive integer. The minimum cardinality of a reference cannot be
+			lowered. A mandatory reference cannot be reduced to optional through
+			this property. That is, a <code>1..1</code> cardinality can not be
+			lowered to a <code>0..1</code> cardinality because the
+			component was written to expect at least one bound service.</para>
+
+			<para>The name of a minimum cardinality property is the name of a
+			reference appended with <code>.cardinality.minimum</code>.</para>
+
+			<programlisting><![CDATA[
+minimumCardinality ::= refName '.cardinality.minimum'
+refName            ::= < reference name >]]></programlisting>
+
+			<para>For example, the minimum cardinality property for a reference
+			with the name <code>http</code> would have the name
+			<code>http.cardinality.minimum</code>.</para>
+
+			<programlisting><![CDATA[http.cardinality.minimum=3]]></programlisting>
+
+			<para>The value of a minimum cardinality property must be a positive
+			integer or a value that can be coerced into a positive integer using
+			the <link linkend="util.converter-conversions">conversions</link>
+			defined by the <xref linkend="util.converter"/>. If the numerical
+			value of the minimum cardinality property is not valid for the
+			reference's cardinality or the minimum cardinality property value
+			cannot be coerced into a numerical value, then the minimum
+			cardinality property must be ignored and a warning message
+			logged.</para>
+
+			<para>Attempts to reduce the initial minimum cardinality will result
+			in a warning message to be logged and the value to be otherwise
+			ignored.</para>
+
+			<para>CCR must support the minimum cardinality property for all
+			components.</para>
+		</section>
+	</section>
+</section>
+
+<section xml:id="service.cdi-component.property.types">
+	<title>Component Property Types</title>
+
+	<para>Component Property Types, which are user defined annotations, can be
+	used to describe component properties when applied in conjunction with
+	other annotations defined by this specification.</para>
+
+	<para>The definition for Component Property Types is defined in
+	<xref linkend="service.component-component.property.types" xrefstyle="hyperlink" />.
+	However this specification makes two distinctions:</para>
+
+	<itemizedlist>
+		<listitem>
+			<para><emphasis>The meta-annotation used is <xref
+			linkend="org.osgi.service.cdi.annotations.ComponentPropertyType"
+			xrefstyle="hyperlink" /></emphasis> - The difference is that this
+			meta-annotation's <emphasis>retention policy</emphasis> is
+			<code>RUNTIME</code>.</para>
+		</listitem>
+		<listitem>
+			<para><emphasis>All user defined Component Property Types must specify
+			a <emphasis>retention policy</emphasis> of <code>RUNTIME</code></emphasis>.
+			</para>
+		</listitem>
+	</itemizedlist>
+
+	<remark>RAY uses of Component Property Types</remark>
+
+	<para>Finally, all interpretation and conversion of Component Property Types
+	processed by CCR occurs at runtime.</para>
+</section>
+
+<section xml:id="service.cdi-providing.services">
+	<title>Providing Services</title>
+
+	<para>A key aspect of working with OSGi is the ability to provide services.
+	Services are published to the service registry specifying service types.
+	The <link linkend="org.osgi.service.cdi.annotations.Service">@Service</link>
+	annotation provides this capability to CCR and serves a dual role; the first
+	of which is indicating that a bean publishes a service, the second
+	indicating the service types. <code>@Service</code> can be applied in any
+	one of the following ways:</para>
+
+	<section>
+		<title>@Service applied to bean class</title>
+
+		<para>Applying the <code>@Service</code> annotation to the bean class
+		indicates the set of service types will be one of (in order of
+		precedence):</para>
+
+		<orderedlist>
+			<listitem>
+				<para><emphasis>the specified type(s)</emphasis> - When
+				providing a specified <xref
+				linkend="org.osgi.service.cdi.annotations.Service.value--"/>,
+				these are the types under which the service is published.</para>
+
+				<programlisting><![CDATA[// service types = [BassetHound, Dog]
+@Service({BassetHound.class, Dog.class})
+class Spot {}]]></programlisting>
+			</listitem>
+			<listitem>
+				<para><emphasis>directly implemented interfaces</emphasis> -
+				These are the interfaces for which the bean class directly
+				specifies an <code>implements</code> clause.</para>
+
+				<programlisting><![CDATA[// service types = [Hound]
+@Service
+class Fido implements Hound {}]]></programlisting>
+			</listitem>
+			<listitem>
+				<para><emphasis>bean class</emphasis> - The class of the
+				bean itself is the type under which the service is
+				published.</para>
+
+				<programlisting><![CDATA[// service types = [Fido]
+@Service
+class Fido]]></programlisting>
+			</listitem>
+		</orderedlist>
+
+		<para>The <code>@Service</code> annotation is <emphasis>never
+		inherited</emphasis>. CCR ignores instances of the annotation on
+		super classes, interfaces or super interfaces for this purpose.</para>
+	</section>
+
+	<section>
+		<title>@Service applied to type use</title>
+
+		<para>A convenient readability optimization is to apply the
+		<code>@Service</code> annotation on <emphasis>type_use</emphasis>.
+		This is to say that it may be applied to <code>extends</code> and/or
+		<code>implements</code> clauses. For example:</para>
+
+		<programlisting><![CDATA[// service types = [BassetHound]
+class Fido extends @Service BassetHound {}]]></programlisting>
+
+		<para>Or:</para>
+
+		<programlisting><![CDATA[// service types = [Hound]
+class Fido implements @Service Hound {}]]></programlisting>
+
+		<para>The two approaches can be combined. <code>@Service</code>
+		annotations are collected so that the service is published with all
+		collected types:</para>
+
+		<programlisting><![CDATA[// service types = [BassetHound, Hound]
+class Fido extends @Service BassetHound implements @Service Hound {}]]></programlisting>
+
+		<para>In this scenario, any use of the <code>@Service.value</code>
+		property will result in a definition error.</para>
+
+		<para>Applying <code>@Service</code> to both bean class, and type
+		use will result in a definition error.</para>
+	</section>
+
+	<section>
+		<title>@Service applied to Producers</title>
+
+		<para>Applying the <code>@Service</code> annotation to producer methods
+		or fields indicates the set of service types as described in the
+		following table (earlier rows take precedence over later rows).</para>
+
+		<table>
+		<title>@Service applied to Producers</title>
+
+		<tgroup cols="2">
+			<colspec colnum="1" colwidth="1*"/>
+
+			<colspec colnum="2" colwidth="2*"/>
+
+			<thead>
+			<row>
+				<entry>Case</entry>
+
+				<entry>Description</entry>
+			</row>
+			</thead>
+
+			<tbody>
+			<row>
+				<entry><para>the type(s) specified by <code>@Service.value</code></para></entry>
+
+				<entry><para>When providing a specified <code>@Service.value</code>,
+				these are the types under which the service is published.</para>
+
+				<programlisting><![CDATA[// service types = [BassetHound, Dog]
+@Produces
+@Service({BassetHound.class, Dog.class})
+Spot getSpot() {
+	return new Spot();
+}]]></programlisting>
+				</entry>
+			</row>
+
+			<row>
+				<entry><para>the returned interface</para></entry>
+
+				<entry><para>In the case of a producer method, if the return
+				type is an interface, this type is used as the service type.</para>
+
+				<programlisting><![CDATA[// service types = [Dog]
+@Produces
+@Service
+Dog getDog() {
+	return new Spot();
+}]]></programlisting></entry>
+			</row>
+
+			<row>
+				<entry><para>all directly implemented interfaces of returned
+				type</para></entry>
+
+				<entry><para>In the case of a producer method, if the return
+				type is a concrete type, use any interfaces directly implemented
+				by the concrete type.</para>
+
+				<programlisting><![CDATA[// service types = [Hound]
+@Produces
+@Service
+Buddy getBuddy() {
+	return new Buddy();
+}]]></programlisting></entry>
+			</row>
+
+			<row>
+				<entry><para>the return type</para></entry>
+
+				<entry><para>In the case of a producer method, if the return
+				type is a concrete type which does not directly implement any
+				interfaces, use the concrete type.</para>
+
+				<programlisting><![CDATA[class Fido {}
+
+// service types = [Fido]
+@Produces
+@Service
+Fido getFido() {
+	return new Fido();
+}]]></programlisting></entry>
+			</row>
+
+			<row>
+				<entry><para>the field interface</para></entry>
+
+				<entry><para>In the case of a producer field, if the field type
+				is an interface this type is used as the service type.</para>
+
+				<programlisting><![CDATA[// service types = [Dog]
+@Produces
+@Service
+Dog dog = new Spot();]]></programlisting></entry>
+			</row>
+
+			<row>
+				<entry><para>all directly implemented interfaces of the
+				field type</para></entry>
+
+				<entry><para>In the case of a producer field, if the field type
+				is a concrete type use any interfaces directly implemented by
+				the concrete type.</para>
+
+				<programlisting><![CDATA[// service types = [Hound]
+@Produces
+@Service
+Buddy buddy = new Buddy();]]></programlisting></entry>
+			</row>
+
+			<row>
+				<entry><para>the field type</para></entry>
+
+				<entry><para>In the case of
+				a producer field if the field type is a concrete type
+				which does not directly implement any interfaces use the
+				concrete type.</para>
+
+				<programlisting><![CDATA[class Fido {}
+
+// service types = [Fido]
+@Produces
+@Service
+Fido fido = new Fido();]]></programlisting></entry>
+			</row>
+			</tbody>
+		</tgroup>
+		</table>
+	</section>
+
+	<section>
+		<title>@Service restrictions</title>
+
+		<para>Regardless of the source, no service type may be a generic type.
+		A generic type found in the set of service types will result in a
+		definition error.</para>
+
+		<para>Service types must be a subset of bean types, including type
+		constraints declared by the CDI <code>@javax.enterprise.inject.Typed</code>
+		annotation. This restriction is required to support CDI features like
+		<emphasis>Decorators</emphasis> and <emphasis>Interceptors</emphasis>.</para>
+
+		<para>Using the <code>@Service</code> annotation on injection points
+		will result in a definition error.</para>
+	</section>
+
+	<section xml:id="service.cdi-service.properties">
+		<title>Service Properties</title>
+
+		<para>The main source of service properties is <xref
+		linkend="service.cdi-component.properties"/>.</para>
+
+		<para>When CCR registers a service on behalf of a component instance,
+		CCR must follow the recommendations in <xref
+		linkend="service.cm.propertypropagation"/>
+		and must not propagate private configuration properties. That is, the
+		service properties of the registered service must be all the component
+		properties of the component configuration whose property names do not
+		start with full stop (<code>'.' \u002E</code>).</para>
+
+		<para>Component properties whose names start with full stop are
+		available to the component instance but are not available as service
+		properties of the registered service.</para>
+
+		<section>
+			<title>Container component service properties</title>
+
+			<para>In addition to component properties, services provided by the
+			container component obtain additional service properties from
+			Component Property Types on the bean or producer
+			providing the service. See <xref linkend="service.cdi-component.property.types"/>.</para>
+		</section>
+	</section>
+
+	<section xml:id="service.cdi-service.scope">
+		<title>Service Scope</title>
+
+		<para>Service scope represents the scope of the registered service
+		object. There are three scopes supported by the Framework. Each can be
+		represented in CCR.</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>Bundle scope</emphasis> - In order to specify a
+				bundle scoped service, the <link
+				linkend="org.osgi.service.cdi.annotations.Bundle">@Bundle</link>
+				annotation is specified on the bean class, producer method or
+				producer field.</para>
+
+				<remark>RAY should we change org.osgi.service.cdi.annotations.Bundle
+				so as to not conflict
+				with org.osgi.framework.Bundle?</remark>
+
+				<programlisting><![CDATA[@Bundle
+@Service
+class Fido implements Hound {}]]></programlisting>
+			</listitem>
+			<listitem>
+				<para><emphasis>Prototype scope</emphasis> - In order to specify
+				a prototype scoped service, the <link
+				linkend="org.osgi.service.cdi.annotations.Prototype">@Prototype</link>
+				annotation is specified on the bean class, producer method or
+				producer field. The service object is the contextual instance
+				created by the producer or bean.</para>
+
+				<remark>RAY @PrototypeService instead of @Prototype?</remark>
+
+				<programlisting><![CDATA[@Prototype
+@Service
+class Fido implements Hound {}]]></programlisting>
+			</listitem>
+			<listitem>
+				<para><emphasis>Singleton scope</emphasis> - Unless otherwise
+				specified, services are singleton scoped. The service object is
+				the contextual instance created by the producer or bean.</para>
+
+				<programlisting><![CDATA[@Service
+class Fido implements Hound {}]]></programlisting>
+			</listitem>
+		</itemizedlist>
+
+		<para>The use of <code>@Bundle</code> in any other scenario will result
+		in a definition error. </para>
+
+		<para>The use of <code>@Prototype</code> in any other
+		scenario, except in combination with <code>@Reference</code>, will result
+		in a definition error.</para>
+	</section>
+
+	<section>
+		<title>Container Component Services</title>
+
+		<para>Beans, producer methods and producer fields that are
+		<code>@ApplicationScoped</code> can only provide singleton scoped
+		services. Each such case results in a single service registration. The
+		service object is the contextual instance created by the producer or
+		bean.</para>
+
+		<para><code>@ApplicationScoped</code> beans may implement
+		<code>org.osgi.framework.ServiceFactory</code> or
+		<code>org.osgi.framework.PrototypeServiceFactory</code> in order to
+		provide bundle or prototype scoped service objects.</para>
+
+		<para>Beans, producer methods and producer fields that are
+		<code>@Dependent</code> scoped can provide services of all scopes as
+		outlined in <xref linkend="service.cdi-service.scope"/>. The service
+		object is a contextual instance created by the producer or bean on each
+		request for a service object.</para>
+
+		<para>The use of <code>@Bundle</code> or <code>@Prototype</code> on
+		<code>@ApplicationScoped</code> beans will result in a definition
+		error.</para>
+	</section>
+
+	<section xml:id="service.cdi-single.component.services">
+		<title>Single Component Services</title>
+
+		<para>Single components can only apply the <code>@Service</code>
+		annotation to beans marked with <code>@SingleComponent</code>.</para>
+
+		<para>A single component providing a service results in a single
+		service registration.</para>
+
+		<para>Service objects provided by the service registration are defined
+		by the creation of <link
+		linkend="service.cdi-lifecycle.context.instances">contexts</link>. In all
+		cases, the service object provided is the contextual instance of the bean
+		marked <code>@SingleComponent</code> obtained from the context.</para>
+	</section>
+
+	<section xml:id="service.cdi-factory.component.services">
+		<title>Factory Component Services</title>
+
+		<para>Factory components can only apply the <code>@Service</code>
+		annotation to beans marked with <code>@FactoryComponent</code>.</para>
+
+		<para>A factory component providing a service results in one service
+		registration for every factory configuration object associated with the
+		factory PID of the component.</para>
+
+		<para>Service objects provided by the service registration are defined
+		by the creation of <link
+		linkend="service.cdi-lifecycle.context.instances">contexts</link>. In
+		all cases, the service object provided is the contextual instance of the
+		bean marked <code>@FactoryComponent</code> obtained from the context.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-configuration.injection">
+	<title>Configuration Injection Points</title>
+
+	<para>A bean specifies injection of component properties using the <link
+	linkend="org.osgi.service.cdi.annotations.Configuration">@Configuration</link>
+	annotation at an injection point.</para>
+
+	<para>The type typically associated with component properties is
+	<code><![CDATA[java.util.Map<String, ?>]]></code>:</para>
+
+	<programlisting><![CDATA[@Inject
+@Configuration
+Map<String, ?> componentProperties;]]></programlisting>
+
+	<para>However, component properties can be automatically converted to any
+	type compatible with the <link
+	linkend="util.converter-conversions">conversions</link> defined by the <xref
+	linkend="util.converter"/>.</para>
+
+	<para>Given the following configuration properties:</para>
+
+	<programlisting><![CDATA[pool.name (String)
+min.threads (int)
+max.threads (int)
+keep.alive.timeout (long)]]></programlisting>
+
+	<para>The following example demonstrates conversion of component properties
+	into a type safe object with defaults.</para>
+
+	<programlisting><![CDATA[public static @interface PoolConfig {
+	String pool_name();
+	int min_threads() default 2;
+	int max_threads() default 10;
+	long keep_alive_timeout() default 500;
+}
+
+@Inject
+@Configuration
+PoolConfig poolConfig;]]></programlisting>
+
+	<para>Using <link
+	linkend="org.osgi.service.cdi.annotations.Reference">@Reference</link> in
+	conjunction with <code>@Configuration</code> will result in a definition
+	error.</para>
+
+	<para>Any annotations on the injection point annotated with
+	<code>org.osgi.service.cdi.annotations.ComponentPropertyType</code> will be
+	treated as defaults using the rules defined for <xref
+	linkend="service.cdi-component.property.types"/>.</para>
+
+	<section>
+		<title>Non-component configuration objects</title>
+
+		<para>This mechanism provides for injection of arbitrary configuration
+		objects without intermingling these with the component properties. The
+		properties of this configuration are not merged with the component properties.
+		The following is an example of injecting an <emphasis>optional</emphasis>
+		configuration object whose PID is <code>org.server.connector</code>:</para>
+
+		<programlisting><![CDATA[@Inject
+@Configuration
+@PID("org.server.connector")
+Port port;]]></programlisting>
+
+		<para>As shown, the configuration object is optional and will allow the
+		component to be satisfied if no configuration object is available. To
+		make the configuration object required the <xref
+		linkend="org.osgi.service.cdi.annotations.PID.policy--"/> property must
+		be set to <xref
+		linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED"/>.</para>
+
+		<para>It is possible for the component to specify a PID directly on the
+		component as well as on a configuration injection point. However the injection
+		point's view will be of the un-merged properties of the configuration
+		object.</para>
+	</section>
+
+	<section xml:id="service.cdi-coordinatorsupport">
+		<title>Coordinator Support</title>
+
+		<para>The <xref linkend="service.coordinator"/> defines a mechanism
+		for multiple parties to collaborate on a common task without
+		<emphasis>a priori</emphasis> knowledge of who will collaborate in
+		that task. Like <xref linkend="service.cm"/>, CCR must participate in
+		such scenarios to coordinate with provisioning or configuration
+		tasks.</para>
+
+		<para>If configuration changes occur and an implicit coordination
+		exists, CCR must delay taking action on the configuration changes
+		until the coordination terminates, regardless of whether the
+		coordination fails or terminates regularly.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-reference.injection">
+	<title>Reference Injection Points</title>
+
+	<para>Any injection point annotated with <xref
+	linkend="org.osgi.service.cdi.annotations.Reference"/> declares a service
+	dependency.</para>
+
+	<section xml:id="service.cdi-reference.injection.point.types">
+		<title>Reference injection point types</title>
+
+		<para>Injection points specifying <code>@Reference</code> are limited
+		to one of the following <emphasis>injection point types</emphasis> as
+		representations of the dependent service(s). Given that type
+		<code>S</code> is a type under which a service is published, the
+		following <emphasis>injection point types</emphasis> are
+		supported:</para>
+
+		<table>
+		<title>Reference injection point types</title>
+
+		<tgroup cols="2">
+			<colspec colnum="1" colwidth="1*"/>
+
+			<colspec colnum="2" colwidth="1*"/>
+
+			<thead>
+				<row>
+					<entry>Injection Point Type</entry>
+
+					<entry>Description</entry>
+				</row>
+			</thead>
+
+			<tbody>
+				<row>
+					<entry><code><![CDATA[S]]></code></entry>
+
+					<entry>
+						<programlisting><![CDATA[// S = Dog
+@Inject
+@Reference
+Dog dog;]]></programlisting>
+					</entry>
+				</row>
+				<row>
+					<entry><code><![CDATA[org.osgi.framework.ServiceReference<S>]]></code></entry>
+
+					<entry>
+						<programlisting><![CDATA[// S = Dog
+@Inject
+@Reference
+ServiceReference<Dog> dog;]]></programlisting>
+					</entry>
+				</row>
+				<row>
+					<entry><code><![CDATA[java.util.Map<String, ? | Object>]]></code></entry>
+
+					<entry>
+						<para>In this case the <code>@Reference</code> annotation
+						must specify service type <code>S</code> using it's <xref
+						linkend="org.osgi.service.cdi.annotations.Reference.value--"
+						xrefstyle="hyperlink"/> property.</para>
+
+						<programlisting><![CDATA[// S = Dog
+@Inject
+@Reference(Dog.class)
+Map<String, Object> dogProperties;]]></programlisting>
+
+						<para>Failure to specify the type in this scenario results in a
+						definition error.</para>
+					</entry>
+				</row>
+				<row>
+					<entry><code><![CDATA[java.util.Map.Entry<Map<String, ? | Object>, S>]]></code></entry>
+
+					<entry>
+						<programlisting><![CDATA[// S = Dog
+@Inject
+@Reference
+Map.Entry<Map<String, ?>, Dog> dog;]]></programlisting>
+					</entry>
+				</row>
+				<row>
+					<entry><code><link
+						linkend="org.osgi.service.cdi.reference.ReferenceServiceObjects"
+						xrefstyle="hyperlink"><![CDATA[ReferenceServiceObjects<S>]]></link></code></entry>
+
+					<entry>
+						<programlisting><![CDATA[// S = Dog
+@Inject
+@Reference
+ReferenceServiceObjects<Dog> dogs;]]></programlisting>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+		</table>
+
+		<para><code>S</code> must be a concrete service type. The OSGi
+		service registry does not support generics, therefore <code>S</code>
+		cannot specify a generic type.</para>
+
+		<para>A definition error will result if any other types are used with
+		injection points marked <code>@Reference</code> unless otherwise
+		specified by this specification.</para>
+	</section>
+
+	<section>
+		<title>Service scope</title>
+
+		<para>For a bound service, CCR must get the service object from the OSGi
+		Framework's service registry using the <code>getService</code> method on
+		the component's Bundle Context. If the service object for a bound
+		service has been obtained and the service becomes unbound, CCR must
+		unget the service object using the <code>ungetService</code> method on
+		the component's Bundle Context and discard all references to the service
+		object. This ensures that the bundle will only be exposed to a single
+		instance of the service object at any given time.</para>
+
+		<para>For a bound service of a reference with <code>@Prototype</code>,
+		only services registered with prototype service scope can be considered
+		as target services. This ensures that each component instance can be
+		exposed to a single, distinct instance of the service object. Using
+		<code>@Prototype</code> effectively adds <code>service.scope=prototype</code>
+		to the <link linkend="service.cdi-target.property"
+		xrefstyle="hyperlink">target property</link>
+		of the reference. A service that does not use prototype service scope
+		cannot be used as a bound service for a reference with
+		<code>@Prototype</code> since the service cannot provide a distinct
+		service object for each component instance.</para>
+
+	<programlisting><![CDATA[@Inject
+@Prototype
+@Reference Hound hound;]]></programlisting>
+	</section>
+
+	<section>
+		<title>ReferenceServiceObjects</title>
+
+		<para>A Reference Service Objects for the bound service. This Reference
+		Service Objects can be used to obtain the actual service object or
+		objects. This approach is useful when the referenced service has
+		prototype service scope and the component instance needs multiple
+		service objects for the service.</para>
+
+		<programlisting><![CDATA[@Inject
+@Prototype
+@Reference
+ReferenceServiceObjects<Hound> hounds;]]></programlisting>
+
+		<para>Note that <code>@Prototype</code> is not expressly required
+		because it is often usefull to interact in this way with services of any
+		scope just in case a bound service is actually prototype scoped as is
+		often the goal in <emphasis>whiteboard</emphasis> implementations.</para>
+	</section>
+
+	<section>
+		<title>Reference Greediness</title>
+
+		<para>References are reluctant by default which means that once bound
+		with an appropriate service, later matches with higher rankings will be
+		ignored. Use the <code>@Greedy</code> qualifier to force better matches
+		to be applied pro-actively. Note that in the case of static references
+		the component will be destroyed and recreated in order to immediately
+		apply the better match. In the case of the container component, this
+		will result in the entire CDI container being destroyed and
+		recreated.</para>
+
+		<programlisting><![CDATA[@Inject
+@Greedy
+@Reference
+Hound hound;]]></programlisting>
+	</section>
+
+	<section xml:id="service.cdi-reference.service.type">
+		<title>Service Type</title>
+
+		<para>As demonstrated earlier, it's possible to specify the service type
+		of the reference by using <code>@Reference.value()</code> property. This
+		supports use cases like <code><![CDATA[java.util.Map<String, ?>]]></code>
+		where the service type cannot be determined.</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference(Hound.class)
+Map<String, Object> properties;]]></programlisting>
+
+		<para>This makes it possible to target a more specific service
+		type. A reference injection point whose type is <code>Dog</code> may
+		target a service of type <code>BassetHound</code>:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference(BassetHound.class)
+Dog dog;]]></programlisting>
+
+		<para>The injection point type must be compatible with the service
+		type. Otherwise a definition error will result.</para>
+	</section>
+
+	<section>
+		<title>Target Filter</title>
+
+		<para>Target services for a reference are constrained by the reference's
+		service type and the <link linkend="service.cdi-target.property"
+		xrefstyle="hyperlink">target property</link>. A default target filter
+		can be applied by specifying <code>@Reference.target()</code>
+		property.</para>
+
+		<para>For example, a component wants to track all <code>Dog</code>
+		services that have a service property <code>service.vendor</code> whose
+		value is equal to <code>Acme, Ltd.</code>:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference(target = "(service.vendor=Acme, Ltd.)")
+Collection<Dog> dogs;]]></programlisting>
+
+		<section xml:id="service.cdi-component.property.types.to.target.filters">
+			<title>@ComponentPropertyType as target filters</title>
+
+			<para>Annotations meta-annotated with
+			<code>org.osgi.service.cdi.annotations.ComponentPropertyType</code>
+			appearing on an injection point in conjunction
+			with the <code>@Reference</code> annotation will further enhance the
+			target filter as described by the rules for <xref
+			linkend="service.cdi-component.property.types"/>,
+			then assembling the <emphasis>result map</emphasis> into a filter
+			string according to the following rules:</para>
+
+			<orderedlist>
+				<listitem>
+					<para>flatten any <code>key=array</code> pairs into many
+					<code>key=scalar</code> pairs, one for each array
+					value such that all <code>key=value</code> pairs have the
+					form <code>key=scalar</code></para>
+				</listitem>
+				<listitem>
+					<para>format every <code>key=scalar</code> using the pattern
+					<code><![CDATA[(%s=%s)]]></code>. If <code>scalar</code> must
+					contain one of the characters reverse solidus (<code>'\'
+					\u005C</code>), asterisk (<code>'*' \u002A</code>), parentheses
+					open (<code>'(' \u0028</code>) or parentheses close (<code>')'
+					\u0029</code>), then these characters must be preceded with
+					the reverse solidus (<code>'\' \u005C</code>) character.
+					Spaces are significant in <code>scalar</code>. Space
+					characters are defined by
+					<code>Character.isWhiteSpace()</code>.</para>
+				</listitem>
+				<listitem>
+					<para>concatenate all results of 2. into a single
+					string</para>
+				</listitem>
+				<listitem>
+					<para>append the value of
+					<code>@Reference.target()</code> to the result of 3.</para>
+				</listitem>
+				<listitem>
+					<para>format the result of 4. using the pattern
+					<code><![CDATA[(&%s)]]></code></para>
+				</listitem>
+			</orderedlist>
+
+			<para>Given the following example:</para>
+
+			<programlisting><![CDATA[@Repeatable(...)
+@interface Config {
+	String color();
+}
+
+@Inject
+@Reference(target = "(service.vendor=Acme, Ltd.)")
+@Color("blue")
+@Color("orange")
+Executor executor;]]></programlisting>
+
+			<para>The target filter will be:</para>
+
+			<programlisting><![CDATA[(&(color=blue)(color=orange)(service.vendor=Acme, Ltd.))]]></programlisting>
+
+			<para>The target filter supplied by <code>@Reference.target</code>
+			will be added last.</para>
+		</section>
+
+	</section>
+
+	<section>
+		<title>Reference Names</title>
+
+		<para>The <code>@javax.inject.Named</code> annotation may be used to
+		specify a name to serve as the base of the component properties used to
+		configure the reference. If not specified the name of the reference will
+		be derived from the fully qualified class name and the reference
+		injection point.</para>
+
+		<para>The production for generated names is:</para>
+
+		<programlisting><![CDATA[name   ::= prefix '.' suffix
+prefix ::= named | qname
+named  ::= < @Named.value >
+suffix ::= field | ctor | method
+field  ::= < name of field >
+ctor   ::= 'new' pIndex
+method ::= mName pIndex
+mName  ::= < method name >
+pIndex ::= < index of @Reference parameter >]]></programlisting>
+
+		<para>It is a definition error to have two references with the same
+		name.</para>
+
+		<para>It is a definition error to specify the
+		<code>@javax.inject.Named</code> annotation with no value.</para>
+
+		<para>In the following example the reference name is
+		<code>example.Fido.mate</code> and the target and minimum cardinality
+		properties of the reference will be <code>example.Fido.mate.target</code>
+		and <code>example.Fido.mate.cardinality.minimum</code> respectively:</para>
+
+		<programlisting><![CDATA[package example;
+
+@SingleComponent
+class Fido {
+	@Inject
+	@Reference
+	Dog mate;
+}]]></programlisting>
+
+		<para>In the following example the reference name is
+		<code>foo</code> and the target and minimum cardinality
+		properties of the reference will be <code>foo.target</code>
+		and <code>foo.cardinality.minimum</code> respectively:</para>
+
+		<programlisting><![CDATA[package example;
+
+@SingleComponent
+class Fido {
+	@Inject
+	@Named("foo")
+	@Reference
+	Dog mate;
+}]]></programlisting>
+	</section>
+
+	<section>
+		<title>Reference Properties</title>
+
+		<para>Each reference is associated with the following component
+		properties.</para>
+
+		<itemizedlist>
+			<listitem>
+				<programlisting><![CDATA[target  ::= refName ".target"
+refName ::= < reference name >]]></programlisting>
+				<para>Value must be
+				convertible to an LDAP filter.</para>
+				<para>See <xref linkend="service.cdi-target.property"/>.</para>
+
+				<para>If the value is not a valid LDAP filter an error will be
+				logged and the component will become or remain unsatisfied.</para>
+			</listitem>
+			<listitem>
+				<programlisting><![CDATA[cardinality ::= refName ".cardinality
+refName     ::= < reference name >]]></programlisting>
+				<para>Value must be convertable to a positive integer.</para>
+				<para>See <xref linkend="service.cdi-minimum.cardinality.property"/>.</para>
+
+				<para>If the value is not convertable to a positive integer an
+				error will be logged and the component will become or remain
+				unsatisfied.</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+		<title>Static References</title>
+
+		<para>It should be clear that all references displayed to this point
+		have been static in nature. This is the most common form of reference
+		injection point. This means that their values do not change during the
+		lifetime of a contextual instance. This implies that in order to change
+		the service bound to the reference injection point, the entire component
+		instance must be destroyed and recreated. The following are more
+		examples of static reference injection points:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference
+Dog dog;
+
+@Inject
+@Reference(BassetHound.class)
+Map<String, Object> props;
+
+@Inject
+void setHounds(@Reference ReferenceServiceObjects<Hound> hounds) {...}
+
+@Inject
+@Reference
+ServiceReference<Spot> spot;]]></programlisting>
+
+		<para>Static reference injection points are by nature
+		<emphasis>mandatory</emphasis> in that they require a number of services
+		equal to or greater than their minimum cardinality (which is commonly
+		1) to be available in order for the component instance to resolve.</para>
+
+		<para>A static reference for which fewer matching services are available
+		than required by the reference's minimum cardinality will prevent the
+		component instance from becoming resolved.</para>
+	</section>
+
+	<section xml:id="service.cdi-reference.optional">
+		<title>Optional References</title>
+
+		<para>Optional reference injection points allow a component instance to
+		become resolved when fewer matching services are found than required by
+		the reference's minimum cardinality. The injection point type must be
+		<code><![CDATA[java.util.Optional<R>]]></code> where <code>R</code> is
+		one of the <link linkend="service.cdi-reference.injection.point.types"
+		xrefstyle="hyperlink">supported reference injection point
+		types</link>. Repeating the static examples as optional references, we
+		get:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference
+Optional<Dog> dog;
+
+@Inject
+@Reference(BassetHound.class)
+Optional<Map<String, Object>> props;
+
+@Inject
+void setHounds(@Reference Optional<ReferenceServiceObjects<Hound>> hounds) {...}
+
+@Inject
+@Reference
+Optional<ServiceReference<Spot>> spot;]]></programlisting>
+	</section>
+
+	<section xml:id="service.cdi-reference.multi.cardinality">
+		<title>Multi-cardinality References</title>
+
+		<para>Multi-cardinality references are specified using an injection
+		point type of <code><![CDATA[java.lang.Iterable<R>]]></code>,
+		<code><![CDATA[java.util.Collection<R>]]></code>, or
+		<code><![CDATA[java.util.List<R>]]></code> where <code>R</code> is
+		one of the <link linkend="service.cdi-reference.injection.point.types"
+		xrefstyle="hyperlink">supported reference injection point
+		types</link>. Repeating the static examples as multi-cardinality
+		references, we get:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference
+Iterable<Dog> dogs;
+
+@Inject
+@Reference(BassetHound.class)
+Collection<Map<String, Object>> props;
+
+@Inject
+void setHounds(@Reference List<ReferenceServiceObjects<Hound>> hounds) {...}
+
+@Inject
+@Reference
+Collection<ServiceReference<Spot>> spots;]]></programlisting>
+
+		<para>Multi-cardinality references are naturally
+		<emphasis>optional</emphasis> since the default value of the <link
+		linkend="service.cdi-minimum.cardinality.property"
+		xrefstyle="hyperlink">minimum cardinality property</link> is
+		<code>0</code>. See <xref
+		linkend="service.cdi-minimum.cardinality.property"/>.</para>
+	</section>
+
+	<section xml:id="service.cdi-reference.dynamic">
+		<title>Dynamic References</title>
+
+		<para>Dynamic reference injection points are specified using an
+		injection point type of <code><![CDATA[javax.inject.Provider<R>]]></code>
+		where <code>R</code> is
+		one of the <link linkend="service.cdi-reference.injection.point.types"
+		xrefstyle="hyperlink">supported reference injection point
+		types</link>, <code><![CDATA[java.util.Optional<R>]]></code>,
+		<code><![CDATA[java.lang.Iterable<R>]]></code>,
+		<code><![CDATA[java.util.Collection<R>]]></code>, or
+		<code><![CDATA[java.util.List<R>]]></code>. Repeating the static
+		examples as dynamic references, we get:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reference
+Provider<Dog> dog;
+
+@Inject
+@Reference(BassetHound.class)
+Provider<Collection<Map<String, Object>>> props;
+
+@Inject
+void setHounds(
+		@Reference
+		Provider<List<ReferenceServiceObjects<Hound>>> hounds
+	) {...}
+
+@Inject
+@Reference
+Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
+
+		<para>The evaluation of <code>javax.inject.Provider.get()</code> is
+		performed such that each invocation may produce a different result
+		except returning <code>null</code>.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-reference.events">
+	<title>Reference Events</title>
+
+	<para>Observer methods whose CDI event type is <link
+	linkend="org.osgi.service.cdi.reference.ReferenceEvent" xrefstyle="hyperlink">
+	<![CDATA[ReferenceEvent<S>]]></link> where <code>S</code> is a type under
+	which a service is published will recieve delivery of such events
+	when matching services are added to the service registry.</para>
+
+	<programlisting><![CDATA[void onAdd(@Observes ReferenceEvent<Dog> event) {...}]]></programlisting>
+
+	<para><link linkend="org.osgi.service.cdi.annotations.Reference">@Reference</link>
+	is optional for event observers.</para>
+
+	<para>Any type defined by <code>@Reference.value()</code> must be
+	assignable to the type argument <code>S</code> of
+	<code><![CDATA[ReferenceEvent<S>]]></code></para>
+
+	<para><code>ReferenceEvent</code>s are fired synchronously.</para>
+
+	<section>
+		<title>Subscribing to service event life cycles</title>
+
+		<para><code>ReferenceEvent</code> provides a subscription model to bind
+		operations to service events:</para>
+
+		<programlisting><![CDATA[void onAdd(@Observes ReferenceEvent<Dog> event, Logger logger) {
+	event.onAdding(this::check);
+	event.onUpdate(this::check);
+	event.onRemove(dog -> logger.debug("Bye {}!", dog));
+}
+
+private void check(Dog dog) {...}]]></programlisting>
+	</section>
+</section>
+
+<section>
+	<title>CDI Component Runtime</title>
+
+	<para>CDI Component Runtime (CCR) is the actor that manages the CDI
+	containers and their life cycle and allows for their introspection.</para>
+
+	<section>
+		<title>Relationship to the OSGi Framework</title>
+
+		<para>CCR must have access to the Bundle Context of any CDI bundle. CCR
+		needs access to the Bundle Context for the following reasons:</para>
+
+		<itemizedlist>
+			<listitem>
+				<para>To be able to register and get services on behalf of a CDI
+				bundle.</para>
+			</listitem>
+			<listitem>
+				<para>To interact with the Configuration Admin on behalf of a
+				CDI bundle.</para>
+			</listitem>
+			<listitem>
+				<para>To interact with the Log Service on behalf of a CDI
+				bundle.</para>
+			</listitem>
+			<listitem>
+				<para>To make the Bundle Context available for injection in the
+				CDI bundle's beans.</para>
+			</listitem>
+		</itemizedlist>
+
+		<para>CCR should use the <code>Bundle.getBundleContext()</code> method
+		to obtain the Bundle Context reference.</para>
+	</section>
+
+	<section>
+		<title>Starting and Stopping CCR</title>
+
+		<para>When CCR is implemented as a bundle, any containers activated by
+		CCR must be deactivated when the CCR bundle is stopped. When the CCR
+		bundle is started, it must process the CDI metadata declared in CDI
+		bundles. This includes bundles which are started and are awaiting lazy
+		activation.</para>
+	</section>
+
+	<section>
+		<title>Logging Messages</title>
+
+		<para>When CCR must log a message to the Log Service, it must use a
+		Logger named using the component's name and associated with the CDI
+		bundle. To obtain the Logger object, CCR must call the
+		<code>LoggerFactory.getLogger(Bundle bundle, String name,
+		Class loggerType)</code> method passing the CDI bundle as the first
+		argument and the name of the component as the second argument. If CCR
+		cannot know the component name, because the error is not associated with
+		a component or the error occurred before the component template is
+		processed, then CCR must use the bundle's Root Logger, that is, the
+		Logger named <code>ROOT</code>.</para>
+	</section>
+
+	<section>
+		<title>Class loading considerations</title>
+
+		<remark>RAY do we need to talk about class loading considerations?</remark>
+	</section>
+
+	<section>
+		<title>Bundle Activator Interaction</title>
+
+		<para>A CDI bundle may also declare a Bundle Activator. Such a bundle
+		may also be marked for lazy activation. Since CDI containers are activated
+		by CCR and Bundle Activators are called by the OSGi Framework, a bundle
+		using both a CDI container and a Bundle Activator must take care. The Bundle
+		Activator's start method must not rely upon CCR having activated the
+		bundle's CDI container. However, the CDI container can rely upon the
+		Bundle Activator's start method having been called. That is, there is a
+		<emphasis>happens-before</emphasis> relationship between the Bundle
+		Activator's start method being run and the CDI container being
+		activated.</para>
+	</section>
+
+	<section>
+		<title>Introspection</title>
+
+		<para>CCR provides an introspection API for examining the runtime state
+		of the CDI bundles processed by CCR. CCR must register a
+		<xref linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+		xrefstyle="hyperlink"/> service upon startup. The CDI Component Runtime
+		service provides methods to inspect CDI containers. The service
+		uses <emphasis>Data Transfer Objects (DTO)</emphasis> as arguments and
+		return values. The rules for Data Transfer Objects are specified in
+		<xref linkend="intro.core.release"/>.</para>
+
+		<para>The CDI Component Runtime service provides the following
+		methods.</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><xref
+				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerDTOs-Bundle...-"
+				xrefstyle="hyperlink"/> - For each specified bundle, if the
+				bundle is active and processed by CCR, and the bundle is a valid
+				CDI bundle, the returned collection will contain a <xref
+				linkend="org.osgi.service.cdi.runtime.dto.ContainerDTO"
+				xrefstyle="hyperlink"/> describing the CDI container.</para>
+			</listitem>
+			<listitem>
+				<para><xref
+				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerDTO-Bundle-"
+				xrefstyle="hyperlink"/> - If the specified bundle is active and
+				processed by CCR, and the bundle is a valid CDI bundle, the
+				method will return a <xref
+				linkend="org.osgi.service.cdi.runtime.dto.ContainerDTO"
+				xrefstyle="hyperlink"/> describing the CDI container.</para>
+			</listitem>
+			<listitem>
+				<para><xref
+				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerChangeCount-Bundle-"
+				xrefstyle="hyperlink"/> - If the specified bundle is active and
+				processed by CCR, and the bundle is a valid CDI bundle, the
+				method will return an ever increasing, positive, <code>long</code>
+				number indicating the change count of the CDI container.</para>
+			</listitem>
+			<listitem>
+				<para><xref
+				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerTemplateDTO-Bundle-"
+				xrefstyle="hyperlink"/> - If the specified bundle is active and
+				processed by CCR, and the bundle is a valid CDI bundle, the
+				method will return a <xref
+				linkend="org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO"
+				xrefstyle="hyperlink"/> describing the template metadata of the
+				CDI container.</para>
+			</listitem>
+		</itemizedlist>
+
+		<para>The runtime state of the containers can change at any time. So any
+		information returned by these methods only provides a snapshot of the
+		state at the time of the method call.</para>
+
+		<para>There are a number of DTOs available via the CDI Component Runtime
+		service.</para>
+
+		<figure>
+			<title>CDI Component Runtime DTOs</title>
+
+			<mediaobject>
+				<imageobject>
+					<imagedata
+						align="center"
+						contentwidth="300px"
+						fileref="dto-structure.svg"
+					/>
+				</imageobject>
+			</mediaobject>
+		</figure>
+
+		<remark>RAY finish DTOs.</remark>
+	</section>
+
+	<section xml:id="service.cdi-logger.support">
+		<title>Logger Support</title>
+
+		<para>CCR provides special support for logging via the Log Service
+		specification. CCR must provide <code>@Dependent</code> objects of type
+		<code>org.osgi.service.log.Logger</code> and
+		<code>org.osgi.service.log.FormatterLogger</code>.</para>
+
+		<para>To obtain the Logger object for injection, CCR must
+		call the <code>LoggerFactory.getLogger(Bundle bundle, String name, Class
+		loggerType)</code> method passing the bundle declaring the component as the
+		first argument, the fully qualified name of the injection point's declaring
+		class as the second argument, and the type of the injection point;
+		<code>org.osgi.service.log.Logger</code> or
+		<code>org.osgi.service.log.FormatterLogger</code>, as the third
+		argument.</para>
+
+		<para>For example, the following code will set the <code>logger</code>
+		field to a Logger object created as a dependent object (unique to the
+		contextual instance) from a LoggerFactory service obtained by CCR.</para>
+
+		<programlisting><![CDATA[public static @interface Config {
+	String component_name();
+}
+
+@Inject
+void setup(@Configuration Config config, Logger logger) {
+	logger.trace(l -> l.trace(“activating component {}”, config.component_name()));
+}]]></programlisting>
+	</section>
+
+	<section xml:id="service.cdi-bean.discovery">
+		<title>Bean Discovery</title>
+
+		<para>The CDI specification defines bean discovery modes. However this
+		specification expects a concrete list of bean classes in order to avoid
+		runtime class searching. CDI bundles must fully express the complete
+		list of bean classes CCR is expected to operate on by specifying the attribute
+		<code>osgi.beans</code> of type <code><![CDATA[List<String>]]></code> on
+		the <code>osgi.cdi</code> extension requirement. See <link
+		linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
+		extender capability</link>.</para>
+	</section>
+
+	<section xml:id="service.cdi-portable.extensions">
+		<title>CDI Portable Extensions</title>
+
+		<para>CDI Portable Extensions use CDI's Service Provider Interface which
+		provides a powerful mechanism for extending the base functionality of
+		CDI. Portable extensions may process beans, read bean and bean class
+		metadata, add beans dynamically, define custom contexts, and much more. They
+		can generally participate in all aspects of the CDI Container's life
+		cycle.</para>
+
+		<para>This specification requires that portable extensions be provided as
+		OSGi services using the interface <code>javax.enterprise.inject.spi.Extension</code>.
+		Portable extension services must include the service property
+		<code>osgi.cdi.extension</code> who's value should be a name identifying the
+		functionality provided by the portable extension. Portable extension services
+		must also specify a <code>version</code> service property who's value is of
+		type <code>org.osgi.framework.Version</code></para>
+
+		<para>For example, a portable extension that provides an implementation of
+		the <xref linkend="service.cdi-bib.jta12" /> specification should specify the
+		value of it's <code>osgi.cdi.extension</code> service property as <code>JTA</code>
+		and it's <code>version</code> property as <code>1.2</code>.</para>
+
+		<para>Portable extensions are expressed as a requirement on a CDI bundle by
+		specifying a target filter matching the extension service that provides it.
+		This target filter is specified as a list on the <code>osgi.cdi</code>
+		extension requirement. See <link linkend="service.cdi-capabilities.extender">
+		<code>osgi.cdi</code> extender capability</link>.</para>
+	</section>
+
+	<section xml:id="service.cdi-disabling.components">
+		<title>Disabling Components</title>
+
+		<para>All components in a CDI bundle are enabled by default. However, any
+		component can be disabled through configuration using the single configuration
+		object associated with the <link linkend="service.cdi-container.component.configuration"
+		xrefstyle="hyperlink">container PID</link> by defining a property using the
+		component name suffixed with <code>.enabled</code>. The value's type is
+		<code>boolean</code>.</para>
+
+		<programlisting><![CDATA[enabled  ::= compName '.enabled'
+compName ::= < component name >]]></programlisting>
+
+		<para>The following is an example disabling a component whose name is <code>foo</code>:</para>
+
+		<programlisting><![CDATA[foo.enabled=false]]></programlisting>
+
+		<para>The container component can be disabled using it's component name, which
+		is the <emphasis>container id</emphasis>. As a result of disabling the
+		container component, all components in the CDI bundle are also disabled.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-capabilities">
+	<title>Capabilities</title>
+
+	<para>CCR must provide the following capabilities.</para>
+
+	<itemizedlist>
+		<listitem xml:id="service.cdi-capabilities.extender">
+			<para>A capability in the <link
+			linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
+			namespace declaring an extender with the name <xref
+			linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
+			xrefstyle="hyperlink"/>. In addition to the specification packages, this
+			capability must declare a uses constraint for the
+			<code>javax.inject</code> package. For example:</para>
+
+			<programlisting>Provide-Capability: «
+	osgi.extender; «
+		osgi.extender="osgi.cdi"; «
+		version:Version="<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>"; «
+		uses:="javax.inject, org.osgi.service.cdi, org.osgi.service.cdi.annotations, «
+			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime, «
+			org.osgi.service.cdi.runtime.dto, «
+			org.osgi.service.cdi.runtime.dto.template"</programlisting>
+
+			<para>This capability must follow the rules defined for the <xref
+			linkend="service.namespaces-osgi.extender.namespace"/>.</para>
+
+			<para>A CDI bundle must require the <code>osgi.extender</code>
+			capability from CCR. This requirement will wire the bundle to the CCR
+			implementation and ensure that CCR is using the same
+			<code>org.osgi.service.cdi.*</code> packages as the bundle if the bundle
+			uses those packages.</para>
+
+			<programlisting>Require-Capability: «
+	osgi.extender; «
+		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+
+			<para>CCR must only process a bundle's CDI metadata if the bundle's
+			wiring has a required wire for at least one <code>osgi.extender</code>
+			capability with the name <code>osgi.cdi</code> and the first of these
+			required wires is wired to CCR.</para>
+
+			<para>Otherwise, CCR must not process the bundle's CDI metadata.</para>
+
+			<para>When using any of the annotations defined by this
+			specification, the above requirement is automatically added to the
+			manifest when the code is processed by tooling capable of
+			interpreting <emphasis>Bundle Annotations</emphasis> defined in <xref
+			linkend="intro.core.release"/>.</para>
+
+			<para>The requirement may be specified directly on any class in the
+			CDI bundle by using the <xref
+			linkend="org.osgi.service.cdi.annotations.RequireCDIExtender"
+			xrefstyle="hyperlink"/> annotation when the code is processed by
+			tooling capable of interpreting <emphasis>Bundle Annotations</emphasis>
+			defined in <xref linkend="intro.core.release"/>..</para>
+
+			<para><emphasis role="strong">Specifying the list of bean classes</emphasis> -
+			As mentioned in <xref linkend="service.cdi-bean.discovery"
+			xrefstyle="hyperlink" /> a CDI bundle must declare all bean classes
+			CCR is expected to operate on. This is done by adding the attribute
+			<code>osgi.beans</code>, of type <code><![CDATA[List<String>]]></code>,
+			to the requirement. For example:</para>
+
+			<programlisting>Require-Capability: «
+	osgi.extender; «
+		osgi.beans:List&lt;String&gt;="com.foo.Bar,com.foo.Baz,com.foo.fo.Fum"; «
+		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+
+			<para><emphasis role="strong">Specifying Portable Extension
+			dependencies</emphasis> - As mentioned in <xref
+			linkend="service.cdi-portable.extensions" xrefstyle="hyperlink" /> a
+			CDI bundle may declare zero or more Portable Extension dependencies.
+			This is done by adding the attribute <code>extensions</code>, of type
+			<code><![CDATA[List<String>]]></code>, to the requirement. For example:</para>
+
+			<programlisting>Require-Capability: «
+	osgi.extender; «
+		extensions:List&lt;String&gt;="(&amp;(osgi.cdi.extension=JTA)(version=1.2))"; «
+		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+		</listitem>
+
+		<listitem xml:id="service.cdi-capabilities.implementation">
+			<para>A capability in the <link
+			linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+			namespace declaring an implementation with the name <xref
+			linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
+			xrefstyle="hyperlink"/>. In addition to the specification packages, this
+			capability must also declare a uses
+			constraint for the <code>javax.enterprise.*</code> packages. For example:</para>
+
+			<programlisting>Provide-Capability: «
+	osgi.implementation; «
+		osgi.implementation="osgi.cdi"; «
+		version:Version="<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>"; «
+		uses:="javax.enterprise.context, javax.enterprise.context.control, «
+			javax.enterprise.context.spi, javax.enterprise.event, «
+			javax.enterprise.inject, javax.enterprise.inject.literal, «
+			javax.enterprise.inject.spi, javax.enterprise.inject.spi.configurator, «
+			javax.enterprise.util, org.osgi.service.cdi, «
+			org.osgi.service.cdi.annotations, «
+			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime, «
+			org.osgi.service.cdi.runtime.dto, «
+			org.osgi.service.cdi.runtime.dto.template"</programlisting>
+
+			<para>This capability must follow the rules defined for the <xref
+			linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+
+			<para>An Extension bundle must require the <code>osgi.implementation</code>
+			capability from CCR. This requirement will wire the extension bundle
+			to the CCR implementation and ensure that CCR is using the same
+			<code>javax.enterprise.*</code> packages as the extender bundle if
+			the bundle uses those packages.</para>
+
+			<programlisting>Require-Capability: «
+	osgi.implementation; «
+		filter:="(&amp;(osgi.implementation=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+
+			<para>The requirement may be specified directly on any class in the
+			Extension bundle by using the <xref
+			linkend="org.osgi.service.cdi.annotations.RequireCDIImplementation"
+			xrefstyle="hyperlink"/> annotation when the code is processed by
+			tooling capable of interpreting <emphasis>Bundle Annotations</emphasis>
+			defined in <xref linkend="intro.core.release"/>.</para>
+		</listitem>
+
+		<listitem>
+			<para>A capability in the <link
+			linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+			namespace representing the <xref
+			linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+			xrefstyle="hyperlink"/> service. This capability must also declare a
+			uses constraint for the
+			<code>org.osgi.service.cdi.runtime</code> package. For
+			example:</para>
+
+			<programlisting><![CDATA[Provide-Capability: «
+	osgi.service; «
+		objectClass:List<String>= «
+			"org.osgi.service.cdi.runtime.CDIComponentRuntime"; «
+		uses:="org.osgi.service.cdi.runtime"]]></programlisting>
+
+			<para>This capability must follow the rules defined for the <xref
+			linkend="service.namespaces-osgi.service.namespace"/>.</para>
+		</listitem>
+
+		<listitem>
+			<para>A capability in the <link
+			linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+			namespace for every service declared by the metadata in the CDI
+			bundle.</para>
+		</listitem>
+	</itemizedlist>
+</section>
+
+<section>
+	<title>Container Component and Service Cycles</title>
+
+	<para>There is no special support to allow service cycles within the
+	<emphasis>container component</emphasis>. CDI provides existing
+	mechanisms for wiring and collaborating within the CDI container. However,
+	if an container component defines a dynamic, optional reference, then a service
+	subsequently provided by the container component may satisfy the reference
+	at some point when the container component is satisfied. However, if the
+	reference is static and mandatory and the only potentially matching service
+	is one provided by the container component itself, then the container
+	component would wait forever for a service that will never arrive. This is
+	simple design error. The information about unsatisfied references is
+	available from the <xref linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+	xrefstyle="hyperlink"/> service.</para>
+</section>
+
+<section>
+	<title>Relationship to CDI features</title>
+
+	<para>CDI has many features which may occasionally interact with the OSGi
+	CDI integrations defined by this specification.</para>
+
+	<section>
+		<title>Decorators and Interceptors</title>
+
+		<para>Decorators and Interceptors are used to wrap contextual instances
+		with proxies to deliver additional, targetted functionality. However, these
+		features are not support for <xref linkend="service.cdi-bib.unproxyable"/>.
+		Attempting to apply either feature to a bean or producer having an
+		unproxyable bean type will result in a definition error. This limitation
+		extends to CCR where applicable. The <code>@javax.enterprise.inject.Typed</code>
+		annotation is available to explicitly reduce the set of bean types, making
+		it possible to use either feature on beans having unproxyable types.
+		Implementations of this specification must support the use of
+		<code>@javax.enterprise.inject.Typed</code> when publishing services.</para>
+
+		<para>Service objects are the product of beans and producers. As
+		such they may be targeted by Decorators and/or Interceptors and wrapped
+		by proxies. Therefore the subset of types under which the service is
+		published must be a subset of the bean types, including further
+		restrictions declared by <code>@javax.enterprise.inject.Typed</code>.
+		Service types not contained in the restricted set of bean types will
+		result in a definition error.</para>
+	</section>
+</section>
+
+<section xml:id="service.cdi-bean.manager">
+	<title>BeanManager service</title>
+
+	<para>When the container component is satisfied CCR must published it's
+	<code>javax.enterprise.inject.spi.BeanManager</code> to the service registry
+	with the following service properties:</para>
+
+	<table>
+	<title>BeanManager Service Properties</title>
+
+	<tgroup cols="3">
+	<colspec colnum="1" colwidth="2*"/>
+
+	<colspec colnum="2" colwidth="1*"/>
+
+	<colspec colnum="3" colwidth="2*"/>
+
+	<thead>
+		<row>
+		<entry>Service Property</entry>
+
+		<entry>Type</entry>
+
+		<entry>Description</entry>
+		</row>
+	</thead>
+
+	<tbody>
+		<row>
+		<entry><code><xref
+		linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID_PROPERTY"/></code></entry>
+
+		<entry><para>string</para></entry>
+
+		<entry><para>The container id. See <xref
+		linkend="service.cdi-container.component"/>.</para></entry>
+		</row>
+	</tbody>
+	</tgroup>
+	</table>
+
+	<para>The <code>javax.enterprise.inject.spi.BeanManager</code> must be
+	unpublished when the container component becomes unsatisfied.</para>
+</section>
+
+<section>
+	<title>Security</title>
+
+	<para>TBD</para>
+
+	<section>
+		<title>CDI Bundle</title>
+
+		<para>TBD</para>
+	</section>
+</section>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.annotations.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.reference.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.runtime.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.runtime.dto.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.runtime.dto.template.xml"/>
+
+<section>
+	<title>References</title>
+
+	<bibliolist>
+		<bibliomixed xml:id="service.cdi-bib.cdi">
+			<title>CDI</title>http://www.cdi-spec.org/</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi20">
+			<title>CDI 2.0</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.unproxyable">
+			<title>unproxyable bean types</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#unproxyable</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.general.syntax.definitions">
+			<title>General Syntax Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.filter.syntax">
+			<title>Filter Syntax</title>OSGi Core, Filter Syntax</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.typesafe.resolution">
+			<title>Typesafe Resolution</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#typesafe_resolution</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.scopes.and.contexts">
+			<title>Scopes and contexts</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#contexts</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.pseudoscope">
+			<title>Pseudo-scope</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#normal_scope</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.inject">
+			<title>Dependency Injection for Java</title>https://jcp.org/en/jsr/detail?id=330</bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.jta12">
+			<title>Java Transaction Something or other...</title>https://jcp.org/en/jsr/detail?id=JTA??</bibliomixed>
+	</bibliolist>
+</section>
+</chapter>
