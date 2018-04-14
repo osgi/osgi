@@ -32,21 +32,24 @@ import javax.inject.Inject;
 import javax.inject.Qualifier;
 
 import org.osgi.service.cdi.annotations.Bundle;
-import org.osgi.service.cdi.annotations.SingleComponent;
+import org.osgi.service.cdi.annotations.ComponentPropertyType;
 import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
-
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@interface Tb {
-	String value();
-}
 
 @SingleComponent
 @Service
 @Bundle
-@Tb("tb2")
+@Client.Tb("tb2")
 public class Client implements Callable<String>{
+
+	@ComponentPropertyType
+	@Qualifier
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface Tb {
+		String value();
+	}
+
 	@Inject
 	Foo foo;
 

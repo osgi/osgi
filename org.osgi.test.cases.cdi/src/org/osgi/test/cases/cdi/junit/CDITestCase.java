@@ -133,8 +133,13 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
 	 * . Therefore the component from tb2 should not turned into a CDI bean that is
 	 * registered in the OSGi Service Registry.
+	 *
+	 * TODO the only reason this is currently true is because the imported class is
+	 * not listed as a CDI bean in the `osgi.cdi` requirement. Should the rule above
+	 * be upheld?
 	 */
-	public void _testImportedPackageNotProcessed() throws Exception {
+	public void testImportedPackageNotProcessed() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar");
 		Bundle tb2 = installBundle("tb2.jar");
 		Bundle tb4 = installBundle("tb4.jar");
 
@@ -147,7 +152,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		st2.open();
 
 		try {
-			Class<?> cls = tb4.loadClass("org.osgi.test.cases.cdi.tb4.pkg4.StaticAccess");
+			Class<?> cls = tb4.loadClass("org.osgi.test.cases.cdi.tb4.StaticAccess");
 			Method m = cls.getDeclaredMethod("getFromImport");
 			assertEquals("Precondition", "From tb2", m.invoke(null));
 
@@ -161,6 +166,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			st1.close();
 			tb4.uninstall();
 			tb2.uninstall();
+			serviceapi.uninstall();
 		}
 	}
 
@@ -170,7 +176,8 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
 	 * header is present.
 	 */
-	public void _testRequireCapabilityPresent() throws Exception {
+	public void testRequireCapabilityPresent() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar");
 		Bundle tb1 = installBundle("tb1.jar");
 
 		BundleContext ctx = getContext();
@@ -184,6 +191,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			tb1.uninstall();
+			serviceapi.uninstall();
 		}
 	}
 
@@ -192,7 +200,8 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
 	 * header is not present.
 	 */
-	public void _testNoRequireCapabilityPresent() throws Exception {
+	public void testNoRequireCapabilityPresent() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar");
 		Bundle tb2 = installBundle("tb2.jar");
 
 		BundleContext ctx = getContext();
@@ -206,6 +215,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			tb2.uninstall();
+			serviceapi.uninstall();
 		}
 	}
 
@@ -328,10 +338,10 @@ public class CDITestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test that an @Inject @Reference Provider<Optional<?>> will not see object
-	 * when the service dependency is not available.
+	 * Test that an @Inject @Reference Optional<?> will not see object when the
+	 * service dependency is not available.
 	 */
-	public void _testInjectServiceNullObject() throws Exception {
+	public void testInjectServiceNullObject() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
 		Bundle tb10 = installBundle("tb10.jar");
 

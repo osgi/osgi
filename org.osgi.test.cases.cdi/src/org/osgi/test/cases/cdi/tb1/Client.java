@@ -41,9 +41,9 @@ import org.osgi.test.cases.cdi.serviceapi.Foo;
 @Client.Tb("tb1")
 public class Client implements Callable<String>{
 
+	@ComponentPropertyType
 	@Qualifier
 	@Retention(RetentionPolicy.RUNTIME)
-	@ComponentPropertyType
 	public static @interface Tb {
 		String value();
 	}
