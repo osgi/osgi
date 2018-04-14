@@ -31,20 +31,21 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Qualifier;
 
-import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
-
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@interface Tb {
-	String value();
-}
 
 @SingleComponent
 @Service
-@Tb("tb4")
+@Client.Tb("tb4")
 public class Client implements Callable<String>{
+
+	@Qualifier
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface Tb {
+		String value();
+	}
+
 	@Inject
 	Foo foo;
 

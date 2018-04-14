@@ -28,10 +28,12 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
 
 @SingleComponent
+@Service
 public class Client implements Callable<String>{
 	@Inject
 	Foo foo;

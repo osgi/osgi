@@ -27,15 +27,17 @@ package org.osgi.test.cases.cdi.tb6;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.osgi.test.cases.cdi.serviceapi.Bar;
+import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
+import org.osgi.test.cases.cdi.tb6.intf.ClientInterface;
 
 @ApplicationScoped
-public class Client2 implements Bar {
+@Service
+public class Client2 implements ClientInterface {
 	@Inject
 	Foo foo;
 
-	public String doBar() {
+	public String callClient() {
 		return foo.doFoo() + "_2";
 	}
 }

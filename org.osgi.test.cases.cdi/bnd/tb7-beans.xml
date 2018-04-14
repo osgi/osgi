@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<beans xmlns:cdi="http://www.osgi.org/xmlns/cdi/v1.0.0">
-	<cdi:bean class="org.osgi.test.cases.cdi.tb7.Client" />
-</beans>

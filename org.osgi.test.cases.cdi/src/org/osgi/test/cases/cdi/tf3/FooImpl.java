@@ -28,6 +28,6 @@ import org.osgi.test.cases.cdi.serviceapi.Foo;
 
 public class FooImpl implements Foo {
 	public String doFoo() {
-		return "From tf3";
+		return "From Fragment";
 	}
 }

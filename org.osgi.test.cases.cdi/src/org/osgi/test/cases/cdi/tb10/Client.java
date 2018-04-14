@@ -24,20 +24,25 @@
  */
 package org.osgi.test.cases.cdi.tb10;
 
+import java.util.Optional;
+import java.util.concurrent.Callable;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Reference;
+import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
 
 @ApplicationScoped
-public class Client implements Foo {
-	// Should inject the Foo from the Service Registry because of the OSGi bean
-	// descriptor.
+@Service
+public class Client implements Callable<String> {
 	@Inject
-	Foo foo;
+	@Reference
+	Optional<Foo> foo;
 
 	@Override
-	public String doFoo() {
-		return foo.doFoo() + "_via_manifest";
+	public String call() {
+		return foo.map(Foo::doFoo).orElse(null);
 	}
 }

@@ -1,8 +1,9 @@
 Bundle-SymbolicName: ${p}.tb5
 Bundle-Version: 1.0.0.test
 Private-Package: ${p}.tb5
-Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.cdi)"
+Require-Capability:\
+	osgi.extender;\
+		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\
+		osgi.beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb5.*}'
 
 -contract: JavaInject, JavaCDI
-
--includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb5-beans.xml}

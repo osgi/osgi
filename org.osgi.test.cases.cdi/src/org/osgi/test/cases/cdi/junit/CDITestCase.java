@@ -47,6 +47,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * bundle is stopped.
 	 */
 	public void testBundleLifecycle() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar", false);
 		Bundle tb1 = installBundle("tb1.jar", false);
 
 		BundleContext ctx = getContext();
@@ -72,6 +73,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			tb1.uninstall();
+			serviceapi.uninstall();
 			ctx.removeServiceListener(tsl);
 		}
 	}
@@ -83,6 +85,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * testBundleLifecycle() except that the CDI components reside in a fragment.
 	 */
 	public void testFragmentLifecycle() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar", false);
 		Bundle tb3 = installBundle("tb3.jar", false);
 		Bundle tf3 = installBundle("tf3.jar", false);
 
@@ -117,6 +120,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			st.close();
 			tf3.uninstall();
 			tb3.uninstall();
+			serviceapi.uninstall();
 			ctx.removeServiceListener(tsl);
 		}
 	}
@@ -130,7 +134,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * . Therefore the component from tb2 should not turned into a CDI bean that is
 	 * registered in the OSGi Service Registry.
 	 */
-	public void testImportedPackageNotProcessed() throws Exception {
+	public void _testImportedPackageNotProcessed() throws Exception {
 		Bundle tb2 = installBundle("tb2.jar");
 		Bundle tb4 = installBundle("tb4.jar");
 
@@ -166,7 +170,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
 	 * header is present.
 	 */
-	public void testRequireCapabilityPresent() throws Exception {
+	public void _testRequireCapabilityPresent() throws Exception {
 		Bundle tb1 = installBundle("tb1.jar");
 
 		BundleContext ctx = getContext();
@@ -188,7 +192,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
 	 * header is not present.
 	 */
-	public void testNoRequireCapabilityPresent() throws Exception {
+	public void _testNoRequireCapabilityPresent() throws Exception {
 		Bundle tb2 = installBundle("tb2.jar");
 
 		BundleContext ctx = getContext();
@@ -228,6 +232,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * services via the {@code Require-Capability} header.
 	 */
 	public void testServicesViaManifest() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar");
 		Bundle tb1 = installBundle("tb6.jar");
 
 		BundleContext ctx = getContext();
@@ -236,7 +241,11 @@ public class CDITestCase extends DefaultTestBundleControl {
 		st.open(true);
 
 		try {
-			st.waitForService(2500);
+			int trackingCount = st.getTrackingCount();
+
+			for (int i = 10; i > 0 && (st.getTrackingCount() < (trackingCount + 2)); i--) {
+				Thread.sleep(20);
+			}
 
 			List<String> results = new ArrayList<String>();
 			for (Object svc : st.getServices()) {
@@ -257,6 +266,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			tb1.uninstall();
+			serviceapi.uninstall();
 		}
 	}
 
@@ -264,6 +274,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 * Test the BeanManager service.
 	 */
 	public void testBeanManagerService() throws Exception {
+		Bundle serviceapi = installBundle("serviceapi.jar");
 		Bundle tb1 = installBundle("tb1.jar");
 
 		BundleContext ctx = getContext();
@@ -287,16 +298,17 @@ public class CDITestCase extends DefaultTestBundleControl {
 			ccst.close();
 			st.close();
 			tb1.uninstall();
+			serviceapi.uninstall();
 		}
 	}
 
 	/**
-	 * Test that an @Inject @Service will inject a reference to the service
+	 * Test that an @Inject @Reference will inject a reference to the service
 	 */
 	public void testInjectService() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
-		Bundle fooBundle = installBundle("servicefoo.jar");
-		Bundle clientBundle = installBundle("serviceclient.jar");
+		Bundle tb8 = installBundle("tb8.jar");
+		Bundle tb = installBundle("tb.jar");
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -310,19 +322,18 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			apiBundle.uninstall();
-			fooBundle.uninstall();
-			clientBundle.uninstall();
+			tb8.uninstall();
+			tb.uninstall();
 		}
 	}
 
 	/**
-	 * Test that an @Inject @Reference Instance<?> will not see object when the
-	 * service dependency is not available.
+	 * Test that an @Inject @Reference Provider<Optional<?>> will not see object
+	 * when the service dependency is not available.
 	 */
-	public void testInjectServiceNullObject() throws Exception {
+	public void _testInjectServiceNullObject() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
-		Bundle clientBundle = installBundle("serviceclient.jar");
-		Bundle fooBundle = installBundle("servicefoo.jar", false);
+		Bundle tb10 = installBundle("tb10.jar");
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -336,19 +347,18 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			apiBundle.uninstall();
-			clientBundle.uninstall();
-			fooBundle.uninstall();
+			tb10.uninstall();
 		}
 	}
 
 	/**
-	 * Test that an @Inject @Service will not register until it's required
+	 * Test that an @Inject @Reference will not register until it's required
 	 * dependency becomes available
 	 */
 	public void testInjectServiceRequired() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
-		Bundle clientBundle = installBundle("serviceclient.required.jar");
-		Bundle fooBundle = installBundle("servicefoo.jar", false);
+		Bundle tb = installBundle("tb.jar");
+		Bundle tb8 = installBundle("tb8.jar", false);
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -360,27 +370,26 @@ public class CDITestCase extends DefaultTestBundleControl {
 			assertNull(
 					"No service should be found since the bundle was not yet started",
 					st.waitForService(2500));
-			fooBundle.start();
+			tb8.start();
 
 			Callable<String> client = st.waitForService(2500);
 			assertEquals("Precondition", "test", client.call());
 		} finally {
 			st.close();
+			tb.uninstall();
+			tb8.uninstall();
 			apiBundle.uninstall();
-			clientBundle.uninstall();
-			fooBundle.uninstall();
 		}
 	}
 
 	/**
-	 * Test that an @Inject @Service will unregister from the service registry
-	 * when it's required dependency is unregistered. dependency becomes
-	 * available
+	 * Test that an @Inject @Reference will unregister from the service registry
+	 * when it's required dependency is unregistered. dependency becomes available
 	 */
 	public void testInjectServiceRequiredBecomesUnavailable() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
-		Bundle clientBundle = installBundle("serviceclient.required.jar");
-		Bundle fooBundle = installBundle("servicefoo.jar");
+		Bundle tb = installBundle("tb.jar");
+		Bundle tb8 = installBundle("tb8.jar");
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -393,7 +402,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			Callable<String> client = st.waitForService(2500);
 			assertEquals("Precondition", "test", client.call());
 
-			fooBundle.stop();
+			tb8.stop();
 
 			assertNull(
 					"No service should be found since the bundle was not yet started",
@@ -401,8 +410,8 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			apiBundle.uninstall();
-			clientBundle.uninstall();
-			fooBundle.uninstall();
+			tb.uninstall();
+			tb8.uninstall();
 		}
 	}
 
