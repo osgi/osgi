@@ -18,6 +18,9 @@ Include-Resource                    = \
    tb4.jar, \
    tb5.jar ,\
    tb6.jar ,\
+   tb7.jar ,\
+   tb8.jar ,\
+   tb9.jar ,\
    init_config.json=configs/init_config.json
    
    

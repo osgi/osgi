@@ -1,0 +1,7 @@
+{
+  "org.osgi.test.pid8": 
+  {
+    ":configurator:ranking": 2,
+    "foo": "dingdong"
+  }
+}

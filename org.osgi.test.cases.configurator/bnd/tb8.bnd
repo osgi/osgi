@@ -1,0 +1,13 @@
+Bundle-SymbolicName: ${p}.tb8
+Bundle-Name: tb1
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Import-Package: *
+
+Include-Resource: {OSGI-INF/configurator/config8.json=configs/config8.json}
+Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
+
+ 
