@@ -167,7 +167,7 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		BundleDTO dto = fm.installBundle(tb4URL.toString());
 
 		fm.setBundleStartLevel(dto.id, 123);
-		assertEquals(123, fm.getBundleStartLevel(dto.id));
+		assertEquals(123, fm.getBundleStartLevel(dto.id).startLevel);
 		
 		fm.uninstallBundle(dto.id);
 	}
