@@ -54,6 +54,8 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 	public void testInitialConfig() throws Exception {
 		String pid = "org.osgi.test.init.pid";
 		Map<String,String> launchConfig = new HashMap<>();
+		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+				"org.osgi.service.cm");
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
 				+ "\":configurator:version\": \"1.0.0\","
@@ -96,6 +98,8 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 		// provide file uri as configurator.initial
 		Map<String,String> launchConfig = new HashMap<>();
+		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+				"org.osgi.service.cm");
 		String config = f.toURI().toString();
 		launchConfig.put("configurator.initial", config);
 
@@ -121,6 +125,8 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 	public void testInitialConfigRequiresVersion() throws Exception {
 		String pid = "org.osgi.test.init.pid";
 		Map<String,String> launchConfig = new HashMap<>();
+		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+				"org.osgi.service.cm");
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
 				+ "\"org.osgi.test.init.pid\":{\"foo\": \"bar\"}}";
@@ -146,6 +152,8 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 	public void testInitialConfigRequiresSymbolicname() throws Exception {
 		String pid = "org.osgi.test.init.pid";
 		Map<String,String> launchConfig = new HashMap<>();
+		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+				"org.osgi.service.cm");
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:version\": \"1.0.0\","
 				+ "\"org.osgi.test.init.pid\":{\"foo\": \"bar\"}}";
