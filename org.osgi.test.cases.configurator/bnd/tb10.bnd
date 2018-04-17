@@ -1,5 +1,5 @@
-Bundle-SymbolicName: ${p}.tb9
-Bundle-Name: tb9
+Bundle-SymbolicName: ${p}.tb10
+Bundle-Name: tb10
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
@@ -7,7 +7,7 @@ Bundle-Copyright: ${copyright}
 
 Import-Package: *
 
-Include-Resource: {OSGI-INF/configurator/config8b.json=configs/config8b.json}
+Include-Resource: {OSGI-INF/configurator/config10.json=configs/config10.json}
 Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
 
  

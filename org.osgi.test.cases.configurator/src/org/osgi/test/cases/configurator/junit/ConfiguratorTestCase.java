@@ -147,7 +147,7 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 	}
 
 	public void testForceOverwrite() throws Exception {
-		String pid = "org.osgi.test.pid8";
+		String pid = "org.osgi.test.pid10";
 		Deferred<Configuration> updated = new Deferred<>();
 
 		ServiceRegistration<ConfigurationListener> reg1 = registerConfigListener(
@@ -158,6 +158,7 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		props.put("foo", "baz");
 		cfg.update(props);
 
+		Configuration cfg2 = null;
 		ServiceRegistration<ConfigurationListener> reg2 = null, reg3 = null;
 		try {
 			assertEquals("baz",
@@ -167,24 +168,18 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			Deferred<Configuration> updated2 = new Deferred<>();
 			reg2 = registerConfigListener(pid, updated2, null);
 
-			Bundle tb8 = install("tb8.jar");
-			tb8.start();
-			Configuration cfg2 = getTimeoutPromise(updated2).getValue();
+			Bundle tb10 = install("tb10.jar");
+			tb10.start();
+			cfg2 = getTimeoutPromise(updated2).getValue();
 
 			props = cfg2.getProperties();
-			assertEquals("tadaa!", props.get("foo"));
+			assertEquals("yes!", props.get("foo"));
 
-			Deferred<Configuration> updated3 = new Deferred<>();
-			reg3 = registerConfigListener(pid, updated3, null);
-			tb8.uninstall();
-
-			Configuration cfg3 = getTimeoutPromise(updated3).getValue();
-			assertEquals("baz", cfg3.getProperties().get("foo"));
+			tb10.uninstall();
 		} finally {
 			unregister(reg1);
 			unregister(reg2);
 			unregister(reg3);
-			cfg.delete();
 		}
 	}
 
@@ -303,9 +298,9 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 
 			tb7.uninstall();
 		} finally {
-			reg.unregister();
-			reg2.unregister();
-			reg3.unregister();
+			unregister(reg);
+			unregister(reg2);
+			unregister(reg3);
 		}
 	}
 

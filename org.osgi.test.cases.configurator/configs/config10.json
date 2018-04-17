@@ -1,0 +1,8 @@
+{
+  "org.osgi.test.pid10": 
+  {
+    ":configurator:ranking": 2,
+    ":configurator:policy": "force",
+    "foo": "yes!"
+  }
+}

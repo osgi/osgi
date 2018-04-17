@@ -1,5 +1,5 @@
 Bundle-SymbolicName: ${p}.tb8
-Bundle-Name: tb1
+Bundle-Name: tb8
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
