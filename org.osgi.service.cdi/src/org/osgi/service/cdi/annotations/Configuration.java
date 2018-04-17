@@ -18,9 +18,11 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.inject.Qualifier;
@@ -37,7 +39,6 @@ import javax.inject.Qualifier;
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})
 public @interface Configuration {
@@ -45,7 +46,8 @@ public @interface Configuration {
 	/**
 	 * Support inline instantiation of the {@link Configuration} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Configuration> implements Configuration {
+	public static final class Literal extends AnnotationLiteral<Configuration>
+			implements Configuration {
 
 		/**
 		 * Default instance.

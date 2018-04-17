@@ -16,29 +16,23 @@
 
 package org.osgi.service.cdi.annotations;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.CLASS;
+
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.enterprise.inject.Produces;
-
 /**
- * Identify the annotated annotation as a Component Property Type.
- * <p>
- * Component Property Type can be applied to beans annotated with
- * {@link SingleComponent} or {@link FactoryComponent}. They can also be applied
- * to methods and fields marked as {@link Produces} where the {@link Service}
- * annotation was used.
- * <p>
+ * Annotation used to indicate that build tooling must be included the class in
+ * the {@code osgi.cdi} {@code beans} list.
  *
- * @see "Component Property Types."
- * @author $Id$
+ * @author $ID$
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface ComponentPropertyType {
-	// A meta-annotation
+@RequireCDIExtender
+@Retention(CLASS)
+@Target(TYPE)
+public @interface Bean {
+	// A marker annotation
 }

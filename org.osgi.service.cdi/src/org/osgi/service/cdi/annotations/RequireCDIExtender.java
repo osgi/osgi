@@ -56,7 +56,7 @@ public @interface RequireCDIExtender {
 	 * @return CDI bean descriptor file paths
 	 */
 	@Attribute
-	String[] beans() default {};
+	String[] descriptor() default {};
 
 	/**
 	 * Specify service filters matching the extensions required by the CDI
@@ -77,17 +77,15 @@ public @interface RequireCDIExtender {
 	String[] extensions() default {};
 
 	/**
-	 * Specify OSGi Beans Description file paths to be searched on the
-	 * {@code Bundle-ClassPath}. The default value when unspecified is
-	 * {@code OSGI-INF/cdi/osgi-beans.xml}. For example:
+	 * Specify OSGi Beans classes to be used used by the CDI container. For
+	 * example:
 	 * <p>
 	 * <code>
-	 * {@code @}RequireCDIExtender(osgi_beans = "META-INF/beans.xml")
+	 * {@code @}RequireCDIExtender(beans = {"com.foo.BarImpl", "com.foo.impl.BazImpl"})
 	 * </code>
 	 *
 	 * @return OSGi Beans Description file paths
 	 */
-	@Attribute("osgi.beans")
-	String[] osgi_beans() default {};
+	String[] beans() default {};
 
 }

@@ -18,39 +18,42 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
-import org.osgi.framework.PrototypeServiceFactory;
-import org.osgi.service.cdi.reference.ReferenceEvent;
+
+import org.osgi.service.cdi.reference.BindObject;
+import org.osgi.service.cdi.reference.BindServiceObjects;
+import org.osgi.service.cdi.reference.BindServiceReference;
 
 /**
- * When used with {@link Service @Service} indicates that the bean should be
- * published as a {@link PrototypeServiceFactory PrototypeServiceFactory}. When
- * used with {@link Reference @Reference} or {@link ReferenceEvent
- * ReferenceEvent} indicates that the service must be
+ * Used with {@link Reference @Reference}, {@link BindObject BindObject},
+ * {@link BindServiceObjects BindServiceObjects} and {@link BindServiceReference
+ * BindServiceReference} to indicate that the service must be
  * {@code service.scope=prototype}.
  *
  * @author $Id$
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface Prototype {
+public @interface PrototypeRequired {
 
 	/**
-	 * Support inline instantiation of the {@link Prototype} annotation.
+	 * Support inline instantiation of the {@link PrototypeRequired} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Prototype> implements Prototype {
+	public static final class Literal extends
+			AnnotationLiteral<PrototypeRequired> implements PrototypeRequired {
 
 		/**
 		 * Default instance
 		 */
-		public static final Prototype	INSTANCE			= new Literal();
+		public static final PrototypeRequired	INSTANCE			= new Literal();
 
 		private static final long			serialVersionUID	= 1L;
 

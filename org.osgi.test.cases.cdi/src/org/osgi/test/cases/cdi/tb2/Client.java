@@ -24,6 +24,8 @@
  */
 package org.osgi.test.cases.cdi.tb2;
 
+import static org.osgi.service.cdi.ServiceInstanceType.BUNDLE;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.Callable;
@@ -31,15 +33,15 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Qualifier;
 
-import org.osgi.service.cdi.annotations.Bundle;
 import org.osgi.service.cdi.annotations.ComponentPropertyType;
 import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.ServiceInstance;
 import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
 
 @SingleComponent
 @Service
-@Bundle
+@ServiceInstance(BUNDLE)
 @Client.Tb("tb2")
 public class Client implements Callable<String>{
 

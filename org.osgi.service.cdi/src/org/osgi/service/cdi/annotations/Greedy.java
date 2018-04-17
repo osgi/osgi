@@ -18,23 +18,28 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
-import org.osgi.service.cdi.reference.ReferenceEvent;
+
+import org.osgi.service.cdi.reference.BindObject;
+import org.osgi.service.cdi.reference.BindServiceObjects;
+import org.osgi.service.cdi.reference.BindServiceReference;
 
 /**
  * Annotation used to indicate that the behaviour of the reference should be
- * greedy. Used in conjunction with {@link Reference @Reference} or
- * {@link ReferenceEvent ReferenceEvent}.
+ * greedy. Used in conjunction with {@link Reference @Reference},
+ * {@link BindObject BindObject}, {@link BindServiceReference
+ * BindServiceReference} or {@link BindServiceObjects BindServiceObjects}.
  *
  * @author $Id$
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface Greedy {

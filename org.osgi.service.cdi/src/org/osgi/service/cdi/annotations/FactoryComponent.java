@@ -18,12 +18,15 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
+
 import org.osgi.service.cdi.CDIConstants;
 
 /**
@@ -38,7 +41,6 @@ import org.osgi.service.cdi.CDIConstants;
 @ComponentScoped
 @Documented
 @Named
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Stereotype
 @Target(TYPE)
@@ -47,7 +49,8 @@ public @interface FactoryComponent {
 	/**
 	 * Support inline instantiation of the {@link FactoryComponent} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<FactoryComponent> implements FactoryComponent {
+	public static final class Literal extends
+			AnnotationLiteral<FactoryComponent> implements FactoryComponent {
 
 		private static final long serialVersionUID = 1L;
 

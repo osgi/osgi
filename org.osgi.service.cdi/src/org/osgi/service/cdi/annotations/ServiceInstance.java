@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,49 +25,53 @@ import java.lang.annotation.Target;
 
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.osgi.service.cdi.ServiceInstanceType;
+
 /**
- * Annotation used in conjunction with {@link ComponentScoped} in order to
- * associate configurations with the component bean.
+ * Annotation used on beans, observer methods and observer fields to specify the
+ * service scope for the service. Used in conjunction with {@link Service}.
  *
  * @author $Id$
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface PIDs {
+@Target({
+		TYPE, FIELD, METHOD
+})
+public @interface ServiceInstance {
 
 	/**
-	 * Support inline instantiation of the {@link PIDs} annotation.
+	 * Support inline instantiation of the {@link ServiceInstance} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<PIDs>
-			implements PIDs {
+	public static final class Literal extends AnnotationLiteral<ServiceInstance>
+			implements ServiceInstance {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param pids array of {@link PID}
-		 * @return an instance of {@link PIDs}
+		 * @param type the type of the ServiceInstance
+		 * @return an instance of {@link ServiceInstance}
 		 */
-		public static PIDs of(PID[] pids) {
-			return new Literal(pids);
+		public static Literal of(ServiceInstanceType type) {
+			return new Literal(type);
 		}
 
-		private Literal(PID[] pids) {
-			_pids = pids;
+		private Literal(ServiceInstanceType type) {
+			this.type = type;
 		}
 
 		@Override
-		public PID[] value() {
-			return _pids;
+		public ServiceInstanceType value() {
+			return type;
 		}
 
-		private final PID[] _pids;
+		private final ServiceInstanceType type;
 
 	}
 
 	/**
-	 * The set of ordered configurations available to the component.
+	 * The scope of the service.
 	 */
-	PID[] value();
+	ServiceInstanceType value() default ServiceInstanceType.SINGLETON;
 
 }

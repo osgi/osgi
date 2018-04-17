@@ -37,7 +37,6 @@ import javax.inject.Qualifier;
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})
 public @interface Reference {
@@ -45,7 +44,8 @@ public @interface Reference {
 	/**
 	 * Support inline instantiation of the {@link Reference} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Reference> implements Reference {
+	public static final class Literal extends AnnotationLiteral<Reference>
+			implements Reference {
 
 		private static final long serialVersionUID = 1L;
 

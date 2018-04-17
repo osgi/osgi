@@ -29,6 +29,7 @@ import javax.enterprise.util.AnnotationLiteral;
 import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
 
@@ -52,13 +53,13 @@ import org.osgi.framework.ServiceFactory;
  * bean - The provided service can be of any scope. The bean can either
  * implement {@link ServiceFactory ServiceFactory} or
  * {@link PrototypeServiceFactory PrototypeServiceFactory} or use
- * {@link Bundle @Bundle} or {@link Prototype @Prototype} to set it's service
+ * {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype} to set it's service
  * scope. If none of those options are used the service is a singleton scope
  * service.</li>
  * <li>{@link ApplicationScoped @ApplicationScoped} bean - The provided service
  * is a singleton scope service unless the bean implements {@link ServiceFactory
  * ServiceFactory} or {@link PrototypeServiceFactory PrototypeServiceFactory}.
- * It cannot use {@link Bundle @Bundle} or {@link Prototype @Prototype} to set
+ * It cannot use {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype} to set
  * it's service scope. Use of those annotations in this case will result in a
  * definition error.</li>
  * </ul>
@@ -67,7 +68,6 @@ import org.osgi.framework.ServiceFactory;
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, TYPE, TYPE_USE})
 public @interface Service {
@@ -75,7 +75,8 @@ public @interface Service {
 	/**
 	 * Support inline instantiation of the {@link Service} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Service> implements Service {
+	public static final class Literal extends AnnotationLiteral<Service>
+			implements Service {
 
 		private static final long serialVersionUID = 1L;
 

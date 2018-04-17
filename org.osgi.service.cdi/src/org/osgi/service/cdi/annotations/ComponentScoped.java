@@ -18,10 +18,12 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Scope;
 
@@ -35,7 +37,6 @@ import javax.inject.Scope;
  */
 @Documented
 @Inherited
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Scope
 @Target({FIELD, METHOD, TYPE})
@@ -44,7 +45,8 @@ public @interface ComponentScoped {
 	/**
 	 * Support inline instantiation of the {@link ComponentScoped} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<ComponentScoped> implements ComponentScoped {
+	public static final class Literal extends AnnotationLiteral<ComponentScoped>
+			implements ComponentScoped {
 
 		/**
 		 * Default instance.

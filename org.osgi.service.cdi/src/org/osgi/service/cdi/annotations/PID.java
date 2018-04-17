@@ -39,7 +39,6 @@ import org.osgi.service.cdi.ConfigurationPolicy;
 @Documented
 @Qualifier
 @Repeatable(PIDs.class)
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface PID {
@@ -47,7 +46,8 @@ public @interface PID {
 	/**
 	 * Support inline instantiation of the {@link PID} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<PID> implements PID {
+	public static final class Literal extends AnnotationLiteral<PID>
+			implements PID {
 
 		private static final long serialVersionUID = 1L;
 
