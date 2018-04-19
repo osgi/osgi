@@ -28,7 +28,7 @@ public class Client {
 
 	@Inject
 	void updates(@Reference BindObject<CDIComponentRuntime> binder) {
-		binder.adding(this::checkMe).update(this::checkMe);
+		binder.adding(this::checkMe).modified(this::checkMe).bind();
 	}
 
 	private void checkMe(CDIComponentRuntime r) {
