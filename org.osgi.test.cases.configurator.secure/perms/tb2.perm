@@ -1,0 +1,11 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+${permissions;packages}
+(org.osgi.framework.CapabilityPermission "osgi.extender" "require")
+
+# this one has no ConfigurationAdmin ServicePermission, hence the configuration should fail

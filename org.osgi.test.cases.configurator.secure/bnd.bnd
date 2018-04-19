@@ -12,16 +12,7 @@ Import-Package: *
 
 Include-Resource                    = \
    tb1.jar ,\
-   tb2.jar ,\
-   tb3.jar ,\
-   tb4.jar ,\
-   tb5.jar ,\
-   tb6.jar ,\
-   tb7.jar ,\
-   tb8.jar ,\
-   tb9.jar ,\
-   tb10.jar,\
-   init_config.json=configs/init_config.json
+   tb2.jar
    
    
 Test-Cases                          = ${testcases}
@@ -42,7 +33,4 @@ Test-Cases                          = ${testcases}
     org.osgi.util.function; version=latest, \
     org.osgi.util.promise; version=latest
     
-
-
--runproperties = ${runproperties},\
-    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.util.function;latest},${repo;org.osgi.util.promise;latest}}"
+-runproperties = ${runsecureproperties}
