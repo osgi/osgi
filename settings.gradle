@@ -4,6 +4,8 @@
  * Depends on bnd_* values from gradle.properties.
  */
 
+import aQute.bnd.osgi.Constants
+
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
   repositories {
@@ -16,13 +18,17 @@ buildscript {
   }
   /* Add bnd gradle plugin to buildscript classpath of rootProject */
   def bndPlugin = files(configurations.classpath.files)
-  gradle.projectsLoaded { gradle ->
-    gradle.rootProject.buildscript {
+  gradle.rootProject {
+    buildscript {
       dependencies {
         classpath bndPlugin
       }
     }
   }
+}
+
+gradle.ext.bndWorkspaceConfigure = { workspace ->
+  workspace.setProperty('bnd_repourl', uri(bnd_repourl).toString())
 }
 
 apply plugin: 'biz.aQute.bnd.workspace'

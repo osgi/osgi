@@ -30,16 +30,19 @@ javac.target 			= 1.8
 javac.profile           = compact1
 -eeprofile              = auto
 
-
-
 #Bnd options
 -sources               	= true
 -sourcepath             = ${project}/${src}
+
+# Include the gradle.properties to get the value of bnd_repourl which is used
+# for the bnd build repository.
+-include ${workspace}/gradle.properties
 
 mainrepo                = ${build}/repo
 centralrepo             = https://repo1.maven.org/maven2
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
+bndrepo                 = ${uri;${bnd_repourl}}
 
 -plugin = aQute.lib.deployer.FileRepo; \
             name='Main'; \
@@ -49,6 +52,11 @@ releaserepo             = ${build}/${target-dir}/repo
             name='Licensed'; \
             location="${licensedrepo}"; \
             readonly=true, \
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            releaseUrl="${bndrepo}";\
+            index=${.}/bnd.mvn;\
+            name='Bnd';\
+            readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             releaseUrl="${centralrepo}";\
             index=${.}/central.mvn;\

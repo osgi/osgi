@@ -1,0 +1,4 @@
+# Bnd artifacts
+biz.aQute.bnd:biz.aQute.bnd:3.5.0
+biz.aQute.bnd:biz.aQute.junit:3.5.0
+biz.aQute.bnd:biz.aQute.bnd.gradle:3.5.0
