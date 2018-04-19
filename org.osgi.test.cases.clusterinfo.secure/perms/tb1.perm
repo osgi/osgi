@@ -7,3 +7,5 @@
 
 ${permissions;packages}
 (org.osgi.framework.ServicePermission "*" "get")
+(org.osgi.framework.ServicePermission "java.lang.String" "register")
+

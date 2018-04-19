@@ -45,17 +45,16 @@ public class ClusterInfoSecurityTestCase extends OSGiTestCase {
 		assertEquals(1, srefs.size());
 		FrameworkManager fm = ctx.getService(srefs.iterator().next());
 
+		URL tbURL = getClass().getClassLoader().getResource("tb1.jar");
+		BundleDTO dto = fm.installBundle(tbURL.toString());
+
 		try {
-			URL tbURL = getClass().getClassLoader().getResource("tb1.jar");
-			BundleDTO dto = fm.installBundle(tbURL.toString());
 			fm.startBundle(dto.id);
-		} catch (Exception e) {
-			// ignore
+			assertNull("Bundle should not have permission to add tag",
+					st.getService());
+		} finally {
+			fm.uninstallBundle(dto.id);
 		}
-
-		assertNull("Bundle should not have permission to add tag",
-				st.getService());
-
 	}
 
 	public void testPermissionOk() throws Exception {
@@ -78,11 +77,16 @@ public class ClusterInfoSecurityTestCase extends OSGiTestCase {
 
 		URL tbURL = getClass().getClassLoader().getResource("tb2.jar");
 		BundleDTO dto = fm.installBundle(tbURL.toString());
-		fm.startBundle(dto.id);
 
-		assertNotNull(
-				"The service with added custom properties should be there now",
-				st.waitForService(5000));
+		try {
+			fm.startBundle(dto.id);
+
+			assertNotNull(
+					"The service with added custom properties should be there now",
+					st.waitForService(5000));
+		} finally {
+			fm.uninstallBundle(dto.id);
+		}
 	}
 }
 
