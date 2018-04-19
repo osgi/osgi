@@ -425,6 +425,6 @@ defaultTasks += 'specifications'
 task('specifications') {
   description 'Generates all the specifications.'
   group 'documentation'
-  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf'
-  dependsOn 'core.zip', 'cmpn.zip', 'enterprise.zip', 'residential.zip'
+  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf'
+  dependsOn 'core.zip', 'cmpn.zip', 'enterprise.zip'
 }
