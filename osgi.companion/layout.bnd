@@ -3,15 +3,13 @@ osgi.companion.jars =\
   osgi.core,\
   osgi.cmpn,\
   osgi.promise,\
-  osgi.enterprise,\
-  osgi.residential
+  osgi.enterprise
 
 # The includes below must match the list above
 -include: ${project.workspace}/osgi.annotation/layout.bnd, \
 	${project.workspace}/osgi.core/layout.bnd, \
 	${project.workspace}/osgi.cmpn/layout.bnd, \
 	${project.workspace}/osgi.promise/layout.bnd, \
-	${project.workspace}/osgi.enterprise/layout.bnd, \
-	${project.workspace}/osgi.residential/layout.bnd
+	${project.workspace}/osgi.enterprise/layout.bnd
 
-osgi.companion.specs = ${uniq;${foreach;def;${replace;${osgi.companion.jars};$;.specs}}}
+osgi.companion.specs = ${uniq;${map;def;${replace;${osgi.companion.jars};$;.specs}}}

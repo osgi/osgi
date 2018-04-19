@@ -1,4 +1,4 @@
-build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
+build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}}
 
 jar.core.tests = \
     ${repo;org.apache.servicemix.bundles.bcel;latest}
@@ -146,46 +146,3 @@ build.enterprise.tests = \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
     org.osgi.test.cases.xml
-
-jar.residential.tests = \
-    ${repo;org.osgi.test.filter;latest}
-
-build.residential.tests = \
-    org.osgi.test.cases.cm, \
-    org.osgi.test.cases.component, \
-    org.osgi.test.cases.component.annotations, \
-    org.osgi.test.cases.dal, \
-    org.osgi.test.cases.dal.functions, \
-    org.osgi.test.cases.dal.secure, \
-    org.osgi.test.cases.device, \
-    org.osgi.test.cases.dmt.tc1, \
-    org.osgi.test.cases.dmt.tc2, \
-    org.osgi.test.cases.dmt.tc3, \
-    org.osgi.test.cases.dmt.tc4, \
-    org.osgi.test.cases.enocean, \
-    org.osgi.test.cases.event, \
-    org.osgi.test.cases.event.secure, \
-    org.osgi.test.cases.http, \
-    org.osgi.test.cases.log, \
-    org.osgi.test.cases.log.launch, \
-    org.osgi.test.cases.metatype, \
-    org.osgi.test.cases.metatype.annotations, \
-    org.osgi.test.cases.networkadapter, \
-    org.osgi.test.cases.promise, \
-    org.osgi.test.cases.provisioning, \
-    org.osgi.test.cases.residentialmanagement, \
-    org.osgi.test.cases.resourcemonitoring, \
-    org.osgi.test.cases.serial, \
-    org.osgi.test.cases.tr069todmt, \
-    org.osgi.test.cases.upnp, \
-    org.osgi.test.cases.usbinfo, \
-    org.osgi.test.cases.useradmin, \
-    org.osgi.test.cases.xml, \
-    org.osgi.test.cases.zigbee
-
-resources.residential.tests = \
- ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct.xsd, \
- ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct-template.xml, \
- ${workspace}/org.osgi.test.cases.zigbee/zcl.xsd, \
- ${workspace}/org.osgi.test.cases.zigbee/zcl.xml, \
- ${workspace}/org.osgi.test.cases.zigbee/README.md

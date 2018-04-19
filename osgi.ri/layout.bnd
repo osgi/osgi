@@ -1,4 +1,4 @@
-build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
+build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}, ${build.enterprise.impls}}
 
 build.core.impls = \
     org.osgi.dto, \
@@ -114,39 +114,3 @@ jar.enterprise.impls = \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
 	${repo;org.osgi.impl.service.repository;latest}, \
 	${repo;org.osgi.impl.service.subsystem;latest}
-
-build.residential.impls = \
-	org.osgi.impl.bundle.component.annotations, \
-	org.osgi.impl.bundle.rsh, \
-	org.osgi.impl.bundle.jaxp, \
-    org.osgi.impl.bundle.metatype.annotations, \
-	org.osgi.impl.service.dal, \
-	org.osgi.impl.service.dal.step, \
-	org.osgi.impl.service.device.manager, \
-	org.osgi.impl.service.dmt, \
-	org.osgi.impl.service.enocean, \
-	org.osgi.impl.service.networkadapter, \
-	org.osgi.impl.service.residentialmanagement, \
-	org.osgi.impl.service.resourcemonitoring, \
-	org.osgi.impl.service.resourcemonitoring.fakemonitors, \
-	org.osgi.impl.service.resourcemonitoring.util, \
-	org.osgi.impl.service.serial, \
-	org.osgi.impl.service.tr069todmt, \
-	org.osgi.impl.service.upnp.cp, \
-	org.osgi.impl.service.upnp.cd, \
-	org.osgi.impl.service.usbinfo, \
-	org.osgi.impl.service.useradmin, \
-	org.osgi.impl.service.zigbee, \
-    org.osgi.util.function, \
-    org.osgi.util.promise, \
-    org.osgi.util.xml
-
-jar.residential.impls = \
-	${repo;org.osgi.impl.service.cm;latest}, \
-	${repo;org.osgi.impl.service.component;latest}, \
-	${repo;org.osgi.impl.service.event;latest}, \
-	${repo;org.osgi.impl.service.http;latest}, \
-    ${repo;org.osgi.impl.service.log;latest}, \
-	${repo;org.osgi.impl.service.metatype;latest}, \
-	${repo;org.osgi.impl.service.provisioning;latest}
-

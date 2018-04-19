@@ -1,5 +1,0 @@
-Bundle-Description: OSGi Residential Release ${versionmask;=;${build.version}} Reference Implementations
-
--includeresource: {legal}
-
--pack: ${build.residential.impls},${jar.residential.impls}
