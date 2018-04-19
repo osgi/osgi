@@ -1,3 +1,5 @@
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.File;
 import java.util.Calendar;
 import java.util.Collection;
@@ -46,14 +48,15 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		if (!analyzer.getProperties().containsKey(PACK))
 			return false;
 
-		Map<String, String> fileToPath = Create.map();
+		Map<String,String> fileToPath = Create.map();
 
-		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
-		Workspace workspace = pb.getProject().getWorkspace();
+		Project us = pb.getProject();
+		Workspace workspace = us.getWorkspace();
 		Jar jar = analyzer.getJar();
 
 		// For each param listed ...
+		String pack = analyzer.getProperty(PACK);
 		Parameters params = pb.parseHeader(pack);
 		if (params.isEmpty()) {
 			analyzer.warning("No items to pack");
@@ -61,7 +64,6 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		}
 
 		// Do the shared stuff, we use our project as a template
-		Project us = pb.getProject();
 		Collection<Container> runfw = us.getRunFw();
 		Collection<Container> runpath = us.getRunpath();
 
@@ -87,49 +89,57 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append("\n\n");
 		}
 
-		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
-				.getBytes("UTF-8"), 0));
+		jar.putResource("shared.inc",
+				new EmbeddedResource(sb.toString().getBytes(UTF_8), 0L));
 
 		for (String entry : params.keySet()) {
 			try {
 				Project project = workspace.getProject(entry);
 				if (project != null) {
 					pack(analyzer, jar, project, runpath, fileToPath);
-				}
-				else {
-					while (entry.endsWith("~")) {
-						entry = entry.substring(0, entry.length() - 1);
-					}
-					flatten(analyzer, null, jar, new File(entry),
+				} else {
+					flatten(analyzer, null, jar,
+							new File(Processor.removeDuplicateMarker(entry)),
 							Collections.<String, String> emptyMap(), true,
 							fileToPath);
 				}
-			}
-			catch (Exception t) {
+			} catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry, t);
 				throw t;
 			}
 		}
 
-		// Include bnd so it is fully self contained, except for the
+		// Include biz.aQute.bnd so it is fully self contained, except for the
 		// java runtime.
-		Container c = pb.getProject().getBundle("biz.aQute.bnd", "latest",
-				Strategy.HIGHEST, null);
-
-		File f = c.getFile();
-		if (f != null)
-			jar.putResource("jar/bnd.jar", new FileResource(f));
-		else
-			analyzer.error("Cannot find bnd's jar file in a repository ");
+		pack(analyzer, jar, us, "biz.aQute.bnd", "bnd.jar");
 
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests --title ");
-		script.append(pb.getProject());
+		script.append(us);
 		script.append("\n");
-		jar.putResource("runtests", new EmbeddedResource(script.toString()
-				.getBytes("UTF-8"), 0));
+		jar.putResource("runtests",
+				new EmbeddedResource(script.toString().getBytes(UTF_8), 0L));
 
 		return false;
+	}
+
+	/**
+	 * Store a bundle in a JAR so that we can later unzip this project and have
+	 * all information.
+	 */
+	protected void pack(Analyzer analyzer, Jar jar, Project project, String bsn,
+			String name) throws Exception {
+		Container c = project.getBundle(bsn, "latest", Strategy.HIGHEST, null);
+
+		File f = c.getFile();
+		if (f != null) {
+			if (name == null) {
+				name = canonicalName(analyzer, f);
+			}
+			jar.putResource("jar/" + name, new FileResource(f));
+		} else {
+			analyzer.error("Cannot find " + bsn + " in a repository");
+		}
 	}
 
 	/**
@@ -141,7 +151,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	protected void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String, String> fileToPath)
+			Collection<Container> sharedRunpath, Map<String,String> fileToPath)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -188,13 +198,13 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		sb.append(" = ");
 		flatten(analyzer, sb, jar, runbundles, false, fileToPath);
 
-		Map<String, String> properties = OSGiHeader
+		Map<String,String> properties = OSGiHeader
 				.parseProperties(runproperties);
 
 		String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n    ";
 		properties.put("report", "true");
 
-		for (Map.Entry<String, String> entry : properties.entrySet()) {
+		for (Map.Entry<String,String> entry : properties.entrySet()) {
 			sb.append(del);
 			del = ", \\\n    ";
 
@@ -234,14 +244,14 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 
 		sb.append("\n\n\n\n");
 
-		Resource r = new EmbeddedResource(sb.toString().getBytes("UTF-8"),
+		Resource r = new EmbeddedResource(sb.toString().getBytes(UTF_8),
 				project.lastModified());
 		jar.putResource(project.getName() + ".bnd", r);
 
 	}
 
 	private String replacePaths(Analyzer analyzer, Jar jar,
-			Map<String, String> fileToPath, String value, boolean store)
+			Map<String,String> fileToPath, String value, boolean store)
 			throws Exception {
 		Collection<String> paths = Processor.split(value);
 		List<String> result = Create.list();
@@ -255,8 +265,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 					if (f.getName().endsWith(".jar")) {
 						path = "jar/" + canonicalName(analyzer, f);
 						fileToPath.put(f.getAbsolutePath(), path);
-					}
-					else {
+					} else {
 						path = "property-resources/" + f.getName();
 
 						// Ensure names are unique
@@ -271,20 +280,17 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				if (store && (jar.getResource(path) == null)) {
 					if (f.isFile()) {
 						jar.putResource(path, new FileResource(f));
-					}
-					else {
+					} else {
 						Jar j = new Jar(f);
 						try {
 							jar.addAll(j, null, path);
-						}
-						finally {
+						} finally {
 							j.close();
 						}
 					}
 				}
 				result.add(path);
-			}
-			else
+			} else
 				// If one entry is not a file not match, we assume they're not
 				// paths
 				return value;
@@ -309,16 +315,22 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				.append(Calendar.getInstance().get(Calendar.YEAR))
 				.append("). All Rights Reserved.\n");
 		sb.append("#\n");
-		sb.append("# Licensed under the Apache License, Version 2.0 (the \"License\");\n");
-		sb.append("# you may not use this file except in compliance with the License.\n");
+		sb.append(
+				"# Licensed under the Apache License, Version 2.0 (the \"License\");\n");
+		sb.append(
+				"# you may not use this file except in compliance with the License.\n");
 		sb.append("# You may obtain a copy of the License at\n");
 		sb.append("#\n");
 		sb.append("#      http://www.apache.org/licenses/LICENSE-2.0\n");
 		sb.append("#\n");
-		sb.append("# Unless required by applicable law or agreed to in writing, software\n");
-		sb.append("# distributed under the License is distributed on an \"AS IS\" BASIS,\n");
-		sb.append("# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n");
-		sb.append("# See the License for the specific language governing permissions and\n");
+		sb.append(
+				"# Unless required by applicable law or agreed to in writing, software\n");
+		sb.append(
+				"# distributed under the License is distributed on an \"AS IS\" BASIS,\n");
+		sb.append(
+				"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n");
+		sb.append(
+				"# See the License for the specific language governing permissions and\n");
 		sb.append("# limitations under the License.\n");
 		sb.append("\n");
 	}

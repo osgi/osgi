@@ -13,6 +13,7 @@ import aQute.bnd.osgi.Analyzer;
 import aQute.bnd.osgi.Constants;
 import aQute.bnd.osgi.FileResource;
 import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Processor;
 import aQute.bnd.service.AnalyzerPlugin;
 import aQute.bnd.version.Version;
 import aQute.libg.generics.Create;
@@ -29,7 +30,7 @@ import aQute.libg.generics.Create;
 
 public class Packaging implements AnalyzerPlugin {
 
-	private final static String	PACK	= "-pack";
+	private final static String PACK = "-pack";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
 		if (!(analyzer instanceof ProjectBuilder))
@@ -39,7 +40,7 @@ public class Packaging implements AnalyzerPlugin {
 		if (!analyzer.getProperties().containsKey(PACK))
 			return false;
 
-		Map<String, String> fileToPath = Create.map();
+		Map<String,String> fileToPath = Create.map();
 
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
@@ -58,17 +59,13 @@ public class Packaging implements AnalyzerPlugin {
 				Project project = workspace.getProject(entry);
 				if (project != null) {
 					pack(analyzer, jar, project, null, fileToPath);
-				}
-				else {
-					while (entry.endsWith("~")) {
-						entry = entry.substring(0, entry.length() - 1);
-					}
-					flatten(analyzer, null, jar, new File(entry),
+				} else {
+					flatten(analyzer, null, jar,
+							new File(Processor.removeDuplicateMarker(entry)),
 							Collections.<String, String> emptyMap(), true,
 							fileToPath);
 				}
-			}
-			catch (Exception t) {
+			} catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry, t);
 				throw t;
 			}
@@ -85,7 +82,7 @@ public class Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	protected void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String, String> fileToPath)
+			Collection<Container> sharedRunpath, Map<String,String> fileToPath)
 			throws Exception {
 
 		/**
@@ -104,7 +101,7 @@ public class Packaging implements AnalyzerPlugin {
 
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
 			Collection<Container> path, boolean store,
-			Map<String, String> fileToPath) throws Exception {
+			Map<String,String> fileToPath) throws Exception {
 		for (Container container : path) {
 			flatten(analyzer, sb, jar, container, store, fileToPath);
 		}
@@ -113,7 +110,7 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Container container, boolean store, Map<String, String> fileToPath)
+			Container container, boolean store, Map<String,String> fileToPath)
 			throws Exception {
 		switch (container.getType()) {
 			case LIBRARY :
@@ -143,21 +140,20 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Project project, Map<String, String> map, boolean store,
-			Map<String, String> fileToPath) throws Exception {
+			Project project, Map<String,String> map, boolean store,
+			Map<String,String> fileToPath) throws Exception {
 		File[] subs = project.getBuildFiles();
 		analyzer.getInfo(project);
 		if (subs == null) {
 			analyzer.error("Project cannot build %s ", project);
-		}
-		else
+		} else
 			for (File sub : subs)
 				flatten(analyzer, sb, jar, sub, map, store, fileToPath);
 	}
 
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			File sub, Map<String, String> map, boolean store,
-			Map<String, String> fileToPath) throws Exception {
+			File sub, Map<String,String> map, boolean store,
+			Map<String,String> fileToPath) throws Exception {
 		String path = fileToPath.get(sub.getAbsolutePath());
 		if (path == null) {
 			path = "jar/" + canonicalName(analyzer, sub);
@@ -170,7 +166,7 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append("\\\n    ");
 			sb.append(path);
 			sb.append(";version=file");
-			for (Map.Entry<String, String> entry : map.entrySet()) {
+			for (Map.Entry<String,String> entry : map.entrySet()) {
 				if (!entry.getKey().equals("version")) {
 					sb.append(";");
 					sb.append(entry.getKey());
@@ -185,11 +181,10 @@ public class Packaging implements AnalyzerPlugin {
 
 	protected String canonicalName(Analyzer analyzer, File sub)
 			throws Exception {
-		Jar s = new Jar(sub);
-		try {
+		try (Jar s = new Jar(sub)) {
 			Manifest m = s.getManifest();
-			String bsn = m.getMainAttributes().getValue(
-					Constants.BUNDLE_SYMBOLICNAME);
+			String bsn = m.getMainAttributes()
+					.getValue(Constants.BUNDLE_SYMBOLICNAME);
 			if (bsn == null) {
 				analyzer.error(
 						"Invalid bundle in flattening a path (no Bundle-SymbolicName set): %s",
@@ -202,16 +197,13 @@ public class Packaging implements AnalyzerPlugin {
 				bsn = bsn.substring(0, n);
 			bsn = bsn.trim();
 
-			String version = m.getMainAttributes().getValue(
-					Constants.BUNDLE_VERSION);
+			String version = m.getMainAttributes()
+					.getValue(Constants.BUNDLE_VERSION);
 			Version v = Version.parseVersion(version);
 
-			String path = bsn + "-" + v.getMajor() + "."
-					+ v.getMinor() + "." + v.getMicro() + ".jar";
+			String path = bsn + "-" + v.getMajor() + "." + v.getMinor() + "."
+					+ v.getMicro() + ".jar";
 			return path;
-		}
-		finally {
-			s.close();
 		}
 	}
 }
