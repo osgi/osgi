@@ -54,6 +54,7 @@ bndrepo                 = ${uri;${bnd_repourl}}
             readonly=true, \
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             releaseUrl="${bndrepo}";\
+            snapshotUrl="${bndrepo}";\
             index=${.}/bnd.mvn;\
             name='Bnd';\
             readOnly=true,\
