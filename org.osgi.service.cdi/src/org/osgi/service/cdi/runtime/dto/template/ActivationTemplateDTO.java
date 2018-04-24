@@ -19,6 +19,7 @@ package org.osgi.service.cdi.runtime.dto.template;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.dto.DTO;
 import org.osgi.service.cdi.ServiceScope;
 
 /**
@@ -31,7 +32,7 @@ import org.osgi.service.cdi.ServiceScope;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ActivationTemplateDTO {
+public class ActivationTemplateDTO extends DTO {
 	/**
 	 * The {@link ServiceScope} of this activation
 	 * <p>
