@@ -355,7 +355,7 @@
 		which define the set of <emphasis>beans</emphasis> available to the CDI
 		container. Beans express dependencies on OSGi configuration objects and
 		services and are assembled into components. The life cycle of a component
-		is driven by the dependencies of its beans.</para>
+		is driven from the dependencies of its beans.</para>
 
 		<para>There are three types of components:</para>
 
@@ -369,12 +369,15 @@
 				satisfied. The container component may provide multiple
 				services. Altering the state of the container component's static
 				dependencies results in the entire CDI container, and all other
-				component types to be destroyed and recreated.</para>
+				component types being destroyed and recreated.</para>
 			</listitem>
 
 			<listitem>
 				<para><emphasis>Single Component</emphasis> - Consists of beans
-				in the component scope. A single component may provide immediate
+				in the component scope specifying the <link
+				linkend="org.osgi.service.cdi.annotations.SingleComponent"
+				xrefstyle="hyperlink">@SingleComponent</link> annotation. A single
+				component may provide immediate
 				functionality or a service resulting in an immediate instance or
 				a single service registration. Unlike the container component,
 				single components may be created, destroyed and react to changes
@@ -385,9 +388,10 @@
 			</listitem>
 
 			<listitem>
-				<para><emphasis>Factory Component</emphasis> - Identical to a single
-				component in definition and in benefiting from an isolated life cycle
-				with the addition of requiring factory configuration objects. A
+				<para><emphasis>Factory Component</emphasis> - Consists of beans
+				in the component scope specifying the <link
+				linkend="org.osgi.service.cdi.annotations.FactoryComponent"
+				xrefstyle="hyperlink">@FactoryComponent</link> annotation. A
 				factory component may provide immediate functionality or a service,
 				resulting in one immediate instance or service registration,
 				respectively, per factory configuration object.</para>
@@ -440,8 +444,8 @@
 	component model in terms of beans and scopes as they are defined in the CDI
 	specification in order to act as a good CDI citizen.</para>
 
-	<para><emphasis>Components</emphasis>
-	are defined by this specification to have the following characteristics:</para>
+	<para><emphasis>Components</emphasis> are defined by this specification to
+	have the following characteristics:</para>
 
 	<itemizedlist>
 		<listitem>
@@ -455,7 +459,7 @@
 
 		<listitem>
 			<para>Components may have dependencies on configuration objects
-			and services. These dependencies are described using metadata
+			and services. These dependencies are described using annotations
 			defined by this specification.</para>
 		</listitem>
 
@@ -485,7 +489,7 @@
 
 	<para>This specification uses the facilities of CDI <xref
 	linkend="service.cdi-bib.cdi.scopes.and.contexts"/> to define a life cycle
-	for beans specifically for supporting a relationship with dynamic
+	for beans specifically for supporting a relationship with OSGi
 	dependencies.</para>
 
 	<para>Associated with every CDI scope is an object implementing
@@ -496,7 +500,7 @@
 	destroy contextual instances. Contextual instances associated with the scope
 	exist within a <emphasis>context</emphasis> which acts as a cache,
 	creating new or returning existing contextual instances as needed. These
-	contexts are managed by the CCR in conjunction with the CDI container.</para>
+	contexts are managed by CCR in conjunction with the CDI container.</para>
 
 	<figure>
 		<title>CDI Scope Model</title>
@@ -517,11 +521,18 @@
 	linkend="org.osgi.service.cdi.annotations.ComponentScoped"
 	xrefstyle="hyperlink">@ComponentScoped</link></code> annotation. The
 	<emphasis>component scope</emphasis> allows component instances to use
-	component beans to create or destroy contextual instances when dynamic
+	component beans to create or destroy contextual instances when
 	dependencies are satisfied or unsatisfied without interfering with the life
 	cycle of other component instances (including the <link
 	linkend="service.cdi-container.component" xrefstyle="hyperlink">container
 	component</link>).</para>
+
+	<para>The context implementation must be registered with the CDI container
+	using the CDI SPI <code>javax.enterprise.inject.spi.AfterBeanDiscovery.addContext(ctx)</code> method.</para>
+
+	<para>The <code>ComponentScoped</code> annotation must be registered with the
+	CDI container using the CDI SPI
+	<code>javax.enterprise.inject.spi.BeforeBeanDiscovery.addScope(ComponentScoped.class, false, false);</code> method.</para>
 
 	<section xml:id="service.cdi-lifecycle.context.instances">
 		<title>Contexts</title>
@@ -649,18 +660,14 @@
 		<table xml:id="service.cdi-component.context.events">
 		<title>Component Context Events</title>
 
-		<tgroup cols="3">
+		<tgroup cols="2">
 			<colspec colnum="1" colwidth="3*"/>
 
 			<colspec colnum="2" colwidth="2*"/>
 
-			<colspec colnum="3" colwidth="1*"/>
-
 			<thead>
 			<row>
-				<entry>Qualifier</entry>
-
-				<entry>Event type</entry>
+				<entry>Event Qualifier</entry>
 
 				<entry>Condition</entry>
 			</row>
@@ -670,18 +677,12 @@
 			<row>
 				<entry><code>@Initialized(ComponentScoped.class)</code></entry>
 
-				<entry>the contextual instance of the bean marked
-				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
-
 				<entry>when a context is initialized and ready for
 				use</entry>
 			</row>
 
 			<row>
 				<entry><code>@BeforeDestroy(ComponentScoped.class)</code></entry>
-
-				<entry>the contextual instance of the bean marked
-				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
 
 				<entry>when a context is about to be destroyed, but
 				before actual destruction</entry>
@@ -690,94 +691,89 @@
 			<row>
 				<entry><code>@Destoyed(ComponentScoped.class)</code></entry>
 
-				<entry>the contextual instance of the bean marked
-				<code>@SingleComponent</code> or <code>@FactoryComponent</code></entry>
-
 				<entry>after a context is destroyed</entry>
 			</row>
 			</tbody>
 		</tgroup>
 		</table>
 
-		<para>The following are the specific scenarios under which
-		<emphasis>contexts</emphasis> are created:</para>
+		<section>
+			<title>When Contexts are Created</title>
 
-		<orderedlist>
-			<listitem xml:id="service.cdi-context.instance.immediate">
-				<para><emphasis>Immediate instance</emphasis> - A component
-				instance that does not provide a service requires the immediate
-				<link linkend="service.cdi-component.context.creation">creation
-				of a context</link>.</para>
+			<para>A <emphasis>context</emphasis> is created under each of the
+			following conditions:</para>
 
-				<para>The context is released and destroyed when the component
-				instance is no longer satisfied or when the CDI container is
-				destroyed.</para>
-			</listitem>
-			<listitem xml:id="service.cdi-context.instance.singleton.service">
-				<para><emphasis>Singleton scoped service</emphasis> - A component
-				instance that provides a singleton scoped service requires the
-				immediate <link
-				linkend="service.cdi-component.context.creation">creation of a
-				context</link>. </para>
+			<orderedlist>
+				<listitem xml:id="service.cdi-context.instance.immediate">
+					<para><emphasis>Immediate instance</emphasis> - A component
+					instance that does not provide a service requires the immediate
+					<link linkend="service.cdi-component.context.creation">creation
+					of a context</link>.</para>
+				</listitem>
+				<listitem xml:id="service.cdi-context.instance.singleton.service.single.component">
+					<para><emphasis>Singleton scoped service from a <code>@SingleComponent</code></emphasis>
+					- A single component instance that provides a singleton scoped service requires the
+					immediate <link
+					linkend="service.cdi-component.context.creation">creation of a
+					context</link>. </para>
 
-				<para>If the component is a <emphasis>single component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@SingleComponent</code> obtained from the context.</para>
+					<para>The service object is the contextual instance of the bean marked
+					<code>@SingleComponent</code> obtained from the context.</para>
+				</listitem>
+				<listitem xml:id="service.cdi-context.instance.singleton.service.factory.component">
+					<para><emphasis>Singleton scoped service from a <code>@FactoryComponent</code></emphasis>
+					- A factory component instance that provides a singleton scoped service requires the
+					immediate <link
+					linkend="service.cdi-component.context.creation">creation of a
+					context</link> for each factory configuration object.</para>
 
-				<para>If the component is a <emphasis>factory component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@FactoryComponent</code> obtained from the context.</para>
+					<para>The service object is the contextual instance of the bean marked
+					<code>@FactoryComponent</code> obtained from the context.</para>
+				</listitem>
+				<listitem xml:id="service.cdi-context.instance.bundle.service">
+					<para><emphasis>Bundle scoped service</emphasis> - A component
+					instance that provides a bundle scope service requires the <link
+					linkend="service.cdi-component.context.creation">creation of a
+					context</link> when the
+					<code>ServiceFactory.getService()</code> method is called.</para>
 
-				<para>The context is released and destroyed when the component
-				instance is no longer satisfied or when the CDI container is
-				destroyed.</para>
-			</listitem>
-			<listitem xml:id="service.cdi-context.instance.bundle.service">
-				<para><emphasis>Bundle scoped service</emphasis> - A component
-				instance that provides a bundle scope service requires the <link
-				linkend="service.cdi-component.context.creation">creation of a
-				context</link> when the
-				<code>ServiceFactory.getService()</code> method is called.</para>
+					<para>If the component is a <emphasis>single component</emphasis>,
+					the service object is the contextual instance of the bean marked
+					<code>@SingleComponent</code> obtained from the context.</para>
 
-				<para>If the component is a <emphasis>single component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@SingleComponent</code> obtained from the context.</para>
+					<para>If the component is a <emphasis>factory component</emphasis>,
+					the service object is the contextual instance of the bean marked
+					<code>@FactoryComponent</code> obtained from the context.</para>
 
-				<para>If the component is a <emphasis>factory component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@FactoryComponent</code> obtained from the context.</para>
+					<para>The context is released and destroyed when the
+					<code>ServiceFactory.ungetService()</code> method is called.</para>
+				</listitem>
+				<listitem xml:id="service.cdi-context.instance.prototype.service">
+					<para><emphasis>Prototyped scoped service</emphasis> - A component
+					instance that provides a prototype scope service requires the <link
+					linkend="service.cdi-component.context.creation">creation of a
+					context</link> when the
+					<code>PrototypeServiceFactory.getService()</code> method is
+					called.</para>
 
-				<para>The context is released and destroyed when the
-				<code>ServiceFactory.ungetService()</code> method is called.</para>
+					<para>If the component is a <emphasis>single component</emphasis>,
+					the service object is the contextual instance of the bean marked
+					<code>@SingleComponent</code> obtained from the context.</para>
 
-				<para>All contexts produced by the service registration
-				are released and destroyed when the component instance is no
-				longer satisfied or when the CDI container is destroyed.</para>
-			</listitem>
-			<listitem xml:id="service.cdi-context.instance.prototype.service">
-				<para><emphasis>Prototyped scoped service</emphasis> - A component
-				instance that provides a prototype scope service requires the <link
-				linkend="service.cdi-component.context.creation">creation of a
-				context</link> when the
-				<code>PrototypeServiceFactory.getService()</code> method is
-				called.</para>
+					<para>If the component is a <emphasis>factory component</emphasis>,
+					the service object is the contextual instance of the bean marked
+					<code>@FactoryComponent</code> obtained from the context.</para>
 
-				<para>If the component is a <emphasis>single component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@SingleComponent</code> obtained from the context.</para>
+					<para>The context is released and destroyed when the
+					<code>PrototypeServiceFactory.ungetService()</code> method is called.</para>
+				</listitem>
+			</orderedlist>
 
-				<para>If the component is a <emphasis>factory component</emphasis>,
-				the service object is the contextual instance of the bean marked
-				<code>@FactoryComponent</code> obtained from the context.</para>
-
-				<para>The context is released and destroyed when the
-				<code>PrototypeServiceFactory.ungetService()</code> method is called.</para>
-
-				<para>All contexts produced by the service registration
-				are released and destroyed when the component instance is no
-				longer satisfied or when the CDI container is destroyed.</para>
-			</listitem>
-		</orderedlist>
+			<para>In addition to the cases specified above, all contexts
+			produced by an immediate component or by the service registration
+			are released and destroyed when the component instance is no
+			longer satisfied or when the CDI container is destroyed.</para>
+		</section>
 	</section>
 </section>
 
@@ -1012,7 +1008,7 @@ class Fido {}]]></programlisting>
 
 		<programlisting><![CDATA[// component pids = [com.acme.foo, Φ, com.gamma.bar]
 @SingleComponent
-@PID("com.acme.foo", policy = Policy.REQUIRED)
+@PID(value = "com.acme.foo", policy = Policy.REQUIRED)
 @PID
 @PID("com.gamma.bar")
 class Fido {}]]></programlisting>
@@ -1125,8 +1121,7 @@ class Fido {}]]></programlisting>
 		depends. When multiple PIDs are
 		referenced the order is relevant and affects the aggregation of the
 		configuration objects into a flattened dictionary of component properties.
-		Later PIDs take precedence over earlier PIDs. Also, it must be possible to
-		reposition the component factory PID within the order. The <xref
+		Later PIDs take precedence over earlier PIDs. The <xref
 		linkend="org.osgi.service.cdi.annotations.PID" xrefstyle="hyperlink" />
 		annotation is used to control both referenced PIDs and their
 		order.</para>
@@ -1162,7 +1157,7 @@ class Fido {}]]></programlisting>
 
 		<programlisting><![CDATA[// component pids [com.acme.foo, com.gamma.bar, Σ]
 @FactoryComponent
-@PID("com.acme.foo", policy = Policy.REQUIRED)
+@PID(value = "com.acme.foo", policy = Policy.REQUIRED)
 @PID("com.gamma.bar")
 class Fido {}]]></programlisting>
 
@@ -1186,8 +1181,8 @@ class Fido {}]]></programlisting>
 <section xml:id="service.cdi-component.properties">
 	<title>Component Properties</title>
 
-	<para>Each component instance is associated with a set of component
-	properties. The component properties are specified in the following
+	<para>Each component instance is associated with a set of <emphasis>component
+	properties</emphasis>. Component properties are specified in the following
 	<emphasis>configuration sources</emphasis> (in order of
 	precedence, where the properties provided by earlier lines overwrite those
 	of later lines):</para>
@@ -1205,10 +1200,10 @@ class Fido {}]]></programlisting>
 		</listitem>
 
 		<listitem>
-			<para>Properties specified as Component Property Types on the bean
+			<para>Properties specified as Bean Property Types on the bean
 			annotated with <code>@SingleComponent</code> or
 			<code>@FactoryComponent</code> must be treated according to <xref
-			linkend="service.cdi-component.property.types"/>.</para>
+			linkend="service.cdi-bean.property.types" />.</para>
 		</listitem>
 	</orderedlist>
 
@@ -1241,8 +1236,7 @@ class Fido {}]]></programlisting>
 		<listitem>
 			<para><code>component.name</code> - The component name. The syntax
 			for the <code>component.name</code> follows <code>cname</code>
-			defined by the <xref
-			linkend="service.cdi-bib.general.syntax.definitions"/>.</para>
+			defined by the <xref linkend="service.cdi-bib.general.syntax.definitions" />.</para>
 		</listitem>
 
 		<listitem>
@@ -1256,7 +1250,7 @@ class Fido {}]]></programlisting>
 		<title>Reference Properties</title>
 
 		<para>This specification defines some component properties which are
-		associated with specific component instances. These are called
+		associated with a specific reference. These are called
 		<emphasis>reference properties</emphasis>. The name of a reference
 		property for a reference is the name of the reference appended with a
 		full stop (<code>'.' \u002E</code>) and a suffix unique to the reference
@@ -1275,7 +1269,7 @@ class Fido {}]]></programlisting>
 
 			<para>The <emphasis>target property</emphasis> is a reference
 			property which aids in the selection of target services for the
-			reference. See <xref linkend="service.cdi-reference.injection"/>.
+			reference. See <xref linkend="service.cdi-reference.injection" />.
 			The name of a target property is the name of a reference appended
 			with <code>.target</code>.</para>
 
@@ -1283,22 +1277,27 @@ class Fido {}]]></programlisting>
 refName ::= < reference name >]]></programlisting>
 
 			<para>For example, the target property for a reference with the name
-			<code>http</code> would have the name <code>http.target</code>. The
-			value of a target property is a filter string used to select target
+			<code>http</code>
+
+			<programlisting><![CDATA[@Inject
+@Reference
+Http http;]]></programlisting>
+
+			would have the name <code>http.target</code>. The value of a target property is a filter string used to select target
 			services for the reference.</para>
 
-			<programlisting><![CDATA[http.target=(osgi.http.whiteboard.context.name=foo)]]></programlisting>
+			<programlisting><![CDATA[http.target=(context.name=foo)]]></programlisting>
 
 			<para>A default target property value can also be set by the
-			<xref linkend="org.osgi.service.cdi.annotations.Reference.target--"
-			xrefstyle="hyperlink"/> property.</para>
+			<link linkend="org.osgi.service.cdi.annotations.Reference.target--"
+			xrefstyle="hyperlink">@Reference.target</link> property.</para>
 
 			<para>The target property value must be a valid filter string
-			according to <xref linkend="service.cdi-bib.filter.syntax"/>. An
+			according to <xref linkend="service.cdi-bib.filter.syntax" />. An
 			invalid filter string will result in a warning message being
 			logged and the value to be otherwise ignored.</para>
 
-			<para>CCR must support the target property for all components.</para>
+			<para>CCR must support the target property for all references.</para>
 		</section>
 
 		<section xml:id="service.cdi-minimum.cardinality.property">
@@ -1332,7 +1331,13 @@ minimumCardinality ::= refName '.cardinality.minimum'
 refName            ::= < reference name >]]></programlisting>
 
 			<para>For example, the minimum cardinality property for a reference
-			with the name <code>http</code> would have the name
+			with the name <code>http</code>
+
+			<programlisting><![CDATA[@Inject
+@Reference
+Http http;]]></programlisting>
+
+			would have the name
 			<code>http.cardinality.minimum</code>.</para>
 
 			<programlisting><![CDATA[http.cardinality.minimum=3]]></programlisting>
@@ -1340,7 +1345,7 @@ refName            ::= < reference name >]]></programlisting>
 			<para>The value of a minimum cardinality property must be a positive
 			integer or a value that can be coerced into a positive integer using
 			the <link linkend="util.converter-conversions">conversions</link>
-			defined by the <xref linkend="util.converter"/>. If the numerical
+			defined by the <xref linkend="util.converter" />. If the numerical
 			value of the minimum cardinality property is not valid for the
 			reference's cardinality or the minimum cardinality property value
 			cannot be coerced into a numerical value, then the minimum
@@ -1352,41 +1357,617 @@ refName            ::= < reference name >]]></programlisting>
 			ignored.</para>
 
 			<para>CCR must support the minimum cardinality property for all
-			components.</para>
+			references.</para>
 		</section>
 	</section>
 </section>
 
-<section xml:id="service.cdi-component.property.types">
-	<title>Component Property Types</title>
+<section xml:id="service.cdi-bean.property.types">
+	<title>Bean Property Types</title>
 
-	<para>Component Property Types, which are user defined annotations, can be
-	used to describe component properties when applied in conjunction with
-	other annotations defined by this specification.</para>
+	<para>Component properties can be defined and accessed through a user
+	defined annotation type, called a <emphasis>bean property
+	type</emphasis>, containing the property names, property types and
+	default values. A bean property type allows properties to be
+	defined and accessed in a type safe manner. Bean Property Types must
+	be annotated with the <xref
+	linkend="org.osgi.service.cdi.annotations.BeanPropertyType"
+	xrefstyle="hyperlink"/> meta-annotation.</para>
 
-	<para>The definition for Component Property Types is defined in
-	<xref linkend="service.component-component.property.types" xrefstyle="hyperlink" />.
-	However this specification makes two distinctions:</para>
+	<para>The following example shows the definition of a bean property
+	type called <code>Props</code> which defines three properties where the
+	name of the property is the name of the method, the type of the property
+	is the return type of the method and the default value for the property
+	is the default value of the method.</para>
 
+	<programlisting><![CDATA[@BeanPropertyType
+public @interface Props {
+	boolean enabled() default true;
+	String[] names() default {"a", "b"};
+	String topic() default "default/topic";
+}]]></programlisting>
+
+	<para>Bean Property Types can be used in several ways:
 	<itemizedlist>
 		<listitem>
-			<para><emphasis>The meta-annotation used is <xref
-			linkend="org.osgi.service.cdi.annotations.ComponentPropertyType"
-			xrefstyle="hyperlink" /></emphasis> - The difference is that this
-			meta-annotation's <emphasis>retention policy</emphasis> is
-			<code>RUNTIME</code>.</para>
+			<para>Bean Property Types can be used along side the <xref
+			linkend="org.osgi.service.cdi.annotations.SingleComponent"
+			xrefstyle="hyperlink"/> or <xref
+			linkend="org.osgi.service.cdi.annotations.FactoryComponent"
+			xrefstyle="hyperlink"/> annotations to provide component properties.</para>
 		</listitem>
+
 		<listitem>
-			<para><emphasis>All user defined Component Property Types must specify
-			a <emphasis>retention policy</emphasis> of <code>RUNTIME</code></emphasis>.
-			</para>
+			<para>Bean Property Types can be used on <code>ApplicationScoped</code>
+			or <code>Dependent</code> scoped beans, where the <xref
+			linkend="org.osgi.service.cdi.annotations.Service"
+			xrefstyle="hyperlink"/> annotation is applied to provide service properties.</para>
+		</listitem>
+
+		<listitem>
+			<para>Bean Property Types can be used on fields and methods annotated
+			with <code>@Produces</code>, where the <xref
+			linkend="org.osgi.service.cdi.annotations.Service"
+			xrefstyle="hyperlink"/> annotation is applied, to provide service
+			properties.</para>
+		</listitem>
+
+		<listitem>
+			<para>Bean Property Types can be used on injection points where the <xref
+			linkend="org.osgi.service.cdi.annotations.Reference"
+			xrefstyle="hyperlink"/> annotation is applied, to provide target filter
+			properties. Target filter properties can only provide <code>AND</code>
+			filters.</para>
+		</listitem>
+
+		<listitem>
+			<para>Bean Property Types can be used on injection points as the
+			injection point type where the <xref
+			linkend="org.osgi.service.cdi.annotations.Configuration"
+			xrefstyle="hyperlink"/> annotation is applied to provide type safe
+			coercion of configuration properties.</para>
 		</listitem>
 	</itemizedlist>
+	</para>
 
-	<remark>RAY uses of Component Property Types</remark>
+	<para>Each use defines property names, types and values.</para>
 
-	<para>Finally, all interpretation and conversion of Component Property Types
-	processed by CCR occurs at runtime.</para>
+	<para>The following example shows a component bean annotated
+	with the example <code>Props</code> bean property type which
+	specifies a property value for the component which is different than the
+	default value. The example also shows an injection point method taking the
+	example <code>Props</code> bean property type as the injection point type
+	and the method implementation accesses component property values by
+	invoking methods on the bean property type object.</para>
+
+	<programlisting><![CDATA[@SingleComponent
+@Props(names="myapp")
+public class MyBean {
+	@Inject
+	void activate(Props props) {
+		if (props.enabled()) {
+			// do something
+		}
+		for (String name : props.names()) {
+			// do something with each name
+		}
+	}
+}]]></programlisting>
+
+	<para>Bean Property Types must be defined as annotation types. This
+	is done for several reasons. First, the limitations on annotation type
+	definitions make them well suited for Bean Property Types. The
+	methods must have no parameters and the return types supported are
+	limited to a set which is well suited for component properties. Second,
+	annotation types support default values which is useful for defining the
+	default value of a component property. Finally, as annotations, they can
+	be used to annotate bean classes.</para>
+
+	<para>At runtime, when CCR needs to provide injection points an
+	object whose type is a bean property type, CCR must
+	construct an instance of the bean property type whose methods are
+	backed by the values of the component properties. This object can then be
+	used to obtain the property values in a type safe manner.</para>
+
+	<section xml:id="service.cdi-bean.property.type.mapping">
+		<title>Bean Property Type Mapping</title>
+
+		<para>Each method of a bean property type is mapped to a
+		component property. The property name is derived from the method name.
+		Certain common property name characters, such as full stop (<code>'.'
+		\u002E</code>) and hyphen-minus (<code>'-' \u002D</code>) are not
+		valid in Java identifiers. So the name of a method must be converted
+		to its corresponding property name as follows:<itemizedlist>
+			<listitem>
+			<para>A single dollar sign (<code>'$' \u0024</code>) is removed
+			unless it is followed by:<itemizedlist>
+				<listitem>
+					<para>A low line (<code>'_' \u005F</code>) and a dollar
+					sign in which case the three consecutive characters
+					(<code>"$_$"</code>) are converted to a single
+					hyphen-minus (<code>'-' \u002D</code>).</para>
+				</listitem>
+
+				<listitem>
+					<para>Another dollar sign in which case the two
+					consecutive dollar signs (<code>"$$"</code>) are converted
+					to a single dollar sign.</para>
+				</listitem>
+				</itemizedlist></para>
+			</listitem>
+
+			<listitem>
+			<para>A single low line (<code>'_' \u005F</code>) is converted
+			into a full stop (<code>'.' \u002E</code>) unless is it followed
+			by another low line in which case the two consecutive low lines
+			(<code>"__"</code>) are converted to a single low line.</para>
+			</listitem>
+
+			<listitem>
+			<para>All other characters are unchanged.</para>
+			</listitem>
+
+			<listitem>
+			<para>If the bean property type declares a
+			<code>PREFIX_</code> field whose value is a compile-time
+			constant String, then the property name is prefixed with the
+			value of the <code>PREFIX_</code> field.</para>
+			</listitem>
+		</itemizedlist></para>
+
+		<para><xref
+		linkend="service.cdi-bean.property.type.name.mapping"/> contains
+		some name mapping examples.</para>
+
+		<table xml:id="service.cdi-bean.property.type.name.mapping">
+		<title>Bean Property Type Name Mapping Examples</title>
+
+		<tgroup cols="2">
+			<colspec colnum="1" colwidth="1*"/>
+
+			<colspec colnum="2" colwidth="1*"/>
+
+			<thead>
+			<row>
+				<entry>Bean Property Type Method Name</entry>
+
+				<entry>Component Property Name</entry>
+			</row>
+			</thead>
+
+			<tbody>
+			<row>
+				<entry><code>myProperty143</code></entry>
+
+				<entry><code>myProperty143</code></entry>
+			</row>
+
+			<row>
+				<entry><code>$new</code></entry>
+
+				<entry><code>new</code></entry>
+			</row>
+
+			<row>
+				<entry><code>my$$prop</code></entry>
+
+				<entry><code>my$prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>dot_prop</code></entry>
+
+				<entry><code>dot.prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>_secret</code></entry>
+
+				<entry><code>.secret</code></entry>
+			</row>
+
+			<row>
+				<entry><code>another__prop</code></entry>
+
+				<entry><code>another_prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>three___prop</code></entry>
+
+				<entry><code>three_.prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>four_$__prop</code></entry>
+
+				<entry><code>four._prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>five_$_prop</code></entry>
+
+				<entry><code>five..prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>six$_$prop</code></entry>
+
+				<entry><code>six-prop</code></entry>
+			</row>
+
+			<row>
+				<entry><code>seven$$_$prop</code></entry>
+
+				<entry><code>seven$.prop</code></entry>
+			</row>
+			</tbody>
+		</tgroup>
+		</table>
+
+		<para>However, if the bean property type is a
+		<emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
+		linkend="service.cdi-bib.jls.ref"/>, then the property name for the
+		<code>value</code> method is derived from the name of the bean
+		property type rather than the name of the method.</para>
+
+		<para>In this case, the simple name of the bean property type,
+		that is, the name of the class without any package name or outer class
+		name, if the bean property type is an inner class, must be
+		converted to the property name as follows:<itemizedlist>
+			<listitem>
+			<para>When a lower case character is followed by an upper case
+			character, a full stop (<code>'.' \u002E</code>) is inserted
+			between them.</para>
+			</listitem>
+
+			<listitem>
+			<para>Each upper case character is converted to lower
+			case.</para>
+			</listitem>
+
+			<listitem>
+			<para>All other characters are unchanged.</para>
+			</listitem>
+
+			<listitem>
+			<para>If the bean property type declares a
+			<code>PREFIX_</code> field whose value is a compile-time
+			constant String, then the property name is prefixed with the
+			value of the <code>PREFIX_</code> field.</para>
+			</listitem>
+		</itemizedlist></para>
+
+		<para><xref linkend="service.cdi-single.element.name.mapping"/>
+		contains some mapping examples for the <code>value</code>
+		method.</para>
+
+		<table xml:id="service.cdi-single.element.name.mapping">
+		<title>Single-Element Annotation Mapping Examples for
+		<code>value</code> Method</title>
+
+		<tgroup cols="2">
+			<colspec colnum="1" colwidth="1*"/>
+
+			<colspec colnum="2" colwidth="1*"/>
+
+			<thead>
+			<row>
+				<entry>Bean Property Type Name</entry>
+
+				<entry><code>value</code> Method Component Property
+				Name</entry>
+			</row>
+			</thead>
+
+			<tbody>
+			<row>
+				<entry><code>ServiceRanking</code></entry>
+
+				<entry><code>service.ranking</code></entry>
+			</row>
+
+			<row>
+				<entry><code>Some_Name</code></entry>
+
+				<entry><code>some_name</code></entry>
+			</row>
+
+			<row>
+				<entry><code>OSGiProperty</code></entry>
+
+				<entry><code>osgi.property</code></entry>
+			</row>
+			</tbody>
+		</tgroup>
+		</table>
+
+		<para>If the bean property type is a <emphasis>marker
+		annotation</emphasis>, see 9.7.2 in <xref
+		linkend="service.cdi-bib.jls.ref"/>, then the property name is
+		derived from the name of the bean property type, as is described
+		above for single-element annotations, and the value of the property is
+		<code>Boolean.TRUE</code>. Marker annotations can be used to annotate
+		component beans to set a component property to the
+		value <code>Boolean.TRUE</code>. However, since marker annotations
+		have no methods, they are of no use as injection point types.</para>
+
+		<para>The property type can be directly derived from the type of the
+		method. All types supported for annotation elements can be used except
+		for annotation types. Method types of an annotation type or array
+		thereof are not supported.</para>
+
+		<para>If the method type is <code>Class</code> or
+		<code>Class[]</code>, then the property type must be
+		<code>String</code> or <code>String[]</code>, respectively, whose
+		values are fully qualified class names in the form returned by the
+		<code>Class.getName()</code> method.</para>
+
+		<para>If the method type is an enumeration type or an array thereof,
+		then the property type must be <code>String</code> or
+		<code>String[]</code>, respectively, whose values are the names of the
+		enum constants in the form returned by the <code>Enum.name()</code>
+		method.</para>
+	</section>
+
+	<section xml:id="service.cdi-bean.property.type.value.coercion">
+		<title>Coercing Bean Property Type Values</title>
+
+		<para>When a bean property type is used as an injection point type
+		alone with <code>@Configuration</code>, CCR must create a contextual
+		instance that implements the bean property
+		type and maps the methods of the bean property type to component
+		properties. The name of the method is converted to the property name
+		as described in <xref
+		linkend="service.cdi-bean.property.type.mapping"/>. The property
+		value may need to be coerced to the type of the method. In <xref
+		linkend="service.cdi-coercion.table"/>, the columns are source
+		types, that is, the type of the component property value, and the rows
+		are target types, that is, the method types. The property value is
+		<emphasis>v</emphasis>; <emphasis>number</emphasis> is a primitive
+		numerical type and <emphasis>Number</emphasis> is a wrapper numerical
+		type. An invalid coercion is represented by <code>throw</code>. Such a
+		coercion attempt must result in throwing a Bean Property Exception when
+		the bean property type method is called. Any other coercion
+		error, such as parsing a non-numerical string to a number or the
+		inability to coerce a string into a Class or enum object, must be
+		wrapped in a Bean Property Exception and thrown when the bean
+		property type method is called.</para>
+
+		<table pgwide="1" rowheader="firstcol"
+			xml:id="service.cdi-coercion.table">
+		<title>Coercion From Property Value to Method Type</title>
+
+		<tgroup cols="6">
+			<colspec colname="col1" colnum="1" colwidth="1*"/>
+
+			<colspec colname="col2" colnum="2" colwidth="1*"/>
+
+			<colspec colname="col3" colnum="3" colwidth="1*"/>
+
+			<colspec colname="col4" colnum="4" colwidth="1*"/>
+
+			<colspec colname="col5" colnum="5" colwidth="1*"/>
+
+			<colspec colname="col6" colnum="6" colwidth="2*"/>
+
+			<thead>
+			<row>
+				<entry><subscript>target</subscript> \
+				<superscript>source</superscript></entry>
+
+				<entry>String</entry>
+
+				<entry>Boolean</entry>
+
+				<entry>Character</entry>
+
+				<entry><emphasis>Number</emphasis></entry>
+
+				<entry>Collection/array</entry>
+			</row>
+			</thead>
+
+			<tbody>
+			<row>
+				<entry>String</entry>
+
+				<entry><emphasis>v</emphasis></entry>
+
+				<entry><emphasis>v</emphasis>. toString()</entry>
+
+				<entry><emphasis>v</emphasis>. toString()</entry>
+
+				<entry><emphasis>v</emphasis>. toString()</entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements,
+				<code>null</code>; otherwise the first element of
+				<emphasis>v</emphasis> is coerced.</entry>
+			</row>
+
+			<row>
+				<entry>boolean</entry>
+
+				<entry>Boolean. parseBoolean( <emphasis>v</emphasis> )</entry>
+
+				<entry><emphasis>v</emphasis>. booleanValue()</entry>
+
+				<entry><emphasis>v</emphasis>. charValue() != 0</entry>
+
+				<entry><emphasis>v</emphasis>. doubleValue() != 0</entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements,
+				<code>false</code>; otherwise the first element of
+				<emphasis>v</emphasis> is coerced.</entry>
+			</row>
+
+			<row>
+				<entry>char</entry>
+
+				<entry><emphasis>v</emphasis>. length() &gt; 0 ?
+				<emphasis>v</emphasis>. charAt(0) : 0</entry>
+
+				<entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+				<entry><emphasis>v</emphasis>. charValue()</entry>
+
+				<entry>(char) <emphasis>v</emphasis>. intValue()</entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+				the first element of <emphasis>v</emphasis> is
+				coerced.</entry>
+			</row>
+
+			<row>
+				<entry><emphasis>number</emphasis></entry>
+
+				<entry><emphasis>Number</emphasis>.
+				parse<emphasis>Number</emphasis>( <emphasis>v</emphasis>
+				)</entry>
+
+				<entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+				<entry>(<emphasis>number</emphasis>) <emphasis>v</emphasis>.
+				charValue()</entry>
+
+				<entry><emphasis>v</emphasis>.
+				<emphasis>number</emphasis>Value()</entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+				the first element of <emphasis>v</emphasis> is
+				coerced.</entry>
+			</row>
+
+			<row>
+				<entry>Class</entry>
+
+				<entry>Bundle. loadClass( <emphasis>v</emphasis> )</entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements,
+				<code>null</code>; otherwise the first element of
+				<emphasis>v</emphasis> is coerced.</entry>
+			</row>
+
+			<row>
+				<entry><emphasis>EnumType</emphasis></entry>
+
+				<entry><emphasis>EnumType</emphasis>. valueOf(
+				<emphasis>v</emphasis> )</entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry>If <emphasis>v</emphasis> has no elements,
+				<code>null</code>; otherwise the first element of
+				<emphasis>v</emphasis> is coerced.</entry>
+			</row>
+
+			<row>
+				<entry>annotation type</entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+
+				<entry><code>throw</code></entry>
+			</row>
+
+			<row>
+				<entry>array</entry>
+
+				<entry nameend="col5" namest="col2">A single element array is
+				created and <emphasis>v</emphasis> is coerced into the single
+				element of the new array.</entry>
+
+				<entry colname="col6">An array the size of
+				<emphasis>v</emphasis> is created and each element of
+				<emphasis>v</emphasis> is coerced into the corresponding
+				element of the new array.</entry>
+			</row>
+			</tbody>
+		</tgroup>
+		</table>
+
+		<para>Component properties whose names do not map to bean
+		property type methods are ignored. If there is no corresponding
+		component property for a bean property type method, the bean
+		property type method must:</para>
+
+		<itemizedlist>
+		<listitem>
+			<para>Return 0 for numerical and char method types.</para>
+		</listitem>
+
+		<listitem>
+			<para>Return <code>false</code> for boolean method type.</para>
+		</listitem>
+
+		<listitem>
+			<para>Return <code>null</code> for String, Class, and enum.</para>
+		</listitem>
+
+		<listitem>
+			<para>Return an empty array for array method types.</para>
+		</listitem>
+
+		<listitem>
+			<para>Throw a BeanPropertyException for annotation method
+			types.</para>
+		</listitem>
+		</itemizedlist>
+	</section>
+
+	<section xml:id="service.cdi-standard.bean.property.types">
+		<title>Standard Bean Property Types</title>
+
+		<para>Bean Property Types for standard service properties are
+		specified in the <xref
+		linkend="org.osgi.service.cdi.propertytypes"
+		xrefstyle="hyperlink"/> package.</para>
+
+		<para>The <xref
+		linkend="org.osgi.service.cdi.propertytypes.ServiceDescription"
+		xrefstyle="hyperlink"/> bean property type can be used to add the
+		<code>service.description</code> component property, service property or target filter. The
+		<xref
+		linkend="org.osgi.service.cdi.propertytypes.ServiceRanking"
+		xrefstyle="hyperlink"/> bean property type can be used to add the
+		<code>service.ranking</code> component property, service property or target filter. The
+		<xref linkend="org.osgi.service.cdi.propertytypes.ServiceVendor"
+		xrefstyle="hyperlink"/> bean property type can be used to add the
+		<code>service.vendor</code> component property, service property or target filter. For
+		example, using these Bean Property Types as annotations:</para>
+
+		<programlisting>@FactoryComponent
+@ServiceDescription(”My Acme Service implementation”)
+@ServiceRanking(100)
+@ServiceVendor("My Corp")
+public class MyBean implements AcmeService {}</programlisting>
+
+		<para>will result in the following component properties:</para>
+
+		<programlisting>service.description=My Acme Service implementation # String
+service.ranking=100 # Integer
+service.vendor=My Corp # String</programlisting>
+
+		<para>The <xref
+		linkend="org.osgi.service.cdi.propertytypes.ExportedService"
+		xrefstyle="hyperlink"/> bean property type can be used to specify
+		service properties for remote services.</para>
+	</section>
 </section>
 
 <section xml:id="service.cdi-providing.services">
@@ -1394,7 +1975,7 @@ refName            ::= < reference name >]]></programlisting>
 
 	<para>A key aspect of working with OSGi is the ability to provide services.
 	Services are published to the service registry specifying service types.
-	The <link linkend="org.osgi.service.cdi.annotations.Service">@Service</link>
+	The <link linkend="org.osgi.service.cdi.annotations.Service" xrefstyle="hyperlink">@Service</link>
 	annotation provides this capability to CCR and serves a dual role; the first
 	of which is indicating that a bean publishes a service, the second
 	indicating the service types. <code>@Service</code> can be applied in any
@@ -1644,8 +2225,8 @@ Fido fido = new Fido();]]></programlisting></entry>
 
 			<para>In addition to component properties, services provided by the
 			container component obtain additional service properties from
-			Component Property Types on the bean or producer
-			providing the service. See <xref linkend="service.cdi-component.property.types"/>.</para>
+			Bean Property Types on the bean or producer
+			providing the service. See <xref linkend="service.cdi-bean.property.types"/>.</para>
 		</section>
 	</section>
 
@@ -1653,55 +2234,48 @@ Fido fido = new Fido();]]></programlisting></entry>
 		<title>Service Scope</title>
 
 		<para>Service scope represents the scope of the registered service
-		object. There are three scopes supported by the Framework. Each can be
+		object. There are three scopes supported by the OSGi Framework. Each can be
 		represented in CCR.</para>
 
 		<itemizedlist>
 			<listitem>
 				<para><emphasis>Bundle scope</emphasis> - In order to specify a
 				bundle scoped service, the <link
-				linkend="org.osgi.service.cdi.annotations.Bundle">@Bundle</link>
+				linkend="org.osgi.service.cdi.annotations.ServiceInstance">@ServiceInstance</link>
 				annotation is specified on the bean class, producer method or
-				producer field.</para>
+				producer field with the value <xref linkend="org.osgi.service.cdi.ServiceScope.BUNDLE"/>.</para>
 
-				<remark>RAY should we change org.osgi.service.cdi.annotations.Bundle
-				so as to not conflict
-				with org.osgi.framework.Bundle?</remark>
-
-				<programlisting><![CDATA[@Bundle
-@Service
+				<programlisting><![CDATA[@Service
+@ServiceInstance(ServiceScope.BUNDLE)
 class Fido implements Hound {}]]></programlisting>
 			</listitem>
 			<listitem>
 				<para><emphasis>Prototype scope</emphasis> - In order to specify
 				a prototype scoped service, the <link
-				linkend="org.osgi.service.cdi.annotations.Prototype">@Prototype</link>
+				linkend="org.osgi.service.cdi.annotations.ServiceInstance">@ServiceInstance</link>
 				annotation is specified on the bean class, producer method or
-				producer field. The service object is the contextual instance
+				producer field with the value <xref linkend="org.osgi.service.cdi.ServiceScope.PROTOTYPE"/>.
+				The service object is the contextual instance
 				created by the producer or bean.</para>
 
-				<remark>RAY @PrototypeService instead of @Prototype?</remark>
-
-				<programlisting><![CDATA[@Prototype
-@Service
+				<programlisting><![CDATA[@Service
+@ServiceInstance(ServiceScope.PROTOTYPE)
 class Fido implements Hound {}]]></programlisting>
 			</listitem>
 			<listitem>
 				<para><emphasis>Singleton scope</emphasis> - Unless otherwise
-				specified, services are singleton scoped. The service object is
-				the contextual instance created by the producer or bean.</para>
+				specified, services are singleton scoped but the scope can be explicitely expressed
+				if the <link
+				linkend="org.osgi.service.cdi.annotations.ServiceInstance">@ServiceInstance</link>
+				annotation is specified on the bean class, producer method or
+				producer field with the value <xref linkend="org.osgi.service.cdi.ServiceScope.SINGLETON"/>.
+				The service object is the contextual instance created by the producer or bean.</para>
 
 				<programlisting><![CDATA[@Service
+@ServiceInstance(ServiceScope.SINGLETON) // equal to omitting the annotation
 class Fido implements Hound {}]]></programlisting>
 			</listitem>
 		</itemizedlist>
-
-		<para>The use of <code>@Bundle</code> in any other scenario will result
-		in a definition error. </para>
-
-		<para>The use of <code>@Prototype</code> in any other
-		scenario, except in combination with <code>@Reference</code>, will result
-		in a definition error.</para>
 	</section>
 
 	<section>
@@ -1713,7 +2287,7 @@ class Fido implements Hound {}]]></programlisting>
 		service object is the contextual instance created by the producer or
 		bean.</para>
 
-		<para><code>@ApplicationScoped</code> beans may implement
+		<para><code>@ApplicationScoped</code> beans can implement
 		<code>org.osgi.framework.ServiceFactory</code> or
 		<code>org.osgi.framework.PrototypeServiceFactory</code> in order to
 		provide bundle or prototype scoped service objects.</para>
@@ -1724,7 +2298,7 @@ class Fido implements Hound {}]]></programlisting>
 		object is a contextual instance created by the producer or bean on each
 		request for a service object.</para>
 
-		<para>The use of <code>@Bundle</code> or <code>@Prototype</code> on
+		<para>The use of <code>@ServiceInstance</code> on
 		<code>@ApplicationScoped</code> beans will result in a definition
 		error.</para>
 	</section>
@@ -1767,15 +2341,15 @@ class Fido implements Hound {}]]></programlisting>
 	<title>Configuration Injection Points</title>
 
 	<para>A bean specifies injection of component properties using the <link
-	linkend="org.osgi.service.cdi.annotations.Configuration">@Configuration</link>
+	linkend="org.osgi.service.cdi.annotations.Configuration" xrefstyle="hyperlink">@Configuration</link>
 	annotation at an injection point.</para>
 
 	<para>The type typically associated with component properties is
-	<code><![CDATA[java.util.Map<String, ?>]]></code>:</para>
+	<code><![CDATA[java.util.Map<String, Object>]]></code>:</para>
 
 	<programlisting><![CDATA[@Inject
 @Configuration
-Map<String, ?> componentProperties;]]></programlisting>
+Map<String, Object> componentProperties;]]></programlisting>
 
 	<para>However, component properties can be automatically converted to any
 	type compatible with the <link
@@ -1803,41 +2377,42 @@ keep.alive.timeout (long)]]></programlisting>
 @Configuration
 PoolConfig poolConfig;]]></programlisting>
 
+	<para><xref linkend="service.cdi-bean.property.types" xrefstyle="hyperlink"/>
+	can be used as configuration injection point types.</para>
+
 	<para>Using <link
 	linkend="org.osgi.service.cdi.annotations.Reference">@Reference</link> in
 	conjunction with <code>@Configuration</code> will result in a definition
 	error.</para>
 
-	<para>Any annotations on the injection point annotated with
-	<code>org.osgi.service.cdi.annotations.ComponentPropertyType</code> will be
-	treated as defaults using the rules defined for <xref
-	linkend="service.cdi-component.property.types"/>.</para>
-
 	<section>
 		<title>Non-component configuration objects</title>
 
-		<para>This mechanism provides for injection of arbitrary configuration
-		objects without intermingling these with the component properties. The
-		properties of this configuration are not merged with the component properties.
-		The following is an example of injecting an <emphasis>optional</emphasis>
-		configuration object whose PID is <code>org.server.connector</code>:</para>
+		<para>This specification provides a mechanism for injecting arbitrary
+		configuration objects without these affecting or intermingling with the
+		component properties. The properties of this configuration are not merged
+		with the component properties. These are referred to as <emphasis>non-component
+		configuration objects</emphasis>. The following is an example of injecting
+		an <emphasis>optional</emphasis> non-component configuration object whose
+		PID is <code>org.server.connector</code>:</para>
 
 		<programlisting><![CDATA[@Inject
 @Configuration
 @PID("org.server.connector")
 Port port;]]></programlisting>
 
-		<para>As shown, the configuration object is optional and will allow the
-		component to be satisfied if no configuration object is available. To
-		make the configuration object required the <xref
+		<para>As shown, the injection point definition will allow the
+		component to be satisfied if no configuration object for PID
+		<code>org.server.connector</code> is available. To
+		make the non-component configuration object required the <xref
 		linkend="org.osgi.service.cdi.annotations.PID.policy--"/> property must
 		be set to <xref
-		linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED"/>.</para>
+		linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED" xrefstyle="hyperlink"/>.</para>
 
-		<para>It is possible for the component to specify a PID directly on the
-		component as well as on a configuration injection point. However the injection
-		point's view will be of the un-merged properties of the configuration
-		object.</para>
+		<para>It is possible for the component to specify the same PID on both the
+		component bean as well as on a non-component configuration injection point.
+		The configuration injection point's view will be of the un-merged
+		properties of the configuration object.</para>
 	</section>
 
 	<section xml:id="service.cdi-coordinatorsupport">
@@ -1941,14 +2516,14 @@ Map.Entry<Map<String, ?>, Dog> dog;]]></programlisting>
 				</row>
 				<row>
 					<entry><code><link
-						linkend="org.osgi.service.cdi.reference.ReferenceServiceObjects"
-						xrefstyle="hyperlink"><![CDATA[ReferenceServiceObjects<S>]]></link></code></entry>
+						linkend="org.osgi.service.cdi.reference.BeanServiceObjects"
+						xrefstyle="hyperlink"><![CDATA[BeanServiceObjects<S>]]></link></code></entry>
 
 					<entry>
 						<programlisting><![CDATA[// S = Dog
 @Inject
 @Reference
-ReferenceServiceObjects<Dog> dogs;]]></programlisting>
+BeanServiceObjects<Dog> dogs;]]></programlisting>
 					</entry>
 				</row>
 			</tbody>
@@ -1976,25 +2551,27 @@ ReferenceServiceObjects<Dog> dogs;]]></programlisting>
 		object. This ensures that the bundle will only be exposed to a single
 		instance of the service object at any given time.</para>
 
-		<para>For a bound service of a reference with <code>@Prototype</code>,
-		only services registered with prototype service scope can be considered
-		as target services. This ensures that each component instance can be
-		exposed to a single, distinct instance of the service object. Using
-		<code>@Prototype</code> effectively adds <code>service.scope=prototype</code>
+		<para>For a bound service of a reference where the <xref
+		linkend="org.osgi.service.cdi.annotations.PrototypeRequired"/> annotation
+		was specified, only services registered with prototype service scope can
+		be considered as target services. This ensures that each component
+		instance can be exposed to a single, distinct instance of the service object. Using
+		<code>@PrototypeRequired</code> effectively adds <code>service.scope=prototype</code>
 		to the <link linkend="service.cdi-target.property"
 		xrefstyle="hyperlink">target property</link>
 		of the reference. A service that does not use prototype service scope
 		cannot be used as a bound service for a reference with
-		<code>@Prototype</code> since the service cannot provide a distinct
+		<code>@PrototypeRequired</code> since the service cannot provide a distinct
 		service object for each component instance.</para>
 
 	<programlisting><![CDATA[@Inject
-@Prototype
-@Reference Hound hound;]]></programlisting>
+@PrototypeRequired
+@Reference
+Hound hound;]]></programlisting>
 	</section>
 
 	<section>
-		<title>ReferenceServiceObjects</title>
+		<title>BeanServiceObjects</title>
 
 		<para>A Reference Service Objects for the bound service. This Reference
 		Service Objects can be used to obtain the actual service object or
@@ -2003,14 +2580,14 @@ ReferenceServiceObjects<Dog> dogs;]]></programlisting>
 		service objects for the service.</para>
 
 		<programlisting><![CDATA[@Inject
-@Prototype
+@PrototypeRequired
 @Reference
-ReferenceServiceObjects<Hound> hounds;]]></programlisting>
+BeanServiceObjects<Hound> hounds;]]></programlisting>
 
-		<para>Note that <code>@Prototype</code> is not expressly required
-		because it is often usefull to interact in this way with services of any
-		scope just in case a bound service is actually prototype scoped as is
-		often the goal in <emphasis>whiteboard</emphasis> implementations.</para>
+		<para><code>@PrototypeRequired</code> is not required when injecting
+		<code>BeanServiceObjects</code>because interacting in this way with
+		services of any scope is often desired as is often the case when
+		implementing the <emphasis>whiteboard</emphasis> pattern.</para>
 	</section>
 
 	<section>
@@ -2072,15 +2649,15 @@ Dog dog;]]></programlisting>
 @Reference(target = "(service.vendor=Acme, Ltd.)")
 Collection<Dog> dogs;]]></programlisting>
 
-		<section xml:id="service.cdi-component.property.types.to.target.filters">
-			<title>@ComponentPropertyType as target filters</title>
+		<section xml:id="service.cdi-bean.property.types.as.target.filters">
+			<title>Bean Property Types as target filters</title>
 
 			<para>Annotations meta-annotated with
-			<code>org.osgi.service.cdi.annotations.ComponentPropertyType</code>
+			<xref linkend="org.osgi.service.cdi.annotations.BeanPropertyType" xrefstyle="hyperlink" />
 			appearing on an injection point in conjunction
 			with the <code>@Reference</code> annotation will further enhance the
 			target filter as described by the rules for <xref
-			linkend="service.cdi-component.property.types"/>,
+			linkend="service.cdi-bean.property.types"/>,
 			then assembling the <emphasis>result map</emphasis> into a filter
 			string according to the following rules:</para>
 
@@ -2120,6 +2697,7 @@ Collection<Dog> dogs;]]></programlisting>
 			<para>Given the following example:</para>
 
 			<programlisting><![CDATA[@Repeatable(...)
+@BeanPropertyType
 @interface Config {
 	String color();
 }
@@ -2198,36 +2776,6 @@ class Fido {
 	</section>
 
 	<section>
-		<title>Reference Properties</title>
-
-		<para>Each reference is associated with the following component
-		properties.</para>
-
-		<itemizedlist>
-			<listitem>
-				<programlisting><![CDATA[target  ::= refName ".target"
-refName ::= < reference name >]]></programlisting>
-				<para>Value must be
-				convertible to an LDAP filter.</para>
-				<para>See <xref linkend="service.cdi-target.property"/>.</para>
-
-				<para>If the value is not a valid LDAP filter an error will be
-				logged and the component will become or remain unsatisfied.</para>
-			</listitem>
-			<listitem>
-				<programlisting><![CDATA[cardinality ::= refName ".cardinality
-refName     ::= < reference name >]]></programlisting>
-				<para>Value must be convertable to a positive integer.</para>
-				<para>See <xref linkend="service.cdi-minimum.cardinality.property"/>.</para>
-
-				<para>If the value is not convertable to a positive integer an
-				error will be logged and the component will become or remain
-				unsatisfied.</para>
-			</listitem>
-		</itemizedlist>
-	</section>
-
-	<section>
 		<title>Static References</title>
 
 		<para>It should be clear that all references displayed to this point
@@ -2247,7 +2795,7 @@ Dog dog;
 Map<String, Object> props;
 
 @Inject
-void setHounds(@Reference ReferenceServiceObjects<Hound> hounds) {...}
+void setHounds(@Reference BeanServiceObjects<Hound> hounds) {...}
 
 @Inject
 @Reference
@@ -2284,7 +2832,7 @@ Optional<Dog> dog;
 Optional<Map<String, Object>> props;
 
 @Inject
-void setHounds(@Reference Optional<ReferenceServiceObjects<Hound>> hounds) {...}
+void setHounds(@Reference Optional<BeanServiceObjects<Hound>> hounds) {...}
 
 @Inject
 @Reference
@@ -2312,7 +2860,7 @@ Iterable<Dog> dogs;
 Collection<Map<String, Object>> props;
 
 @Inject
-void setHounds(@Reference List<ReferenceServiceObjects<Hound>> hounds) {...}
+void setHounds(@Reference List<BeanServiceObjects<Hound>> hounds) {...}
 
 @Inject
 @Reference
@@ -2351,7 +2899,7 @@ Provider<Collection<Map<String, Object>>> props;
 @Inject
 void setHounds(
 		@Reference
-		Provider<List<ReferenceServiceObjects<Hound>>> hounds
+		Provider<List<BeanServiceObjects<Hound>>> hounds
 	) {...}
 
 @Inject
@@ -2364,49 +2912,101 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 	</section>
 </section>
 
-<section xml:id="service.cdi-reference.events">
-	<title>Reference Events</title>
+<section xml:id="service.cdi-interacting.with.service.events">
+	<title>Interacting with Service Events</title>
 
-	<para>Observer methods whose CDI event type is <link
-	linkend="org.osgi.service.cdi.reference.ReferenceEvent" xrefstyle="hyperlink">
-	<![CDATA[ReferenceEvent<S>]]></link> where <code>S</code> is a type under
-	which a service is published will recieve delivery of such events
-	when matching services are added to the service registry.</para>
+	<para>It is often necessary to observe the addition, modification and removal
+	of services from the service registry. This specification provides 3 special
+	bean types, referred to as <emphasis>binder types</emphasis>, which make it possible to bind methods
+	to coordinate across the service events of set of services. In all 3 cases the type
+	argument <code>S</code> indicates the service type expected unless further
+	reduced as described by <xref linkend="service.cdi-reference.service.type" xrefstyle="hyperlink"/>.
+	Bean Property Types may also be used to expand the target filter as defined in <xref
+	linkend="service.cdi-bean.property.types.as.target.filters"
+	xrefstyle="hyperlink"/>.</para>
 
-	<programlisting><![CDATA[void onAdd(@Observes ReferenceEvent<Dog> event) {...}]]></programlisting>
+	<itemizedlist>
+		<listitem>
+			<para><link
+			linkend="org.osgi.service.cdi.reference.BindObject"><![CDATA[BindObject<S>]]></link> -
+			The <code>BindObject</code> bean allows for coordination of service
+			events when the service object is required.
+			</para>
+		</listitem>
+		<listitem>
+			<para><link
+			linkend="org.osgi.service.cdi.reference.BindServiceObjects"><![CDATA[BindServiceObjects<S>]]></link> -
+			The <code>BindServiceObjects</code> bean allows for coordination of service
+			events when service objects are required.
+			</para>
+		</listitem>
+		<listitem>
+			<para><link
+			linkend="org.osgi.service.cdi.reference.BindServiceReference"><![CDATA[BindServiceReference<S>]]></link> -
+			The <code>BindServiceReference</code> bean allows for coordination of service
+			events when the service reference is required.
+			</para>
+		</listitem>
+	</itemizedlist>
 
-	<para><link linkend="org.osgi.service.cdi.annotations.Reference">@Reference</link>
-	is optional for event observers.</para>
+	<para>These bean types declare a builder style interface for binding the
+	necessary methods to coordinate the events. The following example binds
+	service event methods over the set of services whose type is <code>Dog</code>
+	and having the service property <code>service.vendor=Acme Inc.</code>:</para>
 
-	<para>Any type defined by <code>@Reference.value()</code> must be
-	assignable to the type argument <code>S</code> of
-	<code><![CDATA[ReferenceEvent<S>]]></code></para>
-
-	<para><code>ReferenceEvent</code>s are fired synchronously.</para>
-
-	<section>
-		<title>Subscribing to service event life cycles</title>
-
-		<para><code>ReferenceEvent</code> provides a subscription model to bind
-		operations to service events:</para>
-
-		<programlisting><![CDATA[void onAdd(@Observes ReferenceEvent<Dog> event, Logger logger) {
-	event.onAdding(this::check);
-	event.onUpdate(this::check);
-	event.onRemove(dog -> logger.debug("Bye {}!", dog));
+	<programlisting><![CDATA[@Inject
+@ServiceVendor("Acme Inc.")
+void bindFoo(BindObject<Dog> binder) {
+	binder.
+		adding(this::adding).
+		modified(this::modified).
+		removed(this::removed).
+		bind();
 }
 
-private void check(Dog dog) {...}]]></programlisting>
-	</section>
+void adding(Dog dog, Map<String,Object> properties) {...}
+void modified(Dog dog, Map<String,Object> properties) {...}
+void removed(Dog dog, Map<String,Object> properties) {...}]]></programlisting>
+
+	<para>The terminal <code>bind()</code> method must be called to inform CCR
+	that the bind process is complete. Binding a subset of methods is allowed.
+	Only the last bind method specified for any given service event will be used.
+	For example, given the following invocation:
+
+	<programlisting><![CDATA[@Inject
+void bindFoo(BindObject<Dog> binder) {
+	binder.
+		adding(this::addingA).
+		adding(this::addingB).
+		bind();
+}]]></programlisting>
+
+	only the method <code>addingB</code> will be used.</para>
+
+	<para>An example of a binder type injected into a field:</para>
+
+	<programlisting><![CDATA[@Inject
+BindServiceObjects<Dog> binder;
+
+@PostConstruct
+void init() {
+	binder.
+		adding(this::adding).
+		removed(this::removed).
+		bind();
+}
+
+void adding(BeanServiceObjects<Dog> dogs) {...}
+void removed(BeanServiceObjects<Dog> dogs) {...}]]></programlisting>
 </section>
 
-<section>
+<section xml:id="service.cdi-cdi.component.runtime">
 	<title>CDI Component Runtime</title>
 
 	<para>CDI Component Runtime (CCR) is the actor that manages the CDI
 	containers and their life cycle and allows for their introspection.</para>
 
-	<section>
+	<section xml:id="service.cdi-relationship.to.the.osgi.framework">
 		<title>Relationship to the OSGi Framework</title>
 
 		<para>CCR must have access to the Bundle Context of any CDI bundle. CCR
@@ -2435,7 +3035,7 @@ private void check(Dog dog) {...}]]></programlisting>
 		to obtain the Bundle Context reference.</para>
 	</section>
 
-	<section>
+	<section xml:id="service.cdi-starting.and.stopping.ccr">
 		<title>Starting and Stopping CCR</title>
 
 		<para>When CCR is implemented as a bundle, any containers activated by
@@ -2445,7 +3045,7 @@ private void check(Dog dog) {...}]]></programlisting>
 		activation.</para>
 	</section>
 
-	<section>
+	<section xml:id="service.cdi-logging.messages">
 		<title>Logging Messages</title>
 
 		<para>When CCR must log a message to the Log Service, it must use a
@@ -2460,13 +3060,7 @@ private void check(Dog dog) {...}]]></programlisting>
 		Logger named <code>ROOT</code>.</para>
 	</section>
 
-	<section>
-		<title>Class loading considerations</title>
-
-		<remark>RAY do we need to talk about class loading considerations?</remark>
-	</section>
-
-	<section>
+	<section xml:id="service.cdi-bundle.activator.interaction">
 		<title>Bundle Activator Interaction</title>
 
 		<para>A CDI bundle may also declare a Bundle Activator. Such a bundle
@@ -2481,7 +3075,7 @@ private void check(Dog dog) {...}]]></programlisting>
 		activated.</para>
 	</section>
 
-	<section>
+	<section xml:id="service.cdi-introspection">
 		<title>Introspection</title>
 
 		<para>CCR provides an introspection API for examining the runtime state
@@ -2574,11 +3168,18 @@ private void check(Dog dog) {...}]]></programlisting>
 		class as the second argument, and the type of the injection point;
 		<code>org.osgi.service.log.Logger</code> or
 		<code>org.osgi.service.log.FormatterLogger</code>, as the third
-		argument.</para>
+		argument. The typical usage is:</para>
 
-		<para>For example, the following code will set the <code>logger</code>
-		field to a Logger object created as a dependent object (unique to the
-		contextual instance) from a LoggerFactory service obtained by CCR.</para>
+		<programlisting><![CDATA[@Inject
+Logger logger;
+
+@PostConstruct
+void init() {
+	logger.debug(l -> l.debug("Initialized."));
+}]]></programlisting>
+
+		<para>Another example using method injection along with component
+		properties (coerced to <code>Config</code>):</para>
 
 		<programlisting><![CDATA[public static @interface Config {
 	String component_name();
@@ -2588,49 +3189,6 @@ private void check(Dog dog) {...}]]></programlisting>
 void setup(@Configuration Config config, Logger logger) {
 	logger.trace(l -> l.trace(“activating component {}”, config.component_name()));
 }]]></programlisting>
-	</section>
-
-	<section xml:id="service.cdi-bean.discovery">
-		<title>Bean Discovery</title>
-
-		<para>The CDI specification defines bean discovery modes. However this
-		specification expects a concrete list of bean classes in order to avoid
-		runtime class searching. CDI bundles must fully express the complete
-		list of bean classes CCR is expected to operate on by specifying the attribute
-		<code>osgi.beans</code> of type <code><![CDATA[List<String>]]></code> on
-		the <code>osgi.cdi</code> extension requirement. See <link
-		linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
-		extender capability</link>.</para>
-	</section>
-
-	<section xml:id="service.cdi-portable.extensions">
-		<title>CDI Portable Extensions</title>
-
-		<para>CDI Portable Extensions use CDI's Service Provider Interface which
-		provides a powerful mechanism for extending the base functionality of
-		CDI. Portable extensions may process beans, read bean and bean class
-		metadata, add beans dynamically, define custom contexts, and much more. They
-		can generally participate in all aspects of the CDI Container's life
-		cycle.</para>
-
-		<para>This specification requires that portable extensions be provided as
-		OSGi services using the interface <code>javax.enterprise.inject.spi.Extension</code>.
-		Portable extension services must include the service property
-		<code>osgi.cdi.extension</code> who's value should be a name identifying the
-		functionality provided by the portable extension. Portable extension services
-		must also specify a <code>version</code> service property who's value is of
-		type <code>org.osgi.framework.Version</code></para>
-
-		<para>For example, a portable extension that provides an implementation of
-		the <xref linkend="service.cdi-bib.jta12" /> specification should specify the
-		value of it's <code>osgi.cdi.extension</code> service property as <code>JTA</code>
-		and it's <code>version</code> property as <code>1.2</code>.</para>
-
-		<para>Portable extensions are expressed as a requirement on a CDI bundle by
-		specifying a target filter matching the extension service that provides it.
-		This target filter is specified as a list on the <code>osgi.cdi</code>
-		extension requirement. See <link linkend="service.cdi-capabilities.extender">
-		<code>osgi.cdi</code> extender capability</link>.</para>
 	</section>
 
 	<section xml:id="service.cdi-disabling.components">
@@ -2653,6 +3211,23 @@ compName ::= < component name >]]></programlisting>
 		<para>The container component can be disabled using it's component name, which
 		is the <emphasis>container id</emphasis>. As a result of disabling the
 		container component, all components in the CDI bundle are also disabled.</para>
+	</section>
+
+	<section xml:id="service.cdi-container.component.and.service.cycles">
+		<title>Container Component and Service Cycles</title>
+
+		<para>There is no special support to allow service cycles within the
+		<emphasis>container component</emphasis>. CDI provides existing
+		mechanisms for wiring and collaborating within the CDI container. However,
+		if an container component defines a dynamic, optional reference, then a service
+		subsequently provided by the container component may satisfy the reference
+		at some point when the container component is satisfied. However, if the
+		reference is static and mandatory and the only potentially matching service
+		is one provided by the container component itself, then the container
+		component would wait forever for a service that will never arrive. This is
+		simple design error. The information about unsatisfied references is
+		available from the <xref linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+		xrefstyle="hyperlink"/> service.</para>
 	</section>
 </section>
 
@@ -2697,53 +3272,46 @@ compName ::= < component name >]]></programlisting>
 			endterm="org.osgi.service.cdi-version.number"
 			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
 
-			<para>CCR must only process a bundle's CDI metadata if the bundle's
+			<para>CCR must only process a CDI bundle if the bundle's
 			wiring has a required wire for at least one <code>osgi.extender</code>
 			capability with the name <code>osgi.cdi</code> and the first of these
 			required wires is wired to CCR.</para>
 
-			<para>Otherwise, CCR must not process the bundle's CDI metadata.</para>
-
-			<para>When using any of the annotations defined by this
-			specification, the above requirement is automatically added to the
-			manifest when the code is processed by tooling capable of
+			<para>When using the annotations <xref
+			linkend="org.osgi.service.cdi.annotations.Bean"/> or <xref
+			linkend="org.osgi.service.cdi.annotations.Beans"/>, the above
+			requirement is automatically added to the manifest when the code is
+			processed by a supporting build tool capable of
 			interpreting <emphasis>Bundle Annotations</emphasis> defined in <xref
 			linkend="intro.core.release"/>.</para>
 
-			<para>The requirement may be specified directly on any class in the
-			CDI bundle by using the <xref
+			<para>The requirement may be specified directly on any class or
+			package in the CDI bundle by using the <xref
 			linkend="org.osgi.service.cdi.annotations.RequireCDIExtender"
 			xrefstyle="hyperlink"/> annotation when the code is processed by
-			tooling capable of interpreting <emphasis>Bundle Annotations</emphasis>
-			defined in <xref linkend="intro.core.release"/>..</para>
+			a supporting build tool capable of interpreting <emphasis>Bundle
+			Annotations</emphasis> defined in <xref linkend="intro.core.release"/>.</para>
+
+			<para><emphasis role="strong">Specifying CDI bean descriptors</emphasis> -
+			As specified in <xref linkend="service.cdi-bean.descriptors"
+			xrefstyle="hyperlink" /> a CDI bundle must declare all CDI bean descriptors
+			CCR is expected to operate on. This is done by adding the attribute
+			<code>descriptor</code>, of type <code><![CDATA[List<String>]]></code>,
+			to the requirement.</para>
 
 			<para><emphasis role="strong">Specifying the list of bean classes</emphasis> -
-			As mentioned in <xref linkend="service.cdi-bean.discovery"
+			As specified in <xref linkend="service.cdi-bean.discovery"
 			xrefstyle="hyperlink" /> a CDI bundle must declare all bean classes
 			CCR is expected to operate on. This is done by adding the attribute
-			<code>osgi.beans</code>, of type <code><![CDATA[List<String>]]></code>,
-			to the requirement. For example:</para>
-
-			<programlisting>Require-Capability: «
-	osgi.extender; «
-		osgi.beans:List&lt;String&gt;="com.foo.Bar,com.foo.Baz,com.foo.fo.Fum"; «
-		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
-			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+			<code>beans</code>, of type <code><![CDATA[List<String>]]></code>,
+			to the requirement.</para>
 
 			<para><emphasis role="strong">Specifying Portable Extension
-			dependencies</emphasis> - As mentioned in <xref
+			dependencies</emphasis> - As specified in <xref
 			linkend="service.cdi-portable.extensions" xrefstyle="hyperlink" /> a
-			CDI bundle may declare zero or more Portable Extension dependencies.
+			CDI bundle may declare Portable extension service dependencies.
 			This is done by adding the attribute <code>extensions</code>, of type
-			<code><![CDATA[List<String>]]></code>, to the requirement. For example:</para>
-
-			<programlisting>Require-Capability: «
-	osgi.extender; «
-		extensions:List&lt;String&gt;="(&amp;(osgi.cdi.extension=JTA)(version=1.2))"; «
-		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
-			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
+			<code><![CDATA[List<String>]]></code>, to the requirement.</para>
 		</listitem>
 
 		<listitem xml:id="service.cdi-capabilities.implementation">
@@ -2823,35 +3391,220 @@ compName ::= < component name >]]></programlisting>
 	</itemizedlist>
 </section>
 
-<section>
-	<title>Container Component and Service Cycles</title>
-
-	<para>There is no special support to allow service cycles within the
-	<emphasis>container component</emphasis>. CDI provides existing
-	mechanisms for wiring and collaborating within the CDI container. However,
-	if an container component defines a dynamic, optional reference, then a service
-	subsequently provided by the container component may satisfy the reference
-	at some point when the container component is satisfied. However, if the
-	reference is static and mandatory and the only potentially matching service
-	is one provided by the container component itself, then the container
-	component would wait forever for a service that will never arrive. This is
-	simple design error. The information about unsatisfied references is
-	available from the <xref linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
-	xrefstyle="hyperlink"/> service.</para>
-</section>
-
-<section>
+<section xml:id="service.cdi-relationship.to.cdi.features">
 	<title>Relationship to CDI features</title>
 
 	<para>CDI has many features which may occasionally interact with the OSGi
 	CDI integrations defined by this specification.</para>
 
-	<section>
+	<section xml:id="service.cdi-bean.descriptors">
+		<title>Bean Descriptors</title>
+
+		<para>The <xref linkend="service.cdi-bib.cdi.packaging.and.deployment"/>
+		chapter of the CDI specification defines xml descriptors which are used to
+		control the CDI container. This specification expects that these descriptors
+		be declared using the <code>osgi.cdi</code> extender requirement attribute
+		<code>descriptor</code> of type <code><![CDATA[List<String>]]></code>. For
+		example:</para>
+
+		<programlisting>Require-Capability: «
+		osgi.extender; «
+			filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+				endterm="org.osgi.service.cdi-version.number"
+				linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
+			descriptor:List&lt;String&gt;="META-INF/beans.xml"</programlisting>
+
+		<para>If the attribute is not specified the default value of
+		<code>META-INF/beans.xml</code> is used.</para>
+
+		<para>CCR must process all specified descriptors in the bundle, the
+		bundle class path and attached bundle fragments. See <link
+		linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
+		extender capability</link>.</para>
+	</section>
+
+	<section xml:id="service.cdi-bean.discovery">
+		<title>Bean Discovery</title>
+
+		<para>The CDI specification defines 3 bean discover modes which perform
+		runtime class discovery:</para>
+
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>all</emphasis> - All classes in the jar are passed
+				to the CDI container and processed.</para>
+			</listitem>
+			<listitem>
+				<para><emphasis>none</emphasis> - No classes in the jar are passed
+				to the CDI container. It is assumed however that <emphasis>portable
+				extensions</emphasis> may yet provide beans.</para>
+			</listitem>
+			<listitem>
+				<para><emphasis>annotated</emphasis> (default) - Only classes
+				matching the definition of <emphasis>annotated beans</emphasis> as
+				defined by the <xref linkend="service.cdi-bib.cdi.default.bean.discovery.mode"
+				xrefstyle="hyperlink"/> are passed to the CDI container and processed.</para>
+			</listitem>
+		</itemizedlist>
+
+		<para>This specification avoids runtime class analysis concern by ignoring
+		the bean discovery mode specified or implied by the descriptors, requiring
+		bean classes to be pre-calculated at build time such that the CDI container
+		receives a concrete list of classes to process.</para>
+
+		<para>It is therefore expected that the aforementioned bean discover modes
+		be implemented in build tooling and be performed at build time.</para>
+
+		<para>A CDI bundle must specify the list of classes to process using the
+		<code>osgi.cdi</code> extender requirement attribute <code>beans</code> of
+		type <code><![CDATA[List<String>]]></code>. For example:</para>
+
+		<programlisting>Require-Capability: «
+		osgi.extender; «
+			filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+				endterm="org.osgi.service.cdi-version.number"
+				linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
+			beans:List&lt;String&gt;="org.foo.Bar, org.foo.baz.Fum"</programlisting>
+
+		<para>See <link linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
+		extender capability</link>.</para>
+
+		<section>
+			<title>Build tool support</title>
+
+			<para>The bean descriptors specified by the CDI specification allow for
+			narrowing the range of processed classes by defining <xref
+			linkend="service.cdi-bib.cdi.exclude.filters" xrefstyle="hyperlink"/>.
+			While these filters are still considered, they are only applied over the
+			concrete list of classes passed from the <code>beans</code> attribute.</para>
+
+			<para>The <code>CLASS</code> retention annotation <xref
+			linkend="org.osgi.service.cdi.annotations.Bean"/> may be applied to a
+			class to indicate to supporting build tools it must be included in the
+			<code>beans</code> list.</para>
+
+			<para>The <code>CLASS</code> retention annotation <xref
+			linkend="org.osgi.service.cdi.annotations.Beans"/> may be applied to a
+			package to indicate to supporting build tools that all classes in the
+			package must be included in the <code>beans</code> list.</para>
+
+			<para>Specifying a <xref
+			linkend="org.osgi.service.cdi.annotations.Beans.value--"/> indicates to
+			supporting build tools that the specified classes in the package must be
+			included in the <code>beans</code> list.</para>
+		</section>
+	</section>
+
+	<section xml:id="service.cdi-portable.extensions">
+		<title>Portable Extensions</title>
+
+		<para>CDI Portable Extensions use CDI's SPI which provides a powerful
+		mechanism for extending the base functionality of CDI. Portable
+		extensions may add, modify or read bean and bean class metadata, define
+		custom contexts, and much more. Through the SPI a portable extension can
+		participate in all aspects of the CDI Container's life cycle.</para>
+
+		<para>This specification requires that portable extensions be provided as
+		OSGi services using the interface <code>javax.enterprise.inject.spi.Extension</code>.
+		Portable extension services must provide the service property
+		<code>osgi.cdi.extension</code> whose value should be a name identifying the
+		functionality provided by the portable extension. Portable extension services
+		must also specify a <code>version</code> service
+		property whose value is of type <code>org.osgi.framework.Version</code>.</para>
+
+		<para>For example, a portable extension service that provides an implementation of
+		the <xref linkend="service.cdi-bib.jta12" /> specification should specify the
+		value of it's <code>osgi.cdi.extension</code> service property as <code>JTA</code>
+		and it's <code>version</code> property as <code>1.2</code>.</para>
+
+		<para>Portable extension services are expressed as a requirement on a CDI bundle by
+		specifying a target filter matching the service that provides it.
+		This target filter is specified using the <code>osgi.cdi</code>
+		extension requirement attribute <code>extensions</code> of type
+		<code><![CDATA[List<String>]]></code>. For example:</para>
+
+		<programlisting>Require-Capability: «
+	osgi.extender; «
+		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
+		extensions:List&lt;String&gt;=" «
+			(&amp;(osgi.cdi.extension=JTA)(version=1.2))"</programlisting>
+
+		<para>See <link
+		linkend="service.cdi-capabilities.extender">
+		<code>osgi.cdi</code> extender capability</link>.</para>
+
+		<section xml:id="service.cdi-portable.extension.services.and.beans">
+			<title>Portable Extension Services and Beans</title>
+
+			<para>Portable extension services intending to provide additional beans
+			must do so programmatically using the SPI. Bean descriptors in the
+			bundle providing the portable extension service are not visible to
+			the CDI container and therefore play no role in desciribing bean
+			discovery.</para>
+		</section>
+
+		<section xml:id="service.cdi-embedded.portable.extensions">
+			<title>Embedded Portable Extension</title>
+
+			<para>Portable extensions which are embedded within the CDI bundle
+			are discoverable through the CDI specified <emphasis>service
+			loader</emphasis> mechanism using the class loader of the CDI bundle.</para>
+		</section>
+	</section>
+
+	<section xml:id="service.cdi-bean.manager">
+		<title>BeanManager</title>
+
+		<para>When the container component is satisfied CCR must published it's
+		<code>javax.enterprise.inject.spi.BeanManager</code> to the service registry
+		with the following service properties:</para>
+
+		<table>
+		<title>BeanManager Service Properties</title>
+
+		<tgroup cols="3">
+		<colspec colnum="1" colwidth="2*"/>
+
+		<colspec colnum="2" colwidth="1*"/>
+
+		<colspec colnum="3" colwidth="2*"/>
+
+		<thead>
+			<row>
+			<entry>Service Property</entry>
+
+			<entry>Type</entry>
+
+			<entry>Description</entry>
+			</row>
+		</thead>
+
+		<tbody>
+			<row>
+			<entry><code><xref
+			linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID_PROPERTY"/></code></entry>
+
+			<entry><para>string</para></entry>
+
+			<entry><para>The container id. See <xref
+			linkend="service.cdi-container.component"/>.</para></entry>
+			</row>
+		</tbody>
+		</tgroup>
+		</table>
+
+		<para>The <code>javax.enterprise.inject.spi.BeanManager</code> must be
+		unpublished when the container component becomes unsatisfied.</para>
+	</section>
+
+	<section xml:id="service.cdi-decorators.and.interceptors">
 		<title>Decorators and Interceptors</title>
 
 		<para>Decorators and Interceptors are used to wrap contextual instances
 		with proxies to deliver additional, targetted functionality. However, these
-		features are not support for <xref linkend="service.cdi-bib.unproxyable"/>.
+		features do not support <xref linkend="service.cdi-bib.unproxyable"/>.
 		Attempting to apply either feature to a bean or producer having an
 		unproxyable bean type will result in a definition error. This limitation
 		extends to CCR where applicable. The <code>@javax.enterprise.inject.Typed</code>
@@ -2870,66 +3623,85 @@ compName ::= < component name >]]></programlisting>
 	</section>
 </section>
 
-<section xml:id="service.cdi-bean.manager">
-	<title>BeanManager service</title>
-
-	<para>When the container component is satisfied CCR must published it's
-	<code>javax.enterprise.inject.spi.BeanManager</code> to the service registry
-	with the following service properties:</para>
-
-	<table>
-	<title>BeanManager Service Properties</title>
-
-	<tgroup cols="3">
-	<colspec colnum="1" colwidth="2*"/>
-
-	<colspec colnum="2" colwidth="1*"/>
-
-	<colspec colnum="3" colwidth="2*"/>
-
-	<thead>
-		<row>
-		<entry>Service Property</entry>
-
-		<entry>Type</entry>
-
-		<entry>Description</entry>
-		</row>
-	</thead>
-
-	<tbody>
-		<row>
-		<entry><code><xref
-		linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID_PROPERTY"/></code></entry>
-
-		<entry><para>string</para></entry>
-
-		<entry><para>The container id. See <xref
-		linkend="service.cdi-container.component"/>.</para></entry>
-		</row>
-	</tbody>
-	</tgroup>
-	</table>
-
-	<para>The <code>javax.enterprise.inject.spi.BeanManager</code> must be
-	unpublished when the container component becomes unsatisfied.</para>
-</section>
-
-<section>
+<section xml:id="service.cdi-security">
 	<title>Security</title>
 
-	<para>TBD</para>
+	<para>When Java permissions are enabled, CCR must perform the following
+	security procedures.</para>
 
 	<section>
-		<title>CDI Bundle</title>
+		<title>Service Permissions</title>
 
-		<para>TBD</para>
+		<para>CCR dependencies are built upon the existing OSGi service
+		infrastructure. This means that Service Permission applies regarding the
+		ability to publish, find or bind services.</para>
+
+		<para>If a component specifies a service, that component cannot be
+		satisfied unless the CDI bundle has
+		<code>ServicePermission[&lt;provides&gt;, REGISTER]</code> for each
+		provided interface specified for the service.</para>
+
+		<para>If a component's reference does not specify optional cardinality,
+		the reference cannot be satisfied unless the CDI bundle has
+		<code>ServicePermission[&lt;interface&gt;, GET]</code> for the specified
+		interface in the reference. If the reference specifies optional
+		cardinality but the component's bundle does not have
+		<code>ServicePermission[&lt;interface&gt;, GET]</code> for the specified
+		interface in the reference, no service must be bound for this
+		reference.</para>
+
+		<para>CCR must have <code>ServicePermission[CDIComponentRuntime,
+		REGISTER]</code> permission to register the <xref
+		linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+		xrefstyle="hyperlink"/> service. Administrative bundles wishing to use
+		the <xref
+		linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+		xrefstyle="hyperlink"/> service must have
+		<code>ServicePermission[CDIComponentRuntime, GET]</code> permission.
+		In general, this permission should only be granted to administrative
+		bundles to limit access to the potentially intrusive methods provided by
+		this service.</para>
+	</section>
+
+	<section>
+		<title>Required Admin Permission</title>
+
+		<para>CCR requires <code>AdminPermission[*,CONTEXT]</code> because it
+		needs access to the CDI bundle's Bundle Context object with the
+		<code>Bundle.getBundleContext()</code> method.</para>
+	</section>
+
+	<section>
+		<title>Using hasPermission</title>
+
+		<para>CCR does all publishing, finding and binding of services on behalf
+		of the component using the Bundle Context of the CDI bundle.
+		This means that normal stack-based permission checks will check CCR and
+		not the component's bundle. Since CCR is registering and getting
+		services on behalf of a CDI bundle, CCR must call the
+		<code>Bundle.hasPermission</code> method to validate that a CDI
+		bundle has the necessary permission to register or get a service.</para>
+	</section>
+
+	<section xml:id="service.cdi-multi.location.regions">
+		<title>Configuration Multi-Locations and Regions</title>
+
+		<para>CCR must ensure a bundle has the proper
+		<code>ConfigurationPermission</code> for a Configuration used by its
+		components when the Configuration has a multi-location. See <xref
+		linkend="service.cm-multi.locations"/> for more information on
+		multi-locations and <xref linkend="service.cm-regions"/> for more
+		information on regions. If a bundle does not have the necessary
+		permission for a multi-location Configuration, then CCR must act as if
+		the Configuration does not exist for the bundle.</para>
 	</section>
 </section>
 
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.xml"/>
 
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.annotations.xml"/>
+
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.propertytypes.xml"/>
 
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.reference.xml"/>
 
@@ -2939,30 +3711,51 @@ compName ::= < component name >]]></programlisting>
 
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.runtime.dto.template.xml"/>
 
-<section>
+<section xml:id="service.cdi-references">
 	<title>References</title>
 
 	<bibliolist>
 		<bibliomixed xml:id="service.cdi-bib.cdi">
-			<title>CDI</title>http://www.cdi-spec.org/</bibliomixed>
+			<title>CDI</title>
+			<biblioid class="uri"><link xlink:href="http://www.cdi-spec.org/"/></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.cdi20">
-			<title>CDI 2.0</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html</bibliomixed>
+			<title>CDI 2.0</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html"/></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.unproxyable">
-			<title>unproxyable bean types</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#unproxyable</bibliomixed>
+			<title>unproxyable bean types</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#unproxyable"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.default.bean.discovery.mode">
+			<title>Default bean discovery mode</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#default_bean_discovery"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.exclude.filters">
+			<title>Exclude filters</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#exclude_filters"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.packaging.and.deployment">
+			<title>Packaging and deployment</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#packaging_deployment"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.typesafe.resolution">
+			<title>Typesafe Resolution</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#typesafe_resolution"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.scopes.and.contexts">
+			<title>Scopes and contexts</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#contexts"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.cdi.pseudoscope">
+			<title>Pseudo-scope</title>
+			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#normal_scope"/></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.general.syntax.definitions">
 			<title>General Syntax Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.filter.syntax">
 			<title>Filter Syntax</title>OSGi Core, Filter Syntax</bibliomixed>
-		<bibliomixed xml:id="service.cdi-bib.cdi.typesafe.resolution">
-			<title>Typesafe Resolution</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#typesafe_resolution</bibliomixed>
-		<bibliomixed xml:id="service.cdi-bib.cdi.scopes.and.contexts">
-			<title>Scopes and contexts</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#contexts</bibliomixed>
-		<bibliomixed xml:id="service.cdi-bib.cdi.pseudoscope">
-			<title>Pseudo-scope</title>http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#normal_scope</bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.inject">
-			<title>Dependency Injection for Java</title>https://jcp.org/en/jsr/detail?id=330</bibliomixed>
+			<title>Dependency Injection for Java</title>
+			<biblioid class="uri"><link xlink:href="https://jcp.org/en/jsr/detail?id=330"/></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.jta12">
-			<title>Java Transaction Something or other...</title>https://jcp.org/en/jsr/detail?id=JTA??</bibliomixed>
+			<title>Java Transaction Something or other...</title>
+			<biblioid class="uri"><link xlink:href="https://jcp.org/en/jsr/detail?id=JTA??"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.jls.ref">
+			<title>The Java Language Specification, Java SE 8 Edition</title>
+			<biblioid class="uri"><link xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
+
 	</bibliolist>
 </section>
 </chapter>
