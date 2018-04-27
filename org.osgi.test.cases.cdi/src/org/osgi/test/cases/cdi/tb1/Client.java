@@ -30,9 +30,8 @@ import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Qualifier;
 
-import org.osgi.service.cdi.annotations.ComponentPropertyType;
+import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
 
@@ -41,8 +40,7 @@ import org.osgi.test.cases.cdi.serviceapi.Foo;
 @Client.Tb("tb1")
 public class Client implements Callable<String>{
 
-	@ComponentPropertyType
-	@Qualifier
+	@BeanPropertyType
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface Tb {
 		String value();

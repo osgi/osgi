@@ -39,8 +39,8 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>adding</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>adding</em> service
-	 *                   event
+	 * @param action the action, whose argument is the service object, to
+	 *                   subscribe to the <em>adding</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -51,8 +51,9 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>adding</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>adding</em> service
-	 *                   event
+	 * @param action the action, whose arguments are the service object and the
+	 *                   {@code Map<String, Object>} of service properties, to
+	 *                   subscribe to the <em>adding</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -63,8 +64,8 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>modified</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>modified</em> service
-	 *                   event
+	 * @param action the action, whose argument is the service object, to
+	 *                   subscribe to the <em>modified</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -75,8 +76,9 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>modified</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>modified</em> service
-	 *                   event
+	 * @param action the action, whose arguments are the service object and the
+	 *                   {@code Map<String, Object>} of service properties, to
+	 *                   subscribe to the <em>modified</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -87,8 +89,8 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>removed</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>removed</em> service
-	 *                   event
+	 * @param action the action, whose argument is the service object, to
+	 *                   subscribe to the <em>removed</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -99,8 +101,9 @@ public interface BindObject<S> {
 	 * <p>
 	 * Only the last <em>removed</em> action is used.
 	 *
-	 * @param action the action to subscribe to the <em>removed</em> service
-	 *                   event
+	 * @param action the action, whose arguments are the service object and the
+	 *                   {@code Map<String, Object>} of service properties, to
+	 *                   subscribe to the <em>removed</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */

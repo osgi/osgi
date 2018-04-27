@@ -37,7 +37,8 @@ public interface BindServiceObjects<S> {
 	 * <p>
 	 * Only the last <em>adding</em> action is used.
 	 *
-	 * @param action to subscribe to the <em>adding</em> service event
+	 * @param action the action, whose argument is the Bean Service Objects, to
+	 *                   subscribe to the <em>adding</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -48,7 +49,8 @@ public interface BindServiceObjects<S> {
 	 * <p>
 	 * Only the last <em>modified</em> action is used.
 	 *
-	 * @param action to subscribe to the <em>modified</em> service event
+	 * @param action the action, whose argument is the Bean Service Objects, to
+	 *                   subscribe to the <em>modified</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -59,11 +61,12 @@ public interface BindServiceObjects<S> {
 	 * <p>
 	 * Only the last <em>removed</em> action is used.
 	 *
-	 * @param consumer to subscribe to the <em>removed</em> service event
+	 * @param action the action, whose argument is the Bean Service Objects, to
+	 *                   subscribe to the <em>removed</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
-	BindServiceObjects<S> removed(Consumer<BeanServiceObjects<S>> consumer);
+	BindServiceObjects<S> removed(Consumer<BeanServiceObjects<S>> action);
 
 	/**
 	 * The bind terminal operation is required to instruct CCR that all the bind

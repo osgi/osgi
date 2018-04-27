@@ -39,7 +39,8 @@ public interface BindServiceReference<S> {
 	 * <p>
 	 * Only the last <em>adding</em> action is used.
 	 *
-	 * @param action to subscribe to the <em>adding</em> service event
+	 * @param action the action, whose argument is the service reference, to
+	 *                   subscribe to the <em>adding</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -50,18 +51,21 @@ public interface BindServiceReference<S> {
 	 * <p>
 	 * Only the last <em>adding</em> action is used.
 	 *
-	 * @param consumer to subscribe to the <em>adding</em> service event
+	 * @param action the action, whose arguments are the service reference and
+	 *                   the service object, to subscribe to the <em>adding</em>
+	 *                   service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
-	BindServiceReference<S> adding(BiConsumer<ServiceReference<S>,S> consumer);
+	BindServiceReference<S> adding(BiConsumer<ServiceReference<S>,S> action);
 
 	/**
 	 * Subscribe an action to the <em>modified</em> service event.
 	 * <p>
 	 * Only the last <em>modified</em> action is used.
 	 *
-	 * @param action to subscribe to the <em>modified</em> service event
+	 * @param action the action, whose argument is the service reference, to
+	 *                   subscribe to the <em>modified</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
@@ -72,34 +76,39 @@ public interface BindServiceReference<S> {
 	 * <p>
 	 * Only the last <em>modified</em> action is used.
 	 *
-	 * @param consumer to subscribe to the <em>modified</em> service event
+	 * @param action the action, whose arguments are the service reference and
+	 *                   the service object, to subscribe to the
+	 *                   <em>modified</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
 	BindServiceReference<S> modified(
-			BiConsumer<ServiceReference<S>,S> consumer);
+			BiConsumer<ServiceReference<S>,S> action);
 
 	/**
 	 * Subscribe an action to the <em>removed</em> service event.
 	 * <p>
 	 * Only the last <em>removed</em> action is used.
 	 *
-	 * @param consumer to subscribe to the <em>removed</em> service event
+	 * @param action the action, whose argument is the service reference, to
+	 *                   subscribe to the <em>removed</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
-	BindServiceReference<S> removed(Consumer<ServiceReference<S>> consumer);
+	BindServiceReference<S> removed(Consumer<ServiceReference<S>> action);
 
 	/**
 	 * Subscribe an action to the <em>removed</em> service event.
 	 * <p>
 	 * Only the last <em>removed</em> action is used.
 	 *
-	 * @param consumer to subscribe to the <em>removed</em> service event
+	 * @param action the action, whose arguments are the service reference and
+	 *                   the service object, to subscribe to the
+	 *                   <em>removed</em> service event
 	 * @return self
 	 * @throws IllegalStateException when called after {@link #bind}
 	 */
-	BindServiceReference<S> removed(BiConsumer<ServiceReference<S>,S> consumer);
+	BindServiceReference<S> removed(BiConsumer<ServiceReference<S>,S> action);
 
 	/**
 	 * The bind terminal operation is required to instruct CCR that all the bind

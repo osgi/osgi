@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Qualifier;
 
+import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -19,7 +19,7 @@ import org.osgi.service.event.EventHandler;
 @EventAdminReceiver.Props(event_topics = "com/acme/foo")
 public class EventAdminReceiver implements EventHandler {
 
-	@Qualifier
+	@BeanPropertyType
 	@Retention(RUNTIME)
 	@Target(TYPE)
 	public @interface Props {

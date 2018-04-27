@@ -22,23 +22,27 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 /**
- * Identify the annotated annotation as a Component Property Type.
+ * Identify the annotated annotation as a Bean Property Type.
  * <p>
- * Component Property Type can be applied to beans annotated with
- * {@link SingleComponent} or {@link FactoryComponent}. They can also be applied
- * to methods and fields marked as {@link Produces} where the {@link Service}
- * annotation was used.
+ * Bean Property Type can be applied to beans annotated with
+ * {@link SingleComponent}, {@link FactoryComponent}, to beans annotated with
+ * {@link ApplicationScoped} or {@link Dependent} where the {@link Service}
+ * annotation is applied, to methods and fields marked as {@link Produces} where
+ * the {@link Service} annotation is applied, or to injection points where the
+ * {@link Reference} annotation is applied.
  * <p>
  *
- * @see "Component Property Types."
+ * @see "Bean Property Types."
  * @author $Id$
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
-public @interface ComponentPropertyType {
+public @interface BeanPropertyType {
 	// A meta-annotation
 }
