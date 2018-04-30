@@ -3,7 +3,7 @@
   ":configurator:symbolicname": "org.osgi.test.config.init",
   ":configurator:version": "1.0.0",
   
-  "org.osgi.test.init.pid": 
+  "org.osgi.test.init.pid.file": 
   {
     "foo": "bar"
   }

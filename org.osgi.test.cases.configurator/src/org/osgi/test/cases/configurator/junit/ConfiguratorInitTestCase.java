@@ -22,8 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,14 +34,10 @@ import java.util.StringTokenizer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.test.support.OSGiTestCase;
-import org.osgi.util.tracker.ServiceTracker;
 public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 	private static final String	STORAGEROOT			= "org.osgi.test.cases.configurator.storageroot";
@@ -49,40 +45,10 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 	private static final String	FRAMEWORK_FACTORY	= "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 
 	// in these tests we launch a new Framework each time and check whether the
-	// correct intial configurations are set
-
-	public void testInitialConfig() throws Exception {
-		String pid = "org.osgi.test.init.pid";
-		Map<String,String> launchConfig = new HashMap<>();
-		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-				"org.osgi.service.cm");
-		String config = "{\":configurator:resource-version\": 1,"
-				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
-				+ "\":configurator:version\": \"1.0.0\","
-				+ "\"org.osgi.test.init.pid\":{\"foo\": \"bar\"}}";
-		launchConfig.put("configurator.initial", config);
-
-		Framework framework = startFramework(launchConfig);
-
-		// get Configuration Admin
-		ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configAdminTracker = new ServiceTracker<>(
-				framework.getBundleContext(), ConfigurationAdmin.class, null);
-		configAdminTracker.open();
-		ConfigurationAdmin ca = configAdminTracker.waitForService(5000);
-
-		// check configuration
-		Configuration cfg = readConfig(ca, pid);
-		assertNotNull("There should be a configuration with pid " + pid, cfg);
-		Dictionary<String,Object> props = cfg.getProperties();
-		assertEquals("bar", props.get("foo"));
-		
-		configAdminTracker.close();
-		framework.stop();
-		FrameworkEvent event = framework.waitForStop(10000);
-	}
+	// correct initial configurations are set
 
 	public void testInitialConfigFile() throws Exception {
-		String pid = "org.osgi.test.init.pid";
+		String pid = "org.osgi.test.init.pid.file";
 
 		// write init_config.json to file
 		URL url = getContext().getBundle().getResource("init_config.json");
@@ -98,91 +64,86 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 		// provide file uri as configurator.initial
 		Map<String,String> launchConfig = new HashMap<>();
-		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-				"org.osgi.service.cm");
 		String config = f.toURI().toString();
 		launchConfig.put("configurator.initial", config);
 
 		Framework framework = startFramework(launchConfig);
 
-		// get Configuration Admin
-		ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configAdminTracker = new ServiceTracker<>(
-				framework.getBundleContext(), ConfigurationAdmin.class, null);
-		configAdminTracker.open();
-		ConfigurationAdmin ca = configAdminTracker.waitForService(5000);
+		// check configuration
+		assertTrue("There should be a configuration with pid " + pid,
+				hasConfig(framework, pid));
+
+		framework.stop();
+		framework.waitForStop(10000);
+	}
+
+	public void testInitialConfig() throws Exception {
+		String pid = "org.osgi.test.init.pid1";
+		Map<String,String> launchConfig = new HashMap<>();
+		String config = "{\":configurator:resource-version\": 1,"
+				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
+				+ "\":configurator:version\": \"1.0.0\"," + "\"" + pid
+				+ "\":{\"foo\": \"bar\"}}";
+		launchConfig.put("configurator.initial", config);
+
+		Framework framework = startFramework(launchConfig);
 
 		// check configuration
-		Configuration cfg = readConfig(ca, pid);
-		assertNotNull("There should be a configuration with pid " + pid, cfg);
-		Dictionary<String,Object> props = cfg.getProperties();
-		assertEquals("bar", props.get("foo"));
+		assertTrue("There should be a configuration with pid " + pid,
+				hasConfig(framework, pid));
 
-		configAdminTracker.close();
 		framework.stop();
-		FrameworkEvent event = framework.waitForStop(10000);
+		framework.waitForStop(10000);
 	}
 
 	public void testInitialConfigRequiresVersion() throws Exception {
-		String pid = "org.osgi.test.init.pid";
+		String pid = "org.osgi.test.init.pid2";
 		Map<String,String> launchConfig = new HashMap<>();
-		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-				"org.osgi.service.cm");
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
-				+ "\"org.osgi.test.init.pid\":{\"foo\": \"bar\"}}";
+				+ "\"" + pid + "\":{\"foo\": \"bar\"}}";
 		launchConfig.put("configurator.initial", config);
 
 		Framework framework = startFramework(launchConfig);
 
-		// get Configuration Admin
-		ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configAdminTracker = new ServiceTracker<>(
-				framework.getBundleContext(), ConfigurationAdmin.class, null);
-		configAdminTracker.open();
-		ConfigurationAdmin ca = configAdminTracker.waitForService(5000);
-
 		// check configuration
-		assertNull("This init config has a missing version",
-				readConfig(ca, pid));
+		assertFalse("This init config has a missing version",
+				hasConfig(framework, pid));
 
-		configAdminTracker.close();
 		framework.stop();
-		FrameworkEvent event = framework.waitForStop(10000);
+		framework.waitForStop(10000);
 	}
 
 	public void testInitialConfigRequiresSymbolicname() throws Exception {
-		String pid = "org.osgi.test.init.pid";
+		String pid = "org.osgi.test.init.pid3";
 		Map<String,String> launchConfig = new HashMap<>();
-		launchConfig.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-				"org.osgi.service.cm");
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:version\": \"1.0.0\","
-				+ "\"org.osgi.test.init.pid\":{\"foo\": \"bar\"}}";
+				+ "\"" + pid + "\":{\"foo\": \"bar\"}}";
 		launchConfig.put("configurator.initial", config);
 
 		Framework framework = startFramework(launchConfig);
 
-		// get Configuration Admin
-		ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configAdminTracker = new ServiceTracker<>(
-				framework.getBundleContext(), ConfigurationAdmin.class, null);
-		configAdminTracker.open();
-		ConfigurationAdmin ca = configAdminTracker.waitForService(5000);
-
 		// check configuration
-		assertNull("This init config has a missing symblicname",
-				readConfig(ca, pid));
+		assertFalse("This init config has a missing symblicname",
+				hasConfig(framework, pid));
 
-		configAdminTracker.close();
 		framework.stop();
-		FrameworkEvent event = framework.waitForStop(10000);
+		framework.waitForStop(10000);
 	}
 
-	private Configuration readConfig(ConfigurationAdmin configAdmin, String pid)
-			throws IOException, InvalidSyntaxException {
-		Configuration[] configs = configAdmin.listConfigurations(
+	private boolean hasConfig(Framework framework, String pid)
+			throws Exception {
+		ServiceReference< ? >[] refs = framework.getBundleContext()
+				.getAllServiceReferences(null,
+						"(objectClass=org.osgi.service.cm.ConfigurationAdmin)");
+
+		Object configAdmin = framework.getBundleContext().getService(refs[0]);
+		Method listConfigs = configAdmin.getClass()
+				.getMethod("listConfigurations", String.class);
+		Object configs = listConfigs.invoke(configAdmin,
 				"(" + Constants.SERVICE_PID + "=" + pid + ")");
-		if (configs == null)
-			return null;
-		return configs[0];
+		return configs != null;
 	}
 
 	private Framework startFramework(Map<String,String> configuration)
