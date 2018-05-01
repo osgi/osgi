@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import aQute.bnd.build.Container;
+import aQute.bnd.build.Container.TYPE;
 import aQute.bnd.build.Project;
 import aQute.bnd.build.ProjectBuilder;
 import aQute.bnd.build.Workspace;
@@ -249,6 +250,41 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				project.lastModified());
 		jar.putResource(project.getName() + ".bnd", r);
 
+	}
+
+	@Override
+	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
+			Container container, boolean store, Map<String,String> fileToPath)
+			throws Exception {
+		if (container.getType() == TYPE.REPO) {
+			switch (container.getBundleSymbolicName()) {
+				case "biz.aQute.junit" :
+				case "biz.aQute.tester" :
+				case "biz.aQute.launcher" :
+					if (sb != null) {
+						sb.append("\\\n    ");
+						sb.append(container.getBundleSymbolicName());
+						sb.append(";version=latest");
+						for (Map.Entry<String,String> entry : container
+								.getAttributes()
+								.entrySet()) {
+							if (!entry.getKey().equals("version")) {
+								sb.append(";");
+								sb.append(entry.getKey());
+								sb.append("=\"");
+								sb.append(entry.getValue());
+								sb.append("\"");
+							}
+						}
+						sb.append(", ");
+					}
+					return;
+				default :
+					break;
+			}
+		}
+
+		super.flatten(analyzer, sb, jar, container, store, fileToPath);
 	}
 
 	private String replacePaths(Analyzer analyzer, Jar jar,
