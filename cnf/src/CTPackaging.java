@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,6 @@ import aQute.libg.generics.Create;
  */
 
 public class CTPackaging extends Packaging implements AnalyzerPlugin {
-
 	private final static String	PACK	= "-ctpack";
 	private final static String	TESTER	= "-tester";
 
@@ -154,7 +154,8 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			Collection<Container> sharedRunpath, Map<String,String> fileToPath)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
-		Collection<Container> runbundles = project.getRunbundles();
+		Collection<Container> runbundles = new LinkedHashSet<>(
+				project.getRunbundles());
 		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
 		String runsystempackages = project
 				.getProperty(Constants.RUNSYSTEMPACKAGES);
