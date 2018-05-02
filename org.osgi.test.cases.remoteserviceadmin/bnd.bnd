@@ -42,7 +42,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.http;               version=latest, \
 	org.osgi.impl.service.remoteserviceadmin; version=latest
 
--runvm = -Xmx512m, -XX:MaxPermSize=350m
+-runvm = -Xmx512m
 
 -runproperties = ${runproperties}, \
 	rsa.ct.timeout=30000,\
