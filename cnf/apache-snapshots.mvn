@@ -17,8 +17,6 @@ org.apache.aries.tx-control:tx-control-provider-jdbc-xa:1.0.0-SNAPSHOT
 org.apache.aries.tx-control:tx-control-provider-jpa-xa:1.0.0-SNAPSHOT
 org.apache.aries.tx-control:tx-control-service-xa:1.0.0-SNAPSHOT
 
-org.apache.felix:org.apache.felix.configurator:0.0.1-SNAPSHOT
-
 org.apache.aries.rsa:org.apache.aries.rsa.core:1.12.0-SNAPSHOT
 org.apache.aries.rsa:org.apache.aries.rsa.spi:1.12.0-SNAPSHOT
 org.apache.aries.rsa:org.apache.aries.rsa.topology-manager:1.12.0-SNAPSHOT
