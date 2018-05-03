@@ -1063,10 +1063,17 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   private String getTextValue(Element ele, String tagName) {
     String textVal = null;
     NodeList nl = ele.getElementsByTagName(tagName);
-    if (nl != null && nl.getLength() > 0) {
-      Element el = (Element)nl.item(0);
-      textVal = el.getFirstChild().getNodeValue();
-    }
+		if (nl == null) {
+			return textVal;
+		}
+		int len = nl.getLength();
+		for (int i = 0; i < len; i++) {
+			Element el = (Element) nl.item(i);
+			if (ele.isSameNode(el.getParentNode())) {
+				textVal = getTextValue(el);
+				break;
+			}
+		}
 
     return textVal;
   }
