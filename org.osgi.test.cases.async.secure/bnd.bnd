@@ -19,6 +19,7 @@ Include-Resource					= \
 	${junit}
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.async; version=latest
 
 -runproperties = ${runsecureproperties}

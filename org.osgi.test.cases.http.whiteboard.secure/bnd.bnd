@@ -29,6 +29,7 @@ Include-Resource					= \
 	${junit}
 
 -runbundles						= \
+    ${junit},\
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runsecureproperties}, \

@@ -35,6 +35,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \
@@ -50,7 +51,7 @@ Test-Cases							= ${testcases}
 	configurator.initial='{":configurator:resource-version": 1, ":configurator:version":"1", ":configurator:symbolic-name":"dummy", "org.apache.aries.rsa.discovery.zookeeper" : {}, "org.apache.aries.rsa.discovery.zookeeper.server" : {}}',\
 	server.configurator.initial='{":configurator:resource-version": 1, ":configurator:version":"1", ":configurator:symbolic-name":"dummy", "org.apache.aries.rsa.discovery.zookeeper" : {}}',\
 	${p}.framework.properties="", \
-	${p}.system.packages.extra="${junit.package}", \
+	${p}.system.packages.extra="", \
     ${p}.serverconfig="service.exported.configs", \
     service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo;biz.aQute.junit;latest},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"

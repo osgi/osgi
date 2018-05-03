@@ -34,6 +34,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \
@@ -46,8 +47,8 @@ Test-Cases							= ${testcases}
 -runproperties = ${runsecureproperties}, \
 	rsa.ct.timeout=300000,\
 	rsa.ct.timeout.factor=3,\
-    	${p}.framework.properties="", \
-	${p}.system.packages.extra="${junit.package}", \
+    ${p}.framework.properties="", \
+	${p}.system.packages.extra="", \
     ${p}.serverconfig="service.exported.configs", \
     service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo;biz.aQute.junit;latest},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"

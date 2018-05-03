@@ -20,9 +20,9 @@ Test-Cases							= ${testcases}
 	org.osgi.service.log;version=latest
 
 
--runbundles							= \
-	
--runframework = none
+-runbundles:
+-runframework: none
+-tester: ${junit}
 
 -runproperties = ${runproperties}, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \

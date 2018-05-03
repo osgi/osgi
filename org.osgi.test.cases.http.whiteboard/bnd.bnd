@@ -30,6 +30,7 @@ Export-Package: ${p}.junit.mock
 	${junit}
 
 -runbundles						= \
+    ${junit},\
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runproperties}, \

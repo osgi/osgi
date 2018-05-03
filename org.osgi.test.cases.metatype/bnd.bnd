@@ -7,7 +7,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
-	
+
 Include-Resource					= \
 	tb1.jar, \
 	tb1-r6.jar, \
@@ -31,8 +31,9 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest
-	
+
 -runproperties = ${runproperties}

@@ -19,7 +19,6 @@ Test-Cases			= ${testcases}
  org.osgi.service.zigbee.descriptions, \
  org.osgi.service.zigbee.descriptors, \
  org.osgi.service.zigbee.types
- 
 
 -buildpath: \
 	com.icl.saxon;version=latest,\
@@ -32,6 +31,7 @@ Test-Cases			= ${testcases}
 	${junit}
 
 -runbundles: \
+    ${junit},\
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\

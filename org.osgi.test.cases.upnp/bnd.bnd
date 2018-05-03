@@ -7,7 +7,7 @@ Private-Package						=  \
 Import-Package: ${-signaturetest}, *
 
 Include-Resource: 
-	
+
 -buildpath							= \
     org.osgi.test.support;          version=project , \
 	org.osgi.service.upnp;			version=project	, \
@@ -17,6 +17,7 @@ Include-Resource:
 	${junit}
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.service.upnp.cd; version=latest, \

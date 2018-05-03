@@ -41,9 +41,9 @@ Test-Cases							= ${testcases}
 	osgi.cmpn;								version=4.3.1	, \
 	${junit}
 
--runbundles							= \
-	
--runframework = none
+-runbundles:
+-runframework: none
+-tester: ${junit}
 
 -runproperties = ${runproperties}, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \

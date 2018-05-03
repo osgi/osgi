@@ -5,7 +5,7 @@ javac.profile=compact3
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.*
-	
+
 Export-Package						= \
 	${p}.provider, \
 	${p}.provider.ct, \
@@ -40,8 +40,9 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project, \
 	osgi.core; 								version=4.3.1, \
 	${junit}
-	
+
 -runbundles = \
+    ${junit},\
 	org.osgi.impl.service.jndi; version=latest
 
 -runproperties = ${runproperties}, \

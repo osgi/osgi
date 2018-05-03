@@ -21,6 +21,7 @@ Test-Cases = ${testcases}
 	org.easymock
 
 -runbundles: \
+    ${junit},\
 	org.osgi.util.pushstream;version=latest,\
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest

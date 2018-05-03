@@ -23,6 +23,7 @@ Include-Resource: \
     ${junit}
 
 -runbundles                         = \
+    ${junit},\
     org.osgi.impl.service.repository; version=latest
 
 Test-Cases                          = ${testcases}

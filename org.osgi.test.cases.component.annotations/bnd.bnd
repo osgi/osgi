@@ -16,6 +16,7 @@ Private-Package						=  \
 	${junit}
 
 -runbundles = \
+    ${junit},\
     org.osgi.impl.bundle.component.annotations; version=latest, \
     org.osgi.impl.service.component; version=latest, \
     org.osgi.impl.service.cm; version=latest, \
@@ -25,4 +26,3 @@ Private-Package						=  \
 	${p}.bundle.symbolic.name=org.osgi.impl.bundle.component.annotations
 
 Test-Cases							= ${testcases}
-	

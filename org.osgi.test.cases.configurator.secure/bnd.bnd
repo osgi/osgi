@@ -13,8 +13,7 @@ Import-Package: *
 Include-Resource                    = \
    tb1.jar ,\
    tb2.jar
-   
-   
+
 Test-Cases                          = ${testcases}
 
 -buildpath                          = \
@@ -27,10 +26,11 @@ Test-Cases                          = ${testcases}
     ${junit}
 
 -runbundles                         = \
+    ${junit},\
     org.osgi.impl.service.cm; version=latest , \
     org.osgi.impl.service.configurator; version=latest , \
     org.osgi.impl.service.log; version=latest , \
     org.osgi.util.function; version=latest, \
     org.osgi.util.promise; version=latest
-    
+
 -runproperties = ${runsecureproperties}

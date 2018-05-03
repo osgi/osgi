@@ -6,8 +6,7 @@ Private-Package						=  \
 	${p}.junit
 Import-Package: \
 	${-signaturetest},\
-	*,\
-	
+	*
 
 -buildpath: \
 	org.osgi.test.support;version=project,\
@@ -25,6 +24,7 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log.stream
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.log.stream;  version=latest,\
 	org.osgi.impl.service.cm;  version=latest
 

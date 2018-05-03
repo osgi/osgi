@@ -305,6 +305,7 @@ Test-Cases							= ${testcases}
     org.osgi.framework.wiring.dto
 
 -runbundles						= \
+    ${junit},\
 	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \

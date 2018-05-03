@@ -10,12 +10,12 @@ Bundle-Category: osgi,test
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
-	
+
 Include-Resource					= \
 	setallpermission.jar
-	
+
 Import-Package: ${-signaturetest}, *
-	
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.cm
 
@@ -27,12 +27,9 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.coordinator; version=latest
-	
+
 -runproperties = ${runsecureproperties}
-
-
-
-

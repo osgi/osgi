@@ -19,6 +19,7 @@ Include-Resource					= \
 	${junit}
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.async; version=latest
 
 -runproperties = ${runproperties}
@@ -27,5 +28,3 @@ Test-Cases							= ${testcases}
 -signaturetest                      = \
  org.osgi.service.async, \
  org.osgi.service.async.delegate
-	
-	

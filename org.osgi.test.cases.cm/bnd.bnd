@@ -11,7 +11,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit, \
 	${p}.common
-	
+
 Include-Resource					= \
 	tb1.jar, \
 	tb2.jar, \
@@ -24,7 +24,7 @@ Include-Resource					= \
 	bundleT4.jar, \
 	bundleT5.jar, \
 	bundleT6.jar
-	
+
 Export-Package = \
 	${p}.shared;version=1.0.0
 Import-Package: ${-signaturetest}, *
@@ -40,6 +40,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest
 	

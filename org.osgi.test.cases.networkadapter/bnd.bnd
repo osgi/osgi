@@ -18,6 +18,7 @@ Test-Cases							= ${testcases}
 -signaturetest						= org.osgi.service.networkadapter
 
 -runbundles:  \
+    ${junit},\
 	org.osgi.impl.service.networkadapter;version=latest,\
 	org.osgi.impl.service.event;version=latest
 

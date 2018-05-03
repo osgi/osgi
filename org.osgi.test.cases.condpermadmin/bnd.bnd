@@ -30,8 +30,13 @@ Test-Cases							= ${testcases}
 	osgi.core;								version=6.0	, \
 	${junit}
 
--runbundles							= 
+-runbundles:
+# The test case wipes out permissions for all bundles, so we need
+# to place the tester on the classpath rather than being in a bundle.
+-tester: ${junit}
+
 
 -runproperties = ${runsecureproperties}
+
 javac.deprecation=false
 

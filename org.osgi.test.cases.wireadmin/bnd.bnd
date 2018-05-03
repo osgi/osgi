@@ -7,7 +7,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
-	
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.wireadmin
 
@@ -27,10 +27,10 @@ Include-Resource				= \
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
 	org.osgi.impl.service.wireadmin; version=latest
 
 -runproperties = ${runsecureproperties}
-	

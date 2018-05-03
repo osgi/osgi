@@ -5,7 +5,7 @@ javac.profile=compact2
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.*
-	
+
 Import-Package = \
  	javax.transaction;version=1.1, \
 	javax.transaction.xa;version=1.1, \
@@ -22,10 +22,10 @@ Import-Package = \
 	${junit}
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.bundle.transaction; version=latest
 	
 -runproperties					= ${runproperties}, \
     ${p}.waittime=30
 
 Test-Cases							= ${testcases}
-	

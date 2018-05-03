@@ -6,7 +6,7 @@ Conditional-Package                 = org.osgi.test.support.*
 Private-Package                     =  \
     ${p}.junit.*
 Import-Package: ${-signaturetest}, *
-    
+
 Include-Resource                    = \
     tb2.jar
 
@@ -15,9 +15,10 @@ Include-Resource                    = \
     org.osgi.jmx;                   version=project , \
     osgi.core;                      version=4.3.1   , \
     osgi.cmpn;                      version=4.3.1   , \
-    ${junit}    
+    ${junit}
 
 -runbundles                         = \
+    ${junit},\
     org.osgi.impl.bundle.jmx; version=latest, \
     org.osgi.impl.service.log; version=latest, \
     org.osgi.impl.service.cm; version=latest
@@ -26,7 +27,7 @@ Test-Cases                          = ${testcases}
 -signaturetest                      = \
             org.osgi.jmx, \
             org.osgi.jmx.service.cm
-            
+
 -runproperties = ${runproperties}
 #   osgi.console=1111
 

@@ -37,6 +37,7 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest,\
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \

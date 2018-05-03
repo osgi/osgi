@@ -16,6 +16,7 @@ Private-Package						=  \
 	${junit}
 
 -runbundles = \
+    ${junit},\
     org.osgi.impl.bundle.metatype.annotations; version=latest, \
     org.osgi.impl.service.component; version=latest, \
     org.osgi.impl.service.metatype; version=latest, \
@@ -27,4 +28,3 @@ Private-Package						=  \
 	org.osgi.test.testcase.timeout=1000
 
 Test-Cases							= ${testcases}
-	

@@ -163,10 +163,9 @@ Bundle-Developers: osgi; \
 -noextraheaders: true
 -removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
-# For bnd 3.0 to use the old style with junit on the classpath
--tester=biz.aQute.junit
-junit.package			= junit.framework;version=3.8
-junit					= biz.aQute.junit;version=latest;export="${junit.package}"
+junit: biz.aQute.junit;version=latest
+tester: biz.aQute.tester;version=latest
+-tester: ${tester}
 
 -runfw = org.osgi.impl.framework; version=latest
 

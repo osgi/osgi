@@ -15,7 +15,8 @@ Import-Package: ${-signaturetest}, *
 	osgi.core;								version=4.3.1	, \
 	${junit}
 
--runbundles						= 
+-runbundles						= \
+    ${junit}
 
 -runproperties					= ${runsecureproperties}
 

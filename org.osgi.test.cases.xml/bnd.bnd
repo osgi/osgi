@@ -15,7 +15,7 @@ Include-Resource = \
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar
-	
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.util.xml
 
@@ -26,6 +26,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
     org.osgi.util.xml; version=latest
 
 -runproperties = ${runproperties}

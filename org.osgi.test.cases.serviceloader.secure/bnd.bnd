@@ -31,6 +31,7 @@ Include-Resource                    = \
 	${junit}	
 
 -runbundles = \
+    ${junit},\
 	org.osgi.impl.bundle.serviceloader;version=latest
 
 Test-Cases							= ${testcases}

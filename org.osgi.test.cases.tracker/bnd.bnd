@@ -13,7 +13,8 @@ Export-Package						= ${p}.service
 	org.osgi.test.support;					version=project, \
 	${junit}
 	
--runbundles							= 
+-runbundles							= \
+    ${junit}
 
 -runproperties						= ${runproperties}
 

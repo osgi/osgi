@@ -61,6 +61,7 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.deploymentadmin; 			version=latest, \
 	org.osgi.impl.service.log; 						version=latest,\
 	org.osgi.impl.service.event;  					version=latest, \

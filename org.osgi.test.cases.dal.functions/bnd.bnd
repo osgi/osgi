@@ -23,6 +23,7 @@ Test-Cases		= \
 	${junit}
 
 -runbundles		= \
+    ${junit},\
 	org.osgi.impl.service.dal; 		version=latest, \
 	org.osgi.impl.service.dal.step;	version=latest, \
 	org.osgi.impl.service.event;	version=latest

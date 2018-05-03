@@ -19,14 +19,13 @@ Export-Package: org.osgi.service.transaction.control, \
 	${junit}
 
 -runbundles						= \
+    ${junit},\
     org.osgi.service.jdbc; version=latest, \
     org.h2; version="[1.4.193,2)", \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest
-	
 
 -runproperties = ${runproperties}
 
 Test-Cases							= ${testcases}
-	
-	
+
 -signaturetest                      = org.osgi.service.transaction.control.jdbc

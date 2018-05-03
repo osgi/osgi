@@ -71,6 +71,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	
+    ${junit}
 
 -runproperties = ${runsecureproperties}

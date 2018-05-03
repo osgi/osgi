@@ -35,6 +35,7 @@ DynamicImport-Package: javax.servlet.*
 	org.osgi.namespace.contract;version=latest
 
 -runbundles                     = \
+    ${junit},\
     org.osgi.impl.service.cm;                   version=latest,\
     org.osgi.util.function;version=latest,\
     org.osgi.util.promise;version=latest,\

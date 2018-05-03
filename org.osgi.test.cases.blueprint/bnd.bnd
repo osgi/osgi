@@ -397,7 +397,7 @@ Include-Resource					= \
     www/reference_list_import.jar=reference_list_import.jar , \
     www/reference_list_service_import.jar=reference_list_service_import.jar , \
     www/pattern_injection.jar=pattern_injection.jar
- 	
+
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.blueprint.container, org.osgi.service.blueprint.reflect
@@ -410,11 +410,12 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event; version=latest, \
     org.osgi.impl.service.blueprint; version=latest
-    
+
 -runproperties = ${runproperties}, \
  osgi.compatibility.trigger.lazyActivation.onFailedClassLoad=true
-   
+

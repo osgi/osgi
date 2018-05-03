@@ -44,17 +44,18 @@ Include-Resource 					= \
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.contract;version=latest,\
 	org.osgi.resource;version=latest
-	
+
 # If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
 # Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
+    ${junit},\
 	org.osgi.service.jdbc; version=latest, \
 	org.h2; version="[1.4.193,2)", \
 	org.osgi.impl.service.jpa; version=latest
-		
+
 -runproperties					= ${runproperties}
 
 Test-Cases							= ${testcases}
 
 -signaturetest                      = org.osgi.service.jpa
-	
+

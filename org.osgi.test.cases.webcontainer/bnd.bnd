@@ -4,7 +4,7 @@
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
   (*).(war);                             type=bnd;  recipe="bnd/$1.bnd"
-  
+
 Bundle-Description: OSGi Web Application Specification Compliance Test
 
 Private-Package						= org.osgi.test.support.*, \
@@ -26,16 +26,16 @@ Include-Resource					= \
 	wm3tw5.war, \
 	util.jar, \
 	eventHandler.jar
-	
+
 Import-Package = \
 	javax.servlet; version=2.5, \
 	javax.servlet.http; version=2.5, \
  	*
- 	
+
 Export-Package =\
 	${p}.util;version=1.0, \
 	${p}.util.validate;version=1.0
-	
+
 -buildpath = \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.1_spec; version=latest, \
@@ -43,12 +43,13 @@ Export-Package =\
 	osgi.cmpn; 									version=4.3.1, \
 	org.osgi.test.support;						version=project, \
 	${junit}
-	
+
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.cm; 			version=latest, \
 	org.osgi.impl.service.event; 		version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
-	
+
 -runproperties = ${runproperties}, \
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \

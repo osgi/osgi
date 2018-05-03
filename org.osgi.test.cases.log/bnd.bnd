@@ -20,6 +20,7 @@ Test-Cases							= ${testcases}
     org.osgi.service.log.admin
 
 -runbundles						= \
+    ${junit},\
 	org.osgi.impl.service.log;  version=latest,\
 	org.osgi.impl.service.cm;  version=latest
 

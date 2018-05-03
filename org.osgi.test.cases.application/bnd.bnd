@@ -14,7 +14,7 @@ Include-Resource					= \
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar
-	
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.application, org.osgi.service.application
 
@@ -30,6 +30,7 @@ Test-Cases							= ${testcases}
 # org.osgi.service.application classes must be able to load the 
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.service.application; version=latest, \
 	org.osgi.impl.bundle.midletcontainer; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
@@ -45,4 +46,4 @@ Test-Cases							= ${testcases}
 	org.osgi.vendor.application=org.osgi.impl.service.application, \
 	org.osgi.vendor.application.ApplicationDescriptor=org.osgi.impl.service.application.ApplicationDescriptorImpl, \
 	org.osgi.vendor.application.ApplicationHandle=org.osgi.impl.service.application.ApplicationHandleImpl
-	
+

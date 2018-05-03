@@ -41,6 +41,7 @@ javac.profile=
 	${junit}
 
 -runbundles							= \
+    ${junit},\
 	org.osgi.impl.bundle.cdi;               version=latest
 
 -runproperties = \
