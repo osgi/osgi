@@ -8,12 +8,12 @@
  */
 package org.osgi.test.cases.rest.junit;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
@@ -27,9 +27,11 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -41,6 +43,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -1016,31 +1019,40 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     if (is != null) {
       InputStream data = validate(is);
       Document document = getDocumentBuilder().parse(data);
+			if (debugOn) {
+				printDocument(document, System.out);
+			}
       return document.getDocumentElement();
     }
 
     return null;
   }
 
+	public static void printDocument(Document doc, OutputStream out)
+			throws IOException {
+		try {
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+					"no");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.setOutputProperty(
+					"{http://xml.apache.org/xslt}indent-amount", "4");
+
+			transformer.transform(new DOMSource(doc),
+					new StreamResult(new OutputStreamWriter(out, "UTF-8")));
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+	}
+
   protected InputStream validate(InputStream data) throws SAXException, IOException {
     if (validateXMLRepresentations) {
       byte[] byteArrCopy = toByteArray(data);
       Source source = new StreamSource(new ByteArrayInputStream(byteArrCopy));
       validator.validate(source);
-
-      return new ByteArrayInputStream(byteArrCopy);
-    }
-
-    if (debugOn) {
-      byte[] byteArrCopy = toByteArray(data);
-      BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(byteArrCopy)));
-
-      String temp = null;
-      StringBuilder sb = new StringBuilder();
-      while ((temp = br.readLine()) != null) {
-        sb.append(temp);
-      }
-      System.out.println("xml:" + sb.toString());
 
       return new ByteArrayInputStream(byteArrCopy);
     }
