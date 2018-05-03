@@ -135,7 +135,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		File f = c.getFile();
 		if (f != null) {
 			if (name == null) {
-				name = canonicalName(analyzer, f);
+				name = new BundleInfo(analyzer, f).canonicalName();
 			}
 			jar.putResource("jar/" + name, new FileResource(f));
 		} else {
@@ -294,14 +294,26 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		List<String> result = Create.list();
 		for (String path : paths) {
 			File f = analyzer.getFile(path);
+			boolean storeFile = store;
 			if (f.isAbsolute() && f.exists()
 					&& !f.getPath().contains(analyzer.getProperty("target"))) {
 				f = f.getCanonicalFile();
 				path = fileToPath.get(f.getAbsolutePath());
 				if (path == null) {
 					if (f.getName().endsWith(".jar")) {
-						path = "jar/" + canonicalName(analyzer, f);
-						fileToPath.put(f.getAbsolutePath(), path);
+						BundleInfo info = new BundleInfo(analyzer, f);
+						switch (info.bsn) {
+							case "biz.aQute.junit" :
+							case "biz.aQute.tester" :
+							case "biz.aQute.launcher" :
+								path = "${repo;" + info.bsn + ";latest}";
+								storeFile = false;
+								break;
+							default :
+								path = "jar/" + info.canonicalName();
+								fileToPath.put(f.getAbsolutePath(), path);
+								break;
+						}
 					} else {
 						path = "property-resources/" + f.getName();
 
@@ -314,15 +326,12 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 						fileToPath.put(f.getAbsolutePath(), path);
 					}
 				}
-				if (store && (jar.getResource(path) == null)) {
+				if (storeFile && (jar.getResource(path) == null)) {
 					if (f.isFile()) {
 						jar.putResource(path, new FileResource(f));
 					} else {
-						Jar j = new Jar(f);
-						try {
+						try (Jar j = new Jar(f)) {
 							jar.addAll(j, null, path);
-						} finally {
-							j.close();
 						}
 					}
 				}
