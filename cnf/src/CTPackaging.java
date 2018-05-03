@@ -213,14 +213,13 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			String key = entry.getKey();
 			String value = entry.getValue();
 			sb.append(key);
-			sb.append("=");
+			sb.append("='");
 
 			value = replacePaths(analyzer, jar, fileToPath, value,
 					key.endsWith(".bundles") == false);
 
-			sb.append("\"");
-			sb.append(value);
-			sb.append("\"");
+			escapeSingleQuotes(sb, value);
+			sb.append('\'');
 		}
 
 		if (runsystempackages != null) {
@@ -271,9 +270,9 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 							if (!entry.getKey().equals("version")) {
 								sb.append(";");
 								sb.append(entry.getKey());
-								sb.append("=\"");
-								sb.append(entry.getValue());
-								sb.append("\"");
+								sb.append("='");
+								escapeSingleQuotes(sb, entry.getValue());
+								sb.append('\'');
 							}
 						}
 						sb.append(", ");
@@ -379,5 +378,16 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				"# See the License for the specific language governing permissions and\n");
 		sb.append("# limitations under the License.\n");
 		sb.append("\n");
+	}
+
+	private void escapeSingleQuotes(StringBuilder sb, String value) {
+		int i = sb.length();
+		sb.append(value);
+		for (; i < sb.length(); i++) {
+			if (sb.charAt(i) == '\'') {
+				sb.insert(i, "\\\\\\");
+				i += 3;
+			}
+		}
 	}
 }
