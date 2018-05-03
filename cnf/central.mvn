@@ -67,6 +67,10 @@ org.apache.aries.jpa:org.apache.aries.jpa.container:2.7.0
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.7.0
 org.apache.aries.jpa.javax.persistence:javax.persistence_2.1:2.7.0
 
+org.apache.aries.tx-control:tx-control-provider-jdbc-xa:1.0.0
+org.apache.aries.tx-control:tx-control-provider-jpa-xa:1.0.0
+org.apache.aries.tx-control:tx-control-service-xa:1.0.0
+
 org.jboss.classfilewriter:jboss-classfilewriter:1.2.1.Final
 org.jboss.logging:jboss-logging:3.2.1.Final
 org.jboss.weld:weld-osgi-bundle:3.0.2.Final
