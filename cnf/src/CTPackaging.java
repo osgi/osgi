@@ -38,27 +38,25 @@ import aQute.libg.generics.Create;
  */
 
 public class CTPackaging extends Packaging implements AnalyzerPlugin {
-	private final static String	PACK	= "-ctpack";
-	private final static String	TESTER	= "-tester";
+	private final static String	CTPACK	= "-ctpack";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
 		if (!(analyzer instanceof ProjectBuilder))
 			return false;
 
 		// Make sure -ctpack is set in the actual file or one of its includes
-		if (!analyzer.getProperties().containsKey(PACK))
+		String ctpack = analyzer.getProperty(CTPACK);
+		if (ctpack == null)
 			return false;
 
 		Map<String,String> fileToPath = Create.map();
 
-		ProjectBuilder pb = (ProjectBuilder) analyzer;
-		Project us = pb.getProject();
+		Project us = ((ProjectBuilder) analyzer).getProject();
 		Workspace workspace = us.getWorkspace();
 		Jar jar = analyzer.getJar();
 
 		// For each param listed ...
-		String pack = analyzer.getProperty(PACK);
-		Parameters params = pb.parseHeader(pack);
+		Parameters params = analyzer.parseHeader(ctpack);
 		if (params.isEmpty()) {
 			analyzer.warning("No items to pack");
 			return false;
@@ -75,16 +73,15 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		sb.append(" = ");
 		flatten(analyzer, sb, jar, runfw, false, fileToPath);
 		if (!runpath.isEmpty()) {
-			sb.append("\n");
-			sb.append("\n");
+			sb.append("\n\n");
 			sb.append(Constants.RUNPATH);
 			sb.append(" = ");
 			flatten(analyzer, sb, jar, runpath, false, fileToPath);
 		}
 		sb.append("\n\n-runtrace = true\n\n");
-		String tester = analyzer.getProperty(TESTER);
+		String tester = analyzer.getProperty(Constants.TESTER);
 		if (tester != null) {
-			sb.append(TESTER);
+			sb.append(Constants.TESTER);
 			sb.append(" = ");
 			sb.append(tester);
 			sb.append("\n\n");
@@ -162,6 +159,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				.getProperty(Constants.RUNSYSTEMPACKAGES);
 		String runframework = project.getProperty(Constants.RUNFRAMEWORK);
 		String runvm = project.getProperty(Constants.RUNVM);
+		String tester = project.getProperty(Constants.TESTER);
 		StringBuilder sb = new StringBuilder();
 		addNotice(sb);
 
@@ -232,7 +230,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		if (runframework != null) {
 			sb.append("\n\n");
 			sb.append(Constants.RUNFRAMEWORK);
-			sb.append(" = \\\n    ");
+			sb.append(" = ");
 			sb.append(runframework);
 		}
 
@@ -241,6 +239,13 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append(Constants.RUNVM);
 			sb.append(" = \\\n    ");
 			sb.append(runvm);
+		}
+
+		if (tester != null) {
+			sb.append("\n\n");
+			sb.append(Constants.TESTER);
+			sb.append(" = ");
+			sb.append(tester);
 		}
 
 		sb.append("\n\n\n\n");

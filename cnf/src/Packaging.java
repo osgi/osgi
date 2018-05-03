@@ -29,7 +29,6 @@ import aQute.libg.generics.Create;
  */
 
 public class Packaging implements AnalyzerPlugin {
-
 	private final static String PACK = "-pack";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
@@ -37,12 +36,12 @@ public class Packaging implements AnalyzerPlugin {
 			return false;
 
 		// Make sure -pack is set in the actual file or one of its includes
-		if (!analyzer.getProperties().containsKey(PACK))
+		String pack = analyzer.getProperty(PACK);
+		if (pack == null)
 			return false;
 
 		Map<String,String> fileToPath = Create.map();
 
-		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 		Workspace workspace = pb.getProject().getWorkspace();
 		Jar jar = analyzer.getJar();
