@@ -49,9 +49,8 @@ Include-Resource 					= \
 # Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
     ${junit},\
-	org.osgi.service.jdbc; version=latest, \
-	org.h2; version="[1.4.193,2)", \
-	org.osgi.impl.service.jpa; version=latest
+	org.osgi.impl.service.jpa; version=latest, \
+    org.osgi.impl.service.jdbc.support; version=latest
 
 -runproperties					= ${runproperties}
 

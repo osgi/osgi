@@ -15,8 +15,7 @@ build.core.tests = \
     org.osgi.test.cases.tracker
 
 jar.cmpn.tests = \
-    ${repo;org.osgi.service.jdbc;latest}, \
-    ${repo;org.h2;1.4.193}, \
+    ${repo;org.osgi.impl.service.jdbc.support;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.test.filter;latest}
 
@@ -89,8 +88,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.xml
 
 jar.enterprise.tests = \
-    ${repo;org.osgi.service.jdbc;latest}, \
-    ${repo;org.h2;1.4.193}, \
+    ${repo;org.osgi.impl.service.jdbc.support;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.test.filter;latest}
 

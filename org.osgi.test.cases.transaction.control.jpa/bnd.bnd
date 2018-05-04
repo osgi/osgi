@@ -25,12 +25,9 @@ Private-Package						=  \
 -runbundles						= \
     ${junit},\
     org.osgi.impl.service.jpa; version=latest, \
-    org.osgi.service.jdbc; version=latest, \
-    org.osgi.service.jpa; version=latest, \
-    org.osgi.service.transaction.control; version=latest, \
-    org.h2; version="[1.4.193,2)", \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest,\
-	org.osgi.impl.service.transaction.control.jpa; version=latest
+	org.osgi.impl.service.transaction.control.jpa; version=latest, \
+    org.osgi.impl.service.jdbc.support; version=latest
 
 -runproperties = ${runproperties}
 

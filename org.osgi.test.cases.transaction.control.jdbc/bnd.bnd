@@ -20,9 +20,8 @@ Export-Package: org.osgi.service.transaction.control, \
 
 -runbundles						= \
     ${junit},\
-    org.osgi.service.jdbc; version=latest, \
-    org.h2; version="[1.4.193,2)", \
-	org.osgi.impl.service.transaction.control.jdbc; version=latest
+	org.osgi.impl.service.transaction.control.jdbc; version=latest, \
+    org.osgi.impl.service.jdbc.support; version=latest
 
 -runproperties = ${runproperties}
 
