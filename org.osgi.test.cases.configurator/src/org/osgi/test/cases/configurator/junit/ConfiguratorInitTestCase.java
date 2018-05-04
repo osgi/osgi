@@ -81,7 +81,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 		String pid = "org.osgi.test.init.pid1";
 		Map<String,String> launchConfig = new HashMap<>();
 		String config = "{\":configurator:resource-version\": 1,"
-				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
+				+ "\":configurator:symbolic-name\": \"org.osgi.test.config.init\","
 				+ "\":configurator:version\": \"1.0.0\"," + "\"" + pid
 				+ "\":{\"foo\": \"bar\"}}";
 		launchConfig.put("configurator.initial", config);
@@ -100,7 +100,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 		String pid = "org.osgi.test.init.pid2";
 		Map<String,String> launchConfig = new HashMap<>();
 		String config = "{\":configurator:resource-version\": 1,"
-				+ "\":configurator:symbolicname\": \"org.osgi.test.config.init\","
+				+ "\":configurator:symbolic-name\": \"org.osgi.test.config.init\","
 				+ "\"" + pid + "\":{\"foo\": \"bar\"}}";
 		launchConfig.put("configurator.initial", config);
 
