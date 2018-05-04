@@ -1,4 +1,5 @@
 tx-control-provider-jpa-xa;    version=1.0.0
+org.osgi.service.transaction.control; version=latest
 org.osgi.impl.service.cm; version=latest
 
 slf4j.api;  version=1.7.7
