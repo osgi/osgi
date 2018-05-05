@@ -64,8 +64,9 @@ Test-Cases							= ${testcases}
 	osgi.cmpn;         						version=5.0 , \
 	${junit}
 
+-tester: ${junit}
+
 -runbundles = \
-    ${junit},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.coordinator; version=latest, \
