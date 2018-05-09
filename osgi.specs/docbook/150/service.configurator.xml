@@ -199,7 +199,7 @@
             </row>
 
             <row>
-              <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
+              <entry><para><code>:configurator:</code></para><para><code>&#160;symbolic-name</code></para></entry>
 
               <entry>String</entry>
 
@@ -1116,7 +1116,7 @@ Resource in Bundle B:
         <para>An <code>osgi.identity</code> capability. This capability
         requires that each resource define a symbolic name and version. These
         can be obtained from the mandatory
-        <code>:configurator:symbolicname</code> and
+        <code>:configurator:symbolic-name</code> and
         <code>:configurator:version</code> keys in the configuration resource.
         As <code>type</code> attribute the string
         <code>osgi.configuration</code> must be used.</para>
