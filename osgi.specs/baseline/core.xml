@@ -997,27 +997,6 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       Specification</title><biblioid class="uri"><link xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="framework.numbered.lists" xrefstyle="template:%t"/> to specify the
-        <emphasis>happens-before</emphasis> relationship between items in
-        numbered lists.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="org.osgi.annotation.bundle" xrefstyle="template:%t"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="service.resolver" xrefstyle="template:%t"/> moved
-        to Core from OSGi Compendium, Chapter 136.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="2" revision="$Id: 85f7762af9f5905599f758a3c0db684ef7b6a704 $" version="5" xml:id="framework.security" xml:base="002/framework.security.xml">
@@ -2028,25 +2007,6 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
       Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Updated references to current URLs.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed MD5 and added SHA-256 digest algorithms.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added Package Permission <code>IMPORT</code> for
-        <code>java.*</code> to the implied permissions. See <xref linkend="framework.security.impliedpermissions"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -7646,62 +7606,6 @@ URL(String protocol, String host, String file)</programlisting>
       File</title><biblioid class="uri"><link xlink:href="https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Updated <xref linkend="framework.module-bundle-license"/> to
-        recommend using license identifiers from <xref linkend="framework.module-spdx.license.list"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.module-bundle-developers"/> to
-        hold information about the bundle's developers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.module-bundle-scm"/> to hold
-        information about the bundle's software configuration management
-        system.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated to reference the new bundle annotations in <xref linkend="org.osgi.annotation.bundle"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed specification for bootclasspath extension
-        bundles.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added FrameworkEvent type STOPPED_SYSTEM_REFRESHED.</para>
-      </listitem>
-
-      <listitem>
-        <para>Allow extension bundles to specify package and capability
-        requirements.</para>
-      </listitem>
-
-      <listitem>
-        <para>Mandate support for dynamically resolving extension
-        bundles.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for multi-release JARs. See <xref linkend="framework.module-multireleasejar"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Bundles may now import java.* packages to ensure the Java
-        platform provides the required java.* packages. See <xref linkend="framework.module-execution.environment"/>. Importing a java.*
-        package only affects bundle resolution and wiring. Classes in java.*
-        packages are always loaded from the parent class loader. See <xref linkend="framework.module.parentdelegation"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="4" revision="$Id: 8f02967b6c4282a1a3a638b4b19fe4e374eba5a8 $" version="5" xml:id="framework.lifecycle" xml:base="004/framework.lifecycle.xml">
@@ -11496,21 +11400,6 @@ D: Export-Package: s</programlisting>
       Namespace</title><biblioid class="uri"><link xlink:href="http://www.ietf.org/rfc/rfc4122.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Launching property <code>org.osgi.framework.storage</code> must
-        be set when default value used.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for multi-release JARs. See <xref linkend="framework.lifecycle-lastmodified"/> and <xref linkend="framework.lifecycle-getheaders"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="5" revision="$Id: e4fb2ec377829d4d5d3abf8ffa23e8c8919e9f3b $" version="5" xml:id="framework.service" xml:base="005/framework.service.xml">
@@ -13074,17 +12963,6 @@ D: Export-Package: s</programlisting>
       not have permission to access.</para>
     </section>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Updated <xref linkend="framework.service.prototypeServiceFactory"/> to specify that
-        customized service objects must be use counted.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="6" revision="$Id: 03e755c936175fbc5f2d227469003acda31a6cf9 $" version="5" xml:id="framework.resource" xml:base="006/framework.resource.xml">
@@ -14295,16 +14173,6 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <itemizedlist>
       <listitem>
         <para><code>RESOLVE</code> (for the system bundle) - For <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-" xrefstyle="hyperlink"/> and <xref linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-" xrefstyle="hyperlink"/></para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for multi-release JARs. See <xref linkend="framework.wiring-bundleclasspathorder"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -15636,23 +15504,6 @@ Bundle B:
       <bibliomixed xml:id="i1775657"><title>Specification
       References</title><biblioid class="uri"><link xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <code>osgi.ee</code> capability names for Java SE Embedded
-        compact profiles in <xref linkend="framework.namespaces.osgi.ee"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <code>osgi.ee</code> description to indicate that
-        bundles should import the java.* packages they require to ensure the
-        runtime provides them.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -44299,20 +44150,6 @@ The identifier of the resource associated with the wiring node.
       Object</title><biblioid class="uri"><link xlink:href="https://en.wikipedia.org/wiki/Data_transfer_object"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for enums and Version fields in DTOs.</para>
-      </listitem>
-
-      <listitem>
-        <para>A new DTO for the complete framework wiring, <xref linkend="org.osgi.framework.wiring.dto.FrameworkWiringDTO" xrefstyle="hyperlink"/>, is added.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter xmlns:ns5="http://www.w3.org/1999/xhtml" xmlns:ns4="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1998/Math/MathML" label="58" revision="$Id: c008cce238083f8c6848a859b0db68e2f7a058de $" version="5" xml:id="service.resolver" xml:base="058/service.resolver.xml">
@@ -46258,17 +46095,6 @@ Resolves a given requirement dynamically for the given host wiring using
       Service Specification</title>OSGi Compendium, Chapter 132 Repository
       Service Specification</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added new methods: findRelatedResources, onCancel,
-        getSubstitutionWires, and resolveDynamic.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
