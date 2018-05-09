@@ -36,10 +36,7 @@ import java.lang.annotation.Target;
  * This annotation is not retained at runtime. It is for use by tools to
  * generate bundle manifests or otherwise process the a package.
  * <p>
- * This annotation can be used to annotate an annotation. If the meta-annotated
- * annotation declares an element of the same name as an element in this
- * annotation, the element is considered to override the element in this
- * annotation.
+ * This annotation can be used to annotate an annotation.
  * 
  * @author $Id$
  */
