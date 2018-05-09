@@ -22,6 +22,12 @@ org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
 org.apache.aries.proxy:org.apache.aries.proxy:1.0.1
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
 org.apache.aries.subsystem:org.apache.aries.subsystem:2.0.2
+org.apache.aries.rsa:org.apache.aries.rsa.core:1.12.0
+org.apache.aries.rsa:org.apache.aries.rsa.spi:1.12.0
+org.apache.aries.rsa:org.apache.aries.rsa.topology-manager:1.12.0
+org.apache.aries.rsa.discovery:org.apache.aries.rsa.discovery.local:1.12.0
+org.apache.aries.rsa.discovery:org.apache.aries.rsa.discovery.zookeeper:1.12.0
+org.apache.aries.rsa.provider:org.apache.aries.rsa.provider.tcp:1.12.0
 
 org.apache.felix:org.apache.felix.configadmin:1.9.0
 org.apache.felix:org.apache.felix.configurator:1.0.0
