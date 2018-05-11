@@ -1,5 +1,5 @@
 # Bnd artifacts
-biz.aQute.bnd:biz.aQute.bnd:4.0.0-SNAPSHOT
-biz.aQute.bnd:biz.aQute.junit:4.0.0-SNAPSHOT
-biz.aQute.bnd:biz.aQute.tester:4.0.0-SNAPSHOT
-biz.aQute.bnd:biz.aQute.bnd.gradle:4.0.0-SNAPSHOT
+biz.aQute.bnd:biz.aQute.bnd:4.1.0-SNAPSHOT
+biz.aQute.bnd:biz.aQute.junit:4.1.0-SNAPSHOT
+biz.aQute.bnd:biz.aQute.tester:4.1.0-SNAPSHOT
+biz.aQute.bnd:biz.aQute.bnd.gradle:4.1.0-SNAPSHOT
