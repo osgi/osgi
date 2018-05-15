@@ -1,6 +1,4 @@
-Bundle-SymbolicName: ${p}.tb4
-Bundle-Version: 1.0.0.test
-Export-Package: ${p}.tb4
+Export-Package: ${p}.tb4.*;-split-package:=first
 Require-Capability:\
 	osgi.extender;\
 		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\

@@ -1,7 +1,0 @@
-Bundle-SymbolicName: ${p}.tb
-Bundle-Version: 1.0.0.test
-Private-Package: ${p}.tb
-Require-Capability:\
-	osgi.extender;\
-		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\
-		osgi.beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb.*}'

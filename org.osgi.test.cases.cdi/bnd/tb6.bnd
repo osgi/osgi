@@ -1,7 +1,6 @@
-Bundle-SymbolicName: ${p}.tb6
-Bundle-Version: 1.0.0.test
-Private-Package: ${p}.tb6.*
+Export-Package: ${p}.tb6.*;-split-package:=first
 Require-Capability:\
 	osgi.extender;\
 		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\
+		extensions:List<String>='(osgi.cdi.extension=aries.cdi.http)';\
 		osgi.beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb6.*}'

@@ -1,5 +1,5 @@
-Bundle-SymbolicName: ${p}.tb3
-Bundle-Version: 1.0.0.test
-
--resourceonly: true
--fixupmessages.empty: The JAR is empty
+Export-Package: ${p}.tb3.*;-split-package:=first
+Require-Capability:\
+	osgi.extender;\
+		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\
+		osgi.beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb3.*}'

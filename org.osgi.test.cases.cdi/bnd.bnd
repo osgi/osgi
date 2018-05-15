@@ -2,48 +2,55 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Description: CT for the OSGi/CDI integration
-
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
-	${p}.junit.*
+Conditional-Package: org.osgi.test.support.*
+Export-Package: org.osgi.test.cases.cdi.interfaces;version="0.0.1"
+Private-Package: ${p}.junit.*
 Import-Package: ${-signaturetest}, *
-
-Include-Resource: \
-	serviceapi.jar,\
-	tb.jar,\
-	tb1.jar, \
-	tb2.jar, \
-	tb3.jar, \
-	tb4.jar, \
-	tb5.jar, \
-	tb6.jar, \
+Include-Resource:\
+	basic-beans.jar,\
+	services-one.jar,\
+	tb1.jar,\
+	tb2.jar,\
+	tb3.jar,\
+	tb4.jar,\
+	tb5.jar,\
 	tb7.jar,\
 	tb8.jar,\
 	tb9.jar,\
 	tb10.jar,\
-	tb11.jar,\
-	tf3.jar
+	tb11.jar
+#Test-Cases: ${testcases}
+Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
 
-Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.cdi
+-signaturetest: org.osgi.service.cdi
 
-javac.profile=
-
--buildpath							= \
-	org.osgi.service.event;                 version=project, \
-	org.osgi.service.cdi;                   version=project, \
-	org.osgi.test.support;                  version=project, \
-	org.osgi.util.converter;                version=project, \
-	osgi.core;                              version=6.0, \
-	org.apache.aries.javax.inject-api;      version=latest, \
-	org.apache.aries.javax.cdi-api;         version=latest, \
-	org.apache.aries.javax.annotation-api;  version=latest, \
+-buildpath: \
+	org.osgi.service.event;version=project,\
+	org.osgi.service.cdi;version=project,\
+	org.osgi.service.component;version=project,\
+	org.osgi.annotation.bundle;version=project,\
+	org.osgi.namespace.extender;version=project,\
+	org.osgi.namespace.service;version=project,\
+	org.osgi.service.cm;version=project,\
+	org.osgi.framework;version=project,\
+	org.osgi.util.tracker;version=project,\
+	org.osgi.util.converter;version=project,\
+	org.osgi.util.promise;version=project,\
+	org.osgi.resource;version=project,\
+	org.osgi.dto;version=project,\
+	org.apache.aries.javax.inject-api;version=latest,\
+	org.apache.aries.javax.cdi-api;version=latest,\
+	org.apache.aries.javax.annotation-api;version=latest,\
+	org.osgi.test.support;version=project,\
 	${junit}
 
--runbundles							= \
+-runbundles: \
     ${junit},\
-	org.osgi.impl.bundle.cdi;               version=latest
+	org.osgi.impl.bundle.cdi;version=latest,\
+	org.apache.felix.scr;version=latest
 
--runproperties = \
+-runproperties: \
 	${runproperties},\
 	osgi.console=
+
+javac.profile=
