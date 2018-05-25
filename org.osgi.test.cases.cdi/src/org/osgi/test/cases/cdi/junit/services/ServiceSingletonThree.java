@@ -12,17 +12,18 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.beans;
+package org.osgi.test.cases.cdi.junit.services;
 
-import javax.inject.Inject;
+import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
 
-import org.osgi.service.cdi.annotations.Reference;
-import org.osgi.test.cases.cdi.interfaces.BundleScoped;
+//@Component(
+//	property = {Constants.SERVICE_RANKING + ":Integer=-1"}
+//)
+public class ServiceSingletonThree implements SingletonScoped<ServiceSingletonThree> {
 
-public class BeanWithReference {
-
-	@Inject
-	@Reference
-	BundleScoped bundleScoped;
+	@Override
+	public ServiceSingletonThree get() {
+		return this;
+	}
 
 }

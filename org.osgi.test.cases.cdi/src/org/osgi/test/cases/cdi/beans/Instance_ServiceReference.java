@@ -30,22 +30,18 @@ import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
 @Service({BeanService.class, Instance_ServiceReference.class})
 @SuppressWarnings("rawtypes")
 public class Instance_ServiceReference implements BeanService<ServiceReference> {
+    @Inject
+    @Reference(SingletonScoped.class)
+    List<ServiceReference> instance;
 
 	@Override
 	public String doSomething() {
-		return String.valueOf(_instance.size());
+        return String.valueOf(instance.size());
 	}
 
 	@Override
 	public ServiceReference get() {
-		Iterator<ServiceReference> iterator = _instance.iterator();
-		if (iterator.hasNext())
-			return iterator.next();
-		return null;
+        Iterator<ServiceReference> iterator = instance.iterator();
+        return iterator.hasNext() ? iterator.next() : null;
 	}
-
-	@Inject
-	@Reference(SingletonScoped.class)
-	List<ServiceReference> _instance;
-
 }

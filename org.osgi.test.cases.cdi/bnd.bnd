@@ -8,7 +8,6 @@ Private-Package: ${p}.junit.*
 Import-Package: ${-signaturetest}, *
 Include-Resource:\
 	basic-beans.jar,\
-	services-one.jar,\
 	tb1.jar,\
 	tb2.jar,\
 	tb3.jar,\
@@ -19,7 +18,7 @@ Include-Resource:\
 	tb9.jar,\
 	tb10.jar,\
 	tb11.jar
-#Test-Cases: ${testcases}
+
 Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
 
 -signaturetest: org.osgi.service.cdi
@@ -37,20 +36,20 @@ Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
 	org.osgi.util.converter;version=project,\
 	org.osgi.util.promise;version=project,\
 	org.osgi.resource;version=project,\
-	org.osgi.dto;version=project,\
 	org.apache.aries.javax.inject-api;version=latest,\
 	org.apache.aries.javax.cdi-api;version=latest,\
 	org.apache.aries.javax.annotation-api;version=latest,\
 	org.osgi.test.support;version=project,\
-	${junit}
+	${junit},\
+	org.osgi.dto;version=latest
 
 -runbundles: \
     ${junit},\
 	org.osgi.impl.bundle.cdi;version=latest,\
-	org.apache.felix.scr;version=latest
-
+	
 -runproperties: \
 	${runproperties},\
-	osgi.console=
+	eclipse.consoleLog=true,\
+	eclipse.log.level=DEBUG
 
 javac.profile=

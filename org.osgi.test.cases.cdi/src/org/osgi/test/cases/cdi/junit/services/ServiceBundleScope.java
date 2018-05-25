@@ -12,19 +12,24 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.components;
+package org.osgi.test.cases.cdi.junit.services;
 
-import org.osgi.framework.Constants;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
+import org.osgi.test.cases.cdi.interfaces.BundleScoped;
 
-@Component(
-	property = {Constants.SERVICE_RANKING + ":Integer=1"}
-)
-public class ServiceSingletonOne implements SingletonScoped<ServiceSingletonOne> {
+//@Component(
+//	property = {
+//		"fee.fi=fee",
+//		"fo.fum:Integer=23",
+//		"complex.enough.key=fum",
+//		"key=value",
+//		"simple.annotation=blah"
+//	},
+//	scope = ServiceScope.BUNDLE
+//)
+public class ServiceBundleScope implements BundleScoped {
 
 	@Override
-	public ServiceSingletonOne get() {
+	public Object get() {
 		return this;
 	}
 

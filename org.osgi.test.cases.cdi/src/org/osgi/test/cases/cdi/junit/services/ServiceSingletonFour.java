@@ -12,20 +12,17 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.components;
+package org.osgi.test.cases.cdi.junit.services;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-import org.osgi.test.cases.cdi.interfaces.PrototypeScoped;
+import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
 
-@Component(
-	property = {"key=value"},
-	scope = ServiceScope.PROTOTYPE
-)
-public class ServicePrototypeScope implements PrototypeScoped {
+//@Component(
+//	property = {Constants.SERVICE_RANKING + ":Integer=4"}
+//)
+public class ServiceSingletonFour implements SingletonScoped<ServiceSingletonFour> {
 
 	@Override
-	public Object get() {
+	public ServiceSingletonFour get() {
 		return this;
 	}
 

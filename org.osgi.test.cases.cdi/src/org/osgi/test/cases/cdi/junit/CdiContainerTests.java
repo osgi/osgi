@@ -21,6 +21,10 @@ import javax.enterprise.inject.spi.CDI;
 
 import org.junit.Test;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.cdi.ComponentType;
+import org.osgi.service.cdi.runtime.dto.ComponentDTO;
+import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
+import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
 
 public class CdiContainerTests extends AbstractTestCase {
@@ -53,4 +57,23 @@ public class CdiContainerTests extends AbstractTestCase {
 		}
 	}
 
+    @Test
+    public void testContainerComponentSingleton() throws Exception {
+        ContainerDTO containerDTO = cdiRuntime.getContainerDTO(cdiBundle);
+        assertNotNull(containerDTO);
+
+        ComponentDTO containerComponentDTO = containerDTO.components.stream()
+                .filter(c -> c.template.type == ComponentType.CONTAINER)
+                .findFirst()
+                .orElse(null);
+        // assertNotNull(containerComponentDTO);
+        // assertEquals(8, containerComponentDTO.template.beans.size());
+
+        // There's only one instance of the Container component
+        ComponentInstanceDTO componentInstanceDTO = containerComponentDTO.instances.get(0);
+        assertNotNull(componentInstanceDTO);
+
+        assertEquals(0, componentInstanceDTO.configurations.size());
+        assertNotNull("should have properties", componentInstanceDTO.properties);
+    }
 }

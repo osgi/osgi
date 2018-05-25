@@ -15,9 +15,11 @@
 package org.osgi.test.cases.cdi.junit;
 
 import static org.junit.Assert.*;
+import static org.osgi.framework.Constants.SERVICE_RANKING;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -27,13 +29,19 @@ import javax.enterprise.util.AnnotationLiteral;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cdi.ComponentType;
-import org.osgi.service.cdi.runtime.dto.ComponentDTO;
-import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
-import org.osgi.service.cdi.runtime.dto.ContainerDTO;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.cdi.interfaces.BeanService;
 import org.osgi.test.cases.cdi.interfaces.BundleContextBeanQualifier;
+import org.osgi.test.cases.cdi.interfaces.BundleScoped;
 import org.osgi.test.cases.cdi.interfaces.FieldInjectedReference;
+import org.osgi.test.cases.cdi.interfaces.PrototypeScoped;
+import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
+import org.osgi.test.cases.cdi.junit.services.ServiceBundleScope;
+import org.osgi.test.cases.cdi.junit.services.ServicePrototypeScope;
+import org.osgi.test.cases.cdi.junit.services.ServiceSingletonFour;
+import org.osgi.test.cases.cdi.junit.services.ServiceSingletonOne;
+import org.osgi.test.cases.cdi.junit.services.ServiceSingletonThree;
+import org.osgi.test.cases.cdi.junit.services.ServiceSingletonTwo;
 import org.osgi.util.tracker.ServiceTracker;
 
 @SuppressWarnings("rawtypes")
@@ -59,16 +67,28 @@ public class CdiBeanTests extends AbstractTestCase {
 			FieldInjectedReference.class.getName(),
 			"FieldInjectedBundleScopedImpl");
 
-		FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
+        ServiceRegistration<BundleScoped> bundleScoped = register(
+                BundleScoped.class,
+                new ServiceBundleScope(),
+                "fee.fi", "fee",
+                "fo.fum", 23,
+                "complex.enough.key", "fum",
+                "key", "value",
+                "simple.annotation", "blah");
+        try {
+            FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
 
-		assertNotNull(fieldInjectedReference);
-		assertNotNull(fieldInjectedReference.getProperties());
-		assertNotNull(fieldInjectedReference.getGenericReference());
-		assertNotNull(fieldInjectedReference.getRawReference());
-		assertNotNull(fieldInjectedReference.getService());
-		assertEquals("value", fieldInjectedReference.getProperties().get("key"));
-		assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
-		assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+            assertNotNull(fieldInjectedReference);
+            assertNotNull(fieldInjectedReference.getProperties());
+            assertNotNull(fieldInjectedReference.getGenericReference());
+            assertNotNull(fieldInjectedReference.getRawReference());
+            assertNotNull(fieldInjectedReference.getService());
+            assertEquals("value", fieldInjectedReference.getProperties().get("key"));
+            assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
+            assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+        } finally {
+            bundleScoped.unregister();
+        }
 	}
 
 	@Test
@@ -78,16 +98,24 @@ public class CdiBeanTests extends AbstractTestCase {
 			FieldInjectedReference.class.getName(),
 			"FieldInjectedPrototypeScopedImpl");
 
-		FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
+        ServiceRegistration<PrototypeScoped> prototypeScoped = register(
+                PrototypeScoped.class,
+                new ServicePrototypeScope(),
+                "key", "value");
+        try {
+            FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
 
-		assertNotNull(fieldInjectedReference);
-		assertNotNull(fieldInjectedReference.getProperties());
-		assertNotNull(fieldInjectedReference.getGenericReference());
-		assertNotNull(fieldInjectedReference.getRawReference());
-		assertNotNull(fieldInjectedReference.getService());
-		assertEquals("value", fieldInjectedReference.getProperties().get("key"));
-		assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
-		assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+            assertNotNull(fieldInjectedReference);
+            assertNotNull(fieldInjectedReference.getProperties());
+            assertNotNull(fieldInjectedReference.getGenericReference());
+            assertNotNull(fieldInjectedReference.getRawReference());
+            assertNotNull(fieldInjectedReference.getService());
+            assertEquals("value", fieldInjectedReference.getProperties().get("key"));
+            assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
+            assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+        } finally {
+            prototypeScoped.unregister();
+        }
 	}
 
 	@Test
@@ -114,21 +142,6 @@ public class CdiBeanTests extends AbstractTestCase {
 
 		assertNotNull(beanService);
 		assertEquals("PREFIXMETHOD", beanService.doSomething());
-
-		ContainerDTO containerDTO = cdiRuntime.getContainerDTO(cdiBundle);
-		assertNotNull(containerDTO);
-
-		ComponentDTO containerComponentDTO = containerDTO.components.stream().filter(
-			c -> c.template.type == ComponentType.CONTAINER).findFirst().orElse(null);
-		assertNotNull(containerComponentDTO);
-		assertEquals(8, containerComponentDTO.template.beans.size());
-
-		// There's only one instance of the Container component
-		ComponentInstanceDTO componentInstanceDTO = containerComponentDTO.instances.get(0);
-		assertNotNull(componentInstanceDTO);
-
-		assertEquals(0, componentInstanceDTO.configurations.size());
-		assertNotNull("should have properties", componentInstanceDTO.properties);
 	}
 
 	@Test
@@ -230,14 +243,26 @@ public class CdiBeanTests extends AbstractTestCase {
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
 			"Instance_ServiceReference");
+		
+        ServiceRegistration<?> regOne = register(
+                SingletonScoped.class, new ServiceSingletonOne(), SERVICE_RANKING, 1);
+        ServiceRegistration<?> regTwo = register(
+                SingletonScoped.class, new ServiceSingletonTwo(), SERVICE_RANKING, 2);
+        ServiceRegistration<?> regThree = register(
+                SingletonScoped.class, new ServiceSingletonThree(), SERVICE_RANKING, 3);
+        ServiceRegistration<?> regFour = register(
+                SingletonScoped.class, new ServiceSingletonFour(), SERVICE_RANKING, 4);
+        try {
+            BeanService beanService = tracker.waitForService(timeout);
 
-		BeanService beanService = tracker.waitForService(timeout);
-
-		assertNotNull(beanService);
-		assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
-		ServiceReference<?> sr = (ServiceReference<?>)beanService.get();
-		assertNotNull(sr);
-		assertEquals(4, (int)sr.getProperty("service.ranking"));
+            assertNotNull(beanService);
+            assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
+            ServiceReference<?> sr = (ServiceReference<?>) beanService.get();
+            assertNotNull(sr);
+            assertEquals(4, (int) sr.getProperty("service.ranking"));
+        } finally {
+            Stream.of(regOne, regTwo, regThree, regFour).forEach(ServiceRegistration::unregister);
+        }
 	}
 
 	@Test

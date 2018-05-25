@@ -12,15 +12,13 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.components;
+package org.osgi.test.cases.cdi.junit.services;
 
-import org.osgi.framework.Constants;
-import org.osgi.service.component.annotations.Component;
 import org.osgi.test.cases.cdi.interfaces.SingletonScoped;
 
-@Component(
-	property = {Constants.SERVICE_RANKING + ":Integer=2"}
-)
+//@Component(
+//	property = {Constants.SERVICE_RANKING + ":Integer=2"}
+//)
 public class ServiceSingletonTwo implements SingletonScoped<ServiceSingletonTwo> {
 
 	@Override

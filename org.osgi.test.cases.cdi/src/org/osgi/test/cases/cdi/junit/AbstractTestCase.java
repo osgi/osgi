@@ -18,6 +18,8 @@ import static org.junit.Assert.*;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.namespace.extender.ExtenderNamespace;
@@ -65,14 +68,11 @@ public class AbstractTestCase {
 	public static void beforeClass() throws Exception {
         runtimeTracker = new ServiceTracker<>(bundleContext, CDIComponentRuntime.class, null);
 		runtimeTracker.open();
-		servicesBundle = installBundle("services-one.jar");
-		servicesBundle.start();
 	}
 
 	@AfterClass
 	public static void afterClass() throws Exception {
 		runtimeTracker.close();
-		servicesBundle.uninstall();
 	}
 
 	void testHeader() {
@@ -162,6 +162,19 @@ public class AbstractTestCase {
     public static <S, T> ServiceTracker<S, T> track(String pattern, Object... objects) {
 		return track(filter(pattern, objects));
 	}
+
+    public static <T> ServiceRegistration<T> register(Class<T> iface, T object, Object... props) {
+        if (props.length % 2 > 0) {
+            throw new IllegalArgumentException();
+        }
+
+        Dictionary<String, Object> dict = new Hashtable<>();
+        for (int i = 0; i < props.length; i += 2) {
+            dict.put(props[i].toString(), props[i + 1]);
+        }
+
+        return bundleContext.registerService(iface, object, dict);
+    }
 
 	BeanManager getBeanManager(Bundle bundle) throws Exception {
 		ServiceTracker<BeanManager, BeanManager> tracker = getServiceTracker(bundle);
