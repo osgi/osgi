@@ -63,7 +63,7 @@ public class DisableComponentTests extends AbstractTestCase {
 		Configuration configurationA = null;
 
 		try {
-			configurationA = configurationAdmin.getConfiguration("osgi.cdi.cdi.itests.tb8", "?");
+			configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
 
 			Dictionary<String, Object> p1 = new Hashtable<>();
 			p1.put("cdi-itests.tb8.enabled", false);
@@ -121,7 +121,7 @@ public class DisableComponentTests extends AbstractTestCase {
 		Configuration configurationA = null;
 
 		try {
-			configurationA = configurationAdmin.getConfiguration("osgi.cdi.cdi.itests.tb8", "?");
+			configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
 
 			Dictionary<String, Object> p1 = new Hashtable<>();
 			p1.put("singleComponentBean.enabled", false);

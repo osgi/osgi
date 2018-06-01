@@ -116,7 +116,7 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			ServiceTracker<BeanService, BeanService> stA = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.apache.aries.cdi.test.interfaces.BeanService)(bean=A))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=A))"), null);
 			stA.open(true);
 
 			BeanService<Callable<int[]>> beanService = stA.waitForService(timeout);
@@ -127,7 +127,7 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			ServiceTracker<BeanService, BeanService> stB = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.apache.aries.cdi.test.interfaces.BeanService)(bean=B))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=B))"), null);
 			stB.open(true);
 
 			beanService = stB.waitForService(timeout);
@@ -169,7 +169,7 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			ServiceTracker<BeanService, BeanService> stC = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.apache.aries.cdi.test.interfaces.BeanService)(bean=C))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=C))"), null);
 			stC.open(true);
 
 			BeanService<Callable<int[]>> beanService = stC.waitForService(timeout);
@@ -187,7 +187,7 @@ public class ConfigurationTests extends AbstractTestCase {
 			stC.close();
 			stC = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.apache.aries.cdi.test.interfaces.BeanService)(bean=C)(ports=12))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=C)(ports=12))"), null);
 			stC.open(true);
 
 			beanService = stC.waitForService(timeout);
@@ -201,7 +201,7 @@ public class ConfigurationTests extends AbstractTestCase {
 			stC.close();
 			stC = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.apache.aries.cdi.test.interfaces.BeanService)(bean=C)(!(ports=*)))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=C)(!(ports=*)))"), null);
 			stC.open(true);
 			beanService = stC.waitForService(timeout);
 
