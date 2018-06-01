@@ -33,7 +33,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     osgi.core;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
-    org.apache.aries.javax.inject-api;version=latest, \
+    org.apache.servicemix.bundles.javax-inject;version=1.0.0,\
     org.apache.aries.javax.cdi-api;version=latest, \
     org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon;version=latest

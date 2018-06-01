@@ -6,7 +6,6 @@ org.apache.aries.cdi.extra; version=0.0.2
 org.apache.aries.javax.annotation-api; version=0.0.2
 org.apache.aries.javax.cdi-api; version=0.0.2
 org.apache.aries.javax.el-api; version=0.0.2
-org.apache.aries.javax.inject-api; version=0.0.2
 org.apache.aries.javax.interceptor-api; version=0.0.2
 
 jboss-classfilewriter; version=1.2.1
@@ -14,6 +13,7 @@ log4j.over.slf4j; version=1.7.7
 org.apache.felix.configadmin; version=1.9.0
 org.apache.felix.scr; version=2.0.6
 org.apache.logging.log4j.api; version=2.7.0
+org.apache.servicemix.bundles.javax-inject; version=1.0.0
 org.jboss.logging.jboss-logging; version=3.2.1
 org.jboss.weld.osgi-bundle; version=3.0.2
 slf4j.api; version=1.7.7
