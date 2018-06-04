@@ -218,7 +218,7 @@
 					<listitem>
 						<para><emphasis>Decorators and Interceptors</emphasis> -
 						Actors that intercept certain method invocations of
-						contextual instances. They are implemented using proxies.</para>
+						contextual instances.</para>
 					</listitem>
 
 					<listitem>
@@ -262,15 +262,16 @@
 					</listitem>
 
 					<listitem>
-						<para><emphasis>Single Configuration Object</emphasis> - A
-						configuration object whose PID maps to exactly one configuration
-						object.</para>
+						<para><emphasis>Factory Configuration Object</emphasis> - A
+						Configuration Object having a factory PID whose instances
+						for which there can be 0 or N are under the control of
+						Configuration Admin, all sharing the same factory PID.</para>
 					</listitem>
 
 					<listitem>
-						<para><emphasis>Factory Configuration Object</emphasis> - A
-						configuration object whose PID maps to multiple configuration
-						objects.</para>
+						<para><emphasis>Single Configuration Object</emphasis> - A
+						configuration object that has no factory PID and remains
+						singularly independent from all other configuration objects.</para>
 					</listitem>
 
 					<listitem>
@@ -351,8 +352,8 @@
 		<title>Synopsis</title>
 
 		<para>The CDI Extender reads CDI metadata from started CDI bundles.
-		These metadata are in the form of XML documents and annotation types
-		which define the set of <emphasis>beans</emphasis> available to the CDI
+		These metadata are in the form of XML documents, annotation types and
+		requirements which define the set of <emphasis>beans</emphasis> available to the CDI
 		container. Beans express dependencies on OSGi configuration objects and
 		services and are assembled into components. The life cycle of a component
 		is driven from the dependencies of its beans.</para>
@@ -373,28 +374,36 @@
 			</listitem>
 
 			<listitem>
-				<para><emphasis>Single Component</emphasis> - Consists of beans
-				in the component scope specifying the <link
+				<para><emphasis>Single Component</emphasis> - A <em>Single Component</em>
+				begins with a bean annotated by the <link
 				linkend="org.osgi.service.cdi.annotations.SingleComponent"
-				xrefstyle="hyperlink">@SingleComponent</link> annotation. A single
-				component may provide immediate
+				xrefstyle="hyperlink">@SingleComponent</link> annotation and is
+				further enhanced by other beans in it's injection graph that are
+				component scoped. A single component may provide immediate
 				functionality or a service resulting in an immediate instance or
 				a single service registration. Unlike the container component,
 				single components may be created, destroyed and react to changes
 				in the state of it's dependencies in isolation, without affecting
 				the entire CDI container. A single component's life cycle is driven
-				first by the container component, which must be satisfied and second
+				first by the container component which must be satisfied and second
 				by it's dependencies.</para>
 			</listitem>
 
 			<listitem>
-				<para><emphasis>Factory Component</emphasis> - Consists of beans
-				in the component scope specifying the <link
+				<para><emphasis>Factory Component</emphasis> - A <em>Factory Component</em>
+				begins with a bean annotated by the <link
 				linkend="org.osgi.service.cdi.annotations.FactoryComponent"
-				xrefstyle="hyperlink">@FactoryComponent</link> annotation. A
-				factory component may provide immediate functionality or a service,
-				resulting in one immediate instance or service registration,
-				respectively, per factory configuration object.</para>
+				xrefstyle="hyperlink">@FactoryComponent</link> annotation and is
+				further enhanced by other beans in it's injection graph that are
+				component scoped. A factory component may provide immediate
+				functionality or a service, resulting in one immediate instance
+				or service registration. Unlike the container component,
+				factory components may be created, destroyed and react to changes
+				in the state of it's dependencies in isolation, without affecting
+				the entire CDI container. A factory component's life cycle is driven
+				first by the container component which must be satisfied, secondly
+				by factory configuration which result in one component instance
+				per factory configuration object, and finally by it's dependencies.</para>
 			</listitem>
 		</itemizedlist>
 
@@ -528,11 +537,23 @@
 	component</link>).</para>
 
 	<para>The context implementation must be registered with the CDI container
-	using the CDI SPI <code>javax.enterprise.inject.spi.AfterBeanDiscovery.addContext(ctx)</code> method.</para>
+	using the CDI SPI. For example:</para>
+
+	<programlisting><![CDATA[void afterBeanDiscovery(
+	@Observes javax.enterprise.inject.spi.AfterBeanDiscovery abd) {
+
+	Context ctx = ...
+	abd.addContext(ctx);
+}]]></programlisting>
 
 	<para>The <code>ComponentScoped</code> annotation must be registered with the
-	CDI container using the CDI SPI
-	<code>javax.enterprise.inject.spi.BeforeBeanDiscovery.addScope(ComponentScoped.class, false, false);</code> method.</para>
+	CDI container using the CDI SPI. For example:</para>
+
+	<programlisting><![CDATA[void beforeBeanDiscovery(
+	@Observes javax.enterprise.inject.spi.BeforeBeanDiscovery bbd) {
+
+	bbd.addScope(ComponentScoped.class, false, false);
+}]]></programlisting>
 
 	<section xml:id="service.cdi-lifecycle.context.instances">
 		<title>Contexts</title>
@@ -689,7 +710,7 @@
 			</row>
 
 			<row>
-				<entry><code>@Destoyed(ComponentScoped.class)</code></entry>
+				<entry><code>@Destroyed(ComponentScoped.class)</code></entry>
 
 				<entry>after a context is destroyed</entry>
 			</row>
@@ -848,13 +869,23 @@ bsn         ::= < Bundle-SymbolicName >]]></programlisting>
 	</section>
 </section>
 
-<section xml:id="service.cdi-example.classes">
-	<title>Code Examples</title>
+<section xml:id="service.cdi-standard.definitions">
+	<title>Standard Definitions</title>
 
-	<para>This specification provides several source code examples. In order to avoid
-	repetition the following Java types are defined and re-used throughout:</para>
+	<section>
+		<title>Annotation Inheritance</title>
 
-	<programlisting><![CDATA[interface Dog {}
+		<para>Annotations are not inherited unless meta-annotated by
+		<code>@java.lang.annotation.Inherited</code>.</para>
+	</section>
+
+	<section xml:id="service.cdi-example.classes">
+		<title>Code Examples</title>
+
+		<para>This specification provides several source code examples. In order to avoid
+		repetition the following Java types are defined and re-used throughout:</para>
+
+		<programlisting><![CDATA[interface Dog {}
 
 interface Hound extends Dog {}
 
@@ -863,20 +894,21 @@ abstract class BassetHound implements Hound {}
 class Spot extends BassetHound {}
 
 class Buddy implements Hound {}]]></programlisting>
+	</section>
+
 </section>
 
 <section xml:id="service.cdi-single.component">
 	<title>Single Component</title>
 
-	<para>A single component is composed of beans that are <code>@ComponentScoped</code>.
-	Additionally, there must be one, and only one bean annotated with the <xref
-	linkend="org.osgi.service.cdi.annotations.SingleComponent"
-	xrefstyle="hyperlink"/> annotation which identifies the root of the
-	component. The remaining beans are those that satisfy it's injection graph
-	according to CDI's rules for <xref
-	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from the root
-	bean and recursing through all injection points until all injection points
-	are resolved.</para>
+	<para>A <em>Single Component</em> begins with and is rooted by a bean annotated
+	by the <link linkend="org.osgi.service.cdi.annotations.SingleComponent"
+	xrefstyle="hyperlink">@SingleComponent</link> annotation. It is further enhanced
+	by beans in it's injection graph that are <code>@ComponentScoped</code> which
+	are discovered according to CDI's rules for <xref
+	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from the
+	<code>@SingleComponent</code> bean and recursing through all injection points
+	until all injection points are resolved.</para>
 
 	<para>Resolution results which contain non-root beans marked with
 	<code>@SingleComponent</code> or <code>@FactoryComponent</code> result in a
@@ -967,6 +999,9 @@ class Fido {}]]></programlisting>
 @PID("com.gamma.bar")
 class Fido {}]]></programlisting>
 
+		<para>See <xref linkend="service.cdi-component.properties" xrefstyle="hyperlink"/>
+		for how multiple component PIDs are merged into component properties.</para>
+
 		<para>Using <code>@PID</code> without arguments refers to the component PID:</para>
 
 		<programlisting><![CDATA[// component pids = [Φ]
@@ -1024,15 +1059,14 @@ class Fido {}]]></programlisting>
 <section xml:id="service.cdi-factory.component">
 	<title>Factory Component</title>
 
-	<para>A factory component is composed of beans that are <code>@ComponentScoped</code>.
-	Additionally, there must be one, and only one bean annotated with the <xref
-	linkend="org.osgi.service.cdi.annotations.FactoryComponent"
-	xrefstyle="hyperlink"/> annotation which identifies the root of the
-	component. The remaining beans are those that satisfy it's injection graph
-	according to CDI's rules for <xref
-	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from
-	the root and recursing through all injection points until all injection
-	points are resolved.</para>
+	<para>A <em>Factory Component</em> begins with and is rooted by a bean annotated
+	by the <link linkend="org.osgi.service.cdi.annotations.FactoryComponent"
+	xrefstyle="hyperlink">@FactoryComponent</link> annotation. It is further enhanced
+	by beans in it's injection graph that are <code>@ComponentScoped</code> which
+	are discovered according to CDI's rules for <xref
+	linkend="service.cdi-bib.cdi.typesafe.resolution"/> starting from the
+	<code>@FactoryComponent</code> bean and recursing through all injection points
+	until all injection points are resolved.</para>
 
 	<para>The <code>@FactoryComponent</code> annotation indicates that the
 	component is bound to the life cycle of factory configuration objects
@@ -1161,6 +1195,9 @@ class Fido {}]]></programlisting>
 @PID("com.gamma.bar")
 class Fido {}]]></programlisting>
 
+		<para>See <xref linkend="service.cdi-component.properties" xrefstyle="hyperlink"/>
+		for how multiple component PIDs are merged into component properties.</para>
+
 		<para>The component factory PID always reserves the highest precedence
 		among specified PIDs and is positioned last in PID ordering for the purpose
 		of aggregation</para>
@@ -1184,13 +1221,15 @@ class Fido {}]]></programlisting>
 	<para>Each component instance is associated with a set of <emphasis>component
 	properties</emphasis>. Component properties are specified in the following
 	<emphasis>configuration sources</emphasis> (in order of
-	precedence, where the properties provided by earlier lines overwrite those
-	of later lines):</para>
+	precedence, where the properties provided by later lines overwrite those
+	of earlier lines):</para>
 
 	<orderedlist>
 		<listitem>
-			<para>Properties provided by a factory configuration object whose
-			PID matches to the factory PID specified by the factory component.</para>
+			<para>Properties specified as Bean Property Types on the bean
+			annotated with <code>@SingleComponent</code> or
+			<code>@FactoryComponent</code> must be treated according to <xref
+			linkend="service.cdi-bean.property.types" />.</para>
 		</listitem>
 
 		<listitem>
@@ -1200,10 +1239,8 @@ class Fido {}]]></programlisting>
 		</listitem>
 
 		<listitem>
-			<para>Properties specified as Bean Property Types on the bean
-			annotated with <code>@SingleComponent</code> or
-			<code>@FactoryComponent</code> must be treated according to <xref
-			linkend="service.cdi-bean.property.types" />.</para>
+			<para>Properties provided by a factory configuration object whose
+			PID matches to the factory PID specified by the factory component.</para>
 		</listitem>
 	</orderedlist>
 
@@ -1283,8 +1320,9 @@ refName ::= < reference name >]]></programlisting>
 @Reference
 Http http;]]></programlisting>
 
-			would have the name <code>http.target</code>. The value of a target property is a filter string used to select target
-			services for the reference.</para>
+			would have the name <code>http.target</code>. The value of a target
+			property is a filter string used to select target services for the
+			reference.</para>
 
 			<programlisting><![CDATA[http.target=(context.name=foo)]]></programlisting>
 
@@ -1293,9 +1331,8 @@ Http http;]]></programlisting>
 			xrefstyle="hyperlink">@Reference.target</link> property.</para>
 
 			<para>The target property value must be a valid filter string
-			according to <xref linkend="service.cdi-bib.filter.syntax" />. An
-			invalid filter string will result in a warning message being
-			logged and the value to be otherwise ignored.</para>
+			according to <xref linkend="service.cdi-bib.filter.syntax" />.
+			Invalid filters result in unmatchable reference filters.</para>
 
 			<para>CCR must support the target property for all references.</para>
 		</section>
@@ -1306,8 +1343,8 @@ Http http;]]></programlisting>
 			<para>The initial minimum cardinality of a reference is specified by
 			the optionality of the reference. The minimum cardinality of a
 			reference cannot exceed the multiplicity: a scalar reference has a
-			multiplicity of 1 and a <code>java.util.List</code>, <code>java.util.Collection</code>
-			or <code>java.lang.Iterable</code> reference has a multiplicity of n.</para>
+			multiplicity of 1 and a <code>java.util.List</code> or <code>java.util.Collection</code>
+			reference has a multiplicity of n.</para>
 
 			<para>The <emphasis>minimum cardinality property</emphasis> is a
 			reference property which can be used to raise the
@@ -2282,21 +2319,21 @@ class Fido implements Hound {}]]></programlisting>
 		<title>Container Component Services</title>
 
 		<para>Beans, producer methods and producer fields that are
-		<code>@ApplicationScoped</code> can only provide singleton scoped
-		services. Each such case results in a single service registration. The
-		service object is the contextual instance created by the producer or
-		bean.</para>
-
-		<para><code>@ApplicationScoped</code> beans can implement
-		<code>org.osgi.framework.ServiceFactory</code> or
+		<code>@ApplicationScoped</code> result in contextual instances that are
+		shared throughout the CDI container. Therefore they can only
+		provide singleton scoped services. Each such case results in a single
+		service registration. The service object is the contextual instance
+		created by the producer or bean. However, <code>@ApplicationScoped</code>
+		beans can implement <code>org.osgi.framework.ServiceFactory</code> or
 		<code>org.osgi.framework.PrototypeServiceFactory</code> in order to
 		provide bundle or prototype scoped service objects.</para>
 
 		<para>Beans, producer methods and producer fields that are
-		<code>@Dependent</code> scoped can provide services of all scopes as
-		outlined in <xref linkend="service.cdi-service.scope"/>. The service
-		object is a contextual instance created by the producer or bean on each
-		request for a service object.</para>
+		<code>@Dependent</code> result in contextual instances which are never
+		shared in that a new contextual instance is created for each caller.
+		Therefore they can provide services of all scopes as outlined in <xref
+		linkend="service.cdi-service.scope"/>. The service object is a contextual
+		instance created by the producer or bean on each request for a service object.</para>
 
 		<para>The use of <code>@ServiceInstance</code> on
 		<code>@ApplicationScoped</code> beans will result in a definition
@@ -2435,8 +2472,8 @@ Port port;]]></programlisting>
 <section xml:id="service.cdi-reference.injection">
 	<title>Reference Injection Points</title>
 
-	<para>Any injection point annotated with <xref
-	linkend="org.osgi.service.cdi.annotations.Reference"/> declares a service
+	<para>Any injection point annotated with <link
+	linkend="org.osgi.service.cdi.annotations.Reference" xrefstyle="hyperlink">@Reference</link> declares a service
 	dependency.</para>
 
 	<section xml:id="service.cdi-reference.injection.point.types">
@@ -2508,6 +2545,10 @@ Map<String, Object> dogProperties;]]></programlisting>
 					<entry><code><![CDATA[java.util.Map.Entry<Map<String, ? | Object>, S>]]></code></entry>
 
 					<entry>
+						<para>Represents a <emphasis>tuple</emphasis> containing the
+						map of service properties as the key and the service instance
+						as the value.</para>
+
 						<programlisting><![CDATA[// S = Dog
 @Inject
 @Reference
@@ -2539,7 +2580,7 @@ BeanServiceObjects<Dog> dogs;]]></programlisting>
 		specified by this specification.</para>
 	</section>
 
-	<section>
+	<section xml:id="service.cdi-service.scope">
 		<title>Service scope</title>
 
 		<para>For a bound service, CCR must get the service object from the OSGi
@@ -2573,21 +2614,18 @@ Hound hound;]]></programlisting>
 	<section>
 		<title>BeanServiceObjects</title>
 
-		<para>A Reference Service Objects for the bound service. This Reference
-		Service Objects can be used to obtain the actual service object or
-		objects. This approach is useful when the referenced service has
-		prototype service scope and the component instance needs multiple
-		service objects for the service.</para>
+		<para>A Bean Service Objects for the bound service, can be used to obtain
+		the actual service object or objects. This approach is useful when the
+		referenced service has prototype service scope and the component instance
+		needs multiple service objects for the service.</para>
 
 		<programlisting><![CDATA[@Inject
 @PrototypeRequired
 @Reference
 BeanServiceObjects<Hound> hounds;]]></programlisting>
 
-		<para><code>@PrototypeRequired</code> is not required when injecting
-		<code>BeanServiceObjects</code>because interacting in this way with
-		services of any scope is often desired as is often the case when
-		implementing the <emphasis>whiteboard</emphasis> pattern.</para>
+		<para>The <code>@PrototypeRequired</code> annotation is optional. See
+		<xref linkend="service.cdi-service.scope" xrefstyle="hyperlink"/>.</para>
 	</section>
 
 	<section>
@@ -2654,66 +2692,72 @@ Collection<Dog> dogs;]]></programlisting>
 
 			<para>Annotations meta-annotated with
 			<xref linkend="org.osgi.service.cdi.annotations.BeanPropertyType" xrefstyle="hyperlink" />
-			appearing on an injection point in conjunction
-			with the <code>@Reference</code> annotation will further enhance the
-			target filter as described by the rules for <xref
-			linkend="service.cdi-bean.property.types"/>,
-			then assembling the <emphasis>result map</emphasis> into a filter
-			string according to the following rules:</para>
+			appearing on an injection point in conjunction with the <code>@Reference</code>
+			annotation will further enhance the target filter as described by the
+			rules for converting <xref linkend="service.cdi-bean.property.types"/>
+			to a map of properties assembled into a filter string according to
+			the following steps:</para>
 
 			<orderedlist>
 				<listitem>
-					<para>flatten any <code>key=array</code> pairs into many
-					<code>key=scalar</code> pairs, one for each array
-					value such that all <code>key=value</code> pairs have the
-					form <code>key=scalar</code></para>
+					<para>any <code>key=array</code> pairs are flattened into many
+					<code>key=scalar</code> pairs, one pair for each array
+					value</para>
 				</listitem>
 				<listitem>
-					<para>format every <code>key=scalar</code> using the pattern
-					<code><![CDATA[(%s=%s)]]></code>. If <code>scalar</code> must
-					contain one of the characters reverse solidus (<code>'\'
+					<para>format every <code>key=scalar</code> pair using the production
+
+					<programlisting><![CDATA[pair       ::= '(' pairKey '=' pairScalar ')'
+pairKey    ::= < key >
+pairScalar ::= < scalar >]]></programlisting>
+
+					If <code>scalar</code> must contain one of the characters reverse solidus (<code>'\'
 					\u005C</code>), asterisk (<code>'*' \u002A</code>), parentheses
 					open (<code>'(' \u0028</code>) or parentheses close (<code>')'
 					\u0029</code>), then these characters must be preceded with
 					the reverse solidus (<code>'\' \u005C</code>) character.
 					Spaces are significant in <code>scalar</code>. Space
-					characters are defined by
-					<code>Character.isWhiteSpace()</code>.</para>
+					characters are defined by <code>Character.isWhiteSpace()</code></para>
 				</listitem>
 				<listitem>
-					<para>concatenate all results of 2. into a single
+					<para>concatenate all results of step <code>2.</code> into a single
 					string</para>
 				</listitem>
 				<listitem>
 					<para>append the value of
-					<code>@Reference.target()</code> to the result of 3.</para>
+					<code>@Reference.target()</code> to the result of step <code>3.</code></para>
 				</listitem>
 				<listitem>
-					<para>format the result of 4. using the pattern
-					<code><![CDATA[(&%s)]]></code></para>
+					<para>format the result of step <code>4.</code> using the production
+
+					<programlisting><![CDATA[target ::= '(' '&' step4 ')'
+step4  ::= < result of step 4. >]]></programlisting>
+
+					</para>
 				</listitem>
 			</orderedlist>
 
 			<para>Given the following example:</para>
 
-			<programlisting><![CDATA[@Repeatable(...)
+			<programlisting><![CDATA[
+enum Tricks {
+	SIT, STAND, SHAKE_PAW, TREAT_ON_NOSE
+}
+@Repeatable(...)
 @BeanPropertyType
-@interface Config {
-	String color();
+@interface Trick {
+	Tricks value();
 }
 
 @Inject
-@Reference(target = "(service.vendor=Acme, Ltd.)")
-@Color("blue")
-@Color("orange")
-Executor executor;]]></programlisting>
+@Reference(target = "(service.vendor=Acme Kennels, Ltd.)")
+@Trick(SIT)
+@Trick(TREAT_ON_NOSE)
+Dog dog;]]></programlisting>
 
 			<para>The target filter will be:</para>
 
-			<programlisting><![CDATA[(&(color=blue)(color=orange)(service.vendor=Acme, Ltd.))]]></programlisting>
-
-			<para>The target filter supplied by <code>@Reference.target</code>
-			will be added last.</para>
+			<programlisting><![CDATA[(&(trick=sit)(trick=treat_on_nose)(service.vendor=Acme Kennels, Ltd.))]]></programlisting>
 		</section>
 
 	</section>
@@ -2724,8 +2768,8 @@ Executor executor;]]></programlisting>
 		<para>The <code>@javax.inject.Named</code> annotation may be used to
 		specify a name to serve as the base of the component properties used to
 		configure the reference. If not specified the name of the reference will
-		be derived from the fully qualified class name and the reference
-		injection point.</para>
+		be derived from the fully qualified class name of the class defining the
+		reference injection point and the reference injection point.</para>
 
 		<para>The production for generated names is:</para>
 
@@ -2778,13 +2822,13 @@ class Fido {
 	<section>
 		<title>Static References</title>
 
-		<para>It should be clear that all references displayed to this point
-		have been static in nature. This is the most common form of reference
-		injection point. This means that their values do not change during the
-		lifetime of a contextual instance. This implies that in order to change
+		<para>Static references are the most common form of reference
+		injection point. Static means that their values do not change during the
+		lifetime of the component instance which means that in order to change
 		the service bound to the reference injection point, the entire component
-		instance must be destroyed and recreated. The following are more
-		examples of static reference injection points:</para>
+		instance must be destroyed and recreated.</para>
+
+		<para>The following are more examples of static reference injection points:</para>
 
 		<programlisting><![CDATA[@Inject
 @Reference
@@ -2801,18 +2845,14 @@ void setHounds(@Reference BeanServiceObjects<Hound> hounds) {...}
 @Reference
 ServiceReference<Spot> spot;]]></programlisting>
 
-		<para>Static reference injection points are by nature
-		<emphasis>mandatory</emphasis> in that they require a number of services
-		equal to or greater than their minimum cardinality (which is commonly
-		1) to be available in order for the component instance to resolve.</para>
-
-		<para>A static reference for which fewer matching services are available
-		than required by the reference's minimum cardinality will prevent the
-		component instance from becoming resolved.</para>
+		<para>Static reference injection points are <emphasis>mandatory</emphasis>
+		by default. They require a number of services equal to or greater than
+		their minimum cardinality to be available in order for the component
+		instance to resolve.</para>
 	</section>
 
 	<section xml:id="service.cdi-reference.optional">
-		<title>Optional References</title>
+		<title>Static Optional References</title>
 
 		<para>Optional reference injection points allow a component instance to
 		become resolved when fewer matching services are found than required by
@@ -2820,8 +2860,9 @@ ServiceReference<Spot> spot;]]></programlisting>
 		<code><![CDATA[java.util.Optional<R>]]></code> where <code>R</code> is
 		one of the <link linkend="service.cdi-reference.injection.point.types"
 		xrefstyle="hyperlink">supported reference injection point
-		types</link>. Repeating the static examples as optional references, we
-		get:</para>
+		types</link>.</para>
+
+		<para>The following are examples of static optional references:</para>
 
 		<programlisting><![CDATA[@Inject
 @Reference
@@ -2837,14 +2878,18 @@ void setHounds(@Reference Optional<BeanServiceObjects<Hound>> hounds) {...}
 @Inject
 @Reference
 Optional<ServiceReference<Spot>> spot;]]></programlisting>
+
+		<para>As with other static references, static means that their values do
+		not change during the lifetime of the component instance which means that
+		in order to change the service bound to the reference injection point,
+		the entire component instance must be destroyed and recreated.</para>
 	</section>
 
 	<section xml:id="service.cdi-reference.multi.cardinality">
-		<title>Multi-cardinality References</title>
+		<title>Static Multi-cardinality References</title>
 
 		<para>Multi-cardinality references are specified using an injection
-		point type of <code><![CDATA[java.lang.Iterable<R>]]></code>,
-		<code><![CDATA[java.util.Collection<R>]]></code>, or
+		point type of <code><![CDATA[java.util.Collection<R>]]></code>, or
 		<code><![CDATA[java.util.List<R>]]></code> where <code>R</code> is
 		one of the <link linkend="service.cdi-reference.injection.point.types"
 		xrefstyle="hyperlink">supported reference injection point
@@ -2853,7 +2898,7 @@ Optional<ServiceReference<Spot>> spot;]]></programlisting>
 
 		<programlisting><![CDATA[@Inject
 @Reference
-Iterable<Dog> dogs;
+List<Dog> dogs;
 
 @Inject
 @Reference(BassetHound.class)
@@ -2872,6 +2917,11 @@ Collection<ServiceReference<Spot>> spots;]]></programlisting>
 		xrefstyle="hyperlink">minimum cardinality property</link> is
 		<code>0</code>. See <xref
 		linkend="service.cdi-minimum.cardinality.property"/>.</para>
+
+		<para>As with other static references, static means that their values do
+		not change during the lifetime of the component instance which means that
+		in order to change the services bound to the reference injection point,
+		the entire component instance must be destroyed and recreated.</para>
 	</section>
 
 	<section xml:id="service.cdi-reference.dynamic">
@@ -2879,14 +2929,14 @@ Collection<ServiceReference<Spot>> spots;]]></programlisting>
 
 		<para>Dynamic reference injection points are specified using an
 		injection point type of <code><![CDATA[javax.inject.Provider<R>]]></code>
-		where <code>R</code> is
-		one of the <link linkend="service.cdi-reference.injection.point.types"
+		where <code>R</code> is one of the <link
+		linkend="service.cdi-reference.injection.point.types"
 		xrefstyle="hyperlink">supported reference injection point
 		types</link>, <code><![CDATA[java.util.Optional<R>]]></code>,
-		<code><![CDATA[java.lang.Iterable<R>]]></code>,
 		<code><![CDATA[java.util.Collection<R>]]></code>, or
-		<code><![CDATA[java.util.List<R>]]></code>. Repeating the static
-		examples as dynamic references, we get:</para>
+		<code><![CDATA[java.util.List<R>]]></code>.</para>
+
+		<para>The following are examples of dynamic references:</para>
 
 		<programlisting><![CDATA[@Inject
 @Reference
@@ -2908,7 +2958,7 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 
 		<para>The evaluation of <code>javax.inject.Provider.get()</code> is
 		performed such that each invocation may produce a different result
-		except returning <code>null</code>.</para>
+		except for returning <code>null</code>.</para>
 	</section>
 </section>
 
@@ -2917,27 +2967,28 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 
 	<para>It is often necessary to observe the addition, modification and removal
 	of services from the service registry. This specification provides 3 special
-	bean types, referred to as <emphasis>binder types</emphasis>, which make it possible to bind methods
-	to coordinate across the service events of set of services. In all 3 cases the type
-	argument <code>S</code> indicates the service type expected unless further
-	reduced as described by <xref linkend="service.cdi-reference.service.type" xrefstyle="hyperlink"/>.
-	Bean Property Types may also be used to expand the target filter as defined in <xref
+	bean types, referred to as <emphasis>binder types</emphasis>, which make it
+	possible to bind methods to coordinate across the service events of set of
+	services. The type argument <code>S</code> indicates the service type expected
+	unless further reduced as described by <xref
+	linkend="service.cdi-reference.service.type" xrefstyle="hyperlink"/>. Bean
+	Property Types may also be used to expand the target filter as defined in <xref
 	linkend="service.cdi-bean.property.types.as.target.filters"
 	xrefstyle="hyperlink"/>.</para>
 
 	<itemizedlist>
 		<listitem>
 			<para><link
-			linkend="org.osgi.service.cdi.reference.BindObject"><![CDATA[BindObject<S>]]></link> -
-			The <code>BindObject</code> bean allows for coordination of service
-			events when the service object is required.
+			linkend="org.osgi.service.cdi.reference.BindService"><![CDATA[BindService<S>]]></link> -
+			The <code>BindService</code> bean allows for coordination of service
+			events when the service instance is required.
 			</para>
 		</listitem>
 		<listitem>
 			<para><link
-			linkend="org.osgi.service.cdi.reference.BindServiceObjects"><![CDATA[BindServiceObjects<S>]]></link> -
-			The <code>BindServiceObjects</code> bean allows for coordination of service
-			events when service objects are required.
+			linkend="org.osgi.service.cdi.reference.BindBeanServiceObjects"><![CDATA[BindBeanServiceObjects<S>]]></link> -
+			The <code>BindBeanServiceObjects</code> bean allows for coordination of service
+			events when bean service objects are required.
 			</para>
 		</listitem>
 		<listitem>
@@ -2956,7 +3007,7 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 
 	<programlisting><![CDATA[@Inject
 @ServiceVendor("Acme Inc.")
-void bindFoo(BindObject<Dog> binder) {
+void bindFoo(BindService<Dog> binder) {
 	binder.
 		adding(this::adding).
 		modified(this::modified).
@@ -2974,7 +3025,7 @@ void removed(Dog dog, Map<String,Object> properties) {...}]]></programlisting>
 	For example, given the following invocation:
 
 	<programlisting><![CDATA[@Inject
-void bindFoo(BindObject<Dog> binder) {
+void bindFoo(BindService<Dog> binder) {
 	binder.
 		adding(this::addingA).
 		adding(this::addingB).
@@ -2986,7 +3037,7 @@ void bindFoo(BindObject<Dog> binder) {
 	<para>An example of a binder type injected into a field:</para>
 
 	<programlisting><![CDATA[@Inject
-BindServiceObjects<Dog> binder;
+BindBeanServiceObjects<Dog> binder;
 
 @PostConstruct
 void init() {
@@ -2998,6 +3049,12 @@ void init() {
 
 void adding(BeanServiceObjects<Dog> dogs) {...}
 void removed(BeanServiceObjects<Dog> dogs) {...}]]></programlisting>
+
+	<para>Binder objects are provided as <code>@Dependent</code>
+	beans and are not thread safe. They are intended to be used during the creation
+	phase of component beans before the end of the <code>@PostConstruct</code> method.
+	Executing any binder object method after this time will result in unspecified
+	behavior.</para>
 </section>
 
 <section xml:id="service.cdi-cdi.component.runtime">
