@@ -31,14 +31,6 @@ import org.osgi.service.cdi.MaximumCardinality;
  */
 public class ConfigurationTemplateDTO extends DTO {
 	/**
-	 * Indicates that the configuration is used for configuring the component as
-	 * opposed to only being used as injectable dependency.
-	 * <p>
-	 * Must not be {@code null}.
-	 */
-	public boolean				componentConfiguration;
-
-	/**
 	 * The PID of the tracked configuration object(s).
 	 * <p>
 	 * Must not be {@code null}.

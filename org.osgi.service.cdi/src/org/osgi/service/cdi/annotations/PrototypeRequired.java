@@ -26,15 +26,14 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 
-import org.osgi.service.cdi.reference.BindObject;
-import org.osgi.service.cdi.reference.BindServiceObjects;
+import org.osgi.service.cdi.reference.BindBeanServiceObjects;
+import org.osgi.service.cdi.reference.BindService;
 import org.osgi.service.cdi.reference.BindServiceReference;
 
 /**
- * Used with {@link Reference @Reference}, {@link BindObject BindObject},
- * {@link BindServiceObjects BindServiceObjects} and {@link BindServiceReference
- * BindServiceReference} to indicate that the service must be
- * {@code service.scope=prototype}.
+ * Used with {@link Reference @Reference}, {@link BindService},
+ * {@link BindBeanServiceObjects} and {@link BindServiceReference} to indicate
+ * that the service must be {@code service.scope=prototype}.
  *
  * @author $Id$
  */

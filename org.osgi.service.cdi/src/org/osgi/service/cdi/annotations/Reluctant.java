@@ -26,15 +26,15 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 
-import org.osgi.service.cdi.reference.BindObject;
-import org.osgi.service.cdi.reference.BindServiceObjects;
+import org.osgi.service.cdi.reference.BindBeanServiceObjects;
+import org.osgi.service.cdi.reference.BindService;
 import org.osgi.service.cdi.reference.BindServiceReference;
 
 /**
  * Annotation used to indicate that the behaviour of the reference should be
- * greedy. Used in conjunction with {@link Reference @Reference},
- * {@link BindObject BindObject}, {@link BindServiceReference
- * BindServiceReference} or {@link BindServiceObjects BindServiceObjects}.
+ * reluctant. Used in conjunction with {@link Reference @Reference},
+ * {@link BindService}, {@link BindServiceReference} or
+ * {@link BindBeanServiceObjects}.
  *
  * @author $Id$
  */
@@ -42,17 +42,17 @@ import org.osgi.service.cdi.reference.BindServiceReference;
 @Qualifier
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface Greedy {
+public @interface Reluctant {
 
 	/**
-	 * Support inline instantiation of the {@link Greedy} annotation.
+	 * Support inline instantiation of the {@link Reluctant} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Greedy> implements Greedy {
+	public static final class Literal extends AnnotationLiteral<Reluctant> implements Reluctant {
 
 		/**
 		 * Default instance
 		 */
-		public static final Greedy	INSTANCE			= new Literal();
+		public static final Reluctant	INSTANCE			= new Literal();
 
 		private static final long			serialVersionUID	= 1L;
 

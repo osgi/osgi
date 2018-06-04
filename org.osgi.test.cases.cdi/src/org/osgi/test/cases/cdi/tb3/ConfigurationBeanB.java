@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import org.osgi.service.cdi.ConfigurationPolicy;
 import org.osgi.service.cdi.annotations.BeanPropertyType;
-import org.osgi.service.cdi.annotations.Configuration;
+import org.osgi.service.cdi.annotations.ComponentProperties;
 import org.osgi.service.cdi.annotations.PID;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.SingleComponent;
@@ -60,7 +60,7 @@ public class ConfigurationBeanB implements BeanService<Callable<int[]>> {
 		};
 	}
 
-	@Configuration
+	@ComponentProperties
 	@Inject
 	Map<String, Object> config;
 

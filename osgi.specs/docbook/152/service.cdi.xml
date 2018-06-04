@@ -919,7 +919,7 @@ class Buddy implements Hound {}]]></programlisting>
 	<para>Applying any scope besides <code>@ComponentScoped</code> to a bean
 	marked with <code>@SingleComponent</code> results in a definition error.</para>
 
-	<para>Any <code>@Configuration</code> or <code>@Reference</code> injection point
+	<para>Any <code>@ComponentProperties</code> or <code>@Reference</code> injection point
 	that is resolved by beans which are not provided by CCR results in a definition
 	error.</para>
 
@@ -1087,7 +1087,7 @@ class Fido {}]]></programlisting>
 	<para>Applying any scope besides <code>@ComponentScoped</code> to a bean
 	marked with <code>@FactoryComponent</code> results in a definition error.</para>
 
-	<para>Any <code>@Configuration</code> or <code>@Reference</code> injection point
+	<para>Any <code>@ComponentProperties</code> or <code>@Reference</code> injection point
 	that is resolved by beans which are not provided by CCR results in a definition
 	error.</para>
 
@@ -1751,7 +1751,7 @@ public class MyBean {
 		<title>Coercing Bean Property Type Values</title>
 
 		<para>When a bean property type is used as an injection point type
-		alone with <code>@Configuration</code>, CCR must create a contextual
+		alone with <code>@ComponentProperties</code>, CCR must create a contextual
 		instance that implements the bean property
 		type and maps the methods of the bean property type to component
 		properties. The name of the method is converted to the property name
@@ -2374,18 +2374,19 @@ class Fido implements Hound {}]]></programlisting>
 	</section>
 </section>
 
-<section xml:id="service.cdi-configuration.injection">
-	<title>Configuration Injection Points</title>
+<section xml:id="service.cdi-component.properties.injection">
+	<title>Component Property Injection Points</title>
 
 	<para>A bean specifies injection of component properties using the <link
-	linkend="org.osgi.service.cdi.annotations.Configuration" xrefstyle="hyperlink">@Configuration</link>
+	linkend="org.osgi.service.cdi.annotations.ComponentProperties"
+	xrefstyle="hyperlink">@ComponentProperties</link>
 	annotation at an injection point.</para>
 
 	<para>The type typically associated with component properties is
 	<code><![CDATA[java.util.Map<String, Object>]]></code>:</para>
 
 	<programlisting><![CDATA[@Inject
-@Configuration
+@ComponentProperties
 Map<String, Object> componentProperties;]]></programlisting>
 
 	<para>However, component properties can be automatically converted to any
@@ -2411,46 +2412,13 @@ keep.alive.timeout (long)]]></programlisting>
 }
 
 @Inject
-@Configuration
+@ComponentProperties
 PoolConfig poolConfig;]]></programlisting>
-
-	<para><xref linkend="service.cdi-bean.property.types" xrefstyle="hyperlink"/>
-	can be used as configuration injection point types.</para>
 
 	<para>Using <link
 	linkend="org.osgi.service.cdi.annotations.Reference">@Reference</link> in
-	conjunction with <code>@Configuration</code> will result in a definition
+	conjunction with <code>@ComponentProperties</code> will result in a definition
 	error.</para>
-
-	<section>
-		<title>Non-component configuration objects</title>
-
-		<para>This specification provides a mechanism for injecting arbitrary
-		configuration objects without these affecting or intermingling with the
-		component properties. The properties of this configuration are not merged
-		with the component properties. These are referred to as <emphasis>non-component
-		configuration objects</emphasis>. The following is an example of injecting
-		an <emphasis>optional</emphasis> non-component configuration object whose
-		PID is <code>org.server.connector</code>:</para>
-
-		<programlisting><![CDATA[@Inject
-@Configuration
-@PID("org.server.connector")
-Port port;]]></programlisting>
-
-		<para>As shown, the injection point definition will allow the
-		component to be satisfied if no configuration object for PID
-		<code>org.server.connector</code> is available. To
-		make the non-component configuration object required the <xref
-		linkend="org.osgi.service.cdi.annotations.PID.policy--"/> property must
-		be set to <xref
-		linkend="org.osgi.service.cdi.ConfigurationPolicy.REQUIRED" xrefstyle="hyperlink"/>.</para>
-
-		<para>It is possible for the component to specify the same PID on both the
-		component bean as well as on a non-component configuration injection point.
-		The configuration injection point's view will be of the un-merged
-		properties of the configuration object.</para>
-	</section>
 
 	<section xml:id="service.cdi-coordinatorsupport">
 		<title>Coordinator Support</title>
@@ -2473,8 +2441,8 @@ Port port;]]></programlisting>
 	<title>Reference Injection Points</title>
 
 	<para>Any injection point annotated with <link
-	linkend="org.osgi.service.cdi.annotations.Reference" xrefstyle="hyperlink">@Reference</link> declares a service
-	dependency.</para>
+	linkend="org.osgi.service.cdi.annotations.Reference"
+	xrefstyle="hyperlink">@Reference</link> declares a service dependency.</para>
 
 	<section xml:id="service.cdi-reference.injection.point.types">
 		<title>Reference injection point types</title>
@@ -2631,17 +2599,24 @@ BeanServiceObjects<Hound> hounds;]]></programlisting>
 	<section>
 		<title>Reference Greediness</title>
 
-		<para>References are reluctant by default which means that once bound
-		with an appropriate service, later matches with higher rankings will be
-		ignored. Use the <code>@Greedy</code> qualifier to force better matches
-		to be applied pro-actively. Note that in the case of static references
+		<para>References are greedy by default which means that higher ranking
+		matches are immediately bound. Use the <code>@Reluctant</code>
+		annotation to indicate that higher ranking matches should not bind once the
+		reference has been resolved. Note that in the case of static references
 		the component will be destroyed and recreated in order to immediately
-		apply the better match. In the case of the container component, this
-		will result in the entire CDI container being destroyed and
-		recreated.</para>
+		apply the better match. In the case of the container component, this will
+		result in the entire CDI container being destroyed and recreated.</para>
+
+		<para>A static, greedy reference:</para>
 
 		<programlisting><![CDATA[@Inject
-@Greedy
+@Reference
+Hound hound;]]></programlisting>
+
+		<para>A static, reluctant reference:</para>
+
+		<programlisting><![CDATA[@Inject
+@Reluctant
 @Reference
 Hound hound;]]></programlisting>
 	</section>
@@ -2668,6 +2643,47 @@ Dog dog;]]></programlisting>
 
 		<para>The injection point type must be compatible with the service
 		type. Otherwise a definition error will result.</para>
+	</section>
+
+	<section xml:id="service.cdi-reference.service.type.any">
+		<title>Any Service Type</title>
+
+		<para>A special exception to the service type rules is defined when the
+		special marker type <xref linkend="org.osgi.service.cdi.annotations.Reference.Any"/>
+		is set as <code>@Reference.value</code>. This allows for any service to
+		match the reference. However, the following criteria must be satisfied:</para>
+
+		<orderedlist>
+			<listitem>
+				<para><code>@Reference.value</code> must specify the single value
+				<code>Reference.Any.class</code></para>
+			</listitem>
+			<listitem>
+				<para><code>@Reference.target</code> must specify a valid,
+				non-empty filter value</para>
+			</listitem>
+			<listitem>
+				<para>The injection point <emphasis>service type</emphasis> must be
+				<code>java.lang.Object</code>. For example:
+
+				<programlisting><![CDATA[@Inject
+@Reference(value = Reference.Any.class, target = "(foo=bar)")
+Optional<Object> match;]]></programlisting>
+
+				or
+
+				<programlisting><![CDATA[@Inject
+@Reference(value = Reference.Any.class, target = "(foo=bar)")
+List<Object> matches;]]></programlisting>
+
+				Note that there may be performance impacts resulting from matching
+				too broad a set of services. By definition the above list example
+				with a target filter equal to <code>(service.id=*)</code> is perfectly
+				valid but will match all services in the registry which will likely
+				neither be very useful nor performant.
+				</para>
+			</listitem>
+		</orderedlist>
 	</section>
 
 	<section>
@@ -2924,6 +2940,28 @@ Collection<ServiceReference<Spot>> spots;]]></programlisting>
 		the entire component instance must be destroyed and recreated.</para>
 	</section>
 
+	<section xml:id="service.cdi-default.minimum.cardinality">
+		<title>Default Minimum Cardinality</title>
+
+		<para>As stated in <xref linkend="service.cdi-minimum.cardinality.property" />
+		every reference has a configurable reference property <code>name.cardinality.minimum</code>.
+		However, there are cases where it is appropriate to specify a non-zero
+		default minimum cardinality. The <xref
+		linkend="org.osgi.service.cdi.annotations.MinimumCardinality" xrefstyle="hyperlink"/>
+		annotation provides this functionality.</para>
+
+		<para>The following is an example of setting the minimum cardinality:</para>
+
+		<programlisting><![CDATA[@Inject
+@MinimumCardinality(3)
+@Reference
+List<Dog> guards;]]></programlisting>
+
+		<para>The value must be a positive integer.</para>
+
+		<para>Specifying this annotation on a unary reference results in a definition error.</para>
+	</section>
+
 	<section xml:id="service.cdi-reference.dynamic">
 		<title>Dynamic References</title>
 
@@ -2959,6 +2997,11 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 		<para>The evaluation of <code>javax.inject.Provider.get()</code> is
 		performed such that each invocation may produce a different result
 		except for returning <code>null</code>.</para>
+
+		<para>Specifying the <code>@MinimumCardinality</code> annotation with a
+		non-zero value on a dynamic, multi-cardinality reference results in the
+		component not being resolved until the number of matching services
+		becomes equal to or greater than the specified minimum cardinality.</para>
 	</section>
 </section>
 
@@ -3243,7 +3286,7 @@ void init() {
 }
 
 @Inject
-void setup(@Configuration Config config, Logger logger) {
+void setup(@ComponentProperties Config config, Logger logger) {
 	logger.trace(l -> l.trace(“activating component {}”, config.component_name()));
 }]]></programlisting>
 	</section>

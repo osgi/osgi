@@ -28,12 +28,10 @@ import javax.inject.Inject;
 import javax.inject.Qualifier;
 
 /**
- * Annotation used with {@link Inject} in order to have configuration properties
- * injected. Properties are a combination of qualifiers and properties provided
- * through Configuration Admin in association with the configuration PIDs
- * defined by {@link PID} and {@link FactoryComponent} or in the case of the
- * application component which were specified by the configuration object who's
- * PID matches the CDI container id.
+ * Annotation used with {@link Inject} in order to have component properties
+ * injected.
+ * <p>
+ * See "Component Properties".
  *
  * @author $Id$
  */
@@ -41,18 +39,18 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})
-public @interface Configuration {
+public @interface ComponentProperties {
 
 	/**
-	 * Support inline instantiation of the {@link Configuration} annotation.
+	 * Support inline instantiation of the {@link ComponentProperties} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Configuration>
-			implements Configuration {
+	public static final class Literal extends AnnotationLiteral<ComponentProperties>
+			implements ComponentProperties {
 
 		/**
 		 * Default instance.
 		 */
-		public static final Configuration	INSTANCE			= new Literal();
+		public static final ComponentProperties	INSTANCE			= new Literal();
 
 		private static final long			serialVersionUID	= 1L;
 

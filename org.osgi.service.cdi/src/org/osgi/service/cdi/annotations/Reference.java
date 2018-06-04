@@ -42,6 +42,24 @@ import javax.inject.Qualifier;
 public @interface Reference {
 
 	/**
+	 * A marker type used in {@link Reference#value} to indicate that a
+	 * reference injection point may accept any service type(s).
+	 * <p>
+	 * The injection point service type must be specified as {@link Object}.
+	 * <p>
+	 * The value must be specified by itself.
+	 * <p>
+	 * For example:
+	 *
+	 * <pre>
+	 * &#64;Inject
+	 * &#64;Reference(value = Any.class, target = "(bar=baz)")
+	 * List&lt;Object&gt; services;
+	 * </pre>
+	 */
+	public static final class Any {/**/}
+
+	/**
 	 * Support inline instantiation of the {@link Reference} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<Reference>
