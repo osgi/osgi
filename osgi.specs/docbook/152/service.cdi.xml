@@ -374,7 +374,7 @@
 			</listitem>
 
 			<listitem>
-				<para><emphasis>Single Component</emphasis> - A <em>Single Component</em>
+				<para><emphasis>Single Component</emphasis> - A <emphasis>Single Component</emphasis>
 				begins with a bean annotated by the <link
 				linkend="org.osgi.service.cdi.annotations.SingleComponent"
 				xrefstyle="hyperlink">@SingleComponent</link> annotation and is
@@ -390,7 +390,7 @@
 			</listitem>
 
 			<listitem>
-				<para><emphasis>Factory Component</emphasis> - A <em>Factory Component</em>
+				<para><emphasis>Factory Component</emphasis> - A <emphasis>Factory Component</emphasis>
 				begins with a bean annotated by the <link
 				linkend="org.osgi.service.cdi.annotations.FactoryComponent"
 				xrefstyle="hyperlink">@FactoryComponent</link> annotation and is
@@ -901,7 +901,7 @@ class Buddy implements Hound {}]]></programlisting>
 <section xml:id="service.cdi-single.component">
 	<title>Single Component</title>
 
-	<para>A <em>Single Component</em> begins with and is rooted by a bean annotated
+	<para>A <emphasis>Single Component</emphasis> begins with and is rooted by a bean annotated
 	by the <link linkend="org.osgi.service.cdi.annotations.SingleComponent"
 	xrefstyle="hyperlink">@SingleComponent</link> annotation. It is further enhanced
 	by beans in it's injection graph that are <code>@ComponentScoped</code> which
@@ -1059,7 +1059,7 @@ class Fido {}]]></programlisting>
 <section xml:id="service.cdi-factory.component">
 	<title>Factory Component</title>
 
-	<para>A <em>Factory Component</em> begins with and is rooted by a bean annotated
+	<para>A <emphasis>Factory Component</emphasis> begins with and is rooted by a bean annotated
 	by the <link linkend="org.osgi.service.cdi.annotations.FactoryComponent"
 	xrefstyle="hyperlink">@FactoryComponent</link> annotation. It is further enhanced
 	by beans in it's injection graph that are <code>@ComponentScoped</code> which
@@ -1460,9 +1460,9 @@ public @interface Props {
 		<listitem>
 			<para>Bean Property Types can be used on injection points as the
 			injection point type where the <xref
-			linkend="org.osgi.service.cdi.annotations.Configuration"
+			linkend="org.osgi.service.cdi.annotations.ComponentProperties"
 			xrefstyle="hyperlink"/> annotation is applied to provide type safe
-			coercion of configuration properties.</para>
+			coercion of component properties.</para>
 		</listitem>
 	</itemizedlist>
 	</para>
@@ -2548,8 +2548,8 @@ BeanServiceObjects<Dog> dogs;]]></programlisting>
 		specified by this specification.</para>
 	</section>
 
-	<section xml:id="service.cdi-service.scope">
-		<title>Service scope</title>
+	<section xml:id="service.cdi-reference.service.scope">
+		<title>Reference Service scope</title>
 
 		<para>For a bound service, CCR must get the service object from the OSGi
 		Framework's service registry using the <code>getService</code> method on
@@ -3249,8 +3249,6 @@ void removed(BeanServiceObjects<Dog> dogs) {...}]]></programlisting>
 				</imageobject>
 			</mediaobject>
 		</figure>
-
-		<remark>RAY finish DTOs.</remark>
 	</section>
 
 	<section xml:id="service.cdi-logger.support">
