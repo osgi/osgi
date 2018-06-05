@@ -87,6 +87,7 @@ build.enterprise.impls = \
     org.osgi.util.xml
 
 jar.enterprise.impls = \
+	${repo;org.osgi.impl.bundle.cdi;latest}, \
 	${repo;org.osgi.impl.bundle.derby;latest}, \
 	${repo;org.osgi.impl.bundle.jmx;latest}, \
 	${repo;org.osgi.impl.bundle.serviceloader;latest}, \

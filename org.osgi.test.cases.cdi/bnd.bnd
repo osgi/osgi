@@ -45,8 +45,9 @@ Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
 
 -runbundles: \
     ${junit},\
-	org.osgi.impl.bundle.cdi;version=latest,\
-	
+    org.osgi.impl.bundle.cdi;version=latest,\
+    org.osgi.impl.service.log; version=latest
+
 -runproperties: \
 	${runproperties},\
 	eclipse.consoleLog=true,\
