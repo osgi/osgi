@@ -149,21 +149,23 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 
 		ServiceRegistration<String> testReg = getContext()
 				.registerService(String.class, "TestService", null);
+		ServiceReference<String> testRef = testReg.getReference();
 		Dictionary<String,String> props = new Hashtable<>();
 		props.put("test", "value");
 		testReg.setProperties(props);
 		testReg.unregister();
 
-		assertServiceEventLog("REGISTERED", LogLevel.INFO);
-		assertServiceEventLog("MODIFIED", LogLevel.DEBUG);
-		assertServiceEventLog("UNREGISTERING", LogLevel.INFO);
+		assertServiceEventLog("REGISTERED", LogLevel.INFO, testRef);
+		assertServiceEventLog("MODIFIED", LogLevel.DEBUG, testRef);
+		assertServiceEventLog("UNREGISTERING", LogLevel.INFO, testRef);
 	}
 
-	private void assertServiceEventLog(String eventType, LogLevel logLevel) {
+	private void assertServiceEventLog(String eventType, LogLevel logLevel,
+			ServiceReference<String> ref) {
 		LogEntry entry = eventLogListener.getEntry(10000);
 		assertEventLog(entry, EVENTS_SERVICE, "ServiceEvent " + eventType,
 				getContext().getBundle(), logLevel.ordinal(), logLevel,
-				null);
+				ref);
 	}
 
 	@SuppressWarnings("deprecation")
