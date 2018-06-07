@@ -31,7 +31,8 @@ import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class CapabilitiesTestCase extends OSGiTestCase {
-	private static final Version								VERSION	= new Version(1, 3, 0);
+	private static final Version							VERSION	= new Version(
+			1, 4, 0);
 	private static final String									PACKAGE	= "org.osgi.service.metatype";
 	private static final String									NAME	= "osgi.metatype";
 	private ServiceTracker<MetaTypeService, MetaTypeService>	mtsTracker;
