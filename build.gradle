@@ -7,17 +7,6 @@
 
 import aQute.lib.io.IO
 
-/* Add bnd gradle plugin as a script dependency */
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3'
-  }
-}
-
 /* Configure the subprojects */
 subprojects {
   if (plugins.hasPlugin('biz.aQute.bnd')) {

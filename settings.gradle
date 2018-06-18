@@ -12,9 +12,11 @@ buildscript {
     maven {
       url uri(bnd_repourl)
     }
+    mavenCentral()
   }
   dependencies {
     classpath bnd_plugin
+    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3'
   }
   /* Add bnd gradle plugin to buildscript classpath of rootProject */
   def bndPlugin = files(configurations.classpath.files)
