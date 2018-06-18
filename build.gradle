@@ -71,7 +71,7 @@ subprojects {
   }
 }
 
-task wrapper(type: Wrapper) {
+wrapper {
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }
 
