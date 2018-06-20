@@ -17,3 +17,5 @@ InitialProvisioning-Entries: \
  simple-prov.jar;type=bundle-url, \
  delay-prov.jar;type=bundle-url, \
  provisioning.start.bundle;type=text
+
+XEOM: End of manifest

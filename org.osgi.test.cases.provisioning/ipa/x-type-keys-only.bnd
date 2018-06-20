@@ -13,3 +13,5 @@ InitialProvisioning-Entries: \
  some.key.1;type=text, \
  some.key.2;type=text, \
  some.key.4;type=text
+
+XEOM: End of manifest

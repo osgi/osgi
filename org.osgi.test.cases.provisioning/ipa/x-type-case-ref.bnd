@@ -15,3 +15,5 @@ InitialProvisioning-Entries: \
  load-status;type=text, \
  case-ref-prov.jar;type=bundle-url, \
  provisioning.start.bundle;type=text
+
+XEOM: End of manifest

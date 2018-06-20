@@ -26,3 +26,5 @@ InitialProvisioning-Entries: \
  text-2;type=text, \
  /text-3;type=text, \
  osgi.cert;type=binary
+
+XEOM: End of manifest

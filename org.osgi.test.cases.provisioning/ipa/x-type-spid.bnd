@@ -11,3 +11,5 @@ Include-Resource: \
 InitialProvisioning-Entries: \
  x-type-spid.ipa;type=text, \
  load-status;type=text
+
+XEOM: End of manifest

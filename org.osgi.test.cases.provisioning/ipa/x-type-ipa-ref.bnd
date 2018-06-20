@@ -12,3 +12,5 @@ InitialProvisioning-Entries: \
  x-type-ipa-ref.ipa;type=text, \
  load-status;type=text, \
  provisioning.reference;type=text
+
+XEOM: End of manifest

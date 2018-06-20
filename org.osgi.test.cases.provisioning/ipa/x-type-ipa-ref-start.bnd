@@ -17,4 +17,5 @@ InitialProvisioning-Entries: \
  local-prov.jar=type=bundle, \
  provisioning.reference;type=text, \
  provisioning.start.bundle;type=text
-   
+
+XEOM: End of manifest
