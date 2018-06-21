@@ -2898,6 +2898,32 @@ public class PromiseTest extends TestCase {
 		assertSame("wrong failure", failure, result.get());
 	}
 
+	public void testOnResolveNull1() throws Exception {
+		PromiseFactory factory = new PromiseFactory(
+				PromiseFactory.inlineExecutor());
+		Deferred<String> d1 = factory.deferred();
+		Promise<String> p1 = d1.getPromise();
+		try {
+			p1.onResolve((Runnable) null);
+			fail("failed to error on null runnable");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
+	public void testOnResolveNull2() throws Exception {
+		String value1 = new String("value");
+		PromiseFactory factory = new PromiseFactory(
+				PromiseFactory.inlineExecutor());
+		Promise<String> p1 = factory.resolved(value1);
+		try {
+			p1.onResolve((Runnable) null);
+			fail("failed to error on null runnable");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testOnSuccessNull() throws Exception {
 		String value1 = new String("value");
 		Promise<String> p1 = resolved(value1);

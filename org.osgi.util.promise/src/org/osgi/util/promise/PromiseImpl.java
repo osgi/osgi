@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,8 +100,17 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> onResolve(Runnable callback) {
-		callbacks.offer(callback);
-		notifyCallbacks(); // call any registered callbacks
+		requireNonNull(callback);
+		if (isDone()) {
+			try {
+				callback.run();
+			} catch (Throwable t) {
+				uncaughtException(t);
+			}
+		} else {
+			callbacks.offer(callback);
+			notifyCallbacks(); // call any registered callbacks
+		}
 		return this;
 	}
 
@@ -162,24 +171,6 @@ abstract class PromiseImpl<T> implements Promise<T> {
 			thread.getUncaughtExceptionHandler().uncaughtException(thread, t);
 		} catch (Throwable ignored) {
 			// we ignore this
-		}
-	}
-
-	/**
-	 * Run the specified chain when the specified promise is resolved.
-	 * 
-	 * @param promise The promise associated with the chain.
-	 * @param chain The chain to run when the promise is resolved.
-	 */
-	static <V> void chain(Promise<V> promise, Runnable chain) {
-		if (promise.isDone()) {
-			try {
-				chain.run();
-			} catch (Throwable t) {
-				uncaughtException(t);
-			}
-		} else {
-			promise.onResolve(chain);
 		}
 	}
 
@@ -257,7 +248,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
 		DeferredPromiseImpl<R> chained = deferred();
-		chain(this, chained.new Then<>(this, success, failure));
+		onResolve(chained.new Then<>(this, success, failure));
 		return chained.orDone();
 	}
 
@@ -275,7 +266,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new ThenAccept(this, consumer));
+		onResolve(chained.new ThenAccept(this, consumer));
 		return chained.orDone();
 	}
 
@@ -286,7 +277,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new Filter(this, predicate));
+		onResolve(chained.new Filter(this, predicate));
 		return chained.orDone();
 	}
 
@@ -296,7 +287,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
 		DeferredPromiseImpl<R> chained = deferred();
-		chain(this, chained.new Map<>(this, mapper));
+		onResolve(chained.new Map<>(this, mapper));
 		return chained.orDone();
 	}
 
@@ -307,7 +298,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
 		DeferredPromiseImpl<R> chained = deferred();
-		chain(this, chained.new FlatMap<>(this, mapper));
+		onResolve(chained.new FlatMap<>(this, mapper));
 		return chained.orDone();
 	}
 
@@ -317,7 +308,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new Recover(this, recovery));
+		onResolve(chained.new Recover(this, recovery));
 		return chained.orDone();
 	}
 
@@ -327,7 +318,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new RecoverWith(this, recovery));
+		onResolve(chained.new RecoverWith(this, recovery));
 		return chained.orDone();
 	}
 
@@ -337,7 +328,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new FallbackTo(this, fallback));
+		onResolve(chained.new FallbackTo(this, fallback));
 		return chained.orDone();
 	}
 
@@ -347,7 +338,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> timeout(long millis) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new Timeout(this, millis));
+		onResolve(chained.new Timeout(this, millis));
 		return chained.orDone();
 	}
 
@@ -357,7 +348,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> delay(long millis) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new Delay(this, millis));
+		onResolve(chained.new Delay(this, millis));
 		return chained.orDone();
 	}
 

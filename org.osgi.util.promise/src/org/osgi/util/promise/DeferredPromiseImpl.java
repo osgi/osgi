@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -230,7 +230,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	Promise<Void> resolveWith(Promise< ? extends T> with) {
 		DeferredPromiseImpl<Void> chained = deferred();
-		chain(with, chained.new ResolveWith<>(with, this));
+		with.onResolve(chained.new ResolveWith<>(with, this));
 		return chained.orDone();
 	}
 
@@ -301,7 +301,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e; // propagate new exception
 				}
 				if (returned != null) {
-					chain(returned, new Chain(returned));
+					returned.onResolve(new Chain(returned));
 					return;
 				}
 			}
@@ -462,7 +462,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e;
 				}
 				if (flatmap != null) {
-					chain(flatmap, new Chain(flatmap));
+					flatmap.onResolve(new Chain(flatmap));
 					return;
 				}
 			}
@@ -529,7 +529,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e;
 				}
 				if (recovered != null) {
-					chain(recovered, new Chain(recovered));
+					recovered.onResolve(new Chain(recovered));
 					return;
 				}
 			}
@@ -555,7 +555,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		public void run() {
 			Result<T> result = promise.collect();
 			if (result.fail != null) {
-				chain(fallback, new FallbackChain(fallback, result.fail));
+				fallback.onResolve(new FallbackChain(fallback, result.fail));
 				return;
 			}
 			tryResolve(result.value, null);

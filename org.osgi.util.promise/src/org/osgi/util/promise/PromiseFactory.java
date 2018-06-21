@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
-import static org.osgi.util.promise.PromiseImpl.*;
+import static org.osgi.util.promise.PromiseImpl.uncaughtException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -151,7 +151,7 @@ public class PromiseFactory {
 	 * Returns a new Promise that has been resolved with the specified value.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseFactory object
+	 * this PromiseFactory object.
 	 * <p>
 	 * Use this method instead of {@link Promises#resolved(Object)} to create a
 	 * Promise which uses executors other than the default executors.
@@ -168,7 +168,7 @@ public class PromiseFactory {
 	 * Returns a new Promise that has been resolved with the specified failure.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseFactory object
+	 * this PromiseFactory object.
 	 * <p>
 	 * Use this method instead of {@link Promises#failed(Throwable)} to create a
 	 * Promise which uses executors other than the default executors.
@@ -186,7 +186,7 @@ public class PromiseFactory {
 	 * Returns a new Promise that will hold the result of the specified task.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseFactory object
+	 * this PromiseFactory object.
 	 * <p>
 	 * The specified task will be executed on the {@link #executor() callback
 	 * executor}.
@@ -212,7 +212,7 @@ public class PromiseFactory {
 	 * Promises.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseFactory object
+	 * this PromiseFactory object.
 	 * <p>
 	 * The returned Promise acts as a gate and must be resolved after all of the
 	 * specified Promises are resolved.
@@ -247,7 +247,7 @@ public class PromiseFactory {
 		DeferredPromiseImpl<List<T>> chained = new DeferredPromiseImpl<>(this);
 		All<T,S> all = new All<>(chained, list);
 		for (Promise<S> p : list) {
-			chain(p, all);
+			p.onResolve(all);
 		}
 		return chained.orDone();
 	}
@@ -360,7 +360,7 @@ public class PromiseFactory {
 		}
 
 		/**
-		 * Executor threads should not prevent VM from exiting
+		 * Executor threads should not prevent VM from exiting.
 		 */
 		@Override
 		public Thread newThread(Runnable r) {
