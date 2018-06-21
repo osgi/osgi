@@ -1,0 +1,13 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description			= Annotations Test Bundle
+
+Private-Package 			= ${p}.*
+
+-buildpath 					= \
+	org.osgi.annotation.bundle; version=latest, \
+	org.osgi.annotation.versioning; version=latest
+
+-runproperties = ${runproperties}
+

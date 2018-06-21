@@ -2,7 +2,8 @@ build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}, 
 
 build.core.impls = \
     org.osgi.dto, \
-    org.osgi.util.tracker
+    org.osgi.util.tracker, \
+	org.osgi.impl.bundle.annotations
 
 jar.core.impls = \
 	${repo;org.osgi.impl.framework;latest}, \
