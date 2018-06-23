@@ -31,7 +31,8 @@ import org.osgi.resource.Requirement;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 
 public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
-	protected BundleRevision revision;
+	protected Bundle			impl;
+	protected BundleRevision	revision;
 
 	@Before
 	public void obtainBundleRevision() throws Exception {
@@ -40,7 +41,7 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 		assertThat(bsn).as(
 				"The system property \"%s\" must be set to the Bundle Symbolic Name of the bundle processed by the Bundle Annotations tool.",
 				propName).isNotNull();
-		Bundle impl = null;
+		impl = null;
 		for (Bundle b : getContext().getBundles()) {
 			if (bsn.equals(b.getSymbolicName())) {
 				impl = b;
