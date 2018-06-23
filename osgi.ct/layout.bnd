@@ -8,6 +8,7 @@ build.core.tests = \
     org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.launch, \
     org.osgi.test.cases.framework.launch.secure, \
+    org.osgi.test.cases.bundle.annotations, \
     org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
     org.osgi.test.cases.resolver, \

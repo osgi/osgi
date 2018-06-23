@@ -1,0 +1,26 @@
+javac.profile=compact2
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
+-includeresource					= resources, \
+ OSGI-INF/impl-src=${project.workspace}/org.osgi.impl.bundle.annotations/src
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.annotation.bundle; version=latest, \
+    org.osgi.annotation.versioning; version=latest, \
+	osgi.core;									version=6.0.0, \
+	osgi.cmpn;									version=6.0.0, \
+	${junit}
+
+-runbundles = \
+    ${junit},\
+    org.osgi.impl.bundle.annotations; version=latest
+
+-runproperties = ${runproperties}, \
+	${p}.bundle.symbolic.name=org.osgi.impl.bundle.annotations
+
+Test-Cases: ${testcases}
