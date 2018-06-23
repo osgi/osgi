@@ -19,7 +19,7 @@ Include-Resource:\
 	tb10.jar,\
 	tb11.jar
 
-Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
+Test-Cases: ${testcases}
 
 -signaturetest: org.osgi.service.cdi
 
