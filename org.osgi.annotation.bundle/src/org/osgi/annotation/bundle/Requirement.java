@@ -104,7 +104,7 @@ public @interface Requirement {
 	 * <li>{@code "name:type=value"} for typed attributes.</li>
 	 * <li>{@code "name:=value"} for directives.</li>
 	 * </ul>
-	 * These are added, separated by semicolons, to the export package clause.
+	 * These are added, separated by semicolons, to the requirement clause.
 	 */
 	String[] attribute() default {};
 

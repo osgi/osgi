@@ -103,7 +103,7 @@ public @interface Capability {
 	 * <li>{@code "name:type=value"} for typed attributes.</li>
 	 * <li>{@code "name:=value"} for directives.</li>
 	 * </ul>
-	 * These are added, separated by semicolons, to the export package clause.
+	 * These are added, separated by semicolons, to the capability clause.
 	 */
 	String[] attribute() default {};
 }
