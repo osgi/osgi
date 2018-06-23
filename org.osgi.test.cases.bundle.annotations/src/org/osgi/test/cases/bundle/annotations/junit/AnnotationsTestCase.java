@@ -20,16 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.framework.namespace.PackageNamespace.PACKAGE_NAMESPACE;
 import static org.osgi.resource.Namespace.REQUIREMENT_FILTER_DIRECTIVE;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.api.Condition;
-import org.assertj.core.description.TextDescription;
 import org.junit.Before;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Filter;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
@@ -118,48 +113,6 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 				.as("Package %s requirement could not be found", name)
 				.isNotNull();
 		return requirement;
-	}
-
-	public static class FilterAcceptCondition extends Condition<Filter> {
-		private final Map<String, ? > map;
-
-		public FilterAcceptCondition(Map<String, ? > map) {
-			super(new TextDescription("filter does not accept %s", map));
-			this.map = map;
-		}
-
-		@Override
-		public boolean matches(Filter filter) {
-			return filter.matches(map);
-		}
-	}
-
-	public static class FilterRejectCondition extends Condition<Filter> {
-		private final Map<String, ? > map;
-
-		public FilterRejectCondition(Map<String, ? > map) {
-			super(new TextDescription("filter accepts %s", map));
-			this.map = map;
-		}
-
-		@Override
-		public boolean matches(Filter filter) {
-			return !filter.matches(map);
-		}
-	}
-
-	public static Map<String,Object> map(String k1, Object v1) {
-		Map<String,Object> map = new LinkedHashMap<>();
-		map.put(k1, v1);
-		return Collections.unmodifiableMap(map);
-	}
-
-	public static Map<String,Object> map​(String k1, Object v1, String k2,
-			Object v2) {
-		Map<String,Object> map = new LinkedHashMap<>();
-		map.put(k1, v1);
-		map.put(k2, v2);
-		return Collections.unmodifiableMap(map);
 	}
 
 }
