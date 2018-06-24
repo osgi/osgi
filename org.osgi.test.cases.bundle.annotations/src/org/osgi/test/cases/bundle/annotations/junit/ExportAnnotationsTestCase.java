@@ -32,6 +32,7 @@ import org.osgi.resource.Requirement;
 import org.osgi.test.support.assertj.condition.FilterAcceptCondition;
 import org.osgi.test.support.assertj.condition.FilterRejectCondition;
 import org.osgi.test.support.map.Maps;
+import org.osgi.test.support.string.Strings;
 
 @SuppressWarnings("unused")
 public class ExportAnnotationsTestCase extends AnnotationsTestCase {
@@ -195,7 +196,9 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		Capability pkg = getPackageCapability(pkgName);
 		Map<String,String> directives = pkg.getDirectives();
 		assertThat(directives).as("Package capability directives")
-				.containsEntry(CAPABILITY_USES_DIRECTIVE, "foo,bar");
+				.containsKey(CAPABILITY_USES_DIRECTIVE);
+		assertThat(Strings.split(directives.get(CAPABILITY_USES_DIRECTIVE)))
+				.containsExactlyInAnyOrder("bar", "foo");
 	}
 
 	@Test
@@ -204,7 +207,9 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		Capability pkg = getPackageCapability(pkgName);
 		Map<String,String> directives = pkg.getDirectives();
 		assertThat(directives).as("Package capability directives")
-				.containsEntry(CAPABILITY_USES_DIRECTIVE,
+				.containsKey(CAPABILITY_USES_DIRECTIVE);
+		assertThat(Strings.split(directives.get(CAPABILITY_USES_DIRECTIVE)))
+				.containsExactlyInAnyOrder(
 						"org.osgi.impl.bundle.annotations.export.uses");
 	}
 

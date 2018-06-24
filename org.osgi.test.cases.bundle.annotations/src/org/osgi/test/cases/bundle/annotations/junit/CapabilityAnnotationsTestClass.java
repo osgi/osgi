@@ -26,6 +26,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.osgi.framework.Version;
 import org.osgi.resource.Capability;
+import org.osgi.test.support.string.Strings;
 
 public class CapabilityAnnotationsTestClass extends AnnotationsTestCase {
 
@@ -45,14 +46,17 @@ public class CapabilityAnnotationsTestClass extends AnnotationsTestCase {
 		Capability capability = getCapability(namespace);
 		Map<String,String> directives = capability.getDirectives();
 		assertThat(directives).as("capability directives")
+				.containsKey(CAPABILITY_USES_DIRECTIVE)
 				.containsEntry("x-directive", "directiveValue")
-				.containsEntry(CAPABILITY_USES_DIRECTIVE,
-						"org.osgi.impl.bundle.annotations.reqcap,org.osgi.impl.bundle.annotations.export")
 				.containsEntry(CAPABILITY_EFFECTIVE_DIRECTIVE, "osgi.test")
 				.doesNotContainKeys("attr", "longAttr", "stringAttr",
 						"doubleAttr", "versionAttr", "longList", "stringList",
 						"doubleList", "versionList",
 						CAPABILITY_VERSION_ATTRIBUTE, namespace);
+		assertThat(Strings.split(directives.get(CAPABILITY_USES_DIRECTIVE)))
+				.containsExactlyInAnyOrder(
+						"org.osgi.impl.bundle.annotations.reqcap",
+						"org.osgi.impl.bundle.annotations.export");
 
 		Map<String,Object> attributes = capability.getAttributes();
 		assertThat(attributes).as("capability attributes")
