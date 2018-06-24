@@ -33,6 +33,7 @@ import org.osgi.test.support.assertj.condition.FilterAcceptCondition;
 import org.osgi.test.support.assertj.condition.FilterRejectCondition;
 import org.osgi.test.support.map.Maps;
 
+@SuppressWarnings("unused")
 public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test

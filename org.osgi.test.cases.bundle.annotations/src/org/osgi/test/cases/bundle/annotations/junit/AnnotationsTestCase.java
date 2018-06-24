@@ -116,4 +116,20 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 		return requirement;
 	}
 
+	public Requirement getRequirement(String namespace) {
+		List<Requirement> requirements = revision.getRequirements(namespace);
+		assertThat(requirements).as("%s requirements", namespace)
+				.isNotNull()
+				.hasSize(1);
+		return requirements.get(0);
+	}
+
+	public Capability getCapability(String namespace) {
+		List<Capability> capabilities = revision.getCapabilities(namespace);
+		assertThat(capabilities).as("%s capabilities", namespace)
+				.isNotNull()
+				.hasSize(1);
+		return capabilities.get(0);
+	}
+
 }
