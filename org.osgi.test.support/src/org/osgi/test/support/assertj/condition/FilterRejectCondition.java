@@ -26,7 +26,7 @@ public class FilterRejectCondition extends Condition<Filter> {
 	private final Map<String, ? > map;
 
 	public FilterRejectCondition(Map<String, ? > map) {
-		super(new TextDescription("filter accepts %s", map));
+		super(new TextDescription("filter must not match %s", map));
 		this.map = map;
 	}
 

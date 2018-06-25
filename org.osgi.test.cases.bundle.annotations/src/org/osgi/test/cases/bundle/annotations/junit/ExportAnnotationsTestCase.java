@@ -213,4 +213,32 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 						"org.osgi.impl.bundle.annotations.export.uses");
 	}
 
+	@Test
+	public void testProviderType() throws Exception {
+		String pkgName = "org.osgi.impl.bundle.annotations.pkg.provider";
+		assertThat(getPackageCapability(pkgName).getAttributes())
+				.as("Package %s capability attributes", pkgName)
+				.containsEntry(CAPABILITY_VERSION_ATTRIBUTE,
+						Version.valueOf("1.0"));
+		Requirement pkg = getPackageRequirement(pkgName);
+		Map<String,String> directives = pkg.getDirectives();
+		String filterString = directives.get(REQUIREMENT_FILTER_DIRECTIVE);
+		Filter filter = getContext().createFilter(filterString);
+		assertThat(filter)
+				.as("Package %s requirement filter incorrect: %s", pkgName,
+						filterString)
+				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
+						Version.valueOf("1.0"))))
+				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
+						Version.valueOf("0.9"))))
+				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
+						Version.valueOf("1.1"))))
+				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
+						Version.valueOf("2.0"))));
+	}
+
 }
