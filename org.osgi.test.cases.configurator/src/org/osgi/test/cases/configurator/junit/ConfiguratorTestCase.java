@@ -832,7 +832,7 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 	}
 
 	private <T> Promise<T> getTimeoutPromise(Deferred<T> def) {
-		return def.getPromise().timeout(2000);
+		return def.getPromise().timeout(30000);
 	}
 
 	private void unregister(ServiceRegistration< ? > reg) {
