@@ -35,10 +35,56 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 		return new DictionaryMap<>(dict);
 	}
 
-	final Dictionary<K,V> dict;
+	private final Dictionary<K,V> dict;
 
 	private DictionaryMap(Dictionary<K,V> dict) {
 		this.dict = dict;
+	}
+
+	Enumeration<K> keys() {
+		return dict.keys();
+	}
+
+	@Override
+	public int size() {
+		return dict.size();
+	}
+
+	@Override
+	public boolean containsKey(Object key) {
+		if (key == null) {
+			return false;
+		}
+		return dict.get(key) != null;
+	}
+
+	@Override
+	public V get(Object key) {
+		if (key == null) {
+			return null;
+		}
+		return dict.get(key);
+	}
+
+	@Override
+	public V put(K key, V value) {
+		return dict.put(key, value);
+	}
+
+	@Override
+	public V remove(Object key) {
+		if (key == null) {
+			return null;
+		}
+		return dict.remove(key);
+	}
+
+	@Override
+	public void clear() {
+		Enumeration<K> enumerator = dict.keys();
+		while (enumerator.hasMoreElements()) {
+			dict.remove(enumerator.nextElement());
+		}
 	}
 
 	@Override
@@ -54,26 +100,36 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 
 		@Override
 		public int size() {
-			return dict.size();
+			return DictionaryMap.this.size();
 		}
 
 		@Override
 		public boolean contains(Object o) {
 			if (o instanceof Map.Entry) {
 				Map.Entry< ? , ? > e = (Map.Entry< ? , ? >) o;
-				Object key = e.getKey();
-				return Objects.equals(dict.get(key), e.getValue());
+				return containsEntry(e);
 			}
 			return false;
+		}
+
+		private boolean containsEntry(Map.Entry< ? , ? > e) {
+			Object key = e.getKey();
+			if (key == null) {
+				return false;
+			}
+			Object value = e.getValue();
+			if (value == null) {
+				return false;
+			}
+			return Objects.equals(DictionaryMap.this.get(key), value);
 		}
 
 		@Override
 		public boolean remove(Object o) {
 			if (o instanceof Map.Entry) {
 				Map.Entry< ? , ? > e = (Map.Entry< ? , ? >) o;
-				Object key = e.getKey();
-				if (Objects.equals(dict.get(key), e.getValue())) {
-					dict.remove(key);
+				if (containsEntry(e)) {
+					DictionaryMap.this.remove(e.getKey());
 					return true;
 				}
 			}
@@ -82,16 +138,13 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 
 		@Override
 		public void clear() {
-			Enumeration<K> enumerator = dict.keys();
-			while (enumerator.hasMoreElements()) {
-				dict.remove(enumerator.nextElement());
-			}
+			DictionaryMap.this.clear();
 		}
 	}
 
 	final class EntryIterator implements Iterator<Map.Entry<K,V>> {
-		private Enumeration<K>	enumerator	= dict.keys();
-		private K				key			= null;
+		private final Enumeration<K>	enumerator	= DictionaryMap.this.keys();
+		private K						key			= null;
 
 		@Override
 		public boolean hasNext() {
@@ -101,7 +154,7 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 		@Override
 		public Map.Entry<K,V> next() {
 			key = enumerator.nextElement();
-			return new Entry(key, dict.get(key));
+			return new Entry(key, DictionaryMap.this.get(key));
 		}
 
 		@Override
@@ -109,7 +162,7 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 			if (key == null) {
 				throw new IllegalStateException();
 			}
-			dict.remove(key);
+			DictionaryMap.this.remove(key);
 			key = null;
 		}
 	}
@@ -123,7 +176,7 @@ public class DictionaryMap<K, V> extends AbstractMap<K,V> {
 
 		@Override
 		public V setValue(V value) {
-			dict.put(getKey(), value);
+			DictionaryMap.this.put(getKey(), value);
 			return super.setValue(value);
 		}
 	}
