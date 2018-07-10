@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,8 +117,8 @@ public interface Logger {
 	/**
 	 * Is logging enabled for the {@link LogLevel#DEBUG} level?
 	 * 
-	 * @return {@code true} if logging is enabled for the {@link LogLevel#DEBUG
-	 *         trace} level.
+	 * @return {@code true} if logging is enabled for the {@link LogLevel#DEBUG}
+	 *         level.
 	 */
 	boolean isDebugEnabled();
 
@@ -166,8 +166,8 @@ public interface Logger {
 	/**
 	 * Is logging enabled for the {@link LogLevel#INFO} level?
 	 * 
-	 * @return {@code true} if logging is enabled for the {@link LogLevel#INFO
-	 *         trace} level.
+	 * @return {@code true} if logging is enabled for the {@link LogLevel#INFO}
+	 *         level.
 	 */
 	boolean isInfoEnabled();
 
@@ -215,8 +215,8 @@ public interface Logger {
 	/**
 	 * Is logging enabled for the {@link LogLevel#WARN} level?
 	 * 
-	 * @return {@code true} if logging is enabled for the {@link LogLevel#WARN
-	 *         trace} level.
+	 * @return {@code true} if logging is enabled for the {@link LogLevel#WARN}
+	 *         level.
 	 */
 	boolean isWarnEnabled();
 
@@ -264,8 +264,8 @@ public interface Logger {
 	/**
 	 * Is logging enabled for the {@link LogLevel#ERROR} level?
 	 * 
-	 * @return {@code true} if logging is enabled for the {@link LogLevel#ERROR
-	 *         trace} level.
+	 * @return {@code true} if logging is enabled for the {@link LogLevel#ERROR}
+	 *         level.
 	 */
 	boolean isErrorEnabled();
 
