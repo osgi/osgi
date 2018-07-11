@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 
 package org.osgi.test.cases.component.annotations.junit;
 
+import org.osgi.test.support.xpath.BaseElement;
+import org.osgi.test.support.xpath.BaseNamespaceContext;
 import org.w3c.dom.Element;
 
 /**
@@ -24,41 +26,14 @@ import org.w3c.dom.Element;
  * 
  * @author $Id$
  */
-public class Description {
-	private final String	name;
-	private final NamespaceContextImpl	context;
-	private final Element	component;
-
+public class Description extends BaseElement {
 	/**
 	 * @param name
 	 * @param context
 	 * @param component
 	 */
-	public Description(String name, NamespaceContextImpl context,
+	public Description(String name, BaseNamespaceContext context,
 			Element component) {
-		this.name = name;
-		this.context = context;
-		this.component = component;
-	}
-
-	/**
-	 * @return result
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return result
-	 */
-	public Element getComponent() {
-		return component;
-	}
-
-	/**
-	 * @return result
-	 */
-	public NamespaceContextImpl getNamespaceContext() {
-		return context;
+		super(name, context, component);
 	}
 }
