@@ -45,48 +45,20 @@ import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 @ProviderType
 public interface CDIComponentRuntime {
 	/**
-	 * Returns a collection of container description snapshots for a set of bundles.
+	 * Returns a collection of container description snapshots for a set of
+	 * bundles.
 	 *
-	 * @param bundles The bundles who's container description snapshots are to be
-	 *        returned. Specifying no bundles, or the equivalent of an empty
-	 *        {@code Bundle} array, will return the container descriptions of all
-	 *        active bundles that define a container.
+	 * @param bundles The bundles who's container description snapshots are to
+	 *            be returned. Specifying no bundles, or the equivalent of an
+	 *            empty {@code Bundle} array, will return the container
+	 *            descriptions of all active bundles that define a container.
 	 * @return A set of descriptions of the container of the specified
-	 *         {@code bundles}. Only bundles that have an associated container are
-	 *         included. If a bundle is listed multiple times in {@code bundles}
-	 *         only one {@link ContainerDTO} is returned. Returns an empty
-	 *         collection rather than {@code null}.
+	 *         {@code bundles}. Only bundles that have an associated container
+	 *         are included. If a bundle is listed multiple times in
+	 *         {@code bundles} only one {@link ContainerDTO} is returned.
+	 *         Returns an empty collection if no CDI containers are found.
 	 */
 	Collection<ContainerDTO> getContainerDTOs(Bundle... bundles);
-
-	/**
-	 * Returns the container description snapshot for the specified bundle.
-	 *
-	 * @param bundle The container bundle. Must not be {@code null}.
-	 * @return A snapshot of the current container for the specified active bundle.
-	 *         {@code null} is returned if the provided bundle does not have an
-	 *         associated container.
-	 */
-	ContainerDTO getContainerDTO(Bundle bundle);
-
-	/**
-	 * Returns the change count of the container of the specified bundle.
-	 * <p>
-	 * The change count only reflects the changes within the CDI container of the
-	 * specified bundle. In this way it's possible to recognize if a particular CDI
-	 * container has seen change.
-	 * <p>
-	 * The returned number is always equal or greater to the change count previously
-	 * obtained for the specified bundle.
-	 * <p>
-	 * It is permissible for multiple bundles to have the same change count.
-	 *
-	 * @param bundle The container bundle. Must not be {@code null}.
-	 * @return A positive number indicating change in container of the specified
-	 *         bundle. If the supplied bundle does not have an associated container
-	 *         returns {@code -1}.
-	 */
-	long getContainerChangeCount(Bundle bundle);
 
 	/**
 	 * Returns the {@link ContainerTemplateDTO} for the specified bundle

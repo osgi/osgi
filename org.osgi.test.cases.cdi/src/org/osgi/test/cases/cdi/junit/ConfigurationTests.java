@@ -73,7 +73,7 @@ public class ConfigurationTests extends AbstractTestCase {
 			ComponentDTO configurationBeanA = null;
 
 			while (--attempts > 0) {
-				ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb3Bundle);
+				ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb3Bundle);
 
 				configurationBeanA = containerDTO.components.stream().filter(
 					c -> c.template.name.equals("configurationBeanA")

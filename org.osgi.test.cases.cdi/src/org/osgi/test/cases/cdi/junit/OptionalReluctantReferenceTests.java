@@ -43,7 +43,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			assertEquals(-1, pojo.getCount());
 			assertEquals("-1", pojo.foo(""));
 
-			ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb);
+			ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb);
 
 			long changeCount = containerDTO.changeCount;
 
@@ -52,7 +52,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				new Hashtable<>(Collections.singletonMap("bean.id", "as")));
 
 			try {
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -68,11 +68,11 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				assertEquals("12", pojo.foo(""));
 			}
 			finally {
-				changeCount = cdiRuntime.getContainerDTO(tb).changeCount;
+				changeCount = getContainerDTO(cdiRuntime, tb).changeCount;
 
 				int1.unregister();
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -99,7 +99,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			assertEquals(-1, pojo.getCount());
 			assertEquals("-1", pojo.foo(""));
 
-			ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb);
+			ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb);
 
 			long changeCount = containerDTO.changeCount;
 
@@ -108,7 +108,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				new Hashtable<>(Collections.singletonMap("bean.id", "sc")));
 
 			try {
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -124,11 +124,11 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				assertEquals("12", pojo.foo(""));
 			}
 			finally {
-				changeCount = cdiRuntime.getContainerDTO(tb).changeCount;
+				changeCount = getContainerDTO(cdiRuntime, tb).changeCount;
 
 				int1.unregister();
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -172,7 +172,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			assertEquals(-1, pojo.getCount());
 			assertEquals("-1", pojo.foo(""));
 
-			ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb);
+			ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb);
 
 			long changeCount = containerDTO.changeCount;
 
@@ -181,7 +181,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				new Hashtable<>(Collections.singletonMap("bean.id", "fc")));
 
 			try {
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -197,11 +197,11 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 				assertEquals("12", pojo.foo(""));
 			}
 			finally {
-				changeCount = cdiRuntime.getContainerDTO(tb).changeCount;
+				changeCount = getContainerDTO(cdiRuntime, tb).changeCount;
 
 				int1.unregister();
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 

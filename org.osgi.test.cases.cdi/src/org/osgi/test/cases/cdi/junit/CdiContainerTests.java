@@ -57,27 +57,27 @@ public class CdiContainerTests extends AbstractTestCase {
 		}
 	}
 
-    @Test
-    public void testContainerComponentSingleton() throws Exception {
-        while (cdiRuntime.getContainerDTO(cdiBundle).components.isEmpty()) {
-            Thread.sleep(10);
-        }
+	@Test
+	public void testContainerComponentSingleton() throws Exception {
+		while (getContainerDTO(cdiRuntime, cdiBundle).components.isEmpty()) {
+			Thread.sleep(10);
+		}
 
-        ContainerDTO containerDTO = cdiRuntime.getContainerDTO(cdiBundle);
-        assertNotNull(containerDTO);
+		ContainerDTO containerDTO = getContainerDTO(cdiRuntime, cdiBundle);
+		assertNotNull(containerDTO);
 
-        ComponentDTO containerComponentDTO = containerDTO.components.stream()
-                .filter(c -> c.template.type == ComponentType.CONTAINER)
-                .findFirst()
-                .orElse(null);
-        // assertNotNull(containerComponentDTO);
-        // assertEquals(8, containerComponentDTO.template.beans.size());
+		ComponentDTO containerComponentDTO = containerDTO.components.stream()
+				.filter(c -> c.template.type == ComponentType.CONTAINER)
+				.findFirst()
+				.orElse(null);
+		// assertNotNull(containerComponentDTO);
+		// assertEquals(8, containerComponentDTO.template.beans.size());
 
-        // There's only one instance of the Container component
-        ComponentInstanceDTO componentInstanceDTO = containerComponentDTO.instances.get(0);
-        assertNotNull(componentInstanceDTO);
+		// There's only one instance of the Container component
+		ComponentInstanceDTO componentInstanceDTO = containerComponentDTO.instances.get(0);
+		assertNotNull(componentInstanceDTO);
 
-        assertEquals(0, componentInstanceDTO.configurations.size());
-        assertNotNull("should have properties", componentInstanceDTO.properties);
-    }
+		assertEquals(0, componentInstanceDTO.configurations.size());
+		assertNotNull("should have properties", componentInstanceDTO.properties);
+	}
 }

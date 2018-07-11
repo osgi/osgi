@@ -52,6 +52,7 @@ import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.namespace.service.ServiceNamespace;
 import org.osgi.service.cdi.CDIConstants;
 import org.osgi.service.cdi.runtime.CDIComponentRuntime;
+import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 import org.osgi.util.tracker.ServiceTracker;
 
 @Requirement(
@@ -61,12 +62,12 @@ import org.osgi.util.tracker.ServiceTracker;
 )
 public class AbstractTestCase {
 
-    @Rule
-    public TestName testName = new TestName();
+	@Rule
+	public TestName testName = new TestName();
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-        runtimeTracker = new ServiceTracker<>(bundleContext, CDIComponentRuntime.class, null);
+		runtimeTracker = new ServiceTracker<>(bundleContext, CDIComponentRuntime.class, null);
 		runtimeTracker.open();
 	}
 
@@ -131,6 +132,28 @@ public class AbstractTestCase {
 		return null;
 	}
 
+	public ContainerDTO getContainerDTO(CDIComponentRuntime runtime, Bundle bundle) {
+		Iterator<ContainerDTO> iterator;
+		ContainerDTO containerDTO = null;
+		int attempts = 50;
+		while (--attempts > 0) {
+			iterator = cdiRuntime.getContainerDTOs(bundle).iterator();
+			if (iterator.hasNext()) {
+				containerDTO = iterator.next();
+				if (containerDTO != null) {
+					break;
+				}
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		assertNotNull(containerDTO);
+		return containerDTO;
+	}
+
 	public static Bundle installBundle(String url) throws Exception {
 		return installBundle(url, true);
 	}
@@ -145,44 +168,44 @@ public class AbstractTestCase {
 		return b;
 	}
 
-    private static Filter filter(String pattern, Object... objects) {
+	private static Filter filter(String pattern, Object... objects) {
 		try {
 			return FrameworkUtil.createFilter(String.format(pattern, objects));
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalArgumentException(e);
+		} catch (InvalidSyntaxException e) {
+			throw new IllegalArgumentException(e);
 		}
 	}
 
-    public static <S, T> ServiceTracker<S, T> track(Filter filter) {
+	public static <S, T> ServiceTracker<S, T> track(Filter filter) {
 		ServiceTracker<S, T> tracker = new ServiceTracker<>(bundleContext, filter, null);
 		tracker.open();
 		return tracker;
 	}
 
-    public static <S, T> ServiceTracker<S, T> track(String pattern, Object... objects) {
+	public static <S, T> ServiceTracker<S, T> track(String pattern, Object... objects) {
 		return track(filter(pattern, objects));
 	}
 
-    public static <T> ServiceRegistration<T> register(Class<T> iface, T object, Object... props) {
-        if (props.length % 2 > 0) {
-            throw new IllegalArgumentException();
-        }
+	public static <T> ServiceRegistration<T> register(Class<T> iface, T object, Object... props) {
+		if (props.length % 2 > 0) {
+			throw new IllegalArgumentException();
+		}
 
-        Dictionary<String, Object> dict = new Hashtable<>();
-        for (int i = 0; i < props.length; i += 2) {
-            dict.put(props[i].toString(), props[i + 1]);
-        }
+		Dictionary<String, Object> dict = new Hashtable<>();
+		for (int i = 0; i < props.length; i += 2) {
+			dict.put(props[i].toString(), props[i + 1]);
+		}
 
-        return bundleContext.registerService(iface, object, dict);
-    }
+		return bundleContext.registerService(iface, object, dict);
+	}
 
 	BeanManager getBeanManager(Bundle bundle) throws Exception {
 		ServiceTracker<BeanManager, BeanManager> tracker = getServiceTracker(bundle);
-        try {
-            return tracker.waitForService(timeout);
-        } finally {
-            tracker.close();
-        }
+		try {
+			return tracker.waitForService(timeout);
+		} finally {
+			tracker.close();
+		}
 	}
 
 	ServiceTracker<BeanManager, BeanManager> getServiceTracker(Bundle bundle) throws Exception {
@@ -198,24 +221,22 @@ public class AbstractTestCase {
 	}
 
 	long getChangeCount(ServiceReference<?> reference) {
-        return Optional.ofNullable(reference.getProperty(Constants.SERVICE_CHANGECOUNT))
-                       .map(v -> (Long) v)
-                       .orElse(new Long(-1))
-                       .longValue();
+		return Optional.ofNullable(reference.getProperty(Constants.SERVICE_CHANGECOUNT)).map(v -> (Long) v)
+				.orElse(new Long(-1)).longValue();
 	}
 
-    static final Bundle bundle = FrameworkUtil.getBundle(CdiBeanTests.class);
-    static final BundleContext bundleContext = bundle.getBundleContext();
-    static final long timeout = 1000;
-    static Bundle servicesBundle;
-    static ServiceTracker<CDIComponentRuntime, CDIComponentRuntime> runtimeTracker;
+	static final Bundle bundle = FrameworkUtil.getBundle(CdiBeanTests.class);
+	static final BundleContext bundleContext = bundle.getBundleContext();
+	static final long timeout = 1000;
+	static Bundle servicesBundle;
+	static ServiceTracker<CDIComponentRuntime, CDIComponentRuntime> runtimeTracker;
 
-    static {
-        Bundle[] bundles = bundleContext.getBundles();
-        System.out.println("--------- BUNDLES: " + bundles.length);
-        Arrays.stream(bundles).forEach(System.out::println);
-    }
+	static {
+		Bundle[] bundles = bundleContext.getBundles();
+		System.out.println("--------- BUNDLES: " + bundles.length);
+		Arrays.stream(bundles).forEach(System.out::println);
+	}
 
-    Bundle cdiBundle;
-    CDIComponentRuntime cdiRuntime;
+	Bundle cdiBundle;
+	CDIComponentRuntime cdiRuntime;
 }

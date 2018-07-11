@@ -24,6 +24,7 @@ Test-Cases: ${testcases}
 -signaturetest: org.osgi.service.cdi
 
 -buildpath: \
+	org.apache.aries.cdi.extender; version=0.0.2,\
 	org.osgi.service.event;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.component;version=project,\
@@ -44,9 +45,9 @@ Test-Cases: ${testcases}
 	org.osgi.dto;version=latest
 
 -runbundles: \
-    ${junit},\
-    org.osgi.impl.bundle.cdi;version=latest,\
-    org.osgi.impl.service.log; version=latest
+	${junit},\
+	org.osgi.impl.bundle.cdi;version=latest,\
+	org.osgi.impl.service.log; version=latest
 
 -runproperties: \
 	${runproperties},\

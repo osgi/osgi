@@ -14,7 +14,7 @@
 
 package org.osgi.test.cases.cdi.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Dictionary;
 
@@ -54,14 +54,14 @@ public class EventsTests extends AbstractTestCase {
 			assertEquals(0, pojo.getCount());
 			assertEquals("[]", pojo.foo(null));
 
-			ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb);
+			ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb);
 
 			long changeCount = containerDTO.changeCount;
 
 			ServiceRegistration<Integer> int1 = bundleContext.registerService(Integer.class, new Integer(12), null);
 
 			try {
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -74,7 +74,7 @@ public class EventsTests extends AbstractTestCase {
 				properties.put("foo", "bar");
 				int1.setProperties(properties);
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -85,7 +85,7 @@ public class EventsTests extends AbstractTestCase {
 
 				int1.unregister();
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -110,14 +110,14 @@ public class EventsTests extends AbstractTestCase {
 			assertEquals(0, pojo.getCount());
 			assertEquals("[]", pojo.foo(null));
 
-			ContainerDTO containerDTO = cdiRuntime.getContainerDTO(tb);
+			ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb);
 
 			long changeCount = containerDTO.changeCount;
 
 			ServiceRegistration<Integer> int1 = bundleContext.registerService(Integer.class, new Integer(12), null);
 
 			try {
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -130,7 +130,7 @@ public class EventsTests extends AbstractTestCase {
 				properties.put("foo", "bar");
 				int1.setProperties(properties);
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
@@ -141,7 +141,7 @@ public class EventsTests extends AbstractTestCase {
 
 				int1.unregister();
 
-				for (long i = 10; i > 0 && (cdiRuntime.getContainerDTO(tb).changeCount == changeCount); i--) {
+				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
 					Thread.sleep(20);
 				}
 
