@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.metatype.annotations.junit;
 
+import static org.osgi.test.cases.metatype.annotations.junit.AnnotationsTestCase.xmlns_metatype120;
+
+import org.osgi.test.support.xpath.BaseElement;
+import org.osgi.test.support.xpath.BaseNamespaceContext;
 import org.w3c.dom.Element;
 
 /**
- * 
- * 
  * @author $Id$
  */
 public class OCD extends BaseElement {
@@ -31,7 +32,12 @@ public class OCD extends BaseElement {
 	 * @param context
 	 * @param ocd
 	 */
-	public OCD(String id, NamespaceContextImpl context, Element ocd) {
+	public OCD(String id, BaseNamespaceContext context, Element ocd) {
 		super(id, context, ocd);
+	}
+
+	public String character() {
+		return xmlns_metatype120.equals(getNamespaceContext().getURI()) ? "Char"
+				: "Character";
 	}
 }

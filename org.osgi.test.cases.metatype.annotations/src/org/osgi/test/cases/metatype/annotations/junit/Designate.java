@@ -17,6 +17,8 @@
 
 package org.osgi.test.cases.metatype.annotations.junit;
 
+import org.osgi.test.support.xpath.BaseElement;
+import org.osgi.test.support.xpath.BaseNamespaceContext;
 import org.w3c.dom.Element;
 
 /**
@@ -31,7 +33,7 @@ public class Designate extends BaseElement {
 	 * @param context
 	 * @param designate
 	 */
-	public Designate(String id, NamespaceContextImpl context, Element ocd) {
+	public Designate(String id, BaseNamespaceContext context, Element ocd) {
 		super(id, context, ocd);
 	}
 }
