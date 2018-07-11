@@ -1,6 +1,8 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
+javac.profile=compact2
+
 Bundle-Description: 			General Support for OSGi JUnit based testing
 Export-Package:  				org.osgi.test.*
 
