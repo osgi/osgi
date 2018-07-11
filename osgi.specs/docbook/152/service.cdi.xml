@@ -3080,10 +3080,7 @@ void bindFoo(BindService<Dog> binder) {
 	<para>An example of a binder type injected into a field:</para>
 
 	<programlisting><![CDATA[@Inject
-BindBeanServiceObjects<Dog> binder;
-
-@PostConstruct
-void init() {
+void bind(BindBeanServiceObjects<Dog> binder) {
 	binder.
 		adding(this::adding).
 		removed(this::removed).
@@ -3093,9 +3090,9 @@ void init() {
 void adding(BeanServiceObjects<Dog> dogs) {...}
 void removed(BeanServiceObjects<Dog> dogs) {...}]]></programlisting>
 
-	<para>Binder objects are provided as <code>@Dependent</code>
-	beans and are not thread safe. They are intended to be used during the creation
-	phase of component beans before the end of the <code>@PostConstruct</code> method.
+	<para>Binder objects are <code>@Dependent</code> objects and are not thread
+	safe. They are intended to be used during the creation phase of component
+	beans before the end of the <xref linkend="service.cdi-bib.postconstruct" /> method.
 	Executing any binder object method after this time will result in unspecified
 	behavior.</para>
 </section>
@@ -3133,6 +3130,17 @@ void removed(BeanServiceObjects<Dog> dogs) {...}]]></programlisting>
 
 		<para>CCR should use the <code>Bundle.getBundleContext()</code> method
 		to obtain the Bundle Context reference.</para>
+	</section>
+
+	<section xml:id="service.cdi-injecting.bundle.context">
+		<title>Injecting the Bundle Context</title>
+
+		<para>The Bundle Context of the CDI bundle can be injected. The injection
+		point must be of type <code>org.osgi.framework.BundleContext</code> and must
+		not specify any qualifiers.</para>
+
+		<programlisting><![CDATA[@Inject
+BundleContext bundleContext;]]></programlisting>
 	</section>
 
 	<section xml:id="service.cdi-starting.and.stopping.ccr">
@@ -3840,6 +3848,9 @@ compName ::= < component name >]]></programlisting>
 		<bibliomixed xml:id="service.cdi-bib.cdi.pseudoscope">
 			<title>Pseudo-scope</title>
 			<biblioid class="uri"><link xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#normal_scope"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.postconstruct">
+			<title>@PostConstruct</title>
+			<biblioid class="uri"><link xlink:href="https://javaee.github.io/javaee-spec/javadocs/javax/annotation/PostConstruct.html" /></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.general.syntax.definitions">
 			<title>General Syntax Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.filter.syntax">
