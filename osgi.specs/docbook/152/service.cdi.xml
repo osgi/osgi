@@ -817,15 +817,15 @@ bsn         ::= < Bundle-SymbolicName >]]></programlisting>
 	<para>The container id can be specified using the <xref
 	linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID"
 	xrefstyle="hyperlink"/> attribute of the <link
-	linkend="service.cdi-capabilities.extender" xrefstyle="hyperlink">CDI
+	linkend="service.cdi-capabilities" xrefstyle="hyperlink">CDI
 	extender requirement</link> in the bundle manifest. The value must follow
 	the <code>Bundle-SymbolicName</code> syntax. For example:</para>
 
-	<programlisting>Require-Capability: «
-	osgi.extender; «
+	<programlisting>Require-Capability:
+	osgi.extender;
 		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
 			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”;
 		container.id="my.id"</programlisting>
 
 	<section xml:id="service.cdi-container.component.configuration">
@@ -1321,7 +1321,7 @@ refName ::= < reference name >]]></programlisting>
 Http http;]]></programlisting>
 
 			would have the name <code>http.target</code>. The value of a target
-			property is a filter string used to select target services for the
+			property is a filter String used to select target services for the
 			reference.</para>
 
 			<programlisting><![CDATA[http.target=(context.name=foo)]]></programlisting>
@@ -1330,7 +1330,7 @@ Http http;]]></programlisting>
 			<link linkend="org.osgi.service.cdi.annotations.Reference.target--"
 			xrefstyle="hyperlink">@Reference.target</link> property.</para>
 
-			<para>The target property value must be a valid filter string
+			<para>The target property value must be a valid filter String
 			according to <xref linkend="service.cdi-bib.filter.syntax" />.
 			Invalid filters result in unmatchable reference filters.</para>
 
@@ -1766,8 +1766,8 @@ public class MyBean {
 		type. An invalid coercion is represented by <code>throw</code>. Such a
 		coercion attempt must result in throwing a Bean Property Exception when
 		the bean property type method is called. Any other coercion
-		error, such as parsing a non-numerical string to a number or the
-		inability to coerce a string into a Class or enum object, must be
+		error, such as parsing a non-numerical String to a number or the
+		inability to coerce a String into a Class or enum object, must be
 		wrapped in a Bean Property Exception and thrown when the bean
 		property type method is called.</para>
 
@@ -2223,15 +2223,15 @@ Fido fido = new Fido();]]></programlisting></entry>
 		</table>
 	</section>
 
-	<section>
-		<title>@Service restrictions</title>
+	<section xml:id="service.cdi-service.restrictions">
+		<title>@Service Type Restrictions</title>
 
 		<para>Regardless of the source, no service type may be a generic type.
 		A generic type found in the set of service types will result in a
 		definition error.</para>
 
-		<para>Service types must be a subset of bean types, including type
-		constraints declared by the CDI <code>@javax.enterprise.inject.Typed</code>
+		<para>Service types must be a subset of bean types, including types
+		restricted by the use of the <code>@javax.enterprise.inject.Typed</code>
 		annotation. This restriction is required to support CDI features like
 		<emphasis>Decorators</emphasis> and <emphasis>Interceptors</emphasis>.</para>
 
@@ -2711,7 +2711,7 @@ Collection<Dog> dogs;]]></programlisting>
 			appearing on an injection point in conjunction with the <code>@Reference</code>
 			annotation will further enhance the target filter as described by the
 			rules for converting <xref linkend="service.cdi-bean.property.types"/>
-			to a map of properties assembled into a filter string according to
+			to a map of properties assembled into a filter String according to
 			the following steps:</para>
 
 			<orderedlist>
@@ -2737,7 +2737,7 @@ pairScalar ::= < scalar >]]></programlisting>
 				</listitem>
 				<listitem>
 					<para>concatenate all results of step <code>2.</code> into a single
-					string</para>
+					String</para>
 				</listitem>
 				<listitem>
 					<para>append the value of
@@ -3210,23 +3210,6 @@ BundleContext bundleContext;]]></programlisting>
 			</listitem>
 			<listitem>
 				<para><xref
-				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerDTO-Bundle-"
-				xrefstyle="hyperlink"/> - If the specified bundle is active and
-				processed by CCR, and the bundle is a valid CDI bundle, the
-				method will return a <xref
-				linkend="org.osgi.service.cdi.runtime.dto.ContainerDTO"
-				xrefstyle="hyperlink"/> describing the CDI container.</para>
-			</listitem>
-			<listitem>
-				<para><xref
-				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerChangeCount-Bundle-"
-				xrefstyle="hyperlink"/> - If the specified bundle is active and
-				processed by CCR, and the bundle is a valid CDI bundle, the
-				method will return an ever increasing, positive, <code>long</code>
-				number indicating the change count of the CDI container.</para>
-			</listitem>
-			<listitem>
-				<para><xref
 				linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime.getContainerTemplateDTO-Bundle-"
 				xrefstyle="hyperlink"/> - If the specified bundle is active and
 				processed by CCR, and the bundle is a valid CDI bundle, the
@@ -3257,6 +3240,15 @@ BundleContext bundleContext;]]></programlisting>
 				</imageobject>
 			</mediaobject>
 		</figure>
+
+		<para>The <xref linkend="org.osgi.service.cdi.runtime.dto.ContainerDTO"
+		xrefstyle="hyperlink"/> specifies a <code>changeCount</code> field of
+		type <code>long</code>. Whenever the DTOs bellow the <code>ContainerDTO</code> change,
+		CCR will increment the <code>ContainerDTO</code>'s changeCount. Whenever
+		any ContainerDTOs change, CCR will update the <code>service.changecount</code>
+		service property of the <code>CDIComponentRuntime</code>. See
+		<code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in <xref
+		linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 	</section>
 
 	<section xml:id="service.cdi-logger.support">
@@ -3281,7 +3273,7 @@ Logger logger;
 
 @PostConstruct
 void init() {
-	logger.debug(l -> l.debug("Initialized."));
+	logger.debug("Initialized");
 }]]></programlisting>
 
 		<para>Another example using method injection along with component
@@ -3293,7 +3285,7 @@ void init() {
 
 @Inject
 void setup(@ComponentProperties Config config, Logger logger) {
-	logger.trace(l -> l.trace(“activating component {}”, config.component_name()));
+	logger.trace(“Activating component {}”, config.component_name());
 }]]></programlisting>
 	</section>
 
@@ -3342,159 +3334,123 @@ compName ::= < component name >]]></programlisting>
 
 	<para>CCR must provide the following capabilities.</para>
 
-	<itemizedlist>
-		<listitem xml:id="service.cdi-capabilities.extender">
-			<para>A capability in the <link
-			linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
-			namespace declaring an extender with the name <xref
-			linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
-			xrefstyle="hyperlink"/>. In addition to the specification packages, this
-			capability must declare a uses constraint for the
-			<code>javax.inject</code> package. For example:</para>
+	<para>A capability in the <link
+	linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
+	namespace declaring an extender with the name <xref
+	linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
+	xrefstyle="hyperlink"/>. In addition to the specification packages, this
+	capability must declare a uses constraint for the
+	<code>javax.inject</code> package. For example:</para>
 
-			<programlisting>Provide-Capability: «
-	osgi.extender; «
-		osgi.extender="osgi.cdi"; «
+	<programlisting>Provide-Capability:
+	osgi.extender;
+		osgi.extender="osgi.cdi";
 		version:Version="<xref
 			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>"; «
-		uses:="javax.inject, org.osgi.service.cdi, org.osgi.service.cdi.annotations, «
-			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime, «
-			org.osgi.service.cdi.runtime.dto, «
+			linkend="org.osgi.service.cdi"/>";
+		uses:="javax.inject, org.osgi.service.cdi, org.osgi.service.cdi.annotations,
+			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime,
+			org.osgi.service.cdi.runtime.dto,
 			org.osgi.service.cdi.runtime.dto.template"</programlisting>
 
-			<para>This capability must follow the rules defined for the <xref
-			linkend="service.namespaces-osgi.extender.namespace"/>.</para>
+	<para>This capability must follow the rules defined for the <xref
+	linkend="service.namespaces-osgi.extender.namespace"/>.</para>
 
-			<para>A CDI bundle must require the <code>osgi.extender</code>
-			capability from CCR. This requirement will wire the bundle to the CCR
-			implementation and ensure that CCR is using the same
-			<code>org.osgi.service.cdi.*</code> packages as the bundle if the bundle
-			uses those packages.</para>
+	<para>A CDI bundle must require the <code>osgi.extender</code>
+	capability from CCR. This requirement will wire the bundle to the CCR
+	implementation and ensure that CCR is using the same
+	<code>org.osgi.service.cdi.*</code> packages as the bundle if the bundle
+	uses those packages.</para>
 
-			<programlisting>Require-Capability: «
-	osgi.extender; «
+	<programlisting>Require-Capability:
+	osgi.extender;
 		filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
 			endterm="org.osgi.service.cdi-version.number"
 			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
 
-			<para>CCR must only process a CDI bundle if the bundle's
-			wiring has a required wire for at least one <code>osgi.extender</code>
-			capability with the name <code>osgi.cdi</code> and the first of these
-			required wires is wired to CCR.</para>
+	<para>CCR must only process a CDI bundle if the bundle's
+	wiring has a required wire for at least one <code>osgi.extender</code>
+	capability with the name <code>osgi.cdi</code> and the first of these
+	required wires is wired to CCR.</para>
 
-			<para>When using the annotations <xref
-			linkend="org.osgi.service.cdi.annotations.Bean"/> or <xref
-			linkend="org.osgi.service.cdi.annotations.Beans"/>, the above
-			requirement is automatically added to the manifest when the code is
-			processed by a supporting build tool capable of
-			interpreting <emphasis>Bundle Annotations</emphasis> defined in <xref
-			linkend="intro.core.release"/>.</para>
+	<para>When using the annotations <xref
+	linkend="org.osgi.service.cdi.annotations.Bean"/> or <xref
+	linkend="org.osgi.service.cdi.annotations.Beans"/>, the above
+	requirement is automatically added to the manifest when the code is
+	processed by a supporting build tool capable of
+	interpreting <emphasis>Bundle Annotations</emphasis> defined in <xref
+	linkend="intro.core.release"/>.</para>
 
-			<para>The requirement may be specified directly on any class or
-			package in the CDI bundle by using the <xref
-			linkend="org.osgi.service.cdi.annotations.RequireCDIExtender"
-			xrefstyle="hyperlink"/> annotation when the code is processed by
-			a supporting build tool capable of interpreting <emphasis>Bundle
-			Annotations</emphasis> defined in <xref linkend="intro.core.release"/>.</para>
+	<para>The requirement may be specified directly on any class or
+	package in the CDI bundle by using the <xref
+	linkend="org.osgi.service.cdi.annotations.RequireCDIExtender"
+	xrefstyle="hyperlink"/> annotation when the code is processed by
+	a supporting build tool capable of interpreting <emphasis>Bundle
+	Annotations</emphasis> defined in <xref linkend="intro.core.release"/>.</para>
 
-			<para><emphasis role="strong">Specifying CDI bean descriptors</emphasis> -
-			As specified in <xref linkend="service.cdi-bean.descriptors"
-			xrefstyle="hyperlink" /> a CDI bundle must declare all CDI bean descriptors
-			CCR is expected to operate on. This is done by adding the attribute
-			<code>descriptor</code>, of type <code><![CDATA[List<String>]]></code>,
-			to the requirement.</para>
+	<para><emphasis role="strong">Specifying CDI bean descriptors</emphasis> -
+	As specified in <xref linkend="service.cdi-bean.descriptors"
+	xrefstyle="hyperlink" /> a CDI bundle must declare all CDI bean descriptors
+	CCR is expected to operate on. This is done by adding the attribute
+	<code>descriptor</code>, of type <code><![CDATA[List<String>]]></code>,
+	to the requirement.</para>
 
-			<para><emphasis role="strong">Specifying the list of bean classes</emphasis> -
-			As specified in <xref linkend="service.cdi-bean.discovery"
-			xrefstyle="hyperlink" /> a CDI bundle must declare all bean classes
-			CCR is expected to operate on. This is done by adding the attribute
-			<code>beans</code>, of type <code><![CDATA[List<String>]]></code>,
-			to the requirement.</para>
+	<para><emphasis role="strong">Specifying the list of bean classes</emphasis> -
+	As specified in <xref linkend="service.cdi-bean.discovery"
+	xrefstyle="hyperlink" /> a CDI bundle must declare all bean classes
+	CCR is expected to operate on. This is done by adding the attribute
+	<code>beans</code>, of type <code><![CDATA[List<String>]]></code>,
+	to the requirement.</para>
 
-			<para><emphasis role="strong">Specifying Portable Extension
-			dependencies</emphasis> - As specified in <xref
-			linkend="service.cdi-portable.extensions" xrefstyle="hyperlink" /> a
-			CDI bundle may declare Portable extension service dependencies.
-			This is done by adding the attribute <code>extensions</code>, of type
-			<code><![CDATA[List<String>]]></code>, to the requirement.</para>
-		</listitem>
+	<para>A capability in the <link
+	linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+	namespace declaring an implementation with the name <xref
+	linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
+	xrefstyle="hyperlink"/>. In addition to the specification packages, this
+	capability must also declare a uses
+	constraint for the <code>javax.enterprise.*</code> packages. For example:</para>
 
-		<listitem xml:id="service.cdi-capabilities.implementation">
-			<para>A capability in the <link
-			linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
-			namespace declaring an implementation with the name <xref
-			linkend="org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME"
-			xrefstyle="hyperlink"/>. In addition to the specification packages, this
-			capability must also declare a uses
-			constraint for the <code>javax.enterprise.*</code> packages. For example:</para>
-
-			<programlisting>Provide-Capability: «
-	osgi.implementation; «
-		osgi.implementation="osgi.cdi"; «
+	<programlisting>Provide-Capability:
+	osgi.implementation;
+		osgi.implementation="osgi.cdi";
 		version:Version="<xref
 			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>"; «
-		uses:="javax.enterprise.context, javax.enterprise.context.control, «
-			javax.enterprise.context.spi, javax.enterprise.event, «
-			javax.enterprise.inject, javax.enterprise.inject.literal, «
-			javax.enterprise.inject.spi, javax.enterprise.inject.spi.configurator, «
-			javax.enterprise.util, org.osgi.service.cdi, «
-			org.osgi.service.cdi.annotations, «
-			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime, «
-			org.osgi.service.cdi.runtime.dto, «
+			linkend="org.osgi.service.cdi"/>";
+		uses:="javax.enterprise.context, javax.enterprise.context.control,
+			javax.enterprise.context.spi, javax.enterprise.event,
+			javax.enterprise.inject, javax.enterprise.inject.literal,
+			javax.enterprise.inject.spi, javax.enterprise.inject.spi.configurator,
+			javax.enterprise.util, org.osgi.service.cdi,
+			org.osgi.service.cdi.annotations,
+			org.osgi.service.cdi.reference, org.osgi.service.cdi.runtime,
+			org.osgi.service.cdi.runtime.dto,
 			org.osgi.service.cdi.runtime.dto.template"</programlisting>
 
-			<para>This capability must follow the rules defined for the <xref
-			linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+	<para>This capability must follow the rules defined for the <xref
+	linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
 
-			<para>An Extension bundle must require the <code>osgi.implementation</code>
-			capability from CCR. This requirement will wire the extension bundle
-			to the CCR implementation and ensure that CCR is using the same
-			<code>javax.enterprise.*</code> packages as the extender bundle if
-			the bundle uses those packages.</para>
+	<para>A capability in the <link
+	linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+	namespace representing the <xref
+	linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
+	xrefstyle="hyperlink"/> service. This capability must also declare a
+	uses constraint for the
+	<code>org.osgi.service.cdi.runtime</code> package. For
+	example:</para>
 
-			<programlisting>Require-Capability: «
-	osgi.implementation; «
-		filter:="(&amp;(osgi.implementation=osgi.cdi)(version&gt;=<xref
-			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
-
-			<para>The requirement may be specified directly on any class in the
-			Extension bundle by using the <xref
-			linkend="org.osgi.service.cdi.annotations.RequireCDIImplementation"
-			xrefstyle="hyperlink"/> annotation when the code is processed by
-			tooling capable of interpreting <emphasis>Bundle Annotations</emphasis>
-			defined in <xref linkend="intro.core.release"/>.</para>
-		</listitem>
-
-		<listitem>
-			<para>A capability in the <link
-			linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-			namespace representing the <xref
-			linkend="org.osgi.service.cdi.runtime.CDIComponentRuntime"
-			xrefstyle="hyperlink"/> service. This capability must also declare a
-			uses constraint for the
-			<code>org.osgi.service.cdi.runtime</code> package. For
-			example:</para>
-
-			<programlisting><![CDATA[Provide-Capability: «
-	osgi.service; «
-		objectClass:List<String>= «
-			"org.osgi.service.cdi.runtime.CDIComponentRuntime"; «
+	<programlisting><![CDATA[Provide-Capability:
+	osgi.service;
+		objectClass:List<String>=
+			"org.osgi.service.cdi.runtime.CDIComponentRuntime";
 		uses:="org.osgi.service.cdi.runtime"]]></programlisting>
 
-			<para>This capability must follow the rules defined for the <xref
-			linkend="service.namespaces-osgi.service.namespace"/>.</para>
-		</listitem>
+	<para>This capability must follow the rules defined for the <xref
+	linkend="service.namespaces-osgi.service.namespace"/>.</para>
 
-		<listitem>
-			<para>A capability in the <link
-			linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-			namespace for every service declared by the metadata in the CDI
-			bundle.</para>
-		</listitem>
-	</itemizedlist>
+	<para>A capability in the <link
+	linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+	namespace for every service declared by the metadata in the CDI
+	bundle.</para>
 </section>
 
 <section xml:id="service.cdi-relationship.to.cdi.features">
@@ -3513,19 +3469,20 @@ compName ::= < component name >]]></programlisting>
 		<code>descriptor</code> of type <code><![CDATA[List<String>]]></code>. For
 		example:</para>
 
-		<programlisting>Require-Capability: «
-		osgi.extender; «
-			filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
-				endterm="org.osgi.service.cdi-version.number"
-				linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
-			descriptor:List&lt;String&gt;="META-INF/beans.xml"</programlisting>
+		<programlisting>Require-Capability:
+	osgi.extender;
+		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”;
+		descriptor:List&lt;String&gt;="META-INF/beans.xml"</programlisting>
 
 		<para>If the attribute is not specified the default value of
 		<code>META-INF/beans.xml</code> is used.</para>
 
-		<para>CCR must process all specified descriptors in the bundle, the
-		bundle class path and attached bundle fragments. See <link
-		linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
+		<para>CCR must find descriptors by calling <code>Bundle.getResources(String)</code>
+		for each specified value. Note that the accepted syntax for the values
+		is the same as for <code>java.lang.ClassLoader.getResources</code>. See <link
+		linkend="service.cdi-capabilities"><code>osgi.cdi</code>
 		extender capability</link>.</para>
 	</section>
 
@@ -3558,21 +3515,21 @@ compName ::= < component name >]]></programlisting>
 		bean classes to be pre-calculated at build time such that the CDI container
 		receives a concrete list of classes to process.</para>
 
-		<para>It is therefore expected that the aforementioned bean discover modes
+		<para>It is expected that the aforementioned bean discover modes
 		be implemented in build tooling and be performed at build time.</para>
 
 		<para>A CDI bundle must specify the list of classes to process using the
 		<code>osgi.cdi</code> extender requirement attribute <code>beans</code> of
 		type <code><![CDATA[List<String>]]></code>. For example:</para>
 
-		<programlisting>Require-Capability: «
-		osgi.extender; «
-			filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
-				endterm="org.osgi.service.cdi-version.number"
-				linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
-			beans:List&lt;String&gt;="org.foo.Bar, org.foo.baz.Fum"</programlisting>
+		<programlisting>Require-Capability:
+	osgi.extender;
+		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+			endterm="org.osgi.service.cdi-version.number"
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”;
+		beans:List&lt;String&gt;="org.foo.Bar, org.foo.baz.Fum"</programlisting>
 
-		<para>See <link linkend="service.cdi-capabilities.extender"> <code>osgi.cdi</code>
+		<para>See <link linkend="service.cdi-capabilities"><code>osgi.cdi</code>
 		extender capability</link>.</para>
 
 		<section>
@@ -3583,6 +3540,18 @@ compName ::= < component name >]]></programlisting>
 			linkend="service.cdi-bib.cdi.exclude.filters" xrefstyle="hyperlink"/>.
 			While these filters are still considered, they are only applied over the
 			concrete list of classes passed from the <code>beans</code> attribute.</para>
+
+			<para>Build tools may opt to implement bean discover modes. Implementing
+			the discovery mode <emphasis>all</emphasis> simply requires placing the names of all
+			classes found in the bundle in the <code>beans</code> attribute. Implementing the
+			discovery mode <emphasis>annotated</emphasis> involves collecting the
+			names of all classes matching the definition of <emphasis>annotated
+			beans</emphasis> as defined by the <xref
+			linkend="service.cdi-bib.cdi.default.bean.discovery.mode" xrefstyle="hyperlink"/>
+			and placing those in the <code>beans</code> attribute.</para>
+
+			<para>Another option is to use the <code>CLASS</code> retention
+			annotation defined by this specification.</para>
 
 			<para>The <code>CLASS</code> retention annotation <xref
 			linkend="org.osgi.service.cdi.annotations.Bean"/> may be applied to a
@@ -3610,51 +3579,129 @@ compName ::= < component name >]]></programlisting>
 		custom contexts, and much more. Through the SPI a portable extension can
 		participate in all aspects of the CDI Container's life cycle.</para>
 
-		<para>This specification requires that portable extensions be provided as
-		OSGi services using the interface <code>javax.enterprise.inject.spi.Extension</code>.
-		Portable extension services must provide the service property
-		<code>osgi.cdi.extension</code> whose value should be a name identifying the
-		functionality provided by the portable extension. Portable extension services
-		must also specify a <code>version</code> service
-		property whose value is of type <code>org.osgi.framework.Version</code>.</para>
+		<para>Portable extensions must be provided as OSGi services using the
+		interface <code>javax.enterprise.inject.spi.Extension</code>. Portable
+		extension services must specify the service property <code>osgi.cdi.extension</code>
+		whose value is a name identifying the functionality provided by the portable
+		extension. Portable extension services must also specify a <code>version</code>
+		service property whose value is of type <code>Version+</code>.</para>
+
+		<table>
+		<title>Portable Extension Service Properties</title>
+
+		<tgroup cols="3">
+		<colspec colnum="1" colwidth="2*"/>
+
+		<colspec colnum="2" colwidth="1*"/>
+
+		<colspec colnum="3" colwidth="2*"/>
+
+		<thead>
+			<row>
+			<entry>Service Property</entry>
+
+			<entry>Type</entry>
+
+			<entry>Description</entry>
+			</row>
+		</thead>
+
+		<tbody>
+			<row>
+			<entry><code>osgi.cdi.extension</code></entry>
+
+			<entry><para>String</para></entry>
+
+			<entry><para>The name of the Portable Extension</para></entry>
+			</row>
+
+			<row>
+			<entry><code>version</code></entry>
+
+			<entry><para>Version+</para></entry>
+
+			<entry><para>The versions supported by the portable extension service.
+			This service property allows multiple values to accomodate for portable extensions
+			that are not semantically versioned such as those which provide implementations
+			of apis that use Portable Java Contracts. If the service is semantically versioned
+			it is highly recommended to provide a single Version.</para></entry>
+			</row>
+		</tbody>
+		</tgroup>
+		</table>
 
 		<para>For example, a portable extension service that provides an implementation of
-		the <xref linkend="service.cdi-bib.jta12" /> specification should specify the
-		value of it's <code>osgi.cdi.extension</code> service property as <code>JTA</code>
-		and it's <code>version</code> property as <code>1.2</code>.</para>
+		the <xref linkend="service.cdi-bib.jta" /> should specify the
+		value of it's <code>osgi.cdi.extension</code> service property using the
+		<xref linkend="service.cdi-bib.portable.java.contract"
+		xrefstyle="hyperlink"/> name specified for it, which is <code>JavaJTA</code>.
+		It's <code>version</code> service property must specify a value of
+		type <code>Version+</code>. For an extension which provides an implementation
+		defined by a Portable Java Contract the value should contain all the
+		supported Portable Java Contract versions.</para>
 
-		<para>Portable extension services are expressed as a requirement on a CDI bundle by
-		specifying a target filter matching the service that provides it.
-		This target filter is specified using the <code>osgi.cdi</code>
-		extension requirement attribute <code>extensions</code> of type
-		<code><![CDATA[List<String>]]></code>. For example:</para>
+		<para>Portable Extension bundles must define a capability using the namespace
+		<code>osgi.cdi.extension</code> having an attribute <code>osgi.cdi.extension</code>
+		whoes value is the same as the name specified in the <code>osgi.cdi.extension</code>
+		service property of the portable extension service. The capability must
+		also specify the version attribute using the same values specified for
+		the <code>version</code> service property of the portable extension service.
+		The capability must also specify a <code>uses</code> directive listing all
+		of the Java packages provided as part of the Portable Extension's API. If
+		the portable extension implements an API specified as a Portable Java Contract
+		the uses list should match the Portable Java Contract.
+		</para>
 
-		<programlisting>Require-Capability: «
-	osgi.extender; «
-		filter:=”(&amp;(osgi.extender=osgi.cdi)(version&gt;=<xref
+		<programlisting><![CDATA[Provide-Capability:
+	osgi.cdi.extension;
+		osgi.cdi.extension=JavaJTA;
+		version:Version="1.2";
+		uses:="javax.transaction,javax.transaction.xa"
+		]]></programlisting>
+
+		<para>CDI bundles express a dependency on a portable extension by specifying
+		a requirement in the <code>osgi.cdi.extension</code> namespace who's
+		<code>filter</code> directive matches the capability of a portable extension
+		capability. For example:</para>
+
+		<programlisting><![CDATA[Require-Capability:
+	osgi.cdi.extension;
+		filter:=”(&(osgi.cdi.extension=JavaJTA)(version=1.2))”;]]></programlisting>
+
+		<para>See <link linkend="service.cdi-capabilities"><code>osgi.cdi</code>
+		extender capability</link>.</para>
+
+		<para>A Portable extension bundle must require the <code>osgi.implementation</code>
+		capability from CCR. This requirement will wire the extension bundle
+		to the CCR implementation and ensure that CCR is using the same
+		<code>javax.enterprise.*</code> packages as the portable extension bundle.</para>
+
+		<programlisting>Require-Capability:
+	osgi.implementation;
+		filter:="(&amp;(osgi.implementation=osgi.cdi)(version&gt;=<xref
 			endterm="org.osgi.service.cdi-version.number"
-			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0.0)))”; «
-		extensions:List&lt;String&gt;=" «
-			(&amp;(osgi.cdi.extension=JTA)(version=1.2))"</programlisting>
+			linkend="org.osgi.service.cdi"/>)(!(version&gt;=2.0)))"</programlisting>
 
-		<para>See <link
-		linkend="service.cdi-capabilities.extender">
-		<code>osgi.cdi</code> extender capability</link>.</para>
+		<para>The requirement may be specified directly on any class in the portable
+		extension bundle by using the <xref
+		linkend="org.osgi.service.cdi.annotations.RequireCDIImplementation"
+		xrefstyle="hyperlink"/> annotation when the code is processed by
+		tooling capable of interpreting <emphasis>Bundle Annotations</emphasis>
+		defined in <xref linkend="intro.core.release"/>.</para>
 
 		<section xml:id="service.cdi-portable.extension.services.and.beans">
 			<title>Portable Extension Services and Beans</title>
 
-			<para>Portable extension services intending to provide additional beans
+			<para>Portable extension bundles intending to provide additional beans
 			must do so programmatically using the SPI. Bean descriptors in the
 			bundle providing the portable extension service are not visible to
-			the CDI container and therefore play no role in desciribing bean
-			discovery.</para>
+			the CDI container and therefore play no role in bean discovery.</para>
 		</section>
 
 		<section xml:id="service.cdi-embedded.portable.extensions">
 			<title>Embedded Portable Extension</title>
 
-			<para>Portable extensions which are embedded within the CDI bundle
+			<para>Portable extensions which are embedded in the CDI bundle
 			are discoverable through the CDI specified <emphasis>service
 			loader</emphasis> mechanism using the class loader of the CDI bundle.</para>
 		</section>
@@ -3663,9 +3710,10 @@ compName ::= < component name >]]></programlisting>
 	<section xml:id="service.cdi-bean.manager">
 		<title>BeanManager</title>
 
-		<para>When the container component is satisfied CCR must published it's
-		<code>javax.enterprise.inject.spi.BeanManager</code> to the service registry
-		with the following service properties:</para>
+		<para>When the container component is satisfied CCR must published the CDI
+		container's <code>javax.enterprise.inject.spi.BeanManager</code> to the
+		service registry using the <code>ServiceContext</code> of the CDI bundle
+		accompanied by the following service property:</para>
 
 		<table>
 		<title>BeanManager Service Properties</title>
@@ -3689,12 +3737,13 @@ compName ::= < component name >]]></programlisting>
 
 		<tbody>
 			<row>
-			<entry><code><xref
-			linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID_PROPERTY"/></code></entry>
+			<entry><code>osgi.cdi.container.id</code></entry>
 
-			<entry><para>string</para></entry>
+			<entry><para>String</para></entry>
 
-			<entry><para>The container id. See <xref
+			<entry><para>The container id. The constant <code><xref
+			linkend="org.osgi.service.cdi.CDIConstants.CDI_CONTAINER_ID_PROPERTY"
+			xrefstyle="hyperlink"/></code> exists for convenience. See <xref
 			linkend="service.cdi-container.component"/>.</para></entry>
 			</row>
 		</tbody>
@@ -3702,14 +3751,14 @@ compName ::= < component name >]]></programlisting>
 		</table>
 
 		<para>The <code>javax.enterprise.inject.spi.BeanManager</code> must be
-		unpublished when the container component becomes unsatisfied.</para>
+		unregistered when the container component becomes unsatisfied.</para>
 	</section>
 
 	<section xml:id="service.cdi-decorators.and.interceptors">
 		<title>Decorators and Interceptors</title>
 
 		<para>Decorators and Interceptors are used to wrap contextual instances
-		with proxies to deliver additional, targetted functionality. However, these
+		with proxies to deliver additional, targeted functionality. However, these
 		features do not support <xref linkend="service.cdi-bib.unproxyable"/>.
 		Attempting to apply either feature to a bean or producer having an
 		unproxyable bean type will result in a definition error. This limitation
@@ -3725,7 +3774,8 @@ compName ::= < component name >]]></programlisting>
 		published must be a subset of the bean types, including further
 		restrictions declared by <code>@javax.enterprise.inject.Typed</code>.
 		Service types not contained in the restricted set of bean types will
-		result in a definition error.</para>
+		result in a definition error. See <xref linkend="service.cdi-service.restrictions"
+		xrefstyle="hyperlink"/>.</para>
 	</section>
 </section>
 
@@ -3858,9 +3908,12 @@ compName ::= < component name >]]></programlisting>
 		<bibliomixed xml:id="service.cdi-bib.inject">
 			<title>Dependency Injection for Java</title>
 			<biblioid class="uri"><link xlink:href="https://jcp.org/en/jsr/detail?id=330"/></biblioid></bibliomixed>
-		<bibliomixed xml:id="service.cdi-bib.jta12">
-			<title>Java Transaction Something or other...</title>
-			<biblioid class="uri"><link xlink:href="https://jcp.org/en/jsr/detail?id=JTA??"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.jta">
+			<title>Java Transaction API</title>
+			<biblioid class="uri"><link xlink:href="https://github.com/eclipse-ee4j/jta-api"/></biblioid></bibliomixed>
+		<bibliomixed xml:id="service.cdi-bib.portable.java.contract">
+			<title>Portable Java Contract</title>
+			<biblioid class="uri"><link xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
 		<bibliomixed xml:id="service.cdi-bib.jls.ref">
 			<title>The Java Language Specification, Java SE 8 Edition</title>
 			<biblioid class="uri"><link xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>

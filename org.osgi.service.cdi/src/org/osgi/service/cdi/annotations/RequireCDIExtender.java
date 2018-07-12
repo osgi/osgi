@@ -56,7 +56,7 @@ public @interface RequireCDIExtender {
 	 * @return CDI bean descriptor file paths
 	 */
 	@Attribute
-	String[] descriptor() default {};
+	String[] descriptor() default "META-INF/beans.xml";
 
 	/**
 	 * Specify service filters matching the extensions required by the CDI
