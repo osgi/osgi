@@ -20,32 +20,26 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.osgi.test.support.string.Strings;
-import org.osgi.test.support.xpath.XPathAssert;
+import org.osgi.test.support.xpath.AbstractXPathAssert;
 import org.w3c.dom.Node;
 
-public class OCDXPathAssert<SELF extends OCDXPathAssert<SELF,ACTUAL>, ACTUAL extends OCD>
-		extends XPathAssert<SELF,ACTUAL> {
+public class OCDXPathAssert extends AbstractXPathAssert<OCDXPathAssert,OCD> {
 
-	public OCDXPathAssert(ACTUAL actual) {
-		this(actual, OCDXPathAssert.class);
+	public OCDXPathAssert(OCD actual) {
+		super(actual, OCDXPathAssert.class);
 	}
 
-	protected OCDXPathAssert(ACTUAL actual, Class< ? > selfType) {
-		super(actual, selfType);
+	public static OCDXPathAssert assertThat(OCD actual) {
+		return new OCDXPathAssert(actual);
 	}
 
-	public static <SELF extends OCDXPathAssert<SELF,ACTUAL>, ACTUAL extends OCD> OCDXPathAssert<SELF,ACTUAL> assertThat(
-			ACTUAL actual) {
-		return new OCDXPathAssert<>(actual);
-	}
-
-	public SELF hasOption(String ad, String label, String value) {
+	public OCDXPathAssert hasOption(String ad, String label, String value) {
 		hasValue("AD[@id='" + ad + "']/Option[@label='" + label + "']/@value",
 				value);
 		return myself;
 	}
 
-	public SELF hasAD(String ad, String type, int cardinality,
+	public OCDXPathAssert hasAD(String ad, String type, int cardinality,
 			String... values) {
 		final String expr = "AD[@id='" + ad + "']";
 		hasValue(expr + "/@type", type);

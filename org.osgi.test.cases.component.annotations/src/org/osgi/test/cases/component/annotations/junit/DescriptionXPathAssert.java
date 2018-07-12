@@ -20,26 +20,22 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.osgi.test.support.string.Strings;
-import org.osgi.test.support.xpath.XPathAssert;
+import org.osgi.test.support.xpath.AbstractXPathAssert;
 import org.w3c.dom.Node;
 
-public class DescriptionXPathAssert<SELF extends DescriptionXPathAssert<SELF,ACTUAL>, ACTUAL extends Description>
-		extends XPathAssert<SELF,ACTUAL> {
+public class DescriptionXPathAssert
+		extends AbstractXPathAssert<DescriptionXPathAssert,Description> {
 
-	public DescriptionXPathAssert(ACTUAL actual) {
-		this(actual, DescriptionXPathAssert.class);
+	public DescriptionXPathAssert(Description actual) {
+		super(actual, DescriptionXPathAssert.class);
 	}
 
-	protected DescriptionXPathAssert(ACTUAL actual, Class< ? > selfType) {
-		super(actual, selfType);
+	public static DescriptionXPathAssert assertThat(Description actual) {
+		return new DescriptionXPathAssert(actual);
 	}
 
-	public static <SELF extends DescriptionXPathAssert<SELF,ACTUAL>, ACTUAL extends Description> DescriptionXPathAssert<SELF,ACTUAL> assertThat(
-			ACTUAL actual) {
-		return new DescriptionXPathAssert<>(actual);
-	}
-
-	public SELF hasPropertyValue(String name, String type, String value) {
+	public DescriptionXPathAssert hasPropertyValue(String name, String type,
+			String value) {
 		isNotNull();
 		final String expr = "property[@name='" + name + "']";
 		hasValue(expr + "/@value", value);
@@ -52,8 +48,8 @@ public class DescriptionXPathAssert<SELF extends DescriptionXPathAssert<SELF,ACT
 		return myself;
 	}
 
-	public SELF hasPropertyArrayValue(String name, String type,
-			String... values) {
+	public DescriptionXPathAssert hasPropertyArrayValue(String name,
+			String type, String... values) {
 		isNotNull();
 		final String expr = "property[@name='" + name + "']";
 		doesNotContain(expr + "/@value");

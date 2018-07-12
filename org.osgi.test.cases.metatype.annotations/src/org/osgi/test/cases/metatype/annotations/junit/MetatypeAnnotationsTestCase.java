@@ -34,12 +34,12 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 	public void testConfigurationPropertyType() throws Exception {
 		String name = testName.getMethodName();
 		OCD ocd = ocds.get(name);
-		OCDXPathAssert< ? ,OCD> that = assertThat(ocd).as("OCD %s", name);
 		String expr = "AD[@id='self']/@default";
-		Node self = that.getNode(expr);
+		Node self = assertThat(ocd).as("OCD %s", name).getNode(expr);
 		assertThat(self).as("self %s", expr).isNotNull();
 
-		that.hasValue("../@localization",
+		assertThat(ocd).as("OCD %s", name)
+				.hasValue("../@localization",
 				"OSGI-INF/l10n/" + self.getNodeValue())
 				.hasValue("@description", "")
 				.doesNotContainText(".")
