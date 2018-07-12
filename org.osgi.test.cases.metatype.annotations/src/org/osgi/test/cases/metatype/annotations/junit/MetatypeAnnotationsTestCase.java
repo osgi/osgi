@@ -16,14 +16,12 @@
 
 package org.osgi.test.cases.metatype.annotations.junit;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.test.cases.metatype.annotations.junit.OCDXPathAssert.assertThat;
 import static org.osgi.test.support.xpath.XPathAssert.assertThat;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.w3c.dom.Node;
 
 /**
  * @author $Id$
@@ -34,13 +32,8 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 	public void testConfigurationPropertyType() throws Exception {
 		String name = testName.getMethodName();
 		OCD ocd = ocds.get(name);
-		String expr = "AD[@id='self']/@default";
-		Node self = assertThat(ocd).as("OCD %s", name).getNode(expr);
-		assertThat(self).as("self %s", expr).isNotNull();
-
 		assertThat(ocd).as("OCD %s", name)
-				.hasValue("../@localization",
-				"OSGI-INF/l10n/" + self.getNodeValue())
+				.hasValue("../@localization", "OSGI-INF/l10n/" + getSelf(ocd))
 				.hasValue("@description", "")
 				.doesNotContainText(".")
 				.hasAD("string1", "String", 0, "config/string1")
@@ -205,13 +198,13 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 			Designate designate = designatePids.get(pid);
 			assertThat(designate).as("designate pid %s", pid)
 					.hasValue("Object/@ocdref", "testNoDefaults")
-					.hasCount("@factoryPid", 0);
+					.doesNotContain("@factoryPid");
 		}
 		for (String factoryPid : Arrays.asList("factoryPid1", "factoryPid2")) {
 			Designate designate = designateFactoryPids.get(factoryPid);
 			assertThat(designate).as("designate factoryPid %s", factoryPid)
 					.hasValue("Object/@ocdref", "testNoDefaults")
-					.hasCount("@pid", 0);
+					.doesNotContain("@pid");
 		}
 	}
 
@@ -228,7 +221,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 		Designate designate = designatePids.get(pid);
 		assertThat(designate).as("designate pid %s", pid)
 				.hasValue("Object/@ocdref", name)
-				.hasCount("@factoryPid", 0);
+				.doesNotContain("@factoryPid");
 	}
 
 	@Test
@@ -244,7 +237,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 		Designate designate = designateFactoryPids.get(factoryPid);
 		assertThat(designate).as("designate factoryPid %s", factoryPid)
 				.hasValue("Object/@ocdref", name)
-				.hasCount("@pid", 0);
+				.doesNotContain("@pid");
 	}
 
 }

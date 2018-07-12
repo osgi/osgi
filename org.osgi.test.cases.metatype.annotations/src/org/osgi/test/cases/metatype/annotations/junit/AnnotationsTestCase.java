@@ -17,6 +17,7 @@
 package org.osgi.test.cases.metatype.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.osgi.test.cases.metatype.annotations.junit.OCDXPathAssert.assertThat;
 
 import java.io.StringWriter;
 import java.net.URL;
@@ -148,6 +149,14 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 				}
 			}
 		}
+	}
+
+	public String getSelf(OCD ocd) {
+		final String expr = "AD[@id='self']/@default";
+		Node result = assertThat(ocd).isNotNull().getNode(expr);
+		assertThat(result).as("self %s", expr).isNotNull();
+		String self = result.getNodeValue();
+		return self;
 	}
 
 	private String getOCDId(XPath xpath, Element ocd) throws Exception {
