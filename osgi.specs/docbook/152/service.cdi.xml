@@ -3050,7 +3050,7 @@ Provider<Optional<ServiceReference<Spot>>> spots;]]></programlisting>
 
 	<programlisting><![CDATA[@Inject
 @ServiceVendor("Acme Inc.")
-void bindFoo(BindService<Dog> binder) {
+void bindDogs(BindService<Dog> binder) {
 	binder.
 		adding(this::adding).
 		modified(this::modified).
@@ -3068,7 +3068,7 @@ void removed(Dog dog, Map<String,Object> properties) {...}]]></programlisting>
 	For example, given the following invocation:
 
 	<programlisting><![CDATA[@Inject
-void bindFoo(BindService<Dog> binder) {
+void bindDogs(BindService<Dog> binder) {
 	binder.
 		adding(this::addingA).
 		adding(this::addingB).
@@ -3080,7 +3080,7 @@ void bindFoo(BindService<Dog> binder) {
 	<para>An example of a binder type injected into a field:</para>
 
 	<programlisting><![CDATA[@Inject
-void bind(BindBeanServiceObjects<Dog> binder) {
+void bindDogs(BindBeanServiceObjects<Dog> binder) {
 	binder.
 		adding(this::adding).
 		removed(this::removed).
