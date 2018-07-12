@@ -1404,7 +1404,7 @@ female=Female</programlisting>
     <title>Meta Type Resource XML Schema</title>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
-        href="../../generated/xmlns/metatype/v1.3.0/metatype.xsd" parse="text"/></programlisting>
+        href="../../generated/xmlns/metatype/v1.4.0/metatype.xsd" parse="text"/></programlisting>
   </section>
 
   <section xml:id="service.metatype-metatype.annotations">
