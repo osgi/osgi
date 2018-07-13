@@ -16,6 +16,8 @@
 
 package org.osgi.test.support.xpath;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Arrays;
 
 import javax.xml.xpath.XPath;
@@ -24,7 +26,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
 import org.w3c.dom.Node;
 
 public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,ACTUAL>, ACTUAL extends BaseElement>
@@ -42,7 +43,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 
 	public SELF hasNamespace(String namespace) {
 		isNotNull();
-		Assertions.assertThat(actual.getNamespaceContext().getURI())
+		assertThat(actual.getNamespaceContext().getURI())
 				.as("namespace for node %s", actual.getId())
 				.isEqualTo(namespace);
 		return myself;
@@ -51,8 +52,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 	public SELF contains(String expr) {
 		isNotNull();
 		Node result = getNode(expr);
-		Assertions.assertThat(result)
-				.as("%s for node %s", expr, actual.getId())
+		assertThat(result).as("%s for node %s", expr, actual.getId())
 				.isNotNull();
 		return myself;
 	}
@@ -60,9 +60,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 	public SELF doesNotContain(String expr) {
 		isNotNull();
 		Node result = getNode(expr);
-		Assertions.assertThat(result)
-				.as("%s for node %s", expr, actual.getId())
-				.isNull();
+		assertThat(result).as("%s for node %s", expr, actual.getId()).isNull();
 		return myself;
 	}
 
@@ -82,10 +80,9 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 	public SELF hasValue(String expr, String value) {
 		isNotNull();
 		Node result = getNode(expr);
-		Assertions.assertThat(result)
-				.as("%s for node %s", expr, actual.getId())
+		assertThat(result).as("%s for node %s", expr, actual.getId())
 				.isNotNull();
-		Assertions.assertThat(result.getNodeValue())
+		assertThat(result.getNodeValue())
 				.as("%s for node %s", expr, actual.getId())
 				.isEqualTo(value);
 		return myself;
@@ -95,7 +92,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 		isNotNull();
 		Node result = getNode(expr);
 		if (result != null) {
-			Assertions.assertThat(result.getNodeValue())
+			assertThat(result.getNodeValue())
 					.as("%s for node %s", expr, actual.getId())
 					.isEqualTo(value);
 		}
@@ -105,8 +102,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 	public SELF hasCount(String expr, int value) {
 		isNotNull();
 		int count = getCount(expr);
-		Assertions.assertThat(count)
-				.as("count(%s) for node %s", expr, actual.getId())
+		assertThat(count).as("count(%s) for node %s", expr, actual.getId())
 				.isEqualTo(value);
 		return myself;
 	}
@@ -115,7 +111,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 		isNotNull();
 		Node result = getNode(expr + "/text()");
 		if (result != null) {
-			Assertions.assertThat(result.getNodeValue())
+			assertThat(result.getNodeValue())
 					.as("%s/text() value for node %s", expr, actual.getId())
 					.isBlank();
 		}
@@ -138,8 +134,7 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 		try {
 			String result = (String) xpath.evaluate("count(" + expr + ")",
 					actual.getElement(), XPathConstants.STRING);
-			Assertions.assertThat(result)
-					.as("count(%s) for node %s", expr, actual.getId())
+			assertThat(result).as("count(%s) for node %s", expr, actual.getId())
 					.containsOnlyDigits();
 			return Integer.parseInt(result);
 		} catch (XPathExpressionException e) {
