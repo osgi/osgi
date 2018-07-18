@@ -1142,7 +1142,7 @@ class Fido {}]]></programlisting>
 
 		<para>A factory component may specify a factory PID using it's <xref
 		linkend="org.osgi.service.cdi.annotations.FactoryComponent.value--"
-		="hyperlink" /> property. The value must conform to the syntax
+		/> property. The value must conform to the syntax
 		defined for the <code>Bundle-SymbolicName</code> header.</para>
 
 		<para>An example of a factory component specifying a factory PID:</para>
