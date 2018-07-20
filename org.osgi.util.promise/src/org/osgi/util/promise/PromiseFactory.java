@@ -64,8 +64,8 @@ public class PromiseFactory {
 			null, null);
 
 	/**
-	 * The executor to use for callbacks. If {@code null}, the default
-	 * callback executor is used.
+	 * The executor to use for callbacks. If {@code null}, the default callback
+	 * executor is used.
 	 */
 	private final Executor					callbackExecutor;
 	/**
@@ -74,6 +74,7 @@ public class PromiseFactory {
 	 */
 	private final ScheduledExecutorService	scheduledExecutor;
 
+	private final boolean					allowCurrentThread;
 
 	/**
 	 * Create a new PromiseFactory with the specified callback executor.
@@ -101,6 +102,10 @@ public class PromiseFactory {
 			ScheduledExecutorService scheduledExecutor) {
 		this.callbackExecutor = callbackExecutor;
 		this.scheduledExecutor = scheduledExecutor;
+		allowCurrentThread = Boolean.parseBoolean(System.getProperty(
+				"org.osgi.util.promise.allowCurrentThread",
+				Boolean.TRUE.toString()));
+
 	}
 
 	/**
@@ -264,8 +269,7 @@ public class PromiseFactory {
 		private final List<Promise<S>>				promises;
 		private final AtomicInteger					promiseCount;
 
-		All(DeferredPromiseImpl<List<T>> chained,
-				List<Promise<S>> promises) {
+		All(DeferredPromiseImpl<List<T>> chained, List<Promise<S>> promises) {
 			this.chained = requireNonNull(chained);
 			this.promises = requireNonNull(promises);
 			this.promiseCount = new AtomicInteger(promises.size());
@@ -308,6 +312,10 @@ public class PromiseFactory {
 	 */
 	public static Executor inlineExecutor() {
 		return new InlineExecutor();
+	}
+
+	boolean allowCurrentThread() {
+		return allowCurrentThread;
 	}
 
 	/**

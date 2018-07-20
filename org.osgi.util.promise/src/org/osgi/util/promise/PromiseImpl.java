@@ -101,7 +101,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> onResolve(Runnable callback) {
 		requireNonNull(callback);
-		if (isDone()) {
+		if (factory.allowCurrentThread() && isDone()) {
 			try {
 				callback.run();
 			} catch (Throwable t) {

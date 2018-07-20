@@ -59,10 +59,16 @@ public class PromiseTest extends TestCase {
 
 	public static final long	WAIT_TIME	= 2L;
 	Timer						timer;
+	private static final Random	random		= new Random();
+	private String				originalAllowCurrentThread;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		originalAllowCurrentThread = System
+				.getProperty("org.osgi.util.promise.allowCurrentThread");
+		System.setProperty("org.osgi.util.promise.allowCurrentThread",
+				Boolean.toString(random.nextBoolean()));
 		callbackExecutor = Executors.newSingleThreadExecutor();
 		scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
 		timer = new Timer();
@@ -73,6 +79,12 @@ public class PromiseTest extends TestCase {
 		timer.cancel();
 		callbackExecutor.shutdown();
 		scheduledExecutor.shutdown();
+		if (originalAllowCurrentThread == null) {
+			System.clearProperty("org.osgi.util.promise.allowCurrentThread");
+		} else {
+			System.setProperty("org.osgi.util.promise.allowCurrentThread",
+					originalAllowCurrentThread);
+		}
 		super.tearDown();
 	}
 
@@ -778,7 +790,6 @@ public class PromiseTest extends TestCase {
 		final Promise<String> p = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(size);
 		final AtomicInteger count = new AtomicInteger(0);
-		Random random = new Random();
 		int next = random.nextInt(size);
 		final int runtimeFail = next;
 		do {
