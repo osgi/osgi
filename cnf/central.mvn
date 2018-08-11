@@ -30,7 +30,7 @@ org.apache.aries.rsa.discovery:org.apache.aries.rsa.discovery.zookeeper:1.12.0
 org.apache.aries.rsa.provider:org.apache.aries.rsa.provider.tcp:1.12.0
 
 org.apache.felix:org.apache.felix.configadmin:1.9.4
-org.apache.felix:org.apache.felix.configurator:1.0.0
+org.apache.felix:org.apache.felix.configurator:1.0.4
 org.apache.felix:org.apache.felix.dependencymanager:3.1.0
 org.apache.felix:org.apache.felix.http.servlet-api:1.1.2
 org.apache.felix:org.apache.felix.http.jetty:4.0.4
