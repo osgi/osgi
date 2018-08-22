@@ -94,7 +94,7 @@ public class CDIConstants {
 	public static final String	CDI_SPECIFICATION_VERSION			= "1.0.0";
 
 	/**
-	 * The '{@code beans}' attribute on the CDI extender requirement.
+	 * The '{@code descriptor}' attribute on the CDI extender requirement.
 	 * <p>
 	 * The value of this attribute is a list of bean CDI bean descriptor file
 	 * paths to be searched on the {@code Bundle-ClassPath}. For example:
@@ -102,39 +102,23 @@ public class CDIConstants {
 	 * <pre>
 	 * Require-Capability: osgi.extender; «
 	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
-	 *  beans:List&lt;String&gt;="META-INF/beans.xml"
+	 *  descriptor:List&lt;String&gt;="META-INF/beans.xml"
+	 * </pre>
+	 */
+	public static final String	REQUIREMENT_DESCRIPTOR_ATTRIBUTE	= "descriptor";
+
+	/**
+	 * The '{@code beans}' attribute on the CDI extender requirement.
+	 * <p>
+	 * The value of this attribute is a list of bean class names that will be
+	 * processed by CCR. The default value is an empty list. For example:
+	 *
+	 * <pre>
+	 * Require-Capability: osgi.extender; «
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
+	 *  beans:List&lt;String&gt;="com.acme.Foo,com.acme.bar.Baz"
 	 * </pre>
 	 */
 	public static final String	REQUIREMENT_BEANS_ATTRIBUTE			= "beans";
-
-	/**
-	 * The '{@code extensions}' attribute on the CDI extender requirement.
-	 * <p>
-	 * The value of this attribute is a list of service filter strings used to
-	 * match {@code javax.enterprise.inject.spi.Extension} services required by
-	 * the CDI bundle. For example:
-	 *
-	 * <pre>
-	 * Require-Capability: osgi.extender; «
-	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
-	 *  extensions:List&lt;String&gt;="(osgi.cdi.extension=Foo)"
-	 * </pre>
-	 */
-	public static final String	REQUIREMENT_EXTENSIONS_ATTRIBUTE	= "extensions";
-
-	/**
-	 * The '{@code osgi.beans}' attribute on the CDI extender requirement.
-	 * <p>
-	 * The value of this attribute is a list of OSGi Beans Description file
-	 * paths to be searched on the {@code Bundle-ClassPath}. The default value
-	 * when unspecified is {@code OSGI-INF/cdi/osgi-beans.xml}. For example:
-	 *
-	 * <pre>
-	 * Require-Capability: osgi.extender; «
-	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
-	 *  osgi.beans:List&lt;String&gt;="OSGI-INF/cdi/osgi-beans.xml"
-	 * </pre>
-	 */
-	public static final String	REQUIREMENT_OSGI_BEANS_ATTRIBUTE	= "osgi.beans";
 
 }

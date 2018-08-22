@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * Identify the annotated annotation as a Bean Property Type.
@@ -44,5 +45,19 @@ import javax.enterprise.inject.Produces;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface BeanPropertyType {
-	// A meta-annotation
+
+	/**
+	 * Support inline instantiation of the {@link BeanPropertyType} annotation.
+	 */
+	public static final class Literal extends
+			AnnotationLiteral<BeanPropertyType> implements BeanPropertyType {
+
+		/**
+		 * Default instance.
+		 */
+		public static final BeanPropertyType	INSTANCE			= new Literal();
+
+		private static final long				serialVersionUID	= 1L;
+
+	}
 }
