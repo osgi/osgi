@@ -70,4 +70,40 @@ public class DescriptionXPathAssert
 		return myself;
 	}
 
+	public DescriptionXPathAssert hasFactoryPropertyValue(String name,
+			String type, String value) {
+		isNotNull();
+		final String expr = "factory-property[@name='" + name + "']";
+		hasValue(expr + "/@value", value);
+		if (type.equals("String")) {
+			hasOptionalValue(expr + "/@type", "String");
+		} else {
+			hasValue(expr + "/@type", type);
+		}
+		doesNotContainText(expr);
+		return myself;
+	}
+
+	public DescriptionXPathAssert hasFactoryPropertyArrayValue(String name,
+			String type, String... values) {
+		isNotNull();
+		final String expr = "factory-property[@name='" + name + "']";
+		doesNotContain(expr + "/@value");
+		if (type.equals("String")) {
+			hasOptionalValue(expr + "/@type", "String");
+		} else {
+			hasValue(expr + "/@type", type);
+		}
+		Node result = getNode(expr + "/text()");
+		Assertions.assertThat(result)
+				.as("%s/text() value for node %s", expr, actual.getId())
+				.isNotNull();
+		List<String> split = Strings.split("\\s*\\n\\s*",
+				result.getNodeValue());
+		Assertions.assertThat(split)
+				.as("%s/text() value for node %s", expr, actual.getId())
+				.containsExactly(values);
+		return myself;
+	}
+
 }

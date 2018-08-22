@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:component name="org.osgi.test.cases.component.tb4a.NamedService"
+      xmlns:x="http://www.osgi.org/xmlns/scr/v1.4.0"
+      factory="org.osgi.test.cases.component.tb4a.NamedService">
+    <implementation class="org.osgi.test.cases.component.tb4a.impl.NamedServiceFactory" />
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb4a.NamedService"/>
+	</service>
+    <factory-properties entry="org/osgi/test/cases/component/tb4a/impl/namesservice.properties"/>
+    <factory-property
+        name="factory.id"
+        value="foo"/>
+</x:component>

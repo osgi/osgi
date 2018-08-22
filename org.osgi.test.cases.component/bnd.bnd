@@ -17,6 +17,7 @@ Include-Resource					= \
 	tb2.jar, \
 	tb3.jar, \
 	tb4.jar, \
+	tb4a.jar, \
 	tb5.jar, \
 	tb6.jar, \
 	tb7.jar, \
@@ -51,7 +52,7 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project, \
     org.osgi.service.component;             version=project, \
-	osgi.core;version=6.0.0,\
+	osgi.core;version=7.0.0,\
 	osgi.cmpn;version=6.0.0,\
 	${junit}
 
