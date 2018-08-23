@@ -417,234 +417,168 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
 				// v1.0.0
-				.hasCount("reference", 22)
+				.hasCount("reference", 23)
 
 				.hasValue("reference[@name='static']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='static']/@bind")
-
 				.doesNotContain("reference[@name='static']/@unbind")
 				.hasOptionalValue("reference[@name='static']/@cardinality", "1..1")
-
 				.hasOptionalValue("reference[@name='static']/@policy", "static")
-
 				.doesNotContain("reference[@name='static']/@target")
 
 				.hasValue("reference[@name='dynamic']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='dynamic']/@bind")
-
 				.doesNotContain("reference[@name='dynamic']/@unbind")
 				.hasOptionalValue("reference[@name='dynamic']/@cardinality",
 						"1..1")
 				.hasValue("reference[@name='dynamic']/@policy", "dynamic")
-
 				.doesNotContain("reference[@name='dynamic']/@target")
 
 				.hasValue("reference[@name='mandatory']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='mandatory']/@bind")
-
 				.doesNotContain("reference[@name='mandatory']/@unbind")
 				.hasOptionalValue("reference[@name='mandatory']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='mandatory']/@policy", "static")
-
 				.doesNotContain("reference[@name='mandatory']/@target")
 
 				.hasValue("reference[@name='optional']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='optional']/@bind")
-
 				.doesNotContain("reference[@name='optional']/@unbind")
-
 				.hasValue("reference[@name='optional']/@cardinality", "0..1")
-
 				.hasOptionalValue("reference[@name='optional']/@policy", "static")
-
 				.doesNotContain("reference[@name='optional']/@target")
 
 				.hasValue("reference[@name='multiple']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='multiple']/@bind")
-
 				.doesNotContain("reference[@name='multiple']/@unbind")
-
 				.hasValue("reference[@name='multiple']/@cardinality", "0..n")
-
 				.hasOptionalValue("reference[@name='multiple']/@policy", "static")
-
 				.doesNotContain("reference[@name='multiple']/@target")
 
 				.hasValue("reference[@name='atleastone']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='atleastone']/@bind")
-
 				.doesNotContain("reference[@name='atleastone']/@unbind")
-
 				.hasValue("reference[@name='atleastone']/@cardinality", "1..n")
 				.hasOptionalValue("reference[@name='atleastone']/@policy",
 						"static")
-
 				.doesNotContain("reference[@name='atleastone']/@target")
 
 				.hasValue("reference[@name='greedy']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='greedy']/@bind")
-
 				.doesNotContain("reference[@name='greedy']/@unbind")
 				.hasOptionalValue("reference[@name='greedy']/@cardinality", "1..1")
-
 				.hasOptionalValue("reference[@name='greedy']/@policy", "static")
-
 				.doesNotContain("reference[@name='greedy']/@target")
 
 				.hasValue("reference[@name='reluctant']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='reluctant']/@bind")
-
 				.doesNotContain("reference[@name='reluctant']/@unbind")
 				.hasOptionalValue("reference[@name='reluctant']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='reluctant']/@policy", "static")
-
 				.doesNotContain("reference[@name='reluctant']/@target")
 
 				.hasValue("reference[@name='update']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='update']/@bind")
-
 				.doesNotContain("reference[@name='update']/@unbind")
 				.hasOptionalValue("reference[@name='update']/@cardinality", "1..1")
-
 				.hasOptionalValue("reference[@name='update']/@policy", "static")
-
 				.doesNotContain("reference[@name='update']/@target")
 
 				.hasValue("reference[@name='replace']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='replace']/@bind")
-
 				.doesNotContain("reference[@name='replace']/@unbind")
 				.hasOptionalValue("reference[@name='replace']/@cardinality",
 						"1..1")
-
 				.hasOptionalValue("reference[@name='replace']/@policy", "static")
-
 				.doesNotContain("reference[@name='replace']/@target")
 
 				.hasValue("reference[@name='target']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='target']/@bind")
-
 				.doesNotContain("reference[@name='target']/@unbind")
 				.hasOptionalValue("reference[@name='target']/@cardinality", "1..1")
-
 				.hasOptionalValue("reference[@name='target']/@policy", "static")
 				.hasValue("reference[@name='target']/@target",
 						"(test.attr=foo)")
 
 				.hasValue("reference[@name='bundle']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='bundle']/@bind")
-
 				.doesNotContain("reference[@name='bundle']/@unbind")
 				.hasOptionalValue("reference[@name='bundle']/@cardinality", "1..1")
 				.hasValue("reference[@name='bundle']/@policy", "dynamic")
-
 				.doesNotContain("reference[@name='bundle']/@target")
 
 				.hasValue("reference[@name='prototype']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='prototype']/@bind")
-
 				.doesNotContain("reference[@name='prototype']/@unbind")
 				.hasOptionalValue("reference[@name='prototype']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='prototype']/@policy", "static")
-
 				.doesNotContain("reference[@name='prototype']/@target")
 
 				.hasValue("reference[@name='prototype_required']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='prototype_required']/@bind")
-
 				.doesNotContain("reference[@name='prototype_required']/@unbind")
 				.hasOptionalValue(
 						"reference[@name='prototype_required']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='prototype_required']/@policy",
 						"static")
-
 				.doesNotContain("reference[@name='prototype_required']/@target")
 
 				.hasValue("reference[@name='reference']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='reference']/@bind")
-
 				.doesNotContain("reference[@name='reference']/@unbind")
 				.hasOptionalValue("reference[@name='reference']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='reference']/@policy", "static")
-
 				.doesNotContain("reference[@name='reference']/@target")
 
 				.hasValue("reference[@name='serviceobjects']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='serviceobjects']/@bind")
-
 				.doesNotContain("reference[@name='serviceobjects']/@unbind")
 				.hasOptionalValue("reference[@name='serviceobjects']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='serviceobjects']/@policy",
 						"static")
-
 				.doesNotContain("reference[@name='serviceobjects']/@target")
 
 				.hasValue("reference[@name='properties']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='properties']/@bind")
-
 				.doesNotContain("reference[@name='properties']/@unbind")
 				.hasOptionalValue("reference[@name='properties']/@cardinality",
 						"1..1")
-
 				.hasValue("reference[@name='properties']/@policy", "dynamic")
-
 				.doesNotContain("reference[@name='properties']/@target")
 
 				.hasValue("reference[@name='tuple']/@interface",
 						"java.util.EventListener")
 				.doesNotContain("reference[@name='tuple']/@bind")
-
 				.doesNotContain("reference[@name='tuple']/@unbind")
-
 				.hasOptionalValue("reference[@name='tuple']/@cardinality", "1..1")
-
 				.hasOptionalValue("reference[@name='tuple']/@policy", "static")
-
 				.doesNotContain("reference[@name='tuple']/@target")
 
 				.hasValue("reference[@name='collection_reference']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='collection_reference']/@bind")
 				.doesNotContain(
 						"reference[@name='collection_reference']/@unbind")
@@ -689,81 +623,79 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 
 				.hasValue("reference[@name='collection_tuple']/@interface",
 						"java.util.EventListener")
-
 				.doesNotContain("reference[@name='collection_tuple']/@bind")
-
 				.doesNotContain("reference[@name='collection_tuple']/@unbind")
 				.hasOptionalValue(
 						"reference[@name='collection_tuple']/@cardinality",
 						"0..n")
 				.hasOptionalValue("reference[@name='collection_tuple']/@policy",
 						"static")
-
 				.doesNotContain("reference[@name='collection_tuple']/@target")
+
+				.hasValue("reference[@name='collection_specified']/@interface",
+						"java.util.Map")
+				.doesNotContain("reference[@name='collection_specified']/@bind")
+				.doesNotContain(
+						"reference[@name='collection_specified']/@unbind")
+				.hasOptionalValue(
+						"reference[@name='collection_specified']/@cardinality",
+						"0..n")
+				.hasOptionalValue(
+						"reference[@name='collection_specified']/@policy",
+						"static")
+				.doesNotContain(
+						"reference[@name='collection_specified']/@target")
 
 				// v1.2.0
 				.hasOptionalValue("reference[@name='static']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='static']/@updated")
 
 				.hasOptionalValue("reference[@name='dynamic']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='dynamic']/@updated")
 
 				.hasOptionalValue("reference[@name='mandatory']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='mandatory']/@updated")
 
 				.hasOptionalValue("reference[@name='optional']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='optional']/@updated")
 
 				.hasOptionalValue("reference[@name='multiple']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='multiple']/@updated")
 
 				.hasOptionalValue("reference[@name='atleastone']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='atleastone']/@updated")
 
 				.hasValue("reference[@name='greedy']/@policy-option", "greedy")
-
 				.doesNotContain("reference[@name='greedy']/@updated")
 
 				.hasOptionalValue("reference[@name='reluctant']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='reluctant']/@updated")
 
 				.hasOptionalValue("reference[@name='update']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='update']/@update")
 
 				.hasOptionalValue("reference[@name='replace']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='replace']/@update")
 
 				.hasOptionalValue("reference[@name='target']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='target']/@updated")
 
 				.hasOptionalValue("reference[@name='bundle']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='bundle']/@updated")
 
 				.hasOptionalValue("reference[@name='prototype']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='prototype']/@updated")
 
 				.hasOptionalValue(
@@ -773,23 +705,19 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 
 				.hasOptionalValue("reference[@name='reference']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='reference']/@updated")
 
 				.hasOptionalValue(
 						"reference[@name='serviceobjects']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='serviceobjects']/@updated")
 
 				.hasOptionalValue("reference[@name='properties']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='properties']/@updated")
 
 				.hasOptionalValue("reference[@name='tuple']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='tuple']/@updated")
 
 				.hasOptionalValue(
@@ -813,8 +741,13 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue(
 						"reference[@name='collection_tuple']/@policy-option",
 						"reluctant")
-
 				.doesNotContain("reference[@name='collection_tuple']/@updated")
+
+				.hasOptionalValue(
+						"reference[@name='collection_specified']/@policy-option",
+						"reluctant")
+				.doesNotContain(
+						"reference[@name='collection_specified']/@updated")
 
 				// v1.3.0
 				.hasValue("reference[@name='static']/@field", "fieldStatic")
@@ -822,7 +755,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='static']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='static']/@scope", "bundle")
 
 				.hasValue("reference[@name='dynamic']/@field", "fieldDynamic")
@@ -830,7 +762,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='dynamic']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='dynamic']/@scope", "bundle")
 
 				.hasValue("reference[@name='mandatory']/@field",
@@ -839,7 +770,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='mandatory']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='mandatory']/@scope", "bundle")
 
 				.hasValue("reference[@name='optional']/@field", "fieldOptional")
@@ -847,7 +777,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='optional']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='optional']/@scope", "bundle")
 
 				.hasValue("reference[@name='multiple']/@field", "fieldMultiple")
@@ -856,7 +785,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue(
 						"reference[@name='multiple']/@field-collection-type",
 						"service")
-
 				.hasOptionalValue("reference[@name='multiple']/@scope", "bundle")
 
 				.hasValue("reference[@name='atleastone']/@field",
@@ -873,7 +801,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='greedy']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='greedy']/@scope", "bundle")
 
 				.hasValue("reference[@name='reluctant']/@field",
@@ -882,7 +809,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='reluctant']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='reluctant']/@scope", "bundle")
 
 				.hasValue("reference[@name='update']/@field", "fieldUpdate")
@@ -890,7 +816,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasValue("reference[@name='update']/@field-option", "update")
 				.doesNotContain(
 						"reference[@name='update']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='update']/@scope", "bundle")
 
 				.hasValue("reference[@name='replace']/@field", "fieldReplace")
@@ -898,7 +823,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='replace']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='replace']/@scope", "bundle")
 
 				.hasValue("reference[@name='target']/@field", "fieldTarget")
@@ -906,7 +830,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='target']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='target']/@scope", "bundle")
 
 				.hasValue("reference[@name='bundle']/@field", "fieldBundle")
@@ -914,7 +837,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='bundle']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='bundle']/@scope", "bundle")
 
 				.hasValue("reference[@name='prototype']/@field",
@@ -941,7 +863,6 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"replace")
 				.doesNotContain(
 						"reference[@name='reference']/@field-collection-type")
-
 				.hasOptionalValue("reference[@name='reference']/@scope", "bundle")
 
 				.hasValue("reference[@name='serviceobjects']/@field",
@@ -1013,6 +934,18 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"reference[@name='collection_tuple']/@field-collection-type",
 						"tuple")
 				.hasOptionalValue("reference[@name='collection_tuple']/@scope",
+						"bundle")
+
+				.hasValue("reference[@name='collection_specified']/@field",
+						"fieldServiceM")
+				.hasOptionalValue(
+						"reference[@name='collection_specified']/@field-option",
+						"replace")
+				.hasValue(
+						"reference[@name='collection_specified']/@field-collection-type",
+						"service")
+				.hasOptionalValue(
+						"reference[@name='collection_specified']/@scope",
 						"bundle");
 	}
 

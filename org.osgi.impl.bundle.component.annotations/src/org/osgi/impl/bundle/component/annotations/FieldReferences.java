@@ -20,9 +20,11 @@ import java.util.Collection;
 import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.CollectionType;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.FieldOption;
@@ -121,4 +123,7 @@ public class FieldReferences {
 
 	@Reference(name = "collection_tuple")
 	private Collection<Map.Entry<Map<String, Object>, EventListener>> fieldTupleM;
+
+	@Reference(name = "collection_specified", service = Map.class, collectionType = CollectionType.SERVICE)
+	private Collection<Map<String,Object>>							fieldServiceM;
 }
