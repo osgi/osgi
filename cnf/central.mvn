@@ -21,6 +21,7 @@ org.apache.aries.jmx:org.apache.aries.jmx:1.1.5
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
 org.apache.aries.proxy:org.apache.aries.proxy:1.0.1
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
+org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.0.14
 org.apache.aries.subsystem:org.apache.aries.subsystem:2.0.2
 org.apache.aries.rsa:org.apache.aries.rsa.core:1.12.0
 org.apache.aries.rsa:org.apache.aries.rsa.spi:1.12.0
