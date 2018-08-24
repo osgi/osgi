@@ -24,6 +24,9 @@
  */
 package org.osgi.test.cases.component.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.osgi.test.cases.component.junit.DTOUtil.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +52,7 @@ import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
-import org.osgi.framework.dto.BundleDTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.namespace.extender.ExtenderNamespace;
@@ -98,7 +101,6 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * @author $Id$
  */
-@SuppressWarnings("unchecked")
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {
 
@@ -491,6 +493,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		List<BundleCapability> services = wiring
 				.getCapabilities(ServiceNamespace.SERVICE_NAMESPACE);
 		for (BundleCapability service : services) {
+			@SuppressWarnings("unchecked")
 			List<String> objectClass = (List<String>) service.getAttributes()
 					.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
 			if (objectClass.contains(ServiceComponentRuntime.class.getName())) {
@@ -3177,21 +3180,26 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl");
 		assertNotNull("null description1", description1);
 		ComponentDescriptionDTO expected1 = newComponentDescriptionDTO(
-				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", newBundleDTO(tb1), null, "bundle",
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl",
+				newBundleDTO(tb1), null, "bundle",
 				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", true, false,
 				new String[] {
 						"org.osgi.test.cases.component.service.ServiceProvider"
 				}, Collections.<String, Object> emptyMap(),
 				new ReferenceDTO[] {}, "activate", "deactivate", null, "optional",
-				new String[] {"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"});
-		assertEquals("DTO wrong", expected1, description1);
+				new String[] {
+						"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"
+				}, null, new String[0], 0);
+		assertThat(description1)
+				.isEqualToComparingFieldByFieldRecursively(expected1);
 		boolean found = false;
 		for (ComponentDescriptionDTO d : descriptions) {
 			if (d.bundle.id != description1.bundle.id)
 				continue;
 			if (!d.name.equals(description1.name))
 				continue;
-			assertEquals("DTO wrong", description1, d);
+			assertThat(d)
+					.isEqualToComparingFieldByFieldRecursively(description1);
 			found = true;
 			break;
 		}
@@ -3204,27 +3212,37 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		properties3.put("serviceProvider.target",
 				"(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)");
 		ComponentDescriptionDTO expected3 = newComponentDescriptionDTO(
-				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent", newBundleDTO(tb3), null, "singleton",
+				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent",
+				newBundleDTO(tb3), null, "singleton",
 				"org.osgi.test.cases.component.tb3.impl.ServiceConsumerEventImpl", true, false,
 				new String[] {"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"}, properties3,
 				new ReferenceDTO[] {
-						newReferenceDTO("serviceProvider", "org.osgi.test.cases.component.service.ServiceProvider",
+						newReferenceDTO("serviceProvider",
+								"org.osgi.test.cases.component.service.ServiceProvider",
 								"1..1", "static", "reluctant",
 								"(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)",
-								"bindServiceProvider", "unbindServiceProvider", null, null, null, "bundle"),
-						newReferenceDTO("namedService", "org.osgi.test.cases.component.tb4.NamedService", "0..n",
+								"bindServiceProvider", "unbindServiceProvider",
+								null, null, null, "bundle", null, null),
+						newReferenceDTO("namedService",
+								"org.osgi.test.cases.component.tb4.NamedService",
+								"0..n",
 								"dynamic", "reluctant", null, "bindObject", "unbindObject", null, null, null,
-								"bundle")},
+								"bundle", null, null)
+				},
 				"activate", "deactivate", null, "optional",
-				new String[] {"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"});
-		assertEquals("DTO wrong", expected3, description3);
+				new String[] {
+						"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"
+				}, null, new String[0], 0);
+		assertThat(description3)
+				.isEqualToComparingFieldByFieldRecursively(expected3);
 		found = false;
 		for (ComponentDescriptionDTO d : descriptions) {
 			if (d.bundle.id != description3.bundle.id)
 				continue;
 			if (!d.name.equals(description3.name))
 				continue;
-			assertEquals("DTO wrong", description3, d);
+			assertThat(d)
+					.isEqualToComparingFieldByFieldRecursively(description3);
 			found = true;
 			break;
 		}
@@ -3242,7 +3260,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("wrong number of configurations", 1, configurations1.size());
 		ComponentConfigurationDTO configuration1 = configurations1.iterator().next();
 		assertNotNull("null configuration", configuration1);
-		assertEquals("wrong description in configuration", description1, configuration1.description);
+		assertThat(configuration1.description)
+				.isEqualToComparingFieldByFieldRecursively(description1);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
 		assertEquals("wrong number of satisfiedReferences", 0, configuration1.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration1.unsatisfiedReferences.length);
@@ -3250,6 +3269,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				configuration1.properties.get(ComponentConstants.COMPONENT_NAME));
 		assertTrue("configuration missing component.id property",
 				configuration1.properties.containsKey(ComponentConstants.COMPONENT_ID));
+		assertNull(configuration1.failure);
+		assertNull(configuration1.service);
 
 		ComponentDescriptionDTO description3 = scr.getComponentDescriptionDTO(tb3,
 				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent");
@@ -3259,7 +3280,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("wrong number of configurations", 1, configurations3.size());
 		ComponentConfigurationDTO configuration3 = configurations3.iterator().next();
 		assertNotNull("null configuration", configuration3);
-		assertEquals("wrong description in configuration", description3, configuration3.description);
+		assertThat(configuration3.description)
+				.isEqualToComparingFieldByFieldRecursively(description3);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration3.state);
 		assertEquals("wrong number of satisfiedReferences", 2, configuration3.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration3.unsatisfiedReferences.length);
@@ -3267,6 +3289,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				configuration3.properties.get(ComponentConstants.COMPONENT_NAME));
 		assertTrue("configuration missing component.id property",
 				configuration3.properties.containsKey(ComponentConstants.COMPONENT_ID));
+		assertNull(configuration3.failure);
+		ServiceReferenceDTO[] tb3SRs = tb3.adapt(ServiceReferenceDTO[].class);
+		assertThat(tb3SRs).hasSize(1);
+		assertThat(configuration3.service)
+				.isEqualToComparingFieldByFieldRecursively(tb3SRs[0]);
 	}
 
 	public void testServiceComponentRuntimeEnablement() throws Exception {
@@ -3298,107 +3325,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("null configurations1", configurations1);
 		assertEquals("wrong number of configurations", 1, configurations1.size());
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
-	}
-
-	private static void assertEquals(String message, ComponentDescriptionDTO expected, ComponentDescriptionDTO actual) {
-		assertEquals(message, expected.activate, actual.activate);
-		assertEquals(message, expected.bundle, actual.bundle);
-		assertEquals(message, expected.configurationPid, actual.configurationPid);
-		assertEquals(message, expected.configurationPolicy, actual.configurationPolicy);
-		assertEquals(message, expected.deactivate, actual.deactivate);
-		assertEquals(message, expected.defaultEnabled, actual.defaultEnabled);
-		assertEquals(message, expected.factory, actual.factory);
-		assertEquals(message, expected.immediate, actual.immediate);
-		assertEquals(message, expected.implementationClass, actual.implementationClass);
-		assertEquals(message, expected.modified, actual.modified);
-		assertEquals(message, expected.name, actual.name);
-		assertEquals(message, expected.scope, actual.scope);
-		assertEquals(message, expected.serviceInterfaces, actual.serviceInterfaces);
-		assertEquals(message, expected.properties, actual.properties);
-		assertEquals(message, expected.references, actual.references);
-	}
-
-	private static void assertEquals(String message, BundleDTO expected, BundleDTO actual) {
-		assertEquals(message, expected.id, actual.id);
-		assertEquals(message, expected.lastModified, actual.lastModified);
-		assertEquals(message, expected.state, actual.state);
-		assertEquals(message, expected.symbolicName, actual.symbolicName);
-		assertEquals(message, expected.version, actual.version);
-	}
-
-	private static void assertEquals(String message, ReferenceDTO expected, ReferenceDTO actual) {
-		assertEquals(message, expected.bind, actual.bind);
-		assertEquals(message, expected.cardinality, actual.cardinality);
-		assertEquals(message, expected.field, actual.field);
-		assertEquals(message, expected.fieldOption, actual.fieldOption);
-		assertEquals(message, expected.interfaceName, actual.interfaceName);
-		assertEquals(message, expected.name, actual.name);
-		assertEquals(message, expected.policy, actual.policy);
-		assertEquals(message, expected.policyOption, actual.policyOption);
-		assertEquals(message, expected.scope, actual.scope);
-		assertEquals(message, expected.target, actual.target);
-		assertEquals(message, expected.unbind, actual.unbind);
-		assertEquals(message, expected.updated, actual.updated);
-	}
-
-	private static void assertEquals(String message, String[] expected, String[] actual) {
-		assertEquals(message, expected.length, actual.length);
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(message, expected[i], actual[i]);
-		}
-	}
-
-	private static void assertEquals(String message, ReferenceDTO[] expected, ReferenceDTO[] actual) {
-		assertEquals(message, expected.length, actual.length);
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(message, expected[i], actual[i]);
-		}
-	}
-
-	private static ComponentDescriptionDTO newComponentDescriptionDTO(String name, BundleDTO bundle, String factory,
-			String scope, String implementationClass, boolean defaultEnabled, boolean immediate,
-			String[] serviceInterfaces, Map<String, Object> properties, ReferenceDTO[] references, String activate,
-			String deactivate, String modified, String configurationPolicy, String[] configurationPid) {
-		ComponentDescriptionDTO dto = new ComponentDescriptionDTO();
-		dto.name = name;
-		dto.bundle = bundle;
-		dto.factory = factory;
-		dto.scope = scope;
-		dto.implementationClass = implementationClass;
-		dto.defaultEnabled = defaultEnabled;
-		dto.immediate = immediate;
-		dto.serviceInterfaces = serviceInterfaces;
-		dto.properties = properties;
-		dto.references = references;
-		dto.activate = activate;
-		dto.deactivate = deactivate;
-		dto.modified = modified;
-		dto.configurationPolicy = configurationPolicy;
-		dto.configurationPid = configurationPid;
-		return dto;
-	}
-
-	private static BundleDTO newBundleDTO(Bundle b) {
-		return b.adapt(BundleDTO.class);
-	}
-
-	private static ReferenceDTO newReferenceDTO(String name, String interfaceName, String cardinality, String policy,
-			String policyOption, String target, String bind, String unbind, String updated, String field,
-			String fieldOption, String scope) {
-		ReferenceDTO dto = new ReferenceDTO();
-		dto.name = name;
-		dto.interfaceName = interfaceName;
-		dto.cardinality = cardinality;
-		dto.policy = policy;
-		dto.policyOption = policyOption;
-		dto.target = target;
-		dto.bind = bind;
-		dto.unbind = unbind;
-		dto.updated = updated;
-		dto.field = field;
-		dto.fieldOption = fieldOption;
-		dto.scope = scope;
-		return dto;
 	}
 
 	public void testMinimumCardinality01130() throws Exception {
@@ -4093,6 +4019,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
 				assertEquals("configurations not merged", "config1", props.get(PID1));
 				assertEquals("configurations not merged", "config2", props.get(PID2));
+				@SuppressWarnings("unchecked")
 				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
 				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
 			}
@@ -4154,6 +4081,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("configurations not merged", "config1", props.get(PID1));
 				assertEquals("configurations not merged", "config2", props.get(PID2));
 				assertEquals("configurations not merged", "factory", props.get(PID3));
+				@SuppressWarnings("unchecked")
 				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
 				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
 			}
@@ -4767,9 +4695,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", t1.getTuple().getValue());
 				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
 			}
@@ -4781,6 +4709,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		finally {
 			uninstallBundle(tb24);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <C> Comparable<C> asComparable(C o) {
+		return (Comparable<C>) o;
 	}
 
 	public void testStaticScalarFieldReferenceModified130() throws Exception {
@@ -4969,6 +4902,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNull("properties injected", s1.getProperties());
 				assertNull("tuple injected", s1.getTuple());
 
+				@SuppressWarnings("unchecked")
 				MultipleFieldTestService<BaseService> t1 = (MultipleFieldTestService<BaseService>) s1;
 				Collection<BaseService> cs1 = t1.getCollectionService();
 				assertNotNull("no service collection", cs1);
@@ -5060,6 +4994,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNull("properties injected", s1.getProperties());
 				assertNull("tuple injected", s1.getTuple());
 
+				@SuppressWarnings("unchecked")
 				MultipleFieldTestService<BaseService> t1 = (MultipleFieldTestService<BaseService>) s1;
 				Collection<BaseService> cs1 = t1.getCollectionService();
 				assertNotNull("no service collection", cs1);
@@ -5249,9 +5184,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", t1.getTuple().getValue());
 				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
 
@@ -5316,9 +5251,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", t1.getTuple().getValue());
 				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
 
@@ -5378,9 +5313,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", t1.getTuple().getValue());
 				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
 
@@ -5497,9 +5432,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
 
@@ -5553,9 +5488,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong number of elements in service tuple list", 1, lt1.size());
 				assertTrue("tuple not Comparable", lt1.get(0) instanceof Comparable);
 				assertEquals("tuples not equal", 0,
-						((Comparable<Entry<Map<String, Object>, BaseService>>) lt1.get(0)).compareTo(tuple));
+						asComparable(lt1.get(0)).compareTo(tuple));
 				assertEquals("tuples not equal", 0,
-						((Comparable<Entry<Map<String, Object>, BaseService>>) tuple).compareTo(lt1.get(0)));
+						asComparable(tuple).compareTo(lt1.get(0)));
 				tuple = lt1.get(0);
 				assertTrue("service tuple list not mutable", lt1.remove(tuple));
 				key = tuple.getKey();
@@ -5578,9 +5513,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
 			}
@@ -5843,6 +5778,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testOptionalStaticMultipleFieldReference130() throws Exception {
 		ServiceComponentRuntime scr = scrTracker.getService();
 		assertNotNull("failed to find ServiceComponentRuntime service", scr);
@@ -6211,14 +6147,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong number of elements in service properties collection", 2, cp2.size());
 				Iterator<Map<String, Object>> cp2i = cp2.iterator();
 				assertTrue("wrong order in service properties collection",
-						((Comparable<Map<String, Object>>) cp2i.next()).compareTo(cp2i.next()) < 0);
+						asComparable(cp2i.next()).compareTo(cp2i.next()) < 0);
 				Collection<Entry<Map<String, Object>, BaseService>> ct2 = t2.getCollectionTuple();
 				assertNotNull("no service tuple collection", ct2);
 				assertNotSame("service tuple collection not replaced", ct1, ct2);
 				assertEquals("wrong number of elements in service tuple collection", 2, ct2.size());
 				Iterator<Entry<Map<String, Object>, BaseService>> ct2i = ct2.iterator();
 				assertTrue("wrong order in service tuple collection",
-						((Comparable<Entry<Map<String, Object>, BaseService>>) ct2i.next()).compareTo(ct2i.next()) < 0);
+						asComparable(ct2i.next()).compareTo(ct2i.next()) < 0);
 
 				List<BaseService> ls2 = t2.getListService();
 				assertNotNull("no service list", ls2);
@@ -6243,13 +6179,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotSame("service properties list not replaced", lp1, lp2);
 				assertEquals("wrong number of elements in service properties list", 2, lp2.size());
 				assertTrue("wrong order in service properties list",
-						((Comparable<Map<String, Object>>) lp2.get(0)).compareTo(lp2.get(1)) < 0);
+						asComparable(lp2.get(0)).compareTo(lp2.get(1)) < 0);
 				List<Entry<Map<String, Object>, BaseService>> lt2 = t2.getListTuple();
 				assertNotNull("no service tuple list", lt2);
 				assertNotSame("service tuple list not replaced", lt1, lt2);
 				assertEquals("wrong number of elements in service tuple list", 2, lt2.size());
 				assertTrue("wrong order in service tuple list",
-						((Comparable<Entry<Map<String, Object>, BaseService>>) lt2.get(0)).compareTo(lt2.get(1)) < 0);
+						asComparable(lt2.get(0)).compareTo(lt2.get(1)) < 0);
 			}
 			finally {
 				comp1Tracker.close();
@@ -6299,6 +6235,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNull("properties injected", s1.getProperties());
 				assertNull("tuple injected", s1.getTuple());
 
+				@SuppressWarnings("unchecked")
 				MultipleFieldTestService<BaseService> t1 = (MultipleFieldTestService<BaseService>) s1;
 				Collection<BaseService> cs1 = t1.getCollectionService();
 				assertNotNull("no service collection", cs1);
@@ -6404,6 +6341,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 				assertNull("service injected", s1.getAssignable());
 
+				@SuppressWarnings("unchecked")
 				MultipleFieldTestService<BaseService> t1 = (MultipleFieldTestService<BaseService>) s1;
 				Collection<BaseService> cs1 = t1.getCollectionService();
 				assertNull("service collection injected", cs1);
@@ -6529,9 +6467,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
 
@@ -6585,9 +6523,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong number of elements in service tuple list", 1, lt1.size());
 				assertTrue("tuple not Comparable", lt1.get(0) instanceof Comparable);
 				assertEquals("tuples not equal", 0,
-						((Comparable<Entry<Map<String, Object>, BaseService>>) lt1.get(0)).compareTo(tuple));
+						asComparable(lt1.get(0)).compareTo(tuple));
 				assertEquals("tuples not equal", 0,
-						((Comparable<Entry<Map<String, Object>, BaseService>>) tuple).compareTo(lt1.get(0)));
+						asComparable(tuple).compareTo(lt1.get(0)));
 				tuple = lt1.get(0);
 				assertTrue("service tuple list not mutable", lt1.remove(tuple));
 				key = tuple.getKey();
@@ -6610,9 +6548,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
 
@@ -6680,9 +6618,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertEquals("properties not equal to tuple key", 0,
-						((Comparable<Map<String, Object>>) properties).compareTo(key));
+						asComparable(properties).compareTo(key));
 				assertEquals("tuple keys not equal to properties", 0,
-						((Comparable<Map<String, Object>>) key).compareTo(properties));
+						asComparable(key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
 
@@ -7312,14 +7250,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong number of elements in service properties collection", 2, cp2.size());
 				Iterator<Map<String, Object>> cp2i = cp2.iterator();
 				assertTrue("wrong order in service properties collection",
-						((Comparable<Map<String, Object>>) cp2i.next()).compareTo(cp2i.next()) < 0);
+						asComparable(cp2i.next()).compareTo(cp2i.next()) < 0);
 				Collection<Entry<Map<String, Object>, BaseService>> ct2 = t1.getCollectionTuple();
 				assertNotNull("no service tuple collection", ct2);
 				assertNotSame("service tuple collection not replaced", ct1, ct2);
 				assertEquals("wrong number of elements in service tuple collection", 2, ct2.size());
 				Iterator<Entry<Map<String, Object>, BaseService>> ct2i = ct2.iterator();
 				assertTrue("wrong order in service tuple collection",
-						((Comparable<Entry<Map<String, Object>, BaseService>>) ct2i.next()).compareTo(ct2i.next()) < 0);
+						asComparable(ct2i.next()).compareTo(ct2i.next()) < 0);
 
 				List<BaseService> ls2 = t1.getListService();
 				assertNotNull("no service list", ls2);
@@ -7344,13 +7282,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotSame("service properties list not replaced", lp1, lp2);
 				assertEquals("wrong number of elements in service properties list", 2, lp2.size());
 				assertTrue("wrong order in service properties list",
-						((Comparable<Map<String, Object>>) lp2.get(0)).compareTo(lp2.get(1)) < 0);
+						asComparable(lp2.get(0)).compareTo(lp2.get(1)) < 0);
 				List<Entry<Map<String, Object>, BaseService>> lt2 = t1.getListTuple();
 				assertNotNull("no service tuple list", lt2);
 				assertNotSame("service tuple list not replaced", lt1, lt2);
 				assertEquals("wrong number of elements in service tuple list", 2, lt2.size());
 				assertTrue("wrong order in service tuple list",
-						((Comparable<Entry<Map<String, Object>, BaseService>>) lt2.get(0)).compareTo(lt2.get(1)) < 0);
+						asComparable(lt2.get(0)).compareTo(lt2.get(1)) < 0);
 			}
 			finally {
 				comp1Tracker.close();

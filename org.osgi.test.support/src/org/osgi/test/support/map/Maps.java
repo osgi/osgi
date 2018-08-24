@@ -22,6 +22,10 @@ import java.util.Map;
 
 public class Maps {
 
+	public static <K, V> Map<K,V> mapOf() {
+		return Collections.emptyMap();
+	}
+
 	public static <K, V> Map<K,V> mapOf(K k1, V v1) {
 		Map<K,V> map = new LinkedHashMap<>();
 		map.put(k1, v1);

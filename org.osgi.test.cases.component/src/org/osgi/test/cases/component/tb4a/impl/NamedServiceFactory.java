@@ -24,33 +24,44 @@
  */
 package org.osgi.test.cases.component.tb4a.impl;
 
+import java.util.Collection;
+
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.log.LogService;
 import org.osgi.test.cases.component.tb4a.NamedService;
 
-
 /**
- * @author Valentin Valchev
- * @author $Id$
  */
 public class NamedServiceFactory implements NamedService {
-  private String name = "name not init";
-  
-  public void activate(ComponentContext componentContext) {
-    name = (String) componentContext.getProperties().get("name");
-    if( name == null ) {
-      this.name = "name not set";
-    }
-  }
-  
-  // it is absolutely legal to have activate without having deactivate!
-  //public void deactivate(ComponentContext cc) {}
+	private final String	name;
 
-  public String getName() {
-    return name;
-  }
-  
-  public String toString() {
-    return name;
-  }
+	private BundleContext	context;
+	private final Collection<LogService>	logs;
+
+	public NamedServiceFactory(ComponentContext componentContext,
+			Collection<LogService> logs) {
+		this.name = (String) componentContext.getProperties().get("name");
+		this.logs = logs;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + " " + !getLogServices().isEmpty();
+	}
+
+	@Override
+	public BundleContext getBundleContext() {
+		return context;
+	}
+
+	private Collection<LogService> getLogServices() {
+		return logs;
+	}
 
 }

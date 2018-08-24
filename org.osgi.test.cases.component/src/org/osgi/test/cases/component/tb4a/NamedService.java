@@ -25,10 +25,12 @@
 
 package org.osgi.test.cases.component.tb4a;
 
+import org.osgi.framework.BundleContext;
+
 /**
- * @author Valentin Valchev
- * @author $Id$
  */
 public interface NamedService {
-  public String getName();
+	public String getName();
+
+	public BundleContext getBundleContext();
 }

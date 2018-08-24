@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:component name="org.osgi.test.cases.component.tb4a.NamedService"
       xmlns:x="http://www.osgi.org/xmlns/scr/v1.4.0"
-      factory="org.osgi.test.cases.component.tb4a.NamedService">
+      factory="org.osgi.test.cases.component.tb4a.NamedService"
+      init="2"
+      activation-fields="context">
     <implementation class="org.osgi.test.cases.component.tb4a.impl.NamedServiceFactory" />
 	<service>
 		<provide interface="org.osgi.test.cases.component.tb4a.NamedService"/>
@@ -10,4 +12,9 @@
     <factory-property
         name="factory.id"
         value="foo"/>
+    <reference
+       interface="org.osgi.service.log.LogService"
+       name="loggers"
+       cardinality="0..n"
+       parameter="1"/>
 </x:component>
