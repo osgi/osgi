@@ -25,7 +25,6 @@ import org.junit.Test;
  */
 public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 
-
 	@Test
 	public void testHelloWorld14() throws Exception {
 		String name = testName.getMethodName();
@@ -78,6 +77,30 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasFactoryPropertyValue("h", "Character", "8")
 				.hasFactoryPropertyValue("i", "Short", "9")
 				.hasFactoryPropertyValue("j", "String", "bar");
+	}
+
+	@Test
+	public void testNameMapping() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as("component %s", name)
+				.hasCount("property", 10)
+				.hasPropertyValue("pre.myProperty143", "String",
+						"default.myProperty143")
+				.hasPropertyValue("pre.new", "String", "default.new")
+				.hasPropertyValue("pre.dot.prop", "String", "default.dot.prop")
+				.hasPropertyValue("pre.another_prop", "String",
+						"default.another_prop")
+				.hasPropertyValue("pre.three_.prop", "String",
+						"default.three_.prop")
+				.hasPropertyValue("pre.four._prop", "String",
+						"default.four._prop")
+				.hasPropertyValue("pre.five..prop", "String",
+						"default.five..prop")
+				// v1.4.0
+				.hasPropertyValue("pre.six-prop", "String", "default.six-prop")
+				.hasPropertyValue("pre.seven$.prop", "String",
+						"default.seven$.prop");
 	}
 
 }

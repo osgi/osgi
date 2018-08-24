@@ -32,6 +32,7 @@ import org.osgi.test.cases.component.types.ClassMember;
 import org.osgi.test.cases.component.types.Coercion;
 import org.osgi.test.cases.component.types.EnumMember;
 import org.osgi.test.cases.component.types.NameMapping;
+import org.osgi.test.cases.component.types.NameMapping14;
 import org.osgi.test.cases.component.types.TestEnum;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
@@ -97,6 +98,56 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("property has wrong value", "xml/three_.prop", config.three___prop());
 				assertEquals("property has wrong value", "xml/four._prop", config.four_$__prop());
 				assertEquals("property has wrong value", "xml/five..prop", config.five_$_prop());
+
+			} finally {
+				providerTracker.close();
+			}
+		} finally {
+			tb26.uninstall();
+		}
+	}
+
+	public void testNameMapping140() throws Exception {
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
+		try {
+			tb26.start();
+
+			Filter providerFilter = getContext().createFilter("(&("
+					+ Constants.OBJECTCLASS + "="
+					+ ObjectProvider1.class.getName() + ")("
+					+ ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb26.NameMappingComponent14))");
+			ServiceTracker<ObjectProvider1<NameMapping14>,ObjectProvider1<NameMapping14>> providerTracker = new ServiceTracker<ObjectProvider1<NameMapping14>,ObjectProvider1<NameMapping14>>(
+					getContext(), providerFilter, null);
+			try {
+				providerTracker.open();
+				ObjectProvider1<NameMapping14> p = providerTracker
+						.waitForService(SLEEP * 3);
+				assertNotNull("missing provider", p);
+				NameMapping14 config = p.get1();
+				assertNotNull("missing config", config);
+
+				assertEquals("property has wrong value", "xml/myProperty143",
+						config.myProperty143());
+				assertEquals("property has wrong value", "xml/new",
+						config.$new());
+				assertEquals("property has wrong value", "xml/my$prop",
+						config.my$$prop());
+				assertEquals("property has wrong value", "xml/dot.prop",
+						config.dot_prop());
+				assertEquals("property has wrong value", "xml/another_prop",
+						config.another__prop());
+				assertEquals("property has wrong value", "xml/three_.prop",
+						config.three___prop());
+				assertEquals("property has wrong value", "xml/four._prop",
+						config.four_$__prop());
+				assertEquals("property has wrong value", "xml/five..prop",
+						config.five_$_prop());
+				assertEquals("property has wrong value", "xml/six-prop",
+						config.six$_$prop());
+				assertEquals("property has wrong value", "xml/seven$.prop",
+						config.seven$$_$prop());
 
 			} finally {
 				providerTracker.close();

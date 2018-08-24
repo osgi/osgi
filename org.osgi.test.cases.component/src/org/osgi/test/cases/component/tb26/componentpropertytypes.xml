@@ -17,6 +17,24 @@
     <property name="five..prop" value="xml/five..prop"/>
 </scr:component>
 
+<scr:component name="org.osgi.test.cases.component.tb26.NameMappingComponent14"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0">
+    <implementation class="org.osgi.test.cases.component.tb26.NameMappingComponent14"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="pre.myProperty143" value="xml/myProperty143"/>
+    <property name="pre.new" value="xml/new"/>
+    <property name="pre.my$prop" value="xml/my$prop"/>
+    <property name="pre.dot.prop" value="xml/dot.prop"/>
+    <property name="pre.another_prop" value="xml/another_prop"/>
+    <property name="pre.three_.prop" value="xml/three_.prop"/>
+    <property name="pre.four._prop" value="xml/four._prop"/>
+    <property name="pre.five..prop" value="xml/five..prop"/>
+    <property name="pre.six-prop" value="xml/six-prop"/>
+    <property name="pre.seven$.prop" value="xml/seven$.prop"/>
+</scr:component>
+
 <scr:component name="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
     <implementation class="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"/>
