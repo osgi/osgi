@@ -2,5 +2,5 @@ Export-Package: ${p}.tb6.*;-split-package:=first
 Require-Capability:\
 	osgi.extender;\
 		filter:='(&(osgi.extender=osgi.cdi)(version>=1.0.0)(!(version>=2.0.0)))';\
-		extensions:List<String>='(osgi.cdi.extension=aries.cdi.http)';\
-		osgi.beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb6.*}'
+		beans:List<String>='${classes;PUBLIC;CONCRETE;NAMED;${p}.tb6.*}',\
+	osgi.cdi.extension;filter:='(osgi.cdi.extension=aries.cdi.http)'
