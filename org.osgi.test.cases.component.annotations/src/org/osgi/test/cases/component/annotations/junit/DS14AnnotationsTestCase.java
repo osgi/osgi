@@ -103,4 +103,34 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 						"default.seven$.prop");
 	}
 
+	@Test
+	public void testComponentPropertyTypes() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as("component %s", name)
+				.hasCount("property", 13)
+				.hasPropertyValue("pre.myProperty143", "String",
+						"specified.myProperty143")
+				.hasPropertyValue("pre.new", "String", "specified.new")
+				.hasPropertyValue("pre.dot.prop", "String",
+						"specified.dot.prop")
+				.hasPropertyValue("pre.another_prop", "String",
+						"specified.another_prop")
+				.hasPropertyValue("pre.three_.prop", "String",
+						"specified.three_.prop")
+				.hasPropertyValue("pre.four._prop", "String",
+						"specified.four._prop")
+				.hasPropertyValue("pre.five..prop", "String",
+						"specified.five..prop")
+				.hasPropertyValue("pre.six-prop", "String",
+						"specified.six-prop")
+				.hasPropertyValue("pre.seven$.prop", "String",
+						"specified.seven$.prop")
+				.hasPropertyValue("service.description", "String",
+						"Test case for Component Property Type annotations")
+				.hasPropertyValue("service.ranking", "Integer", "42")
+				.hasPropertyValue("service.vendor", "String", "OSGi Alliance")
+				.doesNotContain("property[@name='ignored']");
+	}
+
 }

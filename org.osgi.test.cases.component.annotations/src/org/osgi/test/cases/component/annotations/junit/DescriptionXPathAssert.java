@@ -36,9 +36,8 @@ public class DescriptionXPathAssert
 
 	public DescriptionXPathAssert hasPropertyValue(String name, String type,
 			String value) {
-		isNotNull();
 		final String expr = "property[@name='" + name + "']";
-		hasValue(expr + "/@value", value);
+		contains(expr).hasValue(expr + "/@value", value);
 		if (type.equals("String")) {
 			hasOptionalValue(expr + "/@type", "String");
 		} else {
@@ -50,9 +49,8 @@ public class DescriptionXPathAssert
 
 	public DescriptionXPathAssert hasPropertyArrayValue(String name,
 			String type, String... values) {
-		isNotNull();
 		final String expr = "property[@name='" + name + "']";
-		doesNotContain(expr + "/@value");
+		contains(expr).doesNotContain(expr + "/@value");
 		if (type.equals("String")) {
 			hasOptionalValue(expr + "/@type", "String");
 		} else {
@@ -72,9 +70,8 @@ public class DescriptionXPathAssert
 
 	public DescriptionXPathAssert hasFactoryPropertyValue(String name,
 			String type, String value) {
-		isNotNull();
 		final String expr = "factory-property[@name='" + name + "']";
-		hasValue(expr + "/@value", value);
+		contains(expr).hasValue(expr + "/@value", value);
 		if (type.equals("String")) {
 			hasOptionalValue(expr + "/@type", "String");
 		} else {
@@ -86,9 +83,8 @@ public class DescriptionXPathAssert
 
 	public DescriptionXPathAssert hasFactoryPropertyArrayValue(String name,
 			String type, String... values) {
-		isNotNull();
 		final String expr = "factory-property[@name='" + name + "']";
-		doesNotContain(expr + "/@value");
+		contains(expr).doesNotContain(expr + "/@value");
 		if (type.equals("String")) {
 			hasOptionalValue(expr + "/@type", "String");
 		} else {
