@@ -17,6 +17,7 @@ package org.osgi.impl.bundle.component.annotations;
 
 import java.util.EventListener;
 import java.util.Map;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.service.component.annotations.Activate;
@@ -66,7 +67,8 @@ public class ReferenceScopes {
 	}
 
 	@Reference(name = "prototype_required", scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private void bindPrototypeRequired(Map<String, Object> properties, EventListener l) {
+	private void bindPrototypeRequired(EventListener l,
+			Map<String,Object> properties) {
 		System.out.println("Bind " + l);
 	}
 
