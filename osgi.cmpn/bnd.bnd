@@ -25,7 +25,7 @@ Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -dependson 					=  \
-	${osgi.cmpn.specs} 
+	${osgi.cmpn.specs}
 
 -buildpath 					= \
 	${replace;${osgi.cmpn.specs};$;\\;version=project}, \
@@ -33,8 +33,8 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     osgi.core;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
-    org.apache.servicemix.bundles.javax-inject;version=1.0.0,\
-    org.apache.aries.javax.cdi-api;version=latest, \
+    org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
+    org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
     org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon;version=latest
 -fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values

@@ -37,9 +37,9 @@ Test-Cases: ${testcases}
 	org.osgi.util.converter;version=project,\
 	org.osgi.util.promise;version=project,\
 	org.osgi.resource;version=project,\
-	org.apache.servicemix.bundles.javax-inject;version=1.0.0,\
-	org.apache.aries.javax.cdi-api;version=latest,\
-	org.apache.aries.javax.annotation-api;version=latest,\
+	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
+	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
+	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
 	org.osgi.test.support;version=project,\
 	${junit},\
 	org.osgi.dto;version=latest
