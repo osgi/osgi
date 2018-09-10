@@ -133,4 +133,37 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.doesNotContain("property[@name='ignored']");
 	}
 
+	@Test
+	public void testActivationFields() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as("component %s", name)
+				.hasNamespace(xmlns_scr140)
+				// v1.0.0
+				.hasOptionalValue("@immediate", "true")
+				.hasOptionalValue("@enabled", "true")
+				.doesNotContain("@factory")
+				.hasValue("implementation/@class",
+						"org.osgi.impl.bundle.component.annotations."
+								+ name.substring(4))
+				.hasCount("implementation", 1)
+				.hasCount("service", 0)
+				.hasCount("reference", 0)
+				// v1.1.0
+				.hasOptionalValue("@configuration-policy", "optional")
+				.hasOptionalValue("@activate", "activate")
+				.hasOptionalValue("@deactivate", "deactivate")
+				.hasValue("@modified", "modified")
+				// v1.2.0
+				.hasOptionalValue("@configuration-pid", name)
+				// v1.3.0
+				.hasOptionalValue("@scope", "singleton")
+				// v1.4.0
+				.doesNotContain("factory-property")
+				.doesNotContain("factory-properties")
+				.hasValuesExactlyInAnyOrder("@activation-fields", "bc",
+						"configNames", "cc", "props")
+				.doesNotContain("reference/@parameter");
+	}
+
 }

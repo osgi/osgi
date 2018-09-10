@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.assertj.core.api.AbstractAssert;
+import org.osgi.test.support.string.Strings;
 import org.w3c.dom.Node;
 
 public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,ACTUAL>, ACTUAL extends BaseElement>
@@ -85,6 +86,16 @@ public abstract class AbstractXPathAssert<SELF extends AbstractXPathAssert<SELF,
 		assertThat(result.getNodeValue())
 				.as("%s for node %s", expr, actual.getId())
 				.isEqualTo(value);
+		return myself;
+	}
+
+	public SELF hasValuesExactlyInAnyOrder(String expr, String... values) {
+		isNotNull();
+		Node result = getNode(expr);
+		assertThat(result).as("%s for node %s", expr, actual.getId())
+				.isNotNull();
+		assertThat(Strings.split("\\s+", result.getNodeValue()))
+				.containsExactlyInAnyOrder(values);
 		return myself;
 	}
 

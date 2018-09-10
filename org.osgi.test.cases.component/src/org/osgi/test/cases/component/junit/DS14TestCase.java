@@ -107,7 +107,11 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 								.hasToString("hello true")
 								.hasFieldOrPropertyWithValue("name", "hello")
 								.hasFieldOrPropertyWithValue("bundleContext",
-										tb4a.getBundleContext());
+										tb4a.getBundleContext())
+								.hasFieldOrProperty("cc")
+								.hasFieldOrProperty("props")
+								.hasFieldOrProperty("config")
+								.hasNoNullFieldsOrProperties();
 					} finally {
 						instance.dispose();
 					}
@@ -149,15 +153,15 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 									"org.osgi.service.log.LogService", "0..n",
 									"static", "reluctant", null, null, null,
 									null, null, null,
-									"bundle", 1, "service")
+									"bundle", 4, "service")
 					},
 					"activate", "deactivate", null, "optional", new String[] {
 							"org.osgi.test.cases.component.tb4a.NamedService"
 					}, Maps.<String, Object> map​Of("factory.id", "foo",
 							"factory.properties", "found"),
 					new String[] {
-							"context"
-					}, 2);
+							"context", "cc", "props", "config"
+					}, 5);
 			assertThat(description1)
 					.isEqualToComparingFieldByFieldRecursively(expected1);
 		} finally {

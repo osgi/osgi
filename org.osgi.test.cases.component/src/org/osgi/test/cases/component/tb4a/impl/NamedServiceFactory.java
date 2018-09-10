@@ -25,6 +25,9 @@
 package org.osgi.test.cases.component.tb4a.impl;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -34,20 +37,38 @@ import org.osgi.test.cases.component.tb4a.NamedService;
 /**
  */
 public class NamedServiceFactory implements NamedService {
-	private final String	name;
+
+	@interface Config {
+		String name();
+	}
 
 	private BundleContext	context;
+	@SuppressWarnings("unused")
+	private ComponentContext				cc;
+	@SuppressWarnings("unused")
+	private Map<String,Object>				props;
+	private Config							config;
+
 	private final Collection<LogService>	logs;
 
 	public NamedServiceFactory(ComponentContext componentContext,
+			BundleContext bundleContext, Map<String,Object> properties,
+			Config someProperties,
 			Collection<LogService> logs) {
-		this.name = (String) componentContext.getProperties().get("name");
-		this.logs = logs;
+		if (componentContext != null && bundleContext != null
+				&& properties != null && someProperties != null
+				&& componentContext.getBundleContext().equals(bundleContext)
+				&& Objects.equals(componentContext.getProperties().get("name"),
+						someProperties.name())) {
+			this.logs = logs;
+		} else {
+			this.logs = Collections.emptyList();
+		}
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return config.name();
 	}
 
 	@Override
