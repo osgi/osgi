@@ -166,4 +166,47 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.doesNotContain("reference/@parameter");
 	}
 
+	@Test
+	public void testPropertyOrdering14() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as("component %s", name)
+				.hasNamespace(xmlns_scr140)
+				.hasCount("properties", 1)
+				.hasValue("properties/@entry", "OSGI-INF/vendor.properties")
+				.hasCount("property", 24)
+				.hasValue("@activate", "activate1")
+				.hasValue("@modified", "modified2")
+				.hasValue("@deactivate", "deactivate3")
+				.hasValue("@init", "2")
+				.hasValuesExactlyInAnyOrder("@activation-fields", "c3", "c4")
+
+				.hasPropertyValue("config1", "String", "config1")
+				.hasPropertyValue("config2", "String", "config2")
+				.hasPropertyValue("config3", "String", "config3")
+				.hasPropertyValue("config4", "String", "config4")
+				.hasPropertyValue("config5", "String", "config5")
+				.hasPropertyValue("config6", "String", "config6")
+				.hasPropertyValue("config7", "String", "config7")
+				.hasPropertyValue("config8", "String", "config8")
+				.hasPropertyValue("config9", "String", "config9")
+				.hasPropertyValue("configA", "String", "configA")
+				.hasPropertyValue("configB", "String", "configB")
+				.hasPropertyValue("configC", "String", "configC")
+
+				.hasPropertyValue("string1", "String", "config/string1")
+				.hasPropertyValue("string2", "String", "config/string2")
+				.hasPropertyValue("string3", "String", "config/string3")
+				.hasPropertyValue("string4", "String", "config/string4")
+				.hasPropertyValue("string5", "String", "config/string5")
+				.hasPropertyValue("string6", "String", "config/string6")
+				.hasPropertyValue("string7", "String", "config/string7")
+				.hasPropertyValue("string8", "String", "config/string8")
+				.hasPropertyValue("string9", "String", "config/string9")
+				.hasPropertyValue("stringA", "String", "config/stringA")
+				.hasPropertyValue("stringB", "String", "config/stringB")
+				.hasPropertyValue("stringC", "String", "config/stringC");
+
+	}
+
 }
