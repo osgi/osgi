@@ -10,6 +10,7 @@ Private-Package 			= ${p}.*
 -buildpath 					= \
 	org.osgi.service.component;	version=latest, \
 	org.osgi.service.component.annotations;	version=latest, \
+	org.osgi.service.log;	version=latest, \
 	osgi.core;					version=6.0, \
 	osgi.cmpn;					version=6.0, \
 

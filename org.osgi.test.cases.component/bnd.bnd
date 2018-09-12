@@ -52,6 +52,7 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project, \
     org.osgi.service.component;             version=project, \
+    org.osgi.service.log;             version=latest, \
 	osgi.core;version=7.0.0,\
 	osgi.cmpn;version=6.0.0,\
 	${junit}

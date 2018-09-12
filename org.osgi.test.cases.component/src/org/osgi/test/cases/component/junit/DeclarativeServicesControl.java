@@ -602,6 +602,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	boolean	errorLog	= false;
 
+	@SuppressWarnings("deprecation")
 	public void logged(LogEntry e) {
 		if (e.getLevel() == LogService.LOG_ERROR) {
 			errorLog = true;
