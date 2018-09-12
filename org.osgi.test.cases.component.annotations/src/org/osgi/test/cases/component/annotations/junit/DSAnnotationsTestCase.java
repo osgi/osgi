@@ -485,6 +485,8 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue("reference[@name='reluctant']/@cardinality",
 						"1..1")
 				.hasOptionalValue("reference[@name='reluctant']/@policy", "static")
+				.hasValue("reference[@name='reluctant']/@policy-option",
+						"reluctant")
 				.doesNotContain("reference[@name='reluctant']/@target")
 
 				.hasValue("reference[@name='update']/@interface",
