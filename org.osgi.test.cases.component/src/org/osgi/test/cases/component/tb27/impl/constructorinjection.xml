@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0" name="org.osgi.test.cases.component.tb27.ConstructorInjection" init="24">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0" name="org.osgi.test.cases.component.tb27.ConstructorInjection" init="25">
   <property name="prop" type="String" value="default.prop"/>
   <reference name="atleastone" cardinality="1..n" interface="org.osgi.service.log.LogService" field-collection-type="service" parameter="8"/>
   <reference name="bundle" interface="org.osgi.service.log.LogService" scope="bundle" parameter="13"/>
   <reference name="collection_properties" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="properties" parameter="21"/>
+  <reference name="collection_reference" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="reference" parameter="24"/>
   <reference name="collection_serviceobjects" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="serviceobjects" parameter="20"/>
   <reference name="collection_specified" cardinality="0..n" interface="java.util.Map" field-collection-type="service" parameter="23"/>
   <reference name="collection_tuple" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="tuple" parameter="22"/>

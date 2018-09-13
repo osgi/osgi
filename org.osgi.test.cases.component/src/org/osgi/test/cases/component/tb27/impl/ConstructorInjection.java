@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.component.tb27.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -85,12 +87,40 @@ public class ConstructorInjection implements NamedService {
 
 			Collection<Map.Entry<Map<String,Object>,LogService>> fieldTupleM,
 
-			Collection<Map<String,Object>> fieldServiceM) {
+			Collection<Map<String,Object>> fieldServiceM,
+
+			Collection<ServiceReference<LogService>> fieldServiceReferencesM) {
 		/**/
 		System.out.println("constructed");
 		name = configNames.prop();
 		this.bc = bc;
 		this.cc = cc;
+		assertThat(cc).isNotNull();
+		assertThat(bc).isNotNull();
+		assertThat(props).isNotNull();
+		assertThat(configNames).isNotNull();
+		assertThat(fieldStatic).isNotNull();
+		assertThat(fieldMandatory).isNotNull();
+		assertThat(fieldMultiple).doesNotContainNull();
+		assertThat(fieldAtLeastOne).isNotEmpty().doesNotContainNull();
+		assertThat(fieldGreedy).isNotNull();
+		assertThat(fieldReluctant).isNotNull();
+		assertThat(fieldReplace).isNotNull();
+		assertThat(cc2).isNotNull();
+		assertThat(fieldBundle).isNotNull();
+		assertThat(fieldPrototype).isNotNull();
+		assertThat(bc2).isNotNull();
+		assertThat(fieldReference).isNotNull();
+		assertThat(fieldServiceObjects).isNotNull();
+		assertThat(fieldProperties).isNotEmpty();
+		assertThat(fieldTuple).isNotNull();
+		assertThat(fieldTuple.getKey()).isNotNull();
+		assertThat(fieldTuple.getValue()).isNotNull();
+		assertThat(fieldServiceObjectsM).doesNotContainNull();
+		assertThat(fieldPropertiesM).doesNotContainNull();
+		assertThat(fieldTupleM).doesNotContainNull();
+		assertThat(fieldServiceM).doesNotContainNull();
+		assertThat(fieldServiceReferencesM).doesNotContainNull();
 	}
 
 	@Override

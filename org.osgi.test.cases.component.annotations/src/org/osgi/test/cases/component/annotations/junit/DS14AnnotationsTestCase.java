@@ -302,7 +302,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasValue("@init", "24")
+				.hasValue("@init", "25")
 				.doesNotContain("@activation-fields")
 				.hasPropertyValue("prop", "String", "default.prop")
 
@@ -350,7 +350,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.doesNotContain(
 						"reference[@name='collection_properties']/@field")
 				.hasValue("reference[@name='collection_properties']/@parameter",
-						"21")
+						"22")
 				.hasValue(
 						"reference[@name='collection_properties']/@cardinality",
 						"0..n")
@@ -399,6 +399,36 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 						"reference[@name='collection_serviceobjects']/@field-collection-type",
 						"serviceobjects")
 
+				.hasValue(
+						"reference[@name='collection_reference']/@interface",
+						"java.util.EventListener")
+				.doesNotContain(
+						"reference[@name='collection_reference']/@bind")
+				.doesNotContain(
+						"reference[@name='collection_reference']/@unbind")
+				.doesNotContain(
+						"reference[@name='collection_reference']/@field")
+				.hasValue(
+						"reference[@name='collection_reference']/@parameter",
+						"21")
+				.hasValue(
+						"reference[@name='collection_reference']/@cardinality",
+						"0..n")
+				.hasOptionalValue(
+						"reference[@name='collection_reference']/@policy",
+						"static")
+				.hasOptionalValue(
+						"reference[@name='collection_reference']/@policy-option",
+						"greedy")
+				.hasOptionalValue(
+						"reference[@name='collection_reference']/@scope",
+						"bundle")
+				.doesNotContain(
+						"reference[@name='collection_reference']/@target")
+				.hasValue(
+						"reference[@name='collection_reference']/@field-collection-type",
+						"reference")
+
 				.hasValue("reference[@name='collection_specified']/@interface",
 						"java.util.Map")
 				.doesNotContain("reference[@name='collection_specified']/@bind")
@@ -407,7 +437,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.doesNotContain(
 						"reference[@name='collection_specified']/@field")
 				.hasValue("reference[@name='collection_specified']/@parameter",
-						"23")
+						"24")
 				.hasValue(
 						"reference[@name='collection_specified']/@cardinality",
 						"0..n")
@@ -432,7 +462,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.doesNotContain("reference[@name='collection_tuple']/@unbind")
 				.doesNotContain("reference[@name='collection_tuple']/@field")
 				.hasValue("reference[@name='collection_tuple']/@parameter",
-						"22")
+						"23")
 				.hasValue("reference[@name='collection_tuple']/@cardinality",
 						"0..n")
 				.hasOptionalValue("reference[@name='collection_tuple']/@policy",

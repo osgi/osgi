@@ -87,6 +87,8 @@ public class ConstructorInjection {
 
 			@Reference(name = "collection_serviceobjects") Collection<ComponentServiceObjects<EventListener>> fieldServiceObjectsM,
 
+			@Reference(name = "collection_reference") Collection<ServiceReference<EventListener>> fieldServiceReferencesM,
+
 			@Reference(name = "collection_properties", service = EventListener.class) Collection<Map<String,Object>> fieldPropertiesM,
 
 			@Reference(name = "collection_tuple") Collection<Map.Entry<Map<String,Object>,EventListener>> fieldTupleM,
