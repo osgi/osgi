@@ -18,6 +18,7 @@ package org.osgi.impl.bundle.component.annotations;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
 
 @interface NameMappingType {
 	String PREFIX_ = "pre.";
@@ -43,6 +44,16 @@ import org.osgi.service.component.annotations.Deactivate;
 	String seven$$_$prop() default "default.seven$.prop";
 }
 
+@interface SingleElement {
+	String PREFIX_ = "single.";
+
+	String value() default "default.single.single.element";
+}
+
+@interface Marker {
+	String PREFIX_ = "marker.";
+}
+
 /**
  *
  *
@@ -58,8 +69,15 @@ public class NameMapping {
 
 	/**
 	 */
+	@Modified
+	private void modified(SingleElement arg) {
+		System.out.println("Changed World!");
+	}
+
+	/**
+	 */
 	@Deactivate
-	private void deactivate() {
+	private void deactivate(Marker arg) {
 		System.out.println("Goodbye World!");
 	}
 }

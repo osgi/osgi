@@ -33,6 +33,7 @@ import org.osgi.test.cases.component.types.Coercion;
 import org.osgi.test.cases.component.types.EnumMember;
 import org.osgi.test.cases.component.types.NameMapping;
 import org.osgi.test.cases.component.types.NameMapping14;
+import org.osgi.test.cases.component.types.SingleElement;
 import org.osgi.test.cases.component.types.TestEnum;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
@@ -148,6 +149,37 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 						config.six$_$prop());
 				assertEquals("property has wrong value", "xml/seven$.prop",
 						config.seven$$_$prop());
+
+			} finally {
+				providerTracker.close();
+			}
+		} finally {
+			tb26.uninstall();
+		}
+	}
+
+	public void testSingleElement140() throws Exception {
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
+		try {
+			tb26.start();
+
+			Filter providerFilter = getContext().createFilter("(&("
+					+ Constants.OBJECTCLASS + "="
+					+ ObjectProvider1.class.getName() + ")("
+					+ ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb26.SingleElementComponent))");
+			ServiceTracker<ObjectProvider1<SingleElement>,ObjectProvider1<SingleElement>> providerTracker = new ServiceTracker<ObjectProvider1<SingleElement>,ObjectProvider1<SingleElement>>(
+					getContext(), providerFilter, null);
+			try {
+				providerTracker.open();
+				ObjectProvider1<SingleElement> p = providerTracker
+						.waitForService(SLEEP * 3);
+				assertNotNull("missing provider", p);
+				SingleElement config = p.get1();
+				assertNotNull("missing config", config);
+				assertEquals("property has wrong value", "xml/single",
+						config.value());
 
 			} finally {
 				providerTracker.close();

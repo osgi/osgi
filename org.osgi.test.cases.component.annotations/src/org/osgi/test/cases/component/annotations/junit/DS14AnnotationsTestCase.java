@@ -84,7 +84,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasCount("property", 10)
+				.hasCount("property", 12)
 				.hasPropertyValue("pre.myProperty143", "String",
 						"default.myProperty143")
 				.hasPropertyValue("pre.new", "String", "default.new")
@@ -100,7 +100,10 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				// v1.4.0
 				.hasPropertyValue("pre.six-prop", "String", "default.six-prop")
 				.hasPropertyValue("pre.seven$.prop", "String",
-						"default.seven$.prop");
+						"default.seven$.prop")
+				.hasPropertyValue("single.single.element", "String",
+						"default.single.single.element")
+				.hasPropertyValue("marker.marker", "Boolean", "true");
 	}
 
 	@Test
@@ -138,7 +141,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasNamespace(xmlns_scr140)
 				// v1.0.0
 				.hasOptionalValue("@immediate", "true")
 				.hasOptionalValue("@enabled", "true")
@@ -171,7 +173,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasNamespace(xmlns_scr140)
 				.hasValue("@init", "4")
 
 				.hasValue("reference[@name='loggerC']/@interface",
@@ -336,7 +337,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasNamespace(xmlns_scr140)
 				.hasCount("properties", 1)
 				.hasValue("properties/@entry", "OSGI-INF/vendor.properties")
 				.hasCount("property", 24)
@@ -379,7 +379,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasNamespace(xmlns_scr140)
 				.hasValue("@init", "24")
 				.doesNotContain("@activation-fields")
 				.hasPropertyValue("prop", "String", "default.prop")
