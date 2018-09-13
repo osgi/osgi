@@ -173,7 +173,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
 		assertThat(description).as("component %s", name)
-				.hasValue("@init", "4")
+				.hasValue("@init", "2")
 
 				.hasValue("reference[@name='loggerC']/@interface",
 						"org.osgi.service.log.LoggerFactory")
@@ -199,44 +199,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue("reference[@name='formatterLoggerC']/@policy",
 						"static")
 				.doesNotContain("reference[@name='formatterLoggerC']/@target")
-
-				.hasValue("reference[@name='listLoggerC']/@interface",
-						"org.osgi.service.log.LoggerFactory")
-				.hasValue("reference[@name='listLoggerC']/@parameter", "2")
-				.doesNotContain("reference[@name='listLoggerC']/@bind")
-				.doesNotContain("reference[@name='listLoggerC']/@unbind")
-				.doesNotContain("reference[@name='listLoggerC']/@field")
-				.hasValue("reference[@name='listLoggerC']/@cardinality", "0..n")
-				.hasOptionalValue("reference[@name='listLoggerC']/@policy",
-						"static")
-				.hasValue(
-						"reference[@name='listLoggerC']/@field-collection-type",
-						"reference")
-				.doesNotContain("reference[@name='listLoggerC']/@target")
-
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerC']/@interface",
-						"org.osgi.service.log.LoggerFactory")
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerC']/@parameter",
-						"3")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerC']/@bind")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerC']/@unbind")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerC']/@field")
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerC']/@cardinality",
-						"0..n")
-				.hasOptionalValue(
-						"reference[@name='collectionFormatterLoggerC']/@policy",
-						"static")
-				.hasOptionalValue(
-						"reference[@name='collectionFormatterLoggerC']/@field-collection-type",
-						"service")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerC']/@target")
 
 				.hasValue("reference[@name='loggerF']/@interface",
 						"org.osgi.service.log.LoggerFactory")
@@ -264,45 +226,6 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue("reference[@name='formatterLoggerF']/@policy",
 						"static")
 				.doesNotContain("reference[@name='formatterLoggerF']/@target")
-
-				.hasValue("reference[@name='listLoggerF']/@interface",
-						"org.osgi.service.log.LoggerFactory")
-				.hasValue("reference[@name='listLoggerF']/@field",
-						"listLoggerF")
-				.doesNotContain("reference[@name='listLoggerF']/@bind")
-				.doesNotContain("reference[@name='listLoggerF']/@unbind")
-				.doesNotContain("reference[@name='listLoggerF']/@parameter")
-				.hasValue("reference[@name='listLoggerF']/@cardinality", "0..n")
-				.hasValue(
-						"reference[@name='listLoggerF']/@field-collection-type",
-						"serviceobjects")
-				.hasOptionalValue("reference[@name='listLoggerF']/@policy",
-						"static")
-				.doesNotContain("reference[@name='listLoggerF']/@target")
-
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerF']/@interface",
-						"org.osgi.service.log.LoggerFactory")
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerF']/@field",
-						"collectionFormatterLoggerF")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerF']/@bind")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerF']/@unbind")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerF']/@parameter")
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerF']/@cardinality",
-						"0..n")
-				.hasValue(
-						"reference[@name='collectionFormatterLoggerF']/@field-collection-type",
-						"tuple")
-				.hasOptionalValue(
-						"reference[@name='collectionFormatterLoggerF']/@policy",
-						"static")
-				.doesNotContain(
-						"reference[@name='collectionFormatterLoggerF']/@target")
 
 				.hasValue("reference[@name='Logger']/@interface",
 						"org.osgi.service.log.LoggerFactory")

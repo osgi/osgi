@@ -15,12 +15,6 @@
  */
 package org.osgi.impl.bundle.component.annotations;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -38,21 +32,13 @@ public class LoggerComponent {
 	@Activate
 	public LoggerComponent(
 			@Reference(name = "loggerC", service = LoggerFactory.class) Logger loggerC,
-			@Reference(name = "formatterLoggerC", service = LoggerFactory.class) FormatterLogger formatterLoggerC,
-			@Reference(name = "listLoggerC", service = LoggerFactory.class) List<ServiceReference<Logger>> listLoggerC,
-			@Reference(name = "collectionFormatterLoggerC", service = LoggerFactory.class) Collection<FormatterLogger> collectionFormatterLoggerC) {/**/}
+			@Reference(name = "formatterLoggerC", service = LoggerFactory.class) FormatterLogger formatterLoggerC) {/**/}
 
 	@Reference(service = LoggerFactory.class)
-	private Map.Entry<Map<String,Object>,Logger>						loggerF;
+	private Logger			loggerF;
 
 	@Reference(service = LoggerFactory.class)
-	private FormatterLogger												formatterLoggerF;
-
-	@Reference(service = LoggerFactory.class)
-	private List<ComponentServiceObjects<Logger>>						listLoggerF;
-
-	@Reference(service = LoggerFactory.class)
-	private Collection<Map.Entry<Map<String,Object>,FormatterLogger>>	collectionFormatterLoggerF;
+	private FormatterLogger	formatterLoggerF;
 
 	@Reference(service = LoggerFactory.class)
 	void bindLogger(Logger loggerM) {/**/}
