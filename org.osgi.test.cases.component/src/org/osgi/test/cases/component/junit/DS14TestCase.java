@@ -37,6 +37,10 @@ import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.service.log.Logger;
 import org.osgi.test.cases.component.service.ObjectProvider1;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.map.Maps;
@@ -47,16 +51,45 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 	private static int														SLEEP			= 1000;
 	private static final String												TEST_CASE_ROOT	= "org.osgi.test.cases.component";
 	private ServiceTracker<ServiceComponentRuntime,ServiceComponentRuntime>	scrTracker;
+	private ServiceTracker<LogReaderService,LogReaderService>				lrTracker;
+	private LogListener														ll;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		scrTracker = new ServiceTracker<ServiceComponentRuntime,ServiceComponentRuntime>(
 				getContext(), ServiceComponentRuntime.class, null);
 		scrTracker.open();
+		lrTracker = new ServiceTracker<LogReaderService,LogReaderService>(
+				getContext(), LogReaderService.class, null);
+		lrTracker.open();
+		LogReaderService lr = Tracker.waitForService(lrTracker, SLEEP);
+		if (lr != null) {
+			ll = new LogListener() {
+				@Override
+				public void logged(LogEntry entry) {
+					Throwable e = entry.getException();
+					if (e != null) {
+						System.out.printf("%s [%s] %s%n%s%n",
+								entry.getLogLevel(), entry.getLoggerName(),
+								entry.getMessage(), e);
+					} else {
+						System.out.printf("%s [%s] %s%n", entry.getLogLevel(),
+								entry.getLoggerName(), entry.getMessage());
+					}
+				}
+			};
+
+			lr.addLogListener(ll);
+		}
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown() throws Exception {
+		LogReaderService lr = Tracker.waitForService(lrTracker, SLEEP);
+		if (lr != null) {
+			lr.removeLogListener(ll);
+		}
+		lrTracker.close();
 		scrTracker.close();
 	}
 

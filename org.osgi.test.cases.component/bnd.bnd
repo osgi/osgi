@@ -66,4 +66,5 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.log; version=latest
 
 -runproperties = ${runproperties}, \
+    org.osgi.service.log.admin.loglevel=WARN,\
 	scr.bundle.name=org.apache.felix.scr
