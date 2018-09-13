@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
@@ -129,44 +130,47 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 	}
 
 	@Test
-	public void testServiceComponentRuntimeDescription14() throws Exception {
+	public void testServiceComponentRuntimeDTOs14() throws Exception {
 		ServiceComponentRuntime scr = scrTracker.getService();
 		assertThat(scr).as("failed to find ServiceComponentRuntime service")
 				.isNotNull();
-		Bundle tb4a = install("tb4a.jar");
+		Bundle tb28 = install("tb28.jar");
 		try {
-			tb4a.start();
+			tb28.start();
 			Collection<ComponentDescriptionDTO> descriptions = scr
-					.getComponentDescriptionDTOs(tb4a);
+					.getComponentDescriptionDTOs(tb28);
 			assertThat(descriptions).hasSize(1);
 			ComponentDescriptionDTO description1 = scr
-					.getComponentDescriptionDTO(tb4a,
-							"org.osgi.test.cases.component.tb4a.NamedService");
+					.getComponentDescriptionDTO(tb28,
+							"org.osgi.test.cases.component.tb28.FailedActivation");
 			ComponentDescriptionDTO expected1 = newComponentDescriptionDTO(
-					"org.osgi.test.cases.component.tb4a.NamedService",
-					newBundleDTO(tb4a),
-					"org.osgi.test.cases.component.tb4a.NamedService",
-					"singleton",
-					"org.osgi.test.cases.component.tb4a.impl.NamedServiceFactory",
-					true, false, new String[] {
-							"org.osgi.test.cases.component.tb4a.NamedService"
-					}, Maps.<String, Object> mapOf(), new ReferenceDTO[] {
-							newReferenceDTO("loggers",
-									"org.osgi.service.log.LogService", "0..n",
-									"static", "reluctant", null, null, null,
-									null, null, null, "bundle", 4, "service")
-					}, "activate", "deactivate", null, "optional",
-					new String[] {
-							"org.osgi.test.cases.component.tb4a.NamedService"
-					}, Maps.<String, Object> map​Of("factory.id", "foo",
-							"factory.properties", "found"),
-					new String[] {
-							"context", "cc", "props", "config"
-					}, 5);
+					"org.osgi.test.cases.component.tb28.FailedActivation",
+					newBundleDTO(tb28), null, "singleton",
+					"org.osgi.test.cases.component.tb28.FailedActivation", true,
+					false, new String[] {
+							"org.osgi.test.cases.component.service.ObjectProvider1"
+					}, Maps.<String, Object> mapOf(), new ReferenceDTO[0],
+					"activate", "deactivate", null, "optional", new String[] {
+							"org.osgi.test.cases.component.tb28.FailedActivation"
+					}, null, new String[0], 0);
 			assertThat(description1)
 					.isEqualToComparingFieldByFieldRecursively(expected1);
+			Collection<ComponentConfigurationDTO> configurations = scr
+					.getComponentConfigurationDTOs(description1);
+			assertThat(configurations).hasSize(1);
+			ComponentConfigurationDTO configuration1 = configurations.iterator()
+					.next();
+			assertThat(configuration1.state)
+					.isEqualTo(ComponentConfigurationDTO.SATISFIED);
+			ServiceReferenceDTO[] tb28SRs = tb28
+					.adapt(ServiceReferenceDTO[].class);
+			assertThat(tb28SRs).as("tb28 registered services").hasSize(1);
+			assertThat(configuration1.service)
+					.as("configuration DTO registered service")
+					.isEqualToComparingFieldByFieldRecursively(tb28SRs[0]);
+
 		} finally {
-			tb4a.uninstall();
+			tb28.uninstall();
 		}
 	}
 
@@ -252,6 +256,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 			try {
 				tracker.open();
 				Object service = Tracker.waitForService(tracker, SLEEP);
+				assertThat(service).isNull();
 				configurations = scr
 						.getComponentConfigurationDTOs(description1);
 				assertThat(configurations).hasSize(1);
@@ -262,7 +267,6 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 				assertThat(configuration1.failure)
 						.as("configuration failure string")
 						.isNotNull();
-				assertThat(service).isNull();
 			} finally {
 				tracker.close();
 			}
