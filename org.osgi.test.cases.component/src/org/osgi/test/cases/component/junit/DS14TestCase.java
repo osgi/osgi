@@ -308,4 +308,59 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 		}
 	}
 
+	@Test
+	public void testLoggerComponent() throws Exception {
+		Filter providerFilter = getContext().createFilter("(&("
+				+ Constants.OBJECTCLASS + "=" + ObjectProvider1.class.getName()
+				+ ")(" + ComponentConstants.COMPONENT_NAME
+				+ "=org.osgi.test.cases.component.tb29.LoggerComponent))");
+
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertThat(scr).as("failed to find ServiceComponentRuntime service")
+				.isNotNull();
+		Bundle tb29 = install("tb29.jar");
+		try {
+			tb29.start();
+			Collection<ComponentDescriptionDTO> descriptions = scr
+					.getComponentDescriptionDTOs(tb29);
+			assertThat(descriptions).hasSize(1);
+			ComponentDescriptionDTO description1 = scr
+					.getComponentDescriptionDTO(tb29,
+							"org.osgi.test.cases.component.tb29.LoggerComponent");
+			assertThat(description1).isNotNull();
+			Collection<ComponentConfigurationDTO> configurations = scr
+					.getComponentConfigurationDTOs(description1);
+			assertThat(configurations).hasSize(1);
+			ComponentConfigurationDTO configuration1 = configurations.iterator()
+					.next();
+			assertThat(configuration1.state)
+					.isEqualTo(ComponentConfigurationDTO.SATISFIED);
+			ServiceReferenceDTO[] tb29SRs = tb29
+					.adapt(ServiceReferenceDTO[].class);
+			assertThat(tb29SRs).as("tb29 registered services").hasSize(1);
+
+			ServiceTracker<ObjectProvider1<Logger>,ObjectProvider1<Logger>> tracker = new ServiceTracker<>(
+					getContext(), providerFilter, null);
+			try {
+				tracker.open();
+				ObjectProvider1<Logger> service = Tracker
+						.waitForService(tracker, SLEEP);
+				configurations = scr
+						.getComponentConfigurationDTOs(description1);
+				assertThat(configurations).hasSize(1);
+				configuration1 = configurations.iterator().next();
+				assertThat(configuration1.state)
+						.as("configuration is active")
+						.isEqualTo(ComponentConfigurationDTO.ACTIVE);
+				assertThat(service).isNotNull();
+				assertThat(service.get1().getName()).isEqualTo(
+						"org.osgi.test.cases.component.tb29.LoggerComponent");
+			} finally {
+				tracker.close();
+			}
+		} finally {
+			tb29.uninstall();
+		}
+	}
+
 }

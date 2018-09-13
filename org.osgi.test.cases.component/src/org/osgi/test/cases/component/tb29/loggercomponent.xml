@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"
+  name="org.osgi.test.cases.component.tb29.LoggerComponent" init="2" activate="activate">
+  <reference name="FormatterLogger" interface="org.osgi.service.log.LoggerFactory" bind="bindFormatterLogger"/>
+  <reference name="Logger" interface="org.osgi.service.log.LoggerFactory" bind="bindLogger"/>
+  <reference name="formatterLoggerC" interface="org.osgi.service.log.LoggerFactory" parameter="1"/>
+  <reference name="formatterLoggerF" interface="org.osgi.service.log.LoggerFactory" field="formatterLoggerF"/>
+  <reference name="loggerC" interface="org.osgi.service.log.LoggerFactory" parameter="0"/>
+  <reference name="loggerF" interface="org.osgi.service.log.LoggerFactory" field="loggerF"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+  <implementation class="org.osgi.test.cases.component.tb29.LoggerComponent"/>
+</scr:component>
+
+</root>
