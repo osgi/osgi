@@ -33,6 +33,7 @@ import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.component.runtime.ServiceComponentRuntime;
+import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
@@ -166,6 +167,55 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 					.isEqualToComparingFieldByFieldRecursively(expected1);
 		} finally {
 			tb4a.uninstall();
+		}
+	}
+
+	@Test
+	public void testConstructorInjection() throws Exception {
+		final String NAMED_CLASS = TEST_CASE_ROOT + ".tb27.NamedService";
+
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertThat(scr).as("failed to find ServiceComponentRuntime service")
+				.isNotNull();
+		Bundle tb27 = install("tb27.jar");
+		try {
+			tb27.start();
+			Collection<ComponentDescriptionDTO> descriptions = scr
+					.getComponentDescriptionDTOs(tb27);
+			assertThat(descriptions).hasSize(1);
+			ComponentDescriptionDTO description1 = scr
+					.getComponentDescriptionDTO(tb27,
+							"org.osgi.test.cases.component.tb27.ConstructorInjection");
+			assertThat(description1).isNotNull();
+			Collection<ComponentConfigurationDTO> configurations = scr
+					.getComponentConfigurationDTOs(description1);
+			assertThat(configurations).hasSize(1);
+			assertThat(configurations.iterator().next())
+					.hasFieldOrPropertyWithValue("state",
+							ComponentConfigurationDTO.SATISFIED);
+			ServiceTracker<Object,Object> tracker = new ServiceTracker<>(
+					getContext(), NAMED_CLASS, null);
+			try {
+				tracker.open();
+				Object service = Tracker.waitForService(tracker, SLEEP);
+				configurations = scr
+						.getComponentConfigurationDTOs(description1);
+				assertThat(configurations).hasSize(1);
+				assertThat(configurations.iterator().next())
+						.hasFieldOrPropertyWithValue("state",
+								ComponentConfigurationDTO.ACTIVE);
+				assertThat(service).hasToString("default.prop true")
+						.hasFieldOrPropertyWithValue("name", "default.prop")
+						.hasFieldOrPropertyWithValue("bundleContext",
+								tb27.getBundleContext())
+						.hasFieldOrProperty("componentContext")
+						.hasFieldOrProperty("name")
+						.hasNoNullFieldsOrProperties();
+			} finally {
+				tracker.close();
+			}
+		} finally {
+			tb27.uninstall();
 		}
 	}
 

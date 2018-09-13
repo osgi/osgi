@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0" name="org.osgi.test.cases.component.tb27.ConstructorInjection" init="24">
+  <property name="prop" type="String" value="default.prop"/>
+  <reference name="atleastone" cardinality="1..n" interface="org.osgi.service.log.LogService" field-collection-type="service" parameter="8"/>
+  <reference name="bundle" interface="org.osgi.service.log.LogService" scope="bundle" parameter="13"/>
+  <reference name="collection_properties" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="properties" parameter="21"/>
+  <reference name="collection_serviceobjects" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="serviceobjects" parameter="20"/>
+  <reference name="collection_specified" cardinality="0..n" interface="java.util.Map" field-collection-type="service" parameter="23"/>
+  <reference name="collection_tuple" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="tuple" parameter="22"/>
+  <reference name="greedy" interface="org.osgi.service.log.LogService" policy-option="greedy" parameter="9"/>
+  <reference name="mandatory" cardinality="1..1" interface="org.osgi.service.log.LogService" parameter="5"/>
+  <reference name="multiple" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="service" parameter="7"/>
+  <reference name="optional" cardinality="0..1" interface="org.osgi.service.log.LogService" parameter="6"/>
+  <reference name="properties" interface="org.osgi.service.log.LogService" parameter="18"/>
+  <reference name="prototype" interface="org.osgi.service.log.LogService" scope="prototype" parameter="14"/>
+  <reference name="reference" interface="org.osgi.service.log.LogService" parameter="16"/>
+  <reference name="reluctant" interface="org.osgi.service.log.LogService" policy-option="reluctant" parameter="10"/>
+  <reference name="replace" interface="org.osgi.service.log.LogService" field-option="replace" parameter="11"/>
+  <reference name="serviceobjects" interface="org.osgi.service.log.LogService" parameter="17"/>
+  <reference name="static" policy="static" interface="org.osgi.service.log.LogService" parameter="4"/>
+  <reference name="tuple" interface="org.osgi.service.log.LogService" parameter="19"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.tb27.NamedService"/>
+    </service>
+  <implementation class="org.osgi.test.cases.component.tb27.impl.ConstructorInjection"/>
+</scr:component>

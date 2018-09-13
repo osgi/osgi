@@ -41,6 +41,7 @@ Include-Resource					= \
 	tb24.jar, \
 	tb25.jar, \
 	tb26.jar, \
+	tb27.jar, \
 	tbf1.jar
 	
 Test-Cases							= ${testcases}
