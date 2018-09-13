@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb28.FailedActivation"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0">
+    <implementation class="org.osgi.test.cases.component.tb28.FailedActivation"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+</scr:component>
+</root>

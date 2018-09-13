@@ -36,14 +36,15 @@ import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
+import org.osgi.test.cases.component.service.ObjectProvider1;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.map.Maps;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DS14TestCase extends AbstractOSGiTestCase {
-	private static int			SLEEP			= 1000;
-	private static final String	TEST_CASE_ROOT	= "org.osgi.test.cases.component";
+	private static int														SLEEP			= 1000;
+	private static final String												TEST_CASE_ROOT	= "org.osgi.test.cases.component";
 	private ServiceTracker<ServiceComponentRuntime,ServiceComponentRuntime>	scrTracker;
 
 	@Before
@@ -63,11 +64,11 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 		final String NAMED_CLASS = TEST_CASE_ROOT + ".tb4a.NamedService";
 		Bundle tb4a = install("tb4a.jar");
 		try {
-			Filter filter = getContext().createFilter("(&("
-					+ ComponentConstants.COMPONENT_FACTORY + '=' + NAMED_CLASS
-					+ ")(" + Constants.OBJECTCLASS + '='
-					+ ComponentFactory.class.getName()
-					+ ")(factory.id=foo)(factory.properties=found))");
+			Filter filter = getContext()
+					.createFilter("(&(" + ComponentConstants.COMPONENT_FACTORY
+							+ '=' + NAMED_CLASS + ")(" + Constants.OBJECTCLASS
+							+ '=' + ComponentFactory.class.getName()
+							+ ")(factory.id=foo)(factory.properties=found))");
 			ServiceTracker<ComponentFactory<Object>,ComponentFactory<Object>> factoryTracker = new ServiceTracker<>(
 					getContext(), filter, null);
 
@@ -153,10 +154,9 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 							newReferenceDTO("loggers",
 									"org.osgi.service.log.LogService", "0..n",
 									"static", "reluctant", null, null, null,
-									null, null, null,
-									"bundle", 4, "service")
-					},
-					"activate", "deactivate", null, "optional", new String[] {
+									null, null, null, "bundle", 4, "service")
+					}, "activate", "deactivate", null, "optional",
+					new String[] {
 							"org.osgi.test.cases.component.tb4a.NamedService"
 					}, Maps.<String, Object> map​Of("factory.id", "foo",
 							"factory.properties", "found"),
@@ -190,9 +190,10 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 			Collection<ComponentConfigurationDTO> configurations = scr
 					.getComponentConfigurationDTOs(description1);
 			assertThat(configurations).hasSize(1);
-			assertThat(configurations.iterator().next())
-					.hasFieldOrPropertyWithValue("state",
-							ComponentConfigurationDTO.SATISFIED);
+			ComponentConfigurationDTO configuration1 = configurations.iterator()
+					.next();
+			assertThat(configuration1.state)
+					.isEqualTo(ComponentConfigurationDTO.SATISFIED);
 			ServiceTracker<Object,Object> tracker = new ServiceTracker<>(
 					getContext(), NAMED_CLASS, null);
 			try {
@@ -201,9 +202,9 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 				configurations = scr
 						.getComponentConfigurationDTOs(description1);
 				assertThat(configurations).hasSize(1);
-				assertThat(configurations.iterator().next())
-						.hasFieldOrPropertyWithValue("state",
-								ComponentConfigurationDTO.ACTIVE);
+				configuration1 = configurations.iterator().next();
+				assertThat(configuration1.state)
+						.isEqualTo(ComponentConfigurationDTO.ACTIVE);
 				assertThat(service).hasToString("default.prop true")
 						.hasFieldOrPropertyWithValue("name", "default.prop")
 						.hasFieldOrPropertyWithValue("bundleContext",
@@ -216,6 +217,57 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 			}
 		} finally {
 			tb27.uninstall();
+		}
+	}
+
+	@Test
+	public void testFailedActivation() throws Exception {
+		Filter providerFilter = getContext().createFilter("(&("
+				+ Constants.OBJECTCLASS + "=" + ObjectProvider1.class.getName()
+				+ ")(" + ComponentConstants.COMPONENT_NAME
+				+ "=org.osgi.test.cases.component.tb28.FailedActivation))");
+
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertThat(scr).as("failed to find ServiceComponentRuntime service")
+				.isNotNull();
+		Bundle tb28 = install("tb28.jar");
+		try {
+			tb28.start();
+			Collection<ComponentDescriptionDTO> descriptions = scr
+					.getComponentDescriptionDTOs(tb28);
+			assertThat(descriptions).hasSize(1);
+			ComponentDescriptionDTO description1 = scr
+					.getComponentDescriptionDTO(tb28,
+							"org.osgi.test.cases.component.tb28.FailedActivation");
+			assertThat(description1).isNotNull();
+			Collection<ComponentConfigurationDTO> configurations = scr
+					.getComponentConfigurationDTOs(description1);
+			assertThat(configurations).hasSize(1);
+			ComponentConfigurationDTO configuration1 = configurations.iterator()
+					.next();
+			assertThat(configuration1.state)
+					.isEqualTo(ComponentConfigurationDTO.SATISFIED);
+			ServiceTracker<ObjectProvider1<Object>,ObjectProvider1<Object>> tracker = new ServiceTracker<>(
+					getContext(), providerFilter, null);
+			try {
+				tracker.open();
+				Object service = Tracker.waitForService(tracker, SLEEP);
+				configurations = scr
+						.getComponentConfigurationDTOs(description1);
+				assertThat(configurations).hasSize(1);
+				configuration1 = configurations.iterator().next();
+				assertThat(configuration1.state)
+						.as("configuration is a failed activation")
+						.isEqualTo(ComponentConfigurationDTO.FAILED_ACTIVATION);
+				assertThat(configuration1.failure)
+						.as("configuration failure string")
+						.isNotNull();
+				assertThat(service).isNull();
+			} finally {
+				tracker.close();
+			}
+		} finally {
+			tb28.uninstall();
 		}
 	}
 

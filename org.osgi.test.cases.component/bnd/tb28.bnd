@@ -1,0 +1,2 @@
+Private-Package: ${p}.tb28.*
+Service-Component: org/osgi/test/cases/component/tb28/failedactivation.xml
