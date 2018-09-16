@@ -3271,7 +3271,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertTrue("configuration missing component.id property",
 				configuration1.properties.containsKey(ComponentConstants.COMPONENT_ID));
 		assertNull(configuration1.failure);
-		assertNull(configuration1.service);
+		ServiceReferenceDTO[] tb1SRs = tb1.adapt(ServiceReferenceDTO[].class);
+		assertThat(tb1SRs).hasSize(1);
+		assertThat(configuration1.service)
+				.isEqualToComparingFieldByFieldRecursively(tb1SRs[0]);
 
 		ComponentDescriptionDTO description3 = scr.getComponentDescriptionDTO(tb3,
 				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent");
