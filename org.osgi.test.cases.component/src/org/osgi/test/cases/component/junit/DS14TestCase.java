@@ -21,7 +21,9 @@ import static org.osgi.test.cases.component.junit.DTOUtil.*;
 import static org.osgi.test.support.dictionary.Dictionaries.*;
 
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,7 +31,12 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.dto.ServiceReferenceDTO;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationPlugin;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
@@ -41,9 +48,12 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.Logger;
+import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.support.dictionary.Dictionaries;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.map.Maps;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -52,6 +62,8 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 	private static final String												TEST_CASE_ROOT	= "org.osgi.test.cases.component";
 	private ServiceTracker<ServiceComponentRuntime,ServiceComponentRuntime>	scrTracker;
 	private ServiceTracker<LogReaderService,LogReaderService>				lrTracker;
+	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>			cmTracker;
+
 	private LogListener														ll;
 
 	@Before
@@ -81,16 +93,47 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 
 			lr.addLogListener(ll);
 		}
+		cmTracker = new ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>(
+				getContext(), ConfigurationAdmin.class, null);
+		cmTracker.open();
+		clearConfigurations();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		clearConfigurations();
+		cmTracker.close();
 		LogReaderService lr = Tracker.waitForService(lrTracker, SLEEP);
 		if (lr != null) {
 			lr.removeLogListener(ll);
 		}
 		lrTracker.close();
 		scrTracker.close();
+	}
+
+	/**
+	 * This methods takes care of the configurations related to this test
+	 */
+	private void clearConfigurations() throws Exception {
+		ConfigurationAdmin cm = Tracker.waitForService(cmTracker, SLEEP);
+		assertThat(cm).as("The ConfigurationAdmin should be available")
+				.isNotNull();
+		// clean configurations from previous tests
+		// clean factory configs for named service
+		clearConfiguration(cm, "(service.factoryPid=" + TEST_CASE_ROOT + "*)");
+		// clean configs for named service
+		clearConfiguration(cm, "(service.pid=" + TEST_CASE_ROOT + "*)");
+
+		Sleep.sleep(SLEEP * 2);
+	}
+
+	private void clearConfiguration(ConfigurationAdmin cm, String filter)
+			throws Exception {
+		Configuration[] configs = cm.listConfigurations(filter);
+		for (int i = 0; configs != null && i < configs.length; i++) {
+			Configuration configuration = configs[i];
+			configuration.delete();
+		}
 	}
 
 	@Test
@@ -349,8 +392,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						.getComponentConfigurationDTOs(description1);
 				assertThat(configurations).hasSize(1);
 				configuration1 = configurations.iterator().next();
-				assertThat(configuration1.state)
-						.as("configuration is active")
+				assertThat(configuration1.state).as("configuration is active")
 						.isEqualTo(ComponentConfigurationDTO.ACTIVE);
 				assertThat(service).isNotNull();
 				assertThat(service.get1().getName()).isEqualTo(
@@ -360,6 +402,67 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 			}
 		} finally {
 			tb29.uninstall();
+		}
+	}
+
+	@Test
+	public void testConfigurationPlugin() throws Exception {
+		ConfigurationAdmin cm = Tracker.waitForService(cmTracker, SLEEP);
+		assertThat(cm).as("The ConfigurationAdmin should be available")
+				.isNotNull();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID = PID_ROOT + ".ConfigurationPlugin";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
+		config.update(Dictionaries.asDictionary(props));
+
+		final Bundle tb23 = install("tb23.jar");
+		try {
+			final AtomicReference<Bundle> msBundle = new AtomicReference<>();
+			ServiceRegistration<ConfigurationPlugin> reg = getContext()
+					.registerService(ConfigurationPlugin.class,
+							new ConfigurationPlugin() {
+								@Override
+								public void modifyConfiguration(
+										ServiceReference< ? > reference,
+										Dictionary<String,Object> properties) {
+									msBundle.set(reference.getBundle());
+									properties.put(PID_ROOT, "plugin");
+								}
+							}, Dictionaries.asDictionary(Maps.mapOf(
+									ConfigurationPlugin.CM_TARGET, PID)));
+			try {
+				tb23.start();
+
+				Filter base1Filter = getContext().createFilter("(&("
+						+ Constants.OBJECTCLASS + "="
+						+ BaseService.class.getName() + ")("
+						+ ComponentConstants.COMPONENT_NAME + "=" + PID + "))");
+				ServiceTracker<BaseService,BaseService> base1Tracker = new ServiceTracker<BaseService,BaseService>(
+						getContext(), base1Filter, null);
+				try {
+					base1Tracker.open();
+					BaseService b1 = Tracker.waitForService(base1Tracker,
+							SLEEP * 3);
+					assertThat(b1).as("missing base1").isNotNull();
+					assertThat(msBundle).as(
+							"configuration plugin called using MS from component bundle")
+							.hasValue(tb23);
+					Dictionary<String,Object> componentProps = b1
+							.getProperties();
+					assertThat(Dictionaries.asMap(componentProps))
+							.containsEntry(PID_ROOT, "plugin")
+							.containsEntry(Constants.SERVICE_PID, PID);
+				} finally {
+					base1Tracker.close();
+				}
+			} finally {
+				reg.unregister();
+			}
+		} finally {
+			tb23.uninstall();
 		}
 	}
 

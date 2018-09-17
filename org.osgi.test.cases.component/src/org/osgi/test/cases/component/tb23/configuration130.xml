@@ -91,4 +91,16 @@
     </service>
     <property name="org.osgi.test.cases.component.tb23" value="xml"/>
 </scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb23.ConfigurationPlugin"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            configuration-policy="require"
+            configuration-pid="org.osgi.test.cases.component.tb23.ConfigurationPlugin">
+    <implementation class="org.osgi.test.cases.component.tb23.ConfigurableComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.BaseService"/>
+    </service>
+    <property name="org.osgi.test.cases.component.tb23" value="xml"/>
+</scr:component>
+
 </root>
