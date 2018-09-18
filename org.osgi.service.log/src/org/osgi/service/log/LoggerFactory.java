@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,8 @@ public interface LoggerFactory {
 	/**
 	 * Return the {@link Logger} named with the specified name.
 	 * 
-	 * @param name The name to use for the logger name.
+	 * @param name The name to use for the logger name. Must not be
+	 *            {@code null}.
 	 * @return The {@link Logger} named with the specified name. If the name
 	 *         parameter is equal to {@link Logger#ROOT_LOGGER_NAME}, then the
 	 *         root logger is returned.
@@ -65,7 +66,8 @@ public interface LoggerFactory {
 	/**
 	 * Return the {@link Logger} named with the specified class.
 	 * 
-	 * @param clazz The class to use for the logger name.
+	 * @param clazz The class to use for the logger name. Must not be
+	 *            {@code null}.
 	 * @return The {@link Logger} named with the name of the specified class.
 	 */
 	Logger getLogger(Class< ? > clazz);
@@ -75,7 +77,8 @@ public interface LoggerFactory {
 	 * name.
 	 * 
 	 * @param <L> The Logger type.
-	 * @param name The name to use for the logger name.
+	 * @param name The name to use for the logger name. Must not be
+	 *            {@code null}.
 	 * @param loggerType The type of Logger. Can be {@link Logger} or
 	 *            {@link FormatterLogger}.
 	 * @return The {@link Logger} or {@link FormatterLogger} named with the
@@ -92,9 +95,10 @@ public interface LoggerFactory {
 	 * class.
 	 * 
 	 * @param <L> A Logger type.
-	 * @param clazz The class to use for the logger name.
+	 * @param clazz The class to use for the logger name. Must not be
+	 *            {@code null}.
 	 * @param loggerType The type of Logger. Can be {@link Logger} or
-	 *            {@link FormatterLogger}.
+	 *            {@link FormatterLogger}. Must not be {@code null}.
 	 * @return The {@link Logger} or {@link FormatterLogger} named with the name
 	 *         of the specified class.
 	 * @throws IllegalArgumentException If the specified type is not a supported
@@ -113,10 +117,12 @@ public interface LoggerFactory {
 	 * behalf of another bundle.
 	 * 
 	 * @param <L> The Logger type.
-	 * @param bundle The bundle associated with the Logger.
-	 * @param name The name to use for the logger name.
+	 * @param bundle The bundle associated with the Logger. Must not be
+	 *            {@code null}.
+	 * @param name The name to use for the logger name. Must not be
+	 *            {@code null}.
 	 * @param loggerType The type of Logger. Can be {@link Logger} or
-	 *            {@link FormatterLogger}.
+	 *            {@link FormatterLogger}. Must not be {@code null}.
 	 * @return The {@link Logger} or {@link FormatterLogger} named with the
 	 *         specified name for the specified bundle. If the name parameter is
 	 *         equal to {@link Logger#ROOT_LOGGER_NAME}, then the root logger is
