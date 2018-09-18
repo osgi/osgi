@@ -3800,6 +3800,45 @@ public class CMControl extends DefaultTestBundleControl {
 				.listConfigurations("(service.factoryPid=" + factorypid + ")"));
 	}
 
+	/**
+	 * Test whether repeated gets of a factory config returns the same object
+	 * 
+	 * @throws Exception
+	 * @since 1.6
+	 */
+	public void testRepeatedGetFactoryConfigurationWithName() throws Exception {
+		final String factorypid = Util.createPid("factorypidforname");
+		final String factoryname = "aname";
+
+		this.setAppropriatePermission();
+
+		final Configuration conf1 = cm.getFactoryConfiguration(factorypid,
+				factoryname, null);
+		final Configuration conf2 = cm.getFactoryConfiguration(factorypid,
+				factoryname, null);
+		final Dictionary<String,Object> props1 = new Hashtable<>();
+		props1.put("val", "1");
+		conf1.update(props1);
+
+		final Dictionary<String,Object> props2 = new Hashtable<>();
+		props2.put("val", "2");
+		conf2.update(props2);
+
+		assertEquals("2",
+				cm.getFactoryConfiguration(factorypid, factoryname, null)
+						.getProperties()
+						.get("val"));
+
+		final Dictionary<String,Object> props22 = new Hashtable<>();
+		props22.put("val", "22");
+		conf2.update(props22);
+
+		assertEquals("22",
+				cm.getFactoryConfiguration(factorypid, factoryname, null)
+						.getProperties()
+						.get("val"));
+	}
+
 	private void commonTestCreateFactoryConfiguration(boolean withLocation,
 			String location) throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
