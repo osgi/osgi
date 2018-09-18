@@ -18,7 +18,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 import org.osgi.service.cdi.annotations.Service;
-import org.osgi.test.cases.cdi.beans.propertytypes.ServiceRanking;
+import org.osgi.service.cdi.propertytypes.ServiceRanking;
 
 @ApplicationScoped
 public class IntegerServiceProvider {
