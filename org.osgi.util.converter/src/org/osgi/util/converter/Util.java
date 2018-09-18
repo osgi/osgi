@@ -214,7 +214,8 @@ class Util {
 			return null;
 		}
 
-		return toSingleElementAnnotationKey(ann.getSimpleName());
+		return getPrefix(ann)
+				+ toSingleElementAnnotationKey(ann.getSimpleName());
 	}
 
 	static Class< ? > getAnnotationType(Class< ? > intf, Object obj) {

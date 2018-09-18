@@ -441,6 +441,13 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	public static class SingleElementAnnotatedClass {
 	}
 
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface SingleElementAnnotationPrefix {
+		public static final String PREFIX_ = "org.foo.bar.";
+
+		long value() default 42L;
+	}
+
 	/**
 	 * Section 707.4.4 : Maps, Interfaces, Java Beans, DTOs and Annotations
 	 * <p/>
@@ -1488,5 +1495,16 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		Map<String,Long> m3 = converter.convert(res2)
 				.to(new TypeReference<Map<String,Long>>() {});
 		assertEquals(Long.valueOf(456L), m3.get("single.element.annotation"));
+	}
+
+	public void testSingleElementAnnotationPrefix() {
+		Map<String,String> m = new HashMap<>();
+		m.put("org.foo.bar.single.element.annotation.prefix", "-999");
+		// m.put("XXXsingle.element.annotation.prefix", "-999");
+
+		Converter converter = Converters.standardConverter();
+		SingleElementAnnotationPrefix ann = converter.convert(m)
+				.to(SingleElementAnnotationPrefix.class);
+		assertEquals(-999L, ann.value());
 	}
 }
