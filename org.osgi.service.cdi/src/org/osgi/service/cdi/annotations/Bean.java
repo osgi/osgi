@@ -30,7 +30,6 @@ import java.lang.annotation.Target;
  * @author $ID$
  */
 @Documented
-@RequireCDIExtender
 @Retention(CLASS)
 @Target(TYPE)
 public @interface Bean {

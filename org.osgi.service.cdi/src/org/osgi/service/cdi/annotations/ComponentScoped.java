@@ -37,7 +37,6 @@ import javax.inject.Scope;
  */
 @Documented
 @Inherited
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Scope
 @Target({FIELD, METHOD, TYPE})

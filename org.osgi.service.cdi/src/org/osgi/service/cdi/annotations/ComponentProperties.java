@@ -37,7 +37,6 @@ import javax.inject.Qualifier;
  */
 @Documented
 @Qualifier
-@RequireCDIExtender
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})
 public @interface ComponentProperties {
