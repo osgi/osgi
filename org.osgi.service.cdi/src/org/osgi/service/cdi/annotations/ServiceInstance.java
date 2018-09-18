@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.osgi.service.cdi.ServiceInstanceType;
+import org.osgi.service.cdi.ServiceScope;
 
 /**
  * Annotation used on beans, observer methods and observer fields to specify the
@@ -52,26 +52,26 @@ public @interface ServiceInstance {
 		 * @param type the type of the ServiceInstance
 		 * @return an instance of {@link ServiceInstance}
 		 */
-		public static Literal of(ServiceInstanceType type) {
+		public static Literal of(ServiceScope type) {
 			return new Literal(type);
 		}
 
-		private Literal(ServiceInstanceType type) {
+		private Literal(ServiceScope type) {
 			this.type = type;
 		}
 
 		@Override
-		public ServiceInstanceType value() {
+		public ServiceScope value() {
 			return type;
 		}
 
-		private final ServiceInstanceType type;
+		private final ServiceScope type;
 
 	}
 
 	/**
 	 * The scope of the service.
 	 */
-	ServiceInstanceType value() default ServiceInstanceType.SINGLETON;
+	ServiceScope value() default ServiceScope.SINGLETON;
 
 }
