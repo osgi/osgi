@@ -11,6 +11,7 @@ jar.core.impls = \
 
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
+	org.osgi.impl.bundle.annotations, \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.metatype.annotations, \
@@ -69,6 +70,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.wireadmin;latest}
 
 build.enterprise.impls = \
+    org.osgi.impl.bundle.annotations, \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
     org.osgi.impl.bundle.metatype.annotations, \

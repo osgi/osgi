@@ -26,6 +26,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.async.secure, \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.secure, \
+    org.osgi.test.cases.bundle.annotations, \
     org.osgi.test.cases.clusterinfo, \
     org.osgi.test.cases.clusterinfo.secure, \
     org.osgi.test.cases.cm, \
@@ -98,6 +99,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.async.secure, \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.secure, \
+    org.osgi.test.cases.bundle.annotations, \
     org.osgi.test.cases.cdi, \
     org.osgi.test.cases.clusterinfo, \
     org.osgi.test.cases.clusterinfo.secure, \
