@@ -21,6 +21,8 @@ Include-Resource                    = \
    tb8.jar ,\
    tb9.jar ,\
    tb10.jar,\
+   tb11a.jar ,\
+   tb11b.jar ,\
    init_config.json=configs/init_config.json
 
 Test-Cases                          = ${testcases}

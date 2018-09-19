@@ -1,0 +1,9 @@
+{
+  ":configurator:resource-version": 1,
+  
+  "org.osgi.test.pid11": 
+  {
+    "taa": "daa",
+    "too": "doo"
+  }
+}

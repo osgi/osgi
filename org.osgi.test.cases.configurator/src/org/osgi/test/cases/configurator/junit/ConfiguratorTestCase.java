@@ -112,6 +112,42 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 	
+	public void testUpdateConfigBundle() throws Exception {
+		String pid = "org.osgi.test.pid11";
+		Deferred<Configuration> updated = new Deferred<>();
+		Deferred<Configuration> updated2 = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, null);
+		ServiceRegistration<ConfigurationListener> reg2 = null;
+		try {
+			assertNull("Precondition, should not yet have the test config",
+					readConfig(pid));
+
+			Bundle tb11 = install("tb11a.jar");
+			assertFalse(getTimeoutPromise(updated).isDone());
+			tb11.start();
+
+			Configuration cfg = getTimeoutPromise(updated).getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals("daa", props.get("taa"));
+			assertEquals("doo", props.get("too"));
+
+			reg2 = registerConfigListener(pid, updated2, null);
+			tb11.update(entryStream("tb11b.jar"));
+			Configuration cfg2 = getTimeoutPromise(updated2).getValue();
+			Dictionary<String,Object> props2 = cfg2.getProperties();
+			assertEquals("daadaa", props2.get("taa"));
+			assertEquals("doo", props2.get("too"));
+
+			tb11.uninstall();
+		} finally {
+			reg.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+		}
+	}
+
 	public void testIgnoreOverwrite() throws Exception {
 		String pid = "org.osgi.test.pid1";
 		Deferred<Configuration> deleted = new Deferred<>();

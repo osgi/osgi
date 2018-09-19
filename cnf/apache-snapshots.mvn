@@ -6,3 +6,4 @@ org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:0.0.1-SNAPSHOT
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:0.0.1-SNAPSHOT
 
 org.apache.felix:org.apache.felix.scr:2.1.7-SNAPSHOT
+org.apache.felix:org.apache.felix.configurator:1.0.5-SNAPSHOT
