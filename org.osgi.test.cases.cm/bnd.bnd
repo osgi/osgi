@@ -42,7 +42,8 @@ Test-Cases							= ${testcases}
 -runbundles							= \
     ${junit},\
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.cm; version=latest
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.coordinator; version=latest
 	
 -runproperties = ${runsecureproperties}
 

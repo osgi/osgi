@@ -22,7 +22,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.cm.coordinator.junit;
+package org.osgi.test.cases.cm.junit;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -50,7 +50,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @author Carsten Ziegeler, Adobe, Testing CM + Coordinator
  */
-public class CMControl extends DefaultTestBundleControl {
+public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 	private long				SIGNAL_WAITING_TIME;
 
@@ -62,7 +62,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	protected void setUp() throws Exception {
 		SIGNAL_WAITING_TIME = getLongProperty(
-				"org.osgi.test.cases.cm.coordinator.signal_waiting_time", 4000);
+				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
 	    assignCm();
 
 		if (System.getSecurityManager() != null) {
