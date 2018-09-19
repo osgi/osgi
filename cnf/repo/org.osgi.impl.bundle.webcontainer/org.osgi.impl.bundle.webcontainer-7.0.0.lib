@@ -1,7 +1,7 @@
 org.apache.geronimo.specs.geronimo-activation_1.1_spec; version=1.0.2
 org.apache.geronimo.specs.geronimo-annotation_1.1_spec; version=1.0.1
 org.apache.geronimo.specs.geronimo-ejb_3.0_spec; version=1.0.1
-org.apache.geronimo.specs.geronimo-el_2.2_spec; version=1.0.4
+org.apache.geronimo.specs.geronimo-el_2.2_spec; version="[1.0.4,1.1.0)"
 org.apache.geronimo.specs.geronimo-javamail_1.4_spec; version=1.6.0
 org.apache.geronimo.specs:geronimo-servlet_3.0_spec; version=1.0.0
 org.apache.geronimo.specs:geronimo-jsp_2.2_spec; version=1.2.0
