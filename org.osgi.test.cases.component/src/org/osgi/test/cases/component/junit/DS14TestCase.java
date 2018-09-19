@@ -44,6 +44,8 @@ import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
@@ -63,6 +65,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 	private ServiceTracker<ServiceComponentRuntime,ServiceComponentRuntime>	scrTracker;
 	private ServiceTracker<LogReaderService,LogReaderService>				lrTracker;
 	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>			cmTracker;
+	private ServiceTracker<Coordinator,Coordinator>							coordinatorTracker;
 
 	private LogListener														ll;
 
@@ -97,10 +100,14 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 				getContext(), ConfigurationAdmin.class, null);
 		cmTracker.open();
 		clearConfigurations();
+		coordinatorTracker = new ServiceTracker<Coordinator,Coordinator>(
+				getContext(), Coordinator.class, null);
+		coordinatorTracker.open();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		coordinatorTracker.close();
 		clearConfigurations();
 		cmTracker.close();
 		LogReaderService lr = Tracker.waitForService(lrTracker, SLEEP);
@@ -460,6 +467,132 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 				}
 			} finally {
 				reg.unregister();
+			}
+		} finally {
+			tb23.uninstall();
+		}
+	}
+
+	@Test
+	public void testCoordinationEnded() throws Exception {
+		ConfigurationAdmin cm = Tracker.waitForService(cmTracker, SLEEP);
+		assertThat(cm).as("The ConfigurationAdmin should be available")
+				.isNotNull();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID = PID_ROOT + ".Coordinator";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
+		config.update(Dictionaries.asDictionary(props));
+
+		final Bundle tb23 = install("tb23.jar");
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&("
+					+ Constants.OBJECTCLASS + "=" + BaseService.class.getName()
+					+ ")(" + ComponentConstants.COMPONENT_NAME + "=" + PID
+					+ "))");
+			ServiceTracker<BaseService,BaseService> base1Tracker = new ServiceTracker<BaseService,BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				BaseService b1 = Tracker.waitForService(base1Tracker,
+						SLEEP * 3);
+				assertThat(b1).as("missing base1").isNotNull();
+				Dictionary<String,Object> componentProps = b1.getProperties();
+				assertThat(Dictionaries.asMap(componentProps))
+						.containsEntry(PID_ROOT, "config")
+						.containsEntry(Constants.SERVICE_PID, PID);
+
+				Coordinator coordinator = Tracker
+						.waitForService(coordinatorTracker, SLEEP);
+				Coordination coordination = coordinator.begin("ds-test", 0);
+				try {
+					props = Maps.mapOf(PID_ROOT, "updated");
+					config.update(Dictionaries.asDictionary(props));
+					Sleep.sleep(SLEEP * 4);
+					componentProps = b1.getProperties();
+					assertThat(Dictionaries.asMap(componentProps))
+							.containsEntry(PID_ROOT, "config")
+							.containsEntry(Constants.SERVICE_PID, PID);
+				} finally {
+					coordination.end();
+				}
+				System.out.println("coordination ended");
+
+				Sleep.sleep(SLEEP * 2);
+				componentProps = b1.getProperties();
+				assertThat(Dictionaries.asMap(componentProps))
+						.containsEntry(PID_ROOT, "updated")
+						.containsEntry(Constants.SERVICE_PID, PID);
+
+			} finally {
+				base1Tracker.close();
+			}
+		} finally {
+			tb23.uninstall();
+		}
+	}
+
+	@Test
+	public void testCoordinationFailed() throws Exception {
+		ConfigurationAdmin cm = Tracker.waitForService(cmTracker, SLEEP);
+		assertThat(cm).as("The ConfigurationAdmin should be available")
+				.isNotNull();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID = PID_ROOT + ".Coordinator";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
+		config.update(Dictionaries.asDictionary(props));
+
+		final Bundle tb23 = install("tb23.jar");
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&("
+					+ Constants.OBJECTCLASS + "=" + BaseService.class.getName()
+					+ ")(" + ComponentConstants.COMPONENT_NAME + "=" + PID
+					+ "))");
+			ServiceTracker<BaseService,BaseService> base1Tracker = new ServiceTracker<BaseService,BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				BaseService b1 = Tracker.waitForService(base1Tracker,
+						SLEEP * 3);
+				assertThat(b1).as("missing base1").isNotNull();
+				Dictionary<String,Object> componentProps = b1.getProperties();
+				assertThat(Dictionaries.asMap(componentProps))
+						.containsEntry(PID_ROOT, "config")
+						.containsEntry(Constants.SERVICE_PID, PID);
+
+				Coordinator coordinator = Tracker
+						.waitForService(coordinatorTracker, SLEEP);
+				Coordination coordination = coordinator.begin("ds-test", 0);
+				try {
+					props = Maps.mapOf(PID_ROOT, "updated");
+					config.update(Dictionaries.asDictionary(props));
+					Sleep.sleep(SLEEP * 4);
+					componentProps = b1.getProperties();
+					assertThat(Dictionaries.asMap(componentProps))
+							.containsEntry(PID_ROOT, "config")
+							.containsEntry(Constants.SERVICE_PID, PID);
+				} finally {
+					coordination.fail(new RuntimeException("failed"));
+				}
+				System.out.println("coordination failed");
+
+				Sleep.sleep(SLEEP * 2);
+				componentProps = b1.getProperties();
+				assertThat(Dictionaries.asMap(componentProps))
+						.containsEntry(PID_ROOT, "updated")
+						.containsEntry(Constants.SERVICE_PID, PID);
+
+			} finally {
+				base1Tracker.close();
 			}
 		} finally {
 			tb23.uninstall();

@@ -1,2 +1,2 @@
 Private-Package: ${p}.tb23.*
-Service-Component: org/osgi/test/cases/component/tb23/configuration130.xml
+Service-Component: org/osgi/test/cases/component/tb23/configuration.xml
