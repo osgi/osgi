@@ -17,10 +17,12 @@ package org.osgi.test.cases.cdi.tb1;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.Reference;
 import org.osgi.test.cases.cdi.interfaces.BeanService;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
 
+@Bean
 @Named("beanimpl")
 public class BeanImpl implements BeanService<BeanImpl> {
 

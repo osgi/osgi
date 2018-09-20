@@ -23,19 +23,21 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.ComponentProperties;
 import org.osgi.service.cdi.annotations.FactoryComponent;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.cdi.interfaces.BeanService;
 
+@Bean
 @Service({BeanService.class, ConfigurationBeanF.class})
 @FactoryComponent
 @ConfigurationBeanF.Props
 public class ConfigurationBeanF implements BeanService<Callable<int[]>> {
 
 	@Retention(RUNTIME) @Target(TYPE)
-    @BeanPropertyType
+	@BeanPropertyType
 	public @interface Props {
 		String bean() default "F";
 	}

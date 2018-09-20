@@ -41,8 +41,6 @@ public class ConfigurationTests extends AbstractTestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
-		testHeader();
-
 		runtimeTracker = new ServiceTracker<>(
 			bundleContext, CDIComponentRuntime.class, null);
 		runtimeTracker.open();

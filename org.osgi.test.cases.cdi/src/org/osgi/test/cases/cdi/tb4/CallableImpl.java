@@ -16,6 +16,9 @@ package org.osgi.test.cases.cdi.tb4;
 
 import java.util.concurrent.Callable;
 
+import org.osgi.service.cdi.annotations.Bean;
+
+@Bean
 public class CallableImpl implements Callable<String> {
 
 	@Override

@@ -12,24 +12,28 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.tb2;
+package org.osgi.test.cases.cdi.tb152_3;
 
 import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.Service;
-import org.osgi.test.cases.cdi.interfaces.Pojo;
+import org.osgi.service.cdi.annotations.SingleComponent;
+import org.osgi.service.cdi.propertytypes.ServiceDescription;
+import org.osgi.test.cases.cdi.interfaces.BeanService;
 
 @Bean
 @Service
-public class PojoImpl implements Pojo {
+@ServiceDescription("two")
+@SingleComponent
+public class Two implements BeanService<Boolean> {
 
 	@Override
-	public String foo(String fooInput) {
-		return "POJO-IMPL" + fooInput;
+	public String doSomething() {
+		return "";
 	}
 
 	@Override
-	public int getCount() {
-		return 1;
+	public Boolean get() {
+		return Boolean.TRUE;
 	}
 
 }

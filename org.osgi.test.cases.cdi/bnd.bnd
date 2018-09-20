@@ -17,7 +17,11 @@ Include-Resource:\
 	tb8.jar,\
 	tb9.jar,\
 	tb10.jar,\
-	tb11.jar
+	tb11.jar,\
+	tb152_2.jar,\
+	tb152_2b.jar,\
+	tb152_3.jar,\
+	tb152_3_1.jar
 
 Test-Cases: ${testcases}
 
@@ -28,6 +32,7 @@ Test-Cases: ${testcases}
 	org.osgi.service.event;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.component;version=project,\
+	org.osgi.service.log;version=project,\
 	org.osgi.annotation.bundle;version=project,\
 	org.osgi.namespace.extender;version=project,\
 	org.osgi.namespace.service;version=project,\

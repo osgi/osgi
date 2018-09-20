@@ -9,12 +9,14 @@ import java.lang.annotation.Target;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
 @ApplicationScoped
+@Bean
 @Service
 @EventAdminReceiver.Props(event_topics = "com/acme/foo")
 public class EventAdminReceiver implements EventHandler {

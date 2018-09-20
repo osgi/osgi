@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.ComponentProperties;
 import org.osgi.service.cdi.annotations.PID;
@@ -30,6 +31,7 @@ import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.test.cases.cdi.interfaces.BeanService;
 
+@Bean
 @Service(BeanService.class)
 @SingleComponent
 @PID("foo.bar")
@@ -37,7 +39,7 @@ import org.osgi.test.cases.cdi.interfaces.BeanService;
 public class ConfigurationBeanC implements BeanService<Callable<int[]>> {
 
 	@Retention(RUNTIME) @Target(TYPE )
-    @BeanPropertyType
+	@BeanPropertyType
 	public @interface Props {
 		String bean() default "C";
 	}

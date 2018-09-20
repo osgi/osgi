@@ -12,24 +12,15 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.tb2;
+package org.osgi.test.cases.cdi.tb152_2;
+
+import javax.inject.Named;
 
 import org.osgi.service.cdi.annotations.Bean;
-import org.osgi.service.cdi.annotations.Service;
-import org.osgi.test.cases.cdi.interfaces.Pojo;
+import org.osgi.service.cdi.annotations.SingleComponent;
 
 @Bean
-@Service
-public class PojoImpl implements Pojo {
-
-	@Override
-	public String foo(String fooInput) {
-		return "POJO-IMPL" + fooInput;
-	}
-
-	@Override
-	public int getCount() {
-		return 1;
-	}
-
+@Named("same")
+@SingleComponent
+public class One {
 }

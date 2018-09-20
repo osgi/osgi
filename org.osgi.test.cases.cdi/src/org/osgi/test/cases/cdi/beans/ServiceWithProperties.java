@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import org.osgi.service.cdi.annotations.BeanPropertyType;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.SingleComponent;
+import org.osgi.service.log.Logger;
 import org.osgi.test.cases.cdi.interfaces.BeanService;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
 
@@ -37,7 +38,7 @@ import org.osgi.test.cases.cdi.interfaces.Pojo;
 public class ServiceWithProperties implements BeanService<Pojo> {
 
 	@Retention(RUNTIME) @Target(TYPE)
-    @BeanPropertyType
+	@BeanPropertyType
 	public @interface Props {
 		String test_key_b1() default "test.value.b1";
 		String test_key_b2() default "test.value.b2";
@@ -62,7 +63,7 @@ public class ServiceWithProperties implements BeanService<Pojo> {
 	}
 
 	@Retention(RUNTIME) @Target(TYPE )
-    @BeanPropertyType
+	@BeanPropertyType
 	public @interface MoreProperties {
 		String goo_string();
 		int glub_integer();
@@ -81,14 +82,17 @@ public class ServiceWithProperties implements BeanService<Pojo> {
 	@Inject
 	private PojoImpl _pojo;
 
+	@Inject
+	Logger logger;
+
 	@PostConstruct
 	private void postConstructed() {
-		System.out.println("PostConstructed " + this);
+		logger.info("PostConstructed {}", this);
 	}
 
 	@PreDestroy
 	private void preDestroyed() {
-		System.out.println("PreDestroyed " + this);
+		logger.info("PreDestroyed {}", this);
 	}
 
 }

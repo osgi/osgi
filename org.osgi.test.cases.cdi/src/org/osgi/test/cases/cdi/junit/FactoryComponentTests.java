@@ -33,8 +33,6 @@ public class FactoryComponentTests extends AbstractTestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
-		testHeader();
-
 		adminTracker = new ServiceTracker<>(bundleContext, ConfigurationAdmin.class, null);
 		adminTracker.open();
 		configurationAdmin = adminTracker.getService();

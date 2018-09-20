@@ -20,31 +20,34 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.reference.BindServiceReference;
+import org.osgi.service.log.Logger;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
 
 @ApplicationScoped
+@Bean
 @Service
 public class ContainerReferenceEventHandler implements Pojo {
 
 	@Inject
-	void integers(BindServiceReference<Integer> binder) {
+	void integers(BindServiceReference<Integer> binder, Logger logger) {
 		binder.adding(
 			sr -> {
-				System.out.println("=====ADDING==>>> " + sr);
+					logger.info("=====ADDING==>>> {}", sr);
 
 				_services.put(sr, "ADDED");
 			}
 		).modified(
 			sr -> {
-				System.out.println("=====UPDATING==>>> " + sr);
+					logger.info("=====UPDATING==>>> {}", sr);
 
 				_services.put(sr, "UPDATED");
 			}
 		).removed(
 			sr -> {
-				System.out.println("=====REMOVING==>>> " + sr);
+					logger.info("=====REMOVING==>>> {}", sr);
 
 				_services.remove(sr);
 			}

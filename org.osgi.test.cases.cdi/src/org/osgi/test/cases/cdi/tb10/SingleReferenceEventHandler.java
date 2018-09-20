@@ -20,32 +20,35 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import javax.inject.Inject;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cdi.annotations.Bean;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.service.cdi.reference.BindServiceReference;
+import org.osgi.service.log.Logger;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
 
+@Bean
 @Service
 @SingleComponent
 public class SingleReferenceEventHandler implements Pojo {
 
 	@Inject
-	void integers(BindServiceReference<Integer> binder) {
+	void integers(BindServiceReference<Integer> binder, Logger logger) {
 		binder.adding(
 			sr -> {
-				System.out.println("=====ADDING==>>> " + sr + " " + SingleReferenceEventHandler.this);
+					logger.info("=====ADDING==>>> {} {}", sr, SingleReferenceEventHandler.this);
 
 				_services.put(sr, "ADDED");
 			}
 		).modified(
 			sr -> {
-				System.out.println("=====UPDATING==>>> " + sr + " " + SingleReferenceEventHandler.this);
+					logger.info("=====UPDATING==>>> {} {}", sr, SingleReferenceEventHandler.this);
 
 				_services.put(sr, "UPDATED");
 			}
 		).removed(
 			sr -> {
-				System.out.println("=====REMOVING==>>> " + sr + " " + SingleReferenceEventHandler.this);
+					logger.info("=====REMOVING==>>> {} {}", sr, SingleReferenceEventHandler.this);
 
 				_services.remove(sr);
 			}

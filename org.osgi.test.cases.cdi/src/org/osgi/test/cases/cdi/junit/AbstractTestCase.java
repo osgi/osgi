@@ -76,14 +76,8 @@ public class AbstractTestCase {
 		runtimeTracker.close();
 	}
 
-	void testHeader() {
-		System.out.println("--------- TEST: " + getClass().getSimpleName() + "#" +testName.getMethodName());
-	}
-
 	@Before
 	public void setUp() throws Exception {
-		testHeader();
-
 		cdiRuntime = runtimeTracker.waitForService(timeout);
 		cdiBundle = installBundle("basic-beans.jar");
 		cdiBundle.start();
