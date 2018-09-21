@@ -86,15 +86,16 @@
     <title>Overview of Services</title>
 
     <section>
-      <title>Component Model</title>
+      <title>Dependency Injection Models</title>
 
       <para>While the OSGi framework API is relatively simple to use, it is
       still considered infrastructure that can bleed into the application code
-      of a bundle. This Enterprise Specification therefore provides a
-      Dependency Injection based component model. This DI model ensures
-      decoupling of the application code from the OSGi APIs; it provides an
+      of a bundle. The OSGi Enterprise Specification therefore provides 
+      Dependency Injection models. This ensures
+      decoupling of the application code from the OSGi APIs; they provide an
       OSGi bundle programming model with minimal implementation dependencies
-      and virtually no accidental complexity in the Java code.</para>
+      and virtually no accidental complexity in the Java code.
+      </para>
 
       <itemizedlist>
         <listitem>
@@ -103,6 +104,16 @@
           for services. It handles the service life cycle dynamics by
           notifying the component or managing the component's life cycle. See
           chapter <xref linkend="service.component"/>.</para>
+        </listitem>
+        
+        <listitem>
+          <para><xref linkend="service.cdi" xrefstyle="template:%t"/> -
+          The CDI Integration Specification
+          describes how OSGi is integrated into the CDI programming model, allowing
+          developer to leverage CDI annotations, injection and extensions with 
+          OSGi bundles and services.
+          See chapter <xref linkend="service.cdi"/>.
+          </para>
         </listitem>
       </itemizedlist>
     </section>
@@ -467,8 +478,7 @@
   <section>
     <title>Application and Provisioning Support</title>
 
-    <para>The support for applications in OSGi environments has long been
-    missing. The term 'application' may mean different things to different
+    <para>The term 'application' may mean different things to different
     people, therefore, rather than defining what an application is, the OSGi
     specification provides a set of enabling services and specifications to
     aid in the definition, composition, deployment, and governance of a group
@@ -946,6 +956,24 @@
               endterm="org.osgi.service.jaxrs.whiteboard-version"
               linkend="service.jaxrs"/></code></entry>
             </row>
+            
+            <row>
+              <entry><xref linkend="service.cdi" xrefstyle="template:%n %t"/></entry>
+              
+              <entry>
+              <para><code><xref linkend="org.osgi.service.cdi"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.annotations"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.propertytypes"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.reference"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.runtime"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.runtime.dto"/></code></para>
+              <para><code><xref linkend="org.osgi.service.cdi.runtime.dto.template"/></code></para>
+              </entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.cdi-version"
+              linkend="service.cdi"/></code></entry>
+            </row>
 
             <row>
               <entry><xref linkend="util.xml"
@@ -1043,6 +1071,11 @@
 
       <listitem>
         <para>Added <xref linkend="service.jaxrs"
+        xrefstyle="template:%t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.cdi"
         xrefstyle="template:%t"/>.</para>
       </listitem>
 
