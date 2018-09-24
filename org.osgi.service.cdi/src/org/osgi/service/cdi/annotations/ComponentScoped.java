@@ -39,7 +39,9 @@ import javax.inject.Scope;
 @Inherited
 @Retention(RUNTIME)
 @Scope
-@Target({FIELD, METHOD, TYPE})
+@Target({
+		FIELD, METHOD, PARAMETER, TYPE
+})
 public @interface ComponentScoped {
 
 	/**
