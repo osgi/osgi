@@ -45,6 +45,7 @@ public class OSGiBeanDescriptorTests extends AbstractTestCase {
 		}
 		finally {
 			tb2Bundle.uninstall();
+			st.close();
 		}
 	}
 

@@ -65,6 +65,7 @@ public class ConfigurationTests extends AbstractTestCase {
 		Bundle tb3Bundle = installBundle("tb3.jar");
 
 		Configuration configurationA = null, configurationB = null;
+		ServiceTracker<BeanService, BeanService> stA = null, stB = null;
 
 		try {
 			int attempts = 50;
@@ -112,7 +113,7 @@ public class ConfigurationTests extends AbstractTestCase {
 			p2.put("ports", new int[] {80});
 			configurationB.update(p2);
 
-			ServiceTracker<BeanService, BeanService> stA = new ServiceTracker<BeanService, BeanService>(
+			stA = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
 					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=A))"), null);
 			stA.open(true);
@@ -123,7 +124,7 @@ public class ConfigurationTests extends AbstractTestCase {
 			assertEquals("blue", beanService.doSomething());
 			assertArrayEquals(new int[] {12, 4567}, beanService.get().call());
 
-			ServiceTracker<BeanService, BeanService> stB = new ServiceTracker<BeanService, BeanService>(
+			stB = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
 					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=B))"), null);
 			stB.open(true);
@@ -151,6 +152,12 @@ public class ConfigurationTests extends AbstractTestCase {
 					// ignore
 				}
 			}
+			if (stA != null) {
+				stA.close();
+			}
+			if (stB != null) {
+				stB.close();
+			}
 			tb3Bundle.uninstall();
 		}
 	}
@@ -161,11 +168,12 @@ public class ConfigurationTests extends AbstractTestCase {
 		Bundle tb5Bundle = installBundle("tb5.jar");
 
 		Configuration configurationC = null;
+		ServiceTracker<BeanService, BeanService> stC = null;
 
 		try {
-			Thread.sleep(1000); // <---- TODO fix this
+			getBeanManager(tb5Bundle);
 
-			ServiceTracker<BeanService, BeanService> stC = new ServiceTracker<BeanService, BeanService>(
+			stC = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
 					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=C))"), null);
 			stC.open(true);
@@ -215,6 +223,9 @@ public class ConfigurationTests extends AbstractTestCase {
 				catch (Exception e) {
 					// ignore
 				}
+			}
+			if (stC != null) {
+				stC.close();
 			}
 			tb5Bundle.uninstall();
 		}

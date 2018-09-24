@@ -20,7 +20,6 @@ import javax.enterprise.inject.spi.BeanManager;
 
 import org.junit.Test;
 import org.osgi.framework.Bundle;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class CdiExtenderTests extends AbstractTestCase {
 
@@ -28,35 +27,35 @@ public class CdiExtenderTests extends AbstractTestCase {
 	public void testStopExtender() throws Exception {
 		Bundle cdiExtenderBundle = getCdiExtenderBundle();
 
-		ServiceTracker<BeanManager, BeanManager> tracker = getServiceTracker(cdiBundle);
+		try (CloseableTracker<BeanManager, BeanManager> tracker = trackBM(cdiBundle);) {
+			BeanManager beanManager = tracker.waitForService(timeout);
 
-		BeanManager beanManager = tracker.waitForService(timeout);
+			assertNotNull(beanManager);
 
-		assertNotNull(beanManager);
+			int trackingCount = tracker.getTrackingCount();
 
-		int trackingCount = tracker.getTrackingCount();
+			cdiExtenderBundle.stop();
 
-		cdiExtenderBundle.stop();
+			for (int i = 10; (i > 0) && (tracker.getTrackingCount() == trackingCount); i--) {
+				Thread.sleep(20);
+			}
 
-		for (int i = 10; (i > 0) && (tracker.getTrackingCount() == trackingCount); i--) {
-			Thread.sleep(20);
+			beanManager = tracker.getService();
+
+			assertNull(beanManager);
+
+			trackingCount = tracker.getTrackingCount();
+
+			cdiExtenderBundle.start();
+
+			for (int i = 10; (i > 0) && (tracker.getTrackingCount() == trackingCount); i--) {
+				Thread.sleep(20);
+			}
+
+			beanManager = tracker.getService();
+
+			assertNotNull(beanManager);
 		}
-
-		beanManager = tracker.getService();
-
-		assertNull(beanManager);
-
-		trackingCount = tracker.getTrackingCount();
-
-		cdiExtenderBundle.start();
-
-		for (int i = 10; (i > 0) && (tracker.getTrackingCount() == trackingCount); i--) {
-			Thread.sleep(20);
-		}
-
-		beanManager = tracker.getService();
-
-		assertNotNull(beanManager);
 	}
 
 }

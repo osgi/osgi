@@ -12,14 +12,25 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.interfaces;
+package org.osgi.test.cases.cdi.tb152_3_1_1b;
 
-public interface Pojo {
-	String foo(String fooInput);
+import org.osgi.service.cdi.CDIConstants;
+import org.osgi.service.cdi.ConfigurationPolicy;
+import org.osgi.service.cdi.annotations.PID;
+import org.osgi.service.cdi.annotations.SingleComponent;
+import org.osgi.test.cases.cdi.interfaces.Pojo;
 
-	int getCount();
+@PID(value = CDIConstants.CDI_COMPONENT_NAME, policy = ConfigurationPolicy.REQUIRED)
+@SingleComponent
+public class ImmediateSingle_C implements Pojo {
 
-	default <T> T get(Class<T> clazz) {
+	@Override
+	public String foo(String fooInput) {
 		return null;
+	}
+
+	@Override
+	public int getCount() {
+		return 0;
 	}
 }

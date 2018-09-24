@@ -49,94 +49,98 @@ public class FactoryComponentTests extends AbstractTestCase {
 	public void testFactoryComponent() throws Exception {
 		Bundle tb7Bundle = installBundle("tb7.jar");
 
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"ConfigurationBeanF");
+				"ConfigurationBeanF");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNull(beanService);
+			assertNull(beanService);
 
-		Configuration configurationA = null, configurationB = null;
+			Configuration configurationA = null, configurationB = null;
+			ServiceTracker<BeanService, BeanService> trackerA = null, trackerB = null;
 
-		try {
-			configurationA = configurationAdmin.getFactoryConfiguration("configurationBeanF", "one");
+			try {
+				configurationA = configurationAdmin.getFactoryConfiguration("configurationBeanF", "one");
 
-			Dictionary<String, Object> p1 = new Hashtable<>();
-			p1.put("ports", new int[] {12, 4567});
-			p1.put("instance", "A");
-			configurationA.update(p1);
+				Dictionary<String, Object> p1 = new Hashtable<>();
+				p1.put("ports", new int[] { 12, 4567 });
+				p1.put("instance", "A");
+				configurationA.update(p1);
 
-			ServiceTracker<BeanService, BeanService> trackerA = track(
-				"(&(objectClass=%s)(objectClass=*.%s)(instance=A))",
-				BeanService.class.getName(),
-				"ConfigurationBeanF");
+				trackerA = track(
+						"(&(objectClass=%s)(objectClass=*.%s)(instance=A))", BeanService.class.getName(),
+						"ConfigurationBeanF");
 
-			BeanService beanServiceA = trackerA.waitForService(timeout);
+				BeanService beanServiceA = trackerA.waitForService(timeout);
 
-			assertNotNull(beanServiceA);
+				assertNotNull(beanServiceA);
 
-			configurationB = configurationAdmin.getFactoryConfiguration("configurationBeanF", "two");
+				configurationB = configurationAdmin.getFactoryConfiguration("configurationBeanF", "two");
 
-			p1 = new Hashtable<>();
-			p1.put("ports", new int[] {45689, 1065});
-			p1.put("instance", "B");
-			configurationB.update(p1);
+				p1 = new Hashtable<>();
+				p1.put("ports", new int[] { 45689, 1065 });
+				p1.put("instance", "B");
+				configurationB.update(p1);
 
-			ServiceTracker<BeanService, BeanService> trackerB = track(
-				"(&(objectClass=%s)(objectClass=*.%s)(instance=B))",
-				BeanService.class.getName(),
-				"ConfigurationBeanF");
+				trackerB = track(
+						"(&(objectClass=%s)(objectClass=*.%s)(instance=B))", BeanService.class.getName(),
+						"ConfigurationBeanF");
 
-			BeanService beanServiceB = trackerB.waitForService(timeout);
+				BeanService beanServiceB = trackerB.waitForService(timeout);
 
-			assertNotNull(beanServiceB);
+				assertNotNull(beanServiceB);
 
-			assertFalse(beanServiceA == beanServiceB);
+				assertFalse(beanServiceA == beanServiceB);
 
-			int trackingCount = trackerA.getTrackingCount();
+				int trackingCount = trackerA.getTrackingCount();
 
-			configurationA.delete();
+				configurationA.delete();
 
-			for (int i = 10; (i > 0) && (trackerA.getTrackingCount() == trackingCount); i--) {
-				Thread.sleep(20);
-			}
-
-			beanServiceA = trackerA.getService();
-
-			assertNull(beanServiceA);
-
-			trackingCount = trackerB.getTrackingCount();
-
-			configurationB.delete();
-
-			for (int i = 10; (i > 0) && (trackerB.getTrackingCount() == trackingCount); i--) {
-				Thread.sleep(20);
-			}
-
-			beanServiceB = trackerB.getService();
-
-			assertNull(beanServiceB);
-		}
-		finally {
-			if (configurationA != null) {
-				try {
-					configurationA.delete();
+				for (int i = 10; (i > 0) && (trackerA.getTrackingCount() == trackingCount); i--) {
+					Thread.sleep(20);
 				}
-				catch (Exception e) {
-					// ignore
+
+				beanServiceA = trackerA.getService();
+
+				assertNull(beanServiceA);
+
+				trackingCount = trackerB.getTrackingCount();
+
+				configurationB.delete();
+
+				for (int i = 10; (i > 0) && (trackerB.getTrackingCount() == trackingCount); i--) {
+					Thread.sleep(20);
 				}
+
+				beanServiceB = trackerB.getService();
+
+				assertNull(beanServiceB);
 			}
-			if (configurationB != null) {
-				try {
-					configurationB.delete();
+			finally {
+				if (configurationA != null) {
+					try {
+						configurationA.delete();
+					} catch (Exception e) {
+						// ignore
+					}
 				}
-				catch (Exception e) {
-					// ignore
+				if (configurationB != null) {
+					try {
+						configurationB.delete();
+					} catch (Exception e) {
+						// ignore
+					}
 				}
+				if (trackerA != null) {
+					trackerA.close();
+				}
+				if (trackerB != null) {
+					trackerB.close();
+				}
+				tb7Bundle.uninstall();
 			}
-			tb7Bundle.uninstall();
 		}
 	}
 

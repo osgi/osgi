@@ -42,164 +42,160 @@ import org.osgi.test.cases.cdi.junit.services.ServiceSingletonFour;
 import org.osgi.test.cases.cdi.junit.services.ServiceSingletonOne;
 import org.osgi.test.cases.cdi.junit.services.ServiceSingletonThree;
 import org.osgi.test.cases.cdi.junit.services.ServiceSingletonTwo;
-import org.osgi.util.tracker.ServiceTracker;
 
 @SuppressWarnings("rawtypes")
 public class CdiBeanTests extends AbstractTestCase {
 
 	@Test
-    public void testConstructorInjectedService() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
-			"(&(objectClass=%s)(objectClass=*.%s))",
-			BeanService.class.getName(),
-			"ConstructorInjectedService");
+	public void testConstructorInjectedService() throws Exception {
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
+				"(&(objectClass=%s)(objectClass=*.%s))", BeanService.class.getName(), "ConstructorInjectedService");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
-		assertEquals("PREFIXCONSTRUCTOR", beanService.doSomething());
+			assertNotNull(beanService);
+			assertEquals("PREFIXCONSTRUCTOR", beanService.doSomething());
+		}
 	}
 
 	@Test
 	public void testFieldInjectedReference_BundleScoped() throws Exception {
-		ServiceTracker<FieldInjectedReference, FieldInjectedReference> tracker = track(
+		try (CloseableTracker<FieldInjectedReference, FieldInjectedReference> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			FieldInjectedReference.class.getName(),
-			"FieldInjectedBundleScopedImpl");
+				"FieldInjectedBundleScopedImpl");) {
 
-        ServiceRegistration<BundleScoped> bundleScoped = register(
-                BundleScoped.class,
-                new ServiceBundleScope(),
-                "fee.fi", "fee",
-                "fo.fum", 23,
-                "complex.enough.key", "fum",
-                "key", "value",
-                "simple.annotation", "blah");
-        try {
-            FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
+			ServiceRegistration<BundleScoped> bundleScoped = register(BundleScoped.class, new ServiceBundleScope(),
+					"fee.fi", "fee", "fo.fum", 23, "complex.enough.key", "fum", "key", "value", "simple.annotation",
+					"blah");
+			try {
+				FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
 
-            assertNotNull(fieldInjectedReference);
-            assertNotNull(fieldInjectedReference.getProperties());
-            assertNotNull(fieldInjectedReference.getGenericReference());
-            assertNotNull(fieldInjectedReference.getRawReference());
-            assertNotNull(fieldInjectedReference.getService());
-            assertEquals("value", fieldInjectedReference.getProperties().get("key"));
-            assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
-            assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
-        } finally {
-            bundleScoped.unregister();
-        }
+				assertNotNull(fieldInjectedReference);
+				assertNotNull(fieldInjectedReference.getProperties());
+				assertNotNull(fieldInjectedReference.getGenericReference());
+				assertNotNull(fieldInjectedReference.getRawReference());
+				assertNotNull(fieldInjectedReference.getService());
+				assertEquals("value", fieldInjectedReference.getProperties().get("key"));
+				assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
+				assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+			} finally {
+				bundleScoped.unregister();
+			}
+		}
 	}
 
 	@Test
 	public void testFieldInjectedReference_PrototypeScoped() throws Exception {
-		ServiceTracker<FieldInjectedReference, FieldInjectedReference> tracker = track(
+		try (CloseableTracker<FieldInjectedReference, FieldInjectedReference> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			FieldInjectedReference.class.getName(),
-			"FieldInjectedPrototypeScopedImpl");
+				"FieldInjectedPrototypeScopedImpl");) {
 
-        ServiceRegistration<PrototypeScoped> prototypeScoped = register(
-                PrototypeScoped.class,
-                new ServicePrototypeScope(),
-                "key", "value");
-        try {
-            FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
+			ServiceRegistration<PrototypeScoped> prototypeScoped = register(PrototypeScoped.class,
+					new ServicePrototypeScope(), "key", "value");
+			try {
+				FieldInjectedReference fieldInjectedReference = tracker.waitForService(timeout);
 
-            assertNotNull(fieldInjectedReference);
-            assertNotNull(fieldInjectedReference.getProperties());
-            assertNotNull(fieldInjectedReference.getGenericReference());
-            assertNotNull(fieldInjectedReference.getRawReference());
-            assertNotNull(fieldInjectedReference.getService());
-            assertEquals("value", fieldInjectedReference.getProperties().get("key"));
-            assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
-            assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
-        } finally {
-            prototypeScoped.unregister();
-        }
+				assertNotNull(fieldInjectedReference);
+				assertNotNull(fieldInjectedReference.getProperties());
+				assertNotNull(fieldInjectedReference.getGenericReference());
+				assertNotNull(fieldInjectedReference.getRawReference());
+				assertNotNull(fieldInjectedReference.getService());
+				assertEquals("value", fieldInjectedReference.getProperties().get("key"));
+				assertEquals("value", fieldInjectedReference.getGenericReference().getProperty("key"));
+				assertEquals("value", fieldInjectedReference.getRawReference().getProperty("key"));
+			} finally {
+				prototypeScoped.unregister();
+			}
+		}
 	}
 
 	@Test
 	public void testFieldInjectedService() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"FieldInjectedService");
+				"FieldInjectedService");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
-		assertEquals("PREFIXFIELD", beanService.doSomething());
+			assertNotNull(beanService);
+			assertEquals("PREFIXFIELD", beanService.doSomething());
+		}
 	}
 
 	@Test
 	public void testMethodInjectedService() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"MethodInjectedService");
+				"MethodInjectedService");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
-		assertEquals("PREFIXMETHOD", beanService.doSomething());
+			assertNotNull(beanService);
+			assertEquals("PREFIXMETHOD", beanService.doSomething());
+		}
 	}
 
 	@Test
 	public void testBeanAsServiceWithProperties() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"ServiceWithProperties");
+				"ServiceWithProperties");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
+			assertNotNull(beanService);
 
-		ServiceReference<BeanService> serviceReference = tracker.getServiceReference();
+			ServiceReference<BeanService> serviceReference = tracker.getServiceReference();
 
-		assertEquals("test.value.b2", serviceReference.getProperty("test.key.b2"));
+			assertEquals("test.value.b2", serviceReference.getProperty("test.key.b2"));
 
-		assertTrue(serviceReference.getProperty("p.Boolean") instanceof Boolean);
-		assertTrue(serviceReference.getProperty("p.Boolean.array") instanceof boolean[]);
-		assertEquals(2, ((boolean[])serviceReference.getProperty("p.Boolean.array")).length);
+			assertTrue(serviceReference.getProperty("p.Boolean") instanceof Boolean);
+			assertTrue(serviceReference.getProperty("p.Boolean.array") instanceof boolean[]);
+			assertEquals(2, ((boolean[]) serviceReference.getProperty("p.Boolean.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Byte") instanceof Byte);
-		assertTrue(serviceReference.getProperty("p.Byte.array") instanceof byte[]);
-		assertEquals(2, ((byte[])serviceReference.getProperty("p.Byte.array")).length);
+			assertTrue(serviceReference.getProperty("p.Byte") instanceof Byte);
+			assertTrue(serviceReference.getProperty("p.Byte.array") instanceof byte[]);
+			assertEquals(2, ((byte[]) serviceReference.getProperty("p.Byte.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Character") instanceof Character);
-		assertTrue(serviceReference.getProperty("p.Character.array") instanceof char[]);
-		assertEquals(2, ((char[])serviceReference.getProperty("p.Character.array")).length);
+			assertTrue(serviceReference.getProperty("p.Character") instanceof Character);
+			assertTrue(serviceReference.getProperty("p.Character.array") instanceof char[]);
+			assertEquals(2, ((char[]) serviceReference.getProperty("p.Character.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Double") instanceof Double);
-		assertTrue(serviceReference.getProperty("p.Double.array") instanceof double[]);
-		assertEquals(2, ((double[])serviceReference.getProperty("p.Double.array")).length);
+			assertTrue(serviceReference.getProperty("p.Double") instanceof Double);
+			assertTrue(serviceReference.getProperty("p.Double.array") instanceof double[]);
+			assertEquals(2, ((double[]) serviceReference.getProperty("p.Double.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Float") instanceof Float);
-		assertTrue(serviceReference.getProperty("p.Float.array") instanceof float[]);
-		assertEquals(2, ((float[])serviceReference.getProperty("p.Float.array")).length);
+			assertTrue(serviceReference.getProperty("p.Float") instanceof Float);
+			assertTrue(serviceReference.getProperty("p.Float.array") instanceof float[]);
+			assertEquals(2, ((float[]) serviceReference.getProperty("p.Float.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Integer") instanceof Integer);
-		assertTrue(serviceReference.getProperty("p.Integer.array") instanceof int[]);
-		assertEquals(2, ((int[])serviceReference.getProperty("p.Integer.array")).length);
+			assertTrue(serviceReference.getProperty("p.Integer") instanceof Integer);
+			assertTrue(serviceReference.getProperty("p.Integer.array") instanceof int[]);
+			assertEquals(2, ((int[]) serviceReference.getProperty("p.Integer.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Long") instanceof Long);
-		assertTrue(serviceReference.getProperty("p.Long.array") instanceof long[]);
-		assertEquals(2, ((long[])serviceReference.getProperty("p.Long.array")).length);
+			assertTrue(serviceReference.getProperty("p.Long") instanceof Long);
+			assertTrue(serviceReference.getProperty("p.Long.array") instanceof long[]);
+			assertEquals(2, ((long[]) serviceReference.getProperty("p.Long.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.Short") instanceof Short);
-		assertTrue(serviceReference.getProperty("p.Short.array") instanceof short[]);
-		assertEquals(2, ((short[])serviceReference.getProperty("p.Short.array")).length);
+			assertTrue(serviceReference.getProperty("p.Short") instanceof Short);
+			assertTrue(serviceReference.getProperty("p.Short.array") instanceof short[]);
+			assertEquals(2, ((short[]) serviceReference.getProperty("p.Short.array")).length);
 
-		assertTrue(serviceReference.getProperty("p.String") instanceof String);
-		assertTrue(serviceReference.getProperty("p.String.array") instanceof String[]);
-		assertEquals(2, ((String[])serviceReference.getProperty("p.String.array")).length);
+			assertTrue(serviceReference.getProperty("p.String") instanceof String);
+			assertTrue(serviceReference.getProperty("p.String.array") instanceof String[]);
+			assertEquals(2, ((String[]) serviceReference.getProperty("p.String.array")).length);
 
-		// glubInteger = 45, gooString = "green"
-		assertTrue(serviceReference.getProperty("glub.integer") instanceof Integer);
-		assertEquals(45, ((Integer)serviceReference.getProperty("glub.integer")).intValue());
-		assertTrue(serviceReference.getProperty("goo.string") instanceof String);
-		assertEquals("green", (serviceReference.getProperty("goo.string")));
+			// glubInteger = 45, gooString = "green"
+			assertTrue(serviceReference.getProperty("glub.integer") instanceof Integer);
+			assertEquals(45, ((Integer) serviceReference.getProperty("glub.integer")).intValue());
+			assertTrue(serviceReference.getProperty("goo.string") instanceof String);
+			assertEquals("green", (serviceReference.getProperty("goo.string")));
+		}
 	}
 
 	@Test
@@ -222,61 +218,64 @@ public class CdiBeanTests extends AbstractTestCase {
 
 	@Test
 	public void testInstanceProperties() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"Instance_ServiceProperties");
+				"Instance_ServiceProperties");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
-		assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
-		@SuppressWarnings("unchecked")
-		Map<String, Object> map = (Map<String, Object>)beanService.get();
-		assertNotNull(map);
-		assertEquals(100000, (int)map.get("service.ranking"));
+			assertNotNull(beanService);
+			assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>) beanService.get();
+			assertNotNull(map);
+			assertEquals(100000, (int) map.get("service.ranking"));
+		}
 	}
 
 	@Test
 	public void testInstanceServiceReference() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"Instance_ServiceReference");
-		
-        ServiceRegistration<?> regOne = register(
-                SingletonScoped.class, new ServiceSingletonOne(), SERVICE_RANKING, 1);
-        ServiceRegistration<?> regTwo = register(
-                SingletonScoped.class, new ServiceSingletonTwo(), SERVICE_RANKING, 2);
-        ServiceRegistration<?> regThree = register(
-                SingletonScoped.class, new ServiceSingletonThree(), SERVICE_RANKING, 3);
-        ServiceRegistration<?> regFour = register(
-                SingletonScoped.class, new ServiceSingletonFour(), SERVICE_RANKING, 4);
-        try {
-            BeanService beanService = tracker.waitForService(timeout);
+				"Instance_ServiceReference");) {
 
-            assertNotNull(beanService);
-            assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
-            ServiceReference<?> sr = (ServiceReference<?>) beanService.get();
-            assertNotNull(sr);
-            assertEquals(4, (int) sr.getProperty("service.ranking"));
-        } finally {
-            Stream.of(regOne, regTwo, regThree, regFour).forEach(ServiceRegistration::unregister);
-        }
+			ServiceRegistration<?> regOne = register(SingletonScoped.class, new ServiceSingletonOne(), SERVICE_RANKING,
+					1);
+			ServiceRegistration<?> regTwo = register(SingletonScoped.class, new ServiceSingletonTwo(), SERVICE_RANKING,
+					2);
+			ServiceRegistration<?> regThree = register(SingletonScoped.class, new ServiceSingletonThree(),
+					SERVICE_RANKING, 3);
+			ServiceRegistration<?> regFour = register(SingletonScoped.class, new ServiceSingletonFour(),
+					SERVICE_RANKING, 4);
+			try {
+				BeanService beanService = tracker.waitForService(timeout);
+
+				assertNotNull(beanService);
+				assertEquals(4, Integer.decode(beanService.doSomething()).intValue());
+				ServiceReference<?> sr = (ServiceReference<?>) beanService.get();
+				assertNotNull(sr);
+				assertEquals(4, (int) sr.getProperty("service.ranking"));
+			} finally {
+				Stream.of(regOne, regTwo, regThree, regFour).forEach(ServiceRegistration::unregister);
+			}
+		}
 	}
 
 	@Test
 	public void testInstance_Optional() throws Exception {
-		ServiceTracker<BeanService, BeanService> tracker = track(
+		try (CloseableTracker<BeanService, BeanService> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s))",
 			BeanService.class.getName(),
-			"Instance_Optional");
+				"Instance_Optional");) {
 
-		BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(timeout);
 
-		assertNotNull(beanService);
-		assertEquals(0, Integer.decode(beanService.doSomething()).intValue());
-		assertNull(beanService.get());
+			assertNotNull(beanService);
+			assertEquals(0, Integer.decode(beanService.doSomething()).intValue());
+			assertNull(beanService.get());
+		}
 	}
 
 }

@@ -48,57 +48,56 @@ public class DisableComponentTests extends AbstractTestCase {
 	public void testDisableContainerComponent() throws Exception {
 		Bundle tb8Bundle = installBundle("tb8.jar");
 
-		ServiceTracker<Pojo, Pojo> tracker = track(
+		try (CloseableTracker<Pojo, Pojo> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s)(service.bundleid=%s))",
 			Pojo.class.getName(),
 			"ContainerBean",
-			tb8Bundle.getBundleId());
+				tb8Bundle.getBundleId());) {
 
-		Pojo pojo = tracker.waitForService(timeout);
-
-		assertNotNull(pojo);
-
-		Configuration configurationA = null;
-
-		try {
-			configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
-
-			Dictionary<String, Object> p1 = new Hashtable<>();
-			p1.put("cdi-itests.tb8.enabled", false);
-
-			configurationA.update(p1);
-
-			for (int i = 20; (i > 0) && (!tracker.isEmpty()); i--) {
-				Thread.sleep(20);
-			}
-
-			pojo = tracker.getService();
-
-			assertNull(pojo);
-
-			p1 = new Hashtable<>();
-			p1.put("containerBean.enabled", true);
-
-			configurationA.update(p1);
-
-			for (int i = 30; (i > 0) && (tracker.isEmpty()); i--) {
-				Thread.sleep(20);
-			}
-
-			pojo = tracker.getService();
+			Pojo pojo = tracker.waitForService(timeout);
 
 			assertNotNull(pojo);
-		}
-		finally {
-			if (configurationA != null) {
-				try {
-					configurationA.delete();
+
+			Configuration configurationA = null;
+
+			try {
+				configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
+
+				Dictionary<String, Object> p1 = new Hashtable<>();
+				p1.put("cdi-itests.tb8.enabled", false);
+
+				configurationA.update(p1);
+
+				for (int i = 20; (i > 0) && (!tracker.isEmpty()); i--) {
+					Thread.sleep(20);
 				}
-				catch (Exception e) {
-					// ignore
+
+				pojo = tracker.getService();
+
+				assertNull(pojo);
+
+				p1 = new Hashtable<>();
+				p1.put("containerBean.enabled", true);
+
+				configurationA.update(p1);
+
+				for (int i = 30; (i > 0) && (tracker.isEmpty()); i--) {
+					Thread.sleep(20);
 				}
+
+				pojo = tracker.getService();
+
+				assertNotNull(pojo);
+			} finally {
+				if (configurationA != null) {
+					try {
+						configurationA.delete();
+					} catch (Exception e) {
+						// ignore
+					}
+				}
+				tb8Bundle.uninstall();
 			}
-			tb8Bundle.uninstall();
 		}
 	}
 
@@ -106,57 +105,56 @@ public class DisableComponentTests extends AbstractTestCase {
 	public void testDisableSingleComponent() throws Exception {
 		Bundle tb8Bundle = installBundle("tb8.jar");
 
-		ServiceTracker<Pojo, Pojo> tracker = track(
+		try (CloseableTracker<Pojo, Pojo> tracker = track(
 			"(&(objectClass=%s)(objectClass=*.%s)(service.bundleid=%s))",
 			Pojo.class.getName(),
 			"SingleComponentBean",
-			tb8Bundle.getBundleId());
+				tb8Bundle.getBundleId());) {
 
-		Pojo pojo = tracker.waitForService(timeout);
-
-		assertNotNull(pojo);
-
-		Configuration configurationA = null;
-
-		try {
-			configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
-
-			Dictionary<String, Object> p1 = new Hashtable<>();
-			p1.put("singleComponentBean.enabled", false);
-
-			configurationA.update(p1);
-
-			for (int i = 20; (i > 0) && (!tracker.isEmpty()); i--) {
-				Thread.sleep(20);
-			}
-
-			pojo = tracker.getService();
-
-			assertNull(pojo);
-
-			p1 = new Hashtable<>();
-			p1.put("singleComponentBean.enabled", true);
-
-			configurationA.update(p1);
-
-			for (int i = 20; (i > 0) && (tracker.isEmpty()); i--) {
-				Thread.sleep(20);
-			}
-
-			pojo = tracker.getService();
+			Pojo pojo = tracker.waitForService(timeout);
 
 			assertNotNull(pojo);
-		}
-		finally {
-			if (configurationA != null) {
-				try {
-					configurationA.delete();
+
+			Configuration configurationA = null;
+
+			try {
+				configurationA = configurationAdmin.getConfiguration("osgi.cdi.org.osgi.test.cases.cdi.tb8", "?");
+
+				Dictionary<String, Object> p1 = new Hashtable<>();
+				p1.put("singleComponentBean.enabled", false);
+
+				configurationA.update(p1);
+
+				for (int i = 20; (i > 0) && (!tracker.isEmpty()); i--) {
+					Thread.sleep(20);
 				}
-				catch (Exception e) {
-					// ignore
+
+				pojo = tracker.getService();
+
+				assertNull(pojo);
+
+				p1 = new Hashtable<>();
+				p1.put("singleComponentBean.enabled", true);
+
+				configurationA.update(p1);
+
+				for (int i = 20; (i > 0) && (tracker.isEmpty()); i--) {
+					Thread.sleep(20);
 				}
+
+				pojo = tracker.getService();
+
+				assertNotNull(pojo);
+			} finally {
+				if (configurationA != null) {
+					try {
+						configurationA.delete();
+					} catch (Exception e) {
+						// ignore
+					}
+				}
+				tb8Bundle.uninstall();
 			}
-			tb8Bundle.uninstall();
 		}
 	}
 

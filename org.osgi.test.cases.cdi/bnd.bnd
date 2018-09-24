@@ -21,7 +21,19 @@ Include-Resource:\
 	tb152_2.jar,\
 	tb152_2b.jar,\
 	tb152_3.jar,\
-	tb152_3_1.jar
+	tb152_3_1.jar,\
+	tb152_3_1_1a.jar,\
+	tb152_3_1_1b.jar,\
+	tb152_3_1_1c.jar,\
+	tb152_3_1_1d.jar,\
+	tb152_3_1_1e.jar,\
+	tb152_3_1_1f.jar,\
+	tb152_3_1_1g.jar,\
+	tb152_3_1_1h.jar,\
+	tb152_3_1_1i.jar,\
+	tb152_3_1_1j.jar,\
+	tb152_3_1_1k.jar,\
+	tb152_3_1_1l.jar
 
 Test-Cases: ${testcases}
 

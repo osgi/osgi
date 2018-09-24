@@ -100,6 +100,8 @@ public class Test152_3_1 extends AbstractTestCase {
 			Function.class, onDestroyed,
 			new Hashtable() {{put(Constants.SERVICE_DESCRIPTION, "onDestroyed");}});
 
+		ServiceTracker<Object, Object> twoTracker = null;
+
 		try {
 			getBeanManager(tb152_3_1Bundle);
 
@@ -107,7 +109,8 @@ public class Test152_3_1 extends AbstractTestCase {
 			assertThat(b.get()).isNull();
 			assertThat(c.get()).isNull();
 
-			ServiceTracker<Object, Object> twoTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION, "two");
+			twoTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION,
+					"two");
 			twoTracker.open();
 			int trackingCount = twoTracker.getTrackingCount();
 
@@ -156,6 +159,9 @@ public class Test152_3_1 extends AbstractTestCase {
 			assertThat(eventMetadata.getQualifiers()).contains(Service.Literal.of(new Class<?>[0]));
 		}
 		finally {
+			if (twoTracker != null) {
+				twoTracker.close();
+			}
 			onInitializedReg.unregister();
 			onBeforeDestroyedReg.unregister();
 			onDestroyedReg.unregister();
@@ -204,6 +210,7 @@ public class Test152_3_1 extends AbstractTestCase {
 			new Hashtable() {{put(Constants.SERVICE_DESCRIPTION, "onDestroyed");}});
 
 		Configuration configuration = null;
+		ServiceTracker<Object, Object> threeTracker = null;
 
 		try {
 			getBeanManager(tb152_3_1Bundle);
@@ -212,7 +219,8 @@ public class Test152_3_1 extends AbstractTestCase {
 			assertThat(b.get()).isNull();
 			assertThat(c.get()).isNull();
 
-			ServiceTracker<Object, Object> threeTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION, "three");
+			threeTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(),
+					Constants.SERVICE_DESCRIPTION, "three");
 			threeTracker.open();
 			int trackingCount = threeTracker.getTrackingCount();
 
@@ -273,6 +281,9 @@ public class Test152_3_1 extends AbstractTestCase {
 			assertThat(eventMetadata.getQualifiers()).contains(Service.Literal.of(new Class<?>[0]));
 		}
 		finally {
+			if (threeTracker != null) {
+				threeTracker.close();
+			}
 			configuration.delete();
 			onInitializedReg.unregister();
 			onBeforeDestroyedReg.unregister();

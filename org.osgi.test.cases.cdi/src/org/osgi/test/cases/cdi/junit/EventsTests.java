@@ -25,7 +25,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 import org.osgi.test.cases.cdi.interfaces.Pojo;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class EventsTests extends AbstractTestCase {
 
@@ -44,9 +43,7 @@ public class EventsTests extends AbstractTestCase {
 	public void testContainerComponentReferenceEventHandler() throws Exception {
 		Bundle tb = installBundle("tb9.jar");
 
-		try {
-			ServiceTracker<Pojo, Pojo> tracker = track("(objectClass=%s)", Pojo.class.getName());
-
+		try (CloseableTracker<Pojo, Pojo> tracker = track("(objectClass=%s)", Pojo.class.getName());) {
 			Pojo pojo = tracker.waitForService(timeout);
 
 			assertEquals(0, pojo.getCount());
@@ -100,9 +97,7 @@ public class EventsTests extends AbstractTestCase {
 	public void testSingleComponentReferenceEventHandler() throws Exception {
 		Bundle tb = installBundle("tb10.jar");
 
-		try {
-			ServiceTracker<Pojo, Pojo> tracker = track("(objectClass=%s)", Pojo.class.getName());
-
+		try (CloseableTracker<Pojo, Pojo> tracker = track("(objectClass=%s)", Pojo.class.getName());) {
 			Pojo pojo = tracker.waitForService(timeout);
 
 			assertEquals(0, pojo.getCount());

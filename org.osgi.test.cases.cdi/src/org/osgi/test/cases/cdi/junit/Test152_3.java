@@ -50,14 +50,17 @@ public class Test152_3 extends AbstractTestCase {
 	public void componentScopeContext() throws Exception {
 		Bundle tbBundle = installBundle("tb152_3.jar");
 
+		ServiceTracker<Object, Object> oneTracker = null, twoTracker = null;
 		try {
 			getBeanManager(tbBundle);
 
-			ServiceTracker<Object, Object> oneTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION, "one");
+			oneTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION,
+					"one");
 			oneTracker.open();
 			Object service = oneTracker.waitForService(timeout);
 
-			ServiceTracker<Object, Object> twoTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION, "two");
+			twoTracker = track("(&(objectClass=%s)(%s=%s))", BeanService.class.getName(), Constants.SERVICE_DESCRIPTION,
+					"two");
 			twoTracker.open();
 			twoTracker.waitForService(timeout);
 
@@ -68,6 +71,12 @@ public class Test152_3 extends AbstractTestCase {
 			assertThat(context).isNotNull();
 		}
 		finally {
+			if (oneTracker != null) {
+				oneTracker.close();
+			}
+			if (twoTracker != null) {
+				twoTracker.close();
+			}
 			tbBundle.uninstall();
 		}
 	}

@@ -12,14 +12,21 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.interfaces;
+package org.osgi.test.cases.cdi.junit;
 
-public interface Pojo {
-	String foo(String fooInput);
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-	int getCount();
+public class CloseableTracker<S, T> extends ServiceTracker<S, T> implements AutoCloseable {
 
-	default <T> T get(Class<T> clazz) {
-		return null;
+	public CloseableTracker(BundleContext context, Filter filter) {
+		super(context, filter, null);
 	}
+
+	public CloseableTracker(BundleContext context, Filter filter, ServiceTrackerCustomizer<S, T> customizer) {
+		super(context, filter, customizer);
+	}
+
 }

@@ -12,14 +12,27 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.cdi.interfaces;
+package org.osgi.test.cases.cdi.tb152_3_1_1l;
 
-public interface Pojo {
-	String foo(String fooInput);
+import static org.osgi.service.cdi.ServiceScope.PROTOTYPE;
 
-	int getCount();
+import org.osgi.service.cdi.annotations.FactoryComponent;
+import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.ServiceInstance;
+import org.osgi.test.cases.cdi.interfaces.Pojo;
 
-	default <T> T get(Class<T> clazz) {
+@Service
+@ServiceInstance(PROTOTYPE)
+@FactoryComponent
+public class PrototypeFactory implements Pojo {
+
+	@Override
+	public String foo(String fooInput) {
 		return null;
+	}
+
+	@Override
+	public int getCount() {
+		return 0;
 	}
 }
