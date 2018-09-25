@@ -1039,7 +1039,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 					synchronized (lock) {
 						queue = queueRef.get();
 						queueRef.lazySet(null);
-						endPending.set(true);
+						endPending.lazySet(true);
 						long now = System.nanoTime();
 						elapsed = now - timestamp.get();
 						counter.lazySet(counter.get() + 1);
@@ -1060,9 +1060,10 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 							// backpressure
 							upstreamClose(error);
 						}
+						// It's now time to deliver the terminal event
+						eventStream.handleEvent(event.nodata());
 					});
 				}
-				ex.execute(() -> eventStream.handleEvent(event.nodata()));
 				return ABORT;
 			} catch (Exception e) {
 				close(PushEvent.error(e));
