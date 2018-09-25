@@ -311,12 +311,14 @@ class Util {
 		return md.invoke(obj);
 	}
 
+	private static final int PUBLIC_STATIC_FINAL = Modifier.PUBLIC
+			| Modifier.FINAL | Modifier.STATIC;
 	static String getPrefix(Class< ? > cls) {
 		try {
 			Field prefixField = cls.getDeclaredField("PREFIX_");
 			if (prefixField.getType().equals(String.class)) {
-				if ((prefixField.getModifiers() & (Modifier.PUBLIC
-						| Modifier.FINAL | Modifier.STATIC)) > 0) {
+				if ((prefixField.getModifiers()
+						& PUBLIC_STATIC_FINAL) == PUBLIC_STATIC_FINAL) {
 					return (String) prefixField.get(null);
 				}
 			}
