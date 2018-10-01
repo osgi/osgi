@@ -1,15 +1,15 @@
-org.osgi.service.remoteserviceadmin; version=latest
+org.osgi.service.remoteserviceadmin; version=1.13.0-SNAPSHOT
 org.osgi.service.cm; version=latest
 org.osgi.impl.service.configurator;version=7.0.0
 org.osgi.service.event; version=latest
 
 slf4j.api; version=1.7.7
 slf4j.simple; version=1.7.7
-org.apache.hadoop.zookeeper; version=3.4.10
+org.apache.hadoop.zookeeper; version=3.4.13
 
-org.apache.aries.rsa.core; version=latest
-org.apache.aries.rsa.spi; version=latest
-org.apache.aries.rsa.topology-manager; version=latest
-org.apache.aries.rsa.discovery.local; version=latest
-org.apache.aries.rsa.discovery.zookeeper; version=latest
-org.apache.aries.rsa.provider.tcp; version=latest
+org.apache.aries.rsa.core; version=1.13.0-SNAPSHOT
+org.apache.aries.rsa.spi; version=1.13.0-SNAPSHOT
+org.apache.aries.rsa.topology-manager; version=1.13.0-SNAPSHOT
+org.apache.aries.rsa.discovery.local; version=1.13.0-SNAPSHOT
+org.apache.aries.rsa.discovery.zookeeper; version=1.13.0-SNAPSHOT
+org.apache.aries.rsa.provider.tcp; version=1.13.0-SNAPSHOT
