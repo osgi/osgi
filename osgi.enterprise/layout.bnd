@@ -41,7 +41,6 @@ osgi.enterprise.specs = \
 osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};$;.*}
 
 osgi.enterprise.resources = {${project.workspace}/osgi.companion/legal/jar}, \
-                        xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
                         xmlns/metatype=${project.workspace}/xmlns/metatype, \
                         xmlns/rsa=${project.workspace}/xmlns/rsa, \
                         xmlns/repository=${project.workspace}/xmlns/repository, \
