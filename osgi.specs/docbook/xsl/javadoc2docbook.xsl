@@ -722,6 +722,11 @@ version="1.1">
                 <xsl:if test="field">
                   <xsl:apply-templates select="field[not(skip)]" mode="enum"/>
                 </xsl:if>          
+                <xsl:if test="method[not(@isConstructor)]">
+                  <xsl:apply-templates select="method[not(@isConstructor) and not(skip)]">
+                    <xsl:sort select="translate(@name, $uppercase, $lowercase)"/>
+                  </xsl:apply-templates>
+                </xsl:if>
               </xsl:when>
               <xsl:when test="@kind='ANNOTATION'">
                 <xsl:apply-templates select="method[not(@isConstructor) and not(skip)]" 
