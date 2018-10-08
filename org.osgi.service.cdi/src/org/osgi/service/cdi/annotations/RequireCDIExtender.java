@@ -49,25 +49,27 @@ public @interface RequireCDIExtender {
 	 * Specify CDI bean descriptor file paths to be searched on the
 	 * {@code Bundle-ClassPath}. For example:
 	 * <p>
-	 * <code>
-	 * {@code @}RequireCDIExtender(descriptor = "META-INF/beans.xml")
-	 * </code>
+	 * 
+	 * <pre>
+	 * &#64;RequireCDIExtender(descriptor = "META-INF/beans.xml")
+	 * </pre>
 	 *
-	 * @return CDI bean descriptor file paths
+	 * @return CDI bean descriptor file paths.
 	 */
 	@Attribute
 	String[] descriptor() default "META-INF/beans.xml";
 
 	/**
-	 * Specify OSGi Beans classes to be used used by the CDI container. For
-	 * example:
+	 * Specify OSGi Beans classes to be used by the CDI container. For example:
 	 * <p>
-	 * <code>
-	 * {@code @}RequireCDIExtender(beans = {"com.foo.BarImpl", "com.foo.impl.BazImpl"})
-	 * </code>
+	 * 
+	 * <pre>
+	 * &#64;RequireCDIExtender(beans = {com.foo.BarImpl.class, com.foo.impl.BazImpl.class})
+	 * </pre>
 	 *
-	 * @return OSGi Beans Description file paths
+	 * @return OSGi Beans classes to be used by the CDI container.
 	 */
-	String[] beans() default {};
+	@Attribute
+	Class< ? >[] beans() default {};
 
 }

@@ -31,7 +31,7 @@ import org.osgi.service.cdi.reference.BindService;
 import org.osgi.service.cdi.reference.BindServiceReference;
 
 /**
- * Annotation used to indicate that the behaviour of the reference should be
+ * Annotation used to indicate that the behavior of the reference should be
  * reluctant. Used in conjunction with {@link Reference @Reference},
  * {@link BindService}, {@link BindServiceReference} or
  * {@link BindBeanServiceObjects}.

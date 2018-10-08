@@ -33,10 +33,10 @@ import org.osgi.service.cdi.ReferencePolicyOption;
  */
 public class ReferenceTemplateDTO extends DTO {
 	/**
-	 * A unique within the container and persistent across reboots identified for
-	 * this activation
+	 * A unique within the container and persistent across reboots identified
+	 * for this activation
 	 * <p>
-	 * The value must not be <code>null</code>. The value must be equal to to the
+	 * The value must not be {@code null}. The value must be equal to the
 	 * reference name.
 	 */
 	public String				name;
@@ -44,7 +44,7 @@ public class ReferenceTemplateDTO extends DTO {
 	/**
 	 * Indicates the type of service matched by the reference.
 	 * <p>
-	 * The value must not be null.
+	 * The value must not be {@code null}.
 	 */
 	public String				serviceType;
 

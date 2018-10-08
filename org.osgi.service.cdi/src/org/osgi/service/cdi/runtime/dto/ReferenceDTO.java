@@ -42,20 +42,22 @@ public class ReferenceDTO extends DTO {
 	 * The runtime minimum cardinality of the dependency.
 	 * <p>
 	 * <ul>
-	 * <li>If {@link ReferenceTemplateDTO#maximumCardinality
-	 * template.maximumCardinality} is {@link MaximumCardinality#ONE ONE} the value
-	 * must be either 0 or 1.</li>
-	 * <li>If {@link ReferenceTemplateDTO#maximumCardinality
-	 * template.maximumCardinality} is {@link MaximumCardinality#MANY MANY} the
-	 * value must be from 0 to {@link Integer#MAX_VALUE}.
+	 * <li>If {@link #template
+	 * template}.{@link ReferenceTemplateDTO#maximumCardinality
+	 * maximumCardinality} is {@link MaximumCardinality#ONE ONE} the value must
+	 * be either 0 or 1.</li>
+	 * <li>If {@link #template
+	 * template}.{@link ReferenceTemplateDTO#maximumCardinality
+	 * maximumCardinality} is {@link MaximumCardinality#MANY MANY} the value
+	 * must be from 0 to {@link Integer#MAX_VALUE}.
 	 * </ul>
 	 */
 	public int			minimumCardinality;
 
 	/**
 	 * Indicates the runtime target filter used in addition to the
-	 * {@link ReferenceTemplateDTO#targetFilter model.serviceType} to match
-	 * services.
+	 * {@link #template template}.{@link ReferenceTemplateDTO#serviceType
+	 * serviceType} to match services.
 	 */
 	public String		targetFilter;
 
@@ -66,10 +68,10 @@ public class ReferenceDTO extends DTO {
 	 * <p>
 	 * Can be empty when there are no matching services.
 	 * <p>
-	 * This dependency is satisfied when <code>
-	 * {@link #minimumCardinality minimumCardinality} <= matches.size() <= {@link MaximumCardinality#toInt()}
-	 * </code> where the maximum cardinality can be obtained from the associated
-	 * {@link ReferenceTemplateDTO}.
+	 * This dependency is satisfied when {@link #minimumCardinality
+	 * minimumCardinality} {@code <= matches.size() <=}
+	 * {@link MaximumCardinality#toInt()} where the maximum cardinality can be
+	 * obtained from the associated {@link ReferenceTemplateDTO}.
 	 */
 	public List<ServiceReferenceDTO>	matches;
 }

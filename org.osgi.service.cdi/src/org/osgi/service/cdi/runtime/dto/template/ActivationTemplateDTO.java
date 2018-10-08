@@ -36,16 +36,16 @@ public class ActivationTemplateDTO extends DTO {
 	/**
 	 * The {@link ServiceScope} of this activation
 	 * <p>
-	 * Must not be null.
+	 * Must not be {@code null}.
 	 */
 	public ServiceScope				scope;
 
 	/**
-	 * Describes the set of fully qualified names of the interfaces/classes under
-	 * which this activation will publish and OSGi service
+	 * Describes the set of fully qualified names of the interfaces/classes
+	 * under which this activation will publish and OSGi service
 	 * <p>
-	 * Must not be null. An empty array indicated this activation will not publish
-	 * an OSGi service
+	 * Must not be {@code null}. An empty array indicated this activation will
+	 * not publish an OSGi service
 	 */
 	public List<String>			serviceClasses;
 
@@ -56,7 +56,8 @@ public class ActivationTemplateDTO extends DTO {
 	 * <p>
 	 * These are merged (and possibly replaced) with runtime properties.
 	 * <p>
-	 * Must not be null. May be empty if no default properties are provided.
+	 * Must not be {@code null}. May be empty if no default properties are
+	 * provided.
 	 */
 	public Map<String,Object>	properties;
 }

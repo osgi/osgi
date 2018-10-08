@@ -36,7 +36,7 @@ import org.osgi.framework.ServiceFactory;
 /**
  * Annotation used to specify that a bean should be published as a service.
  * <p>
- * The behaviour of this annotation depends on it's usage:
+ * The behavior of this annotation depends on it's usage:
  * <ul>
  * <li>on the bean type - publish the service using all implemented interfaces.
  * If there are no implemented interfaces use the bean class.</li>
@@ -53,15 +53,15 @@ import org.osgi.framework.ServiceFactory;
  * bean - The provided service can be of any scope. The bean can either
  * implement {@link ServiceFactory ServiceFactory} or
  * {@link PrototypeServiceFactory PrototypeServiceFactory} or use
- * {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype} to set it's service
- * scope. If none of those options are used the service is a singleton scope
- * service.</li>
+ * {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype} to set it's
+ * service scope. If none of those options are used the service is a singleton
+ * scope service.</li>
  * <li>{@link ApplicationScoped @ApplicationScoped} bean - The provided service
  * is a singleton scope service unless the bean implements {@link ServiceFactory
  * ServiceFactory} or {@link PrototypeServiceFactory PrototypeServiceFactory}.
- * It cannot use {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype} to set
- * it's service scope. Use of those annotations in this case will result in a
- * definition error.</li>
+ * It cannot use {@link Bundle @Bundle} or {@link PrototypeRequired @Prototype}
+ * to set it's service scope. Use of those annotations in this case will result
+ * in a definition error.</li>
  * </ul>
  *
  * @author $Id$

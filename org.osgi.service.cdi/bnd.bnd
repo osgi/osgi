@@ -11,5 +11,4 @@ Export-Package: ${p}.*; -split-package:=first
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec; version=1.1,\
 	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec; version=1.1,\
 	org.osgi.namespace.extender;       version=latest,\
-	org.osgi.namespace.implementation; version=latest,\
-	org.osgi.util.promise;             version=1.0.0
+	org.osgi.namespace.implementation; version=latest

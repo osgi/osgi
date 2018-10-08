@@ -40,8 +40,9 @@ public class ActivationDTO extends DTO {
 	/**
 	 * The service this activation may have registered.
 	 * <p>
-	 * Must not be {@code null} if {@link ActivationTemplateDTO#serviceClasses
-	 * template.serviceClasses} is not empty.
+	 * Must not be {@code null} if {@link #template
+	 * template}.{@link ActivationTemplateDTO#serviceClasses serviceClasses} is
+	 * not empty.
 	 */
 	public ServiceReferenceDTO		service;
 

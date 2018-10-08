@@ -90,7 +90,8 @@ public class ComponentTemplateDTO extends DTO {
 	 * <p>
 	 * These are merged (and possibly replaced) with runtime properties.
 	 * <p>
-	 * Must not be null. May be empty if no default properties are provided.
+	 * Must not be {@code null}. May be empty if no default properties are
+	 * provided.
 	 */
 	public Map<String,Object>				properties;
 }

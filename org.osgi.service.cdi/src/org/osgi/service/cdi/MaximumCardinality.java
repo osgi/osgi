@@ -52,8 +52,8 @@ public enum MaximumCardinality {
 	 * Resolve an integer to an upper cardinality boundary.
 	 *
 	 * @param value The integer representation of an upper cardinality boundary
-	 * @return The enum representation of the upper cardinality boundary descrubed
-	 *         by <code>value</code>
+	 * @return The enum representation of the upper cardinality boundary
+	 *         described by {@code value}
 	 */
 	public static MaximumCardinality fromInt(int value) {
 		return Arrays.stream(values())

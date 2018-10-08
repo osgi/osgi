@@ -32,12 +32,12 @@ public enum ServiceScope {
 	 * <p>
 	 * If {@link ActivationTemplateDTO#serviceClasses} is not empty the instance
 	 * will be registered as an OSGi service with
-	 * <code>service.scope=singleton</code>
+	 * {@code service.scope=singleton}.
 	 */
 	SINGLETON,
 	/**
 	 * This activation will register an OSGi service with
-	 * <code>service.scope=bundle</code>
+	 * {@code service.scope=bundle}.
 	 * <p>
 	 * The service is registered just after all {@link #SINGLETON} activations
 	 * are set up and just before all {@link #SINGLETON} activations are torn
@@ -49,7 +49,7 @@ public enum ServiceScope {
 	BUNDLE,
 	/**
 	 * This activation will register an OSGi service with
-	 * <code>service.scope=prototype</code>
+	 * {@code service.scope=prototype}.
 	 * <p>
 	 * The service is registered just after all {@link #SINGLETON} activations
 	 * are set up and just before all {@link #SINGLETON} activations are torn

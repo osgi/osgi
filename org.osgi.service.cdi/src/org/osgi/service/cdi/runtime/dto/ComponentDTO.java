@@ -40,13 +40,14 @@ public class ComponentDTO extends DTO {
 	 * The component instances created by this component.
 	 * <p>
 	 * <ul>
-	 * <li>When {@link #template} is of type {@link ComponentType#CONTAINER} - there will
-	 * be <code>1</code> {@link ComponentInstanceDTO}</li>
-	 * <li>When {@link #template} is of type {@link ComponentType#SINGLE} - there will be
-	 * <code>1</code> {@link ComponentInstanceDTO}</li>
-	 * <li>When {@link #template} is of type {@link ComponentType#FACTORY} - there will
-	 * be one {@link ComponentInstanceDTO} for every factory configuration
-	 * object associated with the factory PID of the component.</li>
+	 * <li>When {@link #template} is of type {@link ComponentType#CONTAINER} -
+	 * there will be {@code 1} {@link ComponentInstanceDTO}</li>
+	 * <li>When {@link #template} is of type {@link ComponentType#SINGLE} -
+	 * there will be {@code 1} {@link ComponentInstanceDTO}</li>
+	 * <li>When {@link #template} is of type {@link ComponentType#FACTORY} -
+	 * there will be one {@link ComponentInstanceDTO} for every factory
+	 * configuration object associated with the factory PID of the
+	 * component.</li>
 	 * </ul>
 	 * <p>
 	 * Must not be {@code null}
