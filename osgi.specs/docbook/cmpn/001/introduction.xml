@@ -39,12 +39,12 @@
     aware that the OSGi environment is significantly more dynamic than
     traditional desktop or server environments.</para>
 
-    <para>System developers require a <emphasis>very</emphasis> deep
-    understanding of Java. At least three years of Java coding experience in a
-    system environment is recommended. A Framework implementation will use
-    areas of Java that are not normally encountered in traditional
-    applications. Detailed understanding is required of class loaders, garbage
-    collection, Java 2 security, and Java native library loading.</para>
+    <para>System developers require a very deep understanding of Java. At
+    least three years of Java coding experience in a system environment is
+    recommended. A Framework implementation will use areas of Java that are
+    not normally encountered in traditional applications. Detailed
+    understanding is required of class loaders, garbage collection, Java 2
+    security, and Java native library loading.</para>
 
     <para>Architects should focus on the introduction of each subject. This
     introduction contains a general overview of the subject, the requirements
@@ -580,6 +580,44 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.cdi"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.annotations"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.propertytypes"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.reference"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime.dto"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime.dto.template"/>
+                  </code>
+                </para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.cdi-version"
+              linkend="service.cdi"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -685,6 +723,11 @@
 
       <listitem>
         <para>Added <xref linkend="service.jaxrs"
+        xrefstyle="template:%t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.cdi"
         xrefstyle="template:%t"/>.</para>
       </listitem>
 
