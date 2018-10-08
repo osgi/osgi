@@ -90,12 +90,11 @@
 
       <para>While the OSGi framework API is relatively simple to use, it is
       still considered infrastructure that can bleed into the application code
-      of a bundle. The OSGi Enterprise Specification therefore provides 
-      Dependency Injection models. This ensures
-      decoupling of the application code from the OSGi APIs; they provide an
-      OSGi bundle programming model with minimal implementation dependencies
-      and virtually no accidental complexity in the Java code.
-      </para>
+      of a bundle. The OSGi Enterprise Specification therefore provides
+      Dependency Injection models. This ensures decoupling of the application
+      code from the OSGi APIs; they provide an OSGi bundle programming model
+      with minimal implementation dependencies and virtually no accidental
+      complexity in the Java code.</para>
 
       <itemizedlist>
         <listitem>
@@ -105,15 +104,13 @@
           notifying the component or managing the component's life cycle. See
           chapter <xref linkend="service.component"/>.</para>
         </listitem>
-        
+
         <listitem>
-          <para><xref linkend="service.cdi" xrefstyle="template:%t"/> -
-          The CDI Integration Specification
-          describes how OSGi is integrated into the CDI programming model, allowing
-          developer to leverage CDI annotations, injection and extensions with 
-          OSGi bundles and services.
-          See chapter <xref linkend="service.cdi"/>.
-          </para>
+          <para><xref linkend="service.cdi" xrefstyle="template:%t"/> - The
+          CDI Integration Specification describes how OSGi is integrated into
+          the CDI programming model, allowing developer to leverage CDI
+          annotations, injection and extensions with OSGi bundles and
+          services. See chapter <xref linkend="service.cdi"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -577,7 +574,8 @@
       <para>This specification is based on the OSGi Core Release 7. This
       specification can be downloaded from:</para>
 
-      <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
+      <programlisting><link
+          xlink:href="https://www.osgi.org/developer/specifications/"/></programlisting>
     </section>
 
     <section>
@@ -956,22 +954,42 @@
               endterm="org.osgi.service.jaxrs.whiteboard-version"
               linkend="service.jaxrs"/></code></entry>
             </row>
-            
-            <row>
-              <entry><xref linkend="service.cdi" xrefstyle="template:%n %t"/></entry>
-              
-              <entry>
-              <para><code><xref linkend="org.osgi.service.cdi"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.annotations"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.propertytypes"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.reference"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.runtime"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.runtime.dto"/></code></para>
-              <para><code><xref linkend="org.osgi.service.cdi.runtime.dto.template"/></code></para>
-              </entry>
 
-              <entry><code><xref
-              endterm="org.osgi.service.cdi-version"
+            <row>
+              <entry><xref linkend="service.cdi"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.annotations"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.propertytypes"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.reference"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime.dto"/>
+                  </code>
+                </para> <para>
+                  <code>
+                    <xref linkend="org.osgi.service.cdi.runtime.dto.template"/>
+                  </code>
+                </para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.cdi-version"
               linkend="service.cdi"/></code></entry>
             </row>
 
@@ -1091,17 +1109,17 @@
 
       <listitem>
         <para>Updated <xref linkend="service.remoteservices"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> to define new intents.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.log"
-        xrefstyle="template:%t"/>.</para>
+        <para>Updated <xref linkend="service.log" xrefstyle="template:%t"/> to
+        add new Loggers and LogStream service.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.cm"
-        xrefstyle="template:%t"/>.</para>
+        <para>Updated <xref linkend="service.cm" xrefstyle="template:%t"/> to
+        support new Configurator service.</para>
       </listitem>
 
       <listitem>
@@ -1112,7 +1130,8 @@
 
       <listitem>
         <para>Updated <xref linkend="service.component"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> to add new features including constructor
+        injection.</para>
       </listitem>
 
       <listitem>
@@ -1121,23 +1140,24 @@
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="service.jpa"
-        xrefstyle="template:%t"/>.</para>
+        <para>Updated <xref linkend="service.jpa" xrefstyle="template:%t"/> to
+        add support for JPA 2.1 and other enhancements.</para>
       </listitem>
 
       <listitem>
         <para>Updated <xref linkend="service.namespaces"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> to add an unresolvable namespace.</para>
       </listitem>
 
       <listitem>
         <para>Updated <xref linkend="service.http.whiteboard"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> to add multipart configuration support,
+        component property types and other enhancements.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <xref linkend="util.promise"
-        xrefstyle="template:%t"/>.</para>
+        <para>Updated <xref linkend="util.promise" xrefstyle="template:%t"/>
+        to support controlling executors and added new methods.</para>
       </listitem>
 
       <listitem>
