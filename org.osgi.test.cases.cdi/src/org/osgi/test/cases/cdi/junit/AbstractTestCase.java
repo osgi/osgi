@@ -61,7 +61,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 	filter = "(objectClass=org.osgi.service.cm.ConfigurationAdmin)",
 	namespace = ServiceNamespace.SERVICE_NAMESPACE
 )
-public class AbstractTestCase {
+public abstract class AbstractTestCase {
 
 	@Rule
 	public TestName testName = new TestName();
