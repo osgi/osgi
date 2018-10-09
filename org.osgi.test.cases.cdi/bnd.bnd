@@ -40,26 +40,25 @@ Test-Cases: ${testcases}
 -signaturetest: org.osgi.service.cdi
 
 -buildpath: \
-	org.apache.aries.cdi.extender; version=0.0.2,\
-	org.osgi.service.event;version=project,\
+	org.osgi.test.support;version=project,\
 	org.osgi.service.cdi;version=project,\
-	org.osgi.service.component;version=project,\
-	org.osgi.service.log;version=project,\
-	org.osgi.annotation.bundle;version=project,\
-	org.osgi.namespace.extender;version=project,\
-	org.osgi.namespace.service;version=project,\
-	org.osgi.service.cm;version=project,\
-	org.osgi.framework;version=project,\
-	org.osgi.util.tracker;version=project,\
-	org.osgi.util.converter;version=project,\
-	org.osgi.util.promise;version=project,\
-	org.osgi.resource;version=project,\
+	org.osgi.service.event;version=latest,\
+	org.osgi.service.component;version=latest,\
+	org.osgi.service.log;version=latest,\
+	org.osgi.annotation.bundle;version=latest,\
+	org.osgi.namespace.extender;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.service.cm;version=latest,\
+	org.osgi.framework;version=latest,\
+	org.osgi.util.tracker;version=latest,\
+	org.osgi.util.converter;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.resource;version=latest,\
+	org.osgi.dto;version=latest,\
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
-	org.osgi.test.support;version=project,\
-	${junit},\
-	org.osgi.dto;version=latest
+	${junit}
 
 -runbundles: \
 	${junit},\
