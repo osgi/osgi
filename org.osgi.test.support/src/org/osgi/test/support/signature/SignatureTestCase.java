@@ -21,6 +21,8 @@ package org.osgi.test.support.signature;
  * and less fields, methods, end constructors that are visible.
  */
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -34,46 +36,38 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.Test;
 import org.osgi.framework.Bundle;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 
 /**
- * 
  * @author $Id$
  */
-public abstract class SignatureTestCase extends OSGiTestCase implements
-		ParserCallback {
+public abstract class SignatureTestCase extends AbstractOSGiTestCase
+		implements ParserCallback {
 	private Class< ? >						clazz;
-	private Map<String, Method>				methods;
-	private Map<String, Constructor< ? >>	constructors;
-	private Map<String, Field>				fields;
+	private Map<String,Method>				methods;
+	private Map<String,Constructor< ? >>	constructors;
+	private Map<String,Field>				fields;
 	private Set<String>						found;
 	private Set<String>						missing;
 
-
+	@Test
 	public void testSignatures() throws Exception {
 		Bundle bundle = getContext().getBundle();
 		String path = "OSGI-INF/signature";
 		found = new HashSet<String>();
 		missing = new HashSet<String>();
 		Enumeration<URL> e = bundle.findEntries(path, null, true);
-		if (e == null)
-			fail("No Signature Files found in " + path);
+		assertThat(e).as("No Signature Files found in %s", path).isNotNull();
 
 		while (e.hasMoreElements()) {
 			URL url = e.nextElement();
 			if (!url.toString().endsWith("/")) {
-				try {
-					InputStream in = url.openStream();
-					try {
-						ClassParser rdr = new ClassParser(in);
-						rdr.go(this);
-					}
-					finally {
-						in.close();
-					}
-				}
-				catch (Exception ioe) {
+				try (InputStream in = url.openStream()) {
+					ClassParser rdr = new ClassParser(in);
+					rdr.go(this);
+				} catch (Exception ioe) {
 					fail("Unexpected exception", ioe);
 				}
 			}
@@ -82,9 +76,9 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			log("Package is not present: " + path);
 			return;
 		}
-		if (!missing.isEmpty())
-			fail("Missing classes " + missing
-					+ ".\n\nThe following classes were found " + found);
+		assertThat(missing).as(
+				"Missing classes %s.\n\nThe following classes were found %s",
+				missing, found).isEmpty();
 	}
 
 	/**
@@ -137,8 +131,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 				checkInterfaces(clazz, interfaces);
 
 				int cMods = clazz.getModifiers();
-				checkModifiers(access, cMods, ACC_PUBLIC | ACC_FINAL
-						| ACC_INTERFACE | ACC_ABSTRACT);
+				checkModifiers(access, cMods,
+						ACC_PUBLIC | ACC_FINAL | ACC_INTERFACE | ACC_ABSTRACT);
 
 				checkSuperClass(clazz, superClassName);
 
@@ -146,19 +140,17 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 				fields = getFields(clazz);
 				constructors = getConstructors(clazz);
 				return true;
-			}
-			catch (ClassNotFoundException cnfe) {
+			} catch (ClassNotFoundException cnfe) {
 				missing.add(name);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			fail("Unexpected exception", e);
 		}
 		return false;
 	}
 
-	private Map<String, Field> getFields(Class< ? > c) {
-		Map<String, Field> result = new HashMap<String, Field>();
+	private Map<String,Field> getFields(Class< ? > c) {
+		Map<String,Field> result = new HashMap<String,Field>();
 		while (c != null) {
 			Field[] f = c.getDeclaredFields();
 			for (int i = 0, l = f.length; i < l; i++) {
@@ -176,8 +168,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return result;
 	}
 
-	private Map<String, Method> getMethods(Class< ? > c) {
-		Map<String, Method> result = new HashMap<String, Method>();
+	private Map<String,Method> getMethods(Class< ? > c) {
+		Map<String,Method> result = new HashMap<String,Method>();
 		while (c != null) {
 			Method[] m = c.getDeclaredMethods();
 			for (int i = 0, l = m.length; i < l; i++) {
@@ -195,8 +187,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return result;
 	}
 
-	private Map<String, Constructor< ? >> getConstructors(Class< ? > c) {
-		Map<String, Constructor< ? >> result = new HashMap<String, Constructor< ? >>();
+	private Map<String,Constructor< ? >> getConstructors(Class< ? > c) {
+		Map<String,Constructor< ? >> result = new HashMap<String,Constructor< ? >>();
 		Constructor< ? >[] m = c.getDeclaredConstructors();
 		for (int i = 0, l = m.length; i < l; i++) {
 			if (!isAPI(m[i].getModifiers())) {
@@ -229,10 +221,9 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 				+ desiredDescriptor);
 
 		Field f = fields.remove(name);
-		if (f == null) {
-			// Field not found!
-			fail("Could not find field: " + getClassName(clazz) + "." + name);
-		}
+		assertThat(f)
+				.as("Could not find field: %s.%s", getClassName(clazz), name)
+				.isNotNull();
 
 		int cMods = f.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
@@ -241,8 +232,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		Class< ? > type = f.getType();
 		StringBuffer sb = new StringBuffer();
 		createTypeDescriptor(sb, type);
-		assertEquals("Field " + getClassName(clazz) + "." + name,
-				desiredDescriptor, sb.toString());
+		assertThat(sb.toString()).as("Field %s.%s", getClassName(clazz), name)
+				.isEqualTo(desiredDescriptor);
 
 		if (constant != null) {
 			try {
@@ -251,35 +242,33 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 				// are placed in an Integer constant.
 				switch (desiredDescriptor.charAt(0)) {
 					case 'Z' : // boolean
-						assertEquals("Constant value:",
-								((Integer) constant).intValue() != 0,
-								((Boolean) value).booleanValue());
+						assertThat((Boolean) value).as("Constant value")
+								.isEqualTo(
+										((Integer) constant).intValue() != 0);
 						break;
 					case 'B' : // byte
-						assertEquals("Constant value:",
-								((Integer) constant).byteValue(),
-								((Byte) value).byteValue());
+						assertThat((Byte) value).as("Constant value")
+								.isEqualTo(((Integer) constant).byteValue());
 						break;
 					case 'C' : // char
-						assertEquals("Constant value:",
-								(char) ((Integer) constant).intValue(),
-								((Character) value).charValue());
+						assertThat((Character) value).as("Constant value")
+								.isEqualTo(
+										(char) ((Integer) constant).intValue());
 						break;
 					case 'S' : // short
-						assertEquals("Constant value:",
-								((Integer) constant).shortValue(),
-								((Short) value).shortValue());
+						assertThat((Short) value).as("Constant value")
+								.isEqualTo(((Integer) constant).shortValue());
 						break;
 					default :
-						assertEquals("Constant value:", constant, value);
+						assertThat(value).as("Constant value")
+								.isEqualTo(constant);
 						break;
 				}
 			}
 			// These can probably be ignored
 			catch (IllegalArgumentException e) {
 				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
+			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
@@ -311,11 +300,10 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			String desiredDescriptor, String[] exceptions) {
 		String key = desiredDescriptor;
 		Constructor< ? > m = constructors.remove(key);
-		if (m == null) {
-			// Method not found!
-			fail("Could not find constructor: " + getClassName(clazz) + "."
-					+ name + " " + key);
-		}
+		assertThat(m)
+				.as("Could not find constructor: %s.%s %s", getClassName(clazz),
+						name, key)
+				.isNotNull();
 
 		int cMods = m.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
@@ -335,12 +323,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 				actual.add(exceptionType.getName().replace('.', '/'));
 			}
 			for (String name : actual) {
-				if (!expected.remove(name))
-					fail("Superfluous Exception " + name);
+				assertThat(expected.remove(name))
+						.as("Superfluous Exception %s", name)
+						.isTrue();
 			}
 		}
-		if (!expected.isEmpty())
-			fail("Missing declared exceptions: " + expected);
+		assertThat(expected).as("Missing declared exceptions: %s", expected)
+				.isEmpty();
 	}
 
 	private void checkInterfaces(Class< ? > c, String[] interfaces) {
@@ -354,8 +343,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 					continue outer;
 				}
 			}
-			fail("Missing interface, class " + getClassName(c) + " misses "
-					+ ifname);
+			fail("Missing interface, class %s misses %s", getClassName(c),
+					ifname);
 		}
 	}
 
@@ -363,10 +352,9 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			String[] exceptions) {
 		String key = name + desiredDescriptor;
 		Method m = methods.remove(key);
-		if (m == null) {
-			// Method not found!
-			fail("Could not find method: " + getClassName(clazz) + "." + key);
-		}
+		assertThat(m)
+				.as("Could not find method: %s.%s", getClassName(clazz), key)
+				.isNotNull();
 		int cMods = m.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
 				| ACC_STATIC | ACC_FINAL | ACC_ABSTRACT);
@@ -374,56 +362,46 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	}
 
 	private void checkModifiers(int access, int cMods, int mask) {
-		access &= mask;
-		cMods &= mask;
-		assertEquals("Relevant access modifiers", access, cMods);
+		assertThat(cMods & mask).as("Relevant access modifiers")
+				.isEqualTo(access & mask);
 	}
 
 	private void checkSuperClass(Class< ? > c, String superClassName) {
 		Class< ? > superClass = c.getSuperclass();
-		if (superClass != null)
-			assertEquals("Super class", superClassName, superClass.getName());
+		if (superClass != null) {
+			assertThat(superClass.getName()).as("Super class")
+					.isEqualTo(superClassName);
+		}
 	}
 
 	private void createTypeDescriptor(StringBuffer sb, Class< ? > type) {
 		if (type.isArray()) {
 			sb.append("[");
 			createTypeDescriptor(sb, type.getComponentType());
-		}
-		else {
+		} else {
 			if (type.isPrimitive()) {
 				if (type == byte.class)
 					sb.append("B");
+				else if (type == char.class)
+					sb.append("C");
+				else if (type == double.class)
+					sb.append("D");
+				else if (type == float.class)
+					sb.append("F");
+				else if (type == int.class)
+					sb.append("I");
+				else if (type == long.class)
+					sb.append("J");
+				else if (type == short.class)
+					sb.append("S");
+				else if (type == boolean.class)
+					sb.append("Z");
+				else if (type == void.class)
+					sb.append("V");
 				else
-					if (type == char.class)
-						sb.append("C");
-					else
-						if (type == double.class)
-							sb.append("D");
-						else
-							if (type == float.class)
-								sb.append("F");
-							else
-								if (type == int.class)
-									sb.append("I");
-								else
-									if (type == long.class)
-										sb.append("J");
-									else
-										if (type == short.class)
-											sb.append("S");
-										else
-											if (type == boolean.class)
-												sb.append("Z");
-											else
-												if (type == void.class)
-													sb.append("V");
-												else
-													throw new IllegalArgumentException(
-															"Unknown primitive type "
-																	+ type);
-			}
-			else {
+					throw new IllegalArgumentException(
+							"Unknown primitive type " + type);
+			} else {
 				sb.append("L");
 				sb.append(type.getName().replace('.', '/'));
 				sb.append(";");
@@ -453,6 +431,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	}
 
 	private boolean isAPI(int access) {
-		return ((access & (ACC_PUBLIC | ACC_PROTECTED)) != 0) && ((access & (ACC_SYNTHETIC)) == 0);
+		return ((access & (ACC_PUBLIC | ACC_PROTECTED)) != 0)
+				&& ((access & (ACC_SYNTHETIC)) == 0);
 	}
 }
