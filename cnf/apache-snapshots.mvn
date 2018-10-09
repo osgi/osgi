@@ -4,10 +4,3 @@ org.apache.aries.cdi:org.apache.aries.cdi.extra:0.0.2-SNAPSHOT
 
 org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:0.0.1-SNAPSHOT
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:0.0.1-SNAPSHOT
-
-org.apache.aries.rsa:org.apache.aries.rsa.core:1.13.0-SNAPSHOT
-org.apache.aries.rsa:org.apache.aries.rsa.spi:1.13.0-SNAPSHOT
-org.apache.aries.rsa:org.apache.aries.rsa.topology-manager:1.13.0-SNAPSHOT
-org.apache.aries.rsa:org.apache.aries.rsa.discovery.local:1.13.0-SNAPSHOT
-org.apache.aries.rsa:org.apache.aries.rsa.discovery.zookeeper:1.13.0-SNAPSHOT
-org.apache.aries.rsa:org.apache.aries.rsa.provider.tcp:1.13.0-SNAPSHOT
