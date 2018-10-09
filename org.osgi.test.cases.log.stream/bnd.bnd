@@ -1,23 +1,24 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage: org.osgi.test.support.*
+-includepackage:   \
 	${p}.junit
 Import-Package: \
 	${-signaturetest},\
 	*
 
 -buildpath: \
+	osgi.annotation;version=latest,\
+	osgi.core;version=6.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.log;version=project,\
-	osgi.core;version=4.3.1,\
-	org.osgi.service.cm;version=project,\
-	org.osgi.namespace.service;version=project,\
-	org.osgi.resource;version=project,\
-	org.osgi.util.pushstream;version=project,\
-	org.osgi.util.promise;version=project,\
-	org.osgi.util.function;version=project,\
+	org.osgi.service.cm;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.resource;version=latest,\
+	org.osgi.util.pushstream;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.util.function;version=latest,\
 	${junit}
 
 Test-Cases							= ${testcases}
