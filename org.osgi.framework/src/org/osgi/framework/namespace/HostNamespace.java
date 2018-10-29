@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +54,13 @@ import org.osgi.resource.Namespace;
  * </ul>
  * 
  * <p>
- * A non-fragment resource with the with the
- * {@link IdentityNamespace#TYPE_BUNDLE osgi.bundle} type
- * {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE identity} provides zero or
- * one<sup>&#8224;</sup> host capabilities. A fragment resource with the
- * {@link IdentityNamespace#TYPE_FRAGMENT osgi.fragment} type
- * {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE identity} must not declare
- * a host capability and must declare exactly one host requirement.
+ * A non-fragment resource with the {@link IdentityNamespace#TYPE_BUNDLE
+ * osgi.bundle} type {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE
+ * identity} provides zero or one<sup>&#8224;</sup> host capabilities. A
+ * fragment resource with the {@link IdentityNamespace#TYPE_FRAGMENT
+ * osgi.fragment} type {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE
+ * identity} must not declare a host capability and must declare exactly one
+ * host requirement.
  * <p>
  * &#8224; A resource with no bundle symbolic name must not provide a host
  * capability.
