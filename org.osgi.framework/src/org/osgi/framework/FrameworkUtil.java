@@ -16,9 +16,11 @@
 
 package org.osgi.framework;
 
+import static java.lang.invoke.MethodHandles.publicLookup;
+
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
@@ -1157,10 +1159,11 @@ public class FrameworkUtil {
 				if (Modifier.isStatic(method.getModifiers()) && target.isAssignableFrom(method.getReturnType())) {
 					setAccessible(method);
 					try {
-						return method.invoke(null, value2.trim());
-					} catch (IllegalAccessException e) {
-						return null;
-					} catch (InvocationTargetException e) {
+						MethodHandle mh = publicLookup().unreflect(method);
+						return mh.invoke(value2.trim());
+					} catch (Error e) {
+						throw e;
+					} catch (Throwable e) {
 						return null;
 					}
 				}
@@ -1175,12 +1178,12 @@ public class FrameworkUtil {
 				}
 				setAccessible(constructor);
 				try {
-					return constructor.newInstance(value2.trim());
-				} catch (IllegalAccessException e) {
-					return null;
-				} catch (InvocationTargetException e) {
-					return null;
-				} catch (InstantiationException e) {
+					MethodHandle mh = publicLookup()
+							.unreflectConstructor(constructor);
+					return mh.invoke(value2.trim());
+				} catch (Error e) {
+					throw e;
+				} catch (Throwable e) {
 					return null;
 				}
 			} while (false);
