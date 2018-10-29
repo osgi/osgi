@@ -42,6 +42,7 @@ subprojects {
     }
     animalsniffer {
       sourceSets = [sourceSets.main]
+      ignore 'java.lang.invoke.MethodHandle'
     }
     jar {
       dependsOn animalsnifferMain
