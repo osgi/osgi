@@ -215,7 +215,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 						
 						Map<String,String> m = new HashMap<String,String>();
 						m.put("bean", t.toString());
-						m.put("prop1", t.getProp1());
+								m.put("prop1", t.getP());
 						m.put("prop2", t.getProp2());
 						m.put("prop3", t.getProp3());
 						m.put("embbeded", t.getEmbedded().toString());
@@ -272,7 +272,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		
 		MappingBean embeddedBean = new MappingBean();
 		embeddedBean.setEmbedded(new ExtObject());
-		embeddedBean.setProp1("mappingBean_prop1");
+		embeddedBean.setP("mappingBean_prop1");
 		embeddedBean.setProp2("mappingBean_prop2");
 		embeddedBean.setProp3("mappingBean_prop3");
 

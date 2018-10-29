@@ -160,11 +160,11 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		// empty constructor
 		public MappingBean() {}
 
-		public void setProp1(String prop1) {
+		public void setP(String prop1) {
 			this.prop1 = prop1;
 		}
 
-		public String getProp1() {
+		public String getP() {
 			return this.prop1;
 		}
 
@@ -911,7 +911,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		ConversionComplianceTest.ExtObject embedded = new ConversionComplianceTest.ExtObject();
 
 		MappingBean bean = new MappingBean();
-		bean.setProp1("value1");
+		bean.setP("value1");
 		bean.setProp2("value2");
 		bean.setProp3("value3");
 		bean.setEmbedded(embedded);
@@ -941,7 +941,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.targetAsBean()
 				.to(MappingBean.class);
 		assertNotNull(convertedBean);
-		assertEquals(bean.getProp1(), convertedBean.getProp1());
+		assertEquals(bean.getP(), convertedBean.getP());
 		assertEquals(bean.getProp2(), convertedBean.getProp2());
 		assertEquals(bean.getProp3(), convertedBean.getProp3());
 		assertNull(convertedBean.getEmbedded());

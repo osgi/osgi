@@ -16,12 +16,17 @@
  */
 package org.osgi.util.converter;
 
+import static java.lang.invoke.MethodHandles.publicLookup;
+import static java.lang.invoke.MethodType.methodType;
+
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -62,6 +67,10 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 class ConvertingImpl extends AbstractSpecifying<Converting>
 		implements Converting, InternalConverting {
+	private static final MethodType					defaultConstructor	= methodType(
+			void.class);
+	private static final MethodType					intConstructor		= methodType(
+			void.class, int.class);
 	private static final Map<Class< ? >,Class< ? >>	INTERFACE_IMPLS;
 	// Interfaces with no methods are also not considered
 	private static final Collection<Class< ? >>		NO_MAP_VIEW_TYPES;
@@ -368,8 +377,9 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 
 		try {
 			String prefix = Util.getPrefix(targetAsCls);
-
-			T dto = (T) targetClass.newInstance();
+			MethodHandle mh = publicLookup().findConstructor(targetClass,
+					defaultConstructor);
+			T dto = (T) mh.invoke();
 
 			List<String> names = getNames(targetAsClass);
 			for (Map.Entry entry : (Set<Map.Entry>) m.entrySet()) {
@@ -421,15 +431,26 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 								targetAsClass, typeArguments);
 						val = converter.convert(val).to(genericType);
 					}
-					f.set(dto, val);
+					mh = publicLookup().unreflectSetter(f);
+					if (isStatic(f)) {
+						mh.invoke(val);
+					} else {
+						mh.invoke(dto, val);
+					}
 				}
 			}
 
 			return dto;
-		} catch (Exception e) {
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable e) {
 			throw new ConversionException("Cannot create DTO " + targetClass,
 					e);
 		}
+	}
+
+	private static boolean isStatic(Member m) {
+		return Modifier.isStatic(m.getModifiers());
 	}
 
 	static Type reifyType(Type typeToReify, Class< ? > ownerClass,
@@ -702,22 +723,29 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		@SuppressWarnings("rawtypes")
 		Map m = mapView(object, sourceCls, converter);
 		try {
-			Object res = targetClass.newInstance();
+			MethodHandle mh = publicLookup().findConstructor(targetClass,
+					defaultConstructor);
+			Object res = mh.invoke();
 			for (Method setter : getSetters(targetCls)) {
 				String setterName = setter.getName();
-				StringBuilder propName = new StringBuilder(Character
-						.valueOf(Character.toLowerCase(setterName.charAt(3)))
-						.toString());
-				if (setterName.length() > 4)
-					propName.append(setterName.substring(4));
-
-				Class< ? > setterType = setter.getParameterTypes()[0];
+				StringBuilder propName = new StringBuilder(
+						setterName.length() - 3).append(
+								Character.toLowerCase(setterName.charAt(3)))
+								.append(setterName.substring(4));
 				String key = propName.toString();
 				Object val = m.get(Util.unMangleName(prefix, key));
-				setter.invoke(res, converter.convert(val).to(setterType));
+				mh = publicLookup().unreflect(setter);
+				Class< ? > setterType = mh.type().parameterType(1);
+				if (isStatic(setter)) {
+					mh.invoke(converter.convert(val).to(setterType));
+				} else {
+					mh.invoke(res, converter.convert(val).to(setterType));
+				}
 			}
 			return res;
-		} catch (Exception e) {
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable e) {
 			throw new ConversionException(
 					"Cannot convert to class: " + targetCls.getName()
 							+ ". Not a JavaBean with a Zero-arg Constructor.",
@@ -876,29 +904,41 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		} else if (Enum.class.isAssignableFrom(targetAsClass)) {
 			if (object instanceof Number) {
 				try {
-					Method m = targetAsClass.getMethod("values");
-					Object[] values = (Object[]) m.invoke(null);
+					MethodHandle mh = publicLookup().findStatic(targetAsClass,
+							"values",
+							methodType(Array.newInstance(targetAsClass, 0)
+									.getClass()));
+					@SuppressWarnings("rawtypes")
+					Enum[] values = (Enum[]) mh.invoke();
 					return values[((Number) object).intValue()];
-				} catch (Exception e) {
+				} catch (Error e) {
+					throw e;
+				} catch (Throwable e) {
 					throw new RuntimeException(e);
 				}
 			} else {
 				try {
-					Method m = targetAsClass.getMethod("valueOf", String.class);
-					return m.invoke(null, object.toString());
-				} catch (Exception e) {
+					String s = object.toString();
+					MethodHandle mh = publicLookup().findStatic(targetAsClass,
+							"valueOf", methodType(targetAsClass, String.class));
 					try {
+						return mh.invoke(s);
+					} catch (IllegalArgumentException e) {
 						// Case insensitive fallback
-						Method m = targetAsClass.getMethod("values");
-						for (Object v : (Object[]) m.invoke(null)) {
-							if (v.toString()
-									.equalsIgnoreCase(object.toString())) {
+						mh = publicLookup().findStatic(targetAsClass, "values",
+								methodType(Array.newInstance(targetAsClass, 0)
+										.getClass()));
+						for (@SuppressWarnings("rawtypes")
+						Enum v : (Enum[]) mh.invoke()) {
+							if (v.name().equalsIgnoreCase(s)) {
 								return v;
 							}
 						}
-					} catch (Exception e1) {
-						throw new RuntimeException(e1);
 					}
+				} catch (Error e) {
+					throw e;
+				} catch (Throwable e) {
+					throw new RuntimeException(e);
 				}
 			}
 		} else if (Annotation.class.isAssignableFrom(sourceClass)
@@ -946,23 +986,22 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	private <T> T tryStandardMethods() {
 		try {
-			Method m = targetAsClass.getDeclaredMethod("valueOf", String.class);
-			if (m != null) {
-				return (T) m.invoke(null, object.toString());
-			}
-		} catch (Exception e) {
+			MethodHandle mh;
 			try {
-				Constructor< ? > ctr = targetAsClass
-						.getConstructor(String.class);
-				return (T) ctr.newInstance(object.toString());
-			} catch (Exception e2) {
-				// Ignore
+				mh = publicLookup().findStatic(targetAsClass, "valueOf",
+						methodType(targetAsClass, String.class));
+			} catch (NoSuchMethodException | IllegalAccessException e) {
+				mh = publicLookup().findConstructor(targetAsClass,
+						methodType(void.class, String.class));
 			}
+			return (T) mh.invoke(object.toString());
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable t) {
+			return null;
 		}
-		return null;
 	}
 
 	private Collection< ? > collectionView() {
@@ -1046,21 +1085,22 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		throw new ConversionException("Cannot be converted to map: " + obj);
 	}
 
-	@SuppressWarnings("boxing")
 	private static Object createMapOrCollection(Class< ? > cls,
 			int initialSize) {
 		try {
-			Constructor< ? > ctor = cls.getConstructor(int.class);
-			return ctor.newInstance(initialSize);
-		} catch (Exception e1) {
+			MethodHandle mh;
 			try {
-				Constructor< ? > ctor2 = cls.getConstructor();
-				return ctor2.newInstance();
-			} catch (Exception e2) {
-				// ignore
+				mh = publicLookup().findConstructor(cls, intConstructor);
+			} catch (NoSuchMethodException | IllegalAccessException e) {
+				mh = publicLookup().findConstructor(cls, defaultConstructor);
 			}
+			return mh.type().parameterCount() == 0 ? mh.invoke()
+					: mh.invoke(initialSize);
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable t) {
+			return null;
 		}
-		return null;
 	}
 
 	private static Class< ? > getConstructableType(Class< ? > targetCls) {
@@ -1070,14 +1110,14 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		Class< ? > cls = targetCls;
 		do {
 			try {
-				cls.getConstructor(int.class);
+				publicLookup().findConstructor(cls, intConstructor);
 				return cls; // If no exception the constructor is there
-			} catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException | IllegalAccessException e) {
 				try {
-					cls.getConstructor();
+					publicLookup().findConstructor(cls, defaultConstructor);
 					return cls; // If no exception the constructor is there
-				} catch (NoSuchMethodException e1) {
-					// There is no constructor with this name
+				} catch (NoSuchMethodException | IllegalAccessException e1) {
+					// There is no suitable constructor
 				}
 			}
 			for (Class< ? > intf : cls.getInterfaces()) {
@@ -1139,10 +1179,13 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return; // Field with this name was already handled
 
 		try {
-			Object fVal = field.get(obj);
+			MethodHandle mh = publicLookup().unreflectGetter(field);
+			Object fVal = isStatic(field) ? mh.invoke() : mh.invoke(obj);
 			result.put(fn, fVal);
 			handledFields.add(fn);
-		} catch (Exception e) {
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable e) {
 			// Ignore
 		}
 	}
@@ -1160,9 +1203,12 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return; // method with this name already invoked
 
 		try {
-			res.put(bp, md.invoke(obj));
+			MethodHandle mh = publicLookup().unreflect(md);
+			res.put(bp, isStatic(md) ? mh.invoke() : mh.invoke(obj));
 			invokedMethods.add(bp);
-		} catch (Exception e) {
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable e) {
 			// Ignore
 		}
 	}
@@ -1230,8 +1276,12 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			if (m == null)
 				m = cls.getMethod("getProperties");
 
-			return converter.convert(m.invoke(obj)).to(Map.class);
-		} catch (Exception e) {
+			MethodHandle mh = publicLookup().unreflect(m);
+			return converter.convert(isStatic(m) ? mh.invoke() : mh.invoke(obj))
+					.to(Map.class);
+		} catch (Error e) {
+			throw e;
+		} catch (Throwable e) {
 			return Collections.emptyMap();
 		}
 	}
@@ -1245,13 +1295,11 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 	}
 
 	private static boolean isWriteableJavaBean(Class< ? > cls) {
-		boolean hasNoArgCtor = false;
-		for (Constructor< ? > ctor : cls.getConstructors()) {
-			if (ctor.getParameterTypes().length == 0)
-				hasNoArgCtor = true;
-		}
-		if (!hasNoArgCtor)
+		try {
+			publicLookup().findConstructor(cls, defaultConstructor);
+		} catch (NoSuchMethodException | IllegalAccessException e) {
 			return false; // A JavaBean must have a public no-arg constructor
+		}
 
 		return getSetters(cls).size() > 0;
 	}
