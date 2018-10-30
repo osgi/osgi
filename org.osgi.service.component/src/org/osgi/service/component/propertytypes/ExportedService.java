@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,8 +92,7 @@ public @interface ExportedService {
 	String[] service_exported_intents_extra() default {};
 
 	/**
-	 * Service property identifying the intents that the distribution provider
-	 * must implement to distribute the service.
+	 * Service property identifying the intents that this service implements.
 	 * <p>
 	 * If an empty array is specified, the default value, the property is not
 	 * added to the component description.

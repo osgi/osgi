@@ -1574,7 +1574,7 @@ public interface Constants {
 	String	SERVICE_IMPORTED_CONFIGS				= "service.imported.configs";
 
 	/**
-	 * Service property identifying the intents that this service implement.
+	 * Service property identifying the intents that this service implements.
 	 * This property has a dual purpose:
 	 * <ul>
 	 * <li>A bundle can use this service property to notify the distribution

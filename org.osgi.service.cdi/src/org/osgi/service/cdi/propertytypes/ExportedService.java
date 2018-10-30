@@ -92,8 +92,7 @@ public @interface ExportedService {
 	String[] service_exported_intents_extra() default {};
 
 	/**
-	 * Service property identifying the intents that the distribution provider
-	 * must implement to distribute the service.
+	 * Service property identifying the intents that this service implements.
 	 * <p>
 	 * If an empty array is specified, the default value, the property is not
 	 * added to the component description.
