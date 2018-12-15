@@ -2,4 +2,4 @@ javac.profile=
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 -nobundles = true
--buildpath = biz.aQute.bnd.gradle; version=latest;packages=**
+-buildpath = biz.aQute.bndlib;version=latest;packages=**
