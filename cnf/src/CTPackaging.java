@@ -87,7 +87,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append("\n\n");
 		}
 
-		jar.putResource("shared.inc",
+		jar.putResource(Workspace.CNFDIR + "/" + Workspace.BUILDFILE,
 				new EmbeddedResource(sb.toString().getBytes(UTF_8), 0L));
 
 		for (String entry : params.keySet()) {
@@ -179,7 +179,6 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 
 		sb.append("# bnd pack for project " + project + "\n");
 		sb.append("# ").append(new Date()).append("\n");
-		sb.append("-include= ~shared.inc\n");
 		sb.append("\n");
 		sb.append("-target = ");
 		flatten(analyzer, sb, jar, project,
