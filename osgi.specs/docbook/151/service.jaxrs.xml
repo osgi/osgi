@@ -584,11 +584,16 @@ public class Foo {
         map to the same URI. This situation is permitted by the JAX-RS
         specification which defines a detailed selection algorithm.</para>
 
-        <para>When clashes occur in the JAX-RS whiteboard then resources
-        supplied using the service whiteboard must be preferred to static
-        resources contained in the application. Otherwise resource method
-        selection follows the normal rules defined in the JAX-RS
-        specification.</para>
+        <para>When clashes occur in the JAX-RS whiteboard then resources supplied 
+        using the service whiteboard must be preferred to static resources 
+        contained in the application. If two or more whiteboard resources exist 
+        then they must be ordered using their service ranking. Unlike for other 
+        services in the JAX-RS whiteboard, whiteboard resource services must not 
+        be ordered using their natural ordering. Whiteboard resource services with 
+        the same ranking must be considered equal, following the normal resource 
+        method selection rules defined in the JAX-RS specification. As per the core 
+        specification, whiteboard services with no <code>service.ranking</code>  
+        property must be treated as having a ranking of <code>0</code>.</para>
       </section>
     </section>
 
