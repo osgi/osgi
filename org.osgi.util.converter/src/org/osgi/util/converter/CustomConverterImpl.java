@@ -179,7 +179,7 @@ class CustomConverterImpl implements InternalConverter {
 				T result = del.to(type);
 				if (result != null && Proxy.isProxyClass(result.getClass())
 						&& errorHandlers.size() > 0) {
-					return wrapErrorHandling(result, type);
+					return wrapErrorHandling(result);
 				} else {
 					return result;
 				}
@@ -202,11 +202,10 @@ class CustomConverterImpl implements InternalConverter {
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T> T wrapErrorHandling(final T wrapped, final Type type) {
+		private <T> T wrapErrorHandling(final T wrapped) {
 			final Class< ? > cls = wrapped.getClass();
 			return (T) Proxy.newProxyInstance(cls.getClassLoader(),
 					cls.getInterfaces(), new InvocationHandler() {
-						@SuppressWarnings("boxing")
 						@Override
 						public Object invoke(Object proxy, Method method,
 								Object[] args) throws Throwable {
@@ -233,7 +232,7 @@ class CustomConverterImpl implements InternalConverter {
 								for (ConverterFunction eh : errorHandlers) {
 									try {
 										Object handled = eh.apply(wrapped,
-												type);
+												method.getGenericReturnType());
 										if (handled != ConverterFunction.CANNOT_HANDLE)
 											return handled;
 									} catch (RuntimeException re) {
