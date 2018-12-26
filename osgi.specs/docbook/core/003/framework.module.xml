@@ -3391,8 +3391,10 @@ boot-description    ::= package-name        // See <xref
 
       <para>The single wildcard means that the Framework must always delegate
       to the parent class loader first, which is the same as the Release 3
-      behavior. For example, when running on an Oracle JVM, it may be
-      necessary to specify a value like:</para>
+      behavior.</para>
+
+      <para>For example, when running on an Oracle JVM, it may be necessary to
+      specify a value like:</para>
 
       <programlisting>org.osgi.framework.bootdelegation=sun.*,com.sun.*</programlisting>
 
