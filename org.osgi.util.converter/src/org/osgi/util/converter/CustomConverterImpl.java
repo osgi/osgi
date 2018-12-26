@@ -16,6 +16,9 @@
 
 package org.osgi.util.converter;
 
+import static java.lang.invoke.MethodHandles.publicLookup;
+
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -227,9 +230,10 @@ class CustomConverterImpl implements InternalConverter {
 														+ cls);
 								}
 							}
-
+							MethodHandle mh = publicLookup().unreflect(method);
 							try {
-								return method.invoke(wrapped, args);
+								return mh.bindTo(wrapped)
+										.invokeWithArguments(args);
 							} catch (Exception ex) {
 								for (ConverterFunction eh : errorHandlers) {
 									try {

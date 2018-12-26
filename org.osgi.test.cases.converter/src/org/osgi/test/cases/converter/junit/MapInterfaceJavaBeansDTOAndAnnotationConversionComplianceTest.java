@@ -1,8 +1,12 @@
 
 package org.osgi.test.cases.converter.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +31,7 @@ import org.osgi.dto.DTO;
 import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.ConverterFunction;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 
@@ -1414,6 +1419,37 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.to(MyGenericInterface.class);
 		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
 				converted.charSet());
+	}
+
+	public void testMapToInterfaceWithErrorHandler() {
+		Map<String,Object> dto = new HashMap<>();
+		final Object BAD = new Object();
+		dto.put("charSet", new HashSet<>(Arrays.asList("foo", BAD, 'o')));
+
+		Converter converter = Converters.newConverterBuilder()
+				.errorHandler(new ConverterFunction() {
+					@Override
+					public Object apply(Object obj, Type targetType)
+							throws Exception {
+						Class< ? > clazz = null;
+						try {
+							clazz = (Class< ? >) ((ParameterizedType) targetType)
+									.getRawType();
+						} catch (ClassCastException e) {
+							clazz = (Class< ? >) targetType;
+						}
+						if ((obj == BAD)
+								&& Character.class.isAssignableFrom(clazz)) {
+							return Character.valueOf('O');
+						}
+						return ConverterFunction.CANNOT_HANDLE;
+					}
+				})
+				.build();
+		MyGenericInterface converted = converter.convert(dto)
+				.to(MyGenericInterface.class);
+		assertThat(converted.charSet()).containsExactlyInAnyOrder('f', 'O',
+				'o');
 	}
 
 	public void testMapToInterfaceWithGenericVariables() {
