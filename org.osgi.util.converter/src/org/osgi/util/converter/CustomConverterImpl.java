@@ -213,9 +213,11 @@ class CustomConverterImpl implements InternalConverter {
 							if (mdDecl.equals(Object.class)) {
 								switch (method.getName()) {
 									case "equals" :
-										return proxy == args[0];
+										return Boolean
+												.valueOf(proxy == args[0]);
 									case "hashCode" :
-										return System.identityHashCode(proxy);
+										return Integer.valueOf(
+												System.identityHashCode(proxy));
 									case "toString" :
 										return "Proxy for " + cls;
 									default :

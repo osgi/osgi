@@ -771,7 +771,6 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		return Proxy.newProxyInstance(cls.getClassLoader(), new Class[] {
 				cls
 		}, new InvocationHandler() {
-			@SuppressWarnings("boxing")
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args)
 					throws Throwable {
@@ -779,9 +778,10 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 				if (mdDecl.equals(Object.class))
 					switch (method.getName()) {
 						case "equals" :
-							return proxy == args[0];
+							return Boolean.valueOf(proxy == args[0]);
 						case "hashCode" :
-							return System.identityHashCode(proxy);
+							return Integer
+									.valueOf(System.identityHashCode(proxy));
 						case "toString" :
 							return "Proxy for " + cls;
 						default :
@@ -839,7 +839,6 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 		});
 	}
 
-	@SuppressWarnings("boxing")
 	private Object handleNull(Class< ? > cls) {
 		if (hasDefault)
 			return converter.convert(defaultValue).to(cls);
@@ -855,7 +854,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return null;
 		}
 
-		return converter.convert(0).to(cls);
+		return converter.convert(Integer.valueOf(0)).to(cls);
 	}
 
 	private static boolean isMapType(Class< ? > cls, boolean asJavaBean,
@@ -876,7 +875,6 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return Dictionary.class.isAssignableFrom(cls);
 	}
 
-	@SuppressWarnings("boxing")
 	private Object trySpecialCases() {
 		if (Boolean.class.equals(targetAsClass)) {
 			if (object instanceof Collection
@@ -885,31 +883,31 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			}
 		} else if (Number.class.isAssignableFrom(targetAsClass)) {
 			if (object instanceof Boolean) {
-				return ((Boolean) object).booleanValue() ? 1 : 0;
+				return Integer
+						.valueOf(((Boolean) object).booleanValue() ? 1 : 0);
 			} else if (object instanceof Number) {
 				if (Byte.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).byteValue();
+					return Byte.valueOf(((Number) object).byteValue());
 				} else if (Short.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).shortValue();
+					return Short.valueOf(((Number) object).shortValue());
 				} else if (Integer.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).intValue();
+					return Integer.valueOf(((Number) object).intValue());
 				} else if (Long.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).longValue();
+					return Long.valueOf(((Number) object).longValue());
 				} else if (Float.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).floatValue();
+					return Float.valueOf(((Number) object).floatValue());
 				} else if (Double.class.isAssignableFrom(targetAsClass)) {
-					return ((Number) object).doubleValue();
+					return Double.valueOf(((Number) object).doubleValue());
 				}
 			}
-		} else if (Enum.class.isAssignableFrom(targetAsClass)) {
+		} else if (targetAsClass.isEnum()) {
 			if (object instanceof Number) {
 				try {
 					MethodHandle mh = publicLookup().findStatic(targetAsClass,
 							"values",
 							methodType(Array.newInstance(targetAsClass, 0)
 									.getClass()));
-					@SuppressWarnings("rawtypes")
-					Enum[] values = (Enum[]) mh.invoke();
+					Enum< ? >[] values = (Enum< ? >[]) mh.invoke();
 					return values[((Number) object).intValue()];
 				} catch (Error e) {
 					throw e;
@@ -928,8 +926,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 						mh = publicLookup().findStatic(targetAsClass, "values",
 								methodType(Array.newInstance(targetAsClass, 0)
 										.getClass()));
-						for (@SuppressWarnings("rawtypes")
-						Enum v : (Enum[]) mh.invoke()) {
+						for (Enum< ? > v : (Enum< ? >[]) mh.invoke()) {
 							if (v.name().equalsIgnoreCase(s)) {
 								return v;
 							}
