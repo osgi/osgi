@@ -41,6 +41,7 @@ import org.osgi.service.component.annotations.ReferenceScope;
 @Component(name = "testFieldReferences")
 public class FieldReferences {
 	public FieldReferences() {
+		fieldUpdate = new ArrayList<>();
 		fieldReferenceM = new ArrayList<ServiceReference<EventListener>>();
 	}
 
@@ -82,8 +83,8 @@ public class FieldReferences {
 	@Reference(name = "reluctant", policyOption = ReferencePolicyOption.RELUCTANT)
 	private EventListener fieldReluctant;
 
-	@Reference(name = "update", fieldOption = FieldOption.UPDATE)
-	private EventListener fieldUpdate;
+	@Reference(name = "update", policy = ReferencePolicy.DYNAMIC, fieldOption = FieldOption.UPDATE)
+	private final List<EventListener>								fieldUpdate;
 
 	@Reference(name = "replace", fieldOption = FieldOption.REPLACE)
 	private EventListener fieldReplace;

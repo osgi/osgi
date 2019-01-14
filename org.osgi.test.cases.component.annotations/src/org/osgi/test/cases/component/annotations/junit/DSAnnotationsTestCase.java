@@ -493,8 +493,8 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 						"java.util.EventListener")
 				.doesNotContain("reference[@name='update']/@bind")
 				.doesNotContain("reference[@name='update']/@unbind")
-				.hasOptionalValue("reference[@name='update']/@cardinality", "1..1")
-				.hasOptionalValue("reference[@name='update']/@policy", "static")
+				.hasValue("reference[@name='update']/@cardinality", "0..n")
+				.hasValue("reference[@name='update']/@policy", "dynamic")
 				.doesNotContain("reference[@name='update']/@target")
 
 				.hasValue("reference[@name='replace']/@interface",
@@ -816,8 +816,9 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasValue("reference[@name='update']/@field", "fieldUpdate")
 
 				.hasValue("reference[@name='update']/@field-option", "update")
-				.doesNotContain(
-						"reference[@name='update']/@field-collection-type")
+				.hasOptionalValue(
+						"reference[@name='update']/@field-collection-type",
+						"service")
 				.hasOptionalValue("reference[@name='update']/@scope", "bundle")
 
 				.hasValue("reference[@name='replace']/@field", "fieldReplace")
