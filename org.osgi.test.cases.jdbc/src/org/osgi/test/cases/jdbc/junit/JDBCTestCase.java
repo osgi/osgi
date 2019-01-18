@@ -17,14 +17,8 @@
 
 package org.osgi.test.cases.jdbc.junit;
 
-import java.lang.reflect.Method;
-import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import javax.sql.ConnectionPoolDataSource;
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -46,27 +40,36 @@ public class JDBCTestCase extends OSGiTestCase {
 		assertNotNull("No DataSourceFactory service available", ref);
 		factory = getContext().getService(ref);
 		assertNotNull(factory);
-		// TODO OSGi Compliance test *must* not rely on details in the reference
-		// implementation!
-		// assertEquals(
-		// DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_CLASS_PROPERTY_VALUE,
-		// ref.getProperty( DataSourceFactory.JDBC_DRIVER_CLASS ) );
-		// assertEquals(
-		// DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_NAME_PROPERTY_VALUE,
-		// ref.getProperty( DataSourceFactory.JDBC_DRIVER_NAME ) );
-		// assertEquals(
-		// DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_VERSION_PROPERTY_VALUE,
-		// ref.getProperty( DataSourceFactory.JDBC_DRIVER_VERSION ) );
 	}
 	
 	protected void tearDown() {
 		getContext().ungetService(ref);
 	}
 
-	private void assertDSProperty( Object dataSource, String methodName, Object value ) throws Exception {
-		Method method = dataSource.getClass().getMethod( methodName, new Class[] {} );
-		Object res = method.invoke( dataSource, new Object[] {} );
-		assertEquals( res, value );
+	public void testRegisteredProperties() {
+
+		Object className = ref
+				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS);
+
+		assertNotNull(
+				"The DataSourceFactory is missing the required osgi.jdbc.driver.class property",
+				className);
+		assertTrue("The DataSourceFactory driver class is not a String",
+				className instanceof String);
+
+		Object driverName = ref
+				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_NAME);
+		if (driverName != null) {
+			assertTrue("The DataSourceFactory driver name is not a String",
+					driverName instanceof String);
+		}
+
+		Object driverVersion = ref
+				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_VERSION);
+		if (driverVersion != null) {
+			assertTrue("The DataSourceFactory driver version is not a String",
+					driverName instanceof String);
+		}
 	}
 
 	public void testCreateDataSource() throws Exception {
@@ -77,27 +80,20 @@ public class JDBCTestCase extends OSGiTestCase {
 		props.put( DataSourceFactory.JDBC_PASSWORD, password );
 		props.put( DataSourceFactory.JDBC_USER, user );
 
-		DataSource ds = factory.createDataSource( props );
-		assertDSProperty( ds, "getDatabaseName", databaseName );
-		assertDSProperty( ds, "getDataSourceName", dataSourceName );
-		assertDSProperty( ds, "getDescription", description );
-		assertDSProperty( ds, "getPassword", password );
-		assertDSProperty( ds, "getUser", user );
+		try {
+			factory.createDataSource(props);
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+			// No point in further testing
+			return;
+		}
 
 		// make sure we get an exception if we use an unknown property
-		props = new Properties();
 		props.put( "junk", "junk" );
 		try {
 			factory.createDataSource( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
-		
-		// make sure we get an exception if we use an invalid property
-		props = new Properties();
-		props.put( "loginTimeout", "junk" );
-		try {
-			factory.createDataSource( props );
-			fail( "Should have gotten a SQLException." );
+			fail("Should have gotten a SQLException for invalid property \"junk\".");
 		} catch ( SQLException ignore ) { }
 	}
 
@@ -109,15 +105,16 @@ public class JDBCTestCase extends OSGiTestCase {
 		props.put( DataSourceFactory.JDBC_PASSWORD, password );
 		props.put( DataSourceFactory.JDBC_USER, user );
 
-		ConnectionPoolDataSource ds = factory.createConnectionPoolDataSource( props );
-		assertDSProperty( ds, "getDatabaseName", databaseName );
-		assertDSProperty( ds, "getDataSourceName", dataSourceName );
-		assertDSProperty( ds, "getDescription", description );
-		assertDSProperty( ds, "getPassword", password );
-		assertDSProperty( ds, "getUser", user );
+		try {
+			factory.createConnectionPoolDataSource(props);
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+			// No point in further testing
+			return;
+		}
 		
 		// make sure we get an exception if we use an unknown property
-		props = new Properties();
 		props.put( "junk", "junk" );
 		try {
 			factory.createConnectionPoolDataSource( props );
@@ -133,15 +130,16 @@ public class JDBCTestCase extends OSGiTestCase {
 		props.put( DataSourceFactory.JDBC_PASSWORD, password );
 		props.put( DataSourceFactory.JDBC_USER, user );
 
-		XADataSource ds = factory.createXADataSource( props );
-		assertDSProperty( ds, "getDatabaseName", databaseName );
-		assertDSProperty( ds, "getDataSourceName", dataSourceName );
-		assertDSProperty( ds, "getDescription", description );
-		assertDSProperty( ds, "getPassword", password );
-		assertDSProperty( ds, "getUser", user );
+		try {
+			factory.createXADataSource(props);
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+			// No point in further testing
+			return;
+		}
 		
 		// make sure we get an exception if we use an unknown property
-		props = new Properties();
 		props.put( "junk", "junk" );
 		try {
 			factory.createXADataSource( props );
@@ -152,19 +150,74 @@ public class JDBCTestCase extends OSGiTestCase {
 	public void testCreateDriver() throws Exception {
 		Properties props = new Properties();
 
-		@SuppressWarnings("unused")
-		Driver driver = factory.createDriver( props );
-		// TODO OSGi Compliance test *must* not rely on details in the reference
-		// implementation!
-		// assertTrue( driver.acceptsURL( "jdbc:derby:testDBName" ) );
+		try {
+			factory.createDriver(props);
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (DataSource only
+			// DataSourceFactory implementations are perfectly valid).
+			// No point in further testing
+			return;
+		}
 
 		// make sure we get an exception if we use an unknown property
-		props = new Properties();
 		props.put( "junk", "junk" );
 		try {
 			factory.createDriver( props );
 			fail( "Should have gotten a SQLException." );
 		} catch ( SQLException ignore ) { }
+	}
+
+	public void testAtLeastOneMethodWorks() {
+
+		Properties props = new Properties();
+
+		try {
+			factory.createDriver(props);
+
+			// At least one test passed!
+			return;
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (DataSource only
+			// DataSourceFactory implementations are perfectly valid).
+		}
+
+		props.put(DataSourceFactory.JDBC_DATABASE_NAME, databaseName);
+		props.put(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
+		props.put(DataSourceFactory.JDBC_DESCRIPTION, description);
+		props.put(DataSourceFactory.JDBC_PASSWORD, password);
+		props.put(DataSourceFactory.JDBC_USER, user);
+
+		try {
+			factory.createXADataSource(props);
+
+			// At least one test passed!
+			return;
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+		}
+
+		try {
+			factory.createConnectionPoolDataSource(props);
+
+			// At least one test passed!
+			return;
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+		}
+
+		try {
+			factory.createDataSource(props);
+
+			// At least one test passed!
+			return;
+		} catch (SQLException sqle) {
+			// This is allowed as it may not be supported (Driver only
+			// DataSourceFactory implementations are perfectly valid).
+		}
+
+		fail("None of the DataSourceFactory methods successfully created a DataSource or Driver");
 	}
 
 }
