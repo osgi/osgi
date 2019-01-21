@@ -16,8 +16,10 @@
 package org.osgi.test.cases.log.junit;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -64,6 +66,30 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 				LogEntry entry = log.size() == 0 ? null : log.remove(0);
 				return entry;
 			}
+		}
+
+		public void waitForEntry(long timeToWait, String message) {
+			synchronized (log) {
+				try {
+					long startTime = System.currentTimeMillis();
+					while (log.size() > 0 && !message.equals(log.get(log.size() - 1).getMessage())
+							&& timeToWait > 0) {
+						log.wait(timeToWait);
+						timeToWait = timeToWait
+								- (System.currentTimeMillis() - startTime);
+					}
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+
+				if (log.size() > 0 && !message.equals(log.get(log.size() - 1).getMessage())) {
+					fail(message + " not found in logs");
+				}
+			}
+		}
+
+		public List<LogEntry> getLogs() {
+			return log;
 		}
 	};
 
@@ -129,18 +155,26 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 		tb1.stop();
 		tb1.uninstall();
 
-		assertBundleEventLog("INSTALLED");
-		assertBundleEventLog("RESOLVED");
-		assertBundleEventLog("STARTED");
-		assertBundleEventLog("STOPPED");
-		assertBundleEventLog("UNRESOLVED");
-		assertBundleEventLog("UPDATED");
-		assertBundleEventLog("RESOLVED");
-		assertBundleEventLog("STARTED");
-		assertBundleEventLog("STOPPED");
-		assertBundleEventLog("UNRESOLVED");
-		assertBundleEventLog("UNINSTALLED");
+		List<String> expectedEventTypes1 = Arrays.asList("INSTALLED",
+				"RESOLVED", "STARTED", "STOPPED", "UNRESOLVED", "UPDATED",
+				"RESOLVED", "STARTED", "STOPPED", "UNRESOLVED", "UNINSTALLED");
 
+		List<String> expectedEventTypes2 = Arrays.asList("INSTALLED",
+				"RESOLVED", "STARTING", "STARTED", "STOPPING", "STOPPED",
+				"UNRESOLVED", "UPDATED", "RESOLVED", "STARTING", "STARTED",
+				"STOPPING", "STOPPED", "UNRESOLVED", "UNINSTALLED");
+
+		eventLogListener.waitForEntry(10000, "BundleEvent UNINSTALLED");
+		List<LogEntry> actualLogs = eventLogListener.getLogs();
+
+		int logsCount = actualLogs.size();
+		if (logsCount == expectedEventTypes1.size()) {
+			assertBundleEventLog(actualLogs, expectedEventTypes1);
+		} else if (logsCount == expectedEventTypes2.size()) {
+			assertBundleEventLog(actualLogs, expectedEventTypes2);
+		} else {
+			fail("Expected bundle events are not logged");
+		}
 	}
 
 	public void testServiceEventsLogged() {
@@ -169,10 +203,13 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void assertBundleEventLog(String eventType) {
-		LogEntry entry = eventLogListener.getEntry(10000);
-		assertEventLog(entry, EVENTS_BUNDLE, "BundleEvent " + eventType, tb1,
-				LogService.LOG_INFO, LogLevel.INFO, null);
+	private void assertBundleEventLog(List<LogEntry> actualLogs,
+			List<String> expectedEventTypes) {
+		for (int i = 0; i < actualLogs.size(); i++) {
+			assertEventLog(actualLogs.get(i), EVENTS_BUNDLE,
+					"BundleEvent " + expectedEventTypes.get(i), tb1,
+					LogService.LOG_INFO, LogLevel.INFO, null);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
