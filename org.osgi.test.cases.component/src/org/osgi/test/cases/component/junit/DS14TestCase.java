@@ -439,7 +439,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 									properties.put(PID_ROOT, "plugin");
 								}
 							}, Dictionaries.asDictionary(Maps.mapOf(
-									ConfigurationPlugin.CM_TARGET, PID)));
+									ConfigurationPlugin.CM_TARGET, new String[] {PID})));
 			try {
 				tb23.start();
 

@@ -355,8 +355,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		final PluginContext context = new PluginContext();
 
 		createConfigurationPlugin(context, 1, 1, null);
-		createConfigurationPlugin(context, 2, 2, pid);
-		createConfigurationPlugin(context, 3, 3, "foo");
+		createConfigurationPlugin(context, 2, 2, new String[] {pid});
+		createConfigurationPlugin(context, 3, 3, new String[] {"foo"});
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
 		registerManagedService(pid, synchronizer);
@@ -383,8 +383,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		final PluginContext context = new PluginContext();
 
 		createConfigurationPlugin(context, 1, 1, null);
-		createConfigurationPlugin(context, 2, 2, factoryPid);
-		createConfigurationPlugin(context, 3, 3, "foo");
+		createConfigurationPlugin(context, 2, 2, new String[] {factoryPid});
+		createConfigurationPlugin(context, 3, 3, new String[] {"foo"});
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
 		registerManagedServiceFactory(factoryPid, synchronizer);
@@ -583,19 +583,19 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * @param context The context to collect invocation information
 	 * @param id The id of the plugin
 	 * @param ranking The ranking of the plugin
-	 * @param pid The pid to register the plugin for
+	 * @param pids The pids to register the plugin for
 	 * @throws Exception If an error occurs
 	 */
 	private void createConfigurationPlugin(final PluginContext context, int id,
 			Object ranking,
-			Object pid) throws Exception {
+			String[] pids) throws Exception {
 		trace("Create and register a new ConfigurationPlugin");
 		Dictionary<String,Object> props = new Hashtable<>();
 		if (ranking != null) {
 			props.put(ConfigurationPlugin.CM_RANKING, ranking);
 		}
-		if (pid != null) {
-			props.put(ConfigurationPlugin.CM_TARGET, pid);
+		if (pids != null) {
+			props.put(ConfigurationPlugin.CM_TARGET, pids);
 		}
 
 		Plugin plugin = new Plugin(context, ranking, id);
