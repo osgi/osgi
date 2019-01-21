@@ -72,6 +72,7 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
+import org.osgi.test.cases.cm.junit.CMControl.SyncEventListener;
 import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
@@ -2290,10 +2291,11 @@ public class CMControl extends DefaultTestBundleControl {
 			final Configuration conf = cm.getConfiguration(pid);
 
 			final long startLevel = conf.getChangeCount();
-			final Hashtable<String,Object> newprops = new Hashtable<String,Object>();
-			newprops.put("somekey", "somevalue");
-			newprops.put("array", new long[] {1, 2});
-			assertTrue(conf.updateIfDifferent(newprops));
+			final Hashtable<String,Object> props1 = new Hashtable<String,Object>();
+			props1.put("scalar", "somevalue");
+			props1.put("array", new long[] {1, 2});
+			props1.put("collection", Arrays.asList(1,2));
+			assertTrue(conf.updateIfDifferent(props1));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 
 			assertEquals(1, events.size());
@@ -2302,23 +2304,31 @@ public class CMControl extends DefaultTestBundleControl {
 			barrier.reset();
 
 			// update again with same props
-			assertFalse(conf.updateIfDifferent(newprops));
-			assertEquals(startLevel + 1, conf.getChangeCount());
-			assertEquals(1, events.size());
-
-            // check array compare
-            newprops.put("array", new Long[] {1L, 2L});
-			assertFalse(conf.updateIfDifferent(newprops));
+			assertFalse(conf.updateIfDifferent(props1));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 			assertEquals(1, events.size());
             
-            // update once more with different props
-			final Hashtable<String,Object> props2 = new Hashtable<String,Object>();
-			props2.put("somekey", "newvalue");
+			// update scalar prop
+			final Hashtable<String,Object> props2 = new Hashtable<String,Object>(props1);
+			props2.put("scalar", "newvalue");
 			assertTrue(conf.updateIfDifferent(props2));
 			assertEquals(startLevel + 2, conf.getChangeCount());
 
 			assertEquals(2, events.size());
+			
+			// update array prop
+			final Hashtable<String,Object> props3 = new Hashtable<String,Object>(props2);
+			props3.put("array",  new long[] {3, 4});
+			assertTrue(conf.updateIfDifferent(props3));
+			assertEquals(startLevel + 3, conf.getChangeCount());
+			assertEquals(3, events.size());
+			
+			// update collection prop
+			final Hashtable<String,Object> props4 = new Hashtable<String,Object>(props3);
+			props4.put("collection", Arrays.asList(3, 4));
+			assertTrue(conf.updateIfDifferent(props4));
+			assertEquals(startLevel + 4, conf.getChangeCount());
+			assertEquals(4, events.size());
 			
 			// check updates to managed service
 			System.out.println("Waiting for managed service updates");
@@ -2326,8 +2336,8 @@ public class CMControl extends DefaultTestBundleControl {
 			barrier.await();
 
 			assertNull(updates.get(0));
-			assertEquals("somevalue", updates.get(1).get("somekey"));
-			assertEquals("newvalue", updates.get(2).get("somekey"));
+			assertEquals("somevalue", updates.get(1).get("scalar"));
+			assertEquals("newvalue", updates.get(2).get("scalar"));
 		} finally {
 			this.unregisterService(listener);
 			this.unregisterService(ms);
