@@ -373,7 +373,8 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 					previousSequence < entry.getSequence());
 			assertEquals("Wrong logLevel", LogReader.getLogLevel(level),
 					entry.getLogLevel());
-			assertEquals("Wrong log name", logName, entry.getLoggerName());
+			assertTrue("Wrong log name", logName.equals(entry.getLoggerName())
+					|| entry.getLoggerName().startsWith(logName + "."));
 			if (threadName != null) {
 				assertTrue("Unexpected thread info: " + entry.getThreadInfo(),
 						entry.getThreadInfo().indexOf(threadName) >= 0);

@@ -46,7 +46,8 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 
 		@Override
 		public void logged(LogEntry entry) {
-			if (loggerName.equals(entry.getLoggerName())) {
+			if (loggerName.equals(entry.getLoggerName())
+					|| entry.getLoggerName().startsWith(loggerName + ".")) {
 				synchronized (log) {
 					log.add(entry);
 					log.notifyAll();
@@ -216,8 +217,9 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 	private void assertEventLog(LogEntry logEntry, String loggerName,
 			String message, Bundle bundle, int level, LogLevel logLevel,
 			ServiceReference< ? > reference) {
-		assertEquals("Wrong logger name.", loggerName,
-				logEntry.getLoggerName());
+		assertTrue("Wrong logger name.",
+				loggerName.equals(logEntry.getLoggerName())
+						|| logEntry.getLoggerName().startsWith(loggerName + "."));
 		assertEquals("Wrong message.", message, logEntry.getMessage());
 		assertEquals("Wrong bundle.", bundle, logEntry.getBundle());
 		assertEquals("Wrong level.", level, logEntry.getLevel());
