@@ -8,3 +8,6 @@ Export-Package: !${p}.annotations, ${p}.*; -split-package:=first
     osgi.annotation; version=latest,\
     org.osgi.namespace.extender;version=latest,\
     org.osgi.namespace.implementation;version=latest
+
+-includeresource.xmlns: \
+    xmlns/metatype=${project.workspace}/xmlns/metatype
