@@ -243,36 +243,33 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
-		Servlet servlet = new HttpServlet() {
+		class TestServlet extends HttpServlet {
+			private final String content;
 
+			public TestServlet(String content) {
+				this.content = content;
+			}
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 
 				invoked.set(true);
-
-				PrintWriter writer = response.getWriter();
-				writer.write((request.getContextPath() == null) ? "" : request.getContextPath());
-				writer.write(":");
-				writer.write((request.getServletPath() == null) ? "" : request.getServletPath());
-				writer.write(":");
-				writer.write((request.getPathInfo() == null) ? "" : request.getPathInfo());
+				response.getWriter().write(content);
 			}
-
-		};
+		}
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
-		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new TestServlet("a"), properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/fee/fi/foo/fum");
-		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new TestServlet("b"), properties));
 
-		assertEquals(":/a:", request("a"));
+		assertEquals("a", request("a"));
 		assertTrue(invoked.get());
 		invoked.set(false);
-		assertEquals(":/fee/fi/foo/fum:", request("fee/fi/foo/fum"));
+		assertEquals("b", request("fee/fi/foo/fum"));
 		assertTrue(invoked.get());
 	}
 
