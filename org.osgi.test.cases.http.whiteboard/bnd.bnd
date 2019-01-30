@@ -2,6 +2,8 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Conditional-Package = org.osgi.test.support.*,\
+ org.osgi.util.converter.*,\
+ org.osgi.util.function.*,\
  org.apache.http.*,\
  org.apache.commons.codec.*,\
  org.apache.commons.logging.*
@@ -20,6 +22,8 @@ Export-Package: ${p}.junit.mock
 
 -buildpath: \
 	org.osgi.test.support;version=project,\
+	org.osgi.util.converter;version=project,\
+	org.osgi.util.function;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
 	org.apache.felix.http.servlet-api;version=1.1.2,\
 	org.apache.commons.logging;version=1.2,\

@@ -42,6 +42,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockFilter;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockServlet;
+import org.osgi.test.support.version.Versions;
 
 public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
@@ -484,9 +485,13 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 				String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
 				if (name != null) {
-					Version version = (Version) attributes.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE);
+					Collection<Version> versions = Versions.plus(attributes.get(
+							ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
-					if (name.equals("JavaServlet") && (version != null) && (version.equals(new Version("3.1.0")))) {
+					if (name.equals("JavaServlet") && !versions.isEmpty()
+							&& versions.iterator()
+							.next()
+							.equals(new Version("3.1.0"))) {
 						Map<String, String> directives = capability.getDirectives();
 
 						String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
@@ -520,9 +525,13 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 					String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
 					if (name != null) {
-						Version version = (Version) attributes.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE);
+						Collection<Version> versions = Versions.plus(attributes
+								.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
-						if (name.equals("JavaServlet") && (version != null) && (version.equals(new Version("3.1.0")))) {
+						if (name.equals("JavaServlet") && !versions.isEmpty()
+								&& versions.iterator()
+										.next()
+										.equals(new Version("3.1.0"))) {
 							Map<String, String> directives = capability.getDirectives();
 
 							String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
