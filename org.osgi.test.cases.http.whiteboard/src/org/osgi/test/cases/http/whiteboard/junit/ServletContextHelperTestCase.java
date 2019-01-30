@@ -1245,7 +1245,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		assertNotNull(servletContext);
 
-		servletContext.getResourcePaths("META-INF/");
+		servletContext.getResourcePaths("/META-INF/");
 
 		assertTrue(invoked.get());
 	}
