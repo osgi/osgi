@@ -1,6 +1,8 @@
 package org.osgi.test.cases.http.whiteboard.junit.mock;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -8,7 +10,7 @@ import javax.servlet.ServletContextListener;
 public class MockSCL implements ServletContextListener {
 
 	public MockSCL(AtomicReference<ServletContext> sc) {
-		this.sc = sc;
+		this.sc = Objects.requireNonNull(sc);
 	}
 
 	public void contextDestroyed(ServletContextEvent arg0) {

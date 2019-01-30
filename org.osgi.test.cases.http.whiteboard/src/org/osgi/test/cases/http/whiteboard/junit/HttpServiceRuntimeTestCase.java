@@ -8,9 +8,13 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -156,7 +160,9 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
-		ServiceRegistration<?> sr = context.registerService(ServletContextListener.class, new MockSCL(null), properties);
+		ServiceRegistration< ? > sr = context.registerService(
+				ServletContextListener.class,
+				new MockSCL(new AtomicReference<ServletContext>()), properties);
 		serviceRegistrations.add(sr);
 
 		servletContextDTO = getServletContextDTOByName(DEFAULT);
@@ -263,7 +269,9 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=a)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
-		ServiceRegistration<?> sr = context.registerService(ServletContextListener.class, new MockSCL(null), properties);
+		ServiceRegistration< ? > sr = context.registerService(
+				ServletContextListener.class,
+				new MockSCL(new AtomicReference<ServletContext>()), properties);
 		serviceRegistrations.add(sr);
 
 		servletContextDTO = getServletContextDTOByName("a");
@@ -343,7 +351,9 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, 4567);
-		ServiceRegistration<?> sr = context.registerService(ServletContextListener.class, new MockSCL(null), properties);
+		ServiceRegistration< ? > sr = context.registerService(
+				ServletContextListener.class,
+				new MockSCL(new AtomicReference<ServletContext>()), properties);
 		serviceRegistrations.add(sr);
 
 		FailedListenerDTO failedListenerDTO = getFailedListenerDTOByServiceId(getServiceId(sr));
