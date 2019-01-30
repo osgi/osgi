@@ -472,7 +472,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(failedFilterDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedFilterDTO.failureReason);
 
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, "/.*");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, "/.+");
 		sr.setProperties(properties);
 
 		failedFilterDTO = getFailedFilterDTOByName("a");
