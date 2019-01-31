@@ -2,7 +2,7 @@
  * OSGi companion code Gradle script
  */
 
-jar {
+def jar = tasks.named('jar') {
   ext.javadocIncludes = new File(docsDir, 'javadocIncludes.txt')
   outputs.file javadocIncludes
   doLast {
@@ -20,7 +20,7 @@ jar {
   }
 }
 
-javadoc {
+def javadoc = tasks.named('javadoc') {
   inputs.files jar
   source bnd.allSrcDirs
   ext.javadocTitle = bnd('javadoc.title', project.name)
@@ -49,32 +49,26 @@ javadoc {
   }
   // compute dependencies on other javadoc builds based upon the classpath
   def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
-  compileJava.classpath.each {
+  def linkProjects = sourceSets.main.compileClasspath.findResult {
     def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
     def matcher = pattern.matcher(entry)
-    if (matcher) {
-      def linkProject = parent.project(matcher[0][1])
-      dependsOn linkProject.javadoc
-    }
+    matcher ? parent.project(matcher[0][1]) : null
+  }
+  linkProjects.each { linkProject ->
+    dependsOn linkProject.absoluteProjectPath('javadoc')
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
   if (JavaVersion.current().isJava8Compatible()) {
     options.addStringOption('Xdoclint:none', '-quiet') 
   }
   doFirst {
-    project.delete(destinationDir)
-    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${jar.javadocVersion.text}"
+    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${jar.get().javadocVersion.text}"
     options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
     options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
     options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
-    include jar.javadocIncludes.text.tokenize(',')
-    compileJava.classpath.each {
-      def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
-      def matcher = pattern.matcher(entry)
-      if (matcher) {
-        def linkProject = parent.project(matcher[0][1])
-        options.linksOffline("../../${linkProject.name}/${linkProject.jar.javadocVersion.text}", linkProject.javadoc.destinationDir.absolutePath)
-      }
+    include jar.get().javadocIncludes.text.tokenize(',')
+    linkProjects.each { linkProject ->
+      options.linksOffline("../../${linkProject.name}/${linkProject.tasks.getByName('jar').javadocVersion.text}", linkProject.tasks.getByName('javadoc').destinationDir.absolutePath)
     }
     logger.info 'Title         : {}', options.windowTitle
     logger.info 'Packages      : {}', includes
@@ -90,6 +84,6 @@ javadoc {
   }
 }
 
-release {
+tasks.named('release') {
   dependsOn javadoc
 }

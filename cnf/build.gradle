@@ -2,7 +2,7 @@
  * cnf Gradle build script
  */
 /* After building, we need to refresh the bnd Projects to pickup the bnd plugins built in cnf. */
-task('refresh') {
+def refresh = tasks.register('refresh') {
   onlyIf {
     compileJava.didWork || processResources.didWork
   }
@@ -17,13 +17,15 @@ task('refresh') {
   }
 }
 
-classes {
+tasks.named('classes') {
   finalizedBy refresh
 }
 
 /* bnd plugins influence bundle contents, so add cnf output to jar inputs */
 parent.subprojects {
   if (project != cnf) {
-    jar.inputs.files cnf.sourceSets.main.output
+    tasks.named('jar') {
+      inputs.files cnf.sourceSets.main.output
+    }
   }
 }

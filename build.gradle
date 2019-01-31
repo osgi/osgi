@@ -22,7 +22,7 @@ subprojects {
     }
     if (sourceCompatibility.isJava7()) { 
       String javacProfile = bnd('javac.profile', '')
-      tasks.withType(JavaCompile) {
+      tasks.withType(JavaCompile.class).configureEach {
         options.compilerArgs.add('-Xlint:-options')
         if (!javacProfile.empty) {
           options.compilerArgs.removeAll(['-profile', javacProfile])
@@ -44,13 +44,10 @@ subprojects {
       sourceSets = [sourceSets.main]
       ignore 'java.lang.invoke.MethodHandle'
     }
-    jar {
-      dependsOn animalsnifferMain
-      doFirst {
-        project.mkdir(compileJava.destinationDir)
-      }
+    tasks.named('jar') {
+      dependsOn 'animalsnifferMain'
     }
-    test {
+    tasks.named('test') {
       testLogging {
         exceptionFormat 'full'
       }
@@ -61,11 +58,11 @@ subprojects {
   }
 }
 
-wrapper {
+tasks.named('wrapper') {
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }
 
-task buildscriptDependencies {
+tasks.register('buildscriptDependencies') {
   doLast {
     println "bnd_plugin: ${bnd_plugin}"
     println "bnd_repourl: ${bnd_repourl}"

@@ -8,11 +8,11 @@ def buildProject = project
 configure(parent) {
   buildDir = buildProject.buildDir
 
-  task build {
-    dependsOn "${buildProject.path}:jar"
-    dependsOn "${buildProject.path}:releaseNeeded"
+  def build = tasks.register('build') {
+    dependsOn buildProject.absoluteProjectPath('jar')
+    dependsOn buildProject.absoluteProjectPath('releaseNeeded')
     description 'Assembles and releases the ${buildProject.name} project.'
     group 'build'
   }
-  defaultTasks += build.path
+  defaultTasks += absoluteProjectPath(build.name)
 }

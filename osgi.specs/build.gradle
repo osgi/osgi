@@ -9,14 +9,14 @@ ext.fop_home = file("${bnd.licensed}/fop")
 ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
   fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
 
-task javadoc('overwrite': true, 'type': Javadoc) {
+def javadoc = tasks.named('javadoc') {
   description 'Build the docbook flavored javadoc.'
   group 'documentation'
   destinationDir = new File(buildDir, 'javadoc')
   ext.javadocxml = new File(destinationDir, 'javadoc.xml')
   ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
-  classpath = compileJava.classpath
-  inputs.files compileJava, classpath, stylesheet
+  classpath = sourceSets.main.compileClasspath
+  inputs.files tasks.named('compileJava'), classpath, stylesheet
   source bnd.allSrcDirs
   bnd.javadoc_specs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
@@ -26,7 +26,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
     encoding = 'UTF-8'
     title = ''
     doclet 'org.osgi.tools.xmldoclet.XmlDoclet'
-    docletpath compileJava.destinationDir
+    docletpath sourceSets.main.java.outputDir
   }
   doLast {
     ant.xslt('style': stylesheet,
@@ -48,13 +48,13 @@ task javadoc('overwrite': true, 'type': Javadoc) {
   }
 }
 
-task('rdmtsummary') {
+def rdmtsummary = tasks.register('rdmtsummary') {
   description 'Build the docbook flavored Residential DMT summary.'
   group 'documentation'
   ext.destinationDir = new File(buildDir, 'residentialdmt')
   ext.treesummaryxml = new File(destinationDir, 'treesummary.xml')
   inputs.files parent.project('dmforest').sourceSets.main.allJava, sourceSets.main.runtimeClasspath
-  outputs.dir destinationDir
+  outputs.dir { destinationDir }
   doFirst {
     project.mkdir(destinationDir)
   }
@@ -70,7 +70,7 @@ task('rdmtsummary') {
   }
 }
 
-task('xmlns', 'type': Copy) {
+def xmlns = tasks.register('xmlns', Copy.class) {
   description 'Build the docbook flavored schemas.'
   group 'documentation'
   from parent.file('xmlns')
@@ -87,16 +87,27 @@ task('xmlns', 'type': Copy) {
   }
 }
 
-tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <name>.') { taskName ->
-  if (taskName.endsWith('.xml') && !taskName.endsWith('-diff.xml')) {
-    task(taskName) {
-      ext.book = taskName - '.xml'
+def specifications = tasks.register('specifications') {
+  description 'Generates all the specifications.'
+  group 'documentation'
+}
+defaultTasks += absoluteProjectPath(specifications.name)
+
+def books = ['core', 'cmpn', 'enterprise']
+
+books.forEach { book ->
+    def booktask = tasks.register("${book}.xml") {
       description "Generate the docbook xml file for the book ${book}."
       group 'documentation'
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file('docbook/xsl/identity.xsl')
-      ext.bookxml = new File(destinationDir, taskName)
+      ext.bookxml = new File(destinationDir, name)
       inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
+      inputs.files javadoc, xmlns
+      if (book == 'residential') {
+        inputs.files rdmtsummary
+      }
+
       outputs.file bookxml
       doFirst {
         project.mkdir(destinationDir)
@@ -125,41 +136,14 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
         }.assertNormalExitValue()
       }
     }
-  }
-}
 
-configure(tasks.getByName('core.xml')) {
-  [javadoc, xmlns].each {
-    inputs.files it
-  }
-}
-configure(tasks.getByName('cmpn.xml')) {
-  [javadoc, xmlns].each {
-    inputs.files it
-  }
-}
-configure(tasks.getByName('enterprise.xml')) {
-  [javadoc, xmlns].each {
-    inputs.files it
-  }
-}
-configure(tasks.getByName('residential.xml')) {
-  [javadoc, xmlns, rdmtsummary].each {
-    inputs.files it
-  }
-}
-
-tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for the book <name>.') { taskName ->
-  if (taskName.endsWith('-diff.xml')) {
-    task(taskName) {
-      ext.book = taskName - '-diff.xml'
+    def bookdifftask = tasks.register("${book}-diff.xml") {
       description "Generate the docbook diff xml file for the book ${book}."
       group 'documentation'
-      def booktask = tasks.getByName("${book}.xml")
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
       ext.baselinexml = file("baseline/${book}.xml")
-      ext.bookxml = new File(destinationDir, taskName)
+      ext.bookxml = new File(destinationDir, name)
       inputs.files booktask, stylesheet, baselinexml
       outputs.file bookxml
       doFirst {
@@ -176,7 +160,7 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
           args '1'
           args '--words'
           args baselinexml
-          args booktask.bookxml
+          args booktask.get().bookxml
           args tmpxml
         }.assertNormalExitValue()
         ant.xslt('style': stylesheet,
@@ -187,94 +171,17 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
         }
       }
     }
-  }
-}
 
-tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <name>.') { taskName ->
-  if (taskName.endsWith('.fo')) {
-    task(taskName) {
-      ext.book = taskName - '.fo'
-      description "Generate the docbook fo file for the book ${book}."
-      group 'documentation'
-      def booktask = tasks.getByName("${book}.xml")
-      ext.destinationDir = new File(buildDir, 'fo')
-      ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
-      ext.bookfo = new File(destinationDir, taskName)
-      ext.watermark = 'docbook/graphics/draft.svg'
-      inputs.files booktask, stylesheet
-      outputs.file bookfo
-      doFirst {
-        project.mkdir(destinationDir)
-      }
-      doLast {
-        ant.xslt('style': stylesheet,
-          'in': booktask.bookxml,
-          'out': bookfo) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.watermark.image', 'expression': watermark)
-          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
-        }
-      }
-    }
-  }
-}
+    def fotask = tasks.register("${book}.fo", fotaskConfiguration(book, booktask))
+    def fodifftask = tasks.register("${book}-diff.fo", fotaskConfiguration("${book}-diff", bookdifftask))
 
-tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <name>.') { taskName ->
-  if (taskName.endsWith('.pdf')) {
-    task(taskName) {
-      ext.book = taskName - '.pdf'
-      description "Generate the docbook pdf file for the book ${book}."
-      group 'documentation'
-      def fotask = tasks.getByName("${book}.fo")
-      ext.destinationDir = buildDir
-      ext.bookpdf = new File(destinationDir, "osgi.${book}-${version}.pdf")
-      def fontbasedir = file('fonts')
-      def fopxconf = file('docbook/fop/fop-osgi.xconf')
-      def log4jprops = file('docbook/fop/log4j.properties')
-      inputs.files fotask, fopxconf, log4jprops, fileTree('dir': 'docbook', 'include': '**/*.svg')
-      inputs.dir fontbasedir
-      outputs.file bookpdf
-      doFirst {
-        project.mkdir(destinationDir)
-      }
-      doLast {
-        def basebook = book - '-diff'
-        copy {
-          from fopxconf
-          into temporaryDir
-          filter(ReplaceTokens,
-            'tokens': ['book.base.url': file("docbook/${basebook}").toURI().toString(),
-              'font.base.url': fontbasedir.toURI().toString(),
-              'font.base.dir': fontbasedir.absolutePath])
-        }
-        javaexec {
-          systemProperty('java.awt.headless', 'true')
-          systemProperty('JAVA_FONTS', fontbasedir)
-          systemProperty('log4j.configuration', log4jprops.toURI())
-          classpath compileJava.destinationDir
-          classpath bnd.log4j
-          classpath fop_classpath
-          main = 'org.osgi.tools.fop.FOPMain'
-          minHeapSize = '1024m'
-          maxHeapSize = '2048m'
-          args '-c', new File(temporaryDir, fopxconf.name)
-          args '-fo', fotask.bookfo
-          args '-pdf', bookpdf
-        }.assertNormalExitValue()
-      }
-    }
-  }
-}
+    def pdftask = tasks.register("${book}.pdf", pdftaskConfiguration(book, book, fotask))
+    tasks.register("${book}-diff.pdf", pdftaskConfiguration(book, "${book}-diff", fodifftask))
 
-tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') { taskName ->
-  if (taskName.endsWith('.rasterize')) {
-    task(taskName) {
-      ext.book = taskName - '.rasterize'
+    def rasterizetask = tasks.register("${book}.rasterize") {
       description "Rasterize SVGs for the book ${book}."
       group 'documentation'
 
-      def booktask = tasks.getByName("${book}.xml")
       def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
       ext.destinationDir = new File(buildDir, "images/${book}")
 
@@ -288,7 +195,7 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
       doLast {
         def imagesFile = new File(temporaryDir, 'images.txt')
         ant.xslt('style': imagesXSL,
-          'in': booktask.bookxml,
+          'in': booktask.get().bookxml,
           'out': imagesFile) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
@@ -311,18 +218,11 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
         }.assertNormalExitValue()
       }
     }
-  }
-}
 
-tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the book <name>.') { taskName ->
-  if (taskName.endsWith('.html')) {
-    task(taskName) {
-      ext.book = taskName - '.html'
+    def htmltask = tasks.register("${book}.html") {
       description "Generate the docbook html files for the book ${book}."
       group 'documentation'
 
-      def booktask = tasks.getByName("${book}.xml")
-      def rasterizetask = tasks.getByName("${book}.rasterize")
       def stylesheet = file('docbook/xsl/custom-html.xsl')
       def commonXSL = file('docbook/xsl/custom-html-common.xsl')
       def profileXSL = file('docbook/xsl/custom-html-profile.xsl')
@@ -341,7 +241,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
       doLast {
         def tmpxml = new File(temporaryDir, 'book.xml')
         ant.xslt('style': profileXSL,
-          'in': booktask.bookxml,
+          'in': booktask.get().bookxml,
           'out': tmpxml,
           'force': true) {
           classpath('location': bnd.saxon)
@@ -383,25 +283,90 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
         }
       }
     }
-  }
-}
 
-tasks.addRule('Pattern: <name>.zip: Generate a ZIP archive of the docbook html for the book <name>.') { taskName ->
-  if (taskName.endsWith('.zip')) {
-    task(taskName, type: Zip) {
-      ext.book = taskName - '.zip'
+    def ziptask = tasks.register("${book}.zip", Zip.class) {
       description "Generate a ZIP archive of the docbook html for the book ${book}."
       group 'documentation'
       destinationDir = buildDir
       baseName = "osgi.${book}"
       classifier = 'html'
-
-      from tasks.getByName("${book}.html")
+      from htmltask
     }
-  }
+
+    specifications.configure {
+        dependsOn pdftask, ziptask
+    }
 }
 
-task('fontmetrics') {
+private Closure fotaskConfiguration(bookName, xmltask) {
+  return {
+      description "Generate the docbook fo file for the book ${bookName}."
+      group 'documentation'
+      ext.destinationDir = new File(buildDir, 'fo')
+      ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
+      ext.bookfo = new File(destinationDir, name)
+      ext.watermark = 'docbook/graphics/draft.svg'
+      inputs.files xmltask, stylesheet
+      outputs.file bookfo
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        ant.xslt('style': stylesheet,
+          'in': xmltask.get().bookxml,
+          'out': bookfo) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+          param('name': 'draft.watermark.image', 'expression': watermark)
+          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
+        }
+      }
+    }
+}
+
+private Closure pdftaskConfiguration(basebook, bookName, fotask) {
+  return {
+      description "Generate the docbook pdf file for the book ${bookName}."
+      group 'documentation'
+      ext.destinationDir = buildDir
+      ext.bookpdf = new File(destinationDir, "osgi.${bookName}-${version}.pdf")
+      def fontbasedir = file('fonts')
+      def fopxconf = file('docbook/fop/fop-osgi.xconf')
+      def log4jprops = file('docbook/fop/log4j.properties')
+      inputs.files fotask, fopxconf, log4jprops, fileTree('dir': 'docbook', 'include': '**/*.svg')
+      inputs.dir fontbasedir
+      outputs.file bookpdf
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        copy {
+          from fopxconf
+          into temporaryDir
+          filter(ReplaceTokens,
+            'tokens': ['book.base.url': file("docbook/${basebook}").toURI().toString(),
+              'font.base.url': fontbasedir.toURI().toString(),
+              'font.base.dir': fontbasedir.absolutePath])
+        }
+        javaexec {
+          systemProperty('java.awt.headless', 'true')
+          systemProperty('JAVA_FONTS', fontbasedir)
+          systemProperty('log4j.configuration', log4jprops.toURI())
+          classpath compileJava.destinationDir
+          classpath bnd.log4j
+          classpath fop_classpath
+          main = 'org.osgi.tools.fop.FOPMain'
+          minHeapSize = '1024m'
+          maxHeapSize = '2048m'
+          args '-c', new File(temporaryDir, fopxconf.name)
+          args '-fo', fotask.get().bookfo
+          args '-pdf', bookpdf
+        }.assertNormalExitValue()
+      }
+    }
+}
+
+tasks.register('fontmetrics') {
   description 'Build the font metrics.'
   group 'documentation'
   inputs.files fileTree('dir': file('fonts'), 'include': '*.ttf')
@@ -418,13 +383,4 @@ task('fontmetrics') {
       }.assertNormalExitValue()
     }
   }
-}
-
-defaultTasks += 'specifications'
-
-task('specifications') {
-  description 'Generates all the specifications.'
-  group 'documentation'
-  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf'
-  dependsOn 'core.zip', 'cmpn.zip', 'enterprise.zip'
 }
