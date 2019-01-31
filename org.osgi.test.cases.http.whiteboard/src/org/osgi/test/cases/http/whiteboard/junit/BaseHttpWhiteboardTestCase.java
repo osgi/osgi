@@ -531,12 +531,21 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	}
 
 	protected long waitForRegistration(final long previousCount) {
+		return waitForRegistration(previousCount, 100);
+	}
+
+	protected long waitForRegistration(final long previousCount,
+			int maxAttempts) {
 		while (this.httpRuntimeChangeCount.longValue() == previousCount) {
+			if (maxAttempts <= 0) {
+				throw new IllegalStateException("Max attempts exceeded");
+			}
 			try {
 				Thread.sleep(20L);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+			maxAttempts--;
 		}
 		return this.httpRuntimeChangeCount.longValue();
 	}
