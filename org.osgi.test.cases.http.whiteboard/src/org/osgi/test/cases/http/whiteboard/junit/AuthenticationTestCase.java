@@ -89,7 +89,7 @@ public class AuthenticationTestCase extends BaseHttpWhiteboardTestCase {
 				}, ctx2Props));
 
 		// servlet for both contexts
-		final Servlet servlet = new HttpServlet() {
+		class AServlet extends HttpServlet {
 
 			@Override
 			protected void service(HttpServletRequest request,
@@ -129,13 +129,15 @@ public class AuthenticationTestCase extends BaseHttpWhiteboardTestCase {
 				"(" + HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME
 						+ "=context1)");
 		serviceRegistrations.add(
-				context.registerService(Servlet.class, servlet, servletProps));
+				context.registerService(Servlet.class, new AServlet(),
+						servletProps));
 
 		servletProps.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
 				"(" + HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME
 						+ "=context2)");
 		serviceRegistrations.add(
-				context.registerService(Servlet.class, servlet, servletProps));
+				context.registerService(Servlet.class, new AServlet(),
+						servletProps));
 	}
 
 	public void test_handleFinishSecurity() throws Exception {
