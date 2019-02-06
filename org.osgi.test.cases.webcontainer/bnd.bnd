@@ -7,10 +7,13 @@
 
 Bundle-Description: OSGi Web Application Specification Compliance Test
 
-Private-Package						= org.osgi.test.support.*, \
+-includepackage: \
 	${p}.handler.*, \
 	${p}.junit.*, \
 	${p}.util.*
+
+-conditionalpackage: \
+    org.osgi.test.support.*
 
 Include-Resource					= \
 	tw1.war, \
