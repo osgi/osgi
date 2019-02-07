@@ -312,11 +312,11 @@ Test-Cases							= ${testcases}
 	${p}.div.tb12=abc, \
 	${p}.div.tb15=abc, \
 	${p}.div.tb16=xyz, \
-	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\", \
-	  osgi.ee; osgi.ee=\"AA/BB\", \
-	  osgi.ee; osgi.ee=\"CC-XX/DD-YY\", \
-	  osgi.ee; osgi.ee=\"EE/FF-YY\"; version:Version=\"2.0\", \
-	  osgi.ee; osgi.ee=\"GG-XX/HH\"; version:Version=\"1.0\", \
-	  osgi.ee; osgi.ee=\"II-1.0/JJ-2.0\", \
-	  osgi.ee; osgi.ee=\"div/tb7a\""
+	org.osgi.framework.system.capabilities.extra = 'osgi.ee; osgi.ee="testOSGiEE", \
+	  osgi.ee; osgi.ee="AA/BB", \
+	  osgi.ee; osgi.ee="CC-XX/DD-YY", \
+	  osgi.ee; osgi.ee="EE/FF-YY"; version:Version="2.0", \
+	  osgi.ee; osgi.ee="GG-XX/HH"; version:Version="1.0", \
+	  osgi.ee; osgi.ee="II-1.0/JJ-2.0", \
+	  osgi.ee; osgi.ee="div/tb7a"'
 
