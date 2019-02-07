@@ -21,7 +21,7 @@ org.apache.aries.jmx:org.apache.aries.jmx:1.1.5
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
 org.apache.aries.proxy:org.apache.aries.proxy:1.0.1
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
-org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.0.14
+org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.2
 org.apache.aries.subsystem:org.apache.aries.subsystem:2.0.2
 org.apache.aries.rsa:org.apache.aries.rsa.core:1.13.0
 org.apache.aries.rsa:org.apache.aries.rsa.spi:1.13.0
@@ -94,9 +94,9 @@ org.apache.aries.tx-control:tx-control-provider-jdbc-xa:1.0.0
 org.apache.aries.tx-control:tx-control-provider-jpa-xa:1.0.0
 org.apache.aries.tx-control:tx-control-service-xa:1.0.0
 
-org.jboss.classfilewriter:jboss-classfilewriter:1.2.1.Final
-org.jboss.logging:jboss-logging:3.2.1.Final
-org.jboss.weld:weld-osgi-bundle:3.0.2.Final
+org.jboss.classfilewriter:jboss-classfilewriter:1.2.3.Final
+org.jboss.logging:jboss-logging:3.3.2.Final
+org.jboss.weld:weld-osgi-bundle:3.0.5.Final
 
 log4j:log4j:1.2.15
 
