@@ -1,0 +1,55 @@
+javac.profile=compact2
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description: Tests the service layre bundle
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package: \
+	${p}.junit.*
+
+Import-Package:  *
+
+Test-Cases							= ${testcases}
+
+-buildpath: \
+	${junit},\
+	osgi.core;version=4.3.1,\
+	org.osgi.test.support;version=latest,\
+	org.osgi.framework;version=latest,\
+	slf4j.api,\
+	org.osgi.service.onem2m;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.dto;version=latest
+
+
+-runbundles							= \
+    ${junit},\
+	plugins/slf4j-simple-1.7.21.jar;version=file,\
+	plugins/slf4j-api-1.7.21.jar;version=file,\
+    plugins/org.apache.felix.webconsole.plugins.ds-2.0.8.jar;version=file,\
+	plugins/org.apache.felix.scr-2.1.6.jar;version=file,\
+	plugins/org.apache.felix.webconsole-4.2.16-all.jar;version=file,\
+	plugins/org.apache.felix.http.api-3.0.0.jar;version=file,\
+	plugins/org.apache.felix.eventadmin-1.4.6.jar;version=file,\
+	plugins/org.apache.felix.http.jetty-3.2.0.jar;version=file,\
+	plugins/org.apache.felix.http.servlet-api-1.1.2.jar;version=file,\
+	plugins/org.apache.felix.configadmin-1.8.8.jar;version=file,\
+	plugins/org.apache.felix.gogo.command-0.16.0.jar;version=file,\
+	plugins/org.apache.felix.gogo.runtime-0.16.2.jar;version=file,\
+	plugins/org.apache.felix.gogo.shell-0.10.0.jar;version=file,\
+	plugins/com.diffplug.osgi.extension.sun.misc-0.0.0.jar;version=file,\
+	plugins/org.osgi.impl.bundle.servlet-2.1.1.jar;version=file,\
+	org.osgi.framework;version=latest,\
+	org.osgi.dto;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.util.function;version=latest,\
+	org.osgi.service.http;version=latest,\
+	org.osgi.service.event;version=latest,\
+	org.osgi.service.cm;version=latest,\
+	org.osgi.test.cse.toyCse;version=latest,\
+	org.osgi.service.onem2m;version=latest,\
+	org.osgi.service.onem2m.impl;version=latest
+
+-runproperties: \
+	org.osgi.framework.bootdelegation=*

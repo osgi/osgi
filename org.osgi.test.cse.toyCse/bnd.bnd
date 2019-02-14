@@ -1,0 +1,8 @@
+-buildpath: \
+	org.osgi.framework;version=latest,\
+	slf4j.api,\
+	org.osgi.service.onem2m;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.dto;version=latest
+Export-Package: org.osgi.test.cse.toyCse
+Bundle-Activator: org.osgi.test.cse.toyCse.Activator

@@ -1,0 +1,13 @@
+Bundle-Version: 1.0.0
+Bundle-Name: org.osgi.service.onem2m
+-buildpath: \
+	slf4j.api,\
+	org.osgi.dto;version=latest,\
+	org.osgi.util.promise;version=latest
+-dsannotations:
+Export-Package: \
+	org.osgi.service.onem2m,\
+	org.osgi.service.onem2m.dto
+Private-Package: \
+	org.osgi.service.onem2m,\
+	org.osgi.service.onem2m.dto
