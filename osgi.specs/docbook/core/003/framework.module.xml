@@ -4839,9 +4839,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
         definitions of the host bundle unless the exact definition (directives
         and attributes must match) is already present in the host. Fragment
         bundles can therefore add additional exports for the same package
-        name. The <code>bundle-version</code> attributes and
-        <code>bundle-symbolic-name</code> attributes will reflect the host
-        bundle.</para>
+        name.</para>
       </listitem>
 
       <listitem>
@@ -5693,7 +5691,8 @@ URL(String protocol, String host, String file)</programlisting>
       xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
-      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid class="uri"><link
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid
+      class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc1960.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024199"><title>Java Security
@@ -5712,22 +5711,20 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed xml:id="i3100827"><title>Zip File Format</title>The Zip
       file format as defined by the java.util.zip package.</bibliomixed>
 
-      <bibliomixed xml:id="i3024211"><title>Manifest
-      Format</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3024211"><title>Manifest Format</title><biblioid
+      class="uri"><link
       xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3024215"><title>W3C
-      EBNF</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3024215"><title>W3C EBNF</title><biblioid
+      class="uri"><link
       xlink:href="http://www.w3c.org/TR/REC-xml#sec-notation"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024221"><title>Mathematical Convention for
-      Interval
-      Notation</title><biblioid class="uri"><link
+      Interval Notation</title><biblioid class="uri"><link
       xlink:href="http://planetmath.org/encyclopedia/Interval.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3086040"><title>RFC 2396 Uniform Resource
-      Identifiers URI: Generic
-      Syntax</title><biblioid class="uri"><link
+      Identifiers URI: Generic Syntax</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2396.txt"/></biblioid></bibliomixed>
 
       <bibliomixed><title>Codes for the Representation of Names of
@@ -5748,28 +5745,27 @@ URL(String protocol, String host, String file)</programlisting>
       xlink:href="https://www.osgi.org/capability-namespaces-reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
-      Specification (Second
-      Edition)</title><biblioid class="uri"><link
+      Specification (Second Edition)</title><biblioid class="uri"><link
       xlink:href="http://www.w3.org/TR/2003/REC-PNG-20031110/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3222193"><title>Open Source
       Initiative</title><biblioid class="uri"><link
       xlink:href="http://www.opensource.org/"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>OSGi Semantic
-      Versioning</title><biblioid class="uri"><link
+      <bibliomixed><title>OSGi Semantic Versioning</title><biblioid
+      class="uri"><link
       xlink:href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3242547"><title>Specification
       References</title><biblioid class="uri"><link
       xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3246261"><title>Google
-      Android</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3246261"><title>Google Android</title><biblioid
+      class="uri"><link
       xlink:href="http://developer.android.com/index.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3246276"><title>Google App
-      Engine</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3246276"><title>Google App Engine</title><biblioid
+      class="uri"><link
       xlink:href="https://cloud.google.com/appengine/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246284"><title>Google Web
@@ -5777,8 +5773,8 @@ URL(String protocol, String host, String file)</programlisting>
       xlink:href="http://www.gwtproject.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module-spdx.license.list"><title>Software
-      Package Data Exchange (SPDX) License
-      List</title><biblioid class="uri"><link
+      Package Data Exchange (SPDX) License List</title><biblioid
+      class="uri"><link
       xlink:href="https://spdx.org/licenses/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module-maven.pom.developers"><title>Maven
