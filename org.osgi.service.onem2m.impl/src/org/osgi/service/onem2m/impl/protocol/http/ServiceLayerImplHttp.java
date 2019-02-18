@@ -162,18 +162,8 @@ public class ServiceLayerImplHttp implements ServiceLayer {
 			req.content.listOfURIs = targetAttributes;
 		}
 		req.operation = Operation.Retrieve;
-
-		// Set the source of the request
 		req.from = this.origin;
-
-		uri += "?atrl=";
-		for(String param : targetAttributes) {
-			uri += param + "+";
-		}
-
-		req.to = uri.substring(0, uri.length() - 1);
-
-		LOGGER.debug("Request Uri is [" + req.to + "].");
+		req.to = uri;
 
 		// Execute request transmission processing
 		Promise<ResponsePrimitiveDTO> res = this.request(req);
