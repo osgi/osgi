@@ -97,7 +97,7 @@ public class Activator implements BundleActivator {
 		System.out.println();
 		System.out.println();
 		LOGGER.debug("----ACP RETRIEVE!!!----");
-		ResourceDTO res =  serviceLayerService.retrieve("http://127.0.0.1:38080/in-name/acp_admin", new ResourceDTO()).getValue();
+		ResourceDTO res =  serviceLayerService.retrieve("http://127.0.0.1:38080/in-name/acp_admin").getValue();
 		LOGGER.debug(res.toString());
 
 
@@ -201,7 +201,7 @@ public class Activator implements BundleActivator {
 
 		//RETRIEVE
 		LOGGER.debug("----ContentInstanse RETRIEVE!!!----");
-		serviceLayerService.retrieve("http://127.0.0.1:38080/in-name/SampleAE/SampleCnt/SampleCin", new ResourceDTO());
+		serviceLayerService.retrieve("http://127.0.0.1:38080/in-name/SampleAE/SampleCnt/SampleCin");
 
 		//Wait
 		Thread.sleep(3000);

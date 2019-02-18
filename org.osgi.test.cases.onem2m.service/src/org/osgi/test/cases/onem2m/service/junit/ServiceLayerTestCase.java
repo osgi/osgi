@@ -55,7 +55,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		uri = "/in-cse";
 
 		try {
-			res = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			res = serviceLayerService.retrieve(uri).getValue();
 		} catch (Exception e) {
 			res = null;
 		}
@@ -81,7 +81,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		uri = "/in-cse2";
 
 		try {
-			res = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			res = serviceLayerService.retrieve(uri).getValue();
 		} catch (Exception e) {
 			res = null;
 		}
@@ -205,7 +205,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		uri = "/in-cse/updateCnt";
 
 		try {
-			res3 = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			res3 = serviceLayerService.retrieve(uri).getValue();
 		} catch (Exception e) {
 			fail();
 		}
