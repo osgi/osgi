@@ -275,16 +275,6 @@ public class ServiceLayreImplService implements ServiceLayer {
 
 		LOGGER.debug("Request Uri(BEFORE) is [" + uri + "].");
 
-		try {
-			// Add parameters to URI
-			req.to = makeQueryString(req);
-		} catch (Exception e) {
-			LOGGER.warn("Create filter error.", e);
-			return null;
-		}
-
-		LOGGER.debug("Request Uri(AFTER) is [" + req.to + "].");
-
 		// Execute request transmission processing
 		Promise<ResponsePrimitiveDTO> res = this.request(req);
 
@@ -327,96 +317,6 @@ public class ServiceLayreImplService implements ServiceLayer {
 			LOGGER.debug("[" + str + "]");
 		}
 		return resArrayList;
-	}
-
-
-	private static String makeQueryString(RequestPrimitiveDTO req) {
-
-		if (req.to == null) {
-			LOGGER.warn("URI is NULL");
-			return req.to;
-		}
-
-		String ex = "";
-
-		try {
-			boolean filterFlg = (req.filterCriteria != null);
-			boolean resultTypeFlg = (req.discoveryResultType != null);
-
-			if (filterFlg) {
-				// Get field of filterCriteria
-				FilterCriteriaDTO fc = req.filterCriteria;
-				Field[] field = fc.getClass().getFields();
-
-				// Process only the number of items in the field
-				for (Field s : field) {
-					if (s.get(fc) != null) {
-						// Whether the type is List
-						if (s.getType().equals(List.class)) {
-							Type t = s.getGenericType();
-							if (t instanceof ParameterizedType) {
-								ParameterizedType paramType = (ParameterizedType) t;
-								Type[] argTypes = paramType.getActualTypeArguments();
-								if (argTypes.length > 0) {
-									Type at = argTypes[0];
-									if (at.equals(String.class)) {
-										for (String str : (List<String>) s.get(fc)) {
-											ex += LongShortConverter.l2s(s.getName()) + "=" + str + "&";
-										}
-										continue;
-									} else if (at.equals(Integer.class)) {
-										for (Integer strInt : (List<Integer>) s.get(fc)) {
-											ex += LongShortConverter.l2s(s.getName()) + "=" + strInt.toString() + "&";
-										}
-										continue;
-									} else if (at.equals(AttributeDTO.class)) {
-										for (AttributeDTO ad : (List<AttributeDTO>) s.get(fc)) {
-											ex += LongShortConverter.l2s(s.getName()) + "=" + ad.name + "&";
-										}
-										continue;
-									}
-								}
-							}
-						}
-						// Whether it is filterOperation
-						else if ("filterOperation".equals(s.getName())) {
-							ex += LongShortConverter.l2s(s.getName()) + "=" + fc.filterOperation.getValue();
-						}
-						// Whether it is filterUsage
-						else if ("filterUsage".equals(s.getName())) {
-							ex += LongShortConverter.l2s(s.getName()) + "=" + fc.filterUsage.getValue();
-						}
-
-						else {
-							for (int i = 0; field.length > i; i++) {
-								if (field[i].getName().equals(s.getName())) {
-									ex += LongShortConverter.l2s(s.getName()) + "=" + s.get(fc);
-									break;
-								}
-								else if (field.length == (i + 1)) {
-									LOGGER.warn("This Column is NOT COVERED to \"ChangeName => \" " + s.getName());
-								}
-							}
-						}
-					} else {
-						// If the value is NULL, go to the next item
-						continue;
-					}
-					ex += "&";
-				}// end of for
-			}
-
-			// Setting the ResultType and the URI that added the query more than once
-			if (resultTypeFlg ) {
-				ex += "drt=" + req.discoveryResultType.getValue();
-			}else {
-				ex = ex.substring(0, ex.length() - 1); // remove '&' at the tail
-			}
-
-		} catch (Exception e) {
-			LOGGER.warn("Create filter error.", e);
-		}
-		return req.to + "?" + ex;
 	}
 
 }
