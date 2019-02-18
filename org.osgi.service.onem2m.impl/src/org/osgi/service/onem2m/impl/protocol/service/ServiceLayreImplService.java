@@ -238,17 +238,6 @@ public class ServiceLayreImplService implements ServiceLayer {
 		req.from = this.origin;
 
 		LOGGER.info("START DISCOVERY");
-		LOGGER.debug("Request Uri(BEFORE) is [" + uri + "].");
-
-		try {
-			// Add parameters to URI
-			req.to = makeQueryString(req);
-		} catch (Exception e) {
-			LOGGER.warn("Create filter error.", e);
-			return null;
-		}
-
-		LOGGER.debug("Request Uri(AFTER) is [" + req.to + "].");
 
 		// Execute request transmission processing
 		Promise<ResponsePrimitiveDTO> res = this.request(req);
