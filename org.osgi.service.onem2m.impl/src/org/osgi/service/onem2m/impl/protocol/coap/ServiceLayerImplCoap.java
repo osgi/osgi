@@ -128,19 +128,12 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 	}
 
 	@Override
-	public Promise<ResourceDTO> retrieve(String uri, ResourceDTO resource) {
+	public Promise<ResourceDTO> retrieve(String uri) {
 		LOGGER.info("START RETRIEVE");
 		LOGGER.debug("Request Uri is [" + uri + "].");
 
-		// When DTO is NULL End without request processing
-		if (resource == null) {
-			LOGGER.warn("END RETRIEVE");
-			return null;
-		}
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
-		req.content = new PrimitiveContentDTO();
-		req.content.resource = resource;
 		req.to = uri;
 		req.operation = Operation.Retrieve;
 

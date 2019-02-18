@@ -127,19 +127,12 @@ public class ServiceLayerImplHttp implements ServiceLayer {
 	}
 
 	@Override
-	public Promise<ResourceDTO> retrieve(String uri, ResourceDTO resource) {
+	public Promise<ResourceDTO> retrieve(String uri) {
 		LOGGER.info("START RETRIEVE");
 		LOGGER.debug("Request Uri is [" + uri + "].");
 
-		// When DTO is NULL End without request processing
-		if (resource == null) {
-			LOGGER.warn("END RETRIEVE");
-			return null;
-		}
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
-		req.content = new PrimitiveContentDTO();
-		req.content.resource = resource;
 		req.to = uri;
 		req.operation = Operation.Retrieve;
 
@@ -160,16 +153,14 @@ public class ServiceLayerImplHttp implements ServiceLayer {
 		LOGGER.info("START RETRIEVE");
 		LOGGER.debug("Request Uri is [" + uri + "].");
 
-		// When List is NULL or size 0, it terminates without request processing
-		if (targetAttributes == null || targetAttributes.size() == 0) {
-			LOGGER.warn("END RETRIEVE");
-			return null;
-		}
-
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
-		req.content = new PrimitiveContentDTO();
-		req.content.listOfURIs = targetAttributes;
+		
+		if( targetAttributes != null && targetAttributes.size()==0) {
+			req.content.listOfURIs = null;
+		}else {
+			req.content.listOfURIs = targetAttributes;
+		}
 		req.operation = Operation.Retrieve;
 
 		// Set the source of the request

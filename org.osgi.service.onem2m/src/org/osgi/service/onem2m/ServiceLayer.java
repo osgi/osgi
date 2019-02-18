@@ -38,7 +38,7 @@ public interface ServiceLayer {
 	 * @param uri URI for retrieving resource
 	 * @return retrieved resource data
 	 */
-	public Promise<ResourceDTO> retrieve(String uri, ResourceDTO resource);
+	public Promise<ResourceDTO> retrieve(String uri);
 
 	/**
 	 * retrieve subset of attributes.
