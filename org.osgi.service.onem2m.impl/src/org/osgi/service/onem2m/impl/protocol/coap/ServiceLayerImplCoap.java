@@ -262,7 +262,7 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 
 		try {
 			// Add parameters to URI
-			req.to = discoveryFilter(req);
+			req.to = makeQueryString(req);
 		} catch (Exception e) {
 			LOGGER.warn("Create filter error.", e);
 			return null;
@@ -297,7 +297,7 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 
 		try {
 			// Add parameters to URI
-			req.to = discoveryFilter(req);
+			req.to = makeQueryString(req);
 		} catch (Exception e) {
 			LOGGER.warn("Create filter error.", e);
 			return null;
@@ -401,19 +401,18 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 		return resArrayList;
 	}
 
-	public static String discoveryFilter(RequestPrimitiveDTO req) {
+	private static String makeQueryString(RequestPrimitiveDTO req) {
 
 		if (req.to == null) {
 			LOGGER.warn("URI is NULL");
 			return req.to;
 		}
 
-		String ex = req.to;
+		String ex = "";
 
 		try {
-			Boolean questionFlg = false;
-			Boolean filterFlg = req.filterCriteria != null ? true : false;
-			Boolean resultTypeFlg = req.discoveryResultType != null ? true : false;
+			boolean filterFlg = (req.filterCriteria != null);
+			boolean resultTypeFlg = (req.discoveryResultType != null);
 
 			if (filterFlg) {
 				// Get field of filterCriteria
@@ -423,10 +422,6 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 				// Process only the number of items in the field
 				for (Field s : field) {
 					if (s.get(fc) != null) {
-						if (!questionFlg) {
-							ex += "?";
-							questionFlg = true;
-						}
 						// Whether the type is List
 						if (s.getType().equals(List.class)) {
 							Type t = s.getGenericType();
@@ -479,25 +474,20 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 						continue;
 					}
 					ex += "&";
-				}
+				}// end of for
 			}
 
 			// Setting the ResultType and the URI that added the query more than once
-			if (resultTypeFlg && questionFlg) {
+			if (resultTypeFlg ) {
 				ex += "drt=" + req.discoveryResultType.getValue();
+			}else {
+				ex = ex.substring(0, ex.length() - 1); // remove '&' at the tail
 			}
-			// Setting of ResultType setting
-			else if (resultTypeFlg) {
-				ex += "?drt=" + req.discoveryResultType.getValue();
-			}
-			// URI with no ResultType setting and one or more queries added
-			else if (questionFlg) {
-				ex = ex.substring(0, ex.length() - 1);
-			}
+
 		} catch (Exception e) {
 			LOGGER.warn("Create filter error.", e);
 		}
-		return ex;
+		return req.to + "?" + ex;
 	}
 
 	private Request makeCRUDRequest(RequestPrimitiveDTO req) {
