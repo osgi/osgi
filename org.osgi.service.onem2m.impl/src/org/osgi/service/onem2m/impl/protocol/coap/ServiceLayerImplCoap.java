@@ -507,6 +507,9 @@ public class ServiceLayerImplCoap implements ServiceLayer {
 		case Delete:
 			request = new Request(Code.DELETE);
 			break;
+		case Notify:
+			// TODO: any operation here?
+			break;
 		}
 		request.getOptions().addOption(new Option(X_M2M_ORIGIN, req.from));
 		request.getOptions().addOption(new Option(X_M2M_RI, String.valueOf(System.currentTimeMillis())));
