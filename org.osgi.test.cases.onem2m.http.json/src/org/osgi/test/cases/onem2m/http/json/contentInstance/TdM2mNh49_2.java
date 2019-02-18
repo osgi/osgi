@@ -13,7 +13,7 @@ public class TdM2mNh49_2 {
 		try {
 			// Request for retrieving the latest ContentInstance in a Container.
 			LOGGER.info("----START CONTAINER RETRIEVE!!!----");
-			testResponse = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			testResponse = serviceLayerService.retrieve(uri).getValue();
 			LOGGER.info("----END CONTAINER RETRIEVE!!!----");
 
 		} catch (Exception e) {

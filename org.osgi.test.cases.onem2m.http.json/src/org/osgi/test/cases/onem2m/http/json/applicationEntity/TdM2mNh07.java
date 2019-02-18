@@ -15,7 +15,7 @@ public class TdM2mNh07 {
 
 		try {
 			// Request for retrieving AE data.
-			testResponse = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			testResponse = serviceLayerService.retrieve(uri).getValue();
 			LOGGER.info("----END AE RETRIEVE!!!----");
 		} catch (Exception e) {
 			e.printStackTrace();

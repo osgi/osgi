@@ -13,7 +13,7 @@ public class TdM2mNh01 {
 		try {
 			// Request for Retrieving CSE-BASE data
 			LOGGER.info("----START CSE RETRIEVE!!!----");
-			testResponse = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			testResponse = serviceLayerService.retrieve(uri).getValue();
 			LOGGER.info("----END CSE RETRIEVE!!!----");
 		} catch (Exception e) {
 			e.printStackTrace();

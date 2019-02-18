@@ -13,7 +13,7 @@ public class TdM2mNh15{
 		try {
 		// Request for Retrieving AE data.
 		LOGGER.info("----START CONTENTINSTANCE RETRIEVE!!!----");
-		testResponse  = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+		testResponse  = serviceLayerService.retrieve(uri).getValue();
 		LOGGER.info("----END CONTENTINSTANCE RETRIEVE!!!----");
 		} catch (Exception e) {
 			e.printStackTrace();

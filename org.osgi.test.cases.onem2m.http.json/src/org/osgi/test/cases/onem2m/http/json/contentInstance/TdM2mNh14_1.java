@@ -13,7 +13,7 @@ public class TdM2mNh14_1 {
 		try {
 			// Retrieve Container data before creating a ContentInstance
 			LOGGER.info("----START CONTAINER RETRIEVE (BEFORE)!!!----");
-			beforeResult = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			beforeResult = serviceLayerService.retrieve(uri).getValue();
 			LOGGER.info("----END CONTAINER RETRIEVE (BEFORE)!!!----");
 		} catch (Exception e) {
 			e.printStackTrace();

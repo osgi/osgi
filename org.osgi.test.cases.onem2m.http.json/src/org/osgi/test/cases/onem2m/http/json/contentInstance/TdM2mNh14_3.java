@@ -14,7 +14,7 @@ public class TdM2mNh14_3 {
 		try {
 			// Retrieve Container data after creating a ContentInstance
 			LOGGER.info("----START CONTAINER RETRIEVE (AFTER)!!!----");
-			afterResult = serviceLayerService.retrieve(uri, new ResourceDTO()).getValue();
+			afterResult = serviceLayerService.retrieve(uri).getValue();
 			LOGGER.info("----END CONTAINER RETRIEVE (AFTER)!!!----");
 
 		} catch (Exception e) {
