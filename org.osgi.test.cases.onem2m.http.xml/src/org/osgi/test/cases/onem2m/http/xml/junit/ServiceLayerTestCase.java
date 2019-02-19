@@ -12,6 +12,7 @@ import org.osgi.test.cases.onem2m.http.xml.notificationlistener.NotificationList
 import org.osgi.test.support.OSGiTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
 public class ServiceLayerTestCase extends OSGiTestCase{
 
@@ -56,7 +57,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
     }
 
-
+    @Test
 	public void testTdM2mNh01_xml(){
 		try {
 			Thread.sleep(5000);

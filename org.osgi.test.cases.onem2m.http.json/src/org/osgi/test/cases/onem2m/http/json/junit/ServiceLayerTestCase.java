@@ -1,6 +1,7 @@
 package org.osgi.test.cases.onem2m.http.json.junit;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,7 +84,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
     }
 
-
+    @Test
 	public void testTdM2mNh01(){
 		try {
 			Thread.sleep(5000);
@@ -115,7 +116,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh01 Test is complete----");
 	}
 
-
+    @Test
 	public void testTdM2mNh06(){
 		LOGGER.info("----Start TdM2mNh06 Test----");
 
@@ -171,6 +172,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh06 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh07() {
 		LOGGER.info("----Start TdM2mNh07 Test----");
 
@@ -196,6 +198,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh07 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh08() throws Exception {
 		LOGGER.info("----Start TdM2mNh08 Test----");
 
@@ -232,6 +235,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh08 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh09() {
 		LOGGER.info("----Start TdM2mNh09 Test----");
 
@@ -247,6 +251,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh09 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh10() {
 		LOGGER.info("----Start TdM2mNh10 Test----");
 
@@ -278,6 +283,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh10 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh14() {
 		LOGGER.info("----Start TdM2mNh14 Test----");
 
@@ -332,6 +338,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh14 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh15() {
 		LOGGER.info("----Start TdM2mNh15 Test----");
 
@@ -353,6 +360,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh15 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh49() {
 		LOGGER.info("----Start TdM2mNh49 Test----");
 
@@ -400,6 +408,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh49 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh18() {
 		LOGGER.info("----Start Preparations for TdM2mNh18 Test----");
 		List<String> resList = new ArrayList<String>();
@@ -455,6 +464,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh18 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh19() {
 		LOGGER.info("----Start TdM2mNh19 Test----");
 		List<String> resList = new ArrayList<String>();
@@ -497,6 +507,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh19 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh21() {
 		LOGGER.info("----Start TdM2mNh21 Test----");
 		List<String> resList = new ArrayList<String>();
@@ -532,6 +543,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----TdM2mNh21 Test is complete----");
 	}
 
+    @Test
 	public void testTdM2mNh22() {
 		LOGGER.info("----Start TdM2mNh22 Test----");
 		ResourceDTO req = new ResourceDTO();
@@ -577,6 +589,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 	//NotificationListener
 
+    @Test
 	public void testTdM2mNh48() {
 		LOGGER.info("----Start TdM2mNh48 Test----");
 

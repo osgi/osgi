@@ -1,7 +1,9 @@
 package org.osgi.test.cases.onem2m.service.junit;
 
 import java.util.ArrayList;
+
 import java.util.List;
+import org.junit.Test;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -46,7 +48,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
     }
 
-
+    @Test
 	public void testRetrieve1(){
 		LOGGER.info("----Start RETRIEVE Test 1----");
 
@@ -73,6 +75,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----RETRIEVE Test 1 is complete----");
 	}
 
+    @Test
 	public void testRetrieve2(){
 		LOGGER.info("----Start RETRIEVE Test 2----");
 
@@ -92,7 +95,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----RETRIEVE Test 2 is complete----");
 	}
 
-
+    @Test
 	public void testCreate1(){
 		LOGGER.info("----Start CREATE Test 1----");
 
@@ -119,7 +122,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----CREATE Test 1 is complete----");
 	}
 
-
+    @Test
 	public void testCreate2(){
 		LOGGER.info("----Start CREATE Test 2----");
 
@@ -142,6 +145,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----CREATE Test 2 is complete----");
 	}
 
+    @Test
 	public void testCreate3(){
 		LOGGER.info("----Start CREATE Test 3----");
 
@@ -164,6 +168,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----CREATE Test 3 is complete----");
 	}
 
+    @Test
 	public void testUpdate1(){
 		LOGGER.info("----Start Update Test 1----");
 
@@ -224,6 +229,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Update Test 1 is complete----");
 	}
 
+    @Test
 	public void testUpdate2(){
 		LOGGER.info("----Start Update Test 2----");
 
@@ -249,7 +255,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Update Test 2 is complete----");
 	}
 
-
+    @Test
 	public void testDelete1(){
 		LOGGER.info("----Start Delete Test 1----");
 
@@ -278,7 +284,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Delete Test 1 is complete----");
 	}
 
-
+    @Test
 	public void testDelete2(){
 		LOGGER.info("----Start Delete Test 2----");
 
@@ -295,6 +301,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Delete Test 2 is complete----");
 	}
 
+    @Test
 	public void testDiscovery1(){
 		LOGGER.info("----Start Discovery Test 1----");
 
@@ -359,7 +366,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Discovery Test 1 is complete----");
 	}
 
-
+    @Test
 	public void testDiscovery2(){
 		LOGGER.info("----Start Discovery Test 2----");
 
