@@ -28,17 +28,14 @@ class DTOUtil {
 		// Do not instantiate. This is a utility class.
 	}
 
-	static boolean isDTOType(Class< ? > cls) {
-		try {
-			cls.getDeclaredConstructor();
-		} catch (NoSuchMethodException | SecurityException e) {
-			// No zero-arg constructor, not a DTO
-			return false;
-		}
-
-		if (cls.getDeclaredMethods().length > 0) {
-			// should not have any methods
-			return false;
+	static boolean isDTOType(Class< ? > cls, boolean ignorePublicNoArgsCtor) {
+		if (!ignorePublicNoArgsCtor) {
+			try {
+				cls.getConstructor();
+			} catch (NoSuchMethodException | SecurityException e) {
+				// No public zero-arg constructor, not a DTO
+				return false;
+			}
 		}
 
 		for (Method m : cls.getMethods()) {

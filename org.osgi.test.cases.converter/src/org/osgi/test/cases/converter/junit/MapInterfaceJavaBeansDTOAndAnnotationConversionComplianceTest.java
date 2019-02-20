@@ -203,7 +203,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		public String	prop1;
 		public String	prop2;
 
-		DTOLike() {}
+		public DTOLike() {}
 	}
 
 	public static class NotDTOLike {
@@ -230,7 +230,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		public String				prop1;
 		public String				prop2;
 
-		WithStaticAndPrivateFieldsDTOLike() {}
+		public WithStaticAndPrivateFieldsDTOLike() {}
 	}
 
 	public static class KeyMappingDTOLike {

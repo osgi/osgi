@@ -81,7 +81,8 @@ class Util {
 
 	static Map<String,Method> getBeanKeys(Class< ? > beanClass) {
 		Map<String,Method> keys = new LinkedHashMap<>();
-		for (Method md : beanClass.getDeclaredMethods()) {
+		// Bean methods must be public and can be on parent classes
+		for (Method md : beanClass.getMethods()) {
 			String key = getBeanKey(md);
 			if (key != null && !keys.containsKey(key)) {
 				keys.put(key, md);
@@ -191,13 +192,25 @@ class Util {
 		return keys;
 	}
 
+	static String getMarkerAnnotationKey(Class< ? > intf, Object obj) {
+		Class< ? > ann = getAnnotationType(intf, obj);
+		return getPrefix(intf)
+				+ toSingleElementAnnotationKey(ann.getSimpleName());
+	}
+
 	static String getSingleElementAnnotationKey(Class< ? > intf, Object obj) {
 		Class< ? > ann = getAnnotationType(intf, obj);
 		if (ann == null)
 			return null;
 
 		boolean valueFound = false;
-		for (Method md : ann.getDeclaredMethods()) {
+		// All annotation methods must be public
+		for (Method md : ann.getMethods()) {
+			if(md.getDeclaringClass() != ann) {
+				// Ignore Object methods and Annotation methods
+				continue;
+			}
+			
 			if ("value".equals(md.getName())) {
 				valueFound = true;
 				continue;
