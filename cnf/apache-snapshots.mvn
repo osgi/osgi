@@ -1,6 +1,4 @@
 # 3rd party artifacts
-org.apache.aries.cdi:org.apache.aries.cdi.extender:0.0.2-SNAPSHOT
-org.apache.aries.cdi:org.apache.aries.cdi.extra:0.0.2-SNAPSHOT
 
 org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:0.0.1-SNAPSHOT
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:0.0.1-SNAPSHOT
