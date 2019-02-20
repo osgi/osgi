@@ -1,4 +1,4 @@
-package org.osgi.service.onem2m.impl.protocol;
+package org.osgi.impl.service.onem2m.protocol;
 
 import java.io.FileInputStream;
 import java.io.IOException;

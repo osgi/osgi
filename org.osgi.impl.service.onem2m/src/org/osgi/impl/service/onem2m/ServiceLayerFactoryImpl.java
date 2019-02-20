@@ -1,4 +1,4 @@
-package org.osgi.service.onem2m.impl;
+package org.osgi.impl.service.onem2m;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;

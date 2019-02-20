@@ -1,4 +1,4 @@
-package org.osgi.service.onem2m.impl;
+package org.osgi.impl.service.onem2m;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
