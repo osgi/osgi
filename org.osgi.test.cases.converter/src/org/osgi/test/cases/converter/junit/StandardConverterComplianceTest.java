@@ -6,8 +6,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.dto.DTO;
 import org.osgi.util.converter.Converter;
@@ -181,5 +184,41 @@ public class StandardConverterComplianceTest extends TestCase{
 	public static class ReifiedFieldDto extends ParameterizedFieldDto<String> {}
 
 	public static class ReifiedFieldDtoSub extends ReifiedFieldDto {}
+
+	/**
+	 * Section 707.4 : Conversions
+	 * <p/>
+	 * 707.4.1 - Generics
+	 * <p/>
+	 * When converting to a target type which reifies parameterized fields the
+	 * converter should convert the nested data as defined by the type variables
+	 * This test looks at a subclass that indirectly binds a type variable
+	 */
+	public void testWildcardGenerics() {
+
+		HashSet<Character> charSet = new HashSet<>(
+				Arrays.asList('f', 'o', 'o'));
+
+		Map<String,Object> map = new HashMap<>();
+		map.put("charSet", charSet);
+
+		Converter converter = Converters.standardConverter();
+
+		Map<String, ? > m = converter.convert(map)
+				.to(new TypeReference<Map<String, ? >>() {});
+		assertEquals(1, m.size());
+		assertEquals(charSet, m.get("charSet"));
+
+		m = converter.convert(map)
+				.to(new TypeReference<Map<String, ? extends List<String>>>() {});
+		assertEquals(1, m.size());
+
+		List<String> list = new ArrayList<>();
+		for (Character character : charSet) {
+			list.add(String.valueOf(character));
+		}
+
+		assertEquals(list, m.get("charSet"));
+	}
 
 }
