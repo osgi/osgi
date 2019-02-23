@@ -149,7 +149,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			if (lowerBounds.length != 0) {
 				// This is a ? super X generic, why on earth would you do this?
 				throw new ConversionException("The type variable "
-						+ wt.getTypeName()
+						+ wt.toString()
 						+ " cannot be used with the converter. The use of <? super ...> is highly ambiguous.");
 			} else {
 				type = wt.getUpperBounds()[0];
