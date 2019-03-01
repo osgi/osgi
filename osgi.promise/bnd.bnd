@@ -1,4 +1,4 @@
-osgi.version.micro: 1
+osgi.version.micro: 2
 
 Bundle-License: Apache-2.0; \
                 link="http://www.apache.org/licenses/LICENSE-2.0"; \
