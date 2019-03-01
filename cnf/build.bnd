@@ -44,6 +44,13 @@ licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 bndrepo                 = ${uri;${bnd_repourl}}
 
+bnd_dependencies: \
+  biz.aQute.bnd,\
+  biz.aQute.bndlib,\
+  biz.aQute.junit,\
+  biz.aQute.tester
+bnd_version: ${replace;${bnd_plugin};.*:(.*);$1}
+
 -plugin = aQute.lib.deployer.FileRepo; \
             name='Main'; \
             location="${mainrepo}"; \
@@ -52,26 +59,26 @@ bndrepo                 = ${uri;${bnd_repourl}}
             name='Licensed'; \
             location="${licensedrepo}"; \
             readonly=true, \
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            releaseUrl="${bndrepo}";\
-            snapshotUrl="${bndrepo}";\
-            index=${.}/bnd.mvn;\
+          aQute.bnd.repository.maven.pom.provider.BndPomRepository;\
             name='Bnd';\
-            readOnly=true,\
+            revision="${replacelist;${bnd_dependencies};.+;biz.aQute.bnd:$0:${bnd_version}}";\
+            releaseUrls="${bndrepo}";\
+            snapshotUrls="${bndrepo}";\
+            location="${workspace}/cnf/cache/Bnd/index.xml",\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            name='Maven Central';\
             releaseUrl="${centralrepo}";\
             index=${.}/central.mvn;\
-            name='Maven Central';\
             readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            name='SpringSource EBR';\
             releaseUrl="http://repository.springsource.com/maven/bundles/external";\
             index=${.}/springsource.mvn;\
-            name='SpringSource EBR';\
             readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            name='Apache Snapshots';\
             snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
             index=${.}/apache-snapshots.mvn;\
-            name='Apache Snapshots';\
             readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             name='Local';\
@@ -82,9 +89,9 @@ bndrepo                 = ${uri;${bnd_repourl}}
             snapshotUrl="${fileuri;${releaserepo}}";\
             noupdateOnRelease=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
+           name='Baseline';\
            releaseUrl="${centralrepo}";\
            index=${.}/baseline.mvn;\
-           name='Baseline';\
            readOnly=true,\
           aQute.bnd.signing.JartoolSigner; \
             keystore="${build}/keystore"; \
