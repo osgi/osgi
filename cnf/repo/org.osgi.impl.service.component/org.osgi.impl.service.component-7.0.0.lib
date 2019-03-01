@@ -1,3 +1,5 @@
 org.osgi.service.component; version=latest
 org.osgi.service.cm; version=latest
-org.apache.felix.scr; version=2.1.8
+org.osgi.util.function; version=latest
+org.osgi.util.promise; version=latest           
+org.apache.felix.scr; version=2.1.16
