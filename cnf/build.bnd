@@ -61,7 +61,7 @@ bnd_version: ${replace;${bnd_plugin};.*:(.*);$1}
             readonly=true, \
           aQute.bnd.repository.maven.pom.provider.BndPomRepository;\
             name='Bnd';\
-            revision="${replacelist;${bnd_dependencies};.+;biz.aQute.bnd:$0:${bnd_version}}";\
+            revision="${replace;${bnd_dependencies};.+;biz.aQute.bnd:$0:${bnd_version}}";\
             releaseUrls="${bndrepo}";\
             snapshotUrls="${bndrepo}";\
             location="${workspace}/cnf/cache/Bnd/index.xml",\
