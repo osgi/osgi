@@ -25,7 +25,7 @@ Export-Package: ${p}.junit.mock
 	org.osgi.util.converter;version=project,\
 	org.osgi.util.function;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
-	org.apache.felix.http.servlet-api;version=1.1.2,\
+	org.apache.felix.http.servlet-api;version=1.1,\
 	org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
