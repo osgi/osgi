@@ -12,7 +12,7 @@ org.apache.geronimo.specs.geronimo-jcdi_2.0_spec; version=1.1
 
 jboss-classfilewriter; version=1.2.3
 log4j.over.slf4j; version=1.7.7
-org.apache.felix.configadmin; version=1.9.6
+org.apache.felix.configadmin; version=1.9.12
 org.apache.felix.scr; version=2.1.8
 org.apache.logging.log4j.api; version=2.7.0
 org.jboss.logging.jboss-logging; version=3.3.2
