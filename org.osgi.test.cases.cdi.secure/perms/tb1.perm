@@ -1,0 +1,17 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to fragments (extension) bundles test bundle.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+${permissions;packages}
+(org.osgi.framework.CapabilityPermission "(&(capability.namespace=osgi.contract)(osgi.contract=JavaInject))" "require")
+(org.osgi.framework.CapabilityPermission "(&(capability.namespace=osgi.extender)(osgi.extender=osgi.cdi))" "require")
+(org.osgi.framework.CapabilityPermission "(&(capability.namespace=osgi.cdi.extension)(osgi.cdi.extension=tb.extension))" "require")
+(org.osgi.framework.ServicePermission "org.osgi.service.cdi.runtime.CDIComponentRuntime" "get")
+(org.osgi.framework.ServicePermission "javax.enterprise.inject.spi.Extension" "get")
+(org.osgi.framework.ServicePermission "java.util.concurrent.Callable" "register")
+
+#(org.osgi.framework.ServicePermission "javax.enterprise.inject.spi.BeanManager" "register")

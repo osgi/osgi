@@ -1,0 +1,48 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Conditional-Package: org.osgi.test.support.*
+
+Private-Package: ${p}.junit.*
+
+Include-Resource:\
+	tb1.jar,\
+	tb2.jar,\
+	tb3.jar,\
+	tb4.jar,\
+	tb5.jar,\
+	tbextension.jar
+
+-runsystempackages: \
+	sun.misc
+
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.cdi;version=project,\
+	org.osgi.service.log;version=latest,\
+	org.osgi.service.component.annotations;version=latest,\
+	org.osgi.annotation.bundle;version=latest,\
+	org.osgi.namespace.extender;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.framework;version=latest,\
+	org.osgi.util.tracker;version=latest,\
+	org.osgi.resource;version=latest,\
+	org.osgi.dto;version=latest,\
+	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
+	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
+	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
+	${junit}
+
+-runbundles: \
+	${junit},\
+	org.osgi.impl.bundle.cdi;version=latest
+
+# This is to work around the missing (org.osgi.framework.CapabilityPermission "osgi.implementation" "provide") in Felix ConfigAdmin
+-runsystemcapabilities: \
+	osgi.implementation;osgi.implementation="osgi.cm";uses:="org.osgi.service.cm,org.apache.felix.cm";version:Version="1.6"
+
+-runproperties: \
+	${runsecureproperties}
+
+Test-Cases: ${testcases}
+
