@@ -36,6 +36,15 @@ public class DisableComponentTests extends AbstractTestCase {
 		adminTracker = new ServiceTracker<>(bundleContext, ConfigurationAdmin.class, null);
 		adminTracker.open();
 		configurationAdmin = adminTracker.getService();
+
+		Configuration[] configurations = configurationAdmin
+				.listConfigurations("(service.pid=osgi.cdi.org.osgi.test.cases.cdi.tb8)");
+
+		if (configurations != null) {
+			for (Configuration configuration : configurations) {
+				configuration.delete();
+			}
+		}
 	}
 
 	@After
