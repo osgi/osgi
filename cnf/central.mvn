@@ -17,8 +17,8 @@ org.apache.aries.application:org.apache.aries.application.api:1.0.0
 org.apache.aries.application:org.apache.aries.application.modeller:1.0.0
 org.apache.aries.application:org.apache.aries.application.utils:1.0.0
 org.apache.aries.blueprint:org.apache.aries.blueprint:1.0.0
-org.apache.aries.cdi:org.apache.aries.cdi.extender:1.0.0
-org.apache.aries.cdi:org.apache.aries.cdi.extra:1.0.0
+org.apache.aries.cdi:org.apache.aries.cdi.extender:1.0.2
+org.apache.aries.cdi:org.apache.aries.cdi.extra:1.0.2
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:1.0.4
 org.apache.aries.jmx:org.apache.aries.jmx:1.1.5
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
