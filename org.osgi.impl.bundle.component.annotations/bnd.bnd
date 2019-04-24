@@ -12,7 +12,10 @@ Private-Package 			= ${p}.*
 	org.osgi.service.component.annotations;	version=latest, \
 	org.osgi.service.log;	version=latest, \
 	osgi.core;					version=6.0, \
-	osgi.cmpn;					version=6.0, \
+	osgi.cmpn;					version=6.0
+
+-includeresource: \
+ OSGI-INF/vendor.properties;literal="vendor=impl"
 
 -runbundles							= \
 	org.osgi.impl.service.component; version=latest, \
