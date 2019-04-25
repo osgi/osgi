@@ -16,7 +16,6 @@ buildscript {
   }
   dependencies {
     classpath bnd_plugin
-    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.5.0'
   }
   /* Add bnd gradle plugin to buildscript classpath of rootProject */
   def bndPlugin = files(configurations.classpath.files)

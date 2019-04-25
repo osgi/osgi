@@ -1,4 +1,0 @@
-animalsniffer {
-    ignore 'java.util.concurrent.CompletableFuture'
-    ignore 'java.util.concurrent.CompletionStage'
-}

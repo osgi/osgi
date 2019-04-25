@@ -13,13 +13,6 @@ subprojects {
     if (bndis('companion.code')) {
       apply from: cnf.file('gradle/companion.gradle')
     }
-    plugins.apply 'ru.vyarus.animalsniffer'
-    repositories {
-      mavenCentral()
-      flatDir {
-        dirs "${bnd('licensed')}/animalsniffer"
-      }
-    }
     if (sourceCompatibility.isJava7()) { 
       String javacProfile = bnd('javac.profile', '')
       tasks.withType(JavaCompile.class).configureEach {
@@ -28,24 +21,6 @@ subprojects {
           options.compilerArgs.removeAll(['-profile', javacProfile])
         }
       }
-      def signatures7 = ['':'org.codehaus.mojo.signature:java17:1.0@signature',
-                         'compact1':':java17:1.0:compact1@signature',
-                         'compact2':':java17:1.0:compact2@signature',
-                         'compact3':':java17:1.0:compact3@signature']
-      dependencies {
-        signature signatures7[javacProfile]
-      }
-    } else { 
-      dependencies {
-        signature 'org.codehaus.mojo.signature:java18:1.0@signature'
-      }
-    }
-    animalsniffer {
-      sourceSets = [sourceSets.main]
-      ignore 'java.lang.invoke.MethodHandle'
-    }
-    tasks.named('jar') {
-      dependsOn 'animalsnifferMain'
     }
     tasks.named('test') {
       testLogging {
