@@ -1,5 +1,3 @@
-osgi.version.minor: 1
-
 Bundle-License: Apache-2.0; \
                 link="http://www.apache.org/licenses/LICENSE-2.0"; \
                 description="Apache License, Version 2.0"

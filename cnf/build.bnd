@@ -138,7 +138,7 @@ copyright.year = ${tstamp;yyyy}
 copyright = Copyright (c) OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
 
-osgi.release				= 7
+osgi.release				= 8
 osgi.version.major			= ${osgi.release}
 osgi.version.minor			= 0
 osgi.version.micro			= 0

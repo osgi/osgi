@@ -1,6 +1,6 @@
 org.osgi.service.remoteserviceadmin; version=latest
 org.osgi.service.cm; version=latest
-org.osgi.impl.service.configurator;version=7.0.0
+org.osgi.impl.service.configurator;version=latest
 org.osgi.service.event; version=latest
 
 slf4j.api; version=1.7.7
