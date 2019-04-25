@@ -13,15 +13,6 @@ subprojects {
     if (bndis('companion.code')) {
       apply from: cnf.file('gradle/companion.gradle')
     }
-    if (sourceCompatibility.isJava7()) { 
-      String javacProfile = bnd('javac.profile', '')
-      tasks.withType(JavaCompile.class).configureEach {
-        options.compilerArgs.add('-Xlint:-options')
-        if (!javacProfile.empty) {
-          options.compilerArgs.removeAll(['-profile', javacProfile])
-        }
-      }
-    }
     tasks.named('test') {
       testLogging {
         exceptionFormat 'full'
