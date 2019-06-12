@@ -178,8 +178,15 @@ public abstract class LaunchTest extends OSGiTestCase {
 
 	static FrameworkClassLoader createFrameworkClassLoader()
 			throws MalformedURLException {
-		String classpathProp = System.getProperty("java.class.path");
-		String[] classpaths = classpathProp.split(File.pathSeparator);
+
+		// Since bnd 4.3.0 the framework is on the launcher.runpath system
+		// property.
+		// TODO Remove the old approach one day.
+		String classpathProp = System.getProperty("launcher.runpath",
+				System.getProperty("java.class.path"));
+		String[] classpaths = classpathProp
+				.split("[," + File.pathSeparator + "]");
+
 		List<URL> frameworkImpl = new ArrayList<>();
 		for (String classpath : classpaths) {
 			File file = new File(classpath);
