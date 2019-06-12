@@ -24,6 +24,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.net.SocketFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -408,11 +410,22 @@ public class FrameworkLaunchTests extends LaunchTest {
 		Map<String, String> configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "*");
 		doTestParentClassLoader(configuration, null, Bundle.class.getName(), true);
+		doTestParentClassLoader(configuration, null,
+				SocketFactory.class.getName(), false);
 		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_BOOT, Bundle.class.getName(), true);
+		doTestParentClassLoader(configuration,
+				Constants.FRAMEWORK_BUNDLE_PARENT_BOOT,
+				SocketFactory.class.getName(), false);
 		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_EXT, Bundle.class.getName(), true);
-		// here we assume the framework jar was placed on the app class loader.
-		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_APP, Bundle.class.getName(), false);
-		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK, Bundle.class.getName(), false);
+		doTestParentClassLoader(configuration,
+				Constants.FRAMEWORK_BUNDLE_PARENT_EXT,
+				SocketFactory.class.getName(), false);
+		doTestParentClassLoader(configuration,
+				Constants.FRAMEWORK_BUNDLE_PARENT_APP,
+				SocketFactory.class.getName(), false);
+		doTestParentClassLoader(configuration,
+				Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK,
+				SocketFactory.class.getName(), false);
 	}
 
 	private void doTestParentClassLoader(Map<String, String> configuration,
