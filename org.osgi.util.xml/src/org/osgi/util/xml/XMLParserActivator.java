@@ -204,7 +204,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 			if (pfcName.length() == 0) {
 				continue; // blank line
 			}
-			int commentIdx = pfcName.indexOf("#");
+			int commentIdx = pfcName.indexOf('#');
 			if (commentIdx == 0) { // comment line
 				continue;
 			} else

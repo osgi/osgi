@@ -866,7 +866,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		// work our way up the tree...
 		int last;
 		int offset = requestedName.length() - 1;
-		while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
+		while ((last = requestedName.lastIndexOf('.', offset)) != -1) {
 			requestedName = requestedName.substring(0, last + 1) + "*";
 			sp = pc.get(requestedName);
 			if (sp != null) {

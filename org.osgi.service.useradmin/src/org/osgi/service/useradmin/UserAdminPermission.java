@@ -587,7 +587,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 		// work our way up the tree...
 		int last;
 		int offset = name.length() - 1;
-		while ((last = name.lastIndexOf(".", offset)) != -1) {
+		while ((last = name.lastIndexOf('.', offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
 				x = permissions.get(name);
