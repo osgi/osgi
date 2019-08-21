@@ -2626,10 +2626,10 @@ public class Foo implements EventHandler { ... }</programlisting>
       <title>Reference Element</title>
 
       <para>A <emphasis>reference</emphasis> declares a dependency that a
-      component has on a set of target services. A
-      component configuration is not satisfied, unless all its references are
-      satisfied. A reference specifies target services by specifying their
-      interface and an optional target property.</para>
+      component has on a set of target services. A component configuration is
+      not satisfied, unless all its references are satisfied. A reference
+      specifies target services by specifying their interface and an optional
+      target property.</para>
 
       <para>A <code>reference</code> element has the attributes defined in the
       following table.</para>
@@ -3469,7 +3469,7 @@ public class FooImpl implements Foo {
           description, all the component's references are satisfied. A
           reference is satisfied when the reference specifies optional
           cardinality or there is at least one target service for the
-          reference</para>
+          reference.</para>
         </listitem>
       </itemizedlist>
 
@@ -4764,7 +4764,7 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       <para>For example, the following class registers a Speech service that
       can run on a Macintosh:</para>
 
-      <programlisting>pubic interface Speech {
+      <programlisting>public interface Speech {
   void say(String what) throws Exception;
 }
 
@@ -4795,7 +4795,7 @@ public class MacSpeech implements Speech {
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.service.component.annotations.Deactivate"
       xrefstyle="hyperlink"/> annotations. If the component wants to be
-      updated for changes in the configuration properties than it can also
+      updated for changes in the configuration properties then it can also
       indicated the modified method with the <xref
       linkend="org.osgi.service.component.annotations.Modified"
       xrefstyle="hyperlink"/> annotation. For example:</para>
@@ -4832,8 +4832,8 @@ public MacSpeech(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para>The name of the bind method or field is used for the name of
-          the reference.</para>
+          <para>The name of the method is used for the name of the
+          reference.</para>
         </listitem>
 
         <listitem>
@@ -4868,8 +4868,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para>The name of the bind method or field is used for the name of
-          the reference.</para>
+          <para>The name of the field is used for the name of the
+          reference.</para>
         </listitem>
 
         <listitem>
@@ -4899,7 +4899,8 @@ volatile Collection&lt;LogService&gt; log;</programlisting>
       <itemizedlist>
         <listitem>
           <para>The name of the parameter is used for the name of the
-          reference.</para>
+          reference if method parameter names are included in the class file.
+          Otherwise, a name for the reference must be generated.</para>
         </listitem>
 
         <listitem>

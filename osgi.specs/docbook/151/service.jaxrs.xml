@@ -170,10 +170,10 @@
     is used to register resources that do not target an existing application.
     In this respect a JAX-RS whiteboard application shares some similarities
     with a Servlet Context in the <xref linkend="service.http.whiteboard"/>.
-    Resources registered with a JAX-RS Whiteboard are <code>always</code>
-    registered as part of an application. The generated name of the default
-    application is <code>.default</code>, and it is mapped to the root context
-    of the JAX-RS Whiteboard.</para>
+    Resources registered with a JAX-RS Whiteboard are always registered as
+    part of an application. The generated name of the default application is
+    <code>.default</code>, and it is mapped to the root context of the JAX-RS
+    Whiteboard.</para>
 
     <para>A JAX-RS Whiteboard implementation must create a JAX-RS Whiteboard
     instance, however it is expected that most implementations will permit
@@ -584,16 +584,17 @@ public class Foo {
         map to the same URI. This situation is permitted by the JAX-RS
         specification which defines a detailed selection algorithm.</para>
 
-        <para>When clashes occur in the JAX-RS whiteboard then resources supplied 
-        using the service whiteboard must be preferred to static resources 
-        contained in the application. If two or more whiteboard resources exist 
-        then they must be ordered using their service ranking. Unlike for other 
-        services in the JAX-RS whiteboard, whiteboard resource services must not 
-        be ordered using their natural ordering. Whiteboard resource services with 
-        the same ranking must be considered equal, following the normal resource 
-        method selection rules defined in the JAX-RS specification. As per the core 
-        specification, whiteboard services with no <code>service.ranking</code>  
-        property must be treated as having a ranking of <code>0</code>.</para>
+        <para>When clashes occur in the JAX-RS whiteboard then resources
+        supplied using the service whiteboard must be preferred to static
+        resources contained in the application. If two or more whiteboard
+        resources exist then they must be ordered using their service ranking.
+        Unlike for other services in the JAX-RS whiteboard, whiteboard
+        resource services must not be ordered using their natural ordering.
+        Whiteboard resource services with the same ranking must be considered
+        equal, following the normal resource method selection rules defined in
+        the JAX-RS specification. As per the core specification, whiteboard
+        services with no <code>service.ranking</code> property must be treated
+        as having a ranking of <code>0</code>.</para>
       </section>
     </section>
 
@@ -1553,10 +1554,10 @@ public class MyApplication extends Application {
     <itemizedlist>
       <listitem>
         <para><emphasis>Failure to obtain a service instance</emphasis> - In
-        the case where a published service is unable to obtained by the JAX-RS
-        whiteboard then the service is blacklisted by the container. A failure
-        DTO is made available from the JaxrsServiceRuntime representing the
-        blacklisted service object.</para>
+        the case where a published service is unable to be obtained by the
+        JAX-RS whiteboard then the service is blacklisted by the container. A
+        failure DTO is made available from the JaxrsServiceRuntime
+        representing the blacklisted service object.</para>
       </listitem>
 
       <listitem>
@@ -1720,7 +1721,7 @@ WebTarget target = client.target(REST_SERVICE_URL)
     .path("/{name}")
     .resolveTemplate("name", buzz);
 
-SseEventSource source = sseFactory.newSource(target);;
+SseEventSource source = sseFactory.newSource(target);
     
 source.register(event -&gt; doSomething(event));
     
