@@ -4634,7 +4634,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       from <code>B.p</code> &gt; <code>A.p</code>. The mandatory attribute on
       bundle <code>B</code>'s export definition ensures that bundle
       <code>B</code> is not accidentally selected as exporter for package
-      <code>p</code>. Split packages have a number drawbacks that are
+      <code>p</code>. Split packages have a number of drawbacks that are
       discussed in <xref linkend="i3198951"/>.</para>
 
       <para>Resources and classes from a split package must be searched in the
@@ -5279,7 +5279,7 @@ bundle-description  ::= symbolic-name
       <section>
         <title>Installing</title>
 
-        <para>When an extension bundle is installed, a Framework must allow
+        <para>When an extension bundle is installed, the Framework must allow
         the extension to become resolved dynamically, without a Framework
         restart. When an extension bundle is resolved dynamically after
         Framework initialization, then the Extension Bundle Activator start
@@ -5333,16 +5333,16 @@ bundle-description  ::= symbolic-name
       must perform an additional security check before allowing an extension
       bundle to be installed. In order for an extension bundle to successfully
       install, the Framework must check that the extension bundle has All
-      Permissions assigned to it. This means that the permissions of an
+      Permission assigned to it. This means that the permissions of an
       extension bundle must be setup before the extension bundle is
       installed.</para>
 
-      <para>AllPermission must be granted to extension bundles because they
+      <para>All Permission must be granted to extension bundles because they
       will be loaded under the Protection Domain of either the boot class path
       or the Framework implementation. Both of these Protection Domains have
-      All Permissions granted to them. Attempting to install an extension
-      bundle that has not already been granted All Permissions must result in
-      a Bundle Exception.</para>
+      All Permission granted to them. Attempting to install an extension
+      bundle that has not already been granted All Permission must result in a
+      Bundle Exception.</para>
 
       <para>The installer of an extension bundle must have
       <code>AdminPermission[&lt;extension

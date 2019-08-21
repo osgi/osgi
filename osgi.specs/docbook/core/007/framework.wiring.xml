@@ -449,7 +449,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     bundle <code>A</code> and bundle <code>B</code> will create a Bundle
     Wiring for Bundle Revision <code>A.0</code> linking to a Bundle Wiring for
     Bundle Revision <code>B.0</code>. If bundle <code>B</code> is now updated,
-    it will create a second Bundle Revision, <code>B.1</code>.However, the
+    it will create a second Bundle Revision, <code>B.1</code>. However, the
     current Bundle Wiring for bundle <code>A</code> (Bundle Revision
     <code>A.0</code>) will remain wired to Bundle Revision <code>B.0</code> as
     long as bundle <code>A</code> and bundle <code>B</code> remain resolved,

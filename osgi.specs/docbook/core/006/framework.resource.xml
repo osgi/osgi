@@ -417,7 +417,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.resource.Wiring.getResourceRequirements-String-"
-        xrefstyle="hyperlink"/> - Get the hosted Requirements of the Related
+        xrefstyle="hyperlink"/> - Get the hosted Requirements of the related
         Resource.</para>
       </listitem>
     </itemizedlist>

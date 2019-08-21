@@ -1499,13 +1499,13 @@
       from the bundle. A framework will not automatically share packages
       between the launcher code and the bundles. Packages must be explicitly
       exported from the parent class loader. The
-      <code>org.osgi.framework.system.packages.extra</code> is specifically designed
-      to hold any application packages that needs to be shared between the
-      OSGi bundles and the application. Packages in that property are added to
-      the system packages of the framework, which are packages exported by the
-      system bundle from its parent loader. Care should be taken to ensure
-      that all these system packages are visible to the class loader that
-      loaded the framework.</para>
+      <code>org.osgi.framework.system.packages.extra</code> is specifically
+      designed to hold any application packages that needs to be shared
+      between the OSGi bundles and the application. Packages in that property
+      are added to the system packages of the framework, which are packages
+      exported by the system bundle from its parent loader. Care should be
+      taken to ensure that all these system packages are visible to the class
+      loader that loaded the framework.</para>
 
       <para>The OSGi Framework is running in a multi-threaded environment.
       After the framework is started, it will start bundles and these bundles
@@ -2012,7 +2012,7 @@ if ( it.hasNext() ) {
 
       <para>The optional Start Level API influences the actual order of
       starting and stopping of bundles. See <xref
-      linkend="framework.startlevel"/>' Fragment bundles can not be started
+      linkend="framework.startlevel"/>. Fragment bundles can not be started
       and must cause a Bundle Exception when there is an attempt to start
       them.</para>
     </section>
@@ -3963,7 +3963,8 @@ D: Export-Package: s</programlisting>
       xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1199796"><title>A String Representation of LDAP
-      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid class="uri"><link
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid
+      class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc1960.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1200042"><title>Java Security
@@ -3979,16 +3980,16 @@ D: Export-Package: s</programlisting>
       Organization<?line-break ?><biblioid class="uri"><link
       xlink:href="http://lcweb.loc.gov/standards/iso639-2/langhome.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i2164952"><title>Manifest
-      Format</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i2164952"><title>Manifest Format</title><biblioid
+      class="uri"><link
       xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i2461629"><title>W3C
-      EBNF</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i2461629"><title>W3C EBNF</title><biblioid
+      class="uri"><link
       xlink:href="http://www.w3c.org/TR/REC-xml#sec-notation"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i2467175"><title>Interval
-      Notation</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i2467175"><title>Interval Notation</title><biblioid
+      class="uri"><link
       xlink:href="http://www.math.ohio-state.edu/courses/math104/interval.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3287541"><title>OSGi Reference
@@ -4004,8 +4005,7 @@ D: Export-Package: s</programlisting>
       xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Service_Provider"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3324333"><title>IETF RFC 1422 A Universally Unique
-      IDentifier (UUID) URN
-      Namespace</title><biblioid class="uri"><link
+      IDentifier (UUID) URN Namespace</title><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc4122.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
