@@ -22,7 +22,7 @@ import org.osgi.framework.wiring.BundleRevision;
 
 /**
  * A connect module instance is used by a {@link Framework framework} to load
- * content and obtain a class loader for a bundle installed in the framework.
+ * content for a bundle revision installed in the framework.
  * 
  * @ThreadSafe
  * @author $Id$
