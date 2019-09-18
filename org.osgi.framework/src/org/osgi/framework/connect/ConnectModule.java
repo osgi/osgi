@@ -16,11 +16,9 @@
 package org.osgi.framework.connect;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.wiring.BundleRevision;
 
 /**
  * A connect module instance is used by a {@link Framework framework} to load
@@ -31,36 +29,14 @@ import org.osgi.framework.launch.Framework;
  */
 public interface ConnectModule {
 	/**
-	 * Opens the content of this connect module. The framework will open the
-	 * content when it needs to access the content for a bundle associated with
-	 * the connect module. The framework may lazily open the content until the
-	 * first request is made to access the bundle content.
+	 * Returns the current content of this connect module. The framework will
+	 * get the content when it needs to access the content for the current
+	 * {@link BundleRevision bundle revision} associated with this connect
+	 * module. The framework may lazily open the content until the first request
+	 * is made to access the bundle content.
 	 * 
-	 * @return the content of this connect module
-	 * @throws IOException if an error occurred opening the content
+	 * @return the current content of this connect module
+	 * @throws IOException if an error occurred getting the content
 	 */
-	ConnectContent open() throws IOException;
-
-	/**
-	 * Returns a class loader for this connect module. The
-	 * {@link Optional#empty() empty} value is returned if the framework should
-	 * handle creating a class loader for the bundle associated with this
-	 * connect module.
-	 * <p>
-	 * This method is called by the framework for {@link Bundle#RESOLVED
-	 * resolved} bundles only and will be called at most once while a bundle is
-	 * resolved. If a bundle associated with a connect module is refreshed and
-	 * resolved again the framework will ask the module for the class loader
-	 * again. This allows for a connect module to reuse or create a new class
-	 * loader each time the bundle is resolved.
-	 * 
-	 * @return a class loader for the module.
-	 */
-	Optional<ClassLoader> getClassLoader();
-
-	/**
-	 * @return null if framework should handle
-	 */
-	// TODO remove this method?
-	Optional<Map<String,String>> getHeaders();
+	ConnectContent getContent() throws IOException;
 }

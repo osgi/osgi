@@ -17,26 +17,36 @@ package org.osgi.framework.connect;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.Map;
 import java.util.Optional;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.BundleRevisions;
 
 /**
  * A connect content provides a {@link Framework framework} access to the
  * content of a connect {@link ConnectModule module}. A framework may
- * {@link ConnectModule#open() open} and {@link #close() close} the content for
- * a connect module multiple times while the connect module is in use by the
- * framework instance. The framework must close the connect content once the
- * connect content is no longer used as the content of a current bundle revision
- * or an in use bundle revision.
+ * {@link #open() open} and {@link #close() close} the content for a connect
+ * module multiple times while the connect content is in use by the framework
+ * instance. The framework must close the connect content once the connect
+ * content is no longer used as the content of a current bundle revision or an
+ * in use bundle revision.
  * 
  * @see BundleRevisions
  * @ThreadSafe
  * @author $Id$
  */
 public interface ConnectContent {
+	/**
+	 * Returns this connect content Manifest headers and values. The
+	 * {@link Optional#empty() empty} value is returned if the framework should
+	 * handle parsing the Manifest of the content itself.
+	 * 
+	 * @return This connect content Manifest headers and values.
+	 * @throws IllegalStateException if the connect content has been closed
+	 */
+	Optional<Map<String,String>> getHeaders();
 
 	/**
 	 * Returns an iterable with all the entry names available in this
@@ -59,24 +69,31 @@ public interface ConnectContent {
 	Optional<ConnectEntry> getEntry(String name);
 
 	/**
-	 * @param name
-	 * @return null if framework should handle
-	 * @throws IllegalArgumentException if no such entry
-	 * @throws IOException
+	 * Returns a class loader for this connect content. The
+	 * {@link Optional#empty() empty} value is returned if the framework should
+	 * handle creating a class loader for the bundle revision associated with
+	 * this connect content.
+	 * <p>
+	 * This method is called by the framework for {@link Bundle#RESOLVED
+	 * resolved} bundles only and will be called at most once while a bundle is
+	 * resolved. If a bundle associated with a connect module is refreshed and
+	 * resolved again the framework will ask the content for the class loader
+	 * again. This allows for a connect content to reuse or create a new class
+	 * loader each time the bundle revision is resolved.
+	 * 
+	 * @return a class loader for the module.
 	 */
-	// TODO remove this?
-	ConnectContent getEntryAsContent(String name)
-			throws IllegalArgumentException, IOException;
+	Optional<ClassLoader> getClassLoader();
 
 	/**
-	 * @param name
-	 * @return null if framework should handle
-	 * @throws IllegalArgumentException if no such entry
-	 * @throws IOException
+	 * Opens this connect content. The framework will open the content when it
+	 * needs to access the content for a bundle revision associated with the
+	 * connect content. The framework may lazily open the content until the
+	 * first request is made to access the bundle revision content.
+	 * 
+	 * @throws IOException if an error occurred opening the content
 	 */
-	// TODO remove this?
-	String getEntryAsNativeLibrary(String name)
-			throws IllegalArgumentException, IOException;
+	void open() throws IOException;
 
 	/**
 	 * Closes this connect content.
@@ -116,6 +133,7 @@ public interface ConnectContent {
 		 * @return the content bytes
 		 * @throws IOException if an error occurs reading the content
 		 */
+		// Default this?? to use getInputStream
 		byte[] getBytes() throws IOException;
 
 		/**
@@ -125,13 +143,5 @@ public interface ConnectContent {
 		 * @throws IOException if an error occurs reading the content
 		 */
 		InputStream getIntputStream() throws IOException;
-
-		/**
-		 * Returns the URL to the entry.
-		 * 
-		 * @return the URL to the entry
-		 */
-		// TODO remove this?
-		URL getURL();
 	}
 }

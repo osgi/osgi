@@ -16,6 +16,7 @@
 package org.osgi.framework.connect;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Optional;
 
 import org.osgi.framework.BundleActivator;
@@ -40,16 +41,20 @@ public interface ConnectFactory {
 
 	/**
 	 * Initializes the connect factory with the
-	 * {@link Constants#FRAMEWORK_STORAGE framework persistent storage} file
-	 * configured for a {@link Framework} instance. This method is called once
-	 * by a {@link Framework} instance and is called before any other methods on
-	 * this factory are called.
+	 * {@link Constants#FRAMEWORK_STORAGE framework persistent storage} file and
+	 * framework properties configured for a {@link Framework} instance. This
+	 * method is called once by a {@link Framework} instance and is called
+	 * before any other methods on this factory are called.
 	 * 
+	 * @param configuration The framework properties to used configure the new
+	 *            framework instance. An unmodifiable map of framework
+	 *            configuration properties that were used to create a new
+	 *            framework instance.
 	 * @param storage the persistent storage area used by the {@link Framework}
 	 *            or {@code null} if the if the platform does not have file
 	 *            system support.
 	 */
-	void initialize(File storage);
+	void initialize(File storage, Map<String,String> configuration);
 
 	/**
 	 * Returns the connect module for the specified bundle location. If an
@@ -61,6 +66,7 @@ public interface ConnectFactory {
 	 * 
 	 * @param location the bundle location used to install a bundle
 	 * @return the connect module for the specified bundle location
+	 * @throws IllegalStateException if the location cannot be handled
 	 */
 	Optional<ConnectModule> getModule(String location);
 
