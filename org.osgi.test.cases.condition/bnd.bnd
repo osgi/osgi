@@ -1,0 +1,38 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description = Test cases for the Condidion spec.
+
+Conditional-Package = org.osgi.test.support.*
+Private-Package =  \
+    ${p}.junit
+Import-Package: ${-signaturetest}, *
+
+Test-Cases = ${testcases}
+# -signaturetest = org.osgi.util.converter
+
+-buildpath: \
+	osgi.core;version=5.0,\
+	org.osgi.test.support;version=project,\
+	org.osgi.dto;version=1.0.0,\
+	${junit}
+
+-runbundles: \
+    ${junit},\
+    org.osgi.dto;version=latest
+
+# -buildpath: \
+#	osgi.core;version=5.0,\
+#	org.osgi.test.support;version=project,\
+#	org.osgi.util.converter;version=project,\
+#	org.osgi.util.function;version=1.0.0,\
+#	org.osgi.dto;version=1.0.0,\
+#	${junit}
+#
+#-runbundles: \
+#    ${junit},\
+#	org.osgi.util.converter;version=latest, \
+#    org.osgi.util.function;version=latest, \
+#    org.osgi.dto;version=latest
+
+-runproperties = ${runproperties}
