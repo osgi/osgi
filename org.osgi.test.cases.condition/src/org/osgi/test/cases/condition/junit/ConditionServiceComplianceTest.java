@@ -1,4 +1,4 @@
-package org.osgi.test.cases.converter.junit;
+package org.osgi.test.cases.condition.junit;
 
 import junit.framework.TestCase;
 

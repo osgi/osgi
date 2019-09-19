@@ -6,7 +6,7 @@ Bundle-Description = Test cases for the Condidion spec.
 Conditional-Package = org.osgi.test.support.*
 Private-Package =  \
     ${p}.junit
-Import-Package: ${-signaturetest}, *
+# Import-Package: ${-signaturetest}, *
 
 Test-Cases = ${testcases}
 # -signaturetest = org.osgi.util.converter
