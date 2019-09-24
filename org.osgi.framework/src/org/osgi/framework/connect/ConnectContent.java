@@ -142,6 +142,6 @@ public interface ConnectContent {
 		 * @return the content input stream
 		 * @throws IOException if an error occurs reading the content
 		 */
-		InputStream getIntputStream() throws IOException;
+		InputStream getInputStream() throws IOException;
 	}
 }
