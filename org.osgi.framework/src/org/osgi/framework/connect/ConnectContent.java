@@ -15,6 +15,7 @@
  */
 package org.osgi.framework.connect;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -133,8 +134,40 @@ public interface ConnectContent {
 		 * @return the content bytes
 		 * @throws IOException if an error occurs reading the content
 		 */
-		// Default this?? to use getInputStream
-		byte[] getBytes() throws IOException;
+		default byte[] getBytes() throws IOException {
+			long longLength = getContentLength();
+			if (longLength > Integer.MAX_VALUE - 8) {
+				throw new IOException(
+						"Entry is to big to fit into a byte[]: " + getName());
+			}
+
+			try (InputStream in = getInputStream()) {
+				int length = (int) longLength;
+				if (length > 0) {
+					int bytesread = 0;
+					byte[] result = new byte[length];
+					int readcount = 0;
+					while (bytesread < length) {
+						readcount = in.read(result, bytesread,
+								length - bytesread);
+						bytesread += readcount;
+						if (readcount <= 0) {
+							break;
+						}
+					}
+					return result;
+				} else {
+					ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+					int nRead;
+					byte[] data = new byte[1024];
+					while ((nRead = in.read(data, 0, data.length)) > 0) {
+						buffer.write(data, 0, nRead);
+					}
+					buffer.flush();
+					return buffer.toByteArray();
+				}
+			}
+		}
 
 		/**
 		 * Returns the content of the entry as an input stream.
