@@ -118,7 +118,7 @@ public interface ConnectContent {
 		 * 
 		 * @return the size of the entry
 		 */
-		public int getContentLength();
+		public long getContentLength();
 
 		/**
 		 * Returns the last modification time of the entry
