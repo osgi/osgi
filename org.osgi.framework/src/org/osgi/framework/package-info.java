@@ -27,7 +27,7 @@
  * @author $Id$
  */
 
-@Version("1.9")
+@Version("1.10")
 package org.osgi.framework;
 
 import org.osgi.annotation.versioning.Version;

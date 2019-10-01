@@ -36,6 +36,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.connect.ConnectFactory;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
@@ -112,6 +113,12 @@ public abstract class LaunchTest extends OSGiTestCase {
 			return getFrameworkFactory().newFramework(configuration);
 		}
 
+		@Override
+		public Framework newFramework(Map<String,String> configuration,
+				ConnectFactory connectFactory) {
+			return getFrameworkFactory().newFramework(configuration,
+					connectFactory);
+		}
 		public void close() {
 			if (frameworkClassLoader != null) {
 				try {

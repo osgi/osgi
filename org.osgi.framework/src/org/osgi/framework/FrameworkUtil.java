@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -218,7 +219,62 @@ public class FrameworkUtil {
 		if (cl instanceof BundleReference) {
 			return ((BundleReference) cl).getBundle();
 		}
+
+		for (Helper helper : helpers) {
+			Bundle b = helper.getBundle(classFromBundle);
+			if (b != null) {
+				return b;
+			}
+		}
 		return null;
+	}
+
+	static private final Set<Helper> helpers = new CopyOnWriteArraySet<>();
+
+	/**
+	 * Adds a {@link Helper} instance to the set of helpers. The {@code Helper}
+	 * instance is used by the {@code FrameworkUtil} class to provide
+	 * alternative return values for specific {@code FrameworkUtil} methods.
+	 * 
+	 * @param helper the helper to add
+	 * @see Helper
+	 * @since 1.10
+	 */
+	public static void addHelper(Helper helper) {
+		helpers.add(helper);
+	}
+
+	/**
+	 * Removes a {@link Helper} instance from the set of helpers.
+	 * 
+	 * @param helper the helper to remove
+	 * @since 1.10
+	 */
+	public static void removeHelper(Helper helper) {
+		helpers.remove(helper);
+	}
+
+	/**
+	 * A helper for the {@link FrameworkUtil} class. This helper provides
+	 * alternative implementations for methods on {@link FrameworkUtil}.
+	 * 
+	 * @since 1.10
+	 */
+	static public interface Helper {
+		/**
+		 * Return a {@code Bundle} associated with the specified class.
+		 * <p>
+		 * This helper method is called by
+		 * {@link FrameworkUtil#getBundle(Class)} if the standard implementation
+		 * of {@code FrameworkUtil} cannot find the bundle.
+		 * 
+		 * @param classFromBundle A class associated with a bundle
+		 * @return A {@code Bundle} for the specified class or {@code null} if
+		 *         the specified class is not from a bundle.
+		 */
+		default Bundle getBundle(Class< ? > classFromBundle) {
+			return null;
+		}
 	}
 
 	/**
