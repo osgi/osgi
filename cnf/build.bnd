@@ -110,7 +110,7 @@ bnd_version: ${replace;${bnd_plugin};.*:(.*);$1}
 
 -plugin.osgi.nexus: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
-        snapshotUrl="https://oss.sonatype.org/content/repositories/osgi-snapshots/"; \
+        snapshotUrl="https://oss.sonatype.org/content/repositories/snapshots/"; \
         releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
         index=${.}/osgi-nexus.mvn; \
         name='OSGiNexus'
