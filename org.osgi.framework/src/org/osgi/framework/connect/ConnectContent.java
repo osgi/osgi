@@ -60,11 +60,13 @@ public interface ConnectContent {
 	Iterable<String> getEntries() throws IOException;
 
 	/**
-	 * Returns the connect entry for the specified name, or {@code null} if not
-	 * found.
+	 * Returns the connect entry for the specified name. The
+	 * {@link Optional#empty() empty} value is returned if an entry with the
+	 * specified name does not exist.
 	 * 
 	 * @param name the name of the entry
-	 * @return the connect entry, or {@code null} if not found.
+	 * @return the connect entry, or {@link Optional#empty() empty} if not
+	 *         found.
 	 * @throws IllegalStateException if the connect content has been closed
 	 */
 	Optional<ConnectEntry> getEntry(String name);
@@ -115,9 +117,11 @@ public interface ConnectContent {
 		String getName();
 
 		/**
-		 * Returns the size of the entry
+		 * Returns the size of the entry. The value {@code -1} is returned if
+		 * the content length is not known.
 		 * 
-		 * @return the size of the entry
+		 * @return the size of the entry, or {@code -1} if the content length is
+		 *         not known.
 		 */
 		public long getContentLength();
 
