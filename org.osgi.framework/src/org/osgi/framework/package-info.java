@@ -15,14 +15,14 @@
  */
 
 /**
- * Framework Package Version 1.9.
+ * Framework Package Version 1.10.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest.
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework; version="[1.9,2.0)"}
+ * {@code  Import-Package: org.osgi.framework; version="[1.10,2.0)"}
  * 
  * @author $Id$
  */
