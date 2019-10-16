@@ -43,8 +43,8 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 				.hasAD("boolean1", "Boolean", 0, "true")
 				.hasAD("booleanarray1", "Boolean", 1, "true", "false")
 
-				.hasAD("char1", ocd.character(), 0, "64")
-				.hasAD("chararray1", ocd.character(), 1, "64", "43")
+				.hasAD("char1", ocd.character(), 0, "@")
+				.hasAD("chararray1", ocd.character(), 1, "@", "+")
 
 				.hasAD("byte1", "Byte", 0, "2")
 				.hasAD("bytearray1", "Byte", 1, "2", "-3")
