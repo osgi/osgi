@@ -74,7 +74,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasFactoryPropertyValue("e", "Double", "5.0")
 				.hasFactoryPropertyValue("f", "Float", "6.0")
 				.hasFactoryPropertyValue("g", "Byte", "7")
-				.hasFactoryPropertyValue("h", "Character", "8")
+				.hasFactoryPropertyValue("h", "Character", Integer.toString('8'))
 				.hasFactoryPropertyValue("i", "Short", "9")
 				.hasFactoryPropertyValue("j", "String", "bar");
 	}

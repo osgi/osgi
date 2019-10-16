@@ -1402,7 +1402,7 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasPropertyValue("e", "Double", "5.0")
 				.hasPropertyValue("f", "Float", "6.0")
 				.hasPropertyValue("g", "Byte", "7")
-				.hasPropertyValue("h", "Character", "8")
+				.hasPropertyValue("h", "Character", Integer.toString('8'))
 				.hasPropertyValue("i", "Short", "9")
 				.hasPropertyValue("j", "String", "bar");
 	}
@@ -1437,8 +1437,8 @@ public class DSAnnotationsTestCase extends AnnotationsTestCase {
 				.hasPropertyArrayValue("booleanarray1", "Boolean", "true",
 						"false")
 
-				.hasPropertyValue("char1", "Character", "64")
-				.hasPropertyArrayValue("chararray1", "Character", "64", "43")
+				.hasPropertyValue("char1", "Character", Integer.toString('@'))
+				.hasPropertyArrayValue("chararray1", "Character", Integer.toString('@'), Integer.toString('+'))
 
 				.hasPropertyValue("byte1", "Byte", "2")
 				.hasPropertyArrayValue("bytearray1", "Byte", "2", "-3")
