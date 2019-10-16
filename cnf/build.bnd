@@ -185,6 +185,9 @@ runsecureproperties = ${runproperties}, \
 
 -runproperties = ${runproperties}
 
-testcases = ${sort;${uniq;${classes;EXTENDS;junit.framework.TestCase;CONCRETE};${classes;ANNOTATED;org.junit.Test;CONCRETE}}}
+testcases.junit3 = ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
+testcases.junit4 = ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
+
+testcases = ${sort;${uniq;${testcases.junit3};${testcases.junit4}}}
 
 
