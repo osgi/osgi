@@ -240,9 +240,14 @@ public class FrameworkUtil {
 											FrameworkUtilHelper.class.getClassLoader()));
 
 			helperLoader.forEach((h) -> l.add(h));
-		} catch (Throwable t) {
-			// should not fail out of static initializers
-			t.printStackTrace();
+		} catch (Throwable error) {
+			// try hard not to fail static <clinit>
+			try {
+				Thread t = Thread.currentThread();
+				t.getUncaughtExceptionHandler().uncaughtException(t, error);
+			} catch (Throwable ignored) {
+				// we ignore this
+			}
 		}
 		helpers = Collections.unmodifiableList(l);
 	}
