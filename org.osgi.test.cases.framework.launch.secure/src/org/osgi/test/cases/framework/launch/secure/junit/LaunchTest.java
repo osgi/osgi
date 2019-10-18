@@ -28,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -39,6 +41,8 @@ import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class LaunchTest extends OSGiTestCase {
+	private static final Pattern	QUOTED_P			= Pattern
+			.compile("^([\"'])(.*)\\1$");
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String	STORAGEROOT	= "org.osgi.test.cases.framework.launch.secure.storageroot";
 
@@ -134,10 +138,23 @@ public abstract class LaunchTest extends OSGiTestCase {
 		frameworkClassLoader.close();
 	}
 
-	private static FrameworkClassLoader createFrameworkClassLoader()
+	static FrameworkClassLoader createFrameworkClassLoader()
 			throws MalformedURLException {
-		String classpathProp = System.getProperty("java.class.path");
-		String[] classpaths = classpathProp.split(File.pathSeparator);
+
+		// Since bnd 4.3.0 the framework is on the launcher.runpath system
+		// property.
+		// TODO Remove the old approach one day.
+		String pathProp = System.getProperty("launcher.runpath",
+				System.getProperty("java.class.path"));
+
+		Matcher matcher = QUOTED_P.matcher(pathProp);
+		if (matcher.matches()) {
+			pathProp = matcher.group(2);
+		}
+
+		String[] classpaths = pathProp
+				.split("\\s*[," + File.pathSeparator + "]\\s*");
+
 		List<URL> frameworkImpl = new ArrayList<>();
 		for (String classpath : classpaths) {
 			File file = new File(classpath);

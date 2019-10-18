@@ -343,7 +343,7 @@ public class ExtensionDependencyTests extends LaunchTest {
 		// trying to make sure the other versions are not on the classpath
 		List<URL> resourceList = new ArrayList<>();
 		for (Enumeration<URL> resources = fwkClassLoader
-				.getResources(EXTENSION_2_RESOURCE); resources
+				.getResources(extensionAResource); resources
 						.hasMoreElements();) {
 			resourceList.add(resources.nextElement());
 		}
