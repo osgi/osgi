@@ -19,6 +19,8 @@ package org.osgi.util.promise;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
@@ -163,5 +165,15 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	@Override
 	public Promise<T> timeout(long millis) {
 		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CompletionStage<T> toCompletionStage() {
+		CompletableFuture<T> completionStage = new CompletableFuture<>();
+		completionStage.completeExceptionally(fail);
+		return completionStage;
 	}
 }

@@ -18,6 +18,9 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
 import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
 
@@ -141,5 +144,13 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	@Override
 	public Promise<T> timeout(long millis) {
 		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CompletionStage<T> toCompletionStage() {
+		return CompletableFuture.completedFuture(value);
 	}
 }

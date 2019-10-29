@@ -17,6 +17,7 @@
 package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.CompletionStage;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.function.Consumer;
@@ -490,4 +491,14 @@ public interface Promise<T> {
 	 * @since 1.1
 	 */
 	Promise<T> delay(long milliseconds);
+
+	/**
+	 * Returns a new CompletionStage that will be resolved with the result of
+	 * this Promise.
+	 * 
+	 * @return A new CompletionStage that will be resolved with the result of
+	 *         this Promise.
+	 * @since 1.2
+	 */
+	CompletionStage<T> toCompletionStage();
 }

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -56,6 +57,26 @@ import org.osgi.util.promise.PromiseImpl.Result;
  */
 @ConsumerType
 public class PromiseFactory {
+
+	/**
+	 * Defines the options for a Promise factory.
+	 * <p>
+	 * The default options are no options unless the boolean system property
+	 * {@code org.osgi.util.promise.allowCurrentThread} is set to {@false}. When
+	 * this is the case, the option {@link Option#CALLBACKS_EXECUTOR_ONLY} is a
+	 * default option.
+	 *
+	 * @since 1.2
+	 */
+	public enum Option {
+		/**
+		 * All callbacks must be run on an executor thread. If this option is
+		 * not set, callbacks added to a resolved promise may be immediately
+		 * called on the caller's thread to avoid a thread context switch.
+		 */
+		CALLBACKS_EXECUTOR_ONLY
+	}
+
 	/**
 	 * The default factory which uses the default callback executor and default
 	 * scheduled executor.
@@ -79,18 +100,20 @@ public class PromiseFactory {
 	/**
 	 * Create a new PromiseFactory with the specified callback executor.
 	 * <p>
-	 * The default scheduled executor will be used.
+	 * The default scheduled executor and default options will be used.
 	 * 
 	 * @param callbackExecutor The executor to use for callbacks. {@code null}
 	 *            can be specified for the default callback executor.
 	 */
 	public PromiseFactory(Executor callbackExecutor) {
-		this(callbackExecutor, null);
+		this(callbackExecutor, null, defaultOptions());
 	}
 
 	/**
 	 * Create a new PromiseFactory with the specified callback executor and
 	 * specified scheduled executor.
+	 * <p>
+	 * The default options will be used.
 	 * 
 	 * @param callbackExecutor The executor to use for callbacks. {@code null}
 	 *            can be specified for the default callback executor.
@@ -100,12 +123,45 @@ public class PromiseFactory {
 	 */
 	public PromiseFactory(Executor callbackExecutor,
 			ScheduledExecutorService scheduledExecutor) {
+		this(callbackExecutor, scheduledExecutor, defaultOptions());
+
+	}
+
+	private static Option[] defaultOptions() {
+		boolean allowCurrentThread = Boolean.parseBoolean(
+				System.getProperty("org.osgi.util.promise.allowCurrentThread",
+						Boolean.TRUE.toString()));
+		return allowCurrentThread ? new Option[0] : new Option[] {
+				Option.CALLBACKS_EXECUTOR_ONLY
+		};
+	}
+
+	/**
+	 * Create a new PromiseFactory with the specified callback executor,
+	 * specified scheduled executor, and specified options.
+	 * 
+	 * @param callbackExecutor The executor to use for callbacks. {@code null}
+	 *            can be specified for the default callback executor.
+	 * @param scheduledExecutor The scheduled executor for use for scheduled
+	 *            operations. {@code null} can be specified for the default
+	 *            scheduled executor.
+	 * @param options Options for PromiseFactory.
+	 * @since 1.2
+	 */
+	public PromiseFactory(Executor callbackExecutor,
+			ScheduledExecutorService scheduledExecutor, Option... options) {
 		this.callbackExecutor = callbackExecutor;
 		this.scheduledExecutor = scheduledExecutor;
-		allowCurrentThread = Boolean.parseBoolean(System.getProperty(
-				"org.osgi.util.promise.allowCurrentThread",
-				Boolean.TRUE.toString()));
-
+		boolean callbacksExecutorOnly = false;
+		for (Option option : options) {
+			if (option == Option.CALLBACKS_EXECUTOR_ONLY) {
+				callbacksExecutorOnly = true;
+				continue;
+			}
+			requireNonNull(option);
+			throw new AssertionError("unrecognized option: " + option);
+		}
+		this.allowCurrentThread = !callbacksExecutorOnly;
 	}
 
 	/**
@@ -325,7 +381,8 @@ public class PromiseFactory {
 	 * @Immutable
 	 */
 	private static final class InlineExecutor implements Executor {
-		InlineExecutor() {}
+		InlineExecutor() {
+		}
 
 		@Override
 		public void execute(Runnable callback) {
@@ -480,5 +537,27 @@ public class PromiseFactory {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns a new Promise that will be resolved with the result of the
+	 * specified CompletionStage.
+	 * <p>
+	 * The returned Promise uses the callback executor and scheduled executor of
+	 * this PromiseFactory object.
+	 * <p>
+	 * 
+	 * @param <T> The value type associated with the returned Promise.
+	 * @param completionStage The CompletionStage whose result will be used to
+	 *            resolve the returned promise. Must not be {@code null}.
+	 * @return A new Promise that will be resolved with the result of the
+	 *         specified CompletionStage.
+	 * @since 1.2
+	 */
+	public <T> Promise<T> promiseFrom(
+			CompletionStage< ? extends T> completionStage) {
+		DeferredPromiseImpl<T> chained = new DeferredPromiseImpl<>(this);
+		completionStage.whenCompleteAsync(chained::tryResolve, executor());
+		return chained.orDone();
 	}
 }

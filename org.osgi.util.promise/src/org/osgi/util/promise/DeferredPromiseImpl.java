@@ -21,6 +21,8 @@ import static java.util.Objects.requireNonNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -658,6 +660,40 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 				tryResolve(task.call(), null);
 			} catch (Throwable t) {
 				tryResolve(null, t);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CompletionStage<T> toCompletionStage() {
+		CompletableFuture<T> completionStage = new CompletableFuture<>();
+		onResolve(new ToCompletionStage(completionStage));
+		return completionStage;
+	}
+
+	/**
+	 * A callback used for the {@link #toCompletionStage()} method.
+	 * 
+	 * @Immutable
+	 * @since 1.2
+	 */
+	private final class ToCompletionStage implements Runnable {
+		private final CompletableFuture<T> completionStage;
+
+		ToCompletionStage(CompletableFuture<T> completionStage) {
+			this.completionStage = requireNonNull(completionStage);
+		}
+
+		@Override
+		public void run() {
+			Result<T> result = collect();
+			if (result.fail == null) {
+				completionStage.complete(result.value);
+			} else {
+				completionStage.completeExceptionally(result.fail);
 			}
 		}
 	}

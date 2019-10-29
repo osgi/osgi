@@ -17,15 +17,13 @@
 package org.osgi.test.cases.promise.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.Assertions.fail;
 import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
-import static org.osgi.util.promise.Promises.all;
-import static org.osgi.util.promise.Promises.failed;
-import static org.osgi.util.promise.Promises.resolved;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -35,7 +33,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -56,6 +57,7 @@ import org.osgi.util.promise.FailedPromisesException;
 import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.PromiseFactory;
+import org.osgi.util.promise.PromiseFactory.Option;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.Success;
 import org.osgi.util.promise.TimeoutException;
@@ -66,6 +68,7 @@ public class PromiseTest {
 
 	ExecutorService				callbackExecutor;
 	ScheduledExecutorService	scheduledExecutor;
+	PromiseFactory				factory;
 
 	public static final long	WAIT_TIME	= 2L;
 	private static final Random	random		= new Random();
@@ -73,12 +76,20 @@ public class PromiseTest {
 
 	@Before
 	public void setUp() throws Exception {
+		boolean callbacksExecutorOnly = random.nextBoolean();
+		boolean inlineExecutor = random.nextBoolean();
 		originalAllowCurrentThread = System
 				.getProperty("org.osgi.util.promise.allowCurrentThread");
 		System.setProperty("org.osgi.util.promise.allowCurrentThread",
-				Boolean.toString(random.nextBoolean()));
+				Boolean.toString(!callbacksExecutorOnly));
 		callbackExecutor = Executors.newFixedThreadPool(2);
 		scheduledExecutor = Executors.newScheduledThreadPool(2);
+		Executor executor = inlineExecutor ? PromiseFactory.inlineExecutor()
+				: callbackExecutor;
+		factory = callbacksExecutorOnly
+				? new PromiseFactory(executor, scheduledExecutor,
+						Option.CALLBACKS_EXECUTOR_ONLY)
+				: new PromiseFactory(executor, scheduledExecutor);
 	}
 
 	@After
@@ -94,8 +105,19 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void testDeferredPromiseSuccess() throws Exception {
+		final Deferred<String> d = new Deferred<>();
+		final Promise<String> p = d.getPromise();
+		assertThat(p).isNotDone();
+		String value = new String("value");
+		d.resolve(value);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+	}
+
+	@Test
 	public void testPromiseSuccess1() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise();
 		assertThat(p).isNotDone();
 		String value = new String("value");
@@ -106,10 +128,9 @@ public class PromiseTest {
 
 	@Test
 	public void testPromiseSuccess2() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
 		final Deferred<Integer> d = factory.deferred();
 		final Promise<Integer> p = d.getPromise();
-		Promise<Number> p2 = p.then(resolved -> resolved(
+		Promise<Number> p2 = p.then(resolved -> factory.resolved(
 				(Number) Long.valueOf(resolved.getValue().longValue())));
 		assertThat(p).isNotDone();
 		assertThat(p2).isNotDone();
@@ -123,15 +144,13 @@ public class PromiseTest {
 
 	@Test
 	public void testPromiseSuccess3() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<Integer> d = factory.deferred();
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.then(resolved -> {
-			final Promise<Number> returned = resolved(
+			final Promise<Number> returned = factory.resolved(
 					(Number) Long.valueOf(resolved.getValue().longValue()));
 			returned.onResolve(() -> latch1.countDown());
 			return returned;
@@ -154,8 +173,8 @@ public class PromiseTest {
 
 	@Test
 	public void testPromiseSuccess4() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
-		final Deferred<String> d2 = new Deferred<String>();
+		final Deferred<Integer> d1 = factory.deferred();
+		final Deferred<String> d2 = factory.deferred();
 		final AtomicReference<String> result = new AtomicReference<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
@@ -187,9 +206,21 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void testDeferredPromiseFail() throws Exception {
+		final Deferred<String> d = new Deferred<>();
+		final Promise<String> p = d.getPromise();
+		assertThat(p).isNotDone();
+		Throwable failure = new RuntimeException();
+		d.fail(failure);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+		assertThat(catchThrowableOfType(() -> p.getValue(),
+				InvocationTargetException.class).getCause()).isSameAs(failure);
+	}
+
+	@Test
 	public void testPromiseFail1() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise();
 		assertThat(p).isNotDone();
@@ -205,7 +236,6 @@ public class PromiseTest {
 	@Test
 	public void testPromiseFail2() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
 		final Deferred<String> d = factory.deferred();
 		final AtomicReference<Throwable> result = new AtomicReference<>();
 		final Throwable failure = new RuntimeException();
@@ -234,14 +264,14 @@ public class PromiseTest {
 	 */
 	@Test
 	public void testFailureChain() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger callbackCallCount = new AtomicInteger(0);
 
 		Success<String,String> doubler = promise -> {
 			callbackCallCount.incrementAndGet();
-			return resolved(promise.getValue() + promise.getValue());
+			return factory.resolved(promise.getValue() + promise.getValue());
 		};
 		final Promise<String> p2 = p1.then(doubler).then(doubler).then(doubler);
 
@@ -267,7 +297,7 @@ public class PromiseTest {
 
 	@Test
 	public void testSuccessChain() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger successCallbackCallCount = new AtomicInteger(0);
@@ -275,7 +305,7 @@ public class PromiseTest {
 
 		Success<String,String> doubler = promise -> {
 			successCallbackCallCount.incrementAndGet();
-			return resolved(promise.getValue() + promise.getValue());
+			return factory.resolved(promise.getValue() + promise.getValue());
 		};
 		Failure wrapper = promise -> {
 			failureCallbackCallCount.incrementAndGet();
@@ -306,7 +336,7 @@ public class PromiseTest {
 
 	@Test
 	public void testExceptionOverride() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger successCallbackCallCount = new AtomicInteger(0);
@@ -314,7 +344,7 @@ public class PromiseTest {
 
 		Success<String,String> doubler = promise -> {
 			successCallbackCallCount.incrementAndGet();
-			return resolved(promise.getValue() + promise.getValue());
+			return factory.resolved(promise.getValue() + promise.getValue());
 		};
 		Failure wrapper = promise -> {
 			failureCallbackCallCount.incrementAndGet();
@@ -357,7 +387,7 @@ public class PromiseTest {
 	 */
 	@Test
 	public void testRepeat() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		String value = new String("10");
 		d.resolve(value);
@@ -365,8 +395,8 @@ public class PromiseTest {
 		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS);
 		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS);
 
-		Promise<Integer> p2 = p1
-				.then(promise -> resolved(Integer.valueOf(promise.getValue())));
+		Promise<Integer> p2 = p1.then(promise -> factory
+				.resolved(Integer.valueOf(promise.getValue())));
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(Integer.valueOf(10));
 	}
@@ -376,13 +406,13 @@ public class PromiseTest {
 	 */
 	@Test
 	public void testThen() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<Number> p2 = p1.then(promise -> {
 			latch.countDown();
-			final Deferred<Number> n = new Deferred<Number>();
+			final Deferred<Number> n = factory.deferred();
 			scheduledExecutor.schedule(() -> {
 				try {
 					latch2.await();
@@ -410,7 +440,7 @@ public class PromiseTest {
 	@Test
 	public void testThenSuccessNull1() throws Exception {
 		String value = new String("20");
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		d.resolve(value); // resolve before then
 
@@ -421,7 +451,7 @@ public class PromiseTest {
 	@Test
 	public void testThenSuccessNull2() throws Exception {
 		String value = new String("20");
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		Promise<String> p2 = p1.then(null, null);
 		d.resolve(value); // resolve after then
@@ -432,7 +462,6 @@ public class PromiseTest {
 	@Test
 	public void testThenSuccessNull3() throws Exception {
 		String value = new String("20");
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
 		Promise<String> p1 = factory.resolved(value);
 		Promise<String> p2 = p1.then(null, null);
 
@@ -442,7 +471,7 @@ public class PromiseTest {
 	@Test
 	public void testThenFailureNull1() throws Exception {
 		Exception failure = new Exception("20");
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		d.fail(failure); // fail before then
 		Promise<String> p2 = p1.then(null, null);
@@ -457,7 +486,7 @@ public class PromiseTest {
 	@Test
 	public void testThenFailureNull2() throws Exception {
 		Exception failure = new Exception("20");
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		Promise<String> p2 = p1.then(null, null);
 		d.fail(failure); // fail after then
@@ -472,7 +501,6 @@ public class PromiseTest {
 	@Test
 	public void testThenFailureNull3() throws Exception {
 		Exception failure = new Exception("20");
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
 		Promise<String> p1 = factory.failed(failure);
 		Promise<String> p2 = p1.then(null, null);
 
@@ -485,7 +513,7 @@ public class PromiseTest {
 
 	@Test
 	public void testValueInterrupted() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final Thread thread = Thread.currentThread();
 		assertThat(p).isNotDone();
@@ -500,7 +528,7 @@ public class PromiseTest {
 
 	@Test
 	public void testFailureInterrupted() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final Thread thread = Thread.currentThread();
 		assertThat(p).isNotDone();
@@ -515,20 +543,20 @@ public class PromiseTest {
 
 	@Test
 	public void testNullCallback() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		assertThatNullPointerException().isThrownBy(() -> p.onResolve(null));
 	}
 
 	@Test
 	public void testFailNull() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		assertThatNullPointerException().isThrownBy(() -> d.fail(null));
 	}
 
 	@Test
 	public void testMultiResolve() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final AtomicBoolean fail = new AtomicBoolean(false);
 		assertThat(p).isNotDone();
@@ -551,7 +579,7 @@ public class PromiseTest {
 
 	@Test
 	public void testMultiFail() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final AtomicBoolean fail = new AtomicBoolean(false);
 		assertThat(p).isNotDone();
@@ -579,8 +607,6 @@ public class PromiseTest {
 	@Test
 	public void testCallbackException1() throws Exception {
 		final int size = 20;
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(size);
@@ -612,7 +638,7 @@ public class PromiseTest {
 
 	@Test
 	public void testCallbackException2() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise();
 		assertThat(p).isNotDone();
 		Throwable failure = new RuntimeException();
@@ -626,10 +652,10 @@ public class PromiseTest {
 	}
 
 	@Test
-	public void testNewResolvedPromise() throws Exception {
+	public void testFactoryResolvedPromise() throws Exception {
 		String value1 = new String("value");
-		final Promise<String> p1 = resolved(value1);
-		final Promise<String> p2 = resolved(null);
+		final Promise<String> p1 = factory.resolved(value1);
+		final Promise<String> p2 = factory.resolved(null);
 		assertThat(p1).isDone()
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
@@ -639,23 +665,50 @@ public class PromiseTest {
 	}
 
 	@Test
-	public void testNewFailedPromise() throws Exception {
+	public void testPromisesResolvedPromise() throws Exception {
+		String value1 = new String("value");
+		final Promise<String> p1 = Promises.resolved(value1);
+		final Promise<String> p2 = Promises.resolved(null);
+		assertThat(p1).isDone()
+				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value1);
+		assertThat(p2).isDone()
+				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
+	}
+
+	@Test
+	public void testFactoryFailedPromise() throws Exception {
 		Throwable failure = new Exception("value");
-		final Promise<String> p = failed(failure);
+		final Promise<String> p = factory.failed(failure);
 		assertThat(p).isDone()
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
-		assertThatNullPointerException().isThrownBy(() -> failed(null));
+		assertThatNullPointerException().isThrownBy(() -> factory.failed(null));
+	}
+
+	@Test
+	public void testPromisesFailedPromise() throws Exception {
+		Throwable failure = new Exception("value");
+		final Promise<String> p = Promises.failed(failure);
+		assertThat(p).isDone()
+				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+		assertThat(catchThrowableOfType(() -> p.getValue(),
+				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThatNullPointerException()
+				.isThrownBy(() -> Promises.failed(null));
 	}
 
 	@Test
 	public void testAllSuccess1() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
-		final Deferred<Long> d2 = new Deferred<Long>();
+		final Deferred<Long> d2 = factory.deferred();
 		final Promise<Long> p2 = d2.getPromise();
 		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2);
 		assertThat(p1).isNotDone();
@@ -682,15 +735,14 @@ public class PromiseTest {
 
 	@Test
 	public void testAllSuccess2() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
-		final Deferred<Integer> d2 = new Deferred<Integer>();
+		final Deferred<Integer> d2 = factory.deferred();
 		final Promise<Integer> p2 = d2.getPromise();
 		List<Promise<Integer>> promises = new ArrayList<Promise<Integer>>();
 		promises.add(p1);
 		promises.add(p2);
-		final Promise<List<Number>> latched = Promises
-				.<Number, Integer> all(promises);
+		final Promise<List<Number>> latched = factory.all(promises);
 		assertThat(p1).isNotDone();
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
@@ -715,7 +767,6 @@ public class PromiseTest {
 
 	@Test
 	public void testAllSuccess3() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
 		final Deferred<Number> d1 = factory.deferred();
 		final Promise<Number> p1 = d1.getPromise();
 		final Deferred<Number> d2 = factory.deferred();
@@ -746,8 +797,6 @@ public class PromiseTest {
 
 	@Test
 	public void testAllSuccess4() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
 		final Deferred<Integer> d2 = factory.deferred();
@@ -781,13 +830,13 @@ public class PromiseTest {
 
 	@Test
 	public void testAllFail1() throws Exception {
-		final Deferred<Number> d1 = new Deferred<Number>();
+		final Deferred<Number> d1 = factory.deferred();
 		final Promise<Number> p1 = d1.getPromise();
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
-		final Deferred<Long> d3 = new Deferred<Long>();
+		final Deferred<Long> d3 = factory.deferred();
 		final Promise<Long> p3 = d3.getPromise();
-		final Promise<List<Number>> latched = all(p1, p2, p3);
+		final Promise<List<Number>> latched = Promises.all(p1, p2, p3);
 		assertThat(p1).isNotDone();
 		assertThat(p2).isNotDone();
 		assertThat(p3).isNotDone();
@@ -820,9 +869,9 @@ public class PromiseTest {
 	}
 
 	@Test
-	public void testAllEmpty1() throws Exception {
+	public void testAllEmptyCollection() throws Exception {
 		Collection<Promise<String>> promises = Collections.emptyList();
-		final Promise<List<String>> latched = all(promises);
+		final Promise<List<String>> latched = factory.all(promises);
 		assertThat(latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValueThat()
 				.asList()
@@ -830,8 +879,8 @@ public class PromiseTest {
 	}
 
 	@Test
-	public void testAllEmpty2() throws Exception {
-		final Promise<List<Object>> latched = all();
+	public void testAllEmptyVarargs() throws Exception {
+		final Promise<List<Object>> latched = Promises.all();
 		assertThat(latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValueThat()
 				.asList()
@@ -841,16 +890,16 @@ public class PromiseTest {
 	@Test
 	public void testAllNull() throws Exception {
 		assertThatNullPointerException()
-				.isThrownBy(() -> all((Promise< ? >[]) null));
-		assertThatNullPointerException()
-				.isThrownBy(() -> all((Collection<Promise<Object>>) null));
+				.isThrownBy(() -> Promises.all((Promise< ? >[]) null));
+		assertThatNullPointerException().isThrownBy(
+				() -> factory.all((Collection<Promise<Object>>) null));
 	}
 
 	@Test
 	public void testResolveWithSuccess() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
 		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
@@ -869,9 +918,9 @@ public class PromiseTest {
 
 	@Test
 	public void testResolveWithFailure() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
 		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
@@ -895,9 +944,9 @@ public class PromiseTest {
 
 	@Test
 	public void testResolveWithAlready1() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
 		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
@@ -928,8 +977,8 @@ public class PromiseTest {
 	@Test
 	public void testResolveWithAlready2() throws Exception {
 		Integer value = Integer.valueOf(42);
-		final Promise<Integer> p1 = resolved(value);
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Integer> p1 = factory.resolved(value);
+		final Deferred<Number> d2 = factory.deferred();
 		d2.resolve(value);
 
 		final Promise<Void> p3 = d2.resolveWith(p1);
@@ -945,8 +994,8 @@ public class PromiseTest {
 	public void testResolveWithAlready3() throws Exception {
 		Integer value = Integer.valueOf(42);
 		Throwable failure = new RuntimeException();
-		final Promise<Integer> p1 = resolved(value);
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Integer> p1 = factory.resolved(value);
+		final Deferred<Number> d2 = factory.deferred();
 		d2.fail(failure);
 
 		final Promise<Void> p3 = d2.resolveWith(p1);
@@ -959,10 +1008,22 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void testResolveWithAlreadyDeferred() throws Exception {
+		Integer value = Integer.valueOf(42);
+		final Promise<Integer> p1 = factory.resolved(value);
+		final Deferred<Number> d2 = new Deferred<>();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+	}
+
+	@Test
 	public void testResolveWithAlready4() throws Exception {
 		Integer value = Integer.valueOf(42);
-		final Promise<Integer> p1 = resolved(value);
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Integer> p1 = factory.resolved(value);
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
@@ -973,8 +1034,8 @@ public class PromiseTest {
 	@Test
 	public void testResolveWithAlready5() throws Exception {
 		Throwable failure = new RuntimeException();
-		final Promise<Integer> p1 = failed(failure);
-		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Integer> p1 = factory.failed(failure);
+		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
@@ -987,7 +1048,7 @@ public class PromiseTest {
 
 	@Test
 	public void testResolveWithNull() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		assertThatNullPointerException().isThrownBy(() -> d.resolveWith(null));
 	}
 
@@ -995,9 +1056,9 @@ public class PromiseTest {
 	public void testFilter() throws Exception {
 		String value1 = new String("value");
 		String value3 = new String("");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		Promise<String> p2 = p1.filter(t -> t.length() > 0);
-		Promise<String> p3 = resolved(value3);
+		Promise<String> p3 = factory.resolved(value3);
 		Promise<String> p4 = p1.filter(t -> t.length() == 0);
 		Promise<String> p5 = p3.filter(t -> t.length() > 0);
 
@@ -1021,7 +1082,7 @@ public class PromiseTest {
 	public void testFilterException() throws Exception {
 		String value1 = new String("value");
 		final Exception failure = new Exception("fail");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(t -> {
 			throw failure;
@@ -1042,7 +1103,7 @@ public class PromiseTest {
 	@Test
 	public void testFilterFailed() throws Exception {
 		final Error failure = new Error("fail");
-		Promise<String> p1 = failed(failure);
+		Promise<String> p1 = factory.failed(failure);
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(t -> {
 			latch.countDown();
@@ -1061,14 +1122,14 @@ public class PromiseTest {
 	@Test
 	public void testFilterNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.filter(null));
 	}
 
 	@Test
 	public void testMap() throws Exception {
 		Integer value1 = Integer.valueOf(42);
-		Promise<Integer> p1 = resolved(value1);
+		Promise<Integer> p1 = factory.resolved(value1);
 		Promise<String> p2 = p1.map(t -> Long.valueOf(t.longValue()))
 				.map(t -> t.toString());
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
@@ -1079,7 +1140,7 @@ public class PromiseTest {
 	public void testMapException() throws Exception {
 		Integer value1 = Integer.valueOf(42);
 		final Exception failure = new Exception("fail");
-		Promise<Integer> p1 = resolved(value1);
+		Promise<Integer> p1 = factory.resolved(value1);
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<String> p2 = p1.map(t -> {
 			throw failure;
@@ -1098,17 +1159,17 @@ public class PromiseTest {
 	@Test
 	public void testMapNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.map(null));
 	}
 
 	@Test
 	public void testFlatMap() throws Exception {
 		Integer value1 = Integer.valueOf(42);
-		Promise<Integer> p1 = resolved(value1);
+		Promise<Integer> p1 = factory.resolved(value1);
 		Promise<String> p2 = p1
-				.flatMap(t -> resolved(Long.valueOf(t.longValue())))
-				.flatMap(t -> resolved(t.toString()));
+				.flatMap(t -> factory.resolved(Long.valueOf(t.longValue())))
+				.flatMap(t -> factory.resolved(t.toString()));
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(value1.toString());
 	}
@@ -1117,13 +1178,13 @@ public class PromiseTest {
 	public void testFlatMapException() throws Exception {
 		Integer value1 = Integer.valueOf(42);
 		final Exception failure = new Exception("fail");
-		Promise<Integer> p1 = resolved(value1);
+		Promise<Integer> p1 = factory.resolved(value1);
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<String> p2 = p1.flatMap(t -> {
 			throw failure;
 		}).flatMap(t -> {
 			latch.countDown();
-			return resolved(t.toString());
+			return factory.resolved(t.toString());
 		});
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
@@ -1136,7 +1197,7 @@ public class PromiseTest {
 	@Test
 	public void testFlatMapNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.flatMap(null));
 	}
 
@@ -1144,7 +1205,7 @@ public class PromiseTest {
 	public void testRecoverNoFailure() throws Exception {
 		final Number value1 = Integer.valueOf(42);
 		final Long value2 = Long.valueOf(43);
-		final Promise<Number> p1 = resolved(value1);
+		final Promise<Number> p1 = factory.resolved(value1);
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(t -> {
 			latch.countDown();
@@ -1159,7 +1220,7 @@ public class PromiseTest {
 	public void testRecoverFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = Long.valueOf(43);
-		final Promise<Number> p1 = failed(failure);
+		final Promise<Number> p1 = factory.failed(failure);
 		final Promise<Number> p2 = p1.recover(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return value2;
@@ -1171,7 +1232,7 @@ public class PromiseTest {
 	@Test
 	public void testRecoverFailureNull() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Promise<Number> p1 = failed(failure);
+		final Promise<Number> p1 = factory.failed(failure);
 		final Promise<Number> p2 = p1.recover(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return null;
@@ -1187,7 +1248,7 @@ public class PromiseTest {
 	public void testRecoverFailureException() throws Exception {
 		final Throwable failure1 = new Exception("fail1");
 		final Exception failure2 = new Exception("fail2");
-		final Promise<Number> p1 = failed(failure1);
+		final Promise<Number> p1 = factory.failed(failure1);
 		final Promise<Number> p2 = p1.recover(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure1);
 			throw failure2;
@@ -1202,7 +1263,7 @@ public class PromiseTest {
 	@Test
 	public void testRecoverNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.recover(null));
 	}
 
@@ -1210,11 +1271,11 @@ public class PromiseTest {
 	public void testRecoverWithNoFailure() throws Exception {
 		final Number value1 = Integer.valueOf(42);
 		final Long value2 = Long.valueOf(43);
-		final Promise<Number> p1 = resolved(value1);
+		final Promise<Number> p1 = factory.resolved(value1);
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(t -> {
 			latch.countDown();
-			return resolved(value2);
+			return factory.resolved(value2);
 		});
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
@@ -1225,10 +1286,10 @@ public class PromiseTest {
 	public void testRecoverWithFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = Long.valueOf(43);
-		final Promise<Number> p1 = failed(failure);
+		final Promise<Number> p1 = factory.failed(failure);
 		final Promise<Number> p2 = p1.recoverWith(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
-			return resolved(value2);
+			return factory.resolved(value2);
 		});
 		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
@@ -1237,7 +1298,7 @@ public class PromiseTest {
 	@Test
 	public void testRecoverWithFailureNull() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Promise<Number> p1 = failed(failure);
+		final Promise<Number> p1 = factory.failed(failure);
 		final Promise<Number> p2 = p1.recoverWith(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return null;
@@ -1253,7 +1314,7 @@ public class PromiseTest {
 	public void testRecoverWithFailureException() throws Exception {
 		final Throwable failure1 = new Exception("fail1");
 		final Exception failure2 = new Exception("fail2");
-		final Promise<Number> p1 = failed(failure1);
+		final Promise<Number> p1 = factory.failed(failure1);
 		final Promise<Number> p2 = p1.recoverWith(t -> {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure1);
 			throw failure2;
@@ -1268,7 +1329,7 @@ public class PromiseTest {
 	@Test
 	public void testRecoverWithNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.recoverWith(null));
 	}
 
@@ -1276,8 +1337,8 @@ public class PromiseTest {
 	public void testFallbackToNoFailure() throws Exception {
 		final Number value1 = Integer.valueOf(42);
 		final Long value2 = Long.valueOf(43);
-		final Promise<Number> p1 = resolved(value1);
-		final Promise<Long> p2 = resolved(value2);
+		final Promise<Number> p1 = factory.resolved(value1);
+		final Promise<Long> p2 = factory.resolved(value2);
 		final Promise<Number> p3 = p1.fallbackTo(p2);
 		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
@@ -1288,9 +1349,9 @@ public class PromiseTest {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
 		final Long value3 = Long.valueOf(43);
-		final Promise<Number> p1 = failed(failure1);
-		final Promise<Number> p2 = failed(failure2);
-		final Promise<Long> p3 = resolved(value3);
+		final Promise<Number> p1 = factory.failed(failure1);
+		final Promise<Number> p2 = factory.failed(failure2);
+		final Promise<Long> p3 = factory.resolved(value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertThat(p4).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value3);
@@ -1301,9 +1362,9 @@ public class PromiseTest {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
 		final Error failure3 = new Error("fail3");
-		final Promise<Number> p1 = failed(failure1);
-		final Promise<Number> p2 = failed(failure2);
-		final Promise<Long> p3 = failed(failure3);
+		final Promise<Number> p1 = factory.failed(failure1);
+		final Promise<Number> p2 = factory.failed(failure2);
+		final Promise<Long> p3 = factory.failed(failure3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertThat(p4).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
@@ -1315,20 +1376,22 @@ public class PromiseTest {
 	@Test
 	public void testFallbackToNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.fallbackTo(null));
 	}
 
 	@Test
 	public void testTryResolve() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final AtomicBoolean fail1 = new AtomicBoolean(false);
 		final AtomicBoolean fail2 = new AtomicBoolean(false);
-		p.onResolve(() -> d.resolveWith(resolved("onResolve")).then(r -> {
-			fail1.set(true);
-			return null;
-		}, f -> fail1.set(!(f.getFailure() instanceof IllegalStateException))));
+		p.onResolve(
+				() -> d.resolveWith(factory.resolved("onResolve")).then(r -> {
+					fail1.set(true);
+					return null;
+				}, f -> fail1.set(
+						!(f.getFailure() instanceof IllegalStateException))));
 		p.onResolve(() -> {
 			try {
 				d.resolve("onResolve");
@@ -1337,19 +1400,19 @@ public class PromiseTest {
 			}
 			fail2.set(true);
 		});
-		assertThat(d.resolveWith(resolved("first")))
+		assertThat(d.resolveWith(factory.resolved("first")))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.isSuccessful();
 		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue("first");
 		assertThat(fail1).isFalse();
 		assertThat(fail2).isFalse();
-		assertThat(d.resolveWith(resolved("second")))
+		assertThat(d.resolveWith(factory.resolved("second")))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException().isThrownBy(() -> d.resolve("second"));
-		assertThat(d.resolveWith(failed(new Exception("second"))))
+		assertThat(d.resolveWith(factory.failed(new Exception("second"))))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
@@ -1359,19 +1422,18 @@ public class PromiseTest {
 
 	@Test
 	public void testTryFail() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		final AtomicBoolean fail1 = new AtomicBoolean(false);
 		final AtomicBoolean fail2 = new AtomicBoolean(false);
 		assertThat(p).isNotDone();
-		p.onResolve(() -> d
-				.resolveWith(
-						Promises.<String> failed(new Exception("onResolve")))
-				.then(r -> {
-					fail1.set(true);
-					return null;
-				}, f -> fail1.set(
-						!(f.getFailure() instanceof IllegalStateException))));
+		p.onResolve(
+				() -> d.resolveWith(factory.failed(new Exception("onResolve")))
+						.then(r -> {
+							fail1.set(true);
+							return null;
+						}, f -> fail1.set(!(f
+								.getFailure() instanceof IllegalStateException))));
 		p.onResolve(() -> {
 			try {
 				d.fail(new Exception("onResolve"));
@@ -1380,7 +1442,7 @@ public class PromiseTest {
 			}
 			fail2.set(true);
 		});
-		assertThat(d.resolveWith(failed(new Exception("first"))))
+		assertThat(d.resolveWith(factory.failed(new Exception("first"))))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.isSuccessful();
 		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
@@ -1388,13 +1450,13 @@ public class PromiseTest {
 				.hasMessage("first");
 		assertThat(fail1).isFalse();
 		assertThat(fail2).isFalse();
-		assertThat(d.resolveWith(failed(new Exception("second"))))
+		assertThat(d.resolveWith(factory.failed(new Exception("second"))))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException()
 				.isThrownBy(() -> d.fail(new Exception("second")));
-		assertThat(d.resolveWith(resolved("second")))
+		assertThat(d.resolveWith(factory.resolved("second")))
 				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
@@ -1403,7 +1465,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithTimeout() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
@@ -1417,8 +1479,6 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithSuccess1() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor,
-				scheduledExecutor);
 		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1431,7 +1491,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithSuccess2() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1443,7 +1503,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithFailure1() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.fail(new Exception("no timeout"));
@@ -1457,7 +1517,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithFailure2() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.fail(new Exception("no timeout"));
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1471,7 +1531,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithNegativeTimeoutResolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
@@ -1483,7 +1543,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithNegativeTimeoutUnresolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
 		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
@@ -1497,7 +1557,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithZeroTimeoutResolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(0);
@@ -1509,7 +1569,7 @@ public class PromiseTest {
 
 	@Test
 	public void testTimeoutWithZeroTimeoutUnresolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(0);
 		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
@@ -1523,8 +1583,6 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithSuccess1() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor,
-				scheduledExecutor);
 		final Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1537,7 +1595,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithSuccess2() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no delay");
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1549,7 +1607,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithFailure1() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.fail(new Exception("no delay"));
@@ -1562,7 +1620,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithFailure2() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.fail(new Exception("no delay"));
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -1575,7 +1633,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithDelayUnresolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
@@ -1584,7 +1642,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithNegativeDelayResolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no delay");
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
@@ -1595,7 +1653,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithNegativeDelayUnresolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
 		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
@@ -1604,7 +1662,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithZeroDelayResolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		d.resolve("no delay");
 		Promise<String> t = p.delay(0);
@@ -1615,7 +1673,7 @@ public class PromiseTest {
 
 	@Test
 	public void testDelayWithZeroDelayUnresolved() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(0);
 		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
@@ -1627,7 +1685,7 @@ public class PromiseTest {
 	 */
 	@Test
 	public void testThenAcceptSuccess() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final AtomicReference<String> result = new AtomicReference<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
@@ -1652,7 +1710,7 @@ public class PromiseTest {
 
 	@Test
 	public void testThenAcceptFailure() throws Exception {
-		Deferred<String> d = new Deferred<String>();
+		Deferred<String> d = factory.deferred();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<String> p2 = p1.thenAccept(s -> latch.countDown());
@@ -1678,7 +1736,7 @@ public class PromiseTest {
 
 	@Test
 	public void testThenAcceptThrowFailure() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final AtomicReference<String> result = new AtomicReference<String>();
 		final Exception failure = new Exception("failure");
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -1708,7 +1766,7 @@ public class PromiseTest {
 	@Test
 	public void testThenAcceptNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.thenAccept((Consumer<String>) null));
 	}
@@ -1716,7 +1774,7 @@ public class PromiseTest {
 	@Test
 	public void testOnSuccessSuccess() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final AtomicReference<String> result = new AtomicReference<String>();
 		final Promise<String> p = d.getPromise().onSuccess(s -> {
 			result.set(s);
@@ -1734,7 +1792,7 @@ public class PromiseTest {
 	@Test
 	public void testOnFailureSuccess() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>();
+		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise()
 				.onFailure(t -> latch.countDown());
 		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
@@ -1748,8 +1806,6 @@ public class PromiseTest {
 	@Test
 	public void testOnSuccessFailure() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<String> d = factory.deferred();
 		final Promise<String> p = d.getPromise()
 				.onSuccess(s -> latch.countDown());
@@ -1766,8 +1822,6 @@ public class PromiseTest {
 	@Test
 	public void testOnFailureFailure() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		final Deferred<String> d = factory.deferred();
 		final AtomicReference<Throwable> result = new AtomicReference<>();
 		final Throwable failure = new RuntimeException();
@@ -1788,8 +1842,6 @@ public class PromiseTest {
 
 	@Test
 	public void testOnResolveNull1() throws Exception {
-		PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		Deferred<String> d1 = factory.deferred();
 		Promise<String> p1 = d1.getPromise();
 		assertThatNullPointerException()
@@ -1799,8 +1851,6 @@ public class PromiseTest {
 	@Test
 	public void testOnResolveNull2() throws Exception {
 		String value1 = new String("value");
-		PromiseFactory factory = new PromiseFactory(
-				PromiseFactory.inlineExecutor());
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.onResolve((Runnable) null));
@@ -1809,7 +1859,7 @@ public class PromiseTest {
 	@Test
 	public void testOnSuccessNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.onSuccess((Consumer<String>) null));
 	}
@@ -1817,15 +1867,13 @@ public class PromiseTest {
 	@Test
 	public void testOnFailureNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = resolved(value1);
+		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.onFailure((Consumer<Throwable>) null));
 	}
 
 	@Test
 	public void testSubmitSuccess() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor,
-				scheduledExecutor);
 		Promise<String> p = factory.submit(() -> testName.getMethodName());
 		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(testName.getMethodName());
@@ -1833,8 +1881,6 @@ public class PromiseTest {
 
 	@Test
 	public void testSubmitFailure() throws Exception {
-		final PromiseFactory factory = new PromiseFactory(callbackExecutor,
-				scheduledExecutor);
 		final Exception failure = new RuntimeException();
 		Promise<String> p = factory.submit(() -> {
 			throw failure;
@@ -1858,5 +1904,113 @@ public class PromiseTest {
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
+	}
+
+	@Test
+	public void testToCompletionStageSuccess1() throws Exception {
+		final String value = new String("success");
+		final Deferred<String> d = factory.deferred();
+		final Promise<String> p = d.getPromise();
+		final CompletionStage<String> c = p.toCompletionStage();
+		assertThat(c).isNotCompleted();
+		d.resolve(value);
+		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
+				.handleAsync((v, f) -> null, factory.executor());
+		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
+				.doesNotThrowAnyException();
+		assertThat(c).isCompletedWithValueMatching(v -> v == value,
+				"same value");
+	}
+
+	@Test
+	public void testToCompletionStageSuccess2() throws Exception {
+		final String value = new String("success");
+		final Promise<String> p = factory.resolved(value);
+		final CompletionStage<String> c = p.toCompletionStage();
+		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
+				.handleAsync((v, f) -> null, factory.executor());
+		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
+				.doesNotThrowAnyException();
+		assertThat(c).isCompletedWithValueMatching(v -> v == value,
+				"same value");
+	}
+
+	@Test
+	public void testToCompletionStageFailed1() throws Exception {
+		final Throwable failure = new Exception("failed");
+		final Deferred<String> d = factory.deferred();
+		final Promise<String> p = d.getPromise();
+		final CompletionStage<String> c = p.toCompletionStage();
+		assertThat(c).isNotCompleted();
+		d.fail(failure);
+		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
+				.handleAsync((v, f) -> null, factory.executor());
+		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
+				.doesNotThrowAnyException();
+		assertThat(c).isCompletedExceptionally()
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+	}
+
+	@Test
+	public void testToCompletionStageFailed2() throws Exception {
+		final Throwable failure = new Exception("failed");
+		final Promise<String> p = factory.failed(failure);
+		final CompletionStage<String> c = p.toCompletionStage();
+		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
+				.handleAsync((v, f) -> null, factory.executor());
+		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
+				.doesNotThrowAnyException();
+		assertThat(c).isCompletedExceptionally()
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+	}
+
+	@Test
+	public void testPromiseFromSuccess1() throws Exception {
+		final String value = new String("success");
+		final CompletableFuture<String> c = new CompletableFuture<>();
+		final Promise<String> p = factory.promiseFrom(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p).isNotDone();
+		c.complete(value);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+	}
+
+	@Test
+	public void testPromiseFromSuccess2() throws Exception {
+		final String value = new String("success");
+		final CompletableFuture<String> c = CompletableFuture
+				.completedFuture(value);
+		assertThat(c).isCompleted();
+		final Promise<String> p = factory.promiseFrom(c);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+	}
+
+	@Test
+	public void testPromiseFromFailed1() throws Exception {
+		final Throwable failure = new Exception("failed");
+		final CompletableFuture<String> c = new CompletableFuture<>();
+		final Promise<String> p = factory.promiseFrom(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p).isNotDone();
+		c.completeExceptionally(failure);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+	}
+
+	@Test
+	public void testPromiseFromFailed2() throws Exception {
+		final Throwable failure = new Exception("failed");
+		final CompletableFuture<String> c = new CompletableFuture<>();
+		c.completeExceptionally(failure);
+		assertThat(c).isCompletedExceptionally();
+		final Promise<String> p = factory.promiseFrom(c);
+		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
 	}
 }
