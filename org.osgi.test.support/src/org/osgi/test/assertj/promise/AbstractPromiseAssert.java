@@ -72,8 +72,11 @@ public abstract class AbstractPromiseAssert<SELF extends AbstractPromiseAssert<S
 	public SELF doesNotResolve(long timeout, TimeUnit unit) {
 		isNotDone();
 		final CountDownLatch latch = new CountDownLatch(1);
+		actual.onResolve(latch::countDown);
 		try {
-			latch.await(timeout, unit);
+			if (latch.await(timeout, unit)) {
+				failWithMessage("%nExpecting%n  <%s>%nto not resolve.", actual);
+			}
 		} catch (InterruptedException e) {
 			fail("unexpected exception", e);
 		}
