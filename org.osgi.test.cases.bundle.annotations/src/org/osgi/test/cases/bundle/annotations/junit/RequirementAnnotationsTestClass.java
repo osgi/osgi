@@ -27,8 +27,7 @@ import org.junit.Test;
 import org.osgi.framework.Filter;
 import org.osgi.framework.Version;
 import org.osgi.resource.Requirement;
-import org.osgi.test.support.assertj.condition.FilterAcceptCondition;
-import org.osgi.test.support.assertj.condition.FilterRejectCondition;
+import org.osgi.test.assertj.filter.FilterCondition;
 import org.osgi.test.support.map.Maps;
 
 public class RequirementAnnotationsTestClass extends AnnotationsTestCase {
@@ -62,21 +61,21 @@ public class RequirementAnnotationsTestClass extends AnnotationsTestCase {
 		String filterString = directives.get(REQUIREMENT_FILTER_DIRECTIVE);
 		Filter filter = getContext().createFilter(filterString);
 		assertThat(filter).as("requirement filter incorrect: %s", filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.map​Of(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.3"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.2"))))
-				.is(new FilterAcceptCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.map​Of(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.9"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.3"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						"foo", "baz", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.3"))));
 
@@ -165,13 +164,13 @@ public class RequirementAnnotationsTestClass extends AnnotationsTestCase {
 		String filterString = directives.get(REQUIREMENT_FILTER_DIRECTIVE);
 		Filter filter = getContext().createFilter(filterString);
 		assertThat(filter).as("requirement filter incorrect: %s", filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.map​Of(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.5"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.4"))))
-				.is(new FilterAcceptCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.map​Of(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.9"))))
-				.is(new FilterRejectCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("2.0"))));
 
 		Map<String,Object> attributes = requirement.getAttributes();

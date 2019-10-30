@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.support.assertj.condition;
+package org.osgi.test.assertj.filter;
 
 import java.util.Map;
 
@@ -22,10 +22,10 @@ import org.assertj.core.api.Condition;
 import org.assertj.core.description.TextDescription;
 import org.osgi.framework.Filter;
 
-public class FilterAcceptCondition extends Condition<Filter> {
+public class FilterCondition extends Condition<Filter> {
 	private final Map<String, ? > map;
 
-	public FilterAcceptCondition(Map<String, ? > map) {
+	public FilterCondition(Map<String, ? > map) {
 		super(new TextDescription("filter must match %s", map));
 		this.map = map;
 	}

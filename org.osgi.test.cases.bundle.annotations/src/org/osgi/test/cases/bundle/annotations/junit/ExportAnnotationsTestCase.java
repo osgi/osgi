@@ -29,8 +29,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.Version;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
-import org.osgi.test.support.assertj.condition.FilterAcceptCondition;
-import org.osgi.test.support.assertj.condition.FilterRejectCondition;
+import org.osgi.test.assertj.filter.FilterCondition;
 import org.osgi.test.support.map.Maps;
 import org.osgi.test.support.string.Strings;
 
@@ -99,16 +98,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -127,16 +126,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -155,16 +154,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -227,16 +226,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterAcceptCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.is(new FilterRejectCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
