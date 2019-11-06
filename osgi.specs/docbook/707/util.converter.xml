@@ -801,7 +801,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></pa
 
               <listitem>
                 <para>If the type that declares the method also declares a
-                static final <code>PREFIX_</code> field whose value is a
+                public static final <code>PREFIX_</code> field whose value is a
                 compile-time constant <code>String</code>, then the key name
                 is prefixed with the value of the <code>PREFIX_</code> field.
                 <code>PREFIX_</code> fields in super-classes or
