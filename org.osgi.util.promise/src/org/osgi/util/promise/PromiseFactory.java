@@ -62,9 +62,9 @@ public class PromiseFactory {
 	 * Defines the options for a Promise factory.
 	 * <p>
 	 * The default options are no options unless the boolean system property
-	 * {@code org.osgi.util.promise.allowCurrentThread} is set to {@false}. When
-	 * this is the case, the option {@link Option#CALLBACKS_EXECUTOR_ONLY} is a
-	 * default option.
+	 * {@code org.osgi.util.promise.allowCurrentThread} is set to {@code false}.
+	 * When this is the case, the option {@link Option#CALLBACKS_EXECUTOR_ONLY}
+	 * is a default option.
 	 *
 	 * @since 1.2
 	 */
