@@ -98,16 +98,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -126,16 +126,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -154,16 +154,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}
@@ -226,16 +226,16 @@ public class ExportAnnotationsTestCase extends AnnotationsTestCase {
 		assertThat(filter)
 				.as("Package %s requirement filter incorrect: %s", pkgName,
 						filterString)
-				.is(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.is(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.0"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("0.9"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.1"))))
-				.isNot(new FilterCondition(Maps.map​Of(PACKAGE_NAMESPACE,
+				.isNot(new FilterCondition(Maps.mapOf(PACKAGE_NAMESPACE,
 						pkgName, CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))));
 	}

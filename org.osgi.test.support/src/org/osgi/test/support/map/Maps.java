@@ -32,14 +32,14 @@ public class Maps {
 		return Collections.unmodifiableMap(map);
 	}
 
-	public static <K, V> Map<K,V> map​Of(K k1, V v1, K k2, V v2) {
+	public static <K, V> Map<K,V> mapOf(K k1, V v1, K k2, V v2) {
 		Map<K,V> map = new LinkedHashMap<>();
 		map.put(k1, v1);
 		map.put(k2, v2);
 		return Collections.unmodifiableMap(map);
 	}
 
-	public static <K, V> Map<K,V> map​Of(K k1, V v1, K k2, V v2, K k3, V v3) {
+	public static <K, V> Map<K,V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
 		Map<K,V> map = new LinkedHashMap<>();
 		map.put(k1, v1);
 		map.put(k2, v2);
@@ -47,7 +47,7 @@ public class Maps {
 		return Collections.unmodifiableMap(map);
 	}
 
-	public static <K, V> Map<K,V> map​Of(K k1, V v1, K k2, V v2, K k3, V v3,
+	public static <K, V> Map<K,V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3,
 			K k4, V v4) {
 		Map<K,V> map = new LinkedHashMap<>();
 		map.put(k1, v1);

@@ -61,21 +61,21 @@ public class RequirementAnnotationsTestClass extends AnnotationsTestCase {
 		String filterString = directives.get(REQUIREMENT_FILTER_DIRECTIVE);
 		Filter filter = getContext().createFilter(filterString);
 		assertThat(filter).as("requirement filter incorrect: %s", filterString)
-				.is(new FilterCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.mapOf(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.3"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.2"))))
-				.is(new FilterCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.mapOf(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.9"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						"foo", "bar", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("2.0"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.3"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						"foo", "baz", CAPABILITY_VERSION_ATTRIBUTE,
 						Version.valueOf("1.3"))));
 
@@ -164,13 +164,13 @@ public class RequirementAnnotationsTestClass extends AnnotationsTestCase {
 		String filterString = directives.get(REQUIREMENT_FILTER_DIRECTIVE);
 		Filter filter = getContext().createFilter(filterString);
 		assertThat(filter).as("requirement filter incorrect: %s", filterString)
-				.is(new FilterCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.mapOf(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.5"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.4"))))
-				.is(new FilterCondition(Maps.map​Of(namespace, name,
+				.is(new FilterCondition(Maps.mapOf(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("1.9"))))
-				.isNot(new FilterCondition(Maps.map​Of(namespace, name,
+				.isNot(new FilterCondition(Maps.mapOf(namespace, name,
 						CAPABILITY_VERSION_ATTRIBUTE, Version.valueOf("2.0"))));
 
 		Map<String,Object> attributes = requirement.getAttributes();
