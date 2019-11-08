@@ -154,8 +154,8 @@ books.forEach { book ->
         javaexec {
           classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
           main = 'net.sf.diffmk.DiffMk'
-          minHeapSize = '1024m'
-          maxHeapSize = '2048m'
+          minHeapSize = '1g'
+          maxHeapSize = '2g'
           args '--verbose'
           args '1'
           args '--words'
@@ -211,8 +211,8 @@ books.forEach { book ->
           systemProperty('JAVA_FONTS', file('fonts'))
           classpath sourceSets.main.runtimeClasspath
           main = 'org.osgi.tools.rasterizer.RasterizerMain'
-          minHeapSize = '1024m'
-          maxHeapSize = '2048m'
+          minHeapSize = '1g'
+          maxHeapSize = '2g'
           args destinationDir
           args svgFiles
         }.assertNormalExitValue()
@@ -356,8 +356,8 @@ private Closure pdftaskConfiguration(basebook, bookName, fotask) {
           classpath bnd.log4j
           classpath fop_classpath
           main = 'org.osgi.tools.fop.FOPMain'
-          minHeapSize = '1024m'
-          maxHeapSize = '2048m'
+          minHeapSize = '1g'
+          maxHeapSize = '3g'
           args '-c', new File(temporaryDir, fopxconf.name)
           args '-fo', fotask.get().bookfo
           args '-pdf', bookpdf
