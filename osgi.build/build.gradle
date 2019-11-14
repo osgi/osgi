@@ -6,7 +6,7 @@ def buildProject = project
 
 /* Configure the workspace project */
 configure(parent) {
-  buildDir = buildProject.buildDir
+  layout.buildDirectory.value(buildProject.layout.buildDirectory)
 
   def build = tasks.register('build') {
     dependsOn buildProject.absoluteProjectPath('jar')

@@ -3,7 +3,7 @@
  */
 
 if (project == rootProject) { // we are not applied from the main build
-  buildDir = project.file('generated')
+  project.layout.buildDirectory.value(project.layout.projectDirectory.dir('generated'))
   ext.riBuildDir = project.file('../osgi.ri/generated')
 }
 
@@ -13,18 +13,18 @@ tasks.addRule('Pattern: prepct.<name>: Prepare the CT for <name>.') { taskName -
       ext.book = taskName - 'prepct.'
       description "Prepare the CT for ${book}."
       group 'verification'
-      ext.destinationDir = new File(buildDir, "osgi.ct.${book}")
+      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.ct.${book}"))
       inputs.files fileTree(riBuildDir).include('osgi.ri.core*.jar', "osgi.ri.${book}*.jar")
-      inputs.files fileTree(buildDir).include("osgi.ct.${book}*.jar")
+      inputs.files fileTree(project.layout.buildDirectory).include("osgi.ct.${book}*.jar")
       doFirst {
-        project.delete(destinationDir)
-        project.mkdir(destinationDir)
+        project.delete(destinationDirectory)
+        project.mkdir(destinationDirectory)
       }
       doLast {
         inputs.files.each { jar ->
           copy {
             from zipTree(jar)
-            into destinationDir
+            into destinationDirectory
           }
         }
       }
@@ -38,13 +38,13 @@ tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
       ext.book = taskName - 'ct.'
       description "Run the CT for ${book}."
       group 'verification'
-      ext.destinationDir = new File(buildDir, "osgi.ct.${book}")
+      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.ct.${book}"))
       dependsOn "prepct.${book}"
       doLast {
         javaexec {
-          workingDir destinationDir
+          workingDir file(destinationDirectory)
           main = '-jar' // first arg must be the bnd jar
-          args new File(destinationDir, 'jar/bnd.jar')
+          args file(destinationDirectory.file('jar/bnd.jar'))
           args '--exceptions'
           args 'runtests'
           args '--title', "osgi.ct.${book}"

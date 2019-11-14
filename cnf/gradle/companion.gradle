@@ -3,20 +3,25 @@
  */
 
 def jar = tasks.named('jar') {
-  ext.javadocIncludes = new File(docsDir, 'javadocIncludes.txt')
+  def docsDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir(project.provider({ ->
+    return project.docsDirName
+  })))
+  ext.javadocIncludes = docsDirectory.file('javadocIncludes.txt')
   outputs.file javadocIncludes
   doLast {
-    project.mkdir(javadocIncludes.parent)
-    javadocIncludes.text = bnd.project.getExports().collect { packageRef, attrs ->
+    File javadocIncludesFile = file(javadocIncludes)
+    project.mkdir(javadocIncludesFile.parent)
+    javadocIncludesFile.text = bnd.project.getExports().collect { packageRef, attrs ->
        "${packageRef.getBinary()}/*.java"
     }.join(',')
   }
-  ext.javadocVersion = new File(docsDir, 'javadocVersion.txt')
+  ext.javadocVersion = docsDirectory.file('javadocVersion.txt')
   outputs.file javadocVersion
   doLast {
-    project.mkdir(javadocVersion.parent)
+    File javadocVersionFile = file(javadocVersion)
+    project.mkdir(javadocVersionFile.parent)
     def version = bnd.project.getVersion(project.name)
-    javadocVersion.text = bnd.project.getReplacer().process("\${versionmask;===s;${version}}", bnd.project)
+    javadocVersionFile.text = bnd.project.getReplacer().process("\${versionmask;===s;${version}}", bnd.project)
   }
 }
 
@@ -39,6 +44,7 @@ def javadoc = tasks.named('javadoc') {
     noIndex = false
     noNavBar = false
     noTree = false
+    noTimestamp = JavaVersion.current().isJava9Compatible()
     tags = ['Immutable:t:"Immutable"',
             'ThreadSafe:t:"ThreadSafe"',
             'NotThreadSafe:t:"NotThreadSafe"',
@@ -49,7 +55,7 @@ def javadoc = tasks.named('javadoc') {
   }
   // compute dependencies on other javadoc builds based upon the classpath
   def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
-  def linkProjects = sourceSets.main.compileClasspath.findResult {
+  def linkProjects = sourceSets.main.compileClasspath.findResults {
     def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
     def matcher = pattern.matcher(entry)
     matcher ? parent.project(matcher[0][1]) : null
@@ -62,13 +68,17 @@ def javadoc = tasks.named('javadoc') {
     options.addStringOption('Xdoclint:none', '-quiet') 
   }
   doFirst {
-    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${jar.get().javadocVersion.text}"
+    File javadocVersion = file(jar.get().javadocVersion)
+    File javadocIncludes = file(jar.get().javadocIncludes)
+    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${javadocVersion.text}"
     options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
     options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
     options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
-    include jar.get().javadocIncludes.text.tokenize(',')
+    include javadocIncludes.text.tokenize(',')
     linkProjects.each { linkProject ->
-      options.linksOffline("../../${linkProject.name}/${linkProject.tasks.getByName('jar').javadocVersion.text}", linkProject.tasks.getByName('javadoc').destinationDir.absolutePath)
+      File linkJavadocVersion = file(linkProject.tasks.getByName('jar').javadocVersion)
+      File linkDestinationDir = file(linkProject.tasks.getByName('javadoc').destinationDir)
+      options.linksOffline("../../${linkProject.name}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
     }
     logger.info 'Title         : {}', options.windowTitle
     logger.info 'Packages      : {}', includes
