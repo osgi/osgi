@@ -641,27 +641,45 @@ public class ConnectTests extends LaunchTest {
 					assertTrue("Wrong wiring entry URLs: " + wiringEntryUrls,
 							entries.containsAll(wiringEntryUrls));
 
-					String txtPath = "org/osgi/test/cases/framework/launch/junit/connect/test/resources/"
-							+ id + ".txt";
+					String txtPathDir = "org/osgi/test/cases/framework/launch/junit/connect/test/resources/";
+					String txtPath = txtPathDir + id + ".txt";
 					Optional<ConnectEntry> txtConnectEntry = m.getContent()
 							.getEntry(txtPath);
 					assertTrue("Could not find text entry.",
 							txtConnectEntry.isPresent());
 
-					checkEntry(txtConnectEntry.get(), b.getEntry(txtPath), id,
-							false);
-					if (provideLoader) {
-						checkEntry(txtConnectEntry.get(),
-								b.getResource(txtPath), id, true);
-					} else {
-						checkEntry(txtConnectEntry.get(),
-								b.getResource(txtPath), id, false);
-					}
+					doCheckEntry(provideLoader, id, b, txtPathDir, txtPath,
+							txtConnectEntry);
+
+					// now try with leading '/'
+					String slashTxtPath = '/' + txtPath;
+					doCheckEntry(provideLoader, id, b, '/' + txtPathDir,
+							slashTxtPath,
+							txtConnectEntry);
 				}
 			} catch (Throwable t) {
 				sneakyThrow(t);
 			}
 		});
+	}
+
+	private void doCheckEntry(boolean provideLoader, Integer id, Bundle b,
+			String txtPathDir, String txtPath, Optional<ConnectEntry> txtConnectEntry) throws IOException {
+		checkEntry(txtConnectEntry.get(), b.getEntry(txtPath),
+				id, false);
+
+		if (provideLoader) {
+			checkEntry(txtConnectEntry.get(),
+					b.getResource(txtPath), id, true);
+		} else {
+			checkEntry(txtConnectEntry.get(),
+					b.getResource(txtPath), id, false);
+		}
+		Enumeration<URL> found = b.findEntries(txtPathDir, "*.txt",
+				false);
+		checkEntry(txtConnectEntry.get(), found.nextElement(), id,
+				false);
+		assertFalse("More entries found.", found.hasMoreElements());
 	}
 
 	public void testOpenCloseUpdateConnectContent() {
@@ -711,6 +729,8 @@ public class ConnectTests extends LaunchTest {
 	void checkEntry(ConnectEntry expected, URL actual, Integer id,
 			boolean matchUrl)
 			throws IOException {
+
+		assertNotNull("No entry found.", actual);
 		if (matchUrl) {
 			assertEquals("Wrong path.",
 					((TestConnectEntryURL) expected).getContentURL(), actual);
