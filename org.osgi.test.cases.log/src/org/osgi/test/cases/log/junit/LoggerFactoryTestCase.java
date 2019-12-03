@@ -27,6 +27,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -51,7 +52,6 @@ import org.osgi.service.log.LoggerConsumer;
 import org.osgi.service.log.LoggerFactory;
 import org.osgi.service.log.admin.LoggerAdmin;
 import org.osgi.service.log.admin.LoggerContext;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LoggerFactoryTestCase extends AbstractLogTestCase {
 
@@ -839,4 +839,82 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 			}
 		}
 	}
+
+	public void testLoggerContextSetLogLevelsWithBundleInstalledAndLogger()
+			throws Exception {
+		Collection<LogReader> readers = Collections.singletonList(reader);
+		try {
+			tb1 = install("tb1.jar");
+			tb1.start();
+			Logger logger = logService.getLogger(tb1, TEST_LOGGER_NAME,
+					Logger.class);
+			assertNotNull("Logger cannot be null", logger);
+			// Bundle is installed and a logger is associated with that bundle
+			// before setting the log level
+			setAndAssertLogLevel(tb1.getSymbolicName(), TEST_LOGGER_NAME);
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+		} finally {
+			if (tb1 != null) {
+				tb1.stop();
+				tb1.uninstall();
+			}
+		}
+	}
+
+	public void testLoggerContextSetLogLevelsWithBundleInstalledAndNoLogger()
+			throws Exception {
+		Collection<LogReader> readers = Collections.singletonList(reader);
+		try {
+			tb1 = install("tb1.jar");
+			tb1.start();
+			// Bundle is installed but a logger is not associated with the
+			// bundle before setting the log level
+			setAndAssertLogLevel(tb1.getSymbolicName(), TEST_LOGGER_NAME);
+			Logger logger = logService.getLogger(tb1, TEST_LOGGER_NAME,
+					Logger.class);
+			assertNotNull("Logger cannot be null", logger);
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+		} finally {
+			if (tb1 != null) {
+				tb1.stop();
+				tb1.uninstall();
+			}
+		}
+	}
+
+	public void testLoggerContextSetLogLevelsWithoutBundleAndLogger()
+			throws Exception {
+		Collection<LogReader> readers = Collections.singletonList(reader);
+		// Bundle is not installed and also the logger is not associated with
+		// the bundle before setting the log level
+		setAndAssertLogLevel("tb1", TEST_LOGGER_NAME);
+		try {
+			tb1 = install("tb1.jar");
+			tb1.start();
+			Logger logger = logService.getLogger(tb1, TEST_LOGGER_NAME,
+					Logger.class);
+			assertNotNull("Logger cannot be null", logger);
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+		} finally {
+			if (tb1 != null) {
+				tb1.stop();
+				tb1.uninstall();
+			}
+		}
+	}
+
+	private void setAndAssertLogLevel(String loggerContextName,
+            String loggerName) {
+		LoggerContext loggerContext = loggerAdmin
+                    .getLoggerContext(loggerContextName);
+		Map<String,LogLevel> logLevels = loggerContext.getLogLevels();
+		logLevels.put(loggerName, LogLevel.TRACE);
+		loggerContext.setLogLevels(logLevels);
+		assertEquals("Log levels not set for " + loggerContext.getName(),
+                    logLevels, loggerContext.getLogLevels());
+		assertEquals("Wrong effective level", LogLevel.TRACE,
+                    loggerContext.getEffectiveLogLevel(loggerName));
+
+	}
+
 }
