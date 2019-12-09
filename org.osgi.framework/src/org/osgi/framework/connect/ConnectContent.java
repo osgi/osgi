@@ -60,16 +60,17 @@ public interface ConnectContent {
 	Iterable<String> getEntries() throws IOException;
 
 	/**
-	 * Returns the connect entry for the specified name. The
-	 * {@link Optional#empty() empty} value is returned if an entry with the
-	 * specified name does not exist.
+	 * Returns the connect entry for the specified path name in this content.
+	 * The {@link Optional#empty() empty} value is returned if an entry with the
+	 * specified path name does not exist. The path must not start with a
+	 * &quot;/&quot; and is relative to the root of this content.
 	 * 
-	 * @param name the name of the entry
+	 * @param path the path name of the entry
 	 * @return the connect entry, or {@link Optional#empty() empty} if not
 	 *         found.
 	 * @throws IllegalStateException if the connect content has been closed
 	 */
-	Optional<ConnectEntry> getEntry(String name);
+	Optional<ConnectEntry> getEntry(String path);
 
 	/**
 	 * Returns a class loader for this connect content. The
@@ -110,9 +111,9 @@ public interface ConnectContent {
 	 */
 	public interface ConnectEntry {
 		/**
-		 * Returns the name of the entry
+		 * Returns the path name of the entry
 		 * 
-		 * @return the name of the entry
+		 * @return the path name of the entry
 		 */
 		String getName();
 
