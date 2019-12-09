@@ -3316,15 +3316,15 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		assertTrue("description is not enabled", scr.isComponentEnabled(description1));
 		Promise<Void> p = scr.disableComponent(description1);
-		assertFalse("description is enabled", scr.isComponentEnabled(description1));
 		p.getValue(); // wait for state change to complete
+		assertFalse("description is enabled", scr.isComponentEnabled(description1));
 		configurations1 = scr.getComponentConfigurationDTOs(description1);
 		assertNotNull("null configurations1", configurations1);
 		assertEquals("wrong number of configurations", 0, configurations1.size());
 
 		p = scr.enableComponent(description1);
-		assertTrue("description is not enabled", scr.isComponentEnabled(description1));
 		p.getValue(); // wait for state change to complete
+		assertTrue("description is not enabled", scr.isComponentEnabled(description1));
 		configurations1 = scr.getComponentConfigurationDTOs(description1);
 		assertNotNull("null configurations1", configurations1);
 		assertEquals("wrong number of configurations", 1, configurations1.size());
