@@ -3531,13 +3531,12 @@ boot-description    ::= package-name        // See <xref
       true for a bundle class loader. Framework implementations should attempt
       to load these classes from the boot class path.</para>
 
-      <para>The system bundle (bundle ID zero) is used to export
-      non-<code>java.*</code> packages from the parent class loader. Export
-      definitions from the system bundle are treated like normal exports,
-      meaning that they can have version numbers, and are used to resolve
-      import definitions as part of the normal bundle resolving process. Other
-      bundles may provide alternative implementations of the same
-      packages.</para>
+      <para>The system bundle (bundle ID zero) is used to export packages from
+      the parent class loader. Export definitions from the system bundle are
+      treated like normal exports, meaning that they can have version numbers,
+      and are used to resolve import definitions as part of the normal bundle
+      resolving process. Other bundles may provide alternative implementations
+      of the same packages.</para>
 
       <para>The set of export definitions for the parent class loader can
       either be set by this property or calculated by the Framework. The
