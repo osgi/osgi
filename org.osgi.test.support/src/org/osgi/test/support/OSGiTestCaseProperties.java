@@ -17,6 +17,9 @@
 
 package org.osgi.test.support;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -70,19 +73,22 @@ public class OSGiTestCaseProperties {
 	 * @return The property value or null if the property is not set.
 	 */
 	public static String getProperty(String key) {
-		Bundle bundle = FrameworkUtil.getBundle(OSGiTestCaseProperties.class);
-		if (bundle != null) {
-			BundleContext context;
-			try {
-				context = bundle.getBundleContext();
-			} catch (SecurityException e) {
-				context = null;
+		return AccessController.doPrivileged((PrivilegedAction<String>) () -> {
+			Bundle bundle = FrameworkUtil
+					.getBundle(OSGiTestCaseProperties.class);
+			if (bundle != null) {
+				BundleContext context;
+				try {
+					context = bundle.getBundleContext();
+				} catch (SecurityException e) {
+					context = null;
+				}
+				if (context != null) {
+					return context.getProperty(key);
+				}
 			}
-			if (context != null) {
-				return context.getProperty(key);
-			}
-		}
-		return System.getProperty(key);
+			return System.getProperty(key);
+		});
 	}
 
 	/**
