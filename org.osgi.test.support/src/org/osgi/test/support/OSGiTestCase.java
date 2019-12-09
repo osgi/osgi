@@ -21,15 +21,21 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Comparator;
 import java.util.List;
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.test.support.sleep.Sleep;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
 public abstract class OSGiTestCase extends TestCase {
 	private volatile BundleContext context;
@@ -159,6 +165,19 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 
+	public static <T> T doPrivileged(PrivilegedAction< ? extends T> action) {
+		return AccessController.doPrivileged(action);
+	}
+
+	public static <T> T doPrivilegedException(
+			PrivilegedExceptionAction< ? extends T> action) throws Exception {
+		try {
+			return AccessController.doPrivileged(action);
+		} catch (PrivilegedActionException e) {
+			throw e.getException();
+		}
+	}
+
 	/**
 	 * Return the property value from the bundle context properties.
 	 * 
@@ -166,10 +185,12 @@ public abstract class OSGiTestCase extends TestCase {
 	 * @return The property value or null if the property is not set.
 	 */
 	public String getProperty(String key) {
-		if (context != null) {
-			return context.getProperty(key);
-		}
-		return System.getProperty(key);
+		return doPrivileged(() -> {
+			if (context != null) {
+				return context.getProperty(key);
+			}
+			return System.getProperty(key);
+		});
 	}
 
 	/**

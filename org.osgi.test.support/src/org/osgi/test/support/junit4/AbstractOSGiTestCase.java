@@ -21,6 +21,10 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -103,6 +107,19 @@ public abstract class AbstractOSGiTestCase {
 		}
 	}
 
+	public static <T> T doPrivileged(PrivilegedAction< ? extends T> action) {
+		return AccessController.doPrivileged(action);
+	}
+
+	public static <T> T doPrivilegedException(
+			PrivilegedExceptionAction< ? extends T> action) throws Exception {
+		try {
+			return AccessController.doPrivileged(action);
+		} catch (PrivilegedActionException e) {
+			throw e.getException();
+		}
+	}
+
 	/**
 	 * Return the property value from the bundle context properties.
 	 * 
@@ -110,10 +127,12 @@ public abstract class AbstractOSGiTestCase {
 	 * @return The property value or null if the property is not set.
 	 */
 	public String getProperty(String key) {
-		if (context != null) {
-			return context.getProperty(key);
-		}
-		return System.getProperty(key);
+		return doPrivileged(() -> {
+			if (context != null) {
+				return context.getProperty(key);
+			}
+			return System.getProperty(key);
+		});
 	}
 
 	/**
