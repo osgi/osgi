@@ -2202,6 +2202,7 @@ public class FrameworkUtil {
 	 * @return A Map object which wraps the specified dictionary. If the
 	 *         specified dictionary can be cast to a Map, then the specified
 	 *         dictionary is returned.
+	 * @since 1.10
 	 */
 	public static <K, V> Map<K,V> asMap(
 			Dictionary< ? extends K, ? extends V> dictionary) {
@@ -2453,6 +2454,7 @@ public class FrameworkUtil {
 	 * @return A Dictionary object which wraps the specified map. If the
 	 *         specified map can be cast to a Dictionary, then the specified map
 	 *         is returned.
+	 * @since 1.10
 	 */
 	public static <K, V> Dictionary<K,V> asDictionary(
 			Map< ? extends K, ? extends V> map) {
