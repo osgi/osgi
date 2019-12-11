@@ -17,9 +17,12 @@
 
 package org.osgi.test.cases.framework.junit.frameworkutil;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.OSGiTestCase;
 
 public class BundleReferenceTests extends OSGiTestCase {
@@ -34,23 +37,33 @@ public class BundleReferenceTests extends OSGiTestCase {
 		assertEquals("wrong bundle returned", me, ref.getBundle());
 	}
 
-	public void testGetBundle() {
+	public void testGetBundleFromClass() {
 		Bundle me = getContext().getBundle();
 		Class< ? > self = getClass();
 		assertEquals("wrong bundle returned", me, FrameworkUtil.getBundle(self));
+	}
+
+	public void testGetBundleFromClassLoader() {
+		Bundle me = getContext().getBundle();
+		BundleWiring wiring = me.adapt(BundleWiring.class);
+		assertThat(wiring).as("bundle wiring").isNotNull();
+		ClassLoader cl = wiring.getClassLoader();
+		assertThat(cl).as("bundle wiring class loader").isNotNull();
+		assertThat(FrameworkUtil.getBundle(cl)).as("bundle returned")
+				.hasValue(me);
 	}
 
 	public void testBootClass() {
 		assertNull("expected null", FrameworkUtil.getBundle(Object.class));
 	}
 
-	public void testNull() {
-		try {
-			FrameworkUtil.getBundle(null);
-			fail("expected runtime exception");
-		}
-		catch (RuntimeException e) {
-			// expected
-		}
+	public void testGetBundleFromClassNull() {
+		assertThatExceptionOfType(RuntimeException.class)
+				.isThrownBy(() -> FrameworkUtil.getBundle((Class< ? >) null));
+	}
+
+	public void testGetBundleFromClassLoaderNull() {
+		assertThatExceptionOfType(RuntimeException.class)
+				.isThrownBy(() -> FrameworkUtil.getBundle((ClassLoader) null));
 	}
 }

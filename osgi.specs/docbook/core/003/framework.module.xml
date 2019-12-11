@@ -3694,48 +3694,33 @@ C: Require-Bundle: D</programlisting>
       started.</para>
     </section>
 
-    <section>
-      <title>Finding an Object's Bundle</title>
+    <section xml:id="framework.module-finding-a-bundle">
+      <title>Finding a Bundle</title>
 
       <para>There are scenarios where a bundle is required in code that has no
       access to a Bundle Context. For this reason, the framework provides the
-      following methods:</para>
+      following <emphasis>Framework Util</emphasis> methods:</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Framework Util</emphasis> - Through the
-          <code>FrameworkUtil</code> class with the
-          <code>getBundle(Class)</code> method. The framework provides this
-          method to allow code to find the bundle of an object without having
-          the permission to get the class loader. The method returns null when
-          the class does not originate from a bundle.</para>
+          <para><code>getBundle(Class)</code> - The <xref
+          linkend="org.osgi.framework.FrameworkUtil.getBundle-Class-"/> method
+          allows code to find the bundle of a class. The method returns
+          <code>null</code> when the class does not originate from a
+          bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Class Loader</emphasis> - An OSGi framework must
-          ensure that the class loader of a class that comes from a bundle
-          implements the <code>BundleReference</code> interface. This allows
-          legacy code to find an object's bundle by getting its class loader
-          and casting it to a <code>BundleReference</code> object, which
-          provides access to the Bundle. However, this requires the code to
-          have the permission to access the class loader. The following code
-          fragment shows how to obtain a <code>Bundle</code> object from any
-          object.</para>
+          <para><code>getBundle(ClassLoader)</code> - The <xref
+          linkend="org.osgi.framework.FrameworkUtil.getBundle-ClassLoader-"/>
+          method allows code to find the bundle of a class loader. The method
+          returns an empty Optional when the class loader is not associated
+          with a specific bundle.</para>
         </listitem>
       </itemizedlist>
 
-      <programlisting>
-ClassLoader cl = target.getClassLoader();
-if ( cl instanceof BundleReference ) {
-    BundleReference ref = (BundleReference) cl;
-    Bundle b = ref.getBundle();
-    ...
-}</programlisting>
-
-      <para>In an OSGi system, not all objects belong to the framework. It is
-      therefore possible to get hold of a class loader that does not implement
-      the <code>BundleReference</code> interface, for example the boot class
-      path loader.</para>
+      <para>In an OSGi system, not all objects belong to types loaded from a
+      bundle class loader. For example, the boot class path loader.</para>
     </section>
   </section>
 
@@ -5796,58 +5781,14 @@ URL(String protocol, String host, String file)</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Updated <xref linkend="framework.module-bundle-license"/> to
-        recommend using license identifiers from <xref
-        linkend="framework.module-spdx.license.list"/>.</para>
+        <para>Clarified that the system bundle can export <code>java.*</code>
+        packages. See <xref
+        linkend="framework.module.parentclassloader"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="framework.module-bundle-developers"/> to
-        hold information about the bundle's developers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.module-bundle-scm"/> to hold
-        information about the bundle's software configuration management
-        system.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated to reference the new bundle annotations in <xref
-        linkend="org.osgi.annotation.bundle"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed specification for bootclasspath extension
-        bundles.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added FrameworkEvent type STOPPED_SYSTEM_REFRESHED.</para>
-      </listitem>
-
-      <listitem>
-        <para>Allow extension bundles to specify package and capability
-        requirements.</para>
-      </listitem>
-
-      <listitem>
-        <para>Mandate support for dynamically resolving extension
-        bundles.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for multi-release JARs. See <xref
-        linkend="framework.module-multireleasejar"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Bundles may now import java.* packages to ensure the Java
-        platform provides the required java.* packages. See <xref
-        linkend="framework.module-execution.environment"/>. Importing a java.*
-        package only affects bundle resolution and wiring. Classes in java.*
-        packages are always loaded from the parent class loader. See <xref
-        linkend="framework.module.parentdelegation"/>.</para>
+        <para>Added new FrameworkUtil.getBundle(ClassLoader) method. See <xref
+        linkend="framework.module-finding-a-bundle"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

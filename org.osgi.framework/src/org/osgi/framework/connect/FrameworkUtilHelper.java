@@ -16,6 +16,8 @@
 
 package org.osgi.framework.connect;
 
+import java.util.Optional;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -27,15 +29,15 @@ public interface FrameworkUtilHelper {
 	/**
 	 * Return a {@code Bundle} associated with the specified class.
 	 * <p>
-	 * This helper method is called by
-	 * {@link FrameworkUtil#getBundle(Class)} if the standard implementation
-	 * of {@code FrameworkUtil} cannot find the bundle.
+	 * This helper method is called by {@link FrameworkUtil#getBundle(Class)} if
+	 * the standard implementation of {@code FrameworkUtil} cannot find the
+	 * bundle.
 	 * 
 	 * @param classFromBundle A class associated with a bundle
-	 * @return A {@code Bundle} for the specified class or {@code null} if
-	 *         the specified class is not from a bundle.
+	 * @return An Optional containing a {@code Bundle} for the specified class
+	 *         or an empty Optional if the specified class is not from a bundle.
 	 */
-	default Bundle getBundle(Class< ? > classFromBundle) {
-		return null;
+	default Optional<Bundle> getBundle(Class< ? > classFromBundle) {
+		return Optional.empty();
 	}
 }

@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -203,33 +204,43 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Return a {@code Bundle} for the specified bundle class. The returned
-	 * {@code Bundle} is the bundle associated with the bundle class loader
-	 * which defined the specified class.
+	 * Return a {@code Bundle} for the specified bundle class loader.
 	 * 
-	 * @param classFromBundle A class defined by a bundle class loader.
+	 * @param bundleClassLoader A bundle class loader.
+	 * @return An Optional containing {@code Bundle} for the specified bundle
+	 *         class loader or an empty Optional if the specified class loader
+	 *         is not associated with a specific bundle.
+	 * @since 1.10
+	 */
+	public static Optional<Bundle> getBundle(ClassLoader bundleClassLoader) {
+		requireNonNull(bundleClassLoader);
+		return Optional
+				.ofNullable((bundleClassLoader instanceof BundleReference)
+						? ((BundleReference) bundleClassLoader).getBundle()
+						: null);
+	}
+
+	/**
+	 * Return a {@code Bundle} for the specified bundle class.
+	 * 
+	 * @param classFromBundle A class defined by a bundle.
 	 * @return A {@code Bundle} for the specified bundle class or {@code null}
-	 *         if the specified class was not defined by a bundle class loader.
+	 *         if the specified class was not defined by a bundle.
 	 * @since 1.5
 	 */
-	public static Bundle getBundle(final Class<?> classFromBundle) {
+	public static Bundle getBundle(Class< ? > classFromBundle) {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
-		ClassLoader cl = AccessController
-				.doPrivileged( (PrivilegedAction<ClassLoader>) 
-						() -> classFromBundle.getClassLoader());
+		ClassLoader cl = AccessController.doPrivileged(
+				(PrivilegedAction<ClassLoader>) () -> classFromBundle
+						.getClassLoader());
 
-		if (cl instanceof BundleReference) {
-			return ((BundleReference) cl).getBundle();
-		}
-
-		for (FrameworkUtilHelper helper : helpers) {
-			Bundle b = helper.getBundle(classFromBundle);
-			if (b != null) {
-				return b;
-			}
-		}
-		return null;
+		return getBundle(cl).orElseGet(() -> helpers.stream()
+				.map(helper -> helper.getBundle(classFromBundle))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.findFirst()
+				.orElse(null));
 	}
 
 	private final static List<FrameworkUtilHelper> helpers;
@@ -240,9 +251,9 @@ public class FrameworkUtil {
 					.doPrivileged(
 							(PrivilegedAction<ServiceLoader<FrameworkUtilHelper>>) () -> ServiceLoader
 									.load(FrameworkUtilHelper.class,
-											FrameworkUtilHelper.class.getClassLoader()));
-
-			helperLoader.forEach((h) -> l.add(h));
+											FrameworkUtilHelper.class
+													.getClassLoader()));
+			helperLoader.forEach(l::add);
 		} catch (Throwable error) {
 			// try hard not to fail static <clinit>
 			try {
