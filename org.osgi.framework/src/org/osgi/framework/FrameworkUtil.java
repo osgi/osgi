@@ -231,16 +231,18 @@ public class FrameworkUtil {
 	public static Bundle getBundle(Class< ? > classFromBundle) {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
-		ClassLoader cl = AccessController.doPrivileged(
-				(PrivilegedAction<ClassLoader>) () -> classFromBundle
-						.getClassLoader());
+		Optional<ClassLoader> cl = Optional
+				.ofNullable(AccessController.doPrivileged(
+						(PrivilegedAction<ClassLoader>) () -> classFromBundle
+								.getClassLoader()));
 
-		return getBundle(cl).orElseGet(() -> helpers.stream()
-				.map(helper -> helper.getBundle(classFromBundle))
-				.filter(Optional::isPresent)
-				.map(Optional::get)
-				.findFirst()
-				.orElse(null));
+		return cl.flatMap(FrameworkUtil::getBundle)
+				.orElseGet(() -> helpers.stream()
+						.map(helper -> helper.getBundle(classFromBundle))
+						.filter(Optional::isPresent)
+						.map(Optional::get)
+						.findFirst()
+						.orElse(null));
 	}
 
 	private final static List<FrameworkUtilHelper> helpers;
