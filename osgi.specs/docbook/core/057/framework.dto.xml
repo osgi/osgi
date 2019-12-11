@@ -318,7 +318,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="framework.dto-obtaining-dtos">
     <title>Obtaining Core Data Transfer Objects</title>
 
     <para>The <xref linkend="org.osgi.framework.Bundle.adapt-Class-"
@@ -338,7 +338,7 @@ BundleWiringDTO bundleWiringDTO = bundle.adapt(BundleWiringDTO.class);
 BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</programlisting>
 
     <para>The following table shows the Core Data Transfer Objects that can be
-    obtained via the <code>adapt</code> method.</para>
+    obtained from a Bundle via the <code>adapt</code> method.</para>
 
     <table>
       <title>Data Transfer Objects that can be adapted from Bundle</title>
@@ -458,6 +458,51 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
         </tbody>
       </tgroup>
     </table>
+
+    <para>The <xref linkend="org.osgi.framework.ServiceReference.adapt-Class-"
+    xrefstyle="hyperlink"/> method allows the Service Reference to be adapted
+    to different types. The <code>adapt</code> method is used to obtain the
+    Core Data Transfer Objects. For example, the <code>adapt</code> method can
+    be used to adapt a Service Reference object to the current
+    <code>ServiceReferenceDTO</code> object. The adapt method can be used as
+    follows:</para>
+
+    <programlisting>// DTO for the service reference
+ServiceReferenceDTO referenceDTO = reference.adapt(ServiceReferenceDTO.class);</programlisting>
+
+    <para>The following table shows the Core Data Transfer Objects that can be
+    obtained from a Service Reference via the <code>adapt</code>
+    method.</para>
+
+    <table>
+      <title>Data Transfer Objects that can be adapted from
+      ServiceReference</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
+        <thead>
+          <row>
+            <entry>Class</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.dto.ServiceReferenceDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>A Service Reference Data Transfer Object for the
+            Service Reference.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </section>
 
   <section>
@@ -465,9 +510,9 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
     <para>Data Transfer Objects have no behavior by definition and thus no
     permissions are applicable to their use. To obtain Data Transfer Objects
-    from a Bundle object via the <code>adapt</code> method,
-    <code>AdaptPermission[&lt;dtotype&gt;,ADAPT]</code> is required for the
-    desired Data Transfer Object type.</para>
+    from a Bundle or ServiceReference object via the <code>adapt</code>
+    method, <code>AdaptPermission[&lt;dtotype&gt;,ADAPT]</code> is required
+    for the desired Data Transfer Object type.</para>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.xml"/>
@@ -495,13 +540,9 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
     <itemizedlist>
       <listitem>
-        <para>Added support for enums and Version fields in DTOs.</para>
-      </listitem>
-
-      <listitem>
-        <para>A new DTO for the complete framework wiring, <xref
-        linkend="org.osgi.framework.wiring.dto.FrameworkWiringDTO"
-        xrefstyle="hyperlink"/>, is added.</para>
+        <para>Updated <xref linkend="framework.dto-obtaining-dtos"/> to
+        reflect that ServiceReference can now be adapted to
+        ServiceReferenceDTO.</para>
       </listitem>
     </itemizedlist>
   </section>

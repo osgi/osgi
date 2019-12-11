@@ -474,6 +474,55 @@ public class FrameworkDTOTestCase extends OSGiTestCase {
         assertNull("ServiceReferenceDTO[] for uninstalled bundle is not null", dtos);
     }
 
+	public void testServiceReferenceDTO() throws Exception {
+		tb1.start();
+		Dictionary<String,Object> properties = new Hashtable<String,Object>();
+		properties.put("dtotest", getName());
+		Version versionProp = new Version("1.2.3.Q");
+		properties.put("testVersion", versionProp);
+		properties.put("testNumber", Double.valueOf(3.14));
+		properties.put("testBoolean", Boolean.TRUE);
+		properties.put("testCharacter", Character.valueOf('#'));
+		TestDTO dtoProp = new TestDTO();
+		dtoProp.field = "prop";
+		properties.put("testDTO", dtoProp);
+		Map<String,Object> mapProp = new HashMap<String,Object>();
+		mapProp.put("mapProp", dtoProp);
+		properties.put("testMap", mapProp);
+		List<Object> listProp = new ArrayList<Object>();
+		listProp.add(dtoProp);
+		properties.put("testList", listProp);
+		Set<Object> setProp = new HashSet<Object>();
+		setProp.add(dtoProp);
+		properties.put("testSet", setProp);
+		Object[] objectArrayProp = new Object[] {
+				dtoProp, versionProp
+		};
+		properties.put("testObjectArray", objectArrayProp);
+		double[] doubleArrayProp = new double[] {
+				3.14
+		};
+		properties.put("testdoubleArray", doubleArrayProp);
+		Version[] versionArray = new Version[] {
+				versionProp
+		};
+		properties.put("testVersionArray", versionArray);
+
+		tb1.getBundleContext()
+				.registerService(DTO.class, new TestDTO(), properties);
+		Collection<ServiceReference<DTO>> refs = getContext()
+				.getServiceReferences(DTO.class, "(dtotest=" + getName() + ")");
+		assertEquals("Wrong number of ServiceReferences", 1, refs.size());
+		ServiceReference<DTO> ref = refs.iterator().next();
+		getContext().getService(ref);
+		assertNotNull("Null ServiceReference", ref);
+		ServiceReferenceDTO dto = ref.adapt(ServiceReferenceDTO.class);
+		assertEquals("ServiceReferenceDTO has wrong bundle", tb1.getBundleId(),
+				dto.bundle);
+		assertServiceReferenceDTO(ref, dto);
+		tb1.stop();
+	}
+
     public void testFrameworkDTO() throws Exception {
         tb1.start();
         FrameworkDTO dto = tb1.adapt(FrameworkDTO.class);

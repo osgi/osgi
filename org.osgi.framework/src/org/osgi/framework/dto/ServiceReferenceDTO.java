@@ -17,16 +17,17 @@
 package org.osgi.framework.dto;
 
 import java.util.Map;
+
 import org.osgi.dto.DTO;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 
 /**
  * Data Transfer Object for a ServiceReference.
- * 
  * <p>
  * {@code ServiceReferenceDTO}s for all registered services can be obtained from
- * a {@link FrameworkDTO}. A started Bundle can be adapted to provide a
+ * a {@link FrameworkDTO}. A {@link ServiceReference} can be adapted to a
+ * {@code ServiceReferenceDTO}. A started Bundle can be adapted to provide a
  * {@code ServiceReferenceDTO[]} of the services registered by the Bundle. A
  * {@code ServiceReferenceDTO} obtained from a framework must convert service
  * property values which are not valid value types for DTOs to type

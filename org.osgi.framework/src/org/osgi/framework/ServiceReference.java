@@ -53,7 +53,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author $Id$
  */
 @ProviderType
-public interface ServiceReference<S> extends Comparable<Object> {
+public interface ServiceReference<S>
+		extends Comparable<Object>, BundleReference {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties {@code Dictionary} object of the service referenced by
@@ -109,6 +110,7 @@ public interface ServiceReference<S> extends Comparable<Object> {
 	 *         already been unregistered.
 	 * @see BundleContext#registerService(String[],Object,Dictionary)
 	 */
+	@Override
 	public Bundle getBundle();
 
 	/**
@@ -212,4 +214,27 @@ public interface ServiceReference<S> extends Comparable<Object> {
 	 * @since 1.9
 	 */
 	public Dictionary<String,Object> getProperties();
+
+	/**
+	 * Adapt this {@code ServiceReference} object to the specified type.
+	 * <p>
+	 * Adapting this {@code ServiceReference} object to the specified type may
+	 * require certain checks, including security checks, to succeed. If a check
+	 * does not succeed, then this {@code ServiceReference} object cannot be
+	 * adapted and {@code null} is returned.
+	 * 
+	 * @param <A> The type to which this {@code ServiceReference} object is to
+	 *            be adapted.
+	 * @param type Class object for the type to which this
+	 *            {@code ServiceReference} object is to be adapted.
+	 * @return The object, of the specified type, to which this
+	 *         {@code ServiceReference} object has been adapted or {@code null}
+	 *         if this {@code ServiceReference} object cannot be adapted to the
+	 *         specified type.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *             {@code AdaptPermission[type,this,ADAPT]}, and the Java
+	 *             Runtime Environment supports permissions.
+	 * @since 1.10
+	 */
+	<A> A adapt(Class<A> type);
 }
