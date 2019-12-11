@@ -578,11 +578,11 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <title>Packages and versions OSGi Core</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="3*"/>
+        <colspec colnum="1" colwidth="3.5*"/>
 
-        <colspec colnum="2" colwidth="3.5*"/>
+        <colspec colnum="2" colwidth="3*"/>
 
-        <colspec colnum="3" colwidth="0.8*"/>
+        <colspec colnum="3" colwidth="1*"/>
 
         <thead>
           <row>
