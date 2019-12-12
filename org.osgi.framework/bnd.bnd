@@ -4,7 +4,7 @@
 Export-Package: ${p}.*; -split-package:=first; -noimport:=true
 
 -buildpath = \
-	osgi.annotation; version=6.0.1, \
+	osgi.annotation; version=latest, \
 	org.osgi.dto; version=project, \
 	org.osgi.resource; version=project
 

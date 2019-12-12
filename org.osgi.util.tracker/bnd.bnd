@@ -5,5 +5,5 @@ Export-Package: ${p}.*; -split-package:=first
 
 -runfw =
 -buildpath = \
-	osgi.annotation; version=6.0.1, \
+	osgi.annotation; version=latest, \
 	org.osgi.framework; version=project
