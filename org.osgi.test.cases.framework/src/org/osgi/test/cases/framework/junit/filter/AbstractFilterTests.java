@@ -16,6 +16,9 @@
 
 package org.osgi.test.cases.framework.junit.filter;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -27,27 +30,31 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.assertj.core.api.AutoCloseableSoftAssertions;
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.test.support.MockFactory;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 
-public abstract class AbstractFilterTests extends OSGiTestCase {
+public abstract class AbstractFilterTests extends AbstractOSGiTestCase {
 
-	private static final Matcher	nullMatcher	= new Matcher() {
-													public boolean matches(
-															Filter f) {
-														boolean result = f
-					.match((Dictionary<String, ? >) null);
-														result &= f
-					.matchCase((Dictionary<String, ? >) null);
-														result &= f
-																.matches(null);
-														return result;
-													}
-												};
+	private static final Matcher nullMatcher = new Matcher() {
+		public void matches(SoftAssertions softly, Filter f, boolean expected) {
+			softly.assertThat(f.match((Dictionary<String, ? >) null))
+					.as("\"%s\".match(null)", f)
+					.isEqualTo(expected);
+			softly.assertThat(f.matchCase((Dictionary<String, ? >) null))
+					.as("\"%s\".matchCase(null)", f)
+					.isEqualTo(expected);
+			softly.assertThat(f.matches(null))
+					.as("\"%s\".matches(null)", f)
+					.isEqualTo(expected);
+		}
+	};
 
 	public abstract Filter createFilter(String filterString)
 			throws InvalidSyntaxException;
@@ -55,7 +62,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	Hashtable<String,Object> getProperties() {
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("room", "bedroom");
-		props.put("channel", new Object[] {Integer.valueOf(34), "101"});
+		props.put("channel", new Object[] {
+				Integer.valueOf(34), "101"
+		});
 		props.put("status", "(on\\)*");
 		List<Object> list = new ArrayList<>(10);
 		list.add(Long.valueOf(150));
@@ -71,17 +80,30 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("charvalue", Character.valueOf('A'));
 		props.put("booleanvalue", Boolean.valueOf(true));
 		props.put("weirdvalue", new Hashtable<String,Object>());
-		props.put("primintarrayvalue", new int[] {1, 2, 3});
-		props.put("primlongarrayvalue", new long[] {1, 2, 3});
-		props.put("primbytearrayvalue", new byte[] {(byte) 1, (byte) 2,
-				(byte) 3});
-		props.put("primshortarrayvalue", new short[] {(short) 1, (short) 2,
-				(short) 3});
-		props.put("primfloatarrayvalue", new float[] {(float) 1.1, (float) 2.2,
-				(float) 3.3});
-		props.put("primdoublearrayvalue", new double[] {1.1, 2.2, 3.3});
-		props.put("primchararrayvalue", new char[] {'A', 'b', 'C', 'd'});
-		props.put("primbooleanarrayvalue", new boolean[] {false});
+		props.put("primintarrayvalue", new int[] {
+				1, 2, 3
+		});
+		props.put("primlongarrayvalue", new long[] {
+				1, 2, 3
+		});
+		props.put("primbytearrayvalue", new byte[] {
+				(byte) 1, (byte) 2, (byte) 3
+		});
+		props.put("primshortarrayvalue", new short[] {
+				(short) 1, (short) 2, (short) 3
+		});
+		props.put("primfloatarrayvalue", new float[] {
+				(float) 1.1, (float) 2.2, (float) 3.3
+		});
+		props.put("primdoublearrayvalue", new double[] {
+				1.1, 2.2, 3.3
+		});
+		props.put("primchararrayvalue", new char[] {
+				'A', 'b', 'C', 'd'
+		});
+		props.put("primbooleanarrayvalue", new boolean[] {
+				false
+		});
 		props.put("bigintvalue", new BigInteger("4123456"));
 		props.put("bigdecvalue", new BigDecimal("4.123456"));
 		props.put("*", "foo");
@@ -96,16 +118,21 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		return props;
 	}
 
+	@Test
 	public void testCaseInsensitive() throws InvalidSyntaxException {
 		final Matcher matcher = new Matcher() {
 			final Dictionary<String,Object>	props	= getProperties();
 			final ServiceReference< ? >		ref		= newDictionaryServiceReference(
 					props);
 
-			public boolean matches(Filter f) {
-				boolean result = f.match(props);
-				result &= f.match(ref);
-				return result;
+			public void matches(SoftAssertions softly, Filter f,
+					boolean expected) {
+				softly.assertThat(f.match(props))
+						.as("\"%s\".match(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.match(ref))
+						.as("\"%s\".match(ref)", f)
+						.isEqualTo(expected);
 			}
 		};
 		assertFilterTrue("(room=*)", matcher);
@@ -121,7 +148,8 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterTrue("  ( room =*b*oo*m*) ", matcher);
 		assertFilterFalse("  ( room =b*b*  *m*) ", matcher);
 		assertFilterTrue("  (& (room =bedroom) (channel ~= 34))", matcher);
-		assertFilterFalse("  (&  (room =b*)  (room =*x) (channel=34))", matcher);
+		assertFilterFalse("  (&  (room =b*)  (room =*x) (channel=34))",
+				matcher);
 		assertFilterTrue("(| (room =bed*)(channel=222)) ", matcher);
 		assertFilterTrue("(| (room =boom*)(channel=101)) ", matcher);
 		assertFilterTrue("  (! (room =ab*b*oo*m*) ) ", matcher);
@@ -168,14 +196,19 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterTrue("(space=*)", matcher);
 	}
 
+	@Test
 	public void testCaseSensitive() throws InvalidSyntaxException {
 		final Matcher matcher = new Matcher() {
 			final Hashtable<String,Object> props = getProperties();
 
-			public boolean matches(Filter f) {
-				boolean result = f.matches(props);
-				result &= f.matchCase(props);
-				return result;
+			public void matches(SoftAssertions softly, Filter f,
+					boolean expected) {
+				softly.assertThat(f.matches(props))
+						.as("\"%s\".matches(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.matchCase(props))
+						.as("\"%s\".matchCase(props)", f)
+						.isEqualTo(expected);
 			}
 		};
 		assertFilterTrue("(room=*)", matcher);
@@ -191,7 +224,8 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterTrue("  ( room =*b*oo*m*) ", matcher);
 		assertFilterFalse("  ( room =b*b*  *m*) ", matcher);
 		assertFilterTrue("  (& (room =bedroom) (channel ~= 34))", matcher);
-		assertFilterFalse("  (&  (room =b*)  (room =*x) (channel=34))", matcher);
+		assertFilterFalse("  (&  (room =b*)  (room =*x) (channel=34))",
+				matcher);
 		assertFilterTrue("(| (room =bed*)(channel=222)) ", matcher);
 		assertFilterTrue("(| (room =boom*)(channel=101)) ", matcher);
 		assertFilterTrue("  (! (room =ab*b*oo*m*) ) ", matcher);
@@ -238,18 +272,24 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterTrue("(space=*)", matcher);
 	}
 
+	@Test
 	public void testInvalidValues() throws InvalidSyntaxException {
 		final Matcher matcher = new Matcher() {
 			final Hashtable<String,Object>	props	= getProperties();
 			final ServiceReference< ? >		ref		= newDictionaryServiceReference(
 					props);
 
-			public boolean matches(Filter f) {
-				boolean result = f.match(props);
-				result &= f.matchCase(props);
-				result &= f.matches(props);
-				result &= f.match(ref);
-				return result;
+			public void matches(SoftAssertions softly, Filter f,
+					boolean expected) {
+				softly.assertThat(f.match(props))
+						.as("\"%s\".match(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.matches(props))
+						.as("\"%s\".matches(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.match(ref))
+						.as("\"%s\".match(ref)", f)
+						.isEqualTo(expected);
 			}
 		};
 		assertFilterTrue("(intvalue=*)", matcher);
@@ -278,10 +318,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 
 	}
 
+	@Test
 	public void testNullProperties() throws InvalidSyntaxException {
 		assertFilterFalse("(room=bedroom)", nullMatcher);
 	}
 
+	@Test
 	public void testInvalidFilter() {
 		assertFilterInvalid("");
 		assertFilterInvalid("()");
@@ -295,18 +337,27 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterInvalid("  (room = =b**oo*m*) ) ");
 	}
 
+	@Test
 	public void testScalarSubstring() throws InvalidSyntaxException {
 		final Matcher matcher = new Matcher() {
 			final Hashtable<String,Object>	props	= getProperties();
 			final ServiceReference< ? >		ref		= newDictionaryServiceReference(
 					props);
 
-			public boolean matches(Filter f) {
-				boolean result = f.match(props);
-				result &= f.matchCase(props);
-				result &= f.matches(props);
-				result &= f.match(ref);
-				return result;
+			public void matches(SoftAssertions softly, Filter f,
+					boolean expected) {
+				softly.assertThat(f.match(props))
+						.as("\"%s\".match(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.matchCase(props))
+						.as("\"%s\".matchCase(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.matches(props))
+						.as("\"%s\".matches(props)", f)
+						.isEqualTo(expected);
+				softly.assertThat(f.match(ref))
+						.as("\"%s\".match(ref)", f)
+						.isEqualTo(expected);
 			}
 		};
 		assertFilterFalse("(shortvalue =100*) ", matcher);
@@ -321,6 +372,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFilterFalse("(booleanvalue =t*ue) ", matcher);
 	}
 
+	@Test
 	public void testNormalization() throws InvalidSyntaxException {
 		Filter f1 = createFilter("( a = bedroom  )");
 		Filter f2 = createFilter(" (a= bedroom  ) ");
@@ -332,27 +384,24 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	}
 
 	private void assertFilterInvalid(String query) {
-		try {
-			createFilter(query);
-			fail("expected InvalidSyntaxException exception");
-		}
-		catch (InvalidSyntaxException e) {
-			// expected
-		}
+		assertThatExceptionOfType(InvalidSyntaxException.class)
+				.isThrownBy(() -> createFilter(query));
 	}
 
 	private void assertFilterTrue(String query, Matcher matcher)
 			throws InvalidSyntaxException {
 		Filter f1 = createFilter(query);
 
-		boolean val = matcher.matches(f1);
-		assertTrue("wrong result", val);
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			matcher.matches(softly, f1, true);
+		}
 
 		String normalized = f1.toString();
 		Filter f2 = createFilter(normalized);
 
-		val = matcher.matches(f2);
-		assertTrue("wrong result", val);
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			matcher.matches(softly, f2, true);
+		}
 
 		assertEquals("normalized not equal", normalized, f2.toString());
 	}
@@ -361,18 +410,21 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			throws InvalidSyntaxException {
 		Filter f1 = createFilter(query);
 
-		boolean val = matcher.matches(f1);
-		assertFalse("wrong result", val);
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			matcher.matches(softly, f1, false);
+		}
 
 		String normalized = f1.toString();
 		Filter f2 = createFilter(normalized);
 
-		val = matcher.matches(f2);
-		assertFalse("wrong result", val);
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			matcher.matches(softly, f2, false);
+		}
 
 		assertEquals("normalized not equal", normalized, f2.toString());
 	}
 
+	@Test
 	public void testComparable() throws InvalidSyntaxException {
 		Object comp42 = new SampleComparable("42");
 		Object comp43 = new SampleComparable("43");
@@ -436,6 +488,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testComparableException() throws InvalidSyntaxException {
 		Object compbad = new SampleComparable("exception");
 		Hashtable<String,Object> hash = new Hashtable<>();
@@ -450,10 +503,11 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testVersion() throws InvalidSyntaxException {
 		Version v42 = new Version("4.2");
 		Version v43 = new Version("4.3");
-		Hashtable<String, Object> hash = new Hashtable<>();
+		Hashtable<String,Object> hash = new Hashtable<>();
 
 		Filter f1 = createFilter("(version=4.2)");
 
@@ -513,9 +567,10 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testVersionException() throws InvalidSyntaxException {
 		Version v = Version.emptyVersion;
-		Hashtable<String, Object> hash = new Hashtable<>();
+		Hashtable<String,Object> hash = new Hashtable<>();
 
 		Filter f1 = createFilter("(version=exception)");
 
@@ -527,6 +582,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testObject() throws InvalidSyntaxException {
 		Object obj42 = new SampleObject("42");
 		Object obj43 = new SampleObject("43");
@@ -558,6 +614,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testObjectException() throws InvalidSyntaxException {
 		Object objbad = new SampleObject("exception");
 		Hashtable<String,Object> hash = new Hashtable<>();
@@ -572,6 +629,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testValueOf() throws InvalidSyntaxException {
 		Object obj42 = new SampleValueOf("42", null);
 		Object obj43 = new SampleValueOf("43", null);
@@ -603,6 +661,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testValueOfException() throws InvalidSyntaxException {
 		Object objbad = new SampleValueOf("exception", null);
 		Hashtable<String,Object> hash = new Hashtable<>();
@@ -617,7 +676,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
-	public void testValueOfWithUnassignableReturnType() throws InvalidSyntaxException {
+	@Test
+	public void testValueOfWithUnassignableReturnType()
+			throws InvalidSyntaxException {
 		Object obj42 = new SampleValueOfWithUnassignableReturnType("42");
 		Object obj43 = new SampleValueOfWithUnassignableReturnType("43");
 		Hashtable<String,Object> hash = new Hashtable<>();
@@ -648,6 +709,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testNullMapValue() throws InvalidSyntaxException {
 		Map<String,Object> map = new HashMap<>();
 		map.put("foo", null);
@@ -655,6 +717,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		assertFalse("does match filter", f1.matches(map));
 	}
 
+	@Test
 	public void testComparableValueOf() throws InvalidSyntaxException {
 		Object comp42 = new SampleComparableValueOf("42", null);
 		Object comp43 = new SampleComparableValueOf("43", null);
@@ -718,6 +781,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	@Test
 	public void testComparableValueOfException() throws InvalidSyntaxException {
 		Object compbad = new SampleComparableValueOf("exception", null);
 		Hashtable<String,Object> hash = new Hashtable<>();
@@ -751,8 +815,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			RuntimeException r = null;
 			try {
 				v = Integer.parseInt(value);
-			}
-			catch (RuntimeException re) {
+			} catch (RuntimeException re) {
 				r = re;
 			}
 			this.value = v;
@@ -786,8 +849,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			RuntimeException r = null;
 			try {
 				v = Integer.parseInt(value);
-			}
-			catch (RuntimeException re) {
+			} catch (RuntimeException re) {
 				r = re;
 			}
 			this.value = v;
@@ -820,8 +882,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			RuntimeException r = null;
 			try {
 				v = Integer.parseInt(value);
-			}
-			catch (RuntimeException re) {
+			} catch (RuntimeException re) {
 				r = re;
 			}
 			this.value = v;
@@ -866,8 +927,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			RuntimeException r = null;
 			try {
 				v = Integer.parseInt(value);
-			}
-			catch (RuntimeException re) {
+			} catch (RuntimeException re) {
 				r = re;
 			}
 			this.value = v;
@@ -907,8 +967,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 			RuntimeException r = null;
 			try {
 				v = Integer.parseInt(value);
-			}
-			catch (RuntimeException re) {
+			} catch (RuntimeException re) {
 				r = re;
 			}
 			this.value = v;
@@ -943,7 +1002,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 
 	private static class DictionaryServiceReference {
 		private final Dictionary< ? , ? >	dictionary;
-		private final String[]		keys;
+		private final String[]				keys;
 
 		DictionaryServiceReference(Dictionary< ? , ? > dictionary) {
 			if (dictionary == null) {
@@ -987,6 +1046,6 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	}
 
 	static interface Matcher {
-		public boolean matches(Filter f);
+		public void matches(SoftAssertions softly, Filter f, boolean expected);
 	}
 }
