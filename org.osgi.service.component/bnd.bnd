@@ -5,8 +5,8 @@ Export-Package: !${p}.annotations, ${p}.*; -split-package:=first
 
 -buildpath = \
     osgi.annotation; version=latest, \
-    osgi.core; version=latest, \
-    osgi.promise;version=6.0, \
+    osgi.core; version=6.0.0, \
+    osgi.promise;version=6.0.0, \
     org.osgi.namespace.extender;version=latest
 
 -includeresource.xmlns: \

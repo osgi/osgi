@@ -43,6 +43,7 @@ Test-Cases: ${testcases}
 
 -buildpath: \
 	osgi.annotation;version=latest,\
+	osgi.core;version=7.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.event;version=latest,\
@@ -52,7 +53,6 @@ Test-Cases: ${testcases}
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.service.cm;version=latest,\
-	org.osgi.framework;version=latest,\
 	org.osgi.util.tracker;version=latest,\
 	org.osgi.util.converter;version=latest,\
 	org.osgi.util.promise;version=latest,\
