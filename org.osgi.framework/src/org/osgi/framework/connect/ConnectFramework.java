@@ -20,31 +20,31 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
-import org.osgi.framework.launch.FrameworkFactory;
 
 /**
- * A connect factory creates instances of {@link ConnectModule} that are used by
- * a {@link Framework} instance to provide content and classes for a bundle
- * installed in the Framework. A connect factory is provided when
- * {@link FrameworkFactory#newFramework(java.util.Map) creating} a framework
- * instance. Because a connect factory instance can participate in the
- * initialization of the framework and the lifecycle of a framework instance the
- * connect factory instance should only be used with a single framework
- * instance.
+ * A connect framework provides access to instances of {@link ConnectModule}
+ * that are used by a {@link Framework} instance to provide content and classes
+ * for a bundle installed in the Framework. A connect framework is provided when
+ * {@link ConnectFrameworkFactory#newFramework(java.util.Map, ConnectFramework)
+ * creating} a framework instance. Because a connect framework instance can
+ * participate in the initialization of the framework and the life cycle of a
+ * framework instance the connect framework instance should only be used with a
+ * single framework instance.
  * 
  * @ThreadSafe
  * @author $Id$
  */
-public interface ConnectFactory {
+public interface ConnectFramework {
 
 	/**
-	 * Initializes the connect factory with the
+	 * Initializes the connect framework with the
 	 * {@link Constants#FRAMEWORK_STORAGE framework persistent storage} file and
 	 * framework properties configured for a {@link Framework} instance. This
 	 * method is called once by a {@link Framework} instance and is called
-	 * before any other methods on this factory are called.
+	 * before any other methods on this connect framework are called.
 	 * 
 	 * @param configuration The framework properties to used configure the new
 	 *            framework instance. An unmodifiable map of framework
@@ -53,8 +53,9 @@ public interface ConnectFactory {
 	 * @param storage the persistent storage area used by the {@link Framework}
 	 *            or {@code null} if the if the platform does not have file
 	 *            system support.
+	 * @return a reference to this object
 	 */
-	void initialize(File storage, Map<String,String> configuration);
+	ConnectFramework initialize(File storage, Map<String,String> configuration);
 
 	/**
 	 * Returns the connect module for the specified bundle location. If an
@@ -66,24 +67,24 @@ public interface ConnectFactory {
 	 * 
 	 * @param location the bundle location used to install a bundle
 	 * @return the connect module for the specified bundle location
-	 * @throws IllegalStateException if the location cannot be handled
+	 * @throws BundleException if the location cannot be handled
 	 */
-	Optional<ConnectModule> getModule(String location);
+	Optional<ConnectModule> getModule(String location) throws BundleException;
 
 	/**
-	 * Creates a new activator for this factory. A new activator is created by
-	 * the framework each time the framework is {@link Framework#init()
-	 * initialized}. An activator allows the factory to participate in the
-	 * framework lifecyle. When the framework is {@link Framework#init()
-	 * initialized} the activator
+	 * Creates a new activator for this connect framework. A new activator is
+	 * created by the framework each time the framework is
+	 * {@link Framework#init() initialized}. An activator allows the connect
+	 * framework to participate in the framework life cyle. When the framework
+	 * is {@link Framework#init() initialized} the activator
 	 * {@link BundleActivator#start(org.osgi.framework.BundleContext) start}
 	 * method is called. When the framework is {@link Framework#stop() stopped}
 	 * the activator
 	 * {@link BundleActivator#stop(org.osgi.framework.BundleContext) stop}
 	 * method is called
 	 * 
-	 * @return a new activator for this factory or {@link Optional#empty()
-	 *         empty} if no activator is available for the factory
+	 * @return a new activator for this connect framework or
+	 *         {@link Optional#empty() empty} if no activator is available
 	 */
 	Optional<BundleActivator> createBundleActivator();
 }

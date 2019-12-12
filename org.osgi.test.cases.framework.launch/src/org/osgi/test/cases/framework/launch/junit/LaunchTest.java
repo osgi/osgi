@@ -38,7 +38,8 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.connect.ConnectFactory;
+import org.osgi.framework.connect.ConnectFramework;
+import org.osgi.framework.connect.ConnectFrameworkFactory;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
@@ -48,6 +49,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	private static final Pattern	QUOTED_P			= Pattern
 			.compile("^([\"'])(.*)\\1$");
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
+	private static final String		CONNECT_FRAMEWORK_FACTORY	= "/META-INF/services/org.osgi.framework.connect.ConnectFrameworkFactory";
 	private static final String	STORAGEROOT	= "org.osgi.test.cases.framework.launch.storageroot";
 
 	static private class FrameworkClassLoader extends URLClassLoader {
@@ -104,13 +106,18 @@ public abstract class LaunchTest extends OSGiTestCase {
 		}
 	}
 
-	static protected class LaunchFrameworkFactory implements FrameworkFactory {
+	static protected class LaunchFrameworkFactory
+			implements FrameworkFactory, ConnectFrameworkFactory {
 		private final String			frameworkFactoryClassName;
+		private final String			connectFrameworkFactoryClassName;
 		private FrameworkClassLoader	frameworkClassLoader;
 		private FrameworkFactory		frameworkFactory;
+		private ConnectFrameworkFactory	connectFrameworkFactory;
 
-		public LaunchFrameworkFactory(String frameworkFactoryClassName) {
+		public LaunchFrameworkFactory(String frameworkFactoryClassName,
+				String connectFrameworkFactoryClassName) {
 			this.frameworkFactoryClassName = frameworkFactoryClassName;
+			this.connectFrameworkFactoryClassName = connectFrameworkFactoryClassName;
 		}
 		@Override
 		public Framework newFramework(Map<String,String> configuration) {
@@ -119,9 +126,14 @@ public abstract class LaunchTest extends OSGiTestCase {
 
 		@Override
 		public Framework newFramework(Map<String,String> configuration,
-				ConnectFactory connectFactory) {
-			return getFrameworkFactory().newFramework(configuration,
-					connectFactory);
+				ConnectFramework connectFramework) {
+			ConnectFrameworkFactory factory = getConnectFrameworkFactory();
+			if (factory == null) {
+				// TODO will need to move the connect tests to another project
+				// if we make it optional
+				fail("No ConnectFrameworkFactory");
+			}
+			return factory.newFramework(configuration, connectFramework);
 		}
 		public void close() {
 			if (frameworkClassLoader != null) {
@@ -155,6 +167,27 @@ public abstract class LaunchTest extends OSGiTestCase {
 			}
 			return frameworkFactory;
 		}
+
+		private ConnectFrameworkFactory getConnectFrameworkFactory() {
+			if (connectFrameworkFactoryClassName == null) {
+				return null;
+			}
+			if (connectFrameworkFactory != null) {
+				return connectFrameworkFactory;
+			}
+			try {
+				if (frameworkClassLoader == null) {
+					frameworkClassLoader = createFrameworkClassLoader();
+				}
+				@SuppressWarnings("unchecked")
+				Class<ConnectFrameworkFactory> clazz = (Class<ConnectFrameworkFactory>) frameworkClassLoader
+						.loadClass(connectFrameworkFactoryClassName);
+				connectFrameworkFactory = clazz.getConstructor().newInstance();
+			} catch (Exception e) {
+				fail("Failed to get the framework constructor", e);
+			}
+			return connectFrameworkFactory;
+		}
 	}
 
 	protected LaunchFrameworkFactory	frameworkFactory;
@@ -175,8 +208,10 @@ public abstract class LaunchTest extends OSGiTestCase {
 					rootFile.mkdirs());
 		String frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
+		String connectFrameworkFactoryClassName = getConnectFrameworkFactoryClassName(); // allow
+																							// null
 		frameworkFactory = new LaunchFrameworkFactory(
-				frameworkFactoryClassName);
+				frameworkFactoryClassName, connectFrameworkFactoryClassName);
 		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.framework.launch.bundles", ""), ",");
 		rootBundles.clear();
@@ -332,11 +367,18 @@ public abstract class LaunchTest extends OSGiTestCase {
 	}
 	
 	private String getFrameworkFactoryClassName() throws IOException {
-        URL factoryService = getClass().getResource(FRAMEWORK_FACTORY);
+		URL factoryService = getClass().getResource(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
 	}
-	
+
+	private String getConnectFrameworkFactoryClassName() throws IOException {
+		URL factoryService = getClass().getResource(CONNECT_FRAMEWORK_FACTORY);
+		assertNotNull("Could not locate: " + CONNECT_FRAMEWORK_FACTORY,
+				factoryService);
+		return getClassName(factoryService);
+	}
+
 	private void installRootBundles(Framework framework) {
 		List<Bundle> bundles = new LinkedList<Bundle>();
 

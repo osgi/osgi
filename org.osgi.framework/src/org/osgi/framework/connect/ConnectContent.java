@@ -95,16 +95,18 @@ public interface ConnectContent {
 	 * connect content. The framework may lazily open the content until the
 	 * first request is made to access the bundle revision content.
 	 * 
+	 * @return a reference to this object
 	 * @throws IOException if an error occurred opening the content
 	 */
-	void open() throws IOException;
+	ConnectContent open() throws IOException;
 
 	/**
 	 * Closes this connect content.
 	 * 
+	 * @return a reference to this object
 	 * @throws IOException if an error occurred closing the connect content
 	 */
-	void close() throws IOException;
+	ConnectContent close() throws IOException;
 
 	/**
 	 * Represents the entry of a connect module
