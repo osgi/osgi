@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.wiring.BundleRevisions;
 
 /**
@@ -39,6 +40,13 @@ import org.osgi.framework.wiring.BundleRevisions;
  * @author $Id$
  */
 public interface ConnectContent {
+	/**
+	 * The {@code osgi.identity}
+	 * {@link IdentityNamespace#CAPABILITY_TAGS_ATTRIBUTE tags} attribute value
+	 * used by the framework to tag connect bundle revisions.
+	 */
+	public static final String TAG_OSGI_CONNECT = "osgi.connect";
+
 	/**
 	 * Returns this connect content Manifest headers and values. The
 	 * {@link Optional#empty() empty} value is returned if the framework should

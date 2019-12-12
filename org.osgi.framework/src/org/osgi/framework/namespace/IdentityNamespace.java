@@ -105,6 +105,14 @@ public final class IdentityNamespace extends Namespace {
 	public static final String	TYPE_UNKNOWN						= "unknown";
 
 	/**
+	 * The attribute value that contains tags for the resource. A tag is used to
+	 * identify an aspect of the resource that is not otherwise expressed by the
+	 * capabilities of the resource. The value of this attribute must be of type
+	 * {@code List<Version>}.
+	 */
+	public static final String	CAPABILITY_TAGS_ATTRIBUTE			= "tags";
+
+	/**
 	 * The capability attribute that contains a human readable copyright notice
 	 * for the resource. See the {@code Bundle-Copyright} manifest header.
 	 */
