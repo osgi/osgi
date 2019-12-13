@@ -15,7 +15,7 @@
  */
 
 /**
- * Namespace Package Version 1.1.
+ * Namespace Package Version 1.2.
  * 
  * <p>
  * Bundles should not need to import this package at runtime since all
@@ -25,7 +25,7 @@
  * @author $Id$
  */
 
-@Version("1.1")
+@Version("1.2")
 package org.osgi.framework.namespace;
 
 import org.osgi.annotation.versioning.Version;
