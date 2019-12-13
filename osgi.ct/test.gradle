@@ -9,13 +9,13 @@ if (project == rootProject) { // we are not applied from the main build
 
 tasks.addRule('Pattern: prepct.<name>: Prepare the CT for <name>.') { taskName ->
   if (taskName.startsWith('prepct.')) {
-    task(taskName) {
+    tasks.create(taskName) {
       ext.book = taskName - 'prepct.'
       description "Prepare the CT for ${book}."
       group 'verification'
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.ct.${book}"))
-      inputs.files fileTree(riBuildDir).include('osgi.ri.core*.jar', "osgi.ri.${book}*.jar")
-      inputs.files fileTree(project.layout.buildDirectory).include("osgi.ct.${book}*.jar")
+      inputs.files fileTree(riBuildDir).include('osgi.ri.core.jar', "osgi.ri.${book}.jar")
+      inputs.files project.layout.buildDirectory.file("osgi.ct.${book}.jar")
       doFirst {
         project.delete(destinationDirectory)
         project.mkdir(destinationDirectory)
@@ -34,21 +34,33 @@ tasks.addRule('Pattern: prepct.<name>: Prepare the CT for <name>.') { taskName -
 
 tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
   if (taskName.startsWith('ct.')) {
-    task(taskName) {
-      ext.book = taskName - 'ct.'
+    def book = taskName - 'ct.'
+    def destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.ct.${book}"))
+    def cts = zipTree(project.layout.buildDirectory.file("osgi.ct.${book}.jar")).matching {
+      include '*.bnd'
+    }
+    def cttask = tasks.create(taskName) {
       description "Run the CT for ${book}."
       group 'verification'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.ct.${book}"))
-      dependsOn "prepct.${book}"
-      doLast {
-        javaexec {
-          workingDir file(destinationDirectory)
-          main = '-jar' // first arg must be the bnd jar
-          args file(destinationDirectory.file('jar/bnd.jar'))
-          args '--exceptions'
-          args 'runtests'
-          args '--title', "osgi.ct.${book}"
-        }.assertNormalExitValue()
+    }
+    cts.forEach { bndFile ->
+      def bndName = bndFile.name - '.bnd'
+      cttask.dependsOn tasks.create("${taskName}.${bndName}") {
+        description "Run the ${bndName} CT for ${book}."
+        group 'verification'
+        dependsOn tasks.named("prepct.${book}")
+        doLast {
+          javaexec {
+            workingDir file(destinationDirectory)
+            main = '-jar' // first arg must be the bnd jar
+            args file(destinationDirectory.file('jar/bnd.jar'))
+            args '--exceptions'
+            args 'runtests'
+            args '--title', name
+            args '--reportdir', "reports/${bndName}"
+            args bndFile.name
+          }.assertNormalExitValue()
+        }
       }
     }
   }
