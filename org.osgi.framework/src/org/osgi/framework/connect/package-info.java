@@ -22,7 +22,7 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.framework.connect; version="[1.0,2.0)"}
  * 
  * @author $Id$
  */
