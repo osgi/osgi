@@ -109,6 +109,8 @@ public final class IdentityNamespace extends Namespace {
 	 * identify an aspect of the resource that is not otherwise expressed by the
 	 * capabilities of the resource. The value of this attribute must be of type
 	 * {@code List<Version>}.
+	 * 
+	 * @since 1.2
 	 */
 	public static final String	CAPABILITY_TAGS_ATTRIBUTE			= "tags";
 
