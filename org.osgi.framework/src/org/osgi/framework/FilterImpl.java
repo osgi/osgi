@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 
 package org.osgi.framework;
 
-import static java.lang.invoke.MethodHandles.publicLookup;
 import static java.util.Objects.requireNonNull;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -385,111 +383,84 @@ abstract class FilterImpl implements Filter {
 		}
 	}
 
-	static final class Present extends FilterImpl {
-		private final String attr;
-
-		Present(String attr) {
-			this.attr = attr;
-		}
-
-		@Override
-		boolean matches0(Map<String, ? > map) {
-			return map.get(attr) != null;
-		}
-
-		@Override
-		StringBuilder normalize(StringBuilder sb) {
-			return sb.append('(')
-					.append(attr)
-					.append('=')
-					.append('*')
-					.append(')');
-		}
-	}
-
 	static abstract class Item extends FilterImpl {
-		final String	attr;
-		final Object	value;
+		final String attr;
 
-		Item(String attr, Object value) {
+		Item(String attr) {
 			this.attr = attr;
-			this.value = value;
 		}
 
 		@Override
 		boolean matches0(Map<String, ? > map) {
-			return compare(map.get(attr), value);
+			return compare(map.get(attr));
 		}
 
-		private boolean compare(Object value1, Object value2) {
+		private boolean compare(Object value1) {
 			if (value1 == null) {
 				return false;
 			}
 			if (value1 instanceof String) {
-				return compare_String((String) value1, value2);
+				return compare_String((String) value1);
 			}
 			if (value1 instanceof Version) {
-				return compare_Version((Version) value1, value2);
+				return compare_Version((Version) value1);
 			}
 
 			Class< ? > clazz = value1.getClass();
 			if (clazz.isArray()) {
 				Class< ? > type = clazz.getComponentType();
 				if (type.isPrimitive()) {
-					return compare_PrimitiveArray(type, value1, value2);
+					return compare_PrimitiveArray(type, value1);
 				}
-				return compare_ObjectArray((Object[]) value1, value2);
+				return compare_ObjectArray((Object[]) value1);
 			}
 			if (value1 instanceof Collection< ? >) {
-				return compare_Collection((Collection< ? >) value1, value2);
+				return compare_Collection((Collection< ? >) value1);
 			}
 			if (value1 instanceof Integer) {
-				return compare_Integer(((Integer) value1).intValue(), value2);
+				return compare_Integer(((Integer) value1).intValue());
 			}
 			if (value1 instanceof Long) {
-				return compare_Long(((Long) value1).longValue(), value2);
+				return compare_Long(((Long) value1).longValue());
 			}
 			if (value1 instanceof Byte) {
-				return compare_Byte(((Byte) value1).byteValue(), value2);
+				return compare_Byte(((Byte) value1).byteValue());
 			}
 			if (value1 instanceof Short) {
-				return compare_Short(((Short) value1).shortValue(), value2);
+				return compare_Short(((Short) value1).shortValue());
 			}
 			if (value1 instanceof Character) {
-				return compare_Character(((Character) value1).charValue(),
-						value2);
+				return compare_Character(((Character) value1).charValue());
 			}
 			if (value1 instanceof Float) {
-				return compare_Float(((Float) value1).floatValue(), value2);
+				return compare_Float(((Float) value1).floatValue());
 			}
 			if (value1 instanceof Double) {
-				return compare_Double(((Double) value1).doubleValue(), value2);
+				return compare_Double(((Double) value1).doubleValue());
 			}
 			if (value1 instanceof Boolean) {
-				return compare_Boolean(((Boolean) value1).booleanValue(),
-						value2);
+				return compare_Boolean(((Boolean) value1).booleanValue());
 			}
 			if (value1 instanceof Comparable< ? >) {
 				@SuppressWarnings("unchecked")
 				Comparable<Object> comparable = (Comparable<Object>) value1;
-				return compare_Comparable(comparable, value2);
+				return compare_Comparable(comparable);
 			}
-			return compare_Unknown(value1, value2);
+			return compare_Unknown(value1);
 		}
 
-		private boolean compare_Collection(Collection< ? > collection,
-				Object value2) {
+		private boolean compare_Collection(Collection< ? > collection) {
 			for (Object value1 : collection) {
-				if (compare(value1, value2)) {
+				if (compare(value1)) {
 					return true;
 				}
 			}
 			return false;
 		}
 
-		private boolean compare_ObjectArray(Object[] array, Object value2) {
+		private boolean compare_ObjectArray(Object[] array) {
 			for (Object value1 : array) {
-				if (compare(value1, value2)) {
+				if (compare(value1)) {
 					return true;
 				}
 			}
@@ -497,12 +468,11 @@ abstract class FilterImpl implements Filter {
 		}
 
 		private boolean compare_PrimitiveArray(Class< ? > type,
-				Object primarray,
-				Object value2) {
+				Object primarray) {
 			if (Integer.TYPE.isAssignableFrom(type)) {
 				int[] array = (int[]) primarray;
 				for (int value1 : array) {
-					if (compare_Integer(value1, value2)) {
+					if (compare_Integer(value1)) {
 						return true;
 					}
 				}
@@ -511,7 +481,7 @@ abstract class FilterImpl implements Filter {
 			if (Long.TYPE.isAssignableFrom(type)) {
 				long[] array = (long[]) primarray;
 				for (long value1 : array) {
-					if (compare_Long(value1, value2)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -520,7 +490,7 @@ abstract class FilterImpl implements Filter {
 			if (Byte.TYPE.isAssignableFrom(type)) {
 				byte[] array = (byte[]) primarray;
 				for (byte value1 : array) {
-					if (compare_Byte(value1, value2)) {
+					if (compare_Byte(value1)) {
 						return true;
 					}
 				}
@@ -529,7 +499,7 @@ abstract class FilterImpl implements Filter {
 			if (Short.TYPE.isAssignableFrom(type)) {
 				short[] array = (short[]) primarray;
 				for (short value1 : array) {
-					if (compare_Short(value1, value2)) {
+					if (compare_Short(value1)) {
 						return true;
 					}
 				}
@@ -538,7 +508,7 @@ abstract class FilterImpl implements Filter {
 			if (Character.TYPE.isAssignableFrom(type)) {
 				char[] array = (char[]) primarray;
 				for (char value1 : array) {
-					if (compare_Character(value1, value2)) {
+					if (compare_Character(value1)) {
 						return true;
 					}
 				}
@@ -547,7 +517,7 @@ abstract class FilterImpl implements Filter {
 			if (Float.TYPE.isAssignableFrom(type)) {
 				float[] array = (float[]) primarray;
 				for (float value1 : array) {
-					if (compare_Float(value1, value2)) {
+					if (compare_Float(value1)) {
 						return true;
 					}
 				}
@@ -556,7 +526,7 @@ abstract class FilterImpl implements Filter {
 			if (Double.TYPE.isAssignableFrom(type)) {
 				double[] array = (double[]) primarray;
 				for (double value1 : array) {
-					if (compare_Double(value1, value2)) {
+					if (compare_Double(value1)) {
 						return true;
 					}
 				}
@@ -565,7 +535,7 @@ abstract class FilterImpl implements Filter {
 			if (Boolean.TYPE.isAssignableFrom(type)) {
 				boolean[] array = (boolean[]) primarray;
 				for (boolean value1 : array) {
-					if (compare_Boolean(value1, value2)) {
+					if (compare_Boolean(value1)) {
 						return true;
 					}
 				}
@@ -574,51 +544,51 @@ abstract class FilterImpl implements Filter {
 			return false;
 		}
 
-		boolean compare_String(String string, Object value2) {
+		boolean compare_String(String string) {
 			return false;
 		}
 
-		boolean compare_Version(Version value1, Object value2) {
+		boolean compare_Version(Version value1) {
 			return false;
 		}
 
-		boolean compare_Comparable(Comparable<Object> value1, Object value2) {
+		boolean compare_Comparable(Comparable<Object> value1) {
 			return false;
 		}
 
-		boolean compare_Unknown(Object value1, Object value2) {
+		boolean compare_Unknown(Object value1) {
 			return false;
 		}
 
-		boolean compare_Boolean(boolean boolval, Object value2) {
+		boolean compare_Boolean(boolean boolval) {
 			return false;
 		}
 
-		boolean compare_Byte(byte byteval, Object value2) {
+		boolean compare_Byte(byte byteval) {
 			return false;
 		}
 
-		boolean compare_Character(char charval, Object value2) {
+		boolean compare_Character(char charval) {
 			return false;
 		}
 
-		boolean compare_Double(double doubleval, Object value2) {
+		boolean compare_Double(double doubleval) {
 			return false;
 		}
 
-		boolean compare_Float(float floatval, Object value2) {
+		boolean compare_Float(float floatval) {
 			return false;
 		}
 
-		boolean compare_Integer(int intval, Object value2) {
+		boolean compare_Integer(int intval) {
 			return false;
 		}
 
-		boolean compare_Long(long longval, Object value2) {
+		boolean compare_Long(long longval) {
 			return false;
 		}
 
-		boolean compare_Short(short shortval, Object value2) {
+		boolean compare_Short(short shortval) {
 			return false;
 		}
 
@@ -644,69 +614,38 @@ abstract class FilterImpl implements Filter {
 			}
 			return sb;
 		}
+	}
 
-		static Object valueOf(Class< ? > target, String value2) {
-			do {
-				Method method;
-				try {
-					method = target.getMethod("valueOf", String.class);
-				} catch (NoSuchMethodException e) {
-					break;
-				}
-				if (Modifier.isStatic(method.getModifiers())
-						&& target.isAssignableFrom(method.getReturnType())) {
-					setAccessible(method);
-					try {
-						MethodHandle mh = publicLookup().unreflect(method);
-						return mh.invoke(value2.trim());
-					} catch (Error e) {
-						throw e;
-					} catch (Throwable e) {
-						return null;
-					}
-				}
-			} while (false);
-
-			do {
-				Constructor< ? > constructor;
-				try {
-					constructor = target.getConstructor(String.class);
-				} catch (NoSuchMethodException e) {
-					break;
-				}
-				setAccessible(constructor);
-				try {
-					MethodHandle mh = publicLookup()
-							.unreflectConstructor(constructor);
-					return mh.invoke(value2.trim());
-				} catch (Error e) {
-					throw e;
-				} catch (Throwable e) {
-					return null;
-				}
-			} while (false);
-
-			return null;
+	static final class Present extends Item {
+		Present(String attr) {
+			super(attr);
 		}
 
-		private static void setAccessible(AccessibleObject accessible) {
-			if (!accessible.isAccessible()) {
-				AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-					accessible.setAccessible(true);
-					return null;
-				});
-			}
+		@Override
+		boolean matches0(Map<String, ? > map) {
+			return map.get(attr) != null;
+		}
+
+		@Override
+		StringBuilder normalize(StringBuilder sb) {
+			return sb.append('(')
+					.append(attr)
+					.append('=')
+					.append('*')
+					.append(')');
 		}
 	}
 
 	static final class Substring extends Item {
-		Substring(String attr, Object value) {
-			super(attr, value);
+		final String[] substrings;
+
+		Substring(String attr, String[] substrings) {
+			super(attr);
+			this.substrings = substrings;
 		}
 
 		@Override
-		boolean compare_String(String string, Object value2) {
-			String[] substrings = (String[]) value2;
+		boolean compare_String(String string) {
 			int pos = 0;
 			for (int i = 0, size = substrings.length; i < size; i++) {
 				String substr = substrings[i];
@@ -750,7 +689,6 @@ abstract class FilterImpl implements Filter {
 		@Override
 		StringBuilder normalize(StringBuilder sb) {
 			sb.append('(').append(attr).append('=');
-			String[] substrings = (String[]) value;
 			for (String substr : substrings) {
 				if (substr == null) /* * */ {
 					sb.append('*');
@@ -763,19 +701,22 @@ abstract class FilterImpl implements Filter {
 	}
 
 	static class Equal extends Item {
-		Equal(String attr, Object value) {
-			super(attr, value);
+		final String value;
+
+		Equal(String attr, String value) {
+			super(attr);
+			this.value = value;
 		}
 
 		@Override
-		boolean compare_String(String string, Object value2) {
-			return string.equals(value2);
+		boolean compare_String(String string) {
+			return string.equals(value);
 		}
 
 		@Override
-		boolean compare_Version(Version value1, Object value2) {
+		boolean compare_Version(Version value1) {
 			try {
-				Version version2 = Version.valueOf((String) value2);
+				Version version2 = Version.valueOf(value);
 				return value1.compareTo(version2) == 0;
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
@@ -784,34 +725,33 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Boolean(boolean boolval, Object value2) {
-			return boolval == Boolean.valueOf(((String) value2).trim())
-					.booleanValue();
+		boolean compare_Boolean(boolean boolval) {
+			return boolval == Boolean.parseBoolean(value.trim());
 		}
 
 		@Override
-		boolean compare_Byte(byte byteval, Object value2) {
+		boolean compare_Byte(byte byteval) {
 			try {
-				return byteval == Byte.parseByte(((String) value2).trim());
+				return byteval == Byte.parseByte(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Character(char charval, Object value2) {
+		boolean compare_Character(char charval) {
 			try {
-				return charval == ((String) value2).charAt(0);
+				return charval == value.charAt(0);
 			} catch (IndexOutOfBoundsException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Double(double doubleval, Object value2) {
+		boolean compare_Double(double doubleval) {
 			double doubleval2;
 			try {
-				doubleval2 = Double.parseDouble(((String) value2).trim());
+				doubleval2 = Double.parseDouble(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -819,10 +759,10 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Float(float floatval, Object value2) {
+		boolean compare_Float(float floatval) {
 			float floatval2;
 			try {
-				floatval2 = Float.parseFloat(((String) value2).trim());
+				floatval2 = Float.parseFloat(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -830,35 +770,35 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Integer(int intval, Object value2) {
+		boolean compare_Integer(int intval) {
 			try {
-				return intval == Integer.parseInt(((String) value2).trim());
+				return intval == Integer.parseInt(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Long(long longval, Object value2) {
+		boolean compare_Long(long longval) {
 			try {
-				return longval == Long.parseLong(((String) value2).trim());
+				return longval == Long.parseLong(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Short(short shortval, Object value2) {
+		boolean compare_Short(short shortval) {
 			try {
-				return shortval == Short.parseShort(((String) value2).trim());
+				return shortval == Short.parseShort(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Comparable(Comparable<Object> value1, Object value2) {
-			value2 = valueOf(value1.getClass(), (String) value2);
+		boolean compare_Comparable(Comparable<Object> value1) {
+			Object value2 = valueOf(value1.getClass());
 			if (value2 == null) {
 				return false;
 			}
@@ -871,8 +811,8 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Unknown(Object value1, Object value2) {
-			value2 = valueOf(value1.getClass(), (String) value2);
+		boolean compare_Unknown(Object value1) {
+			Object value2 = valueOf(value1.getClass());
 			if (value2 == null) {
 				return false;
 			}
@@ -887,24 +827,74 @@ abstract class FilterImpl implements Filter {
 		@Override
 		StringBuilder normalize(StringBuilder sb) {
 			sb.append('(').append(attr).append('=');
-			return encodeValue(sb, (String) value).append(')');
+			return encodeValue(sb, value).append(')');
+		}
+
+		Object valueOf(Class< ? > target) {
+			do {
+				Method method;
+				try {
+					method = target.getMethod("valueOf", String.class);
+				} catch (NoSuchMethodException e) {
+					break;
+				}
+				if (Modifier.isStatic(method.getModifiers())
+						&& target.isAssignableFrom(method.getReturnType())) {
+					setAccessible(method);
+					try {
+						return method.invoke(null, value.trim());
+					} catch (Error e) {
+						throw e;
+					} catch (Throwable e) {
+						return null;
+					}
+				}
+			} while (false);
+
+			do {
+				Constructor< ? > constructor;
+				try {
+					constructor = target.getConstructor(String.class);
+				} catch (NoSuchMethodException e) {
+					break;
+				}
+				setAccessible(constructor);
+				try {
+					return constructor.newInstance(value.trim());
+				} catch (Error e) {
+					throw e;
+				} catch (Throwable e) {
+					return null;
+				}
+			} while (false);
+
+			return null;
+		}
+
+		private static void setAccessible(AccessibleObject accessible) {
+			if (!accessible.isAccessible()) {
+				AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+					accessible.setAccessible(true);
+					return null;
+				});
+			}
 		}
 	}
 
 	static final class Less extends Equal {
-		Less(String attr, Object value) {
+		Less(String attr, String value) {
 			super(attr, value);
 		}
 
 		@Override
-		boolean compare_String(String string, Object value2) {
-			return string.compareTo((String) value2) <= 0;
+		boolean compare_String(String string) {
+			return string.compareTo(value) <= 0;
 		}
 
 		@Override
-		boolean compare_Version(Version value1, Object value2) {
+		boolean compare_Version(Version value1) {
 			try {
-				Version version2 = Version.valueOf((String) value2);
+				Version version2 = Version.valueOf(value);
 				return value1.compareTo(version2) <= 0;
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
@@ -913,28 +903,28 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Byte(byte byteval, Object value2) {
+		boolean compare_Byte(byte byteval) {
 			try {
-				return byteval <= Byte.parseByte(((String) value2).trim());
+				return byteval <= Byte.parseByte(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Character(char charval, Object value2) {
+		boolean compare_Character(char charval) {
 			try {
-				return charval <= ((String) value2).charAt(0);
+				return charval <= value.charAt(0);
 			} catch (IndexOutOfBoundsException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Double(double doubleval, Object value2) {
+		boolean compare_Double(double doubleval) {
 			double doubleval2;
 			try {
-				doubleval2 = Double.parseDouble(((String) value2).trim());
+				doubleval2 = Double.parseDouble(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -942,10 +932,10 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Float(float floatval, Object value2) {
+		boolean compare_Float(float floatval) {
 			float floatval2;
 			try {
-				floatval2 = Float.parseFloat(((String) value2).trim());
+				floatval2 = Float.parseFloat(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -953,35 +943,35 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Integer(int intval, Object value2) {
+		boolean compare_Integer(int intval) {
 			try {
-				return intval <= Integer.parseInt(((String) value2).trim());
+				return intval <= Integer.parseInt(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Long(long longval, Object value2) {
+		boolean compare_Long(long longval) {
 			try {
-				return longval <= Long.parseLong(((String) value2).trim());
+				return longval <= Long.parseLong(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Short(short shortval, Object value2) {
+		boolean compare_Short(short shortval) {
 			try {
-				return shortval <= Short.parseShort(((String) value2).trim());
+				return shortval <= Short.parseShort(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Comparable(Comparable<Object> value1, Object value2) {
-			value2 = valueOf(value1.getClass(), (String) value2);
+		boolean compare_Comparable(Comparable<Object> value1) {
+			Object value2 = valueOf(value1.getClass());
 			if (value2 == null) {
 				return false;
 			}
@@ -996,24 +986,24 @@ abstract class FilterImpl implements Filter {
 		@Override
 		StringBuilder normalize(StringBuilder sb) {
 			sb.append('(').append(attr).append('<').append('=');
-			return encodeValue(sb, (String) value).append(')');
+			return encodeValue(sb, value).append(')');
 		}
 	}
 
 	static final class Greater extends Equal {
-		Greater(String attr, Object value) {
+		Greater(String attr, String value) {
 			super(attr, value);
 		}
 
 		@Override
-		boolean compare_String(String string, Object value2) {
-			return string.compareTo((String) value2) >= 0;
+		boolean compare_String(String string) {
+			return string.compareTo(value) >= 0;
 		}
 
 		@Override
-		boolean compare_Version(Version value1, Object value2) {
+		boolean compare_Version(Version value1) {
 			try {
-				Version version2 = Version.valueOf((String) value2);
+				Version version2 = Version.valueOf(value);
 				return value1.compareTo(version2) >= 0;
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
@@ -1022,28 +1012,28 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Byte(byte byteval, Object value2) {
+		boolean compare_Byte(byte byteval) {
 			try {
-				return byteval >= Byte.parseByte(((String) value2).trim());
+				return byteval >= Byte.parseByte(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Character(char charval, Object value2) {
+		boolean compare_Character(char charval) {
 			try {
-				return charval >= ((String) value2).charAt(0);
+				return charval >= value.charAt(0);
 			} catch (IndexOutOfBoundsException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Double(double doubleval, Object value2) {
+		boolean compare_Double(double doubleval) {
 			double doubleval2;
 			try {
-				doubleval2 = Double.parseDouble(((String) value2).trim());
+				doubleval2 = Double.parseDouble(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -1051,10 +1041,10 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Float(float floatval, Object value2) {
+		boolean compare_Float(float floatval) {
 			float floatval2;
 			try {
-				floatval2 = Float.parseFloat(((String) value2).trim());
+				floatval2 = Float.parseFloat(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -1062,35 +1052,35 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Integer(int intval, Object value2) {
+		boolean compare_Integer(int intval) {
 			try {
-				return intval >= Integer.parseInt(((String) value2).trim());
+				return intval >= Integer.parseInt(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Long(long longval, Object value2) {
+		boolean compare_Long(long longval) {
 			try {
-				return longval >= Long.parseLong(((String) value2).trim());
+				return longval >= Long.parseLong(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Short(short shortval, Object value2) {
+		boolean compare_Short(short shortval) {
 			try {
-				return shortval >= Short.parseShort(((String) value2).trim());
+				return shortval >= Short.parseShort(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
 
 		@Override
-		boolean compare_Comparable(Comparable<Object> value1, Object value2) {
-			value2 = valueOf(value1.getClass(), (String) value2);
+		boolean compare_Comparable(Comparable<Object> value1) {
+			Object value2 = valueOf(value1.getClass());
 			if (value2 == null) {
 				return false;
 			}
@@ -1105,27 +1095,29 @@ abstract class FilterImpl implements Filter {
 		@Override
 		StringBuilder normalize(StringBuilder sb) {
 			sb.append('(').append(attr).append('>').append('=');
-			return encodeValue(sb, (String) value).append(')');
+			return encodeValue(sb, value).append(')');
 		}
 	}
 
 	static final class Approx extends Equal {
-		Approx(String attr, Object value) {
+		final String approx;
+
+		Approx(String attr, String value) {
 			super(attr, value);
+			this.approx = approxString(value);
 		}
 
 		@Override
-		boolean compare_String(String string, Object value2) {
+		boolean compare_String(String string) {
 			string = approxString(string);
-			String string2 = approxString((String) value2);
-			return string.equalsIgnoreCase(string2);
+			return string.equalsIgnoreCase(approx);
 		}
 
 		@Override
-		boolean compare_Character(char charval, Object value2) {
+		boolean compare_Character(char charval) {
 			char charval2;
 			try {
-				charval2 = ((String) value2).charAt(0);
+				charval2 = approx.charAt(0);
 			} catch (IndexOutOfBoundsException e) {
 				return false;
 			}
@@ -1139,7 +1131,7 @@ abstract class FilterImpl implements Filter {
 		@Override
 		StringBuilder normalize(StringBuilder sb) {
 			sb.append('(').append(attr).append('~').append('=');
-			return encodeValue(sb, approxString((String) value)).append(')');
+			return encodeValue(sb, approx).append(')');
 		}
 
 		/**
@@ -1344,12 +1336,19 @@ abstract class FilterImpl implements Filter {
 					}
 
 					pos++;
-					Object string = parse_substring();
+					String[] substrings = parse_substring();
 
-					if (string instanceof String) {
-						return new FilterImpl.Equal(attr, string);
+					int length = substrings.length;
+					if (length == 0) {
+						return new FilterImpl.Equal(attr, "");
 					}
-					return new FilterImpl.Substring(attr, string);
+					if (length == 1) {
+						String single = substrings[0];
+						if (single != null) {
+							return new FilterImpl.Equal(attr, single);
+						}
+					}
+					return new FilterImpl.Substring(attr, substrings);
 				}
 			}
 
@@ -1428,7 +1427,7 @@ abstract class FilterImpl implements Filter {
 			return sb.toString();
 		}
 
-		private Object parse_substring() throws InvalidSyntaxException {
+		private String[] parse_substring() throws InvalidSyntaxException {
 			StringBuilder sb = new StringBuilder(filterChars.length - pos);
 
 			List<String> operands = new ArrayList<>(10);
@@ -1475,20 +1474,6 @@ abstract class FilterImpl implements Filter {
 						pos++;
 						break;
 					}
-				}
-			}
-
-			int size = operands.size();
-
-			if (size == 0) {
-				return "";
-			}
-
-			if (size == 1) {
-				String single = operands.get(0);
-
-				if (single != null) {
-					return single;
 				}
 			}
 
