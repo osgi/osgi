@@ -15,12 +15,12 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo xml:id="cmpn.book-release">Release 7</releaseinfo>
+    <releaseinfo xml:id="cmpn.book-release">Release 8</releaseinfo>
 
-    <pubdate>April 2018</pubdate>
+    <pubdate>TBD</pubdate>
 
     <copyright>
-      <year>2000, 2018</year>
+      <year>2000, 2020</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
