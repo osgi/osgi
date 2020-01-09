@@ -708,16 +708,20 @@ abstract class FilterImpl implements Filter {
 			this.value = value;
 		}
 
+		boolean comparison(int compare) {
+			return compare == 0;
+		}
+
 		@Override
 		boolean compare_String(String string) {
-			return string.equals(value);
+			return comparison((string == value) ? 0 : string.compareTo(value));
 		}
 
 		@Override
 		boolean compare_Version(Version value1) {
 			try {
 				Version version2 = Version.valueOf(value);
-				return value1.compareTo(version2) == 0;
+				return comparison(value1.compareTo(version2));
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
 				return false;
@@ -726,25 +730,30 @@ abstract class FilterImpl implements Filter {
 
 		@Override
 		boolean compare_Boolean(boolean boolval) {
-			return boolval == Boolean.parseBoolean(value.trim());
+			boolean boolval2 = Boolean.parseBoolean(value.trim());
+			return comparison(Boolean.compare(boolval, boolval2));
 		}
 
 		@Override
 		boolean compare_Byte(byte byteval) {
+			byte byteval2;
 			try {
-				return byteval == Byte.parseByte(value.trim());
+				byteval2 = Byte.parseByte(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
+			return comparison(Byte.compare(byteval, byteval2));
 		}
 
 		@Override
 		boolean compare_Character(char charval) {
+			char charval2;
 			try {
-				return charval == value.charAt(0);
+				charval2 = value.charAt(0);
 			} catch (IndexOutOfBoundsException e) {
 				return false;
 			}
+			return comparison(Character.compare(charval, charval2));
 		}
 
 		@Override
@@ -755,7 +764,7 @@ abstract class FilterImpl implements Filter {
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
-			return Double.compare(doubleval, doubleval2) == 0;
+			return comparison(Double.compare(doubleval, doubleval2));
 		}
 
 		@Override
@@ -766,34 +775,40 @@ abstract class FilterImpl implements Filter {
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
-			return Float.compare(floatval, floatval2) == 0;
+			return comparison(Float.compare(floatval, floatval2));
 		}
 
 		@Override
 		boolean compare_Integer(int intval) {
+			int intval2;
 			try {
-				return intval == Integer.parseInt(value.trim());
+				intval2 = Integer.parseInt(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
+			return comparison(Integer.compare(intval, intval2));
 		}
 
 		@Override
 		boolean compare_Long(long longval) {
+			long longval2;
 			try {
-				return longval == Long.parseLong(value.trim());
+				longval2 = Long.parseLong(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
+			return comparison(Long.compare(longval, longval2));
 		}
 
 		@Override
 		boolean compare_Short(short shortval) {
+			short shortval2;
 			try {
-				return shortval == Short.parseShort(value.trim());
+				shortval2 = Short.parseShort(value.trim());
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
+			return comparison(Short.compare(shortval, shortval2));
 		}
 
 		@Override
@@ -803,7 +818,7 @@ abstract class FilterImpl implements Filter {
 				return false;
 			}
 			try {
-				return value1.compareTo(value2) == 0;
+				return comparison(value1.compareTo(value2));
 			} catch (Exception e) {
 				// if the compareTo method throws an exception; return false
 				return false;
@@ -881,106 +896,14 @@ abstract class FilterImpl implements Filter {
 		}
 	}
 
-	static final class Less extends Equal {
-		Less(String attr, String value) {
+	static final class LessEqual extends Equal {
+		LessEqual(String attr, String value) {
 			super(attr, value);
 		}
 
 		@Override
-		boolean compare_String(String string) {
-			return string.compareTo(value) <= 0;
-		}
-
-		@Override
-		boolean compare_Version(Version value1) {
-			try {
-				Version version2 = Version.valueOf(value);
-				return value1.compareTo(version2) <= 0;
-			} catch (Exception e) {
-				// if the valueOf or compareTo method throws an exception
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Byte(byte byteval) {
-			try {
-				return byteval <= Byte.parseByte(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Character(char charval) {
-			try {
-				return charval <= value.charAt(0);
-			} catch (IndexOutOfBoundsException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Double(double doubleval) {
-			double doubleval2;
-			try {
-				doubleval2 = Double.parseDouble(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return Double.compare(doubleval, doubleval2) <= 0;
-		}
-
-		@Override
-		boolean compare_Float(float floatval) {
-			float floatval2;
-			try {
-				floatval2 = Float.parseFloat(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return Float.compare(floatval, floatval2) <= 0;
-		}
-
-		@Override
-		boolean compare_Integer(int intval) {
-			try {
-				return intval <= Integer.parseInt(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Long(long longval) {
-			try {
-				return longval <= Long.parseLong(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Short(short shortval) {
-			try {
-				return shortval <= Short.parseShort(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Comparable(Comparable<Object> value1) {
-			Object value2 = valueOf(value1.getClass());
-			if (value2 == null) {
-				return false;
-			}
-			try {
-				return value1.compareTo(value2) <= 0;
-			} catch (Exception e) {
-				// if the compareTo method throws an exception; return false
-				return false;
-			}
+		boolean comparison(int compare) {
+			return compare <= 0;
 		}
 
 		@Override
@@ -990,106 +913,14 @@ abstract class FilterImpl implements Filter {
 		}
 	}
 
-	static final class Greater extends Equal {
-		Greater(String attr, String value) {
+	static final class GreaterEqual extends Equal {
+		GreaterEqual(String attr, String value) {
 			super(attr, value);
 		}
 
 		@Override
-		boolean compare_String(String string) {
-			return string.compareTo(value) >= 0;
-		}
-
-		@Override
-		boolean compare_Version(Version value1) {
-			try {
-				Version version2 = Version.valueOf(value);
-				return value1.compareTo(version2) >= 0;
-			} catch (Exception e) {
-				// if the valueOf or compareTo method throws an exception
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Byte(byte byteval) {
-			try {
-				return byteval >= Byte.parseByte(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Character(char charval) {
-			try {
-				return charval >= value.charAt(0);
-			} catch (IndexOutOfBoundsException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Double(double doubleval) {
-			double doubleval2;
-			try {
-				doubleval2 = Double.parseDouble(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return Double.compare(doubleval, doubleval2) >= 0;
-		}
-
-		@Override
-		boolean compare_Float(float floatval) {
-			float floatval2;
-			try {
-				floatval2 = Float.parseFloat(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return Float.compare(floatval, floatval2) >= 0;
-		}
-
-		@Override
-		boolean compare_Integer(int intval) {
-			try {
-				return intval >= Integer.parseInt(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Long(long longval) {
-			try {
-				return longval >= Long.parseLong(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Short(short shortval) {
-			try {
-				return shortval >= Short.parseShort(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		@Override
-		boolean compare_Comparable(Comparable<Object> value1) {
-			Object value2 = valueOf(value1.getClass());
-			if (value2 == null) {
-				return false;
-			}
-			try {
-				return value1.compareTo(value2) >= 0;
-			} catch (Exception e) {
-				// if the compareTo method throws an exception; return false
-				return false;
-			}
+		boolean comparison(int compare) {
+			return compare >= 0;
 		}
 
 		@Override
@@ -1313,14 +1144,14 @@ abstract class FilterImpl implements Filter {
 				case '>' : {
 					if (filterChars[pos + 1] == '=') {
 						pos += 2;
-						return new FilterImpl.Greater(attr, parse_value());
+						return new FilterImpl.GreaterEqual(attr, parse_value());
 					}
 					break;
 				}
 				case '<' : {
 					if (filterChars[pos + 1] == '=') {
 						pos += 2;
-						return new FilterImpl.Less(attr, parse_value());
+						return new FilterImpl.LessEqual(attr, parse_value());
 					}
 					break;
 				}
