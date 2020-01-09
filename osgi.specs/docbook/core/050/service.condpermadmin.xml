@@ -2230,6 +2230,8 @@ AllPermission</programlisting>
     </section>
   </section>
 
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condpermadmin.xml"/>
+
   <section>
     <title>Changes</title>
 
@@ -2241,5 +2243,4 @@ AllPermission</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condpermadmin.xml"/>
 </chapter>
