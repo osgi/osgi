@@ -1625,7 +1625,7 @@ public  void manage(ConditionalPermissionAdmin admin,
     </section>
   </section>
   
-  <section xml:id="file.permission">
+  <section xml:id="service.condpermadmin-file.permission">
     <title>File Permission for Relative Path Names</title>
 
     <para>A <code>java.io.FilePermission</code> assigned to a bundle via a
@@ -2237,7 +2237,7 @@ AllPermission</programlisting>
       <listitem>
         <para>Clarified the behavior of relative path names for 
         <code>FilePermission</code>.
-        See <xref linkend="file.permission"/>.</para>
+        See <xref linkend="service.condpermadmin-file.permission"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
