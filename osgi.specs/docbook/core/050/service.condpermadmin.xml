@@ -1624,31 +1624,30 @@ public  void manage(ConditionalPermissionAdmin admin,
       set.</para>
     </section>
   </section>
-  
+
   <section xml:id="service.condpermadmin-file.permission">
     <title>File Permission for Relative Path Names</title>
 
     <para>A <code>java.io.FilePermission</code> assigned to a bundle via a
-    condition must receive special treatment if the
-    path argument for the <code>FilePermission</code> is a relative path
-    name. A relative path name is one that is not absolute. See the
-    <code>java.io.File.isAbsolute</code> method for more information on
-    absolute path names.</para>
+    condition must receive special treatment if the path argument for the
+    <code>FilePermission</code> is a relative path name. A relative path name
+    is one that is not absolute. See the <code>java.io.File.isAbsolute</code>
+    method for more information on absolute path names.</para>
 
     <para>When a bundle is assigned a <code>FilePermission</code> for a
-    relative path name, the path name is taken to be relative to the
-    bundle's persistent storage area. This allows additional permissions,
-    such as <code>execute</code>, to be assigned to files in the bundle's
-    persistent storage area. For example:</para>
+    relative path name, the path name is taken to be relative to the bundle's
+    persistent storage area. This allows additional permissions, such as
+    <code>execute</code>, to be assigned to files in the bundle's persistent
+    storage area. For example:</para>
 
     <programlisting>    java.io.FilePermission "-" "execute"</programlisting>
 
     <para>can be used to allow a bundle to execute any file in the bundle's
     persistent storage area.</para>
 
-    <para>This only applies to <code>FilePermission</code> objects assigned
-    to a bundle via a condition. Any <code>FilePermission</code> object
-    with a relative path name must be ignored by the
+    <para>This only applies to <code>FilePermission</code> objects assigned to
+    a bundle via a condition. Any <code>FilePermission</code> object with a
+    relative path name must be ignored by the
     <code>AccessControlContext</code> object returned by the
     <code>getAccessControlContext</code> method.</para>
   </section>
@@ -2237,9 +2236,9 @@ AllPermission</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Clarified the behavior of relative path names for 
-        <code>FilePermission</code>.
-        See <xref linkend="service.condpermadmin-file.permission"/>.</para>
+        <para>Clarified the behavior of relative path names for
+        <code>FilePermission</code>. See <xref
+        linkend="service.condpermadmin-file.permission"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
