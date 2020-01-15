@@ -5703,9 +5703,9 @@ URL(String protocol, String host, String file)</programlisting>
       class="uri"><link
       xlink:href="http://www.w3c.org/TR/REC-xml#sec-notation"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3024221"><title>Mathematical Convention for
-      Interval Notation</title><biblioid class="uri"><link
-      xlink:href="http://planetmath.org/encyclopedia/Interval.html"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="i3024221"><title>Interval
+      (Mathematics)</title><biblioid class="uri"><link
+      xlink:href="https://en.wikipedia.org/wiki/Interval_(mathematics)"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3086040"><title>RFC 2396 Uniform Resource
       Identifiers URI: Generic Syntax</title><biblioid class="uri"><link
