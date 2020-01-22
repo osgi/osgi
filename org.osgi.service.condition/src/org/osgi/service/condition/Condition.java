@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,20 +73,22 @@ public interface Condition {
 	/**
 	 * A condition factory configuration property identifying a list of target
 	 * filters for the condition. The condition may not be registered if any of
-	 * the target filters match at least one service registration.The value of
+	 * the target filters match at least one service registration. The value of
 	 * this configuration property must be of type {@code Collection<String>}.
 	 */
 	public static final String		CONDITION_FACTORY_CONFIGURE_MATCH_NONE			= "osgi.condition.configure.match.none";
 
 	/**
-	 * A singleton condition instance that can be used to register multiple
-	 * Conditions.
+	 * A singleton condition instance that can be used to register condition
+	 * services.
 	 */
 	public static final Condition	INSTANCE										= new ConditionImpl();
 
 	/**
 	 * A default implementation of a condition.
 	 */
+	// TODO should this be final or do we allow others to extend this?
+	// TODO is this necessary to be a public type?
 	static class ConditionImpl implements Condition {
 		// nothing to implement
 	}
