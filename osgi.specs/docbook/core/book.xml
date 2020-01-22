@@ -68,5 +68,7 @@
 
   <xi:include href="058/service.resolver.xml"/>
 
+  <xi:include href="059/service.condition.xml"/>
+
   <xi:include href="../701/util.tracker.xml"/>
 </book>

@@ -767,6 +767,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
           </row>
 
           <row>
+            <entry><xref linkend="service.condition"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.condition"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.service.condition-version"
+            linkend="service.condition"/></code></entry>
+          </row>
+
+          <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 

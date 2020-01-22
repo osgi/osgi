@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="59" revision="$Id$" version="5" xml:id="service.condition"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Condition Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.condition-version"
+    linkend="org.osgi.service.condition"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+    <para>Enter introduction</para>
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Item 1</emphasis> - Item 1</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Item 2</emphasis> - Item 2</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Item 1</emphasis> - Item 1</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Item 2</emphasis> - Item 2</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+      <para>Enter synopsis</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Section 1</title>
+    <para>Enter section 1</para>
+  </section>
+  <section>
+    <title>Section 2</title>
+    <para>Enter section 2</para>
+  </section>
+
+  <section>
+    <title>Security</title>
+    <para>Enter security section</para>
+  </section>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condition.xml"/>
+
+</chapter>
