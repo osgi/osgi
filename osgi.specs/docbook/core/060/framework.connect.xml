@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="60" revision="$Id$"
+         version="5" xml:id="framework.connect"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Connect Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.framework.connect-version"
+    linkend="org.osgi.framework.connect"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Service Layer provides a dynamic, concise and consistent
+    programming model for Java developers, simplifying the development
+    and deployment of service by de-coupling the service's specification
+    (Java interface) from its implementations. This model allows developers
+    to bind to services only using their interface specifications.
+    The selection of a specific implementation, optimized for a specific need
+    or from a specific vendor, can thus be deferred to runtime.</para>
+
+    <para>In order to use this powerful tool, developers are required to build
+    on top of the Life Cycle and Module Layer of the OSGi Framework. Anything
+    built on top of the Service Layer must follow the rules of the 
+    Life Cycle and Module Layers as well as the Service Layer. The Module
+    Layer has strict rules for sharing Java packages between bundles or
+    hiding packages from other bundles.  The Life Cycle Layer provides an API
+    to manage bundles in the Module Layer.</para>
+
+    <para>The Module and Life Cycle Layers assume the Framework is in control
+    of the actual deployment unit (bundle) which is deployed as a Java ARchive (JAR) file.
+    The Module Layer then provides the access for reading content and meta-data from the bundle and loading 
+    classes from the bundle. This can make it difficult to use classes or services that are already present in the running
+    environment, for example, from the class path or anything else whose class space is managed outside of
+    the framework.  Content that lives outside the control of the Framework cannot easily benefit from the rich
+    Service Layer because there is no way to represent the outside content as bundles inside the Framework.</para>
+
+    <para>This specification defines a Connect Framework Factory to create and launch an OSGi
+    Framework instance that can connect bundles in the Framework with content managed outside of the Framework
+    itself. For example, to provide things like resource loading, class loading, bundle entry content
+    and bundle manifest headers. Among other things, this allows for bundles to exist and be installed
+    into the Framework from the flat class path, the module path (Java Platform Module System), a jlink
+    image, or a native image. Such bundles may have some limitations with respect to class loading
+    and isolation because they may not follow the strict rules of the Module Layer.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Represent Content</emphasis> - It must be possible to represent content managed outside
+          of the Framework with a bundle installed.  This is referred to as connecting the content to a bundle
+          in the Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Class and Resource Loading</emphasis> - It must be possible for connected content to have classes
+          and resources loaded by class loaders outside the control of the Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Bundle Headers</emphasis> - It must be possible for connected content to have control
+          over the loading of bundle manifest headers.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Bundle Entries</emphasis> - It must be possible for connected content to have control
+          over the reading of bundle entry content.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Connect Content</emphasis> - Provides a Framework access to content from outside the Framework
+          that can be used to represent an installed bundle in the Framework.  A connect content provides things like a 
+          class loader for the bundle, access to entries in a bundle, and the bundle manifest headers.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Connect Module</emphasis> - Provides the current connect content available for a bundle installed
+          in the Framework.  If the connect content for a bundle is constant then the connect module may return the
+          same connect content for the lifetime of the Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Connect Framework</emphasis> - Hooks into the initialization of the Framework and connects
+          bundles installed in the Framework with connect module instances.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Connect Framework Factory</emphasis> - A factory, similar to the FrameworkFactory, that is used
+          to create Framework instances that use a connect factory.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Connect Bundle</emphasis> - A bundle installed in the Framework that is connected to a 
+          connect module and has it content provided by a connect content.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+      <para>Enter synopsis</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Section 1</title>
+    <para>Enter section 1</para>
+  </section>
+  <section>
+    <title>Section 2</title>
+    <para>Enter section 2</para>
+  </section>
+
+  <section>
+    <title>Security</title>
+    <para>Enter security section</para>
+  </section>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.connect.xml"/>
+</chapter>
