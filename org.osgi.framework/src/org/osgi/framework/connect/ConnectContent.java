@@ -34,6 +34,11 @@ import org.osgi.framework.wiring.BundleRevisions;
  * instance. The framework must close the connect content once the connect
  * content is no longer used as the content of a current bundle revision or an
  * in use bundle revision.
+ * <p>
+ * An entry in a connect content is identified by a path name that is a
+ * '{@code /}'-separated path. A connect content may treat directories as
+ * entries. A directory entry path name will end with a slash ('/'). A directory
+ * entry may be located using a path name that drops the trailing slash.
  * 
  * @see BundleRevisions
  * @ThreadSafe
@@ -71,7 +76,8 @@ public interface ConnectContent {
 	 * Returns the connect entry for the specified path name in this content.
 	 * The {@link Optional#empty() empty} value is returned if an entry with the
 	 * specified path name does not exist. The path must not start with a
-	 * &quot;/&quot; and is relative to the root of this content.
+	 * &quot;/&quot; and is relative to the root of this content. A connect
+	 * entry for a directory will have a path name that ends with a slash ('/').
 	 * 
 	 * @param path the path name of the entry
 	 * @return the connect entry, or {@link Optional#empty() empty} if not
