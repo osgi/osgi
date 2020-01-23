@@ -73,13 +73,27 @@ import junit.framework.TestCase;
 
 public class ConnectTests extends LaunchTest {
 
+	private File storageArea;
+
+	public void setUp() throws Exception {
+		super.setUp();
+		storageArea = new File(rootStorageArea, getName());
+		storageArea.mkdirs();
+	}
+
+	public void tearDown() throws Exception {
+		super.tearDown();
+		if (storageArea != null) {
+			assertTrue(
+					"Could not clean up storage area: " + storageArea.getPath(),
+					delete(storageArea));
+		}
+	}
+
 	void doTestConnect(ConnectFramework connectFramework,
 			Map<String,String> fwkConfig,
 			Consumer<Framework> test) {
-		File storageArea = new File(rootStorageArea, getName());
-		storageArea.mkdirs();
 		fwkConfig.put(Constants.FRAMEWORK_STORAGE, storageArea.getAbsolutePath());
-
 		Framework framework = frameworkFactory
 				.newFramework(fwkConfig,
 				connectFramework);

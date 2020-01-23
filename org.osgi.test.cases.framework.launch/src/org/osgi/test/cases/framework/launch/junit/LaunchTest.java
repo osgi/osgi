@@ -426,7 +426,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 		return storageArea;
 	}
 
-	private boolean delete(File file) {
+	protected boolean delete(File file) {
 		if (file.exists()) {
 			if (file.isDirectory()) {
 				String list[] = file.list();
