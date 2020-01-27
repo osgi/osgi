@@ -1,59 +1,25 @@
 javac.profile=compact2
-Bundle-Name: org.osgi.service.onem2m.impl
+Bundle-Name: org.osgi.impl.service.onem2m
 Bundle-Version: 1.0.0
-Bundle-Activator: org.osgi.service.onem2m.impl.Activator
+Bundle-Activator: org.osgi.impl.service.onem2m.Activator
 -buildpath: \
 	slf4j.api,\
 	org.osgi.service.onem2m;version=latest,\
-	lib/javax.servlet-api-3.1.0.jar;version=file,\
-	lib/jackson-annotations-2.9.7.jar;version=file,\
-	lib/jackson-core-2.9.7.jar;version=file,\
-	lib/jackson-databind-2.9.7.jar;version=file,\
-	lib/californium-osgi-1.0.6.jar;version=file,\
-	lib/jackson-dataformat-cbor-2.9.7.jar;version=file,\
-	lib/scandium-1.0.6.jar;version=file,\
 	org.osgi.framework;version=latest,\
 	org.osgi.dto;version=latest,\
-	org.osgi.service.http;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.util.function;version=latest,\
-	lib/okhttp-3.11.0.jar;version=file,\
-	lib/okio-2.1.0.jar;version=file,\
-	lib/kotlin-runtime.jar;version=file,\
-	lib/kotlin-stdlib-jdk7-1.3.10.jar;version=file,\
-	lib/kotlin-stdlib-jdk8.jar;version=file,\
-	lib/android-util-3.0.1.jar;version=file,\
-	lib/conscrypt-openjdk-1.4.1.jar;version=file,\
-	lib/android-sun-jarsign-support-1.1.jar;version=file,\
 	org.osgi.test.cse.toyCse;version=latest
 
 
 -includeresource = \
     lib
 
-Bundle-ClassPath: .,\
-	jackson-annotations-2.9.7.jar,\
-	jackson-core-2.9.7.jar,\
-	jackson-databind-2.9.7.jar,\
-	jackson-dataformat-cbor-2.9.7.jar,\
-	californium-osgi-1.0.6.jar,\
-	scandium-1.0.6.jar,\
-	okhttp-3.11.0.jar,\
-	okio-2.1.0.jar,\
-	kotlin-runtime.jar,\
-	kotlin-stdlib-jdk7-1.3.10.jar,\
-	kotlin-stdlib-jdk8.jar,\
-	android-util-3.0.1.jar,\
-	conscrypt-openjdk-1.4.1.jar,\
-	android-sun-jarsign-support-1.1.jar
+Bundle-ClassPath: .
 
 Private-Package: \
-	org.osgi.service.onem2m.impl,\
-	org.osgi.service.onem2m.impl.protocol,\
-	org.osgi.service.onem2m.impl.protocol.coap,\
-	org.osgi.service.onem2m.impl.protocol.http,\
-	org.osgi.service.onem2m.impl.serialization,\
-	org.osgi.service.onem2m.impl.serialization.cbor,\
-	org.osgi.service.onem2m.impl.serialization.json,\
-	org.osgi.service.onem2m.impl.serialization.xml,\
-	org.osgi.service.onem2m.impl.protocol.service
+	org.osgi.impl.service.onem2m,\
+	org.osgi.impl.service.onem2m.protocol,\
+	org.osgi.impl.service.onem2m.serialization,\
+	org.osgi.impl.service.onem2m.protocol.service
+

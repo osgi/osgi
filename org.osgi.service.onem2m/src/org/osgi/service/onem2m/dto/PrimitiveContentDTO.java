@@ -24,4 +24,10 @@ public class PrimitiveContentDTO extends DTO{
 
 	public List<ResponsePrimitiveDTO> aggregatedResponse;
 	public List<ChildResourceRefDTO> childResourceRefList;
+	
+	public NotificationDTO notification;
+	public List<String> attributeList;
+	public RequestPrimitiveDTO requestPrimitive;
+	public String queryResult;
+
 }

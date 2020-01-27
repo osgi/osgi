@@ -1,4 +1,4 @@
-package org.osgi.service.onem2m.impl.serialization;
+package org.osgi.impl.service.onem2m.serialization;
 
 import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.ResourceDTO;

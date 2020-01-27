@@ -8,34 +8,26 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.californium.core.CoapServer;
-import org.eclipse.californium.core.coap.Response;
-import org.eclipse.californium.core.network.CoapEndpoint;
-import org.eclipse.californium.core.network.EndpointManager;
-import org.eclipse.californium.core.network.Exchange;
-import org.eclipse.californium.core.server.MessageDeliverer;
-import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.http.HttpService;
-import org.osgi.service.onem2m.NotificationListener;
-import org.osgi.service.onem2m.ServiceLayer;
-import org.osgi.service.onem2m.impl.protocol.ServiceLayerUtil;
-import org.osgi.service.onem2m.impl.protocol.coap.NotificationResource;
-import org.osgi.service.onem2m.impl.protocol.coap.ServiceLayerImplCoap;
-import org.osgi.service.onem2m.impl.protocol.http.NotificationServlet;
-import org.osgi.service.onem2m.impl.protocol.http.ServiceLayerImplHttp;
-import org.osgi.service.onem2m.impl.protocol.service.ServiceLayreImplService;
-import org.osgi.service.onem2m.impl.serialization.BaseSerialize;
-import org.osgi.service.onem2m.impl.serialization.cbor.CborSerialize;
-import org.osgi.service.onem2m.impl.serialization.json.JsonSerialize;
-import org.osgi.service.onem2m.impl.serialization.xml.XmlSerialize;
+
+import org.osgi.service.onem2m.*;
+import org.osgi.service.onem2m.dto.*;
+
+
+import org.osgi.impl.service.onem2m.protocol.service.ServiceLayreImplService;
+import org.osgi.impl.service.onem2m.*;
+import org.osgi.impl.service.onem2m.protocol.ServiceLayerUtil;
+import org.osgi.impl.service.onem2m.protocol.service.*;
+import org.osgi.impl.service.onem2m.serialization.BaseSerialize;
 import org.osgi.test.cse.toyCse.CseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.osgi.impl.service.onem2m.protocol.*;
 
 public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerFactoryImpl.class);
@@ -68,17 +60,7 @@ public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 
 		//Serialize
 		BaseSerialize serialize = null;
-		//Json
-		if(ServiceLayerUtil.SERIALIZE_JSON.equals(property.get(ServiceLayerUtil.SERIALIZE).toLowerCase())){
-			serialize = new JsonSerialize();
-		//XML
-		}else if(ServiceLayerUtil.SERIALIZE_XML.equals(property.get(ServiceLayerUtil.SERIALIZE).toLowerCase())){
-			serialize = new XmlSerialize();
-		//Cbor
-		} else if (ServiceLayerUtil.SERIALIZE_CBOR.equals(property.get(ServiceLayerUtil.SERIALIZE).toLowerCase())){
-			serialize = new CborSerialize();
-		}
-
+	
 		if(serialize == null){
 			LOGGER.warn(property.get(ServiceLayerUtil.PROTOCOL) + " & " + property.get(ServiceLayerUtil.SERIALIZE)
 			+ " is Unimplemented.");
@@ -189,47 +171,6 @@ public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 
 	}
 
-	private class ServiceLayreDeliver implements MessageDeliverer{
-
-		String name = null;
-		NotificationListener listner = null;
-
-		public ServiceLayreDeliver(String name, NotificationListener listner){
-			this.name = name;
-			this.listner = listner;
-		}
-
-		@Override
-		public void deliverRequest(Exchange exchange) {
-			NotificationResource coapResource = new NotificationResource(name);
-			coapResource.setListener(listner);
-
-			CoapExchange coapExchange = new CoapExchange(exchange, coapResource);
-
-			switch(exchange.getRequest().getCode()) {
-			case GET:
-				// GET
-				coapResource.handleGET(coapExchange);
-				break;
-			case POST:
-				// POST
-				coapResource.handlePOST(coapExchange);
-				break;
-			case PUT:
-				// PUT
-				coapResource.handlePUT(coapExchange);
-				break;
-			case DELETE:
-				// DELETE
-				coapResource.handleDELETE(coapExchange);
-				break;
-			}
-		}
-
-		@Override
-		public void deliverResponse(Exchange arg0, Response arg1) {
-		}
-
-	}
+	
 
 }

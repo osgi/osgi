@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.service.onem2m.impl</name>
+	<name>org.osgi.impl.service.onem2m</name>
 	<comment></comment>
 	<projects>
 	</projects>
