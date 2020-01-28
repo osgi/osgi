@@ -1,0 +1,12 @@
+osgi.iot.specs = \
+     org.osgi.util.promise, \
+     org.osgi.service.onem2m
+
+osgi.iot.packages = ${replace;${osgi.iot.specs};$;.*}
+
+osgi.iot.resources = {${project.workspace}/osgi.companion/legal/jar}, \
+                        xmlns/metatype=${project.workspace}/xmlns/metatype, \
+                        xmlns/rsa=${project.workspace}/xmlns/rsa, \
+                        xmlns/repository=${project.workspace}/xmlns/repository, \
+                        xmlns/rest=${project.workspace}/xmlns/rest, \
+                        xmlns/scr=${project.workspace}/xmlns/scr

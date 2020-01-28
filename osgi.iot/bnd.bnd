@@ -1,0 +1,43 @@
+Bundle-License: Apache-2.0; \
+                link="http://www.apache.org/licenses/LICENSE-2.0"; \
+                description="Apache License, Version 2.0"
+Bundle-Description: \
+	OSGi Enterprise Release ${versionmask;=;${build.version}}, \
+	Interfaces and Classes for use in compiling bundles
+Bundle-Name: ${-groupid}:${bsn}
+-pom: version=${versionmask;===s;${@version}}
+
+-buildrepo: Local
+-releaserepo: Release
+-releaserepo.publish: ${def;-snapshot;${env;PUBLISH_REPO}}
+-baseline: *
+-fixupmessages.baseline.warning: Baseline mismatch;is:=warning
+companion.code = true
+
+Import-Package					: *; resolution:=optional
+
+Export-Package 					: ${replace;${osgi.iot.packages};$;\\;-split-package:=first}
+-fixupmessages.export: Unused Export-Package instructions
+
+-includeresource 				: ${osgi.iot.resources}
+
+Provide-Capability: osgi.unresolvable
+Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+
+-dependson 					=  \
+	${osgi.iot.specs}
+
+-buildpath 					= \
+	${replace;${osgi.iot.specs};$;\\;version=project}, \
+    osgi.annotation;version=latest, \
+    osgi.core;version=latest, \
+    org.apache.felix.http.servlet-api;version=latest, \
+    org.eclipse.persistence.jpa_spec;version=latest, \
+    org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
+    org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
+    org.apache.aries.javax.jax.rs-api;version=latest,\
+    com.icl.saxon;version=latest
+-fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values
+
+-include : ${build}/eclipse/jdt.bnd, layout.bnd
+javadoc.title = Enterprise
