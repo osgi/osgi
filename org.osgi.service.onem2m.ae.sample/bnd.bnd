@@ -1,8 +1,0 @@
--buildpath: \
-	org.osgi.dto;version=latest,\
-	org.osgi.framework;version=latest,\
-	org.osgi.service.onem2m;version=latest,\
-	org.osgi.util.promise;version=latest,\
-	org.osgi.util.function;version=latest,\
-	slf4j.api
-Bundle-Activator: org.osgi.service.onem2m.ae.sample.Activator
