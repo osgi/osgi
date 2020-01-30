@@ -1,4 +1,4 @@
-package org.osgi.service.onem2m.dto;
+package org.osgi.service.onem2m;
 
 import java.io.IOException;
 
