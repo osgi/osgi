@@ -9,12 +9,38 @@ import org.osgi.dto.DTO;
  */
 public class ResponseTypeInfoDTO extends DTO {
 //	@javax.xml.bind.annotation.XmlElement(required = true)
+	/**
+	 * Response Type Value
+	 */
 	public ResponseType responseTypeValue;
 //	@javax.xml.bind.annotation.XmlElement(required = true)
+	/**
+	 * Notification URI
+	 */
 	public List<java.lang.String> notificationURI;
 
+	/**
+	 * enum ResponseType 
+	 * 
+	 *
+	 */
 	public static enum ResponseType {
-		nonBlockingRequestSynch(1), nonBlockingRequestAsynch(2), blockingRequest(3), flexBlocking(4);
+		/**
+		 * nonBlockingRequestSynch
+		 */
+		nonBlockingRequestSynch(1),
+		/**
+		 * nonBlockingRequestAsynch
+		 */
+		nonBlockingRequestAsynch(2), 
+		/**
+		 * blockingRequest
+		 */
+		blockingRequest(3), 
+		/**
+		 * flexBlocking
+		 */
+		flexBlocking(4);
 
 		private int value;
 
@@ -22,6 +48,10 @@ public class ResponseTypeInfoDTO extends DTO {
 			value = i;
 		}
 
+		/**
+		 * get assigned value
+		 * @return assigned integer value.
+		 */
 		public int getValue() {
 			return value;
 		}

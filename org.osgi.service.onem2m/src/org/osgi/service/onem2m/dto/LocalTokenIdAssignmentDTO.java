@@ -7,7 +7,13 @@ import org.osgi.dto.DTO;
  */
 public class LocalTokenIdAssignmentDTO extends DTO{
 //	@javax.xml.bind.annotation.XmlElement( required  = true)
+	/**
+	 * local token ID
+	 */
 	public java.lang.String localTokenID;
 //	@javax.xml.bind.annotation.XmlElement( required  = true)
+	/**
+	 * token ID
+	 */
 	public java.lang.String tokenID;
 }

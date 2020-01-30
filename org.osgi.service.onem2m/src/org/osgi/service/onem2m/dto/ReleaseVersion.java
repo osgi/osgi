@@ -7,5 +7,24 @@ package org.osgi.service.onem2m.dto;
  * oneM2M uses only R2A,R3_0 (as 2a and 3).
  */
 public enum ReleaseVersion {
-	R1_0, R1_1, R2_0, R2A, R3_0;
+	/**
+	 * Release 1
+	 */
+	R1_0,
+	/**
+	 * Release 1.1
+	 */
+	R1_1,
+	/**
+	 * Release 2
+	 */
+	R2_0,
+	/**
+	 * Release 2A
+	 */
+	R2A,
+	/**
+	 * Release 3
+	 */
+	R3_0;
 }
