@@ -106,8 +106,9 @@ public interface ConnectContent {
 	/**
 	 * Opens this connect content. The framework will open the content when it
 	 * needs to access the content for a bundle revision associated with the
-	 * connect content. The framework may lazily open the content until the
-	 * first request is made to access the bundle revision content.
+	 * connect content. The framework may lazily postpone to open the content
+	 * until right before requests to access the bundle revision content are
+	 * made.
 	 * 
 	 * @return a reference to this object
 	 * @throws IOException if an error occurred opening the content
