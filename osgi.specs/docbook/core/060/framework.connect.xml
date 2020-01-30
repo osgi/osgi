@@ -100,7 +100,7 @@
 
         <listitem>
           <para><emphasis>Connect Framework Factory</emphasis> - A factory, similar to the FrameworkFactory, that is used
-          to create Framework instances that use a connect factory.</para>
+          to create Framework instances that use a connect framework.</para>
         </listitem>
 
         <listitem>
@@ -109,20 +109,434 @@
         </listitem>
       </itemizedlist>
     </section>
+  </section>
+
+  <section>
+    <title>Connect Frameworks</title>
+    <para>This section outlines how a <emphasis>launcher</emphasis> can launch
+    a framework implementation with an implementation of a <xref linkend="org.osgi.framework.connect.ConnectFramework" xrefstyle="hyperlink"/>, regardless of the
+    implementation type of the framework. This allows a launcher to embed an
+    OSGi framework without having to provide code that differs between
+    different implementations. 
+    </para>
+<section>
+      <title>Launching a Connect Framework</title>
+
+      <para>A framework implementation that supports the Connect specification must provide a
+      <emphasis>factory</emphasis> class. A factory class is an indirection to
+      create a framework implementation object. The implementation factory
+      class must implement the <xref
+      linkend="org.osgi.framework.connect.ConnectFrameworkFactory"
+      xrefstyle="hyperlink"/> interface. The launcher can use the following
+      ways to get this class name:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Service Provider Configuration model, see <xref
+          linkend="framework.connect.service.provider"/>,</para>
+        </listitem>
+
+        <listitem>
+          <para>Get it from some configuration and use
+          <code>Class.forName</code>, or</para>
+        </listitem>
+
+        <listitem>
+          <para>Hardcode the name.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <xref linkend="org.osgi.framework.connect.ConnectFrameworkFactory"
+      xrefstyle="hyperlink"/> interface has a single method: <xref
+      linkend="org.osgi.framework.connect.ConnectFrameworkFactory.newFramework-Map-ConnectFramework-"
+      xrefstyle="hyperlink"/>. The map provides the sole configuration
+      properties for the framework object. The <xref linkend="org.osgi.framework.connect.ConnectFramework"
+      xrefstyle="hyperlink"/> implementation provides the OSGi Framework with the support
+      to connect bundles with <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> instances.
+      The result of this method is a
+      <emphasis>framework object</emphasis>, this object implements the <xref
+      linkend="org.osgi.framework.launch.Framework" xrefstyle="hyperlink"/>
+      interface. See <xref linkend="framework.lifecycle-frameworks"/> for details
+      on the <xref
+      linkend="org.osgi.framework.launch.Framework" xrefstyle="hyperlink"/> interface.</para>
+
+      <para>The following code shows how a connect framework can be launched.</para>
+
+      <programlisting>Framework launch(ConnectFramework connectFramework) 
+            throws Exception {
+    Map&lt;String, String&gt; p = new HashMap();
+    p.put( "org.osgi.framework.storage",    
+            System.getProperty("user.home")
+        +   File.separator+"osgi");
+
+    ServiceLoader&lt;ConnectFrameworkFactory&gt; sl =
+        ServiceLoader.load(ConnectFrameworkFactory.class);
+
+    FrameworkFactory factory = sl.iterator().next();
+    Framework osgiFramework = factory.newFramework(p, connectFramework);
+    osgiFramework.init();
+    osgiFramework.start();
+    return osgiFramework;
+}</programlisting>
+    </section>
+    <section xml:id="framework.connect.initializing">
+      <title>Initializing the Connect Framework</title>
+      <para>Before a connect framework can be used by a <code>Framework</code> instance, the
+      <xref linkend="org.osgi.framework.connect.ConnectFramework" xrefstyle="hyperlink"/> must
+      be <emphasis>initialized</emphasis>.
+      Initialization is caused by the <code>Framework</code> calling the 
+      <xref linkend="org.osgi.framework.connect.ConnectFramework.initialize-File-Map-" xrefstyle="hyperlink"/>
+      method on the connect framework.  The connect framework <code>initialize</code> method must only be called
+      once for the lifetime of the <code>Framework</code> instance.  If the <code>Framework</code> is stopped
+      as defined by <xref linkend="framework.lifecycle.stopping"/> and initialized again as defined by
+      <xref linkend="framework.lifecycle.initializing"/> the connect framework <code>initialize</code> method must
+      not be called again.</para>
+
+      <para>If the framework supports persistence then the framework determines the path used for the storage
+      area according to the launch property <xref linkend="org.osgi.framework.Constants.FRAMEWORK_STORAGE" xrefstyle="hyperlink"/>.
+      Once the framework instance has determined the storage area the method
+      <xref linkend="org.osgi.framework.connect.ConnectFramework.initialize-File-Map-" xrefstyle="hyperlink"/> must be called.
+      The file is the storage area used by the framework and may be <code>null</code>
+      if persistence is not supported.
+      This file may be used by the connect framework for persistent storage.
+      The map is the unmodifiable map of the framework configuration properties
+      that were used to create the new framework instance with the method <xref
+      linkend="org.osgi.framework.connect.ConnectFrameworkFactory.newFramework-Map-ConnectFramework-"
+      xrefstyle="hyperlink"/></para>
+    </section>
+    <section xml:id="framework.connect.lifecycle">
+      <title>Connect Framework Life Cycle</title>
+
+      <para>A connect framework may hook into the Framework life cycle by providing
+      a <xref linkend="org.osgi.framework.BundleActivator" xrefstyle="hyperlink"/>
+      instance. The <code>BundleActivator</code> interface defines methods that the
+      Framework invokes when the Framework is initialized and shutdown.</para>
+      <section xml:id="framework.connect.starting">
+        <title>Start</title>
+
+        <para>When the Framework is initialized the system bundle enters the <xref
+        linkend="org.osgi.framework.Bundle.STARTING" xrefstyle="hyperlink"/> state.
+        At this point a valid <xref linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>
+        exists for the Framework. Before invoking extension bundle activators as defined by
+        <xref linkend="framework.lifecycle.extension.start"/> the Framework must call
+        the connect framework method <xref 
+        linkend="org.osgi.framework.connect.ConnectFramework.createBundleActivator--" xrefstyle="hyperlink"/>.
+        If the connect framework provides a bundle activator then the <xref
+        linkend="org.osgi.framework.BundleActivator.start-BundleContext-" xrefstyle="hyperlink"/> method must be
+        called before before returning from the Framework <xref 
+        linkend="org.osgi.framework.launch.Framework.init--" xrefstyle="hyperlink"/> method and before
+        any extension bundle activator <code>start</code> methods are called. Any exception thrown by a
+        connect framework activator <code>start</code> method must be wrapped in a <code>BundleException</code> 
+        and broadcast as an <xref linkend="org.osgi.framework.FrameworkEvent.ERROR" xrefstyle="hyperlink"/>.</para>
+
+        <para>The bundle activator allows for the connect framework to hook into the life cycle of the Framework
+        itself. For example, this allows the connect framework to register services, add listeners and install other
+        bundles before anything else installed in the framework can, including extension bundles. With the
+        supplied system bundle context a connect framework is able to influence the behavior of the Framework
+        by registering various Framework hooks like the <xref 
+        linkend="org.osgi.framework.hooks.resolver.ResolverHook" xrefstyle="hyperlink"/>. A resolver hook
+        is useful for cases where the wiring of a connect bundle must not be allowed to wire to capabilities
+        provided by normal bundles installed in the Framework.</para>
+      </section>
+      <section>
+        <title>Shutdown</title>
+
+        <para>When the Framework is stopped it will reach start level zero and the Framework checks if there are any
+        framework extensions activators to call the <code>stop</code> method on as defined by
+        <xref linkend="framework.lifecycle.stopExtension"/>. After calling the <code>stop</code> method
+        on the framework extension activators, the framework must call <xref
+        linkend="org.osgi.framework.BundleActivator.stop-BundleContext-" xrefstyle="hyperlink"/>
+        on the bundle activator provided by the connect framework. Any exception thrown by a
+        connect framework activator <code>stop</code> method must be wrapped in a <code>BundleException</code> and broadcast as an 
+        <xref linkend="org.osgi.framework.FrameworkEvent.ERROR" xrefstyle="hyperlink"/>.</para>
+
+        <para>The Framework must guarantee that if the <code>start</code> method has executed successfully for
+        connect framework activator, that same <code>BundleActivator</code> object must be called on its
+        <code>stop</code> method when the framework is shutdown. After calling the <code>stop</code> method, that
+        particular <code>BundleActivator</code> object must never be used again. A connect framework activator that
+        threw an exception during <code>start</code> must not be called on shutdown.</para>
+      </section>
+    </section>
+    <section xml:id="framework.connect.service.provider">
+      <title>Java Service Provider Configuration Support for Connect</title>
+
+      <para>Similar to how a framework factory is obtained in <xref
+      linkend="i3309166"/> the connect framework factory name is
+      obtained by reading the content of the configuration resource with the path 
+      <code>META-INF/services/org.osgi.framework.connect.ConnectFrameworkFactory</code></para>
+
+      <para>For example, if the <code>com.acme.osgi</code> framework has a
+      connect factory class <code>com.acme.osgi.connect.Factory</code>, then it should have
+      the following resource:</para>
+
+      <programlisting>META-INF/services/org.osgi.framework.connect.ConnectFrameworkFactory</programlisting>
+
+      <para>And the contents should be:</para>
+
+      <programlisting># ACME Impl. for OSGi connect framework
+com.acme.osgi.connect.Factory</programlisting>
+    </section>
+  </section>
+  <section xml:id="framework.connect.bundle">
+    <title>Connect Bundles</title>
+    <para>A connect bundle is a <xref linkend="org.osgi.framework.Bundle" xrefstyle="hyperlink"/>
+    installed in the framework that is connected to a
+    <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> by a 
+    <xref linkend="org.osgi.framework.connect.ConnectFramework" xrefstyle="hyperlink"/>.</para>
+
+    <section xml:id="framework.connect.bundle.install">
+      <title>Installing Connect Bundles</title>
+
+      <para>When a bundle is installed, as defined by <xref
+      linkend="i1314099"/>, a bundle location and an optional input stream
+      to the content is provided to the framework with the method <xref
+      linkend="org.osgi.framework.BundleContext.installBundle-String-InputStream-" xrefstyle="hyperlink"/>.
+      Before the Framework reads the content of the bundle, the framework must call the connect
+      framework method <xref linkend="org.osgi.framework.connect.ConnectFramework.getModule-String-"
+      xrefstyle="hyperlink"/>. The <code>getModule</code> method is given the bundle location
+      specified in the call to <xref linkend="org.osgi.framework.BundleContext.installBundle-String-InputStream-"
+      xrefstyle="hyperlink"/>. The <code>getModule</code> method must do one of the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Throw a <code>BundleException</code> if the installation of the bundle is to be prevented.
+          In this case the <code>BundleException</code> must be thrown from the <code>installBundle</code>
+          method. Any other exception thrown by the <code>getModule</code> method must propagate to the caller
+          of the <code>installBundle</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para>Return an empty <code>Optional</code> indicating that the Framework must handle reading the
+          content of the bundle itself.</para>
+        </listitem>
+
+        <listitem>
+          <para>Return a present <code>Optional</code> indicating that the <xref linkend="org.osgi.framework.connect.ConnectModule"
+          xrefstyle="hyperlink"/> present must be connected to the bundle and used to access content of the bundle.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If a <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> is found for the specified
+      bundle location, then the Framework must call the <code>ConnectModule</code> method
+      <xref linkend="org.osgi.framework.connect.ConnectModule.getContent--" xrefstyle="hyperlink"/> to access the
+      current <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/>
+      for the bundle. The <code>ConnectContent</code> must be used by the Framework to access content for the bundle's current
+      <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/>. Any exception thrown by the
+      <code>getContent</code> method must be wrapped in a <code>BundleException</code> and result in the 
+      <code>BundleException</code> being thrown by the <code>installBundle</code> method.</para>
+    </section>
 
     <section>
-      <title>Synopsis</title>
-      <para>Enter synopsis</para>
+      <title>Updating Connect Bundles</title>
+      <para>When a bundle is updated, as defined by <xref linkend="i3284680"/>, if the bundle is connected to
+      a <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> then the
+      <code>ConnectModule</code> method <xref linkend="org.osgi.framework.connect.ConnectModule.getContent--"
+      xrefstyle="hyperlink"/> is called to get the current <xref linkend="org.osgi.framework.connect.ConnectContent"
+      xrefstyle="hyperlink"/> for the bundle. The <code>ConnectContent</code> must be used by the Framework to access content for
+      updating the bundle's current <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/>
+      Any exception thrown by the <code>getContent</code> method must be wrapped in a <code>BundleException</code>
+      and result in the <code>BundleException</code> being thrown by the bundle <code>update</code> method.</para>
+    </section>
+
+    <section>
+      <title>Connect Content</title>
+
+      <para>The <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/>
+      provides the Framework with all the information and resources necessary to represent a
+      <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/> for the connect
+      bundle installed the Framework.</para>
+
+      <section>
+        <title>Opening Connect Content</title>
+
+        <para>Before accessing the <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/>
+        a Framework must first open the <code>ConnectContent</code> with the method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.open--" xrefstyle="hyperlink"/>.
+        A Framework may open and close the content many times while the content is being used by the Framework.
+        For example, to limit the number of resources kept open concurrently by the Framework.  The framework
+        must always ensure that the content is open before calling other methods on the
+        <code>ConnectContent</code>. If any exception is thrown by the <code>open</code>
+        method as a result of installing or updating a connect bundle then the exception
+        must be wrapped in a <code>BundleException</code> and result in the <code>BundleException</code>
+        being thrown by the bundle <code>install</code> or <code>update</code> method.</para>
+      </section>
+
+      <section>
+        <title>Bundle Manifest Headers</title>
+        <para>As defined by <xref linkend="i2654895"/> the bundle manifest headers can carry descriptive
+        information about the bundle. A connect content may provide the bundle manifest headers
+        to be used by the current revision of a bundle. When the framework needs to access a
+        connect bundle's headers it must call the <code>ConnectContent</code> method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.getHeaders--" xrefstyle="hyperlink"/>.
+        If an empty <code>Optional</code> is returned then the Framework must lookup the content entry
+        named <code>META-INF/MANIFEST.MF</code> and parse the bundle manifest itself as defined by
+        <xref linkend="i2654895"/>.</para>
+
+        <para>If the <code>Optional</code> returned has a map present then the map must be used to provide
+        the raw, unlocalized, headers for the bundle.  The headers must be used the same way the raw header
+        values would have been used from a parsed <code>META-INF/MANIFEST.MF</code> entry. That is the header
+        keys and values that have semantic meaning must be used by the framework for the bundle and the 
+        key/value pairs must be used for the <code>Dictionary</code> returned by the bundle
+        <xref linkend="org.osgi.framework.Bundle.getHeaders--" xrefstyle="hyperlink"/> methods.
+        The <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/> associated with the 
+        connect content must also have its capabilities and requirements defined by the contents of the Map.</para>
+      </section>
+
+      <section>
+        <title>Bundle Class Loader</title>
+
+        <para>Connect content is typically managed and loaded by an entity outside of the Framework itself. This may also
+        influence the way classes are defined and loaded for content outside of the Framework control. For bundle
+        revisions that are connected to a <xref linkend="org.osgi.framework.connect.ConnectContent"
+        xrefstyle="hyperlink"/> the framework must call the connect content method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.getClassLoader--" xrefstyle="hyperlink"/>
+        before creating a Framework managed class loader for the connected bundle.</para>
+
+        <para>If an empty <code>Optional</code> is returned by the connect content <code>getClassLoader</code> method then the
+        Framework must create a class loader for the current bundle revision. The class loader created
+        by the Framework must follow all the delegation rules defined by <xref linkend="i3174728"/> for a bundle
+        class loader and it must implement the <xref linkend="org.osgi.framework.BundleReference" xrefstyle="hyperlink"/>
+        interface. All resources found and classes defined by this class loader must have their content read using the
+        connect content entries.  This is similar to how a bundle class loader works when the Framework is responsible
+        for accessing and reading the bundle content JAR files directly. This framework implementation class loader
+        must be returned by the the <code>BundleWiring</code> method <xref linkend="org.osgi.framework.wiring.BundleWiring.getClassLoader--"
+        xrefstyle="hyperlink"/>.</para>
+
+        <para>If the <code>Optional</code> returned by the connect content <code>getClassLoader</code> method has a
+        class loader present then that <code>ClassLoader</code> must be used for the class loader of the
+        <xref linkend="org.osgi.framework.wiring.BundleWiring" xrefstyle="hyperlink"/>
+        that is connected to the connect content.  The <code>ClassLoader</code> provided is not required to implement
+        the <xref linkend="org.osgi.framework.BundleReference" xrefstyle="hyperlink"/> interface and is not required
+        to follow the delegation rules defined by <xref linkend="i3174728"/>.  If the <code>ClassLoader</code> does
+        not implement <code>BundleReference</code> then the Framework must wrap the <code>ClassLoader</code> with
+        another <code>ClassLoader</code> that does implement <code>BundleReference</code>. The
+        <xref linkend="org.osgi.framework.BundleReference.getBundle--" xrefstyle="hyperlink"/> must return the bundle
+        associated with the <code>BundleWiring</code>.  This wrapper loader simply delegates all loading to the 
+        <code>ClassLoader</code> provided connect content.  A framework is free to always return a wrapper loader
+        for the <code>BundleWiring</code> method <xref linkend="org.osgi.framework.wiring.BundleWiring.getClassLoader--"
+        xrefstyle="hyperlink"/> even when the connect content loader does implement the <code>BundleReference</code> interface.</para>
+
+        <para>A connect framework is not required to provide a unique class loader for each <code>ConnectContent</code> instance.
+        That is the same class loader can be used as the class loader for multiple <code>ConnectContent</code> instance and therefore
+        get used by multiple bundles installed in the framework. If the connect bundle exports packages then the
+        <code>ConnectContent</code> class loader will be delegated to by other class loaders managed by the framework.
+        In other words, a bundle installed that is not connected with a 
+        <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> may import packages exported by 
+        connect bundles and the OSGi Module Layer will do the correct delegation of class loads to the connect class loader as defined
+        <xref linkend="i3174728"/> for exported packages.</para>
+      </section>
+
+      <section>
+        <title>Connect Content Entries</title>
+
+        <para>A <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/> instance
+        provides access to content entries for a revision of a connect bundle. The connect content entries
+        are used by the Framework for the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>To provide content for the introspective methods on <xref linkend="org.osgi.framework.Bundle" xrefstyle="hyperlink"/>
+            and <xref linkend="org.osgi.framework.wiring.BundleWiring" xrefstyle="hyperlink"/>. For example, the
+            <xref linkend="org.osgi.framework.Bundle.getEntry-String-" xrefstyle="hyperlink"/>,
+            <xref linkend="org.osgi.framework.Bundle.getEntryPaths-String-" xrefstyle="hyperlink"/> and
+            <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-" xrefstyle="hyperlink"/> method.
+            </para>
+          </listitem>
+          <listitem>
+            <para>To provide content for loading classes and resources from the framework managed class loader.
+            This is used when the <code>ConnectContent</code> method
+            <xref linkend="org.osgi.framework.connect.ConnectContent.getClassLoader--" xrefstyle="hyperlink"/> returns
+            an empty <code>Optional</code>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To introspect all entry path names provided by a <code>ConnectContent</code> instance the method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.getEntries--" xrefstyle="hyperlink"/>
+        is used by the Framework. The result of the <code>getEntries</code> method is used by the Framework
+        to provide results from the <code>Bundle</code> 
+        <xref linkend="org.osgi.framework.Bundle.getEntryPaths-String-" xrefstyle="hyperlink"/>
+        method and the <code>BundleWiring</code>
+        <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-" xrefstyle="hyperlink"/>
+        method.</para>
+
+        <para>To introspect a connect content entry the interface
+        <xref linkend="org.osgi.framework.connect.ConnectContent.ConnectEntry" xrefstyle="hyperlink"/>
+        is used. A <code>ConnectEntry</code> can be looked up by its path name using the
+        <code>ConnectContent</code> method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.getEntry-String-" xrefstyle="hyperlink"/>.
+        If the entry does not exist then an empty <code>Optional</code> is returned. A present
+        <xref linkend="org.osgi.framework.connect.ConnectContent.ConnectEntry" xrefstyle="hyperlink"/>
+        can be used by the Framework to provide <code>URL</code> objects that use a Framework specific
+        protocol for bundle entries. For example, for the <code>URL</code> instances returned by
+        <code>Bundle</code> method 
+        <xref linkend="org.osgi.framework.Bundle.getEntry-String-" xrefstyle="hyperlink"/>
+        and the <code>BundleWiring</code> method
+        <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-" xrefstyle="hyperlink"/>.
+        </para>
+
+        <para>The Framework must ensure that the path value used for calls to <code>ConnectContent</code>
+        method <xref linkend="org.osgi.framework.connect.ConnectContent.getEntry-String-" xrefstyle="hyperlink"/>
+        do not start with slash ('/'). That is any paths used for calls to <code>Bundle</code> method
+        <xref linkend="org.osgi.framework.Bundle.getEntry-String-" xrefstyle="hyperlink"/>
+        or <code>BundleWiring</code> method
+        <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-" xrefstyle="hyperlink"/>
+        must have the beginning slash ('/') removed before calling the <code>ConnectContent</code> method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.getEntry-String-" xrefstyle="hyperlink"/>.
+        </para>
+      </section>
+      <section>
+        <title>Closing Connect Content</title>
+
+        <para>When a <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/>
+        connected to a <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/>
+        no longer <xref linkend="org.osgi.framework.wiring.BundleWiring.isInUse--" xrefstyle="hyperlink"/>
+        then the Framework must call the <code>ConnectContent</code> method
+        <xref linkend="org.osgi.framework.connect.ConnectContent.close--" xrefstyle="hyperlink"/> in order
+        to close the connect content. The Framework is free to <code>close</code> the <code>ConnectContent</code>
+        at any other time during the life time of the Framework, but the Framework must always ensure 
+        <code>ConnectContent</code> is opened before calling other methods on the <code>ConnectContent</code>.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Launching from Persistent Storage</title>
+
+      <para>The Framework must make a record of which bundles are connected to a 
+      <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/>.
+      When the Framework is stopped it must persist the state of all the installed bundles,
+      including the ones connected to a <code>ConnectModule</code>.  When a new Framework instance
+      is created using the persistent storage which recorded the connection to a
+      <code>ConnectModule</code>, the Framework must verify that a
+      <xref linkend="org.osgi.framework.connect.ConnectFramework" xrefstyle="hyperlink"/> is
+      available that can handle the bundle location.</para>
+
+      <para>If there is no <code>ConnectModule</code> present then the bundle installed must
+      be discarded by the Framework as if it is not installed and a warning <code>FrameworkEvent</code>
+      should be published or a warning should be logged.</para>
     </section>
   </section>
 
   <section>
-    <title>Section 1</title>
-    <para>Enter section 1</para>
-  </section>
-  <section>
-    <title>Section 2</title>
-    <para>Enter section 2</para>
+    <title>Framework Utility Helpers</title>
+    <section>
+      <title>Java Service Provider Configuration Support for Helpers</title>
+
+      <para>Similar to how a connect framework factory is obtained in <xref
+      linkend="framework.connect.service.provider"/> the <code>FrameworkUtil</code> class discovers helper names
+      by reading the content of the configuration resources with the path 
+      <code>META-INF/services/org.osgi.framework.connect.FrameworkUtilHelper</code></para>
+
+      <para>For example, if the connect framework implementation <code>com.acme.osgi.connect.classpath</code> has a
+      helper class <code>com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</code>, then it should have
+      the following resource:</para>
+
+      <programlisting>META-INF/services/org.osgi.framework.connect.FrameworkUtilHelper</programlisting>
+
+      <para>And the contents should be:</para>
+
+      <programlisting># ACME Impl. for FrameworkUtilHelper
+com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</programlisting>
+    </section>
   </section>
 
   <section>

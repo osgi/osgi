@@ -1361,7 +1361,7 @@
         </listitem>
       </itemizedlist>
 
-      <section>
+      <section xml:id="framework.lifecycle.extension.start">
         <title>Start Extension Activators</title>
 
         <para>The Extension Bundle Activator <code>start</code> method is
