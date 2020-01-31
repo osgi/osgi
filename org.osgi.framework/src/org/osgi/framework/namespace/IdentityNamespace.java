@@ -108,7 +108,7 @@ public final class IdentityNamespace extends Namespace {
 	 * The attribute value that contains tags for the resource. A tag is used to
 	 * identify an aspect of the resource that is not otherwise expressed by the
 	 * capabilities of the resource. The value of this attribute must be of type
-	 * {@code List<Version>}.
+	 * {@code List<String>}.
 	 * 
 	 * @since 1.2
 	 */
