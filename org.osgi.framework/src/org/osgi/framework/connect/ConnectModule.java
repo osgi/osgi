@@ -30,13 +30,14 @@ import org.osgi.framework.wiring.BundleRevision;
 public interface ConnectModule {
 	/**
 	 * Returns the current content of this connect module. The framework will
-	 * get the content when it needs to access the content for the current
-	 * {@link BundleRevision bundle revision} associated with this connect
-	 * module. The framework may lazily open the content until the first request
-	 * is made to access the bundle content.
+	 * call this method when it needs to access the content for the current
+	 * {@link BundleRevision bundle revision} that is using this connect module
+	 * for content. The framework may lazily postpone to open the content until
+	 * right before requests to access the bundle revision content are made.
 	 * 
 	 * @return the current content of this connect module
 	 * @throws IOException if an error occurred getting the content
+	 * @see ConnectFramework#getModule(String)
 	 */
 	ConnectContent getContent() throws IOException;
 }

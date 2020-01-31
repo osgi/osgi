@@ -25,7 +25,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
 
 /**
- * A <code>ConnectFramework</code> provides access to instances of
+ * A <code>ConnectFramework</code> provides a connection to instances of
  * {@link ConnectModule} that are used by a {@link Framework} instance to
  * connect installed bundles with content provided by the
  * <code>ConnectFramework</code>. This allows a <code>ConnectFramework</code> to
@@ -66,9 +66,10 @@ public interface ConnectFramework {
 	 * {@link Optional#empty() empty} optional is returned the the framework
 	 * must handle reading the content of the bundle itself. If a value is
 	 * {@link Optional#isPresent() present} in the returned optional then the
-	 * {@link Optional#get() value} from the optional must be used to connect
-	 * the bundle to the returned connect module. The returned connect module is
-	 * used by the framework to access the content of the bundle.
+	 * <code>ConnectModule</code> {@link Optional#get() value} from the optional
+	 * must be used to connect the bundle to the returned connect module. The
+	 * returned connect module is used by the framework to access the content of
+	 * the bundle.
 	 * 
 	 * @param location the bundle location used to install a bundle
 	 * @return the connect module for the specified bundle location
