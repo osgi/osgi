@@ -5212,7 +5212,7 @@ bundle-description  ::= symbolic-name
       than the system bundle.</para>
     </section>
 
-    <section>
+    <section xml:id="framework.module.extensionClassPath">
       <title>Class Path Treatment</title>
 
       <para>A extension bundle's JAR is appended to the class path of the

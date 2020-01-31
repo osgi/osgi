@@ -417,7 +417,7 @@ com.acme.osgi.connect.Factory</programlisting>
         xrefstyle="hyperlink"/> even when the connect content loader does implement the <code>BundleReference</code> interface.</para>
 
         <para>A connect framework is not required to provide a unique class loader for each <code>ConnectContent</code> instance.
-        That is the same class loader can be used as the class loader for multiple <code>ConnectContent</code> instance and therefore
+        That is the same class loader can be used as the class loader for multiple <code>ConnectContent</code> instances and therefore
         get used by multiple bundles installed in the framework. If the connect bundle exports packages then the
         <code>ConnectContent</code> class loader will be delegated to by other class loaders managed by the framework.
         In other words, a bundle installed that is not connected with a 
@@ -499,6 +499,26 @@ com.acme.osgi.connect.Factory</programlisting>
     </section>
 
     <section>
+      <title>Identify Connect Bundles</title>
+      <para>A bundle installed in the framework can be identified as a connect bundle by introspection of
+      the <link linkend="org.osgi.framework.namespace.IdentityNamespace.CAPABILITY_TAGS_ATTRIBUTE"><code>tags</code></link> attribute on
+      <link linkend="org.osgi.framework.namespace.IdentityNamespace.IDENTITY_NAMESPACE"><code>osgi.identity</code></link>
+      capability for the current bundle revision. All connect bundle revisions must have a <code>tags</code>
+      attribute value that contains <link linkend="org.osgi.framework.connect.ConnectContent.TAG_OSGI_CONNECT"><code>osgi.connect</code></link>.
+      For example, the following method determines if a <code>BundleRevision</code> is for a connect bundle:</para>
+
+    <programlisting>boolean isConnect(BundleRevision revision) {
+    return revision.getCapabilities("osgi.identity").stream().findFirst().map(c->{
+        List&lt;String&gt; tags = (List&lt;String&gt;) c.getAttributes().get("tags");
+        if (tags == null) {
+            return false;
+        }
+        return tags.contains("osgi.connect");
+    }).orElse(false);
+}</programlisting>
+    </section>
+
+    <section>
       <title>Launching from Persistent Storage</title>
 
       <para>The Framework must make a record of which bundles are connected to a 
@@ -514,10 +534,49 @@ com.acme.osgi.connect.Factory</programlisting>
       be discarded by the Framework as if it is not installed and a warning <code>FrameworkEvent</code>
       should be published or a warning should be logged.</para>
     </section>
+
+    <section>
+      <title>Extension Bundles</title>
+
+      <para>Extension bundles as defined by <xref linkend="framework.module.extensionbundles"/> can
+      deliver parts, or fragments, of the Framework implementation. A Framework that supports
+      extension bundles will modify its own class loader to append the content of the framework
+      extension as defined by <xref linkend="framework.module.extensionClassPath"/>.
+      If an extension bundle is also a connect bundle then the framework must not attempt to
+      perform the class path modifications of the Framework itself with the extension bundle.
+      It is assumed that the <code>ConnectFramework</code> is managing that outside of the Framework.</para>
+    </section>
   </section>
 
   <section>
     <title>Framework Utility Helpers</title>
+
+    <para>The <xref linkend="org.osgi.framework.FrameworkUtil" xrefstyle="hyperlink"/> class
+    contains utility methods which may be useful to bundles. For connect framework implementations
+    the <code>FrameworkUtil</code> method <xref 
+    linkend="org.osgi.framework.FrameworkUtil.getBundle-Class-" xrefstyle="hyperlink"/>
+    needs additional help from the connect framework to figure out the <code>Bundle</code> for a
+    specified <code>Class</code>.</para>
+
+    <section>
+      <title>Helper Implementations</title>
+
+      <para>A connect framework implementation can hook into the <code>FrameworkUtil</code> class
+      by providing an implementation of the <xref 
+      linkend="org.osgi.framework.connect.FrameworkUtilHelper" xrefstyle="hyperlink"/> interface.
+      Implementations of the <code>FrameworkUtilHelper</code> interface provide alternative
+      implementations of the methods contained in the <code>FrameworkUtil</code> class.
+      The <code>FrameworkUtil</code> method <xref linkend="org.osgi.framework.FrameworkUtil.getBundle-Class-" xrefstyle="hyperlink"/>
+      method will fall back to calling the available <code>FrameworkUtilHelper</code> 
+      <xref linkend="org.osgi.framework.connect.FrameworkUtilHelper.getBundle-Class-" xrefstyle="hyperlink"/> methods
+      if the default implementation of the <code>FrameworkUtil</code>
+      <xref linkend="org.osgi.framework.FrameworkUtil.getBundle-Class-" xrefstyle="hyperlink"/> method
+      cannot figure out the <code>Bundle</code> for the specified <code>Class</code>. This allows a connect
+      framework implementation to return the <code>Bundle</code> object for classes that a connect framework
+      class loader defines.
+      </para>
+    </section>
+
     <section>
       <title>Java Service Provider Configuration Support for Helpers</title>
 
@@ -536,6 +595,14 @@ com.acme.osgi.connect.Factory</programlisting>
 
       <programlisting># ACME Impl. for FrameworkUtilHelper
 com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</programlisting>
+
+      <para>When the <xref linkend="org.osgi.framework.FrameworkUtil" xrefstyle="hyperlink"/> class
+      is initialized it will discover the available <code>FrameworkUtilHelper</code>
+      implementations as described in <xref linkend="i3300085"/> to obtain
+      an immutable list of
+      <xref linkend="org.osgi.framework.connect.FrameworkUtilHelper" xrefstyle="hyperlink"/>
+      implementations. The list of helpers cannot change during the lifetime of the
+      <code>FrameworkUtil</code> class.</para>
     </section>
   </section>
 

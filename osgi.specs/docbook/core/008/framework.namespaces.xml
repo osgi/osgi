@@ -934,7 +934,7 @@ Bundle B:
 
         <colspec colnum="3" colwidth="1*"/>
 
-        <colspec colnum="4" colwidth="1.5*"/>
+        <colspec colnum="4" colwidth="2*"/>
 
         <colspec colnum="5" colwidth="4*"/>
 
@@ -1077,6 +1077,22 @@ Bundle B:
             <entry><para>A URL to the license for this resource. The URL must
             be the name of the license as defined in the Bundle-License
             header.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>tags</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code></entry>
+
+            <entry><code>List&lt;String&gt;</code></entry>
+
+            <entry><code>extended ( ',' extended )*</code></entry>
+
+            <entry><para>A list of tag names used to identify an aspect of this
+            resource that is not otherwise expressed by the capabilities of
+            this resource.</para></entry>
           </row>
 
           <row>
