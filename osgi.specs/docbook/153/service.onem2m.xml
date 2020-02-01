@@ -19,11 +19,36 @@
   <section>
     <title>Introduction</title>
 
-    <para>oneM2M is a standard for IoT platfrom, which is standardized by oneM2M partnership project.. Data conversion is an inherent part of writing software in a type
-    safe language. In Java, converting strings to proper types or to convert
-    one type to a more convenient type is often done manually. Any errors are
-    then handled inline.</para>
+    <para>oneM2M is a standard for IoT platfrom, which is standardized by oneM2M partnership project.
+    This specification provides interfaes to oneM2M applications developed on OSGi framework to communicate
+    with oneM2M server, called Common Services Entities CSE.
+    </para>
+  </section>
 
+  <section>
+    <title>Essentials</title>
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Protocol Agnostic</emphasis> - API is independent on protocol that are used in communications. oneM2M specifies multiple protocols, which are HTTP, CoAP, MQTT and WebSocket.
+        conversion operations.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Serialization Agnostic</emphasis> - API is independent on serialization that are actually used in communications. oneM2M specifies multiple serializations, which are XML, JSON and Concise Binary Object Representation CBOR .</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Support of synchoronous and asynchronous method call</emphasis> - API allows both of calling manners.  </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Use of DTO</emphasis> - DTO is used as parameters passing on API. Since oneM2M defines many types, concrete DTOs are specified for the higher level structure, and for lower structtures generic DTO is used.  </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Low level and high level operations</emphasis> - API allows for applications to use both low level operation and high level operation, where low level operation allows all possible oneM2M operations and high level operation allows resource level operations, which are create, retrieve, update, and delete.  </para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
@@ -33,65 +58,113 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Converter</emphasis> - a converter can perform
-        conversion operations.</para>
+        <para><emphasis>ServiceLayer</emphasis> - This is the API used by oneM2M applications.
+        </para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Standard Converter</emphasis> - a converter
-        implementation that follows this specification.</para>
+        <para><emphasis>NotificationListener</emphasis> - Listner Interface, which is necessary to implement by oneM2M applications, when then need to received notifications.
+        </para>
       </listitem>
 
-      <listitem>
-        <para><emphasis>Converter Builder</emphasis> - can create customized
-        converters by specifying rules for specific conversions.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Source</emphasis> - the object to be converted.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Target</emphasis> - the target of the
-        conversion.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Source Type</emphasis> - the type of the source to be
-        converted.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Target Type</emphasis> - the desired type of the
-        conversion target.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Rule</emphasis> - a rule is used to customize the
-        behavior of the converter.</para>
-      </listitem>
     </itemizedlist>
 
     <figure pgwide="1">
-      <title>Converter Entity overview</title>
+      <title>Entity overview of Service Layer API for oneM2M</title>
 
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="4.100in"
-                     contentwidth="6.000in" fileref="converter-overview.svg"/>
+                     contentwidth="6.000in" fileref="onem2m-classes.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
   </section>
 
+  <section>
+    <title>ServiceLayer</title>
+    <para>
+      ServiceLayer is the interface used by an application for sending request and get response as return method.
+      It contains low level API and high level API.
+    </para>
+    <para>
+      request() method shown in next list is low level API. It takes requestPrimitive as argument and returns responseRequest. It allows all possible operation of oneM2M. OSGi Promise specification (TODO:Link ) is used for allowing synchoronous and asynchronous calling manner.
+    </para>
+
+    <programlisting> 
+public interface ServiceLayer {
+    Promise&lt;ResponsePrimitiveDTO&gt; request(RequestPrimitiveDTO request);
+}
+    </programlisting> 
+
+    <para>
+       Next methos are fow high level API. They allow application to operate more high level manner, that is, resource operation level, which are create, retrieve, update, delete, and discovery.
+       In addition to them, it allows sending notification by notify() method.
+    </para>
+    <programlisting> 
+public interface ServiceLayer {
+    Promise&lt;ResponsePrimitiveDTO&gt; request(RequestPrimitiveDTO request);
+public Promise&lt;ResourceDTO&gt; create(String uri, ResourceDTO resource);
+
+    public Promise&lt;ResourceDTO&gt; retrieve(String uri);
+
+    public Promise&lt;ResourceDTO&gt; retrieve(String uri, List&lt;String&gt; targetAttributes);
+
+    public Promise&lt;ResourceDTO&gt; update(String uri, ResourceDTO resource);
+
+    public Promise&lt;Boolean&gt; delete(String uri);
+
+    public Promise&lt;List&lt;String&gt;&gt; discovery(String uri, FilterCriteriaDTO fc);
+    public Promise&lt;List&lt;String&gt;&gt; discovery(String uri, FilterCriteriaDTO fc, 
+        RequestPrimitiveDTO.DiscoveryResultType drt);
+    public Promise&lt;Boolean&gt; notify(String uri, NotificationDTO notification );
+
+}
+    </programlisting> 
+
+  </section>
+
+  <section>
+    <title>NotificationListener</title>
+    <para>
+      NotificationListener is a interface for receiving oneM2M notification. An application that needs to receive
+     oneM2M notificatoin must implement the interface and register it to OSGi registry.
+    </para>
+
+    <programlisting> 
+public interface NotificationListener
+{
+    public void notified(RequestPrimitiveDTO request);
+}
+    </programlisting> 
+
+  </section>
+
+  <section>
+    <title>DTO</title>
+    <para>
+      OSGi DTO (TODO: link ) are used for representing data structured passed on API.
+      Some of the data structures, which are directly referred from API or referred in 2-3 hops, are specified with concreate field names. Other data structures are represented OSGi DTO in generic manner.
+    </para>
+    <figure pgwide="1">
+      <title>DTOs representing high level structures</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="8.100in"
+                     contentwidth="12.000in" fileref="onem2m-dto.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+  </section>
 
   <section>
     <title>Security</title>
 
-    <para>An implementation of this specification will require the use of Java
-    Reflection APIs. Therefore it should have the appropriate permissions to
-    perform these operations when running under the Java Security
-    model.</para>
+    <para>
+      Security would be kept in oneM2M communication layer and they are out of scope of this specification.
+    </para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.onem2m.dto.xml"/>

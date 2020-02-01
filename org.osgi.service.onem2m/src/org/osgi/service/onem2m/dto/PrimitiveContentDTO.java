@@ -7,7 +7,7 @@ import org.osgi.dto.DTO;
  * DTO expressing Primitive Content.
  *
  * This Data structure is used as union.
- * Only one field MUST have a value, other fields MUST be null.
+ * Only one field MUST have a value, the others MUST be null.
  *
  */
 public class PrimitiveContentDTO extends DTO{
