@@ -61,7 +61,7 @@ public @interface HttpWhiteboardResource {
 	/**
 	 * Service property identifying resource prefix.
 	 * 
-	 * @return The resource patterns.
+	 * @return The resource prefix.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
 	 *      HTTP_WHITEBOARD_RESOURCE_PREFIX
 	 */
