@@ -49,7 +49,7 @@ Test-Cases							= ${testcases}
 	org.osgi.service.cm;version=latest,\
 	org.osgi.test.cse.toyCse;version=latest,\
 	org.osgi.service.onem2m;version=latest,\
-	org.osgi.service.onem2m.impl;version=latest
+	org.osgi.impl.service.onem2m;version=latest
 
 -runproperties: \
 	org.osgi.framework.bootdelegation=*

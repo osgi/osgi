@@ -1,4 +1,6 @@
-javac.profile=compact2
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Name: org.osgi.impl.service.onem2m
 Bundle-Version: 1.0.0
 Bundle-Activator: org.osgi.impl.service.onem2m.Activator
