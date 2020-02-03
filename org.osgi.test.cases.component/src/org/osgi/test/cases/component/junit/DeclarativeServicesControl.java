@@ -3192,7 +3192,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 						"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"
 				}, null, new String[0], 0);
 		assertThat(description1)
-				.isEqualToComparingFieldByFieldRecursively(expected1);
+				.usingRecursiveComparison()
+				.isEqualTo(expected1);
 		boolean found = false;
 		for (ComponentDescriptionDTO d : descriptions) {
 			if (d.bundle.id != description1.bundle.id)
@@ -3200,7 +3201,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			if (!d.name.equals(description1.name))
 				continue;
 			assertThat(d)
-					.isEqualToComparingFieldByFieldRecursively(description1);
+					.usingRecursiveComparison()
+					.isEqualTo(description1);
 			found = true;
 			break;
 		}
@@ -3235,7 +3237,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 						"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"
 				}, null, new String[0], 0);
 		assertThat(description3)
-				.isEqualToComparingFieldByFieldRecursively(expected3);
+				.usingRecursiveComparison()
+				.isEqualTo(expected3);
 		found = false;
 		for (ComponentDescriptionDTO d : descriptions) {
 			if (d.bundle.id != description3.bundle.id)
@@ -3243,7 +3246,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			if (!d.name.equals(description3.name))
 				continue;
 			assertThat(d)
-					.isEqualToComparingFieldByFieldRecursively(description3);
+					.usingRecursiveComparison()
+					.isEqualTo(description3);
 			found = true;
 			break;
 		}
@@ -3262,7 +3266,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentConfigurationDTO configuration1 = configurations1.iterator().next();
 		assertNotNull("null configuration", configuration1);
 		assertThat(configuration1.description)
-				.isEqualToComparingFieldByFieldRecursively(description1);
+				.usingRecursiveComparison()
+				.isEqualTo(description1);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
 		assertEquals("wrong number of satisfiedReferences", 0, configuration1.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration1.unsatisfiedReferences.length);
@@ -3274,7 +3279,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ServiceReferenceDTO[] tb1SRs = tb1.adapt(ServiceReferenceDTO[].class);
 		assertThat(tb1SRs).hasSize(1);
 		assertThat(configuration1.service)
-				.isEqualToComparingFieldByFieldRecursively(tb1SRs[0]);
+				.usingRecursiveComparison()
+				.isEqualTo(tb1SRs[0]);
 
 		ComponentDescriptionDTO description3 = scr.getComponentDescriptionDTO(tb3,
 				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent");
@@ -3285,7 +3291,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentConfigurationDTO configuration3 = configurations3.iterator().next();
 		assertNotNull("null configuration", configuration3);
 		assertThat(configuration3.description)
-				.isEqualToComparingFieldByFieldRecursively(description3);
+				.usingRecursiveComparison()
+				.isEqualTo(description3);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration3.state);
 		assertEquals("wrong number of satisfiedReferences", 2, configuration3.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration3.unsatisfiedReferences.length);
@@ -3297,7 +3304,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ServiceReferenceDTO[] tb3SRs = tb3.adapt(ServiceReferenceDTO[].class);
 		assertThat(tb3SRs).hasSize(1);
 		assertThat(configuration3.service)
-				.isEqualToComparingFieldByFieldRecursively(tb3SRs[0]);
+				.usingRecursiveComparison()
+				.isEqualTo(tb3SRs[0]);
 	}
 
 	public void testServiceComponentRuntimeEnablement() throws Exception {

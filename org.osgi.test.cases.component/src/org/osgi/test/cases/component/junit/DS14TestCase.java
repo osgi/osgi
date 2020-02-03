@@ -237,7 +237,8 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 							"org.osgi.test.cases.component.tb28.FailedActivation"
 					}, null, new String[0], 0);
 			assertThat(description1)
-					.isEqualToComparingFieldByFieldRecursively(expected1);
+					.usingRecursiveComparison()
+					.isEqualTo(expected1);
 			Collection<ComponentConfigurationDTO> configurations = scr
 					.getComponentConfigurationDTOs(description1);
 			assertThat(configurations).hasSize(1);
@@ -250,7 +251,8 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 			assertThat(tb28SRs).as("tb28 registered services").hasSize(1);
 			assertThat(configuration1.service)
 					.as("configuration DTO registered service")
-					.isEqualToComparingFieldByFieldRecursively(tb28SRs[0]);
+					.usingRecursiveComparison()
+					.isEqualTo(tb28SRs[0]);
 
 		} finally {
 			tb28.uninstall();
