@@ -59,6 +59,8 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		try {
 			res = serviceLayerService.retrieve(uri).getValue();
 		} catch (Exception e) {
+			e.printStackTrace();
+			assertNotNull(null);// TODO
 			res = null;
 		}
 
@@ -385,5 +387,12 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 		LOGGER.info("----Discovery Test 2 is complete----");
 	}
+    
+//    @Test
+//   	public void testDummy(){
+//    	// try to fail
+//    	assertEquals("foo","bar");
+//   	
+//   }
 }
 

@@ -47,7 +47,6 @@ Test-Cases							= ${testcases}
 	org.osgi.service.http;version=latest,\
 	org.osgi.service.event;version=latest,\
 	org.osgi.service.cm;version=latest,\
-	org.osgi.test.cse.toyCse;version=latest,\
 	org.osgi.service.onem2m;version=latest,\
 	org.osgi.impl.service.onem2m;version=latest
 

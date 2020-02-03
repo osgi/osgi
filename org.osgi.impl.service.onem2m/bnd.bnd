@@ -10,8 +10,7 @@ Bundle-Activator: org.osgi.impl.service.onem2m.Activator
 	org.osgi.framework;version=latest,\
 	org.osgi.dto;version=latest,\
 	org.osgi.util.promise;version=latest,\
-	org.osgi.util.function;version=latest,\
-	org.osgi.test.cse.toyCse;version=latest
+	org.osgi.util.function;version=latest
 
 
 -includeresource = \

@@ -1,4 +1,4 @@
-package org.osgi.test.cse.toyCse;
+package org.osgi.impl.service.onem2m;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +28,22 @@ public class CseService {
 		cseBase.creationTime = now;
 		cseBase.lastModifiedTime = now;
 		cse.put(uri, cseBase);
+	}
+	
+	public CseService() {
+		String cseName = "in-cse";
+		//CSEBase
+		ResourceDTO cseBase = new ResourceDTO();
+		cseBase.resourceName = cseName;
+		cseBase.resourceType = 5;
+		String now = getDate();
+		cseBase.resourceID = String.valueOf(id++);
+		cseBase.creationTime = now;
+		cseBase.lastModifiedTime = now;
+
+		String uri = "/" + cseName;
+		cse.put(uri, cseBase);
+		
 	}
 
 	public ResponsePrimitiveDTO create(RequestPrimitiveDTO req){

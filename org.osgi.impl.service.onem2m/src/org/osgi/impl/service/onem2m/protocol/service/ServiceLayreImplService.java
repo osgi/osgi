@@ -1,14 +1,11 @@
 package org.osgi.impl.service.onem2m.protocol.service;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.osgi.impl.service.onem2m.CseService;
 import org.osgi.service.onem2m.ServiceLayer;
-import org.osgi.service.onem2m.dto.AttributeDTO;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
@@ -17,8 +14,6 @@ import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.DiscoveryResultType;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.Operation;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.service.onem2m.dto.ResponsePrimitiveDTO;
-import org.osgi.impl.service.onem2m.serialization.LongShortConverter;
-import org.osgi.test.cse.toyCse.CseService;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
