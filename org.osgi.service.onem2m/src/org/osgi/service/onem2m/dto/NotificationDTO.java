@@ -20,7 +20,7 @@ public class NotificationDTO extends DTO{
 	public Boolean verificationRequest;
 //	@javax.xml.bind.annotation.XmlElement( required  = false)
 	/**
-	 * Flag showing subscription delettion
+	 * Flag showing subscription deletion
 	 * 
 	 * This field is optional.
 	 */
