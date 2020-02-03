@@ -14,13 +14,13 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.usbinfo;version=project,\
 	osgi.core;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
-	${junit}
+	${junit4}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.usbinfo
 
 -runbundles:  \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.usbinfo;version=latest,\
 	org.osgi.impl.service.device.manager;version=latest,\
 	org.osgi.impl.service.event;version=latest

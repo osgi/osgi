@@ -19,10 +19,10 @@ Test-Cases							= ${testcases}
     org.osgi.service.http;                  version=project , \
 	org.osgi.impl.bundle.servlet;			version=2.1, \
 	osgi.core;								version=5.0, \
-	${junit}
+	${junit4}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.http; version=latest
 

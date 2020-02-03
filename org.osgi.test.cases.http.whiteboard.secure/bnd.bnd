@@ -26,10 +26,10 @@ Include-Resource					= \
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=6.0.0,\
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runsecureproperties}, \

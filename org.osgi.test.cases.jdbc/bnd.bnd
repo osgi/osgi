@@ -11,10 +11,10 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.test.support; 	version=project, \
 	org.osgi.service.jdbc; 	version=project, \
 	osgi.core;									version=4.3.1	, \
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.jdbc; version=latest, \
 	org.osgi.impl.bundle.derby; version=latest
 

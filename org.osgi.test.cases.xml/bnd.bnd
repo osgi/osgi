@@ -23,10 +23,10 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
 	org.osgi.util.xml;						version=project	, \
 	osgi.core;								version=4.3.1	, \
-	${junit}
+	${junit4}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
     org.osgi.util.xml; version=latest
 
 -runproperties = ${runproperties}

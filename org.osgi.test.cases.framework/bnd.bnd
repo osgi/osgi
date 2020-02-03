@@ -285,7 +285,7 @@ Include-Resource = \
 	osgi.cmpn;								version=4.3.1	, \
 	org.apache.servicemix.bundles.bcel;     version=5.2 , \
     org.osgi.test.support;                  version=project , \
-	${junit}
+	${junit4}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = \
@@ -305,7 +305,7 @@ Test-Cases							= ${testcases}
     org.osgi.framework.wiring.dto
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \

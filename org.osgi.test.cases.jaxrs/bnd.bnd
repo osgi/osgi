@@ -29,13 +29,13 @@ DynamicImport-Package: javax.servlet.*
 	osgi.core;version=6.0.0,\
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest,\
-	${junit},\
+	${junit4},\
 	org.osgi.namespace.implementation;version=latest,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.namespace.contract;version=latest
 
 -runbundles                     = \
-    ${junit},\
+    ${junit4},\
     org.osgi.impl.service.cm;                   version=latest,\
     org.osgi.util.function;version=latest,\
     org.osgi.util.promise;version=latest,\

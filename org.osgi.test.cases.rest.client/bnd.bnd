@@ -27,10 +27,10 @@ Test-Cases              = ${testcases}
   org.osgi.service.rest;version=project,\
   osgi.core;version=6.0.0,\
   osgi.cmpn;version=6.0.0,\
-  ${junit}
+  ${junit4}
 
 -runbundles            = \
-    ${junit},\
+    ${junit4},\
   org.osgi.impl.service.rest; version=latest, \
   org.osgi.impl.service.rest.support; version=latest, \
   org.osgi.impl.service.rest.client; version=latest

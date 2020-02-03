@@ -14,10 +14,10 @@ Private-Package						=  \
     org.osgi.annotation.versioning; version=latest, \
 	osgi.core;									version=6.0.0, \
 	osgi.cmpn;									version=6.0.0, \
-	${junit}
+	${junit4}
 
 -runbundles = \
-    ${junit},\
+    ${junit4},\
     org.osgi.impl.bundle.annotations; version=latest
 
 -runproperties = ${runproperties}, \

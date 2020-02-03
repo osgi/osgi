@@ -37,7 +37,7 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.log; version=latest,\
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \
@@ -52,7 +52,7 @@ Test-Cases							= ${testcases}
 	org.osgi.service.deploymentadmin; 	version=project, \
 	osgi.core;							version=4.3.1, \
 	osgi.cmpn;							version=4.3.1, \
-	${junit}
+	${junit4}
 		
 -runproperties = ${runsecureproperties}, \
 	org.osgi.test.cases.deploymentadmin.timeout=180000, \

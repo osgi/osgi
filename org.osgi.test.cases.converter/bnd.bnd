@@ -17,10 +17,10 @@ Test-Cases = ${testcases}
 	org.osgi.util.converter;version=project,\
 	org.osgi.util.function;version=1.0.0,\
 	org.osgi.dto;version=1.0.0,\
-	${junit}
+	${junit4}
 
 -runbundles: \
-    ${junit},\
+    ${junit4},\
 	org.osgi.util.converter;version=latest, \
     org.osgi.util.function;version=latest, \
     org.osgi.dto;version=latest

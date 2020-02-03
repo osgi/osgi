@@ -28,10 +28,10 @@ Test-Cases							= ${testcases}
     org.osgi.service.metatype;              version=latest , \
 	osgi.core;								version=6.0	, \
 	osgi.cmpn;								version=6.0	, \
-	${junit}
+	${junit4}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest

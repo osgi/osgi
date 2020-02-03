@@ -17,11 +17,11 @@ Test-Cases = ${testcases}
 	org.osgi.util.pushstream;version=project,\
 	org.osgi.util.function;version=project,\
 	org.osgi.util.promise;version=project,\
-	${junit},\
+	${junit4},\
 	org.easymock
 
 -runbundles: \
-    ${junit},\
+    ${junit4},\
 	org.osgi.util.pushstream;version=latest,\
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest

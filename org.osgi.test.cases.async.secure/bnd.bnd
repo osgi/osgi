@@ -16,10 +16,10 @@ Include-Resource					= \
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=4.3.1,\
 	osgi.promise;version=6.0,\
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.async; version=latest
 
 -runproperties = ${runsecureproperties}

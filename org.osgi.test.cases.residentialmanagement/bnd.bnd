@@ -11,10 +11,10 @@ Private-Package						=  \
 	org.osgi.test.support;      	version=project 	, \
 	org.osgi.service.dmt;			version=project		, \
 	osgi.cmpn;				version=4.3.1		, \
-	${junit}
+	${junit4}
 
 -runbundles			= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.log;						version=latest, \
     org.osgi.impl.service.cm;						version=latest, \
     org.osgi.impl.service.event;					version=latest, \

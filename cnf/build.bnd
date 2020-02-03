@@ -157,8 +157,9 @@ Bundle-Developers: osgi; \
 -noextraheaders: true
 -removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
-junit: biz.aQute.junit;version=latest
+junit4: biz.aQute.junit;version=latest
 tester: biz.aQute.tester;version=latest
+junit.tester: biz.aQute.junit;version=latest
 -tester: ${tester}
 
 -runfw = org.osgi.impl.framework; version=latest

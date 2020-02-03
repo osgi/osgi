@@ -22,11 +22,11 @@ Test-Cases							= ${testcases}
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
-	${junit}
+	${junit4}
 
 -runbundles:
 -runframework: none
--tester: ${junit}
+-tester: ${junit.tester}
 
 -runproperties = ${runproperties}, \
 	${p}.trust.repositories=${build}/keystore, \

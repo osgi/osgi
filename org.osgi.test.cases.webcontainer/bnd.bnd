@@ -45,10 +45,10 @@ Export-Package =\
 	osgi.core;									version=4.3.1, \
 	osgi.cmpn; 									version=4.3.1, \
 	org.osgi.test.support;						version=project, \
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.cm; 			version=latest, \
 	org.osgi.impl.service.event; 		version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest

@@ -24,13 +24,13 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.midletcontainer; 	version=project, \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
-	${junit}
+	${junit4}
 
 # org.osgi.impl.service.application must be loaded before osgi.cmpn since the 
 # org.osgi.service.application classes must be able to load the 
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.application; version=latest, \
 	org.osgi.impl.bundle.midletcontainer; version=latest, \
 	org.osgi.impl.service.log; version=latest, \

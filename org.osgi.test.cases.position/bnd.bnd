@@ -16,10 +16,10 @@ Test-Cases							= ${testcases}
     org.osgi.util.position;                 version=project , \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.util.position; version=latest, \
 	org.osgi.util.measurement; version=latest
 

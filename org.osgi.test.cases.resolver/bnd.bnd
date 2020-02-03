@@ -53,10 +53,10 @@ Test-Cases							= ${testcases}
     org.osgi.service.resolver;              version=project , \
 	osgi.core;								version=5.0		, \
 	osgi.cmpn;	        					version=5.0 , \
-	${junit}
+	${junit4}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}

@@ -39,10 +39,10 @@ Test-Cases							= ${testcases}
     org.osgi.test.cases.blueprint;          version=project , \
     osgi.core;                              version=4.3.1     , \
     osgi.cmpn;                              version=4.3.1     , \
-    ${junit}
+    ${junit4}
 
 -runbundles							= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event; version=latest, \

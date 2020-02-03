@@ -28,12 +28,12 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
     org.osgi.service.condpermadmin;         version=project , \
 	osgi.core;								version=6.0	, \
-	${junit}
+	${junit4}
 
 -runbundles:
 # The test case wipes out permissions for all bundles, so we need
 # to place the tester on the classpath rather than being in a bundle.
--tester: ${junit}
+-tester: ${junit.tester}
 
 
 -runproperties = ${runsecureproperties}

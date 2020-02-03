@@ -19,13 +19,13 @@ Import-Package: \
 	org.osgi.util.pushstream;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.util.function;version=latest,\
-	${junit}
+	${junit4}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log.stream
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.log.stream;  version=latest,\
 	org.osgi.impl.service.cm;  version=latest
 

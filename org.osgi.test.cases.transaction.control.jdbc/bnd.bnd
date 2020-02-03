@@ -16,10 +16,10 @@ Export-Package: org.osgi.service.transaction.control, \
 	org.osgi.service.transaction.control;version=project,\
 	org.osgi.service.jdbc; version=project, \
 	osgi.core;version=6.0.0,\
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.service.transaction.control.jdbc; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 

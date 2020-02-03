@@ -20,10 +20,10 @@ Private-Package						=  \
 	org.osgi.annotation.bundle;version=project,\
 	osgi.core;version=6.0.0,\
     org.h2; version="[1.4.193,2)", \
-	${junit}
+	${junit4}
 
 -runbundles						= \
-    ${junit},\
+    ${junit4},\
     org.osgi.impl.service.jpa; version=latest, \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest,\
 	org.osgi.impl.service.transaction.control.jpa; version=latest, \

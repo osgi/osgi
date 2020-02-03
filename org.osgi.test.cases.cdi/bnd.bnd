@@ -61,10 +61,10 @@ Test-Cases: ${testcases}
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
-	${junit}
+	${junit4}
 
 -runbundles: \
-	${junit},\
+	${junit4},\
 	org.osgi.impl.bundle.cdi;version=latest
 
 -runproperties: \

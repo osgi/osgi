@@ -28,10 +28,10 @@ Include-Resource                    = \
     org.osgi.service.serviceloader; version=project , \
 	osgi.core;						version=6.0,\
 	osgi.cmpn;         				version=5.0, \
-	${junit}	
+	${junit4}	
 
 -runbundles = \
-    ${junit},\
+    ${junit4},\
 	org.osgi.impl.bundle.serviceloader;version=latest
 
 Test-Cases							= ${testcases}
