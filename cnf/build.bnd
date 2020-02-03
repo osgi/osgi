@@ -34,7 +34,7 @@ javac.profile           = compact1
 -sources               	= true
 -sourcepath             = ${project}/${src}
 
-# Include the gradle.properties to get the value of bnd_repourl which is used
+# Include the gradle.properties to get the values of bnd_* which are used
 # for the bnd build repository.
 -include ${workspace}/gradle.properties
 
@@ -42,14 +42,6 @@ mainrepo                = ${build}/repo
 centralrepo             = https://repo.maven.apache.org/maven2
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
-bndrepo                 = ${uri;${bnd_repourl}}
-
-bnd_dependencies: \
-  biz.aQute.bnd,\
-  biz.aQute.bndlib,\
-  biz.aQute.junit,\
-  biz.aQute.tester
-bnd_version: ${replace;${bnd_plugin};.*:(.*);$1}
 
 -plugin = aQute.lib.deployer.FileRepo; \
             name='Main'; \
@@ -59,15 +51,10 @@ bnd_version: ${replace;${bnd_plugin};.*:(.*);$1}
             name='Licensed'; \
             location="${licensedrepo}"; \
             readonly=true, \
-          aQute.bnd.repository.maven.pom.provider.BndPomRepository;\
-            name='Bnd';\
-            revision="${replace;${bnd_dependencies};.+;biz.aQute.bnd:$0:${bnd_version}}";\
-            releaseUrls="${bndrepo}";\
-            snapshotUrls="${bndrepo}";\
-            location="${workspace}/cnf/cache/Bnd/index.xml",\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             name='Maven Central';\
             releaseUrl="${centralrepo}";\
+            snapshotUrl="${uri;${bnd_snapshots}}";\
             index=${.}/central.mvn;\
             readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\

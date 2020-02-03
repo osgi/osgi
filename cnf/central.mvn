@@ -10,6 +10,13 @@ org.osgi:osgi.cmpn:6.0.0
 org.osgi:osgi.promise:6.0.0
 org.osgi:osgi.promise:7.0.1
 
+# bnd_version is set in gradle.properties
+biz.aQute.bnd:biz.aQute.bnd:${bnd_version}
+biz.aQute.bnd:biz.aQute.bndlib:${bnd_version}
+biz.aQute.bnd:biz.aQute.junit:${bnd_version}
+biz.aQute.bnd:biz.aQute.tester:${bnd_version}
+biz.aQute.bnd:biz.aQute.tester.junit-platform:${bnd_version}
+
 # 3rd party artifacts
 javax.ejb:javax.ejb-api:3.2
 javax.transaction:javax.transaction-api:1.2

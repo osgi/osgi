@@ -30,8 +30,7 @@ tasks.named('wrapper') {
 
 tasks.register('buildscriptDependencies') {
   doLast {
-    println "bnd_plugin: ${bnd_plugin}"
-    println "bnd_repourl: ${bnd_repourl}"
-    println buildscript.configurations.classpath.asPath
+    println "bnd_version: ${bnd_version}"
+    println "bnd_snapshots: ${bnd_snapshots}"
   }
 }
