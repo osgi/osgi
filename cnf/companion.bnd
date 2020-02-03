@@ -2,6 +2,7 @@
 spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}
 spec.version = ${versionmask;===;${if;${spec.package.versionattr};${spec.package.versionattr};0}}
 build.version = ${spec.version}.${project.build}
+Automatic-Module-Name: ${bsn}
 Bundle-License: Apache-2.0; \
                 link="http://www.apache.org/licenses/LICENSE-2.0"; \
                 description="Apache License, Version 2.0"
