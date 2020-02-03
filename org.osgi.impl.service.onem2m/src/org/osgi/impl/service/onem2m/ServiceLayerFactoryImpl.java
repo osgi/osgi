@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.onem2m.protocol.ServiceLayerUtil;
-import org.osgi.impl.service.onem2m.protocol.service.ServiceLayreImplService;
+import org.osgi.impl.service.onem2m.protocol.service.ServiceLayerImplService;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 
 			
 		CseService cse = new CseService();
-		ServiceLayer sl = new ServiceLayreImplService(property.get(ServiceLayerUtil.ORIGIN), cse);
+		ServiceLayer sl = new ServiceLayerImplService(property.get(ServiceLayerUtil.ORIGIN), cse);
 		LOGGER.info("End factory");
 		return sl;
 

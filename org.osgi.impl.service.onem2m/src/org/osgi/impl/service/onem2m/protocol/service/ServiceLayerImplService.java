@@ -19,12 +19,12 @@ import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceLayreImplService implements ServiceLayer {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayreImplService.class);
+public class ServiceLayerImplService implements ServiceLayer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerImplService.class);
 	private CseService cse;
 	private final String origin;
 
-	public ServiceLayreImplService(String origin, CseService cse){
+	public ServiceLayerImplService(String origin, CseService cse){
 		this.cse = cse;
 		this.origin = origin;
 	}
