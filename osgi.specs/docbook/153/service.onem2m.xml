@@ -167,6 +167,8 @@ public interface NotificationListener
     </para>
   </section>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.onem2m.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.onem2m.dto.xml"/>
 
   <section>
