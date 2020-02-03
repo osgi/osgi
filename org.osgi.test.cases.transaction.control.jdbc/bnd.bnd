@@ -15,6 +15,7 @@ Export-Package: org.osgi.service.transaction.control, \
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.transaction.control;version=project,\
 	org.osgi.service.jdbc; version=project, \
+    osgi.annotation;version=7.0.0,\
 	osgi.core;version=6.0.0,\
 	${junit4}
 
