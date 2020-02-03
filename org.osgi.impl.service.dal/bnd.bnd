@@ -4,7 +4,7 @@
 Bundle-Vendor		= ProSyst
 Bundle-Activator	= ${p}.Activator
 
-Private-Package		= ${p}.*
+-privatepackage		= ${p}.*
 
 Export-Package		= \
     org.osgi.service.dal.*; -split-package:=first; provide:=true, \

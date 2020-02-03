@@ -3,4 +3,4 @@ Bundle-Name: ${p}.classloading.tb17b
 Bundle-SymbolicName: ${p}.classloading.tb17b
 Bundle-Version: 1
 DynamicImport-Package: ${p}.classloading.exports.*,resources;version="0.0.0"
-Private-Package:                         ${p}.classloading.tb17b
+-privatepackage:                         ${p}.classloading.tb17b

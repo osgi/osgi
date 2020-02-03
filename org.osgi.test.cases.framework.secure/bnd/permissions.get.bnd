@@ -4,6 +4,6 @@ Bundle-Description: Filtered ServicePermissiont Test R4 - Service get permission
 Bundle-Activator: ${p}.permissions.get.GetActivator
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.get
 

@@ -1,5 +1,5 @@
 Bundle-Name:                             ${p}.client1
 Bundle-Version:                          1.0.0
-Private-Package:                          ${p}.client
+-privatepackage:                          ${p}.client
 
 Bundle-Activator: ${p}.client.ColorProviderClient

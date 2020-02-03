@@ -5,4 +5,4 @@ Bundle-Version: 1.0
 Bundle-ManifestVersion: 2
 Fragment-Host: ${p}.fragments.tb1a
 Require-Bundle: ${p}.fragments.tb1b
-Private-Package: ${p}.fragments.tb1f
+-privatepackage: ${p}.fragments.tb1f

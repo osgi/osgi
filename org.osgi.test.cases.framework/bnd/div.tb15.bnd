@@ -22,6 +22,6 @@ Bundle-NativeCode: \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; selection-filter="(${p}.div.tb15=xyz)", \
  macosx_x86-64/libNative.jnilib; osname="mac os x"; processor=x86-64; selection-filter="(${p}.div.tb15=xyz)", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; selection-filter="(${p}.div.tb15=xyz)"
-Include-Resource = resources/div.tb2
-Private-Package:                         ${p}.div.tb15
+-includeresource = resources/div.tb2
+-privatepackage:                         ${p}.div.tb15
 

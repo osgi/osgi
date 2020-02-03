@@ -4,7 +4,7 @@ Bundle-Description: Filtered ServicePermissiont Test R4 - package import Test
 Bundle-Activator: ${p}.permissions.importer2.ImporterActivator
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.importer2
 	
 Import-Package	= \

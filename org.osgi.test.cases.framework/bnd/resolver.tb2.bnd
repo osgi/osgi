@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.resolver.tb2
 Bundle-SymbolicName:                     ${p}.resolver.tb2; fragment-attachment:="never"
 Bundle-Version:                          1.0.0
-Private-Package:                         ${p}.resolver.tb2
+-privatepackage:                         ${p}.resolver.tb2
 Bundle-Activator:                        ${p}.resolver.tb2.Activator
 Import-Package:                          org.osgi.framework,org.osgi.test.cases.framework.resolver.tb1,*
 

@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb15.*
+-privatepackage: ${p}.tb15.*
 Service-Component: org/osgi/test/cases/component/tb15/components.xml

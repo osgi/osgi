@@ -1,5 +1,5 @@
 Bundle-Version: 4
-Private-Package: ${p}.tb27.*
+-privatepackage: ${p}.tb27.*
 Service-Component: org/osgi/test/cases/component/tb27/impl/constructorinjection.xml
 
 

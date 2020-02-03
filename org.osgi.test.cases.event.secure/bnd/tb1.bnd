@@ -1,2 +1,2 @@
 Bundle-Activator: ${p}.tb1.Activator
-Private-Package : ${p}.tb1
+-privatepackage : ${p}.tb1

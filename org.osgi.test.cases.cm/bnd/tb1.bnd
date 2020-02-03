@@ -9,9 +9,9 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb1.*, \
 	${p}.common
 
-Include-Resource					= \
+-includeresource					= \
 	{OSGI-INF/permissions.perm=perms/tb1.perm}

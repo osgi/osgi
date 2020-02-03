@@ -15,7 +15,7 @@ Bundle-Description: OSGi Web Application Specification Compliance Test
 -conditionalpackage: \
     org.osgi.test.support.*
 
-Include-Resource					= \
+-includeresource					= \
 	tw1.war, \
 	tw4.war, \
 	tw5.war, \

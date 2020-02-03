@@ -9,5 +9,5 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 Bundle-UpdateLocation: http://localhost/NoURL.jar
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.lifecycle.tb7.*

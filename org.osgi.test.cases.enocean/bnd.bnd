@@ -5,12 +5,12 @@ Bundle-Description	= EnOcean Test Bundle
 
 Export-Package: \
  org.osgi.test.support.step;-noimport:=true
-Conditional-Package: \
+-conditionalpackage: \
  org.osgi.test.support.*
 Import-Package: \
   ${-signaturetest}, \
   *
-Private-Package		=  \
+-privatepackage		=  \
 	${p}.*
 
 Test-Cases			= ${testcases}

@@ -4,7 +4,7 @@
 #
 -sources:								false
 -resourceonly:                           true
-Include-Resource: \
+-includeresource: \
  x-type-simple.ipa;literal='true', \
  load-status;literal='x-type-simple.ipa', \
  test-0-prov.jar=test-0-prov.jar, \

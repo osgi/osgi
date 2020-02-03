@@ -6,7 +6,7 @@ Bundle-Description: OSGi UserAdmin Service Reference Implementation by Gatespace
 Export-Service: org.osgi.service.useradmin.UserAdmin
 
 Export-Package: org.osgi.service.useradmin; -split-package:=first; provide:=true
-Private-Package: ${p}.*
+-privatepackage: ${p}.*
 
 
 -buildpath = \

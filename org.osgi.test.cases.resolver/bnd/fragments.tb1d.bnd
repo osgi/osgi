@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.fragments.tb1d
 Bundle-Version: 1.0
 Bundle-ManifestVersion: 2
 Fragment-Host: ${p}.fragments.tb1b
-Private-Package: ${p}.fragments.tb1d
+-privatepackage: ${p}.fragments.tb1d

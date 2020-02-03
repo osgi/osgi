@@ -2,7 +2,7 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Activator: 		${p}.Activator
-Private-Package: 		${p}.*
+-privatepackage: 		${p}.*
 
 Bundle-Description: 	OSGi Test Filter. Filters out services that are not meant to be used by the CT.
 

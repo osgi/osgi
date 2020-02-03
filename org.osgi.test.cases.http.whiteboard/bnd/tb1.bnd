@@ -2,6 +2,6 @@ Bundle-Version: 1.0
 Bundle-Activator: $(p).tb1.HttpWhiteboardTestBundle1
 Bundle-Description: Test Bundle for Http Whiteboard tests
 
-Private-Package	: $(p).tb1.*
+-privatepackage	: $(p).tb1.*
 
-Include-Resource: /org/osgi/test/cases/http/whiteboard/tb1/resources=src/org/osgi/test/cases/http/whiteboard/tb1/resources
+-includeresource: /org/osgi/test/cases/http/whiteboard/tb1/resources=src/org/osgi/test/cases/http/whiteboard/tb1/resources

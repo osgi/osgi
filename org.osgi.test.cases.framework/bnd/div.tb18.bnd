@@ -20,7 +20,7 @@ Bundle-NativeCode: \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86, \
  macosx_x86-64/libNative.jnilib; osname="mac os x"; processor=x86-64, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc
-Include-Resource = resources/div.tb2
+-includeresource = resources/div.tb2
 -resourceonly:                           true
 
 

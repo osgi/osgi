@@ -10,13 +10,13 @@ Bundle-Category: osgi,test
 
 Export-Package 					= ${p}.common;version=1.0.0
 	
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.*
 	
 Bundle-Category: osgi,test
 
-Include-Resource					= \
+-includeresource					= \
 	tb_exporter.jar=tb_exporter.jar, \
 	tb_importer.jar=tb_importer.jar, \
 	tb_reader.jar=tb_reader.jar, \

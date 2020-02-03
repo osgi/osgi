@@ -4,10 +4,10 @@
 Export-Package: org.osgi.test.support.step;-noimport:=true;-split-package:=first, \
  ${p}.step.*;-noimport:=true
 
-Conditional-Package: org.osgi.test.support.*, \
+-conditionalpackage: org.osgi.test.support.*, \
 	org.osgi.test.cases.dal.step.*
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.*
 
 Test-Cases		= \

@@ -2,9 +2,9 @@ Bundle-Version: 4.2.0
 
 Bundle-SymbolicName: $(p).tb12
 
-Private-Package	: $(p).tb12
+-privatepackage	: $(p).tb12
 
-Include-Resource = {OSGI-INF/permissions.perm = perms/tb12.perm}
+-includeresource = {OSGI-INF/permissions.perm = perms/tb12.perm}
 
 Import-Package = \
 	junit.framework,\

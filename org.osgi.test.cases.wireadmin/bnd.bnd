@@ -3,15 +3,15 @@
 
 Bundle-Description: Test Bundle for WireAdmin Service tests
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.wireadmin
 
-Include-Resource				= \
+-includeresource				= \
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar, \

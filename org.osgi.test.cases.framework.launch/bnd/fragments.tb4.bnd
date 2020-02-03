@@ -2,7 +2,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.fragments.tb4
 Bundle-SymbolicName: ${p}.fragments.tb4
 Bundle-Version: 1.0
-Private-Package: ${p}.fragments.tb4
+-privatepackage: ${p}.fragments.tb4
 Fragment-Host: ${p}.fragments.tb20; extension:=framework
 Bundle-Description: This is not an extension bundle. It's used in the \
  test that checks if the extension directive is ignored when the \

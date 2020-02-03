@@ -2,4 +2,4 @@ Bundle-Version: 1.0
 Bundle-Activator: $(p).tb2.HttpWhiteboardTestBundle2
 Bundle-Description: Test Bundle for Http Whiteboard ServletContextHelper Tests
 
-Private-Package	: $(p).tb2.*
+-privatepackage	: $(p).tb2.*

@@ -2,7 +2,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.extensions.tb1
 Bundle-SymbolicName: ${p}.extensions.tb1
 Bundle-Version: 1.0
-Private-Package: ${p}.extensions.tb1
+-privatepackage: ${p}.extensions.tb1
 Fragment-Host: system.bundle
 Bundle-Description: This is a framework extension bundle with activator
 ExtensionBundle-Activator: ${p}.extensions.tb1.Activator

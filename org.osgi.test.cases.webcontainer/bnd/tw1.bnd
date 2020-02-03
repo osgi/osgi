@@ -1,7 +1,7 @@
 # We don't want bnd to put the source code in the jar
 -sources=false
 
-Private-Package: ${p}.tw1.*
+-privatepackage: ${p}.tw1.*
 -wab: resources/tw1
 -resourceonly=true
 -removeheaders: !Manifest-Version, *

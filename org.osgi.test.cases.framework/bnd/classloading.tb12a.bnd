@@ -2,4 +2,4 @@
 Bundle-Name: 							 ${p}.classloading.tb12a
 Bundle-SymbolicName: 					 ${p}.classloading.tb12a
 Bundle-Version: 						 1
-Private-Package:                         ${p}.classloading.tb12a
+-privatepackage:                         ${p}.classloading.tb12a

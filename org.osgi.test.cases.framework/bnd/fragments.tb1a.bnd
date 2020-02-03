@@ -3,7 +3,7 @@ Bundle-Name: ${p}.fragments.tb1a
 Bundle-SymbolicName: ${p}.fragments.tb1a
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb1a.Activator
-Private-Package: ${p}.fragments.tb1a
+-privatepackage: ${p}.fragments.tb1a
 
-Include-Resource: \
+-includeresource: \
 	resources/resource.txt = resources/fragments.tb1a/resource.txt

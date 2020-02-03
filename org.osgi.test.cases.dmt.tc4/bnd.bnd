@@ -2,9 +2,9 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Description: Dmt Test Case 004
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						= ${p}.*	
-Include-Resource: tb1.jar=resources/DMTTest_Bundles-1.0.0.jar
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						= ${p}.*	
+-includeresource: tb1.jar=resources/DMTTest_Bundles-1.0.0.jar
 
 Test-Cases							= ${testcases}
 

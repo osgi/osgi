@@ -2,7 +2,7 @@
 Bundle-Name:                             ${p}.classloading.tb9b
 Bundle-SymbolicName:                     ${p}.classloading.tb9b
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb9b, \
+-privatepackage:                         ${p}.classloading.tb9b, \
                  java.lang;-split-package:=first
 
 Import-Package: resources

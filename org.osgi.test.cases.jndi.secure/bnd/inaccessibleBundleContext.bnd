@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.inaccessibleBundleContext
 Bundle-Version:                          4.2.0.${project.build}
 Bundle-Activator:						 ${p}.inaccessibleBundleContext.InaccessibleBundleContextActivator
-Private-Package =						 ${p}.inaccessibleBundleContext
+-privatepackage =						 ${p}.inaccessibleBundleContext
 
-Include-Resource = \
+-includeresource = \
 	OSGI-INF/permissions.perm = perms/inaccessibleBundleContextPerms.perm

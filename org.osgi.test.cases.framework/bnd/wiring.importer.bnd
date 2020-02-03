@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.importer
 Bundle-Version: 1.0
 Import-Package: root.B, root.B.a, root.B.b
 
-Include-Resource: resources/wiring/local/
+-includeresource: resources/wiring/local/

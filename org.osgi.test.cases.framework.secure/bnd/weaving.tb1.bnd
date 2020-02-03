@@ -1,9 +1,9 @@
 Bundle-Name:                             ${p}.weaving.tb1
 Bundle-SymbolicName:                     ${p}.weaving.tb1
 Bundle-Version:                          1.0.0
-Private-Package:                         ${p}.weaving.tb.weaver
+-privatepackage:                         ${p}.weaving.tb.weaver
 Bundle-Activator:                        ${p}.weaving.tb.weaver.Activator
 
 Import-Package: ${p}.weaving.tb.woven,*
 
-Include-Resource =	{OSGI-INF/permissions.perm=perms/weaving.tb1.perm}
+-includeresource =	{OSGI-INF/permissions.perm=perms/weaving.tb1.perm}

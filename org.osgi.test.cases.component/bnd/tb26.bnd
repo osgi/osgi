@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb26.*
+-privatepackage: ${p}.tb26.*
 Service-Component: org/osgi/test/cases/component/tb26/componentpropertytypes.xml

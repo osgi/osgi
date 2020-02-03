@@ -7,7 +7,7 @@ Bundle-Name: Resource Monitoring Utils
 
 Export-Package: ${p}
 
-Private-Package: ${p}.*
+-privatepackage: ${p}.*
 
 -buildpath:  \
 	osgi.core;version=4.3.1,\

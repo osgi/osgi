@@ -4,5 +4,5 @@ Bundle-SymbolicName: ${p}.classloading.tb14d
 Bundle-Version: 1
 Bundle-Activator: ${p}.classloading.tb14a.Activator
 Import-Package: org.osgi.framework, .
-Private-Package:                         ${p}.classloading.tb14a
+-privatepackage:                         ${p}.classloading.tb14a
 -fixupmessages.package: Invalid package name: '.'

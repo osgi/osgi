@@ -1,5 +1,5 @@
 Bundle-Name:                             ${p}
 Bundle-Version:                          1.0
-Private-Package:                          ${p}.spi
+-privatepackage:                          ${p}.spi
 
 Export-Package: ${p}.spi

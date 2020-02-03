@@ -8,4 +8,4 @@ Bundle-ContactAddress:	info@mail.osgi.org
 Require-Bundle:			${p}.tb1.jar
 Bundle-Category:		osgi, test
 
-Private-Package =		${p}.tb8
+-privatepackage =		${p}.tb8

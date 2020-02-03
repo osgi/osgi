@@ -5,7 +5,7 @@ javac.profile=compact3
 Bundle-Activator			= org.osgi.impl.service.jndi.Activator
 Bundle-Description			= OSGi JNDI Reference Implementation by Oracle Corporation.
 
-Private-Package 			= ${p}.*
+-privatepackage 			= ${p}.*
 Export-Package				= org.osgi.service.jndi; -split-package:=first; provide:=true
 
 -buildpath 					= \

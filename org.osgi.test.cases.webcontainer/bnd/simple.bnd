@@ -1,7 +1,7 @@
 # We don't want bnd to put the source code in the jar
 -sources=false
 
-Private-Package: ${p}.simple.*
+-privatepackage: ${p}.simple.*
 -resourceonly=true
 -removeheaders: !Manifest-Version, !Class-Path, *
 Class-Path: ../lib2/log.jar

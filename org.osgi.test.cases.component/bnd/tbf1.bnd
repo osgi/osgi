@@ -1,5 +1,5 @@
 Bundle-Version: 4
-Private-Package: ${p}.tbf1.*
+-privatepackage: ${p}.tbf1.*
 Export-Package: ${p}.tbf1;version="1.0"
 Service-Component: org/osgi/test/cases/component/tbf1/impl/components.xml
 

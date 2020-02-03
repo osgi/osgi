@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.reexport
 Bundle-Version: 1.0
 Export-Package: root.A, root.C
 
-Include-Resource: resources/wiring/reexport/
+-includeresource: resources/wiring/reexport/

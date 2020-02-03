@@ -7,7 +7,7 @@ Bundle-Copyright: ${copyright}
 
 Import-Package: *
 
-Include-Resource: {OSGI-INF/configurator/config5.json=configs/config5.json}
+-includeresource: {OSGI-INF/configurator/config5.json=configs/config5.json}
 Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
 
  

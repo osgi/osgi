@@ -2,4 +2,4 @@ Bundle-SymbolicName: ${p}.serviceregistry.tb1
 Bundle-Name: ${p}.serviceregistry.tb1
 Bundle-Activator: ${p}.serviceregistry.tb1.Activator
 
-Private-Package = ${p}.serviceregistry.tb1.*
+-privatepackage = ${p}.serviceregistry.tb1.*

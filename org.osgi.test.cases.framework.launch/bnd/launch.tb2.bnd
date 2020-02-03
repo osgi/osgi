@@ -22,7 +22,7 @@ Bundle-NativeCode: \
  libs/libnativecode.3; osname=MacOSx; processor=x86; selection-filter="(nativecodetest=3)", \
  libs/libnativecode.3; osname=MacOSx; processor=x86-64; selection-filter="(nativecodetest=3)"
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb2.*
 
-Include-Resource = libs=resources/launch.tb2
+-includeresource = libs=resources/launch.tb2

@@ -4,7 +4,7 @@ Bundle-Description: Filtered ServicePermissiont Test R4 - set all Permission.
 Bundle-Activator: ${p}.permissions.setPermission.SetPermissionActivator
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.setPermission
 	
 Import-Package: ${p}.permissions.util, org.osgi.framework, org.osgi.service.permissionadmin

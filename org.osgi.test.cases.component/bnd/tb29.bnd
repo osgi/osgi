@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb29.*
+-privatepackage: ${p}.tb29.*
 Service-Component: org/osgi/test/cases/component/tb29/loggercomponent.xml

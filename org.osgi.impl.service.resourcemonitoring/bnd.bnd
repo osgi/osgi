@@ -9,7 +9,7 @@ Export-Service				= org.osgi.service.resourcemonitoring.ResourceMonitoringServic
 
 Export-Package              = \
     org.osgi.service.resourcemonitoring.*; -split-package:=first; provide:=true
-Private-Package: ${p}.*
+-privatepackage: ${p}.*
 
 -buildpath:  \
 	osgi.core;version=4.3.1,\

@@ -2,5 +2,5 @@ Bundle-SymbolicName: ${p}.tb3
 Bundle-Name: ${p}.tb3
 Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= \
+-privatepackage						= \
 	javax.security.auth.x500

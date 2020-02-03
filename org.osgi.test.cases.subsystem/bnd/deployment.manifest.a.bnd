@@ -1,4 +1,4 @@
 Bundle-SymbolicName: deployment.manifest.a
 Import-Package: org.osgi.framework
 Bundle-Activator: org.osgi.test.cases.subsystem.deployment.manifest.a.Activator
-Private-Package: org.osgi.test.cases.subsystem.deployment.manifest.a
+-privatepackage: org.osgi.test.cases.subsystem.deployment.manifest.a

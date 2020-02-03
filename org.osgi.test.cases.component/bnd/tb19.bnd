@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb19.*
+-privatepackage: ${p}.tb19.*
 Service-Component: org/osgi/test/cases/component/tb19/scopedservice.xml

@@ -2,7 +2,7 @@
 Bundle-Name:                             ${p}.classloading.tb4g
 Bundle-SymbolicName:                     ${p}.classloading.tb4g
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb4g
+-privatepackage:                         ${p}.classloading.tb4g
 
 Bundle-Activator: ${p}.classloading.tb4g.Activator
 Import-Package: ${p}.classloading.exports.service;version="2.0.0", org.osgi.framework

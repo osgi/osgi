@@ -1,13 +1,13 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
+-conditionalpackage					= org.osgi.test.support.*
 	
 Export-Package						= ${p}.tbc.*;-split-package:=merge-first
 	
 Bundle-Category: osgi,test
 	
-Include-Resource					= \
+-includeresource					= \
 	www/simple.dp=res/simple.dp,\
 	www/rp_resource_install.dp=res/rp_resource_install.dp,\
 	www/rp_resource_update.dp=res/rp_resource_update.dp,\

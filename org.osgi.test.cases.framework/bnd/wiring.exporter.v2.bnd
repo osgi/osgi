@@ -5,4 +5,4 @@ Bundle-Version: 2.0
 Export-Package: root, root.A, root.A.a, root.A.b, root.B, root.B.a, root.B.b
 Import-Package: root.B
 Require-Bundle: ${p}.wiring.reexport; visibility:=reexport
-Include-Resource: resources/wiring/export/
+-includeresource: resources/wiring/export/

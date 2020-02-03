@@ -3,4 +3,4 @@ Bundle-Activator: ${p}.tb6.ProducerImpl
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb6
 
-Private-Package	: $(p).tb6
+-privatepackage	: $(p).tb6

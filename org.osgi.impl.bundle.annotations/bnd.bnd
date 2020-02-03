@@ -3,7 +3,7 @@
 
 Bundle-Description			= Annotations Test Bundle
 
-Private-Package 			= ${p}.*
+-privatepackage 			= ${p}.*
 
 -buildpath 					= \
 	org.osgi.annotation.bundle; version=latest, \

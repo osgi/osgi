@@ -3,8 +3,8 @@
 
 Bundle-Description = A test case for Converter.
 
-Conditional-Package = org.osgi.test.support.*
-Private-Package =  \
+-conditionalpackage = org.osgi.test.support.*
+-privatepackage =  \
     ${p}.junit
 Import-Package: ${-signaturetest}, *
 

@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}
 Bundle-Version:                          1.0.0
 
-Private-Package:                          ${p}.impl
+-privatepackage:                          ${p}.impl
 
 Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.registrar)"
         
@@ -12,6 +12,6 @@ Provide-Capability: osgi.serviceloader; \
  osgi.serviceloader="${p}.spi.ColorProvider"; \
  register:="${p}.impl.ColorProviderImpl"
 
-Include-Resource = \
+-includeresource = \
  {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
 

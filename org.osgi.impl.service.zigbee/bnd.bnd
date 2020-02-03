@@ -8,7 +8,7 @@ Bundle-Description			= The ZigBee bundle with Control Point stack
 Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
 
-Private-Package = ${p}.*
+-privatepackage = ${p}.*
 
 -buildpath: \
     com.icl.saxon;version=latest,\

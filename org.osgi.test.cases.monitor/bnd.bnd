@@ -3,14 +3,14 @@
 
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
-Conditional-Package					= org.osgi.test.support.*
+-conditionalpackage					= org.osgi.test.support.*
 Import-Package: ${-signaturetest}, *
 Export-Package						= \
     org.osgi.test.support       , \
     org.osgi.test.support.compatibility        , \
 	${p}.tbc.*
 
-Include-Resource					= \
+-includeresource					= \
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar, \

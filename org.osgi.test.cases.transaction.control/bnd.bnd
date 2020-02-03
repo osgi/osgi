@@ -3,8 +3,8 @@ javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.*
 
 

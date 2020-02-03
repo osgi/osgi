@@ -5,7 +5,7 @@
 -nomanifest: true
 -sources:								false
 -resourceonly:                           true
-Include-Resource:                        delay-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
+-includeresource:                        delay-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='delay-ref.ipa';extra='text/plain;charset=utf-8', \
    simple-prov.jar;literal=director:simple-prov.jar;extra='text/x-osgi-bundle-URL', \
    delay-prov.jar;literal=director:delay-prov.jar;extra='text/x-osgi-bundle-URL', \

@@ -2,5 +2,5 @@ Bundle-SymbolicName:                     ${p}.inner_component_static_factory_pro
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.injection, ${p}.services
 -resourceonly: true
-Include-Resource					= \
+-includeresource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/inner_component_static_factory_property_injection.xml

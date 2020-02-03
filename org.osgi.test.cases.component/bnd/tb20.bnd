@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb20.*
+-privatepackage: ${p}.tb20.*
 Service-Component: org/osgi/test/cases/component/tb20/scopedreference.xml

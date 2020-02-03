@@ -3,7 +3,7 @@ Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.DeviceDetectionTestDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${t}.*
+-privatepackage:                        ${t}.*
 Bundle-Description: A basic driver implementation
 
 #Manifest-Version: 1.0

@@ -1,5 +1,5 @@
 Bundle-Version: 4
 Bundle-Activator: $(p).tb3.MonitorableActivator
 
-Private-Package	: $(p).tb3
+-privatepackage	: $(p).tb3
 

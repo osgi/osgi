@@ -14,6 +14,6 @@ Provide-Capability: \
   double.list: List<  Double>= "1.001, 1.002, 1.003"; \
   string.list :List<String  >= "aString,bString,cString"; \
   string.list2:List="a\\"quote,a\\,comma, aSpace ,\\"start,\\,start,end\\",end\\,"
-Include-Resource = resources/resolver.tb1
+-includeresource = resources/resolver.tb1
 
 -sign: test

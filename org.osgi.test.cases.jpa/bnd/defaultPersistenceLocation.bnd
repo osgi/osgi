@@ -2,5 +2,5 @@ Bundle-Name:                             ${p}.defaultPersistenceLocation
 Bundle-Version:                          4.2.0.${project.build}
 Meta-Persistence: <<EMPTY>>
 
-Include-Resource = \
+-includeresource = \
 	META-INF/persistence.xml = resources/defaultPersistenceLocation/META-INF/persistence.xml

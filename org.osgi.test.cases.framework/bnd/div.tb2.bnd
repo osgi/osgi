@@ -19,9 +19,9 @@ Bundle-NativeCode: \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86, \
  macosx_x86-64/libNative.jnilib; osname="mac os x"; processor=x86-64, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc
-Include-Resource = resources/div.tb2
+-includeresource = resources/div.tb2
 # could not rename this package without rebuilding native so/dll
-Private-Package:                         org.osgi.test.cases.div.tb2
+-privatepackage:                         org.osgi.test.cases.div.tb2
 
 
 

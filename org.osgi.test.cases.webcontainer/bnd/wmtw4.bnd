@@ -7,7 +7,7 @@ Import-Package: javax.servlet;version="2.5",javax.servlet.http;version="2.5"
 # We don't want bnd to put the source code in the jar
 -sources=false
 
-Private-Package: ${p}.tw4.*
+-privatepackage: ${p}.tw4.*
 -wab: resources/tw4
 -resourceonly=true
 -removeheaders: !Manifest-Version, \

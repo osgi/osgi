@@ -2,7 +2,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.fragments.tb22
 Bundle-SymbolicName: ${p}.fragments.tb22
 Bundle-Version: 1.0
-Private-Package: ${p}.fragments.tb22
+-privatepackage: ${p}.fragments.tb22
 Fragment-Host: system.bundle; extension:=framework
 Bundle-Description: Bundle-Description: This is a framework extension bundle used in the \
  native code test. Framework extension bundles cannot have a native \

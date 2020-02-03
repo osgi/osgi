@@ -3,7 +3,7 @@ Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.BasicDevice
 Bundle-Version:                         4.2
-Private-Package:                        ${t}.*
+-privatepackage:                        ${t}.*
 Bundle-Description: basic device implementation
 
 #Manifest-Version: 1.0

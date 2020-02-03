@@ -2,5 +2,5 @@ Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb1
 Bundle-Activator: $(p).tb3.CustomXMLParserActivator
 
-Private-Package	: $(p).tb3
-Include-Resource = resources/tb3
+-privatepackage	: $(p).tb3
+-includeresource = resources/tb3

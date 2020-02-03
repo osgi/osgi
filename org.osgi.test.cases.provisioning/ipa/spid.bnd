@@ -5,5 +5,5 @@
 -nomanifest: true
 -sources:								false
 -resourceonly:                           true
-Include-Resource:                        spid.ipa;literal='true';extra='text/plain;charset=utf-8', \
+-includeresource:                        spid.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='spid.ipa';extra='text/plain;charset=utf-8'

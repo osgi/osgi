@@ -1,10 +1,10 @@
 Bundle-Name:                             ${p}.resolver.tb1
 Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.2.0
-Private-Package:                         ${p}.resolver.tb1
+-privatepackage:                         ${p}.resolver.tb1
 Require-Capability: \
  osgi.ee; filter:="(osgi.ee~=testosgiee)"
 
 Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
-Include-Resource: \
+-includeresource: \
 	/ = resources/resolver.tb1.v100/

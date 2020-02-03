@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.requirer
 Bundle-Version: 1.0
 Require-Bundle: ${p}.wiring.exporter
 
-Include-Resource: resources/wiring/local/
+-includeresource: resources/wiring/local/

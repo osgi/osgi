@@ -1,7 +1,7 @@
 Bundle-Version: 1.0.0.${project.build}
 Bundle-Activator: $(p).tb.Activator
 
-Private-Package	: $(p).tb
+-privatepackage	: $(p).tb
 Custom-Header: A custom header
 
-Include-Resource: {OSGI-INF/permissions.perm=perms/tb2.perm}
+-includeresource: {OSGI-INF/permissions.perm=perms/tb2.perm}

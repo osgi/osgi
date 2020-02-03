@@ -8,8 +8,8 @@ Bundle-Vendor					= Nokia
 
 Export-Package 					= javax.microedition.midlet, \
     org.osgi.application; -split-package:=first; provide:=true
-Private-Package					= ${p}
-Include-Resource				= TestIcon.gif
+-privatepackage					= ${p}
+-includeresource				= TestIcon.gif
 
 -buildpath						= \
 	osgi.core;					version=4.3.1, \

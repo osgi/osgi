@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.resolver.tb1
 Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.0.0
-Private-Package:                         ${p}.resolver.tb1
+-privatepackage:                         ${p}.resolver.tb1
 Require-Capability: \
  osgi.ee; filter:="(&(osgi.ee=JavaSE)(version>=1.5))",\
  osgi.ee; filter:="(&(osgi.ee=JavaSE)(version>=1.4))",\
@@ -12,5 +12,5 @@ Require-Capability: \
  osgi.ee; filter:="(&(osgi.ee=OSGi/Minimum)(version>=1.2))"
 
 Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
-Include-Resource: \
+-includeresource: \
 	/ = resources/resolver.tb1.v100/

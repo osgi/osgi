@@ -1,6 +1,6 @@
 -sources:								false
 -resourceonly:                           true
-Include-Resource: \
+-includeresource: \
  x-type-unicode.ipa;literal='true', \
  load-status;literal='x-type-unicode.ipa', \
  unicode.string;literal='v\u00D0\u00D9v'

@@ -1,5 +1,5 @@
 Bundle-Name:                             ${p}.tb8
 Bundle-Version:                          1.0
-Private-Package:                         ${p}.tb8.*
+-privatepackage:                         ${p}.tb8.*
 Export-Package:                          ${p}.common;-noimport:=true
 Bundle-Activator: ${p}.tb8.Activator

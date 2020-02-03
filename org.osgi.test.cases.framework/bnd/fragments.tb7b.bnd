@@ -2,6 +2,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.fragments.tb7b
 Bundle-SymbolicName: ${p}.fragments.tb7b
 Bundle-Version: 1.0
-Private-Package: ${p}.fragments.tb7b
+-privatepackage: ${p}.fragments.tb7b
 Fragment-Host: ${p}.fragments.tb7a
 Import-Package: ${p}.fragments.tb7c;version="2.0",*

@@ -3,7 +3,7 @@
 
 Bundle-Activator				= ${p}.Activator
 
-Private-Package 					= ${p}.*
+-privatepackage 					= ${p}.*
 Export-Package					= org.osgi.service.application; -split-package:=first; provide:=true
 
 -buildpath						= \

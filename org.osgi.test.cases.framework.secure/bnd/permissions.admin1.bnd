@@ -5,9 +5,9 @@ Bundle-Activator: ${p}.permissions.admin1.Activator
 Bundle-Version: 1.0
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.admin1	
-Include-Resource: \
+-includeresource: \
 	{OSGI-INF/permissions.perm=perms/permissions.admin1.perm}	
 	
 -sign: test

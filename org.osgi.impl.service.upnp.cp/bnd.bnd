@@ -9,7 +9,7 @@ Export-Package				= \
 	org.osgi.service.upnp; -split-package:=first; provide:=true, \
   	org.osgi.impl.service.upnp.cp.util;version=1.0;-split-package:=first
 
-Private-Package 			= ${p}.*;-split-package:=first
+-privatepackage 			= ${p}.*;-split-package:=first
 
 -buildpath = \
 	org.osgi.service.upnp; 			version=project, \

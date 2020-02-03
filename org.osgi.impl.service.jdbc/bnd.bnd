@@ -5,7 +5,7 @@ javac.profile=
 Bundle-Activator: 		${p}.Activator
 Export-Package: 		org.osgi.service.jdbc; -split-package:=first; provide:=true
 #Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
-Private-Package: 		${p}.*
+-privatepackage: 		${p}.*
 
 Bundle-Description: 	OSGi JDBC Service Reference Implementation by Oracle Corporation.
 Bundle-Category: 		osgi

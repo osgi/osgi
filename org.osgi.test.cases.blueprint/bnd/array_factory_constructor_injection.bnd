@@ -2,6 +2,6 @@ Bundle-SymbolicName:                     ${p}.array_factory_constructor_injectio
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.injection, ${p}.services
 -resourceonly: true
-Include-Resource					= \
+-includeresource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/array_factory_constructor_injection.xml
 

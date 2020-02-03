@@ -2,7 +2,7 @@ Bundle-Description: test-bundle for PackageStateMBeanTestCase
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb2.Activator
 Export-Package: 		${p}.tb2.api;version="999" 
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb2.*
 
 

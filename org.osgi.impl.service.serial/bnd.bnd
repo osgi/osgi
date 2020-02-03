@@ -4,7 +4,7 @@
 Bundle-Activator			= ${p}.Activator
 Bundle-Description			= Serial Device Service for a Reference Implementation.
 
-Private-Package 			= ${p}.*
+-privatepackage 			= ${p}.*
 Export-Package 				= \
     org.osgi.service.serial.*; -split-package:=first; provide:=true
 

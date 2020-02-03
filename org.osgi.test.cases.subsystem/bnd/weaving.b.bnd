@@ -1,3 +1,3 @@
 Bundle-SymbolicName: weaving.b
 Bundle-Activator: ${p}.weaving.b.Activator
-Private-Package: ${p}.weaving.b
+-privatepackage: ${p}.weaving.b

@@ -2,7 +2,7 @@ javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Private-Package 				= ${p}.*
+-privatepackage 				= ${p}.*
 Export-Package					= org.osgi.service.rest.client; -split-package:=first
 Bundle-Activator: org.osgi.impl.service.rest.client.Activator
 Provide-Capability: osgi.service; \

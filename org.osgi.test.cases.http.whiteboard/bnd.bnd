@@ -1,13 +1,13 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package = org.osgi.test.support.*,\
+-conditionalpackage = org.osgi.test.support.*,\
  org.osgi.util.converter.*,\
  org.osgi.util.function.*,\
  org.apache.http.*,\
  org.apache.commons.codec.*,\
  org.apache.commons.logging.*
-Private-Package						=  \
+-privatepackage						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest},\
  org.apache.avalon.framework.logger;resolution:=optional,\

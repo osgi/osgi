@@ -2,4 +2,4 @@ Bundle-Name:                             ${p}.resolver.tb5
 Bundle-SymbolicName:                     ${p}.resolver.tb5
 Bundle-Version:                          1.0.0
 Require-Capability:                      test; filter:="(test=aName)"
-Include-Resource = resources/resolver.tb5
+-includeresource = resources/resolver.tb5

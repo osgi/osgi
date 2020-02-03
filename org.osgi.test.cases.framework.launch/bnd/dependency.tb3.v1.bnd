@@ -3,7 +3,7 @@ Bundle-Name: ${p}.dependency.tb1
 Bundle-SymbolicName: ${p}.dependency.tb3
 ExtensionBundle-Activator: ${p}.dependency.tb3.Activator
 Bundle-Version: 1.0
-Private-Package: ${p}.dependency.tb3
+-privatepackage: ${p}.dependency.tb3
 Fragment-Host: system.bundle
 Bundle-Description: This is a framework extension with some capabilities
 Require-Capability: extension.test; filter:="(extension.test=tb2)"

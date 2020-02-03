@@ -6,4 +6,4 @@ Export-Package: root, root.A, root.A.a, root.A.b, root.B, root.B.a, root.B.b
 Import-Package: root.B
 Require-Bundle: ${p}.wiring.reexport; visibility:=reexport
 Bundle-ClassPath: rootStuff
-Include-Resource: {rootStuff/ = resources/wiring/export/}
+-includeresource: {rootStuff/ = resources/wiring/export/}

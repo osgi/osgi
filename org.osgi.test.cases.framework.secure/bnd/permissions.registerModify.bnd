@@ -4,6 +4,6 @@ Bundle-Description: Filtered ServicePermissiont Test R4 - Service properties mod
 Bundle-Activator: ${p}.permissions.registerModify.RegisterModifyActivator
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.registerModify
 	

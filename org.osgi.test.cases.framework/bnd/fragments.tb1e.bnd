@@ -5,4 +5,4 @@ Bundle-Version: 1.0
 Bundle-ManifestVersion: 2
 Fragment-Host: ${p}.fragments.tb1a
 Import-Package: org.osgi.framework, org.osgi.service.packageadmin
-Private-Package: ${p}.fragments.tb1e
+-privatepackage: ${p}.fragments.tb1e

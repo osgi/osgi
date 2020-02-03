@@ -3,7 +3,7 @@ Bundle-SymbolicName: ${p}.div.tb25.unresolved
 Bundle-Version: 4.3
 Bundle-ClassPath: div.tb25a.jar, div.tb25b.jar
 Import-Package: can.not.resolve
-Include-Resource: \
+-includeresource: \
 	resources/all.txt = resources/div.tb25/root.all.txt, \
 	resources/root.txt = resources/div.tb25/root.txt, \
 	div.tb25a.jar, \

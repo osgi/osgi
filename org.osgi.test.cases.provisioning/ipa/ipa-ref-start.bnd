@@ -5,7 +5,7 @@
 -nomanifest: true
 -sources:								false
 -resourceonly:                           true
-Include-Resource:                        ipa-ref-start.ipa;literal='true';extra='text/plain;charset=utf-8', \
+-includeresource:                        ipa-ref-start.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='ipa-ref-start.ipa';extra='text/plain;charset=utf-8', \
    local-prov.jar=local-prov.jar;extra='application/x-osgi-bundle', \
    provisioning.reference;literal='director:simple.ipa';extra='text/plain;charset=utf-8', \

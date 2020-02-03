@@ -2,4 +2,4 @@
 Bundle-Name: 							 ${p}.classloading.tb11e
 Bundle-SymbolicName: 					 ${p}.classloading.tb11b;singleton:=false
 Bundle-Version: 						 4
-Private-Package:                         ${p}.classloading.tb11e
+-privatepackage:                         ${p}.classloading.tb11e

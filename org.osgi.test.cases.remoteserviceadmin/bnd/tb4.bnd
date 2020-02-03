@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.tb4
 Bundle-Version:                          1.0
-Conditional-Package					= org.osgi.test.support.*
-Private-Package:                         ${p}.tb2.*
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage:                         ${p}.tb2.*
 Export-Package:                          ${p}.common;version="2.0.0";-noimport:=true
 Bundle-Activator: 						 ${p}.tb2.Activator
 RSA-Version:                             2.0.0

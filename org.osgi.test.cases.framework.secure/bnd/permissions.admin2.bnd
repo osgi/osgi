@@ -4,9 +4,9 @@ Bundle-Description: AdminPermission Test Bundle 2
 Bundle-Version: 1.0
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.admin2
-Include-Resource: \
+-includeresource: \
 	{OSGI-INF/permissions.perm=perms/permissions.admin2.perm}	
 	
 -sign: test

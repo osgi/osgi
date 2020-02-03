@@ -5,6 +5,6 @@ Bundle-Vendor: Gatespace AB
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.div.tb7.TestEERequirements
 Bundle-RequiredExecutionEnvironment: div/tb7a,div/tb7b
-Private-Package: ${p}.div.tb7
+-privatepackage: ${p}.div.tb7
 
 -fixupmessages.bree: Invalid value for Bundle-RequiredExecutionEnvironment

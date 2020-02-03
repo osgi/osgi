@@ -1,5 +1,5 @@
 Bundle-Version: 1
-Private-Package: ${p}.tb5.*
+-privatepackage: ${p}.tb5.*
 Service-Component: org/osgi/test/cases/component/tb5/optional100.xml, \
   org/osgi/test/cases/component/tb5/optional110.xml, \
   org/osgi/test/cases/component/tb5/require100.xml, \

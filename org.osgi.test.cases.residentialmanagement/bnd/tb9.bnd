@@ -7,8 +7,8 @@ Bundle-DocURL:			http://www.osgi.org/
 Bundle-ContactAddress:	info@mail.osgi.org
 Bundle-Category:		osgi, test
 
-Private-Package: 		${p}.tb9
-Include-Resource: \
+-privatepackage: 		${p}.tb9
+-includeresource: \
  		TestDir/TestFile1.txt = resources/TestFile1.txt,\
  		TestDir/TestFile2.txt = resources/TestFile2.txt,\
  		TestDir/TestFile3.txt = resources/TestFile3.txt

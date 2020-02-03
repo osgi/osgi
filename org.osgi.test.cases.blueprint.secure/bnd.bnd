@@ -9,9 +9,9 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 
 
-Conditional-Package					= org.osgi.test.support.*
+-conditionalpackage					= org.osgi.test.support.*
 
-Include-Resource					= \
+-includeresource					= \
 	www/blueprint_denied.jar=blueprint_denied.jar , \
 	www/bean_constructor.jar=bean_constructor.jar , \
 	www/bean_instance_factory.jar=bean_instance_factory.jar , \

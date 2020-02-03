@@ -20,6 +20,6 @@ Bundle-NativeCode: \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; osversion="[0,10000]", \
  macosx_x86-64/libNative.jnilib; osname="mac os x"; processor=x86-64; osversion="[0,10000]", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; osversion="[0,10000]"
-Include-Resource = resources/div.tb2
-Private-Package:                         ${p}.div.tb22, org.osgi.test.cases.div.tb2
+-includeresource = resources/div.tb2
+-privatepackage:                         ${p}.div.tb22, org.osgi.test.cases.div.tb2
 

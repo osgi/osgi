@@ -7,5 +7,5 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Import-Package: *
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb1.*

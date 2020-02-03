@@ -2,4 +2,4 @@ Bundle-SymbolicName: ${p}.tb2
 Bundle-Version: 1.0.0
 Bundle-Description: Test Bundle Rest Service
 Bundle-Activator: $(p).tb2.TBActivator
-Private-Package: ${p}.tb2
+-privatepackage: ${p}.tb2

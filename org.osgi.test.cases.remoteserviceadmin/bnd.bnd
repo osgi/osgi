@@ -6,14 +6,14 @@ Bundle-Description					: Remote Service Admin test cases.
 Export-Package 					= ${p}.common;version="1.0.0";-noimport:=true,\
  ${p}.common;version="2.0.0";-noimport:=true
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.*
 Import-Package: ${-signaturetest}, *
 	
 Bundle-Category: osgi,test
 
-Include-Resource					= \
+-includeresource					= \
 	tb1.jar=tb1.jar, \
 	tb2.jar=tb2.jar, \
 	tb3.jar=tb3.jar, \

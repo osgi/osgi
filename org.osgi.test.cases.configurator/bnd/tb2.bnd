@@ -7,7 +7,7 @@ Bundle-Copyright: ${copyright}
 
 Import-Package: *
 
-Include-Resource: {OSGI-INF/configurator/config2.json=configs/config2.json}, \
+-includeresource: {OSGI-INF/configurator/config2.json=configs/config2.json}, \
     {OSGI-INF/configurator/config3.json=configs/config3.json}, \
     {OSGI-INF/configurator/config4.json=configs/config4.json}, \
     {OSGI-INF/files/binary1.bin=configs/binary1.bin}, \

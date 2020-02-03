@@ -3,7 +3,7 @@ Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.NotMatchingDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${t}.*
+-privatepackage:                        ${t}.*
 Bundle-Description: A driver that will return MATCH_NONE and should be rejected
 
 #Manifest-Version: 1.0

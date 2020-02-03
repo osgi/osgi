@@ -5,5 +5,5 @@ Bundle-Version: 1
 Bundle-Activator: ${p}.classloading.tb16c.Activator
 Export-Package: test.package.resources;-noimport:=true
 Require-Bundle: ${p}.classloading.tb16a
-Private-Package:                         ${p}.classloading.tb16c
-Include-Resource = test/package/resources/resource.txt=resources/classloading.tb16c/resource.txt
+-privatepackage:                         ${p}.classloading.tb16c
+-includeresource = test/package/resources/resource.txt=resources/classloading.tb16c/resource.txt

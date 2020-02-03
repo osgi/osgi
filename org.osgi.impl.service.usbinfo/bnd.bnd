@@ -4,7 +4,7 @@
 Bundle-Activator			= ${p}.Activator
 Bundle-Description			= USB Information Base Driver for a Reference Implementation.
 
-Private-Package 			= ${p}.*
+-privatepackage 			= ${p}.*
 Export-Package				= \
     org.osgi.service.usbinfo.*; -split-package:=first; provide:=true
 

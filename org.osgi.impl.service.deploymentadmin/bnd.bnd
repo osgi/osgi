@@ -5,7 +5,7 @@ javac.profile=compact2
 Bundle-Vendor					= Nokia
 Bundle-Activator				= $(p).Activator
 
-Private-Package				= \
+-privatepackage				= \
 	${p}, \
 	${p}.plugin, \
  	org.osgi.impl.service.dwnl, \

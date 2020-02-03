@@ -12,7 +12,7 @@ Import-Service					= \
 	org.osgi.service.event.EventAdmin, \
 	org.osgi.service.dmt.DmtAdmin
 
-Private-Package 				= ${p}.*
+-privatepackage 				= ${p}.*
 Export-Package					= org.osgi.service.monitor; -split-package:=first; provide:=true
 
 -buildpath						= \

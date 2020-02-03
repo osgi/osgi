@@ -5,6 +5,6 @@ MIDlet-Vendor: Cesar
 MIDlet-1: TestApplication,/TestIcon.gif,org.osgi.test.cases.application.tb1.TestApplication
 MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
-Private-Package	: ${p}.tb1
-Include-Resource = resources/tb1
+-privatepackage	: ${p}.tb1
+-includeresource = resources/tb1
 -sign: test

@@ -2,4 +2,4 @@ Bundle-Name: ${p}.div.tb24c
 Bundle-SymbolicName: ${p}.div.tb24c
 Bundle-Version: 4
 Import-Package: ${p}.div.tb24b;version="1.0.0",*
-Private-Package: ${p}.div.tb24c
+-privatepackage: ${p}.div.tb24c

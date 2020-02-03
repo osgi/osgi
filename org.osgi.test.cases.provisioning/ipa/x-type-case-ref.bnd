@@ -4,7 +4,7 @@
 #
 -sources:								false
 -resourceonly:                          true
-Include-Resource: \
+-includeresource: \
  x-type-case-ref.ipa;literal='true', \
  load-status;literal='x-type-case-ref.ipa', \
  case-ref-prov.jar;literal=director:case-ref-prov.jar, \

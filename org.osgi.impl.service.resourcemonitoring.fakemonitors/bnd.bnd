@@ -5,7 +5,7 @@ Bundle-Vendor				= Orange
 Bundle-Activator: org.osgi.impl.service.resourcemonitoring.fakemonitors.Activator
 Bundle-Description: Fake Monitors
 
-Private-Package: ${p}.*
+-privatepackage: ${p}.*
 
 -buildpath:  \
 	osgi.core;version=4.3.1,\

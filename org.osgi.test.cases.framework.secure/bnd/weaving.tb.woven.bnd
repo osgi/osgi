@@ -5,4 +5,4 @@ Bundle-Activator:                        ${p}.weaving.tb.woven.Activator
 
 Export-Package: ${p}.weaving.tb.woven
 
-Include-Resource =	{OSGI-INF/permissions.perm=perms/weaving.tb.woven.perm}
+-includeresource =	{OSGI-INF/permissions.perm=perms/weaving.tb.woven.perm}

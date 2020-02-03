@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.wiring.tb4
 Bundle-SymbolicName:                     ${p}.wiring.tb4
 Bundle-Version:                          4
-Private-Package:                         ${p}.wiring.tb4
+-privatepackage:                         ${p}.wiring.tb4
 Bundle-Activator:                        ${p}.wiring.tb4.Activator
 
-Include-Resource: {OSGI-INF/permissions.perm=perms/wiring.none.perm}
+-includeresource: {OSGI-INF/permissions.perm=perms/wiring.none.perm}

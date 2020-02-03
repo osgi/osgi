@@ -9,7 +9,7 @@ Export-Service					= org.osgi.service.url.URLStreamHandlerService
 
 
 Export-Package 					= org.osgi.util.xml
-Private-Package					= ${p}.*
+-privatepackage					= ${p}.*
 
 -buildpath						= \
 	osgi.core;					version=4.3.1, \

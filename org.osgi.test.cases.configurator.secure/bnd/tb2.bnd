@@ -7,7 +7,7 @@ Bundle-Copyright: ${copyright}
 
 Import-Package: *
 
-Include-Resource: {OSGI-INF/configurator/config1.json=configs/config1.json},{OSGI-INF/permissions.perm=perms/tb2.perm}
+-includeresource: {OSGI-INF/configurator/config1.json=configs/config1.json},{OSGI-INF/permissions.perm=perms/tb2.perm}
 Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
 
  

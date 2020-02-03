@@ -3,7 +3,7 @@
 #
 -sources:								false
 -resourceonly:                           true
-Include-Resource: \
+-includeresource: \
  x-type-ipa-ref.ipa;literal='true', \
  load-status;literal='x-type-ipa-ref.ipa', \
  provisioning.reference;literal='director:simple.ipa'

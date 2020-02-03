@@ -1,6 +1,6 @@
 Bundle-Version: 4.1.0.${project.build}
 Bundle-Activator: $(p).tb3.Activator
 
-Private-Package	: $(p).tb3
+-privatepackage	: $(p).tb3
 
 

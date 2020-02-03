@@ -2,10 +2,10 @@ javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Private-Package 				= ${p}
+-privatepackage 				= ${p}
 Service-Component				= OSGI-INF/services.xml
 Bundle-Vendor					= Nokia
-Include-Resource				= OSGI-INF=src/OSGI-INF
+-includeresource				= OSGI-INF=src/OSGI-INF
 
 -buildpath						= \
 	osgi.core;					version=4.3.1, \

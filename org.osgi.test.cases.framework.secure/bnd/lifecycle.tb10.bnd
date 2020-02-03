@@ -8,6 +8,6 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.lifecycle.tb10.*
-Include-Resource =	{OSGI-INF/permissions.perm=perms/lifecycle.tb10.perm}
+-includeresource =	{OSGI-INF/permissions.perm=perms/lifecycle.tb10.perm}

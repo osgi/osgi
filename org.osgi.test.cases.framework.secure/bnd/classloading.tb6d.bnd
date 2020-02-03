@@ -2,6 +2,6 @@
 Bundle-Name:                             ${p}.classloading.tb6d
 Bundle-SymbolicName:                     ${p}.classloading.tb6d
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb6d
+-privatepackage:                         ${p}.classloading.tb6d
 Bundle-Activator: ${p}.classloading.tb6d.Activator
-Include-Resource: {OSGI-INF/permissions.perm=perms/classloading.tb6d.perm}
+-includeresource: {OSGI-INF/permissions.perm=perms/classloading.tb6d.perm}

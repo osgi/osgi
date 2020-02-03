@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}
 Bundle-Version:                          1.0.0
 
-Private-Package:                          ${p}.impl
+-privatepackage:                          ${p}.impl
 
 
 Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.registrar)"
@@ -13,6 +13,6 @@ Provide-Capability:\
    uses:="${p}.spi"; provider="CT"; .hint="by TIBCO"; type="two"; register:="org.osgi.test.cases.serviceloader.impl.ColorProviderImpl2"
  
 
-Include-Resource = \
+-includeresource = \
  {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
 

@@ -1,6 +1,6 @@
 Bundle-Name:                             ${p}.serviceclient
 Bundle-Version:                          1.0.0
-Private-Package:                          ${p}.serviceclient
+-privatepackage:                          ${p}.serviceclient
 
 Bundle-Activator: ${p}.serviceclient.ColorProviderClient
 

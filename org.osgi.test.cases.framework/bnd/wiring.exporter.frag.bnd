@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.exporter.frag
 Bundle-Version: 1.0
 Fragment-Host: ${p}.wiring.exporter; bundle-version="[1.0,2.0)"
 
-Include-Resource: resources/wiring/fragment/
+-includeresource: resources/wiring/fragment/

@@ -7,7 +7,7 @@ Web-ContextPath: /wmtw1
 Import-Package: javax.servlet;version="2.5",javax.servlet.http;version="2.5",javax.servlet.jsp;version="2.1",javax.servlet.jsp.tagext;version="2.1"
 
 -sources=false
-Private-Package: ${p}.tw1.*
+-privatepackage: ${p}.tw1.*
 -wab: resources/tw1
 -resourceonly=true
 -removeheaders: !Manifest-Version, \

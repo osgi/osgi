@@ -2,5 +2,5 @@ Bundle-SymbolicName: ${p}.tb3
 Bundle-Version: 1.0.0
 Bundle-Description: Test Bundle Rest Service
 Bundle-Activator: $(p).tb3.TBActivator
-Private-Package: ${p}.tb3
+-privatepackage: ${p}.tb3
 Bundle-ActivationPolicy: lazy

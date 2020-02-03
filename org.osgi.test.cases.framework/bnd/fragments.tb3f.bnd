@@ -3,4 +3,4 @@ Bundle-Name: ${p}.fragments.tb3f
 Bundle-SymbolicName: ${p}.fragments.tb3a;fragment-attachment:="resolve-time"
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb3f.Activator
-Private-Package: ${p}.fragments.tb3f
+-privatepackage: ${p}.fragments.tb3f

@@ -1,5 +1,5 @@
 Bundle-Name:                             ${p}.tb1
 Bundle-Version:                          1.0
-Private-Package:                         ${p}.tb1.*
+-privatepackage:                         ${p}.tb1.*
 Export-Package:                          ${p}.common;-noimport:=true
 Bundle-Activator: 											${p}.tb1.Activator

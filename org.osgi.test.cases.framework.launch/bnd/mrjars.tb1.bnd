@@ -2,5 +2,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.mrjars.tb1
 Bundle-SymbolicName: ${p}.mrjars.tb1
 Bundle-Version: 1.0
-Private-Package						= \
+-privatepackage						= \
 	${p}.mrjars.*

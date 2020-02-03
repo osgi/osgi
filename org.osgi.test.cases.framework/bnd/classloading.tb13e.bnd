@@ -6,4 +6,4 @@ Export-Package: ${p}.classloading.exports.service;uses:="resources";-noimport:=t
 	${p}.classloading.exports.listener;uses:="${p}.classloading.exports.service";-noimport:=true, \
 	${p}.classloading.exports.security;uses:="${p}.classloading.exports.listener";-noimport:=true
 Import-Package: resources;bundle-symbolic-name="${p}.classloading.tb8b",org.osgi.framework
-Private-Package:                         ${p}.classloading.tb13e
+-privatepackage:                         ${p}.classloading.tb13e

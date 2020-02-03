@@ -3,14 +3,14 @@
 
 Bundle-Description: Test Bundle for subsystem tests
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.junit.*, \
 	${p}.resource, \
 	${p}.util
 Import-Package: ${-signaturetest}, *
 
-Include-Resource					= \
+-includeresource					= \
 	no.deps.a@1.0.0.jar, \
 	no.deps.a@2.0.0.jar, \
 	no.deps.b@1.0.0.jar, \

@@ -3,9 +3,9 @@
 
 Bundle-Activator				= ${p}.Activator
 
-Private-Package 				= ${p}.*
+-privatepackage 				= ${p}.*
 
-Conditional-Package				= net.sf.cglib.*
+-conditionalpackage				= net.sf.cglib.*
 
 Import-Package					= !net.sf.cglib.asm.util, *
 
@@ -14,7 +14,7 @@ Export-Package					= org.osgi.service.async; -split-package:=first; provide:=tru
 								  org.osgi.util.promise; -split-package:=first,\
 								  org.osgi.util.function; -split-package:=first
 
-Include-Resource: OSGI-INF/=permissions
+-includeresource: OSGI-INF/=permissions
 
 Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.async.Async";uses:="org.osgi.service.async",\
 	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async,org.osgi.service.async.delegate"

@@ -4,7 +4,7 @@
 Bundle-Activator				= ${p}.Activator
 Bundle-Description				= OSGi ConnectionService 1.0 Reference Implementation by ProSyst AG.
 
-Private-Package 				= ${p}.*
+-privatepackage 				= ${p}.*
 Export-Package					= org.osgi.service.io; -split-package:=first; provide:=true
 
 -buildpath						= \

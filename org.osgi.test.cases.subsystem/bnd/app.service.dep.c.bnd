@@ -2,4 +2,4 @@ Bundle-SymbolicName: app.service.dep.c
 Require-Capability: osgi.service;filter:="(objectClass=${p}.app.service.dep.b.B)";effective:=active
 Import-Package: org.osgi.framework,${p}.app.service.dep.b
 Bundle-Activator: ${p}.app.service.dep.c.Activator
-Private-Package: ${p}.app.service.dep.c
+-privatepackage: ${p}.app.service.dep.c

@@ -2,5 +2,5 @@ Bundle-Name:                             ${p}.nonStandardPersistenceLocation
 Bundle-Version:                          4.2.0.${project.build}
 Meta-Persistence: 						 persistence/jpa.xml
 
-Include-Resource = \
+-includeresource = \
 	persistence/jpa.xml = resources/nonStandardPersistenceLocation/jpa.xml

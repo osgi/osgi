@@ -5,5 +5,5 @@ Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb7c.Activator
 Export-Package: ${p}.fragments.tb7c;testresources;version="1.0";-noimport:=true
 
-Include-Resource: \
+-includeresource: \
 	testresources/resource.txt = resources/fragments.tb7c/resource.txt

@@ -2,5 +2,5 @@ Bundle-SymbolicName: ${p}.serviceregistry.tb2
 Bundle-Name: ${p}.serviceregistry.tb2
 Bundle-Activator: ${p}.serviceregistry.tb2.Activator
 
-Private-Package = ${p}.serviceregistry.tb2.*
-Include-Resource: {OSGI-INF/permissions.perm=perms/serviceregistry.tb2.perm}
+-privatepackage = ${p}.serviceregistry.tb2.*
+-includeresource: {OSGI-INF/permissions.perm=perms/serviceregistry.tb2.perm}

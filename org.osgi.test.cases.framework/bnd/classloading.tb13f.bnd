@@ -3,4 +3,4 @@ Bundle-Name: ${p}.classloading.tb13f
 Bundle-SymbolicName: ${p}.classloading.tb13f
 Bundle-Version: 1
 Import-Package: ${p}.classloading.exports.security, resources
-Private-Package:                         ${p}.classloading.tb13f
+-privatepackage:                         ${p}.classloading.tb13f

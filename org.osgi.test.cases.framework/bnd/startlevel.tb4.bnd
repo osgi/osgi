@@ -2,4 +2,4 @@ Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).startlevel.tb4
 Bundle-Activator: $(p).startlevel.tb4.Activator
 
-Private-Package	: $(p).startlevel.tb4
+-privatepackage	: $(p).startlevel.tb4

@@ -2,7 +2,7 @@
 Bundle-Name:                             ${p}.classloading.tb7e
 Bundle-SymbolicName:                     ${p}.classloading.tb7e
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb7e
+-privatepackage:                         ${p}.classloading.tb7e
 
 Import-Package: javax.xml.parsers;bundle-symbolic-name="system.bundle";version="0.0.0"
 

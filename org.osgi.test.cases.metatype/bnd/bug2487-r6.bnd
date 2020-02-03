@@ -1,5 +1,5 @@
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).bug2487-r6
 
-Include-Resource					= \
+-includeresource					= \
  resources/bug2487-r6

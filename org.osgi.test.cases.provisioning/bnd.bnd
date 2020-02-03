@@ -8,12 +8,12 @@
 
 Bundle-Activator: ${p}.junit.Activator
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.junit
 Import-Package: ${-signaturetest}, *
 
-Include-Resource: \
+-includeresource: \
 	ipa/case-ref.ipa=case-ref.ipa, \
 	ipa/delay-ref.ipa=delay-ref.ipa, \
 	ipa/ipa-ref-start.ipa=ipa-ref-start.ipa, \

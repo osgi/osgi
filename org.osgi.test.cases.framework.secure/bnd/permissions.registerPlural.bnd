@@ -4,6 +4,6 @@ Bundle-Description: Filtered ServicePermissiont Test R4 - Service register plura
 Bundle-Activator: ${p}.permissions.registerPlural.registerPluralActivator
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.registerPlural
 	

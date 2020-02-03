@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb21.*
+-privatepackage: ${p}.tb21.*
 Service-Component: org/osgi/test/cases/component/tb21/minimumcardinalityreference.xml

@@ -5,7 +5,7 @@ Bundle-Activator: ${p}.permissions.exporter2.ExporterActivator
 Bundle-Version: 2.2.2
 Bundle-Category: osgi,test
 
-Private-Package	= \
+-privatepackage	= \
 	${p}.permissions.exporter2	,\
 	${p}.permissions.sharedPkg
 	

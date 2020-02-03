@@ -7,7 +7,7 @@ Bundle-Vendor: IBM
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.div.tb17.NativeCodeFragment
 Comment: The host bundle doesn't contain the native library directly, but its fragment bundle (tb18) does.
-Private-Package:                         ${p}.div.tb17, org.osgi.test.cases.div.tb2
+-privatepackage:                         ${p}.div.tb17, org.osgi.test.cases.div.tb2
 
 
 

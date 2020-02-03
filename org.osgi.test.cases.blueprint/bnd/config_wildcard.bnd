@@ -3,7 +3,7 @@ Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 Bundle-Blueprint: config/*.xml
 -resourceonly: true
-Include-Resource					= \
+-includeresource					= \
 	config/comp1_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1.xml, \
 	config/subdir/comp2.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2.xml
 

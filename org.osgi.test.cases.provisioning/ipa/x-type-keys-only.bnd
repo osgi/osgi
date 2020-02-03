@@ -1,6 +1,6 @@
 -sources:								false
 -resourceonly:                           true
-Include-Resource: \
+-includeresource: \
  x-type-keys-only.ipa;literal='true', \
  load-status;literal='x-type-keys-only.ipa', \
  some.key.1;literal='some.value.111', \

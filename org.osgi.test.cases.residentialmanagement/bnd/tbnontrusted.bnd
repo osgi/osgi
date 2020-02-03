@@ -6,6 +6,6 @@ Bundle-DocURL:			http://www.osgi.org/
 Bundle-ContactAddress:	info@mail.osgi.org
 Bundle-Category:		osgi, test
 
-Private-Package:		${p}.tbnontrusted
+-privatepackage:		${p}.tbnontrusted
 
 -sign: test_expired

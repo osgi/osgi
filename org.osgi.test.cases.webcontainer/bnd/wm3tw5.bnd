@@ -4,7 +4,7 @@ Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with ma
 
 -sources=false
 
-Private-Package: ${p}.tw5.*
+-privatepackage: ${p}.tw5.*
 -wab: resources/tw5
 -resourceonly=true
 -removeheaders: !Manifest-Version, \
@@ -13,7 +13,7 @@ Private-Package: ${p}.tw5.*
  !Bundle-Description, \
  *
 
-Include-Resource = \
+-includeresource = \
 	WEB-INF/lib2/log.jar=log.jar, \
 	WEB-INF/lib/simple.jar=simple.jar 
 

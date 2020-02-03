@@ -1,6 +1,6 @@
 Bundle-Name: ${p}.div.tb25a
 Bundle-SymbolicName: ${p}.div.tb25a
 Bundle-Version: 4.3
-Include-Resource: \
+-includeresource: \
 	resources/all.txt = resources/div.tb25/a.all.txt, \
 	resources/a.txt = resources/div.tb25/a.txt

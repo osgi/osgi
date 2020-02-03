@@ -7,4 +7,4 @@ Bundle-ContactAddress:	info@mail.osgi.org
 Fragment-Host:			${p}.tb1.jar
 Bundle-Category:		osgi, test
 
-Private-Package =		${p}.tb7
+-privatepackage =		${p}.tb7

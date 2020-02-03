@@ -1,5 +1,5 @@
 Bundle-Version: 4
-Private-Package: ${p}.tb4.*
+-privatepackage: ${p}.tb4.*
 Service-Component: org/osgi/test/cases/component/tb4/impl/namedservice.xml
 
 

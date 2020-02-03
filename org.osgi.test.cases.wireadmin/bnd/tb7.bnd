@@ -3,4 +3,4 @@ Bundle-Activator: ${p}.tb7.ProducerImpl
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb7
 
-Private-Package	: $(p).tb7
+-privatepackage	: $(p).tb7

@@ -1,14 +1,14 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*, \
+-conditionalpackage					= org.osgi.test.support.*, \
     org.osgi.test.cases.subsystem.resource.*
-Private-Package						=  \
+-privatepackage						=  \
 	${p}.junit.*
 
 Export-Package ${p}.runner
 
-Include-Resource					= \
+-includeresource					= \
 	no.deps.a@1.0.0.jar, \
 	no.deps.b@1.0.0.jar, \
 	no.deps.c@1.0.0.jar, \

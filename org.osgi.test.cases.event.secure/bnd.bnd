@@ -3,13 +3,13 @@
 
 Bundle-Description					: A security test case for the event generic mechanism implementation.
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.junit
 Export-Package						= \
 	${p}.service
 
-Include-Resource					= \
+-includeresource					= \
 	tb1.jar, \
 	tb2.jar
 

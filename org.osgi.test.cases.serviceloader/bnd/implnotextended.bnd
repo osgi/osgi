@@ -2,9 +2,9 @@ Bundle-Name:                             ${p}.impl1
 Bundle-Version:                          1.0.0
 Bundle-Activator:                        ${p}.impl1.Activator
 
-Private-Package:                          ${p}.impl1,\
+-privatepackage:                          ${p}.impl1,\
 	${p}.impl
 
-Include-Resource = \
+-includeresource = \
  META-INF/services/${p}.spi.ColorProvider;literal=${p}.impl.ColorProviderImpl
 	

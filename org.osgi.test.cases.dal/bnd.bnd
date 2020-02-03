@@ -4,9 +4,9 @@
 Export-Package: org.osgi.test.support.step;-noimport:=true, \
  ${p}.step.*;-noimport:=true
 
-Conditional-Package: org.osgi.test.support.*
+-conditionalpackage: org.osgi.test.support.*
 
-Private-Package	= \
+-privatepackage	= \
 	${p}
 
 Test-Cases		= \

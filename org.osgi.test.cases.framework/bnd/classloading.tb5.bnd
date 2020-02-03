@@ -2,7 +2,7 @@
 Bundle-Name:                             ${p}.classloading.tb5
 Bundle-SymbolicName:                     ${p}.classloading.tb5
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb5
+-privatepackage:                         ${p}.classloading.tb5
 
 Export-Package: ${p}.classloading.exports.listener;-noimport:=true
 

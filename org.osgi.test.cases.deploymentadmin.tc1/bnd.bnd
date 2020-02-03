@@ -1,10 +1,10 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
+-conditionalpackage					= org.osgi.test.support.*
 Export-Package						= ${p}.tbc.*	
 Bundle-Category						= osgi,test
-Include-Resource					= \
+-includeresource					= \
 	www/tb1.jar=tb1.jar, \
 	www/simple.dp=res/simple.dp,\
 	www/simple2.dp=res/simple2.dp,\

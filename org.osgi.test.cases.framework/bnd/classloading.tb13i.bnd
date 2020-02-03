@@ -3,4 +3,4 @@ Bundle-Name: ${p}.classloading.tb13i
 Bundle-SymbolicName: ${p}.classloading.tb13i
 Bundle-Version: 1
 Import-Package: ${p}.classloading.exports.listener;version="1.0.0";myattribute="abc"
-Private-Package:                         ${p}.classloading.tb13i
+-privatepackage:                         ${p}.classloading.tb13i

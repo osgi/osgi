@@ -1,7 +1,7 @@
 Bundle-Name:                             ${p}.resolver.tb1
 Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.0.0
-Private-Package:                         ${p}.resolver.tb1
+-privatepackage:                         ${p}.resolver.tb1
 Provide-Capability: \
  test; effective:="resolve"; \
   test ="aName"; \
@@ -20,5 +20,5 @@ Provide-Capability: \
  test.no.attrs
 
 Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
-Include-Resource: \
+-includeresource: \
 	/ = resources/resolver.tb1.v100/

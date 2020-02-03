@@ -3,7 +3,7 @@ Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.ConcurentDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${t}.*
+-privatepackage:                        ${t}.*
 Bundle-Description: A driver that will retrun 255 and will have SERVICE_RANKING equal to those of the winner but shall lose with its greater ServiceID
 
 #Manifest-Version: 1.0

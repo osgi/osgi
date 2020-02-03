@@ -3,7 +3,7 @@ Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.StandAloneDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${t}.*
+-privatepackage:                        ${t}.*
 Bundle-Description: A driver that will be installed manually (not through a locator service)
 
 #Manifest-Version: 1.0

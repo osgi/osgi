@@ -2,7 +2,7 @@ Bundle-Name: ${p}.div.tb25.resolved
 Bundle-SymbolicName: ${p}.div.tb25.resolved
 Bundle-Version: 4.3
 Bundle-ClassPath: div.tb25a.jar, div.tb25b.jar
-Include-Resource: \
+-includeresource: \
 	resources/all.txt = resources/div.tb25/root.all.txt, \
 	resources/root.txt = resources/div.tb25/root.txt, \
 	div.tb25a.jar, \

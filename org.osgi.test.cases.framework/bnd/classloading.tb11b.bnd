@@ -2,5 +2,5 @@
 Bundle-Name:                             ${p}.classloading.tb11b
 Bundle-SymbolicName:                     ${p}.classloading.tb11b;singleton:=true
 Bundle-Version: 						 1
-Private-Package:                         ${p}.classloading.tb11b
+-privatepackage:                         ${p}.classloading.tb11b
 

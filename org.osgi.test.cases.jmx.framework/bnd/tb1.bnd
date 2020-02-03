@@ -3,10 +3,10 @@ Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb1.Activator
 Bundle-Vendor: SAP
 Import-Package: ${p}.tb2.api;version="4.2.0.${project.build}", *
-Include-Resource = \
+-includeresource = \
     OSGI-INF/l10n/bundle.properties=resources/tb1/bundle.properties, \
     OSGI-INF/l10n/bundle_nl.properties=resources/tb1/bundle_nl.properties
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb1.*
 
 

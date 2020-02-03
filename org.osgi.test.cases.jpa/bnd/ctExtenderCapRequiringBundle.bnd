@@ -2,7 +2,7 @@ Bundle-Name:                             ${p}.ctExtenderCapRequiringBundle
 Bundle-Version:                          4.2.0.${project.build}
 Meta-Persistence: <<EMPTY>>
 
-Include-Resource = \
+-includeresource = \
     META-INF/persistence.xml = resources/capTestingEMFBundle/META-INF/persistence.xml
 
 Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.jpa)(vendor=osgi.ct)(version>=1.1)(!(version>=2)))"

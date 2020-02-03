@@ -1,5 +1,5 @@
 -nouses=true
 -nomanifest=true
 -failok=true
-Include-Resource = META-INF/MANIFEST.MF=resources/div.tb5/MANIFEST.MF
-Private-Package:                         ${p}.div.tb5
+-includeresource = META-INF/MANIFEST.MF=resources/div.tb5/MANIFEST.MF
+-privatepackage:                         ${p}.div.tb5

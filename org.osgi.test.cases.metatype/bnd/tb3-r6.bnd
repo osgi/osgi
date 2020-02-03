@@ -1,5 +1,5 @@
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb3-r6
 
-Include-Resource					= \
+-includeresource					= \
  resources/tb3-r6

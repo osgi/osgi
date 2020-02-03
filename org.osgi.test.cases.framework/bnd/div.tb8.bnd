@@ -8,5 +8,5 @@ Bundle-ContactAddress: %contactinfo
 Bundle-Activator: ${p}.div.tb8.CheckManifestGetHeaders
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
-Private-Package: ${p}.div.tb8
-Include-Resource = {OSGI-INF/l10n/bundle.properties = resources/div.tb8/bundle.properties}
+-privatepackage: ${p}.div.tb8
+-includeresource = {OSGI-INF/l10n/bundle.properties = resources/div.tb8/bundle.properties}

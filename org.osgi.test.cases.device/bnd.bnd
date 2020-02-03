@@ -2,11 +2,11 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Export-Package: 		${p}.tbc;-split-package:=first
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						= ${p}.tbc.*
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						= ${p}.tbc.*
 Import-Package: ${-signaturetest}, *
 
-Include-Resource					= \
+-includeresource					= \
 	dev0.jar, \
 	dev1.jar, \
 	dev2.jar, \

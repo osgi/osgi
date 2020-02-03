@@ -1,4 +1,4 @@
 -nouses=true
 -nomanifest=true
-Include-Resource = {META-INF/MANIFEST.MF=resources/div.tb11/MANIFEST.MF}
-Private-Package:                         ${p}.div.tb11
+-includeresource = {META-INF/MANIFEST.MF=resources/div.tb11/MANIFEST.MF}
+-privatepackage:                         ${p}.div.tb11

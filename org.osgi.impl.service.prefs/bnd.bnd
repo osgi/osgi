@@ -7,7 +7,7 @@ Bundle-Vendor				= Sun Microsystems, Inc.
 
 Export-Service				= org.osgi.service.prefs.PreferencesService
 
-Private-Package 			= ${p}.*
+-privatepackage 			= ${p}.*
 Export-Package				= org.osgi.service.prefs; -split-package:=first; provide:=true
 
 -buildpath = \

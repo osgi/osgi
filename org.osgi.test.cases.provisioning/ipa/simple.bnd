@@ -5,7 +5,7 @@
 -nomanifest: true
 -sources:								false
 -resourceonly:                           true
-Include-Resource:                        simple.ipa;literal='true';extra='text/plain;charset=utf-8', \
+-includeresource:                        simple.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='simple.ipa';extra='text/plain;charset=utf-8', \
    test-0-prov.jar=test-0-prov.jar;extra='application/x-osgi-bundle', \
    test-1-prov.jar=test-1-prov.jar;extra='application/x-osgi-bundle', \

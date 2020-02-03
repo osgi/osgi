@@ -1,3 +1,3 @@
 Bundle-Version: 1
-Private-Package: ${p}.tb18.*
+-privatepackage: ${p}.tb18.*
 Service-Component: org/osgi/test/cases/component/tb18/components.xml

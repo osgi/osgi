@@ -3,7 +3,7 @@
 # 
 -sources:								false
 -resourceonly:                           true
-Include-Resource: \
+-includeresource: \
  x-ext-ref.ipa;literal='true', \
  load-status;literal='x-ext-ref.ipa', \
  test-0-prov.jar=test-0-prov.jar, \

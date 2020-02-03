@@ -3,8 +3,8 @@
 
 Bundle-Description = A test case for Promises.
 
-Conditional-Package = org.osgi.test.support.*,org.osgi.test.assertj.*
-Private-Package =  \
+-conditionalpackage = org.osgi.test.support.*,org.osgi.test.assertj.*
+-privatepackage =  \
     ${p}.junit
 Import-Package: ${-signaturetest}, *
 

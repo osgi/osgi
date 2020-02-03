@@ -8,7 +8,7 @@ Bundle-Description	= The EnOcean reference implementation bundle.
 Export-Package      = \
     org.osgi.service.enocean.*; -split-package:=first; provide:=true
 
-Private-Package		= \
+-privatepackage		= \
 	${p}.*
 
 -buildpath:  \

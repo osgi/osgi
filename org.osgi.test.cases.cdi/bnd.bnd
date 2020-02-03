@@ -2,11 +2,11 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Description: CT for the OSGi/CDI integration
-Conditional-Package: org.osgi.test.support.*
+-conditionalpackage: org.osgi.test.support.*
 Export-Package: org.osgi.test.cases.cdi.interfaces;version="0.0.1"
-Private-Package: ${p}.junit.*
+-privatepackage: ${p}.junit.*
 Import-Package: ${-signaturetest}, *
-Include-Resource:\
+-includeresource:\
 	basic-beans.jar,\
 	tb1.jar,\
 	tb2.jar,\

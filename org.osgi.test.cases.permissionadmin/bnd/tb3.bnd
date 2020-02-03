@@ -8,7 +8,7 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 Fragment-Host: system.bundle
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb3.*
 Import-Package: !*
 

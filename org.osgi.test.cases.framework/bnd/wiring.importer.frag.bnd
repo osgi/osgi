@@ -4,4 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.importer.frag
 Bundle-Version: 1.0
 Fragment-Host: ${p}.wiring.importer
 
-Include-Resource: resources/wiring/fragment/
+-includeresource: resources/wiring/fragment/

@@ -2,9 +2,9 @@ Bundle-Version: 4.2.0
 
 Bundle-SymbolicName: $(p).tb33
 
-Private-Package	: $(p).tb33
+-privatepackage	: $(p).tb33
 
-Include-Resource = {OSGI-INF/permissions.perm = perms/none.perm}
+-includeresource = {OSGI-INF/permissions.perm = perms/none.perm}
 
 Import-Package = \
 	junit.framework,\

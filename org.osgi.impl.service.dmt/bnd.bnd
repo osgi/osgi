@@ -13,7 +13,7 @@ Import-Service					= \
 Export-Package 					= \
     org.osgi.service.dmt.*; -split-package:=first; provide:=true, \
     org.osgi.service.event; -split-package:=first
-Private-Package					= ${p}.*
+-privatepackage					= ${p}.*
 
 -buildpath						= \
     org.osgi.service.dmt;		version=project, \

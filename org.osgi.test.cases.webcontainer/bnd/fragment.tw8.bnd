@@ -8,7 +8,7 @@ Fragment-Host: ${p}.tw8
 
 -sources=false
 
-Include-Resource = \
+-includeresource = \
 	resources/fragment.tw8
 	
 	

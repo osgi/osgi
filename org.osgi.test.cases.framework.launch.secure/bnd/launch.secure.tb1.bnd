@@ -2,6 +2,6 @@ Bundle-SymbolicName: ${p}.tb1
 Bundle-Name: ${p}.tb1
 Bundle-Version: 4.2.0.${project.build}
 
-Include-Resource = resources/launch.secure.tb1
+-includeresource = resources/launch.secure.tb1
 
 -sign: test

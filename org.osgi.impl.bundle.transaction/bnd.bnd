@@ -4,7 +4,7 @@ javac.profile=compact2
 
 Bundle-Description				= OSGi Transaction reference implementation by ProSyst.
 
-Private-Package = ${p}.*, \
+-privatepackage = ${p}.*, \
 	org.apache.*, \
 	javax.resource.*, \
 	org.slf4j.*

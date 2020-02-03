@@ -5,4 +5,4 @@ Bundle-Version: 1
 Bundle-Activator: ${p}.classloading.tb16a.Activator
 Require-Bundle: ${p}.classloading.tb16c;visibility:="reexport", ${p}.classloading.tb16b;visibility:="reexport"
 Reexport-Package: test.package.resources
-Private-Package:                         ${p}.classloading.tb16a
+-privatepackage:                         ${p}.classloading.tb16a

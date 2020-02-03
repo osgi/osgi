@@ -3,4 +3,4 @@ Bundle-Name: ${p}.fragments.tb8b
 Bundle-SymbolicName: ${p}.fragments.tb8b
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb8b.Activator
-Private-Package: ${p}.fragments.tb8b
+-privatepackage: ${p}.fragments.tb8b

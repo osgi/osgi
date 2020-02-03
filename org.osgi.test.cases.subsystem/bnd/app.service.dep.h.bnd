@@ -1,5 +1,5 @@
 Bundle-SymbolicName: app.service.dep.h
 Provide-Capability: osgi.service;objectClass=${p}.app.service.dep.h.H1;effective:=active
 Export-Package: ${p}.app.service.dep.h
-Include-Resource = \
+-includeresource = \
 	OSGI-INF/blueprint/blueprint.xml=src/org/osgi/test/cases/subsystem/app/service/dep/h/blueprint.xml

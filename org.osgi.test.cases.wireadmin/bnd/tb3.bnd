@@ -3,4 +3,4 @@ Bundle-Activator: ${p}.tb3.ConsumerImpl
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb3
 
-Private-Package	: $(p).tb3
+-privatepackage	: $(p).tb3

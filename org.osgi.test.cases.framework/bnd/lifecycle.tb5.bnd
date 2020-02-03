@@ -9,5 +9,5 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 Export-Package: ${p}.lifecycle.tb5
 
-Private-Package						= \
+-privatepackage						= \
 	${p}.lifecycle.tb5.*

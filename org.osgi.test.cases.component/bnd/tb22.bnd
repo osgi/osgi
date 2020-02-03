@@ -1,2 +1,2 @@
-Private-Package: ${p}.tb22.*
+-privatepackage: ${p}.tb22.*
 Service-Component: org/osgi/test/cases/component/tb22/comparablemap.xml

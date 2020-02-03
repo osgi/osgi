@@ -2,8 +2,8 @@ javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
 	${p}.junit
 -includeresource					= resources, \
  OSGI-INF/impl-src=${project.workspace}/org.osgi.impl.bundle.component.annotations/src

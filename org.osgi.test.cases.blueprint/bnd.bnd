@@ -8,10 +8,10 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 
 
-Conditional-Package					= org.osgi.test.support.*
+-conditionalpackage					= org.osgi.test.support.*
 Import-Package: ${-signaturetest}, *
 
-Include-Resource					= \
+-includeresource					= \
 	www/blueprint_version_two.jar=blueprint_version_two.jar, \
 	www/comp1a_no_header.jar=comp1a_no_header.jar , \
 	www/comp1_no_header.jar=comp1_no_header.jar , \

@@ -1,7 +1,7 @@
 Bundle-Version: 4
 Bundle-Activator: $(p).tb2.MonitorableActivator
 
-Private-Package	: $(p).tb2
+-privatepackage	: $(p).tb2
 
 
 

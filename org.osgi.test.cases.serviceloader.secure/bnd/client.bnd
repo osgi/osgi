@@ -1,6 +1,6 @@
 Bundle-Name:                             ${p}.client
 Bundle-Version:                          1.0.0
-Private-Package:                          ${p}.client
+-privatepackage:                          ${p}.client
 
 Bundle-Activator: ${p}.client.ColorProviderClient
 
@@ -9,5 +9,5 @@ Require-Capability: \
  osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)",\
  osgi.serviceloader; filter:="(&(osgi.serviceloader=${p}.spi.ColorProvider)(provider=CT))"
 
-Include-Resource = \
+-includeresource = \
  {OSGI-INF/permissions.perm=perms/client.perm}

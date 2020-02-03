@@ -2,5 +2,5 @@ Bundle-Version: 4.2.0
 Bundle-SymbolicName: $(p).tb1
 Bundle-Activator: org.osgi.util.xml.XMLParserActivator
 
-Private-Package	: $(p).tb1
-Include-Resource = resources/tb1
+-privatepackage	: $(p).tb1
+-includeresource = resources/tb1

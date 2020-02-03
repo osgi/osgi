@@ -6,7 +6,7 @@ Export-Package = org.osgi.service.tr069todmt; -split-package:=first; provide:=tr
 Export-Service = org.osgi.service.tr069todmt.TR069ConnectorFactory
 Import-Service = org.osgi.service.log.LogService
 
-Private-Package = ${p}.*
+-privatepackage = ${p}.*
 
 -buildpath = \
 	org.osgi.service.tr069todmt;version=project, \

@@ -1,5 +1,5 @@
 -nouses=true
 -nomanifest=true
 -failok=true
-Include-Resource = {META-INF/MANIFEST.MF=resources/classloading.tb14f/MANIFEST.MF}
-Private-Package:                         ${p}.classloading.tb14f
+-includeresource = {META-INF/MANIFEST.MF=resources/classloading.tb14f/MANIFEST.MF}
+-privatepackage:                         ${p}.classloading.tb14f

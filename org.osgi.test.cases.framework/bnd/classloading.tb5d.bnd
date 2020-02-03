@@ -2,7 +2,7 @@
 Bundle-Name:                             ${p}.classloading.tb5d
 Bundle-SymbolicName:                     ${p}.classloading.tb5d
 Bundle-Version:                          4
-Private-Package:                         ${p}.classloading.tb5d
+-privatepackage:                         ${p}.classloading.tb5d
 
 Bundle-Activator: ${p}.classloading.tb5d.Activator
 Import-Package: ${p}.classloading.exports.service;version="1.0.0", ${p}.classloading.exports.listener, org.osgi.framework

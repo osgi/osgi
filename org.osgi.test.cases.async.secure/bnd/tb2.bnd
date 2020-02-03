@@ -7,8 +7,8 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Import-Package: *
-Private-Package						= \
+-privatepackage						= \
 	${p}.tb.*
 
-Include-Resource: {OSGI-INF/permissions.perm=perms/tb2.perm}
+-includeresource: {OSGI-INF/permissions.perm=perms/tb2.perm}
  
