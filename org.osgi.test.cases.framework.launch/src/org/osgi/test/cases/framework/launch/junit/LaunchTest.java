@@ -38,7 +38,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.connect.ConnectFramework;
+import org.osgi.framework.connect.ModuleConnector;
 import org.osgi.framework.connect.ConnectFrameworkFactory;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
@@ -126,7 +126,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 
 		@Override
 		public Framework newFramework(Map<String,String> configuration,
-				ConnectFramework connectFramework) {
+				ModuleConnector connectFramework) {
 			ConnectFrameworkFactory factory = getConnectFrameworkFactory();
 			if (factory == null) {
 				// TODO will need to move the connect tests to another project

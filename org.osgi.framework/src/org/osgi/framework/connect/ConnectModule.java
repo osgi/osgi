@@ -21,8 +21,10 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.BundleRevision;
 
 /**
- * A connect module instance is used by a {@link Framework framework} to load
- * content for a bundle revision installed in the framework.
+ * A connect module instance is used by a {@link Framework framework} when a
+ * bundle location is connected to connect module. The connected bundle must use
+ * the connect module to load content for the bundle revisions installed in the
+ * framework for the connected bundle.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -31,13 +33,13 @@ public interface ConnectModule {
 	/**
 	 * Returns the current content of this connect module. The framework will
 	 * call this method when it needs to access the content for the current
-	 * {@link BundleRevision bundle revision} that is using this connect module
-	 * for content. The framework may lazily postpone to open the content until
-	 * right before requests to access the bundle revision content are made.
+	 * {@link BundleRevision bundle revision} that is connected to this connect
+	 * module. The framework may lazily postpone to open the content until right
+	 * before requests to access the bundle revision content are made.
 	 * 
 	 * @return the current content of this connect module
 	 * @throws IOException if an error occurred getting the content
-	 * @see ConnectFramework#getModule(String)
+	 * @see ModuleConnector#connect(String)
 	 */
 	ConnectContent getContent() throws IOException;
 }

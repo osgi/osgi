@@ -62,7 +62,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.connect.ConnectContent;
 import org.osgi.framework.connect.ConnectContent.ConnectEntry;
-import org.osgi.framework.connect.ConnectFramework;
+import org.osgi.framework.connect.ModuleConnector;
 import org.osgi.framework.connect.ConnectModule;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.BundleWiring;
@@ -90,7 +90,7 @@ public class ConnectTests extends LaunchTest {
 		}
 	}
 
-	void doTestConnect(ConnectFramework connectFramework,
+	void doTestConnect(ModuleConnector connectFramework,
 			Map<String,String> fwkConfig,
 			Consumer<Framework> test) {
 		fwkConfig.put(Constants.FRAMEWORK_STORAGE, storageArea.getAbsolutePath());
@@ -116,21 +116,21 @@ public class ConnectTests extends LaunchTest {
 		}
 	}
 
-	public static class TestCountingConnectFramework implements ConnectFramework {
+	public static class TestCountingConnectFramework implements ModuleConnector {
 		private final AtomicInteger				initializeCalled			= new AtomicInteger();
 		private final Queue<String>				getModuleCalled				= new ConcurrentLinkedQueue<>();
 		private final AtomicInteger				createBundleActivatorCalled	= new AtomicInteger();
 		private final Map<String,ConnectModule>	modules						= new ConcurrentHashMap<String,ConnectModule>();
 
 		@Override
-		public ConnectFramework initialize(File storage,
+		public ModuleConnector initialize(File storage,
 				Map<String,String> configuration) {
 			initializeCalled.getAndIncrement();
 			return this;
 		}
 
 		@Override
-		public Optional<ConnectModule> getModule(String location)
+		public Optional<ConnectModule> connect(String location)
 				throws BundleException {
 			getModuleCalled.add(location);
 			ConnectModule m = modules.get(location);
@@ -367,7 +367,7 @@ public class ConnectTests extends LaunchTest {
 	public void testConnectActivator() {
 		final AtomicInteger bundleActvatorStartCalled = new AtomicInteger();
 		final AtomicInteger bundleActvatorStopCalled = new AtomicInteger();
-		ConnectFramework activatorFactory = new TestCountingConnectFramework() {
+		ModuleConnector activatorFactory = new TestCountingConnectFramework() {
 			@Override
 			public Optional<BundleActivator> createBundleActivator() {
 				super.createBundleActivator();
@@ -408,9 +408,9 @@ public class ConnectTests extends LaunchTest {
 		final AtomicReference<File> initFile = new AtomicReference<>();
 		final AtomicReference<File> storeFile = new AtomicReference<>();
 		final AtomicReference<Map<String,String>> initConfig = new AtomicReference<>();
-		ConnectFramework activatorFactory = new TestCountingConnectFramework() {
+		ModuleConnector activatorFactory = new TestCountingConnectFramework() {
 			@Override
-			public ConnectFramework initialize(File storage,
+			public ModuleConnector initialize(File storage,
 					Map<String,String> config) {
 				super.initialize(storage, config);
 				initFile.set(storage);

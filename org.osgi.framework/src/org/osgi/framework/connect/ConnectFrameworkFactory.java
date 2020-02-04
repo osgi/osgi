@@ -24,7 +24,7 @@ import org.osgi.framework.launch.Framework;
 /**
  * A factory for creating {@link Framework} instances.
  * <p>
- * If a framework supports {@link ConnectFramework} then the implementation jar
+ * If a framework supports {@link ModuleConnector} then the implementation jar
  * must contain the following resource:
  * 
  * <pre>
@@ -51,7 +51,7 @@ import org.osgi.framework.launch.Framework;
 public interface ConnectFrameworkFactory {
 	/**
 	 * Create a new {@link Framework} instance using the specified
-	 * {@link ConnectFramework connect framework}.
+	 * {@link ModuleConnector module connector}.
 	 * 
 	 * @param configuration The framework properties to configure the new
 	 *            framework instance. If framework properties are not provided
@@ -64,17 +64,17 @@ public interface ConnectFrameworkFactory {
 	 *            from the specified configuration argument since the
 	 *            configuration argument can be changed after the framework
 	 *            instance has been created.
-	 * @param connectFramework The connect framework that the new framework
-	 *            instance will use. The specified connect framework argument
-	 *            may be {@code null}.
+	 * @param moduleConnector The module connector that the new framework
+	 *            instance will use. The specified module connector argument may
+	 *            be {@code null}.
 	 * @return A new, configured {@link Framework} instance. The framework
 	 *         instance must be in the {@link Bundle#INSTALLED} state.
 	 * @throws SecurityException If the caller does not have
 	 *             {@code AllPermission}, and the Java Runtime Environment
 	 *             supports permissions.
-	 * @see ConnectFramework
+	 * @see ModuleConnector
 	 * @since 1.3
 	 */
 	Framework newFramework(Map<String,String> configuration,
-			ConnectFramework connectFramework);
+			ModuleConnector moduleConnector);
 }

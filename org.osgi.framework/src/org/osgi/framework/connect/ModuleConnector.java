@@ -25,32 +25,32 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
 
 /**
- * A <code>ConnectFramework</code> provides a connection to instances of
+ * A <code>ModuleConnector</code> provides connections to instances of
  * {@link ConnectModule} that are used by a {@link Framework} instance to
- * connect installed bundles with content provided by the
- * <code>ConnectFramework</code>. This allows a <code>ConnectFramework</code> to
+ * connect installed bundles locations with content provided by the
+ * <code>ModuleConnector</code>. This allows a <code>ModuleConnector</code> to
  * provide content and classes for a connected bundle installed in the
- * <code>Framework</code>. A <code>ConnectFramework</code> is provided when
- * {@link ConnectFrameworkFactory#newFramework(java.util.Map, ConnectFramework)
- * creating} a framework instance. Because a <code>ConnectFramework</code>
+ * <code>Framework</code>. A <code>ModuleConnector</code> is provided when
+ * {@link ConnectFrameworkFactory#newFramework(java.util.Map, ModuleConnector)
+ * creating} a framework instance. Because a <code>ModuleConnector</code>
  * instance can participate in the initialization of the <code>Framework</code>
  * and the life cycle of a <code>Framework</code> instance the
- * <code>ConnectFramework</code> instance should only be used with a single
+ * <code>ModuleConnector</code> instance should only be used with a single
  * <code>Framework</code> instance at a time.
  * 
  * @ThreadSafe
  * @author $Id$
  */
-public interface ConnectFramework {
+public interface ModuleConnector {
 
 	/**
-	 * Initializes this connect framework with the
+	 * Initializes this module connector with the
 	 * {@link Constants#FRAMEWORK_STORAGE framework persistent storage} file and
 	 * framework properties configured for a {@link Framework} instance. This
 	 * method is called once by a {@link Framework} instance and is called
-	 * before any other methods on this connect framework are called.
+	 * before any other methods on this module connector are called.
 	 * 
-	 * @param configuration The framework properties to used configure the new
+	 * @param configuration The framework properties used configure the new
 	 *            framework instance. An unmodifiable map of framework
 	 *            configuration properties that were used to create a new
 	 *            framework instance.
@@ -59,29 +59,29 @@ public interface ConnectFramework {
 	 *            support.
 	 * @return a reference to this object
 	 */
-	ConnectFramework initialize(File storage, Map<String,String> configuration);
+	ModuleConnector initialize(File storage, Map<String,String> configuration);
 
 	/**
-	 * Returns the connect module for the specified bundle location. If an
+	 * Connects a bundle location with a {@link ConnectModule}. If an
 	 * {@link Optional#empty() empty} optional is returned the the framework
 	 * must handle reading the content of the bundle itself. If a value is
 	 * {@link Optional#isPresent() present} in the returned optional then the
 	 * <code>ConnectModule</code> {@link Optional#get() value} from the optional
-	 * must be used to connect the bundle to the returned connect module. The
-	 * returned connect module is used by the framework to access the content of
-	 * the bundle.
+	 * must be used to connect the bundle to the returned {@link ConnectModule}.
+	 * The returned connect module is used by the framework to access the
+	 * content of the bundle.
 	 * 
 	 * @param location the bundle location used to install a bundle
 	 * @return the connect module for the specified bundle location
 	 * @throws BundleException if the location cannot be handled
 	 */
-	Optional<ConnectModule> getModule(String location) throws BundleException;
+	Optional<ConnectModule> connect(String location) throws BundleException;
 
 	/**
-	 * Creates a new activator for this connect framework. A new activator is
+	 * Creates a new activator for this module connector. A new activator is
 	 * created by the framework each time the framework is
-	 * {@link Framework#init() initialized}. An activator allows the connect
-	 * framework to participate in the framework life cycle. When the framework
+	 * {@link Framework#init() initialized}. An activator allows the module
+	 * connector to participate in the framework life cycle. When the framework
 	 * is {@link Framework#init() initialized} the activator
 	 * {@link BundleActivator#start(org.osgi.framework.BundleContext) start}
 	 * method is called. When the framework is {@link Framework#stop() stopped}
@@ -89,7 +89,7 @@ public interface ConnectFramework {
 	 * {@link BundleActivator#stop(org.osgi.framework.BundleContext) stop}
 	 * method is called
 	 * 
-	 * @return a new activator for this connect framework or
+	 * @return a new activator for this module connector or
 	 *         {@link Optional#empty() empty} if no activator is available
 	 */
 	Optional<BundleActivator> createBundleActivator();
