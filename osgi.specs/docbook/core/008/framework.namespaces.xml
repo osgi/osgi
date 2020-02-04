@@ -693,6 +693,21 @@ Bundle B:
           </row>
 
           <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Any attributes defined on the Bundle-SymbolicName
+            header</para></entry>
+          </row>
+
+          <row>
             <entry><code>singleton</code></entry>
 
             <entry><code>CD</code></entry>
@@ -838,6 +853,21 @@ Bundle B:
           </row>
 
           <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Any attributes defined on the Bundle-SymbolicName
+            header</para></entry>
+          </row>
+
+          <row>
             <entry><code>fragment-attachment</code></entry>
 
             <entry><code>CD</code></entry>
@@ -969,7 +999,8 @@ Bundle B:
             <entry><code>symbolic-name</code></entry>
 
             <entry><para>The identity of the resource, for an OSGi bundle this
-            is the bundle symbolic name.</para></entry>
+            is the bundle symbolic name as defined in the
+            Bundle-SymbolicName header.</para></entry>
           </row>
 
           <row>
@@ -988,7 +1019,7 @@ Bundle B:
 
             <entry><para>The type of the resource</para></entry>
           </row>
-
+ 
           <row>
             <entry><code>version</code></entry>
 
@@ -1000,7 +1031,9 @@ Bundle B:
 
             <entry><code>version</code></entry>
 
-            <entry><para>The version of the resource</para></entry>
+            <entry><para>The version of the resource. For an
+            OSGi bundle this is as defined in the
+            Bundle-Version header.</para></entry>
           </row>
 
           <row>
@@ -1015,7 +1048,9 @@ Bundle B:
             <entry><code>'true' |'false'</code></entry>
 
             <entry><para>If this resource is a singleton. The default value is
-            <code>false</code>.</para></entry>
+            <code>false</code>. For an OSGi bundle this
+            is the singleton directive as defined in the
+            Bundle-SymbolicName header.</para></entry>
           </row>
 
           <row>
@@ -1093,6 +1128,22 @@ Bundle B:
             <entry><para>A list of tag names used to identify an aspect of this
             resource that is not otherwise expressed by the capabilities of
             this resource.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Any other attributes for the resource.  For an OSGi bundle
+            this is includes the attributes defined in the Bundle-SymbolicName
+            header.</para></entry>
           </row>
 
           <row>
