@@ -108,6 +108,7 @@
           connect module and has it content provided by a connect content.</para>
         </listitem>
       </itemizedlist>
+      <para><emphasis>TODO - need a class diagram for entities</emphasis></para>
     </section>
   </section>
 
@@ -423,6 +424,18 @@ com.acme.osgi.connect.Factory</programlisting>
         <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> may import packages exported by 
         connect bundles and the OSGi Module Layer will do the correct delegation of class loads to the connect class loader as defined
         <xref linkend="i3174728"/> for exported packages.</para>
+
+        <para>When a module connector implementation provides class loader implementations that are not the framework
+        managed class loader there are limitations with respect to the behavior defined by the sections
+        <xref linkend="framework.weavinghooks"/> and <xref linkend="i3270445"/>. Weaving hooks
+        as defined by  <xref linkend="framework.weavinghooks"/> will not be notified of the classes defined by the module
+        connect class loaders. This implies that the <xref linkend="org.osgi.framework.hooks.weaving.WeavingHook" xrefstyle="hyperlink"/>
+        and <xref linkend="org.osgi.framework.hooks.weaving.WovenClassListener" xrefstyle="hyperlink"/> implementations
+        will not be called for and will not be able to weave the classes from connect bundles. The activation policy as
+        defined by <xref linkend="i3270445"/> also cannot be supported because The framework will not have the necessary
+        hooks into the module connector class loader implementation to cause bundle activation on class load.</para>
+
+        <para></para>
       </section>
 
       <section>
@@ -500,8 +513,8 @@ com.acme.osgi.connect.Factory</programlisting>
     <section>
       <title>Identify Connect Bundles</title>
       <para>A bundle installed in the framework can be identified as a connect bundle by introspection of
-      the <link linkend="org.osgi.framework.namespace.IdentityNamespace.CAPABILITY_TAGS_ATTRIBUTE"><code>tags</code></link> attribute on
-      the <link linkend="org.osgi.framework.namespace.IdentityNamespace.IDENTITY_NAMESPACE"><code>osgi.identity</code></link>
+      the <link linkend="org.osgi.framework.namespace.IdentityNamespace.CAPABILITY_TAGS_ATTRIBUTE" xrefstyle="hyperlink"><code>tags</code></link> attribute on
+      the <link linkend="org.osgi.framework.namespace.IdentityNamespace.IDENTITY_NAMESPACE" xrefstyle="hyperlink"><code>osgi.identity</code></link>
       capability for the current bundle revision. All connect bundle revisions must have a <code>tags</code>
       attribute value that contains the string value <link linkend="org.osgi.framework.connect.ConnectContent.TAG_OSGI_CONNECT"><code>osgi.connect</code></link>.
       For example, the following method determines if a <code>BundleRevision</code> is for a connect bundle:</para>
@@ -515,6 +528,13 @@ com.acme.osgi.connect.Factory</programlisting>
         return tags.contains("osgi.connect");
     }).orElse(false);
 }</programlisting>
+
+      <para>For resources with the <link linkend="org.osgi.framework.namespace.IdentityNamespace.IDENTITY_NAMESPACE" xrefstyle="hyperlink"><code>osgi.identity</code>
+      </link>capability and the attribute <link linkend="org.osgi.framework.namespace.IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE" xrefstyle="hyperlink"><code>type</code></link> value
+      of <link linkend="org.osgi.framework.namespace.IdentityNamespace.TYPE_BUNDLE" xrefstyle="hyperlink"><code>osgi.bundle</code></link>, the <code>tags</code> attribute must
+      be the same for the <link linkend="org.osgi.framework.namespace.BundleNamespace.BUNDLE_NAMESPACE" xrefstyle="hyperlink"><code>osgi.wiring.bundle</code></link>
+      and the <link linkend="org.osgi.framework.namespace.HostNamespace.HOST_NAMESPACE" xrefstyle="hyperlink"><code>osgi.wiring.host</code></link>
+      capabilities. The Framework must include the <code>osgi.connect</code> value in the <code>tags</code> attribute for all three capabilities.</para>
     </section>
 
     <section>
