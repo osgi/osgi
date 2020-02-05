@@ -55,11 +55,11 @@ public class ResponsePrimitiveDTO extends DTO{
 	/**
 	 * Assigned Token Identifiers
 	 */
-	public List<LocalTokenIdAssignmentDTO> assignedTokenIdentifiers;//Map<String,Object>
+	public List<LocalTokenIdAssignmentDTO> assignedTokenIdentifiers;
 	/**
 	 * Token Request Info
 	 */
-	public List<DasInfoDTO> tokenReqInfo;//DynAuthTokenReqInfoDTO
+	public List<DasInfoDTO> tokenReqInfo;
 
 	// Added R3.0
 	/**
