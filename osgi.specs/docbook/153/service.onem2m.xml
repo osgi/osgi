@@ -21,7 +21,7 @@
 
     <para>oneM2M is a standard for IoT platfrom, which is standardized by oneM2M partnership project.
     This specification provides interfaes to oneM2M applications developed on OSGi framework to communicate
-    with oneM2M server, called Common Services Entities CSE.
+    with oneM2M server, called Common Services Entities (CSE).
     </para>
   </section>
 
@@ -58,12 +58,26 @@
 
     <itemizedlist>
       <listitem>
+        <para><emphasis>Application Bundle</emphasis> - Application, which use oneM2M CSE's capability.
+        </para>
+      </listitem>
+      <listitem>
         <para><emphasis>ServiceLayer</emphasis> - This is the API used by oneM2M applications.
         </para>
       </listitem>
 
       <listitem>
         <para><emphasis>NotificationListener</emphasis> - Listner Interface, which is necessary to implement by oneM2M applications, when then need to received notifications.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>ServiceLayer Implmentation Bundle</emphasis> - Bundle providing implementation of ServiceLayer and its ServiceFactory.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>oneM2M CSE</emphasis> - oneM2M's Server. It may exist remotely or locally. 
         </para>
       </listitem>
 
@@ -162,8 +176,9 @@ public interface NotificationListener
        ResourceDTO has both fields with concrete names and a filed (attribute) for having sub-elemens in generic manner.
     </para>
     <para>
-       oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is represented in human readable labels, for example resourceID, meanwhile short name is a short label with 2-4 alphabetical characters, for example ri.
-      All field names in concrete DTOs are based on long name. Short name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
+       oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is human readable representation, for example &quot;resourceID&quot;,
+      meanwhile short name is compact representation for minimizing network transfer, consit with typically 2-4 alphabetical characters, for example &quot;ri&quot;.
+      All field names in concrete DTOs are based on long name. Long name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
     </para>
 
     <programlisting> 
@@ -203,7 +218,11 @@ public class GenericDTO extends DTO{
     <title>Security</title>
 
     <para>
-      Security would be kept in oneM2M communication layer and they are out of scope of this specification.
+      Implementation of ServiceLayer may use credentials on behalf of application bundles on the communication with oneM2M CSE.
+      So ServiceLayer Implementation should pass the service reference of ServiceLayer to only the proper application bundle. Use of ServiceFactory is to realize this. Application Bundles should not pass the service reference to other application bundles. 
+    </para>
+    <para>
+       How to configure those credentials are left to developer of ServiceLayer Implementation, and it is out of scope the specification.
     </para>
   </section>
 
