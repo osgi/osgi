@@ -20,7 +20,7 @@
 
     <para>The Service Layer provides a dynamic, concise and consistent
     programming model for Java developers, simplifying the development
-    and deployment of service by de-coupling the service's specification
+    and deployment of services by de-coupling the service's specification
     (Java interface) from its implementations. This model allows developers
     to bind to services only using their interface specifications.
     The selection of a specific implementation, optimized for a specific need
@@ -55,24 +55,20 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Represent Content</emphasis> - It must be possible to represent content managed outside
-          of the Framework with a bundle installed.  This is referred to as connecting the content to a bundle
-          in the Framework.</para>
+          <para><emphasis>OSGi Service Registry</emphasis> - It must be possible use the
+          OSGi Service Registry in environments that do not have the full OSGi Module Layer.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Class and Resource Loading</emphasis> - It must be possible for connected content to have classes
-          and resources loaded by class loaders outside the control of the Framework.</para>
+          <para><emphasis>OSGi Dependency Model</emphasis> - It must be possible to use
+          the requirements and capabilities model OSGi provides in environments that
+          do not have the full OSGi Module Layer. </para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Headers</emphasis> - It must be possible for connected content to have control
-          over the loading of bundle manifest headers.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Bundle Entries</emphasis> - It must be possible for connected content to have control
-          over the reading of bundle entry content.</para>
+          <para><emphasis>OSGi Extender Pattern</emphasis> - It must be possible to support
+          the OSGi Extender Pattern in environments that do not have the full OSGi Module
+          Layer. For example, Declarative Services.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -115,7 +111,7 @@
   <section>
     <title>Module Connector</title>
     <para>This section outlines how a <emphasis>launcher</emphasis> can launch
-    a framework implementation with an implementation of a <xref linkend="org.osgi.framework.connect.ModuleConnector" xrefstyle="hyperlink"/>, regardless of the
+    a Framework implementation with an implementation of a <xref linkend="org.osgi.framework.connect.ModuleConnector" xrefstyle="hyperlink"/>, regardless of the
     implementation type of the framework. This allows a launcher to embed an
     OSGi framework without having to provide code that differs between
     different implementations. 
@@ -123,7 +119,7 @@
 <section>
       <title>Launching a Framework</title>
 
-      <para>A framework implementation that supports the Connect specification must provide a
+      <para>A Framework implementation that supports the Connect specification must provide a
       <emphasis>factory</emphasis> class. A factory class is an indirection to
       create a framework implementation object. The implementation factory
       class must implement the <xref
@@ -289,10 +285,17 @@ com.acme.osgi.connect.Factory</programlisting>
 
       <para>When a bundle is installed, as defined by <xref
       linkend="i1314099"/>, a bundle location and an optional input stream
-      to the content is provided to the framework with the method <xref
+      to the content is provided with the <code>BundleContext</code> method <xref
       linkend="org.osgi.framework.BundleContext.installBundle-String-InputStream-" xrefstyle="hyperlink"/>.
-      Before the Framework reads the content of the bundle, the framework must call the <code>ModuleConnector</code>
-      method <xref linkend="org.osgi.framework.connect.ModuleConnector.connect-String-"
+      If a content input stream is provided to the call to <code>installBundle</code> then the Framework
+      must use that input stream to read the content of the bundle being installed.
+      In this case the Framework assumes that the management agent is not installing a 
+      connect bundle and wants the content from the provided input stream to be
+      installed into the Framework.
+      </para>
+
+      <para>When no input stream is provided to the <code>installBundle</code> method the Framework
+      must call the <code>ModuleConnector</code> method <xref linkend="org.osgi.framework.connect.ModuleConnector.connect-String-"
       xrefstyle="hyperlink"/>. The <code>connect</code> method is given the bundle location
       specified in the call to <xref linkend="org.osgi.framework.BundleContext.installBundle-String-InputStream-"
       xrefstyle="hyperlink"/>. The <code>connect</code> method must do one of the following:</para>
@@ -306,8 +309,9 @@ com.acme.osgi.connect.Factory</programlisting>
         </listitem>
 
         <listitem>
-          <para>Return an empty <code>Optional</code> indicating that the Framework must handle reading the
-          content of the bundle itself.</para>
+          <para>Return an empty <code>Optional</code> indicating that the Framework must create
+          the input stream from which to read the bundle by interpreting, in an implementation
+          dependent manner, the specified location.</para>
         </listitem>
 
         <listitem>
@@ -328,14 +332,58 @@ com.acme.osgi.connect.Factory</programlisting>
 
     <section>
       <title>Updating Connect Bundles</title>
-      <para>When a bundle is updated, as defined by <xref linkend="i3284680"/>, if the bundle is connected to
-      a <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> then the
-      <code>ConnectModule</code> method <xref linkend="org.osgi.framework.connect.ConnectModule.getContent--"
-      xrefstyle="hyperlink"/> is called to get the current <xref linkend="org.osgi.framework.connect.ConnectContent"
-      xrefstyle="hyperlink"/> for the bundle. The <code>ConnectContent</code> must be used by the Framework to access content for
-      updating the bundle's current <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/>.
-      Any exception thrown by the <code>getContent</code> method must be wrapped in a <code>BundleException</code>
-      and result in the <code>BundleException</code> being thrown by the bundle <code>update</code> method.</para>
+      <para>When a bundle is updated, as defined by <xref linkend="i3284680"/>, an optional input
+      stream to the content is provided with the <code>Bundle</code> method
+      <xref linkend="org.osgi.framework.Bundle.update-InputStream-" xrefstyle="hyperlink"/>.
+      If the content input stream is provided to the call to <code>update</code> then the Framework
+      must use that input stream to read the content of the bundle being updated. In this case
+      the Framework assumes the management agent is not updating the bundle to a connect bundle and wants the
+      content from the provided input stream to be used to update the bundle. This allows a
+      management agent to update a connect bundle a non-connect bundle.</para>
+
+      <para>When no input stream is provided to the <code>update</code> method the Framework must call
+      the <code>ModuleConnector</code> method <xref linkend="org.osgi.framework.connect.ModuleConnector.connect-String-"
+      xrefstyle="hyperlink"/>. The <code>connect</code> method is given the location of the
+      bundle being updated. The <code>connect</code> method must do one of the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Throw a <code>BundleException</code> if the update of the bundle is to be prevented.
+          In this case the <code>BundleException</code> must be thrown from the <code>update</code>
+          method. Any other exception thrown by the <code>connect</code> method must propagate to the caller
+          of the <code>update</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para>Return an empty <code>Optional</code> indicating that the Framework must create the
+          input stream from which to read the updated bundle by interpreting, in an implementation
+          dependent manner, this bundle's <code>Bundle-UpdateLocation</code> Manifest header, if present,
+          or this bundle's original location.</para>
+        </listitem>
+
+        <listitem>
+          <para>Return a present <code>Optional</code> indicating that the
+          <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/>
+          present must be connected to the bundle and used to access content
+          of the updated bundle.</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>If a <xref linkend="org.osgi.framework.connect.ConnectModule" xrefstyle="hyperlink"/> is found for the specified
+      bundle location, then the Framework must call the <code>ConnectModule</code> method
+      <xref linkend="org.osgi.framework.connect.ConnectModule.getContent--" xrefstyle="hyperlink"/> to access the
+      current <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/>
+      for the updated bundle. The <code>ConnectContent</code> must be used by the Framework to access content for the bundle's current
+      <xref linkend="org.osgi.framework.wiring.BundleRevision" xrefstyle="hyperlink"/>. Any exception thrown by the
+      <code>getContent</code> method must be wrapped in a <code>BundleException</code> and result in the 
+      <code>BundleException</code> being thrown by the <code>update</code> method.</para>
+
+      <para>When no input stream is provided to the call to <code>update</code> it is possible to update
+      a non-connect bundle to a connect bundle. Depending on the dynamic nature of the module
+      connector, updating a connect bundle may result in the exact same
+      <xref linkend="org.osgi.framework.connect.ConnectContent" xrefstyle="hyperlink"/> being used for
+      each updated revision for the bundle. This implies that the same class loader and content entries
+      could be used for each updated revision.</para>
     </section>
 
     <section>
@@ -432,10 +480,9 @@ com.acme.osgi.connect.Factory</programlisting>
         connect class loaders. This implies that the <xref linkend="org.osgi.framework.hooks.weaving.WeavingHook" xrefstyle="hyperlink"/>
         and <xref linkend="org.osgi.framework.hooks.weaving.WovenClassListener" xrefstyle="hyperlink"/> implementations
         will not be called for and will not be able to weave the classes from connect bundles. The activation policy as
-        defined by <xref linkend="i3270445"/> also cannot be supported because The framework will not have the necessary
+        defined by <xref linkend="i3270445"/> also cannot be supported because The Framework will not have the necessary
         hooks into the module connector class loader implementation to cause bundle activation on class load.</para>
 
-        <para></para>
       </section>
 
       <section>
@@ -627,7 +674,14 @@ com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</programlisting>
 
   <section>
     <title>Security</title>
-    <para>Enter security section</para>
+    <para>A <xref linkend="org.osgi.framework.connect.ModuleConnector" xrefstyle="hyperlink"/> implementation
+    should be considered part of the Framework implementation when it is used to launch a new Framework. Just
+    like Framework implementations can assume to have <code>AllPermission</code> granted, a module
+    connector should have <code>AllPermission</code> granted. A module connector will have
+    access to the bundle locations. A bundle location can be considered sensitive data that should
+    be protected. Module connector implementations should not expose the bundle location strings they obtain
+    without a necessary permission check, see
+    <xref linkend="org.osgi.framework.Bundle.getLocation--" xrefstyle="hyperlink"/>.</para>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.connect.xml"/>
