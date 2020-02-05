@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.osgi.impl.service.onem2m.CseService;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
@@ -24,8 +23,8 @@ public class ServiceLayerImplService implements ServiceLayer {
 	private CseService cse;
 	private final String origin;
 
-	public ServiceLayerImplService(String origin, CseService cse){
-		this.cse = cse;
+	public ServiceLayerImplService(String origin){
+		this.cse = new CseService();
 		this.origin = origin;
 	}
 

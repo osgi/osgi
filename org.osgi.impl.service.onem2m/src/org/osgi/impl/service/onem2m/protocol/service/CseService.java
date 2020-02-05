@@ -1,4 +1,4 @@
-package org.osgi.impl.service.onem2m;
+package org.osgi.impl.service.onem2m.protocol.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

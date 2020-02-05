@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.onem2m.protocol.ServiceLayerUtil;
 import org.osgi.impl.service.onem2m.protocol.service.ServiceLayerImplService;
@@ -26,9 +25,7 @@ public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 		Map<String, String> property = ServiceLayerUtil.getProperty(bundleSymbolicName, bundle.getBundleContext());
 
 
-			
-		CseService cse = new CseService();
-		ServiceLayer sl = new ServiceLayerImplService(property.get(ServiceLayerUtil.ORIGIN), cse);
+		ServiceLayer sl = new ServiceLayerImplService(property.get(ServiceLayerUtil.ORIGIN));
 		LOGGER.info("End factory");
 		return sl;
 
