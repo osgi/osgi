@@ -94,6 +94,7 @@
     <programlisting> 
 public interface ServiceLayer {
     Promise&lt;ResponsePrimitiveDTO&gt; request(RequestPrimitiveDTO request);
+    ...
 }
     </programlisting> 
 
@@ -103,8 +104,8 @@ public interface ServiceLayer {
     </para>
     <programlisting> 
 public interface ServiceLayer {
-    Promise&lt;ResponsePrimitiveDTO&gt; request(RequestPrimitiveDTO request);
-public Promise&lt;ResourceDTO&gt; create(String uri, ResourceDTO resource);
+    ...
+    public Promise&lt;ResourceDTO&gt; create(String uri, ResourceDTO resource);
 
     public Promise&lt;ResourceDTO&gt; retrieve(String uri);
 
@@ -115,8 +116,10 @@ public Promise&lt;ResourceDTO&gt; create(String uri, ResourceDTO resource);
     public Promise&lt;Boolean&gt; delete(String uri);
 
     public Promise&lt;List&lt;String&gt;&gt; discovery(String uri, FilterCriteriaDTO fc);
+
     public Promise&lt;List&lt;String&gt;&gt; discovery(String uri, FilterCriteriaDTO fc, 
         RequestPrimitiveDTO.DiscoveryResultType drt);
+
     public Promise&lt;Boolean&gt; notify(String uri, NotificationDTO notification );
 
 }
@@ -143,21 +146,58 @@ public interface NotificationListener
   <section>
     <title>DTO</title>
     <para>
-      OSGi DTO (TODO: link ) are used for representing data structured passed on API.
-      Some of the data structures, which are directly referred from API or referred in 2-3 hops, are specified with concreate field names. Other data structures are represented OSGi DTO in generic manner.
+      OSGi DTOs (TODO: link ) are used for representing data structured passed on API.
+      Some of the data structures, which are directly referred from API or in 2-3 hops, are specified with concreate field names. The following figure shows DTOs with concrete field names, and reference relationship. Other data structures, which are refered from those DTOs, are represented with GenericDTO which represents its sub-elements in generic manner.
     </para>
     <figure pgwide="1">
       <title>DTOs representing high level structures</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="8.100in"
-                     contentwidth="12.000in" fileref="onem2m-dto.svg"/>
+          <imagedata align="center" contentdepth="4.100in" contentwidth="6.000in" fileref="onem2m-dto.svg"/> 
         </imageobject>
       </mediaobject>
     </figure>
+    <para>
+       ResourceDTO has both fields with concrete names and a filed (attribute) for having sub-elemens in generic manner.
+    </para>
+    <para>
+       oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is represented in human readable labels, for example resourceID, meanwhile short name is a short label with 2-4 alphabetical characters, for example ri.
+      All field names in concrete DTOs are based on long name. Short name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
+    </para>
 
+    <programlisting> 
+public class ResourceDTO extends DTO{
+    public Integer resourceType;
+    public String resourceID;
+    public String parentID;
+    ...
+    public Map&lt;String, Object&gt; attribute;
+}
+    </programlisting> 
+
+    <programlisting> 
+public class GenericDTO extends DTO{
+    /**
+     * type of data structure, which is represented by this DTO.
+     * 
+     * This is optional field. The creator of the DTO may use the field 
+     * for clarification purpose.
+     * Receiver should not rely on this information to analyze data structure,
+     *  since this information may not provided.
+    */
+    public String type;
+
+    /**
+     * Substructure of DTO. Type of the value part should be one 
+     * of types allowed as OSGi DTO.
+     */
+    public HashMap&lt;String, Object&gt;element;
+
+}
+    </programlisting> 
   </section>
+
 
   <section>
     <title>Security</title>
@@ -179,5 +219,22 @@ public interface NotificationListener
       Specification, Java SE 8 Edition</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0001.ref"><title>oneM2M: Functional Architecture
+      </title><biblioid class="uri"><link
+      xlink:href="http://www.onem2m.org/technical/partner-transpositions"/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0004.ref"><title>oneM2M: Service Layer Core Protocol 
+      </title><biblioid class="uri"><link
+      xlink:href="http://www.onem2m.org/technical/partner-transpositions"/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.xsd.ref"><title>oneM2M-schemas 
+      </title><biblioid class="uri"><link
+      xlink:href="https://git.onem2m.org/PRO/XSD"/></biblioid></bibliomixed>
+    </bibliolist>
+
+
   </section>
 </chapter>

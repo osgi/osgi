@@ -103,26 +103,13 @@
 
           <tbody>
             <row>
-              <entry><xref linkend="service.remoteservices"
+              <entry><xref linkend="service.onem2m"
               xrefstyle="template:%n %t"/></entry>
 
               <entry><code>-</code></entry>
 
-              <entry><code><xref endterm="service.remoteservices-version"
-              linkend="service.remoteservices"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.log"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.log"/></code></para><para><code><xref
-              linkend="org.osgi.service.log.admin"/></code></para><para><code><xref
-              linkend="org.osgi.service.log.stream"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.service.log-version"
-              linkend="service.log"/></code></entry>
+              <entry><code><xref endterm="service.onem2m-version"
+              linkend="service.onem2m"/></code></entry>
             </row>
           </tbody>
         </tgroup>
