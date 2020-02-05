@@ -62,25 +62,4 @@ public class ResourceDTO extends DTO{
 	 */
 	public Map<String, Object> attribute;
 
-	/**
-	 * Setter method for attribute.
-	 * 
-	 * @param key key of attribute
-	 * @param value value of attribute
-	 */
-    public void setAttribute(String key, Object value) {
-        this.attribute.put(key, value);
-    }
-
-    /**
-	 * Getter method for attribute.
-	 * 
-	 * @return attributes
-	 * 
-	 * TODO: Funny.
-	 */
-    public Map<String, Object> getAttribute() {
-        return this.attribute;
-    }
-
 }
