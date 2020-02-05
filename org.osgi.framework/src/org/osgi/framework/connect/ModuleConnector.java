@@ -57,9 +57,8 @@ public interface ModuleConnector {
 	 * @param storage the persistent storage area used by the {@link Framework}
 	 *            or {@code null} if the platform does not have file system
 	 *            support.
-	 * @return a reference to this object
 	 */
-	ModuleConnector initialize(File storage, Map<String,String> configuration);
+	void initialize(File storage, Map<String,String> configuration);
 
 	/**
 	 * Connects a bundle location with a {@link ConnectModule}. If an

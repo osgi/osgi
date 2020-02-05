@@ -62,8 +62,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.connect.ConnectContent;
 import org.osgi.framework.connect.ConnectContent.ConnectEntry;
-import org.osgi.framework.connect.ModuleConnector;
 import org.osgi.framework.connect.ConnectModule;
+import org.osgi.framework.connect.ModuleConnector;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -123,10 +123,10 @@ public class ConnectTests extends LaunchTest {
 		private final Map<String,ConnectModule>	modules						= new ConcurrentHashMap<String,ConnectModule>();
 
 		@Override
-		public ModuleConnector initialize(File storage,
+		public void initialize(
+				File storage,
 				Map<String,String> configuration) {
 			initializeCalled.getAndIncrement();
-			return this;
 		}
 
 		@Override
@@ -222,19 +222,17 @@ public class ConnectTests extends LaunchTest {
 		}
 
 		@Override
-		public ConnectContent open() throws IOException {
+		public void open() throws IOException {
 			if (!isOpen.compareAndSet(false, true)) {
 				throw new IllegalStateException("Already Opened.");
 			}
-			return this;
 		}
 
 		@Override
-		public ConnectContent close() throws IOException {
+		public void close() throws IOException {
 			if (!isOpen.compareAndSet(true, false)) {
 				throw new IllegalStateException("Already Closed.");
 			}
-			return this;
 		}
 
 		void addEntry(String path, ConnectEntry entry) {
@@ -410,12 +408,11 @@ public class ConnectTests extends LaunchTest {
 		final AtomicReference<Map<String,String>> initConfig = new AtomicReference<>();
 		ModuleConnector activatorFactory = new TestCountingConnectFramework() {
 			@Override
-			public ModuleConnector initialize(File storage,
+			public void initialize(File storage,
 					Map<String,String> config) {
 				super.initialize(storage, config);
 				initFile.set(storage);
 				initConfig.set(config);
-				return this;
 			}
 		};
 

@@ -110,18 +110,16 @@ public interface ConnectContent {
 	 * until right before requests to access the bundle revision content are
 	 * made.
 	 * 
-	 * @return a reference to this object
 	 * @throws IOException if an error occurred opening the content
 	 */
-	ConnectContent open() throws IOException;
+	void open() throws IOException;
 
 	/**
 	 * Closes this connect content.
 	 * 
-	 * @return a reference to this object
 	 * @throws IOException if an error occurred closing the connect content
 	 */
-	ConnectContent close() throws IOException;
+	void close() throws IOException;
 
 	/**
 	 * Represents the entry of a connect module
