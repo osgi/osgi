@@ -11,6 +11,7 @@ osgi.cmpn.specs = \
      org.osgi.service.cdi, \
      org.osgi.service.clusterinfo, \
      org.osgi.service.cm, \
+     org.osgi.service.conditionfactory, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
      org.osgi.service.configurator, \

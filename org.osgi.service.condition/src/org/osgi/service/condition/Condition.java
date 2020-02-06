@@ -27,69 +27,23 @@ import org.osgi.annotation.versioning.ConsumerType;
 @ConsumerType
 public interface Condition {
 	/**
-	 * Service property identifying a condition's unique identifier.
+	 * Service property identifying a condition's unique identifier. The type of
+	 * this service property is {@code String+}
 	 */
-	// TODO what are the valid values of the service property? only String or
-	// any Object?
 	public static final String		CONDITION_ID									= "osgi.condition.id";
+
 	/**
 	 * The unique identifier for the TRUE Condition. The TRUE condition is
 	 * registered by the framework and therefore can always be relied upon.
-	 */
-	// TODO why is this not Boolean.TRUE?
-	public static final String		CONDITION_ID_TRUE								= "true";
-
-	/**
-	 * The condition factory PID. The factory PID used to configure conditions
-	 * with the condition factory.
-	 */
-	public static final String		CONDITION_FACTORY_PID							= "osgi.condition.factory";
-
-	/**
-	 * A condition factory configuration property identifying the condition's
-	 * unique identifier that will be used to register the condition when all
-	 * the match filters are satisfied.
 	 * 
-	 * @see #CONDITION_FACTORY_CONFIGURE_MATCH_ALL
-	 * @see #CONDITION_FACTORY_CONFIGURE_MATCH_NONE
+	 * @see Condition#CONDITION_ID
 	 */
-	public static final String		CONDITION_FACTORY_CONFIGURE_ID					= "osgi.condition.configure.id";
-	/**
-	 * A condition factory configuration property prefix identifying a service
-	 * property of the condition. The service property key is the remaining
-	 * content of the configuration property after the prefix. For example, a
-	 * configuration that contains
-	 * {@code osgi.condition.configure.properties.prop1=value1} results in a
-	 * service property {@code prop1=value1} when the condition is registered.
-	 */
-	public static final String		CONDITION_FACTORY_CONFIGURE_PROPERTIES_PREFIX	= "osgi.condition.configure.properties.";
-	/**
-	 * A condition factory configuration property identifying a list of target
-	 * filters for the condition. The condition may be registered when each
-	 * filter matches at least one service registration. The value of this
-	 * configuration property must be of type {@code Collection<String>}.
-	 */
-	public static final String		CONDITION_FACTORY_CONFIGURE_MATCH_ALL			= "osgi.condition.configure.match.all";
-	/**
-	 * A condition factory configuration property identifying a list of target
-	 * filters for the condition. The condition may not be registered if any of
-	 * the target filters match at least one service registration. The value of
-	 * this configuration property must be of type {@code Collection<String>}.
-	 */
-	public static final String		CONDITION_FACTORY_CONFIGURE_MATCH_NONE			= "osgi.condition.configure.match.none";
+	public static final String		CONDITION_ID_TRUE								= "true";
 
 	/**
 	 * A singleton condition instance that can be used to register condition
 	 * services.
 	 */
-	public static final Condition	INSTANCE										= new ConditionImpl();
+	public static final Condition	INSTANCE										= new Condition() {/* Nothing to do */};
 
-	/**
-	 * A default implementation of a condition.
-	 */
-	// TODO should this be final or do we allow others to extend this?
-	// TODO is this necessary to be a public type?
-	static class ConditionImpl implements Condition {
-		// nothing to implement
-	}
 }
