@@ -62,7 +62,7 @@ public interface ModuleConnector {
 
 	/**
 	 * Connects a bundle location with a {@link ConnectModule}. If an
-	 * {@link Optional#empty() empty} optional is returned the the framework
+	 * {@link Optional#empty() empty} optional is returned then the framework
 	 * must handle reading the content of the bundle itself. If a value is
 	 * {@link Optional#isPresent() present} in the returned optional then the
 	 * <code>ConnectModule</code> {@link Optional#get() value} from the optional
