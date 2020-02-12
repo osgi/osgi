@@ -234,7 +234,7 @@ public class GenericDTO extends DTO{
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="util.converter-jls.ref"><title>The Java Language
+      <bibliomixed xml:id="service.onem2m-jls.ref"><title>The Java Language
       Specification, Java SE 8 Edition</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
