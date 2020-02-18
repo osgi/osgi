@@ -10,7 +10,7 @@ public class NotificationDTO extends DTO{
 	/**
 	 * Notification Event
 	 */
-	public Map<String,Object> notificationEvent;//NotificationEventDTO
+	public NotificationEventDTO notificationEvent;
 //	@javax.xml.bind.annotation.XmlElement( required  = false)
 	/**
 	 * Flag showing verification request. 
@@ -46,5 +46,5 @@ public class NotificationDTO extends DTO{
 	 * IPE Discovery Request.
 	 * 
 	 */
-	public Map<String,Object> ipeDiscoveryRequest;//IPEDiscoveryRequestDTO
+	public IPEDiscoveryRequestDTO ipeDiscoveryRequest;
 }
