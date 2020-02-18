@@ -167,20 +167,23 @@ public class FilterCriteriaDTO extends DTO{
 	
 	/**
 	 * Apply Relative Path
+	 * 
+	 * @see oenM2M TS-0004 7.3.3.17.17
 	 */
 	public String applyRelativePath;
 
 	/** 
 	 * Enum FilterOperation
 	 *
+	 * @see oneM2M TS-0004 6.3.4.2.34
 	 */
 	public static enum FilterOperation {
 		/**
-		 * AND
+		 * Logical AND
 		 */
 		AND(1), 
 		/**
-		 * OR
+		 * Logical OR
 		 */
 		OR(2);
 
@@ -200,6 +203,8 @@ public class FilterCriteriaDTO extends DTO{
 
 	/**
 	 * Enum FilterUsage
+	 * 
+	 * @see oneM2M TS-0004 6.3.4.2.31
 	 */
 	public static enum FilterUsage {
 		/**
