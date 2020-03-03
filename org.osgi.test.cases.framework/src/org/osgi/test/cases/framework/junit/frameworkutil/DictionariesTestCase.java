@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -223,7 +224,20 @@ public class DictionariesTestCase {
 		assertThatNullPointerException().isThrownBy(() -> {
 			entry.setValue(null);
 		});
+	}
 
+	@Test
+	public void no_null_key_or_value_map() {
+		Map<String,String> noNullKeyValueMap = new ConcurrentHashMap<>();
+		assertThatNullPointerException().isThrownBy(() -> {
+			noNullKeyValueMap.containsKey(null);
+		});
+		assertThatNullPointerException().isThrownBy(() -> {
+			noNullKeyValueMap.containsValue(null);
+		});
+		assertThatCode(() -> {
+			FrameworkUtil.asDictionary(noNullKeyValueMap);
+		}).doesNotThrowAnyException();
 	}
 
 	@Test
