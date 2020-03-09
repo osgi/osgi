@@ -55,7 +55,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>OSGi Service Registry</emphasis> - It must be possible use the
+          <para><emphasis>OSGi Service Registry</emphasis> - It must be possible to use the
           OSGi Service Registry in environments that do not have the full OSGi Module Layer.</para>
         </listitem>
 
@@ -101,10 +101,20 @@
 
         <listitem>
           <para><emphasis>Connect Bundle</emphasis> - A bundle installed in the Framework that is connected to a 
-          connect module and has it content provided by a connect content.</para>
+          connect module and has its content provided by a connect content.</para>
         </listitem>
       </itemizedlist>
-      <para><emphasis>TODO - need a class diagram for entities</emphasis></para>
+      <figure pgwide="1">
+        <title>Connect Class Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="7.000in"
+                       contentwidth="6.125in"
+                       fileref="connect-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
   </section>
 
@@ -219,7 +229,7 @@
         linkend="org.osgi.framework.connect.ModuleConnector.createBundleActivator--" xrefstyle="hyperlink"/>.
         If the module connector provides a bundle activator then the <xref
         linkend="org.osgi.framework.BundleActivator.start-BundleContext-" xrefstyle="hyperlink"/> method must be
-        called before before returning from the <code>Framework</code> <xref 
+        called before returning from the <code>Framework</code> <xref 
         linkend="org.osgi.framework.launch.Framework.init--" xrefstyle="hyperlink"/> method and before
         any extension bundle activator <code>start</code> methods are called. Any exception thrown by a
         module connector activator <code>start</code> method must be wrapped in a <code>BundleException</code> 
@@ -339,7 +349,7 @@ com.acme.osgi.connect.Factory</programlisting>
       must use that input stream to read the content of the bundle being updated. In this case
       the Framework assumes the management agent is not updating the bundle to a connect bundle and wants the
       content from the provided input stream to be used to update the bundle. This allows a
-      management agent to update a connect bundle a non-connect bundle.</para>
+      management agent to update a connect bundle to a non-connect bundle.</para>
 
       <para>When no input stream is provided to the <code>update</code> method the Framework must call
       the <code>ModuleConnector</code> method <xref linkend="org.osgi.framework.connect.ModuleConnector.connect-String-"
@@ -401,7 +411,7 @@ com.acme.osgi.connect.Factory</programlisting>
         a Framework must first open the <code>ConnectContent</code> with the method
         <xref linkend="org.osgi.framework.connect.ConnectContent.open--" xrefstyle="hyperlink"/>.
         A Framework may open and close the content many times while the content is being used by the Framework.
-        For example, to limit the number of resources kept open concurrently by the Framework.  The framework
+        For example, to limit the number of resources kept open concurrently by the Framework.  The Framework
         must always ensure that the content is open before calling other methods on the
         <code>ConnectContent</code>. If any exception is thrown by the <code>open</code>
         method as a result of installing or updating a connect bundle then the exception
@@ -434,7 +444,7 @@ com.acme.osgi.connect.Factory</programlisting>
         <title>Bundle Class Loader</title>
 
         <para>Connect content is typically managed and loaded by an entity outside of the Framework itself. This may also
-        influence the way classes are defined and loaded for content outside of the Framework control. For bundle
+        influence the way classes are defined and loaded for content outside of the Framework's control. For bundle
         revisions that are connected to a <xref linkend="org.osgi.framework.connect.ConnectContent"
         xrefstyle="hyperlink"/> the framework must call the connect content method
         <xref linkend="org.osgi.framework.connect.ConnectContent.getClassLoader--" xrefstyle="hyperlink"/>
@@ -460,7 +470,7 @@ com.acme.osgi.connect.Factory</programlisting>
         another <code>ClassLoader</code> that does implement <code>BundleReference</code>. The
         <xref linkend="org.osgi.framework.BundleReference.getBundle--" xrefstyle="hyperlink"/> must return the bundle
         associated with the <code>BundleWiring</code>.  This wrapper loader simply delegates all loading to the 
-        <code>ClassLoader</code> provided connect content.  A framework is free to always return a wrapper loader
+        <code>ClassLoader</code> provided connect content.  A Framework is free to always return a wrapper loader
         for the <code>BundleWiring</code> method <xref linkend="org.osgi.framework.wiring.BundleWiring.getClassLoader--"
         xrefstyle="hyperlink"/> even when the connect content loader does implement the <code>BundleReference</code> interface.</para>
 

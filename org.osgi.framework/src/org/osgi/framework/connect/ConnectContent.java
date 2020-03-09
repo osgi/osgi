@@ -99,7 +99,7 @@ public interface ConnectContent {
 	 * again. This allows for a connect content to reuse or create a new class
 	 * loader each time the bundle revision is resolved.
 	 * 
-	 * @return a class loader for the module.
+	 * @return a class loader for the content.
 	 */
 	Optional<ClassLoader> getClassLoader();
 
@@ -122,7 +122,7 @@ public interface ConnectContent {
 	void close() throws IOException;
 
 	/**
-	 * Represents the entry of a connect module
+	 * Represents the entry of a connect content
 	 */
 	public interface ConnectEntry {
 		/**
