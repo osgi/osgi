@@ -34,10 +34,10 @@ public class ConditionFactoryConstants {
 	 * unique identifier that will be used to register the condition when all
 	 * the match filters are satisfied.
 	 * 
-	 * @see #CONDITION_FACTORY_CONFIGURE_MATCH_ALL
-	 * @see #CONDITION_FACTORY_CONFIGURE_MATCH_NONE
+	 * @see #CONDITION_FACTORY_MATCH_ALL
+	 * @see #CONDITION_FACTORY_MATCH_NONE
 	 */
-	public static final String	CONDITION_FACTORY_CONFIGURE_ID					= "osgi.condition.configure.id";
+	public static final String	CONDITION_FACTORY_CONFIGURE_ID					= "configure.id";
 	/**
 	 * A condition factory configuration property prefix identifying a service
 	 * property of the condition. The service property key is the remaining
@@ -46,20 +46,20 @@ public class ConditionFactoryConstants {
 	 * {@code osgi.condition.configure.properties.prop1=value1} results in a
 	 * service property {@code prop1=value1} when the condition is registered.
 	 */
-	public static final String	CONDITION_FACTORY_CONFIGURE_PROPERTIES_PREFIX	= "osgi.condition.configure.properties.";
+	public static final String	CONDITION_FACTORY_PROPERTIES_PREFIX	= "condition.properties.";
 	/**
 	 * A condition factory configuration property identifying a list of target
 	 * filters for the condition. The condition may be registered when each
 	 * filter matches at least one service registration. The value of this
 	 * configuration property must be of type {@code Collection<String>}.
 	 */
-	public static final String	CONDITION_FACTORY_CONFIGURE_MATCH_ALL			= "osgi.condition.configure.match.all";
+	public static final String	CONDITION_FACTORY_MATCH_ALL			= "match.all";
 	/**
 	 * A condition factory configuration property identifying a list of target
 	 * filters for the condition. The condition may not be registered if any of
 	 * the target filters match at least one service registration. The value of
 	 * this configuration property must be of type {@code Collection<String>}.
 	 */
-	public static final String	CONDITION_FACTORY_CONFIGURE_MATCH_NONE			= "osgi.condition.configure.match.none";
+	public static final String	CONDITION_FACTORY_MATCH_NONE		= "match.none";
 
 }

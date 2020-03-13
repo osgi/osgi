@@ -19,7 +19,22 @@ package org.osgi.service.condition;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * A condition service.
+ * OSGi due to its modular nature provides <code>Requirements</code> and
+ * <code>Capabilities</code> to declare what a Bundle needs in order to run
+ * properly. This is honored by the resolver and enforced by the Framework at
+ * runtime. The dynamic nature however can provide some impediments at runtime.
+ * That there is a Bundle that might provide a certain service or capability
+ * does not mean, that it will be available when and a component expects it be.
+ * <p>
+ * Conditions are to the Service Layer what Requirements and Capabilities are to
+ * the module Layer
+ * <p>
+ * The <code>Condition</code> interface is designed to address this issue. Its
+ * task is to provide a marker that can be tracked if a some Condition is meet
+ * and for example a Requirement is meet at Runtime.
+ * <p>
+ * A Condition must be registered with the {@link Condition#CONDITION_ID} as
+ * property.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -30,7 +45,7 @@ public interface Condition {
 	 * Service property identifying a condition's unique identifier. The type of
 	 * this service property is {@code String+}
 	 */
-	public static final String		CONDITION_ID									= "osgi.condition.id";
+	public static final String		CONDITION_ID		= "osgi.condition.id";
 
 	/**
 	 * The unique identifier for the TRUE Condition. The TRUE condition is
@@ -38,12 +53,13 @@ public interface Condition {
 	 * 
 	 * @see Condition#CONDITION_ID
 	 */
-	public static final String		CONDITION_ID_TRUE								= "true";
+	public static final String		CONDITION_ID_TRUE	= "true";
 
 	/**
 	 * A singleton condition instance that can be used to register condition
 	 * services.
 	 */
-	public static final Condition	INSTANCE										= new Condition() {/* Nothing to do */};
+	public static final Condition	INSTANCE			= new Condition() {
+															/* Nothing to do */};
 
 }
