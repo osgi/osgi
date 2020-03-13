@@ -18,12 +18,12 @@
 
    <section>
      <title>Introduction of oneM2M</title>
-      <para>oneM2M™ is a standard for IoT platfrom, which is standardized by oneM2M partnership project.
-      oneM2M defines set of functionarities that are commonly used in IoT applications, which is called Common Services Function (CSF).
-      The implementation of the CSF is provided by Communicagtion Service Entity (CSE). 
-      oneM2M also defines the interface to use the CSF with REST oriented API that consist of limited types of opereation (CREATE, RETRIEVE, UPDATE, DELETE, NOTIFIY) on many types of resources.
+      <para>oneM2M™ is a standard for IoT platform, which is standardized by oneM2M partnership project.
+      oneM2M defines set of functionalities that are commonly used in IoT applications, which is called Common Services Function (CSF).
+      The implementation of the CSF is provided by Communication Service Entity (CSE). 
+      oneM2M also defines the interface to use the CSF with REST oriented API that consist of limited types of operation (CREATE, RETRIEVE, UPDATE, DELETE, NOTIFY) on many types of resources.
        Applications of oneM2M use the interface to communicate with CSEs.
-      In a system managed by a single service provder, multiple CSEs can exist and they form tree structure. The root CSE is called Infrastructured Node CSE (IN-CSE).
+      In a system managed by a single service provider, multiple CSEs can exist and they form tree structure. The root CSE is called Infrastructure Node CSE (IN-CSE).
        Each application connects to one of CSEs in the system. CSEs have routing capability and application can send request to any CSEs in the system through the directly-connected CSE.
     </para>
 
@@ -41,8 +41,8 @@
      <title>Potential Problem of oneM2M</title>
     <para>
       One of potential problems is application portability. 
-      oneM2M specifies protocol based interfaces, but doesn’t specify a programing level API. 
-      Without a standardized API, application program tends to be built tightly coupled with the librraries handling the communication method (combination of protocol and serialization) that is initially intend to use. 
+      oneM2M specifies protocol based interfaces, but doesn’t specify a programming level API. 
+      Without a standardized API, application program tends to be built tightly coupled with the libraries handling the communication method (combination of protocol and serialization) that is initially intend to use. 
       In that case it would be hard to operate the application in another environment where different communication method is used; basically it is required to modify the application drastically. 
       oneM2M could introduce segmentation of ecosystem within oneM2M compliant applications  due to the lack of application portability.
      </para>
@@ -56,7 +56,7 @@
      </para>
      <para>
         Another benefit of the service is reduction of computational resources, typically latency of execution in a certain cases, where both application and CSE is implemented on OSGi framework. 
-       In that case, requires serialization/deserialization of data, context-switch of applications can be reduced, compared to the case where they communiccates with a certain communication protocol.
+       In that case, requires serialization/deserialization of data, context-switch of applications can be reduced, compared to the case where they communicates with a certain communication protocol.
     </para>
   </section>
 
@@ -79,7 +79,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Use of DTO</emphasis> - DTO is used as parameters passing on API. Since oneM2M defines many types, concrete DTOs are specified for the higher level structure, and for lower structtures generic DTO is used.  </para>
+        <para><emphasis>Use of DTO</emphasis> - DTO is used as parameters passing on API. Since oneM2M defines many types, concrete DTOs are specified for the higher level structure, and for lower structures generic DTO is used.  </para>
       </listitem>
 
       <listitem>
@@ -104,12 +104,12 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>NotificationListener</emphasis> - Listner Interface, which is necessary to implement by oneM2M applications, when then need to received notifications.
+        <para><emphasis>NotificationListener</emphasis> - Listener Interface, which is necessary to implement by oneM2M applications, when then need to received notifications.
         </para>
       </listitem>
 
       <listitem>
-        <para><emphasis>ServiceLayer Implmentation Bundle</emphasis> - Bundle providing implementation of ServiceLayer and its ServiceFactory.
+        <para><emphasis>ServiceLayer Implementation Bundle</emphasis> - Bundle providing implementation of ServiceLayer and its ServiceFactory.
         </para>
       </listitem>
 
@@ -212,7 +212,7 @@ public interface ServiceLayer {
     <title>NotificationListener</title>
     <para>
       NotificationListener is a interface for receiving oneM2M notification. An application that needs to receive
-     oneM2M notificatoin must implement the interface and register it to OSGi registry.
+     oneM2M notification must implement the interface and register it to OSGi registry.
     </para>
 
 <!--
@@ -230,7 +230,7 @@ public interface NotificationListener
     <title>DTO</title>
     <para>
       OSGi DTOs (TODO: link ) are used for representing data structured passed on API.
-      Some of the data structures, which are directly referred from API or in small number of hops, are specified with concreate field names. The following figure shows DTOs with concrete field names, and reference relationship of class. 
+      Some of the data structures, which are directly referred from API or in small number of hops, are specified with concrete field names. The following figure shows DTOs with concrete field names, and reference relationship of class. 
       Following DTO's rule, instances must not have loop reference relationship.
     </para>
     <figure pgwide="1">
@@ -244,13 +244,13 @@ public interface NotificationListener
     </figure>
     <para>
        ResourceDTO represents oneM2M resource. 
-       ResourceDTO has both fields with concrete names and a field (named as attribute) for having sub-elemens in generic manner. 
-      All of fields of the ResourceDTO represent attribugtes.  Most of attributes have a primitive type and part of attributes have structured value. 
+       ResourceDTO has both fields with concrete names and a field (named as attribute) for having sub-elements in generic manner. 
+      All of fields of the ResourceDTO represent attributes.  Most of attributes have a primitive type and part of attributes have structured value. 
       For structured value, if it possible defined concrete DTOs must be used, otherwise GenericDTO must be used. 
     </para>
     <para>
        oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is human readable representation, for example &quot;resourceID&quot;,
-      meanwhile short name is compact representation for minimizing network transfer, consit with typically 2-4 alphabetical characters, for example &quot;ri&quot;.
+      meanwhile short name is compact representation for minimizing network transfer, consist with typically 2-4 alphabetical characters, for example &quot;ri&quot;.
       All field names in concrete DTOs are based on long name. Long name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
     </para>
 
