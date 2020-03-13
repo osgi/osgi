@@ -3,9 +3,10 @@ package org.osgi.service.onem2m;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
 
 /**
- * Primary Interface for an oneM2M entity to send request and get response to/from other
- * oneM2M entity.
- *
+ * Interface to receive notification from other oneM2M entities.
+ * 
+ * Application which receives notification must implement this interface and 
+ * register to OSGi service registry. No service property is required.
  */
 public interface NotificationListener
 {

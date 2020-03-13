@@ -168,14 +168,14 @@ public class FilterCriteriaDTO extends DTO{
 	/**
 	 * Apply Relative Path
 	 * 
-	 * @see oenM2M TS-0004 7.3.3.17.17
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oenM2M TS-0004 7.3.3.17.17</a>
 	 */
 	public String applyRelativePath;
 
 	/** 
 	 * Enum FilterOperation
 	 *
-	 * @see oneM2M TS-0004 6.3.4.2.34
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.4.2.34</a>
 	 */
 	public static enum FilterOperation {
 		/**
@@ -204,7 +204,7 @@ public class FilterCriteriaDTO extends DTO{
 	/**
 	 * Enum FilterUsage
 	 * 
-	 * @see oneM2M TS-0004 6.3.4.2.31
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.4.2.31</a>
 	 */
 	public static enum FilterUsage {
 		/**

@@ -9,21 +9,58 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Service Layer API for oneM2M</title>
+  <title>Service Layer API for oneM2M™</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.onem2m-version"
     linkend="org.osgi.service.onem2m"/></releaseinfo>
   </info>
 
-  <section>
-    <title>Introduction</title>
+   <section>
+     <title>Introduction of oneM2M</title>
+      <para>oneM2M™ is a standard for IoT platfrom, which is standardized by oneM2M partnership project.
+      oneM2M defines set of functionarities that are commonly used in IoT applications, which is called Common Services Function (CSF).
+      The implementation of the CSF is provided by Communicagtion Service Entity (CSE). 
+      oneM2M also defines the interface to use the CSF with REST oriented API that consist of limited types of opereation (CREATE, RETRIEVE, UPDATE, DELETE, NOTIFIY) on many types of resources.
+       Applications of oneM2M use the interface to communicate with CSEs.
+      In a system managed by a single service provder, multiple CSEs can exist and they form tree structure. The root CSE is called Infrastructured Node CSE (IN-CSE).
+       Each application connects to one of CSEs in the system. CSEs have routing capability and application can send request to any CSEs in the system through the directly-connected CSE.
+    </para>
 
-    <para>oneM2M is a standard for IoT platfrom, which is standardized by oneM2M partnership project.
-    This specification provides interfaes to oneM2M applications developed on OSGi framework to communicate
-    with oneM2M server, called Common Services Entities (CSE).
+    <para>
+      One of characteristic aspects of oneM2M is to allow multiple protocols and serialization formats for messages. Currently specified protocols are HTTP, CoAP, MQTT and WebSocket, and 
+      specified serialization are XML, JSON and CBOR (Concise Binary Object Representation). To make specification coherent, oneM2M specifications are separated into Resource model
+      written in TS-0001 , data format and procedure written in TS-0004 and mapping to concrete protocols in TS-0009, TS-0004, TS-0010, and TS-0020 respectively.
+      Here, abstraction level independent on concrete protocols is regarded as Service Layer.     
+    </para>
+    <para>oneM2M Partners Type 1 (ARIB, ATIS, CCSA, ETSI, TIA, TSDSI, TTA, TTC) register oneM2M trademarks and logos in their respective jurisdictions.
+    </para>
+   </section>
+
+   <section>
+     <title>Potential Problem of oneM2M</title>
+    <para>
+      One of potential problems is application portability. 
+      oneM2M specifies protocol based interfaces, but doesn’t specify a programing level API. 
+      Without a standardized API, application program tends to be built tightly coupled with the librraries handling the communication method (combination of protocol and serialization) that is initially intend to use. 
+      In that case it would be hard to operate the application in another environment where different communication method is used; basically it is required to modify the application drastically. 
+      oneM2M could introduce segmentation of ecosystem within oneM2M compliant applications  due to the lack of application portability.
+     </para>
+   </section>  
+   <section>
+     <title>Introduction of Service Layer API for oneM2M</title>
+     <para>
+        This chapter provides interface to oneM2M applications for communicating communicate CSE at Service Layer of oneM2M.
+        The providing API is protocol and serialization agnostic for preventing the problem above.
+        Once application developer write code, it can be run in other environment where different communication method is used.d
+     </para>
+     <para>
+        Another benefit of the service is reduction of computational resources, typically latency of execution in a certain cases, where both application and CSE is implemented on OSGi framework. 
+       In that case, requires serialization/deserialization of data, context-switch of applications can be reduced, compared to the case where they communiccates with a certain communication protocol.
     </para>
   </section>
+
+
 
   <section>
     <title>Essentials</title>
@@ -34,7 +71,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Serialization Agnostic</emphasis> - API is independent on serialization that are actually used in communications. oneM2M specifies multiple serializations, which are XML, JSON and Concise Binary Object Representation CBOR .</para>
+        <para><emphasis>Serialization Agnostic</emphasis> - API is independent on serialization that are actually used in communications. oneM2M specifies multiple serializations, which are XML, JSON and CBOR .</para>
       </listitem>
 
       <listitem>
@@ -96,26 +133,55 @@
   </section>
 
   <section>
-    <title>ServiceLayer</title>
+    <title>oneM2M ServiceLayer</title>
     <para>
-      ServiceLayer is the interface used by an application for sending request and get response as return method.
+      org.osgi.service.onem2m.ServiceLayer is the interface used by an application for sending request and get response as return method.
       It contains low level API and high level API.
     </para>
     <para>
-      request() method shown in next list is low level API. It takes requestPrimitive as argument and returns responseRequest. It allows all possible operation of oneM2M. OSGi Promise specification (TODO:Link ) is used for allowing synchoronous and asynchronous calling manner.
+     request() method allows very raw data type access and it enables all possible message exchanges among oneM2M entities. This is called the low level API.
+     The method takes requestPrimitive as an argument and returns responseRequest. 
+     It allows all possible operation of oneM2M. For the return type, OSGi Promise (TODO:Link to org.osgi.util.promise.Promise  ) is used for allowing synchronous and asynchronous calling manner.
     </para>
 
+<!--
     <programlisting> 
 public interface ServiceLayer {
     Promise&lt;ResponsePrimitiveDTO&gt; request(RequestPrimitiveDTO request);
     ...
 }
     </programlisting> 
+-->
 
-    <para>
-       Next methos are fow high level API. They allow application to operate more high level manner, that is, resource operation level, which are create, retrieve, update, delete, and discovery.
-       In addition to them, it allows sending notification by notify() method.
-    </para>
+<para>
+The low level API can be redundant to application developers, because they need to write composition of requestPrimitive and decomposition of responsePrimitive. 
+Following methods allow application developers to develop application with less lines of code. They provides more higher level of abstraction; operation level of resource such as create, retrieve, update, delete, notify and discovery. They cover typical oneM2M operations but not cover all of possible messages of oneM2M.
+ Implementation of these methods automatically inserts ‘requestID’ and ‘from’ parameter to RequestDTO. 
+</para>
+
+
+<!--
+<para>
+The create() method is a method to create new resource under specified uri. The second argument resource is expression of resource to be generated. The resourceType field of the resourceDTO must be assigned. For other fields depends on resource type. Section 7.4 of TS-00004 specifies the optionalities of the fields. 
+</para>
+<para>
+The retrieve() methods are methods to retrieve resource on URI specified by uri argument. There are two variations of retrieve methods, one has ‘targetAttributes’ argument and the other doesn’t have.  The arguments are for specifying attributes to be retrieved. The retrieve method without  ‘targetAttributes’ arguments behaves as all of attributes are specified.
+</para>
+<para>
+The update() method is a method to update resource on the URI specified by uri argument. The resource argument holds attributes to be updated. Attributes not to be updated shall not included in the argument. 
+</para>
+<para>
+The delete() method is a method to delete resouce on the URI specified by uri argument.
+</para>
+<para>
+The discovery() methods are methods to find resources under URI specified by uri argument with condition specified by fc arguments. There are two variations of the methods, one has additional  ‘drt’ argument which specifies the expression of returned URIs. The possible parameter can be structured or unstructured. The method with ‘drt’ argument  behaves as structured is specified.
+</para>
+<para>
+The notify() method is a method to send notification to URI specified by uri argument. The notification argument expresses notification to be sent.
+</para>
+-->
+
+<!--
     <programlisting> 
 public interface ServiceLayer {
     ...
@@ -138,6 +204,7 @@ public interface ServiceLayer {
 
 }
     </programlisting> 
+-->
 
   </section>
 
@@ -148,12 +215,14 @@ public interface ServiceLayer {
      oneM2M notificatoin must implement the interface and register it to OSGi registry.
     </para>
 
+<!--
     <programlisting> 
 public interface NotificationListener
 {
     public void notified(RequestPrimitiveDTO request);
 }
     </programlisting> 
+-->
 
   </section>
 
@@ -161,19 +230,23 @@ public interface NotificationListener
     <title>DTO</title>
     <para>
       OSGi DTOs (TODO: link ) are used for representing data structured passed on API.
-      Some of the data structures, which are directly referred from API or in 2-3 hops, are specified with concreate field names. The following figure shows DTOs with concrete field names, and reference relationship. Other data structures, which are refered from those DTOs, are represented with GenericDTO which represents its sub-elements in generic manner.
+      Some of the data structures, which are directly referred from API or in small number of hops, are specified with concreate field names. The following figure shows DTOs with concrete field names, and reference relationship of class. 
+      Following DTO's rule, instances must not have loop reference relationship.
     </para>
     <figure pgwide="1">
       <title>DTOs representing high level structures</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="4.100in" contentwidth="6.000in" fileref="onem2m-dto.svg"/> 
+          <imagedata align="center" contentdepth="4.100in" contentwidth="6.000in" fileref="onem2m-dto.png"/> 
         </imageobject>
       </mediaobject>
     </figure>
     <para>
-       ResourceDTO has both fields with concrete names and a filed (attribute) for having sub-elemens in generic manner.
+       ResourceDTO represents oneM2M resource. 
+       ResourceDTO has both fields with concrete names and a field (named as attribute) for having sub-elemens in generic manner. 
+      All of fields of the ResourceDTO represent attribugtes.  Most of attributes have a primitive type and part of attributes have structured value. 
+      For structured value, if it possible defined concrete DTOs must be used, otherwise GenericDTO must be used. 
     </para>
     <para>
        oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is human readable representation, for example &quot;resourceID&quot;,
@@ -181,6 +254,7 @@ public interface NotificationListener
       All field names in concrete DTOs are based on long name. Long name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
     </para>
 
+<!--
     <programlisting> 
 public class ResourceDTO extends DTO{
     public Integer resourceType;
@@ -211,6 +285,7 @@ public class GenericDTO extends DTO{
 
 }
     </programlisting> 
+-->
   </section>
 
 
@@ -222,7 +297,7 @@ public class GenericDTO extends DTO{
       So ServiceLayer Implementation should pass the service reference of ServiceLayer to only the proper application bundle. Use of ServiceFactory is to realize this. Application Bundles should not pass the service reference to other application bundles. 
     </para>
     <para>
-       How to configure those credentials are left to developer of ServiceLayer Implementation, and it is out of scope the specification.
+       How to configure those credentials is left to developer of ServiceLayer Implementation, and it is out of scope the specification.
     </para>
   </section>
 
@@ -239,14 +314,14 @@ public class GenericDTO extends DTO{
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
-      <bibliomixed xml:id="service.onem2m.ts-0001.ref"><title>oneM2M: Functional Architecture
+      <bibliomixed xml:id="service.onem2m.ts-0001.ref"><title>oneM2M: TS-0001 Functional Architecture V3.15.1
       </title><biblioid class="uri"><link
-      xlink:href="http://www.onem2m.org/technical/partner-transpositions"/></biblioid></bibliomixed>
+      xlink:href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
-      <bibliomixed xml:id="service.onem2m.ts-0004.ref"><title>oneM2M: Service Layer Core Protocol 
+      <bibliomixed xml:id="service.onem2m.ts-0004.ref"><title>oneM2M: TS-0004 Service Layer Core Protocol  V3.11.2
       </title><biblioid class="uri"><link
-      xlink:href="http://www.onem2m.org/technical/partner-transpositions"/></biblioid></bibliomixed>
+      xlink:href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.xsd.ref"><title>oneM2M-schemas 

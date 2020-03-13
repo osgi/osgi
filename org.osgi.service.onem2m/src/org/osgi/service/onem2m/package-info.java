@@ -30,7 +30,7 @@
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.usbinfo; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.onem2m; version="[1.0,1.1)"}
  *
  * @author $Id$
  */

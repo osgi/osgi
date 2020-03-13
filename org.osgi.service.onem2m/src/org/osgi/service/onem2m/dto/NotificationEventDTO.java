@@ -1,6 +1,6 @@
 package org.osgi.service.onem2m.dto;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -8,7 +8,7 @@ import java.util.HashMap;
  * 
  * This data structure is held in NotificationDTO.
  * 
- * @see oneM2M TS-0004 6.3.5.13
+ * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.5.13</a>
  *
  */
 public class NotificationEventDTO {
@@ -16,21 +16,21 @@ public class NotificationEventDTO {
 	 * 
 	 * m2m:representation
 	 * 
-	 * @see oneM2M TS-0004 6.3.5.62
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.5.62</a>
 	 */
 	public Object representation;
 	
 	/**
 	 * operationMonitor
 	 * 
-	 * @see oneM2M TS-0004 6.3.5.57
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.5.57</a>
 	 */
-	public HashMap<String, Object> operationMonitor;
+	public Map<String, Object> operationMonitor;
 	
 	/**
 	 * notificationEventType
 	 * 
-	 * @see oneM2M TS-0004 6.3.4.2.19 
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.4.2.19</a>
 	 */
 	public NotificationEventType notificationEventType;
 	
@@ -38,7 +38,7 @@ public class NotificationEventDTO {
 	/**
 	 * NotificationEventType
 	 * 
-	 * @see oneM2M TS-0004 6.3.4.2.19 
+	 * @see <a href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M TS-0004 6.3.4.2.19 </a>
 	 * 
 	 */
 	public static enum NotificationEventType {

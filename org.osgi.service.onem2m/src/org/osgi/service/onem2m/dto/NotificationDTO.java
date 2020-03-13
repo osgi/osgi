@@ -1,6 +1,4 @@
 package org.osgi.service.onem2m.dto;
-import java.util.Map;
-
 import org.osgi.dto.DTO;
 
 /**

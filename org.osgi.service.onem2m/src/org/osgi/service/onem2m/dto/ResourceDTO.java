@@ -58,7 +58,10 @@ public class ResourceDTO extends DTO{
 
 	/**
 	 * Non Universal Attribute.
+	 * 
 	 * Value Part must be the types that are allowed for OSGi DTO.
+	 * In case of value part can be expressed DTO in this package, the DTO must be used.
+	 * In case of value part have sub-elements, GenericDTO must be used. 
 	 */
 	public Map<String, Object> attribute;
 
