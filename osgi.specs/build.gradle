@@ -94,7 +94,7 @@ def specifications = tasks.register('specifications') {
 }
 defaultTasks += absoluteProjectPath(specifications.name)
 
-def books = ['core', 'cmpn', 'enterprise','iot']
+def books = ['core', 'cmpn', 'enterprise']
 
 books.forEach { book ->
     def booktask = tasks.register("${book}.xml") {
