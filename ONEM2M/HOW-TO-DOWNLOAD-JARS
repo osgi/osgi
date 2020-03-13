@@ -1,9 +1,0 @@
-I stop uploading jar files, which are manully deployed, because it could make git repo slower.
-The list of the jar files are listed in file nameed MISSING-JAR.
-
-You can download those jar files as follows.
-
-cd ONEM2M   # This directory
-
-./download.sh
-./download2.sh
