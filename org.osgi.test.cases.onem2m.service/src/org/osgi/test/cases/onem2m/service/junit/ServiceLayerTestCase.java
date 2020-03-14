@@ -1,17 +1,24 @@
 package org.osgi.test.cases.onem2m.service.junit;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-
+import java.util.HashSet;
 import java.util.List;
-import org.junit.Test;
+import java.util.Set;
 
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO.FilterUsage;
+import org.osgi.service.onem2m.dto.NotificationDTO;
+import org.osgi.service.onem2m.dto.NotificationEventDTO;
+import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -388,6 +395,81 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Discovery Test 2 is complete----");
 	}
     
+	/**
+	 * Class for receiving notification
+	 */
+	class MyListener implements NotificationListener {
+		Set<RequestPrimitiveDTO> holder;
+
+		public MyListener(Set<RequestPrimitiveDTO> holder) {
+			this.holder = holder;
+		}
+
+		public void notified(RequestPrimitiveDTO request) {
+			holder.add(request);
+		}
+	}
+
+	@Test
+	public void testNotify1() {
+		LOGGER.info("----Start Notify Test 1----");
+		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
+
+		NotificationListener listener = new MyListener(set);
+		con.registerService(NotificationListener.class.getName(), listener, null);
+
+		NotificationDTO notif = new NotificationDTO();
+		notif.notificationEvent = new NotificationEventDTO();
+		notif.notificationEvent.representation = "dummy:URI";
+
+		Promise<Boolean> pb = serviceLayerService.notify("/in-cse/Cae1", notif);
+
+		boolean ret = false;
+		try {
+			ret = pb.getValue();
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+			fail();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		assertEquals(true, ret);
+		assertEquals(false, set.isEmpty());
+		LOGGER.info("----Discovery Notify 1 is complete----");
+	}
+
+	@Test
+	public void testNotify2() {
+		LOGGER.info("----Start Notify Test 2----");
+		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
+
+		NotificationListener listener = new MyListener(set);
+		con.registerService(NotificationListener.class.getName(), listener, null);
+
+		NotificationDTO notif = new NotificationDTO();
+		notif.notificationEvent = new NotificationEventDTO();
+		notif.notificationEvent.representation = "dummy:URI";
+
+		Promise<Boolean> pb = serviceLayerService.notify("/mn-cse/Cae2", notif);// disconnected cse
+
+		boolean ret = false;
+		try {
+			ret = pb.getValue();
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+			fail();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		assertEquals(false, ret);
+		assertEquals(true, set.isEmpty());
+		LOGGER.info("----Discovery Notify 2 is complete----");
+	}
+
 //    @Test
 //   	public void testDummy(){
 //    	// try to fail

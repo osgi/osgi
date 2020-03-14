@@ -1,7 +1,7 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
--dependson: org.osgi.service.onem2m
+-dependson: org.osgi.service.onem2m, org.osgi.impl.service.onem2m
 
 Bundle-Description: Tests the service layre bundle
 

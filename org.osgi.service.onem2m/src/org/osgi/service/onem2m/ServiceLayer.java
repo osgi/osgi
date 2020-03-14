@@ -110,6 +110,7 @@ public interface ServiceLayer {
 	 * @param fc filter criteria
 	 * @param drt Discovery Result Type (structured/unstructured)
 	 * @return list of URIs matching the condition specified in fc
+	 * 
 	 */
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, RequestPrimitiveDTO.DiscoveryResultType drt);
 

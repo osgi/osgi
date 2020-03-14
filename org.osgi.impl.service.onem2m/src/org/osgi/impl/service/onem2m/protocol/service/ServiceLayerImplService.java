@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
@@ -22,10 +26,12 @@ public class ServiceLayerImplService implements ServiceLayer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerImplService.class);
 	private CseService cse;
 	private final String origin;
+	private BundleContext context;
 
-	public ServiceLayerImplService(String origin){
+	public ServiceLayerImplService(String origin, BundleContext context){
 		this.cse = new CseService();
 		this.origin = origin;
+		this.context = context;
 	}
 
 	@Override
@@ -58,7 +64,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 						break;
 
 					case Notify:
-
+						ret = notifySend(request);
 						break;
 				}
 				dret.resolve(ret);
@@ -70,6 +76,41 @@ public class ServiceLayerImplService implements ServiceLayer {
 		t.start();
 
 		return dret.getPromise();
+	}
+
+	ResponsePrimitiveDTO notifySend(RequestPrimitiveDTO req) {
+		ResponsePrimitiveDTO res = new ResponsePrimitiveDTO();
+		String to = req.to;
+		if (to == null) {
+			res.responseStatusCode = 1000;// error
+			return res;
+		}
+		String[] element = to.split("/");
+		if (element[1].equals("in-cse")) {
+
+			LOGGER.info("NOW prepare to send notification!!!");
+			ServiceReference[] rs;
+			try {
+				rs = context.getServiceReferences(NotificationListener.class.getName(), null);
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
+				res.responseStatusCode = 1000;
+				return res;
+			}
+			for (ServiceReference ref : rs) {
+				LOGGER.info("symbolic name:" + ref.getBundle().getSymbolicName());
+				LOGGER.info("bundle location:" + ref.getBundle().getLocation());
+
+				if (ref.getBundle().getSymbolicName().equals("org.osgi.test.cases.onem2m.service")) {
+					NotificationListener lis = (NotificationListener) context.getService(ref);
+					lis.notified(req);
+				}
+			}
+			res.responseStatusCode = 2000;
+		} else {
+			res.responseStatusCode = 1000;// error
+		}
+		return res;
 	}
 
 	@Override
@@ -269,7 +310,27 @@ public class ServiceLayerImplService implements ServiceLayer {
 	@Override
 	public Promise<Boolean> notify(String uri, NotificationDTO notification) {
 		// not implemented
-		return null;
+
+		LOGGER.info("START notify");
+		LOGGER.debug("Uri is [" + uri + "].");
+
+		// Setting RequestPrimitiveDTO
+		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
+		req.to = uri;
+		req.operation = Operation.Notify;
+
+		// Set the source of the request
+		req.from = this.origin;
+
+		// Execute request transmission processing
+		Promise<ResponsePrimitiveDTO> res = this.request(req);
+
+		// RETRIEVE processing end
+		LOGGER.info("END RETRIEVE");
+
+		return res.map(p -> {
+			return (p.responseStatusCode >= 2000 & p.responseStatusCode < 3000);
+		});
 	}
 
 

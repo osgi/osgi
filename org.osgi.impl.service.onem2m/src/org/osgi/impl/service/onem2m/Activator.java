@@ -25,7 +25,7 @@ public class Activator implements BundleActivator {
 		Activator.context = bundleContext;
 
 		// register factory service
-		ServiceFactory<ServiceLayer> slf = new ServiceLayerFactoryImpl();
+		ServiceFactory<ServiceLayer> slf = new ServiceLayerFactoryImpl(bundleContext);
 		context.registerService(ServiceLayer.class.getName(), slf, null);
 
 		LOGGER.info("END Service Layer");
