@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.osgi.framework.*;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -27,9 +29,11 @@ public class ServiceLayerImplService implements ServiceLayer {
 	private CseService cse;
 	private final String origin;
 	private BundleContext context;
+	private Bundle bundleFor;
 
-	public ServiceLayerImplService(String origin, BundleContext context){
-		this.cse = new CseService(context);
+	public ServiceLayerImplService(String origin, BundleContext context, Bundle bundle) {
+		this.cse = new CseService(context, bundle);
+		bundleFor = bundle;
 		this.origin = origin;
 		this.context = context;
 	}
@@ -38,34 +42,36 @@ public class ServiceLayerImplService implements ServiceLayer {
 	public Promise<ResponsePrimitiveDTO> request(RequestPrimitiveDTO request) {
 
 		Deferred<ResponsePrimitiveDTO> dret = new Deferred<ResponsePrimitiveDTO>();
-		class Exec implements Runnable{
+		class Exec implements Runnable {
 			Deferred<ResponsePrimitiveDTO> dret;
-			Exec(Deferred<ResponsePrimitiveDTO> dret){
+
+			Exec(Deferred<ResponsePrimitiveDTO> dret) {
 				this.dret = dret;
 			}
+
 			@Override
 			public void run() {
 				ResponsePrimitiveDTO ret = new ResponsePrimitiveDTO();
-				switch(request.operation){
-					case Create:
-						ret = cse.create(request);
-						break;
+				switch (request.operation) {
+				case Create:
+					ret = cse.create(request);
+					break;
 
-					case Retrieve:
-						ret = cse.retrieve(request);
-						break;
+				case Retrieve:
+					ret = cse.retrieve(request);
+					break;
 
-					case Update:
-						ret = cse.update(request);
-						break;
+				case Update:
+					ret = cse.update(request);
+					break;
 
-					case Delete:
-						ret = cse.delete(request);
-						break;
+				case Delete:
+					ret = cse.delete(request);
+					break;
 
-					case Notify:
-						ret = cse.notify(request);
-						break;
+				case Notify:
+					ret = cse.notify(request);
+					break;
 				}
 				dret.resolve(ret);
 			}
@@ -82,7 +88,6 @@ public class ServiceLayerImplService implements ServiceLayer {
 	public Promise<ResourceDTO> create(String uri, ResourceDTO resource) {
 		LOGGER.info("START CREATE");
 		LOGGER.debug("Request Uri is [" + uri + "].");
-
 
 		// When DTO is NULL End without request processing
 		if (resource == null) {
@@ -150,7 +155,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.from = this.origin;
 
 		uri += "?atrl=";
-		for(String param : targetAttributes) {
+		for (String param : targetAttributes) {
 			uri += param + "+";
 		}
 
@@ -298,11 +303,10 @@ public class ServiceLayerImplService implements ServiceLayer {
 		});
 	}
 
-
 	private List<String> dataListing(Object res) {
 		String strRes = null;
-		if(res instanceof byte[]){
-			strRes = new String((byte[])res);
+		if (res instanceof byte[]) {
+			strRes = new String((byte[]) res);
 		} else {
 			strRes = (String) res;
 		}

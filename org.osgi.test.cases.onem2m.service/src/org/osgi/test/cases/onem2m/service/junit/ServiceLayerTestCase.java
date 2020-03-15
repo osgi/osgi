@@ -2,6 +2,7 @@ package org.osgi.test.cases.onem2m.service.junit;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -234,6 +235,39 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		assertEquals(null, res);// TODO check return code.
 
 		LOGGER.info("----CREATE Test 3 is complete----");
+	}
+
+	@Test
+	public void testCreate4AE() {
+		LOGGER.info("----Start CREATE Test 4 for AE----");
+
+		ResourceDTO r = new ResourceDTO();
+		ResourceDTO res = null;
+
+		uri = "-";
+		r.resourceName = "ae1";
+		r.resourceType = 2;
+		r.attribute = new HashMap<String, Object>();
+		r.attribute.put("App-ID", "TESTAPP");
+		r.attribute.put("requestReachability", true);
+
+		try {
+			res = serviceLayerService.create(uri, r).getValue();
+		} catch (Exception e) {
+			res = null;
+		}
+
+		// Check result
+		assertNotNull("Response is Null.", res);
+		assertEquals(r.resourceName, res.resourceName);
+		assertNotNull("ResourceID IS  is Null.", res.resourceID);
+		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
+		assertNotNull("CreationTime is Null.", res.creationTime);
+		assertNotNull("pointOfAccess is Null.", res.attribute.get("pointOfAccess"));
+		assertNotNull("AE-ID is Null.", res.attribute.get("AE-ID"));
+		assertNotNull("CreationTime is Null.", res.creationTime);
+
+		LOGGER.info("----CREATE Test 4 is complete----");
 	}
 
 	@Test
@@ -500,7 +534,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(true, ret);
 		assertEquals(false, set.isEmpty());
-		LOGGER.info("----Discovery Notify 1 is complete----");
+		LOGGER.info("---- Notify Test 1 is complete----");
 	}
 
 	@Test
@@ -530,9 +564,66 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(false, ret);
 		assertEquals(true, set.isEmpty());
-		LOGGER.info("----Discovery Notify 2 is complete----");
+		LOGGER.info("---- Notify Test 2 is complete----");
 	}
 
+	@Test
+	public void testNotify3byUpdate() {
+		LOGGER.info("----Start Notify Test 3 by update----");
+		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
+
+		NotificationListener listener = new MyListener(set);
+		con.registerService(NotificationListener.class.getName(), listener, null);
+
+		ResourceDTO r = new ResourceDTO();
+		ResourceDTO r2 = null;
+
+		uri = "-";
+		r.resourceName = "cont";
+		r.resourceType = 3;// container
+
+		try {
+			r2 = serviceLayerService.create(uri, r).getValue();
+		} catch (Exception e) {
+			fail();
+		}
+		LOGGER.info("returned resource :" + r2);
+
+		uri = "-/cont";
+		ResourceDTO sub = new ResourceDTO();
+		sub.resourceName = "sub";
+		sub.resourceType = 23;// subscription
+		sub.attribute = new HashMap<String, Object>();
+		sub.attribute.put("notificationURI", "/in-cse/Cae1"); // TODO fix it.
+
+		try {
+			r2 = serviceLayerService.create(uri, sub).getValue();
+		} catch (Exception e) {
+			fail();
+		}
+		LOGGER.info("returned resource :" + r2);
+
+		// update resource
+		uri = "-/cont";
+		r = new ResourceDTO();// create new object
+		r.resourceName = "cont";
+		r.resourceType = 3;// container
+
+		String lblText = "updated";
+		List<String> lbl = new ArrayList<String>();
+		lbl.add(lblText);
+		r.labels = lbl;
+
+		try {
+			r2 = serviceLayerService.update(uri, r).getValue();
+		} catch (Exception e) {
+			fail();
+		}
+		LOGGER.info("returned resource :" + r2);
+
+		assertEquals(1, set.size());
+		LOGGER.info("---- Notify Test 3 is complete----");
+	}
 //    @Test
 //   	public void testDummy(){
 //    	// try to fail

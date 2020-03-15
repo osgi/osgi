@@ -32,7 +32,7 @@ public class ServiceLayerFactoryImpl implements ServiceFactory<ServiceLayer> {
 		Map<String, String> property = ServiceLayerUtil.getProperty(bundleSymbolicName, bundle.getBundleContext());
 
 
-		ServiceLayer sl = new ServiceLayerImplService(property.get(ServiceLayerUtil.ORIGIN), context);
+		ServiceLayer sl = new ServiceLayerImplService(property.get(ServiceLayerUtil.ORIGIN), context,bundle);
 		LOGGER.info("End factory");
 		return sl;
 

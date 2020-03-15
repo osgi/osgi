@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.osgi.framework.*;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO.FilterUsage;
+import org.osgi.service.onem2m.dto.NotificationDTO;
+import org.osgi.service.onem2m.dto.NotificationEventDTO;
 import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
@@ -34,10 +37,11 @@ public class CseService {
 	String cseID = "in-cse";
 	String csebaseName = "cb";
 	BundleContext context;
+	Bundle bundleFor;
 
-	public CseService(BundleContext context) {
+	public CseService(BundleContext context, Bundle bundle) {
 		this.context = context;
-
+		bundleFor = bundle;
 		// CSEBase
 		ResourceDTO cseBase = new ResourceDTO();
 		cseBase.resourceName = csebaseName;
@@ -111,6 +115,9 @@ public class CseService {
 
 		ResourceDTO resource = req.content.resource;
 
+		if (resource.resourceType == 2) {// check Type is AE.
+			completeAE(resource);
+		}
 		if (!isURIForMe(req.to)) {
 			msg = "The uri is not for the CSE";
 			LOGGER.warn(msg);
@@ -137,6 +144,16 @@ public class CseService {
 			res.responseStatusCode = 4105;
 		}
 		return res;
+	}
+
+	private void completeAE(ResourceDTO resource) {
+		String aename = aeNameBySybolicName(bundleFor.getSymbolicName());
+		if (resource.attribute == null) {
+			resource.attribute = new HashMap<String, Object>();
+		}
+		resource.attribute.put("AE-ID", aename);
+		resource.attribute.put("pointOfAccess", "http://localhost:9999/" + aename);
+
 	}
 
 	public ResponsePrimitiveDTO retrieve(RequestPrimitiveDTO req) {
@@ -209,19 +226,59 @@ public class CseService {
 
 		if (resourceTree.containsKey(regularTo)) {
 			orgResource = resourceTree.get(regularTo);
-		}
-
-		if (orgResource != null) {
-			res.responseStatusCode = 2004;
-			resource.creationTime = orgResource.creationTime;
-			resource.lastModifiedTime = getDate();
-			resourceTree.put(regularTo, resource);// This omits detailed implementation.
 		} else {
-			LOGGER.warn("Resource not found. regularTo" + regularTo + " req.to:" + req.to);
+			LOGGER.warn("Resource not found. regularTo:" + regularTo + " req.to:" + req.to);
 			res.responseStatusCode = 4004;
+			return res;
 		}
+		res.responseStatusCode = 2004;
+		resource.creationTime = orgResource.creationTime;
+		resource.resourceID = orgResource.resourceID;
+		resource.lastModifiedTime = getDate();
+
+		resourceTree.put(regularTo, resource);// This omits detailed implementation.
+		res.content.resource = resource;
+
+		updateNotify(regularTo, resource);
 
 		return res;
+	}
+
+	private void updateNotify(String uri, ResourceDTO resource) {
+		LOGGER.info("updateNotify is called. uri:" + uri + " resource:" + resource);
+
+		Set<Entry<String, ResourceDTO>> h = resourceTree.entrySet();
+		int len = uri.length();
+
+		for (Entry<String, ResourceDTO> en : h) {
+			String u2 = en.getKey();
+			if (u2.length() <= len)
+				continue;
+
+			if (uri.equals(u2.substring(0, len))) {
+				// u2 is under uri.
+				String child = u2.substring(len + 1);// +1 means deleting "/"
+				if (!child.contains("/")) {
+					// u2 is direct child of uri.
+					ResourceDTO sub = en.getValue();
+					if (sub.resourceType != 23)
+						continue;
+
+					LOGGER.info("subscription found" + u2 + " sub:" + sub);
+					String notificationURI = (String) sub.attribute.get("notificationURI");
+					RequestPrimitiveDTO req = new RequestPrimitiveDTO();
+					req.content = new PrimitiveContentDTO();
+					req.content.notification = new NotificationDTO();
+					req.content.notification.notificationEvent = new NotificationEventDTO();
+					req.content.notification.notificationEvent.representation = resource;
+					req.to = notificationURI;
+
+					notify(req);
+				}
+
+			}
+		}
+
 	}
 
 	public ResponsePrimitiveDTO delete(RequestPrimitiveDTO req) {
