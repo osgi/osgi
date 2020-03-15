@@ -29,7 +29,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 	private BundleContext context;
 
 	public ServiceLayerImplService(String origin, BundleContext context){
-		this.cse = new CseService();
+		this.cse = new CseService(context);
 		this.origin = origin;
 		this.context = context;
 	}
@@ -64,7 +64,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 						break;
 
 					case Notify:
-						ret = notifySend(request);
+						ret = cse.notify(request);
 						break;
 				}
 				dret.resolve(ret);
@@ -76,41 +76,6 @@ public class ServiceLayerImplService implements ServiceLayer {
 		t.start();
 
 		return dret.getPromise();
-	}
-
-	ResponsePrimitiveDTO notifySend(RequestPrimitiveDTO req) {
-		ResponsePrimitiveDTO res = new ResponsePrimitiveDTO();
-		String to = req.to;
-		if (to == null) {
-			res.responseStatusCode = 1000;// error
-			return res;
-		}
-		String[] element = to.split("/");
-		if (element[1].equals("in-cse")) {
-
-			LOGGER.info("NOW prepare to send notification!!!");
-			ServiceReference[] rs;
-			try {
-				rs = context.getServiceReferences(NotificationListener.class.getName(), null);
-			} catch (InvalidSyntaxException e) {
-				e.printStackTrace();
-				res.responseStatusCode = 1000;
-				return res;
-			}
-			for (ServiceReference ref : rs) {
-				LOGGER.info("symbolic name:" + ref.getBundle().getSymbolicName());
-				LOGGER.info("bundle location:" + ref.getBundle().getLocation());
-
-				if (ref.getBundle().getSymbolicName().equals("org.osgi.test.cases.onem2m.service")) {
-					NotificationListener lis = (NotificationListener) context.getService(ref);
-					lis.notified(req);
-				}
-			}
-			res.responseStatusCode = 2000;
-		} else {
-			res.responseStatusCode = 1000;// error
-		}
-		return res;
 	}
 
 	@Override

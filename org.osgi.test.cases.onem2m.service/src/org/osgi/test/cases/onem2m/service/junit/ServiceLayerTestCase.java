@@ -22,7 +22,14 @@ import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceLayerTestCase extends OSGiTestCase{
+/**
+ * Test Case for oneM2M
+ * 
+ * '-' is a special character to indicate CSEBase, that is root of resource
+ * tree.
+ * 
+ */
+public class ServiceLayerTestCase extends OSGiTestCase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerTestCase.class);
 
@@ -30,8 +37,8 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 	private String uri = null;
 	private BundleContext con = null;
 
-    protected void setUp() throws Exception {
-    	if(serviceLayerService == null){
+	protected void setUp() throws Exception {
+		if (serviceLayerService == null) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -40,7 +47,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 				return;
 			}
 			con = getContext();
-			//Get ServiceLayerFactory
+			// Get ServiceLayerFactory
 			ServiceReference<?> serviceLayerFactory = con.getServiceReference(ServiceLayer.class.getName());
 			serviceLayerService = (ServiceLayer) con.getService(serviceLayerFactory);
 
@@ -48,23 +55,22 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 				fail();
 				return;
 			}
-    	}
-    }
+		}
+	}
 
-    protected void tearDown() throws Exception {
+	protected void tearDown() throws Exception {
 
-    }
+	}
 
-    @Test
-	public void testRetrieve1(){
+	@Test
+	public void testRetrieve1() {
 		LOGGER.info("----Start RETRIEVE Test 1----");
 
 		ResourceDTO res = null;
 
-		uri = "/in-cse";
-
 		try {
-			res = serviceLayerService.retrieve(uri).getValue();
+			// retrieve with short cut of csebase.
+			res = serviceLayerService.retrieve("-").getValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertNotNull(null);// TODO
@@ -75,22 +81,72 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("Response Data:\n" + res.toString());
 
 		assertNotNull("Response is Null.", res);
-		assertEquals(res.resourceName, "in-cse");
 		assertEquals(String.valueOf(res.resourceType), "5");
-		assertEquals(res.resourceID, "0");
+		assertNotNull("ResourceID is Null.", res.resourceID);
 		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
 		assertNotNull("CreationTime is Null.", res.creationTime);
+
+		assertNotNull("CSE attribute is null.", res.attribute);
+		String cseid = (String) res.attribute.get("CSE-ID");
+		assertNotNull("CSE-ID is null.", cseid);
+		String csebaseName = res.resourceName;
+
+		try {
+			// retrieve with short cut of csebase with SP-relative name.
+			res = serviceLayerService.retrieve("/" + cseid + "/-").getValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertNotNull(null);// TODO
+			res = null;
+		}
+
+		// Check result
+		LOGGER.info("Response Data:\n" + res.toString());
+
+		assertNotNull("Response is Null.", res);
+		assertEquals(String.valueOf(res.resourceType), "5");
+		assertNotNull("ResourceID is Null.", res.resourceID);
+		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
+		assertNotNull("CreationTime is Null.", res.creationTime);
+
+		assertNotNull("CSE's attribute is null.", res.attribute);
+		String cseid2 = (String) res.attribute.get("CSE-ID");
+		assertNotNull("CSE-ID is null.", cseid2);
+		assertEquals(cseid, cseid2);
+
+		try {
+			// retrieve regular SP-relative name.
+			res = serviceLayerService.retrieve("/" + cseid + "/" + csebaseName).getValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertNotNull(null);// TODO
+			res = null;
+		}
+
+		// Check result
+		LOGGER.info("Response Data:\n" + res.toString());
+
+		assertNotNull("Response is Null.", res);
+		assertEquals(String.valueOf(res.resourceType), "5");
+		assertNotNull("ResourceID is Null.", res.resourceID);
+		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
+		assertNotNull("CreationTime is Null.", res.creationTime);
+
+		assertNotNull("CSE's attribute is null.", res.attribute);
+		String cseid3 = (String) res.attribute.get("CSE-ID");
+		assertNotNull("CSE-ID is null.", cseid3);
+		assertEquals(cseid, cseid3);
 
 		LOGGER.info("----RETRIEVE Test 1 is complete----");
 	}
 
-    @Test
-	public void testRetrieve2(){
+	@Test
+	public void testRetrieve2() {
 		LOGGER.info("----Start RETRIEVE Test 2----");
 
 		ResourceDTO res = null;
 
-		uri = "/in-cse2";
+		uri = "/in-cse2/-";
 
 		try {
 			res = serviceLayerService.retrieve(uri).getValue();
@@ -104,14 +160,14 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----RETRIEVE Test 2 is complete----");
 	}
 
-    @Test
-	public void testCreate1(){
+	@Test
+	public void testCreate1() {
 		LOGGER.info("----Start CREATE Test 1----");
 
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "/in-cse";
+		uri = "-";
 		req.resourceName = "cnt1";
 		req.resourceType = 3;
 
@@ -131,14 +187,14 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----CREATE Test 1 is complete----");
 	}
 
-    @Test
-	public void testCreate2(){
+	@Test
+	public void testCreate2() {
 		LOGGER.info("----Start CREATE Test 2----");
 
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "/in-cse";
+		uri = "-";
 		req.resourceName = "cnt1";
 		req.resourceType = 3;
 
@@ -154,14 +210,17 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----CREATE Test 2 is complete----");
 	}
 
-    @Test
-	public void testCreate3(){
+	/**
+	 * create under wrong path.
+	 */
+	@Test
+	public void testCreate3() {
 		LOGGER.info("----Start CREATE Test 3----");
 
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = new ResourceDTO();
 
-		uri = "/in-cse2";
+		uri = "/in-cse2/-";
 		req.resourceName = "cnt2";
 		req.resourceType = 3;
 
@@ -172,19 +231,19 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		}
 
 		// Check result
-		assertEquals(null, res);
+		assertEquals(null, res);// TODO check return code.
 
 		LOGGER.info("----CREATE Test 3 is complete----");
 	}
 
-    @Test
-	public void testUpdate1(){
+	@Test
+	public void testUpdate1() {
 		LOGGER.info("----Start Update Test 1----");
 
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "/in-cse";
+		uri = "-";
 		req.resourceName = "updateCnt";
 		req.resourceType = 3;
 
@@ -195,11 +254,10 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		}
 		System.out.println(res.toString());
 
-
 		ResourceDTO req2 = new ResourceDTO();
 		String lblText = "updateTest";
 
-		uri = "/in-cse/updateCnt";
+		uri = "-/updateCnt";
 		req2.resourceName = res.resourceName;
 		req2.resourceType = res.resourceType;
 		req2.resourceID = res.resourceID;
@@ -208,15 +266,18 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		req2.labels = lbl;
 
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(1200);// to ensure second digit to change
 			serviceLayerService.update(uri, req2).getValue();
 		} catch (Exception e) {
 			fail();
 		}
 
+		LOGGER.info("finished first update");// TODO remove this.
+
 		ResourceDTO res3 = null;
 
-		uri = "/in-cse/updateCnt";
+		// retrieve updated resource
+		uri = "-/updateCnt";
 
 		try {
 			res3 = serviceLayerService.retrieve(uri).getValue();
@@ -230,7 +291,9 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		assertEquals(res.resourceType, res3.resourceType);
 		assertEquals(res.resourceID, res3.resourceID);
 		assertEquals(res.creationTime, res3.creationTime);
-		if(res.lastModifiedTime.equals(res3.lastModifiedTime)){
+		if (res.lastModifiedTime.equals(res3.lastModifiedTime)) {
+			LOGGER.warn("modification time is expected changed." + " before:" + res.lastModifiedTime + " after:"
+					+ res3.lastModifiedTime);
 			fail();
 		}
 		assertEquals(lblText, res3.labels.get(0));
@@ -238,8 +301,8 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Update Test 1 is complete----");
 	}
 
-    @Test
-	public void testUpdate2(){
+	@Test
+	public void testUpdate2() {
 		LOGGER.info("----Start Update Test 2----");
 
 		ResourceDTO req = new ResourceDTO();
@@ -247,13 +310,13 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 		String lblText = "updateTest";
 
-		uri = "/in-cse/updateCnt2";
+		uri = "-/updateCnt2";
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
 		req.labels = lbl;
 
 		try {
-			res = serviceLayerService.create(uri, req).getValue();
+			res = serviceLayerService.update(uri, req).getValue();
 		} catch (Exception e) {
 			res = null;
 		}
@@ -264,13 +327,13 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Update Test 2 is complete----");
 	}
 
-    @Test
-	public void testDelete1(){
+	@Test
+	public void testDelete1() {
 		LOGGER.info("----Start Delete Test 1----");
 
 		ResourceDTO req = new ResourceDTO();
 
-		uri = "/in-cse";
+		uri = "-";
 		req.resourceName = "deleteCnt";
 		req.resourceType = 3;
 
@@ -280,10 +343,10 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 			fail();
 		}
 
-		uri = "/in-cse/deleteCnt";
+		uri = "-/deleteCnt";
 
 		try {
-			if(!serviceLayerService.delete(uri).getValue()){
+			if (!serviceLayerService.delete(uri).getValue()) {
 				fail();
 			}
 		} catch (Exception e) {
@@ -293,14 +356,14 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Delete Test 1 is complete----");
 	}
 
-    @Test
-	public void testDelete2(){
+	@Test
+	public void testDelete2() {
 		LOGGER.info("----Start Delete Test 2----");
 
-		uri = "/in-cse/deleteCnt2";
+		uri = "-/deleteCnt2";
 
 		try {
-			if(serviceLayerService.delete(uri).getValue()){
+			if (serviceLayerService.delete(uri).getValue()) {
 				fail();
 			}
 		} catch (Exception e) {
@@ -310,13 +373,13 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		LOGGER.info("----Delete Test 2 is complete----");
 	}
 
-    @Test
-	public void testDiscovery1(){
+	@Test
+	public void testDiscovery1() {
 		LOGGER.info("----Start Discovery Test 1----");
 
 		ResourceDTO req1 = new ResourceDTO();
 
-		uri = "/in-cse";
+		uri = "-";
 		req1.resourceName = "disCnt1";
 		req1.resourceType = 3;
 
@@ -328,7 +391,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 		ResourceDTO req2 = new ResourceDTO();
 
-		uri = "/in-cse";
+		uri = "-";
 		req2.resourceName = "disCnt2";
 		req2.resourceType = 3;
 
@@ -340,7 +403,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 		ResourceDTO req3 = new ResourceDTO();
 
-		uri = "/in-cse/disCnt1";
+		uri = "-/disCnt1";
 		req3.resourceName = "disCnt3";
 		req3.resourceType = 3;
 
@@ -353,7 +416,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 		List<String> uril = null;
 		FilterCriteriaDTO fc = new FilterCriteriaDTO();
 		fc.filterUsage = FilterUsage.DiscoveryCriteria;
-		uri = "/in-cse/disCnt1";
+		uri = "-/disCnt1";
 
 		try {
 			uril = serviceLayerService.discovery(uri, fc).getValue();
@@ -361,28 +424,28 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 			fail();
 		}
 
-		for(String uri : uril){
+		for (String uri : uril) {
 			System.out.println(uri);
-			switch(uri){
-				case "/in-cse/disCnt1":
-				case "/in-cse/disCnt1/disCnt3":
-					break;
-				default:
-					fail();
+			switch (uri) {
+			case "cb/disCnt1":
+			case "cb/disCnt1/disCnt3":
+				break;
+			default:
+				fail();
 			}
 		}
 
 		LOGGER.info("----Discovery Test 1 is complete----");
 	}
 
-    @Test
-	public void testDiscovery2(){
+	@Test
+	public void testDiscovery2() {
 		LOGGER.info("----Start Discovery Test 2----");
 
 		List<String> uril = null;
 		FilterCriteriaDTO fc = new FilterCriteriaDTO();
 		fc.filterUsage = FilterUsage.DiscoveryCriteria;
-		uri = "/in-cse/disCnt0";
+		uri = "-/disCnt0";
 
 		try {
 			uril = serviceLayerService.discovery(uri, fc).getValue();
@@ -394,7 +457,7 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 
 		LOGGER.info("----Discovery Test 2 is complete----");
 	}
-    
+
 	/**
 	 * Class for receiving notification
 	 */
@@ -477,4 +540,3 @@ public class ServiceLayerTestCase extends OSGiTestCase{
 //   	
 //   }
 }
-
