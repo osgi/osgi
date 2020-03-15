@@ -28,12 +28,6 @@ public class CseService {
 	private Map<String, ResourceDTO> resourceTree = new HashMap<String, ResourceDTO>();
 	private int id = 0;
 
-	/*
-	 * public CseService(String uri, ResourceDTO cseBase){ String now = getDate();
-	 * cseBase.resourceID = String.valueOf(id); cseBase.creationTime = now;
-	 * cseBase.lastModifiedTime = now; cse.put(uri, cseBase); }
-	 */
-
 	String cseID = "in-cse";
 	String csebaseName = "cb";
 	BundleContext context;
@@ -125,10 +119,12 @@ public class CseService {
 			return res;
 		}
 		String regularTo = cseRelativeURI(req.to);
-		if (!resourceTree.containsKey(regularTo)) {
-			LOGGER.warn("Parent doesn't exit.");
+		ResourceDTO parent = resourceTree.get(regularTo);
+		if (parent == null) {
+			LOGGER.warn("Parent doesn't exit. uri:" + regularTo);
 			res.responseStatusCode = 4004;// need to change to right one.
 		}
+		resource.parentID = parent.resourceID;
 		String targetUri = regularTo + "/" + resource.resourceName;
 
 		if (!resourceTree.containsKey(targetUri)) {
@@ -234,6 +230,8 @@ public class CseService {
 		res.responseStatusCode = 2004;
 		resource.creationTime = orgResource.creationTime;
 		resource.resourceID = orgResource.resourceID;
+		resource.parentID = orgResource.parentID;
+
 		resource.lastModifiedTime = getDate();
 
 		resourceTree.put(regularTo, resource);// This omits detailed implementation.
