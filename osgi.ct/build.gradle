@@ -9,5 +9,5 @@ apply from: file('test.gradle')
 tasks.register('ct') {
   description 'Run all the CTs.'
   group 'verification'
-  dependsOn 'ct.core', 'ct.cmpn', 'ct.enterprise'
+  dependsOn 'ct.core', 'ct.cmpn'
 }
