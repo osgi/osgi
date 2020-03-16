@@ -2,11 +2,6 @@
  * osgi.ct Gradle test execution script
  */
 
-if (project == rootProject) { // we are not applied from the main build
-  project.layout.buildDirectory.value(project.layout.projectDirectory.dir('generated'))
-  ext.riBuildDir = project.file('../osgi.ri/generated')
-}
-
 tasks.addRule('Pattern: prepct.<name>: Prepare the CT for <name>.') { taskName ->
   if (taskName.startsWith('prepct.')) {
     tasks.create(taskName) {
