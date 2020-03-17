@@ -237,7 +237,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.operation = Operation.Retrieve;
 		req.to = uri;
 		req.filterCriteria = fc;
-		req.discoveryResultType = DesiredIdentiferResultType.structured;
+		req.desiredIdentiferResultType = DesiredIdentiferResultType.structured;
 
 		// Set the source of the request
 		req.from = this.origin;
@@ -262,7 +262,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.operation = Operation.Retrieve;
 		req.to = uri;
 		req.filterCriteria = fc;
-		req.discoveryResultType = drt;
+		req.desiredIdentiferResultType = drt;
 
 		// Set the source of the request
 		req.from = this.origin;

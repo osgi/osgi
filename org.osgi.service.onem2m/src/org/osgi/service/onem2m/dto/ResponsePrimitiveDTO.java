@@ -95,7 +95,7 @@ public class ResponsePrimitiveDTO extends DTO {
 	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L326">oneM2M
 	 *      XSD eventCat</a>
 	 * 
-	 * @see <href="https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-enumerationTypes-v3_11_0.xsd#L208-221">oneM2M
+	 * @see <a href="https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-enumerationTypes-v3_11_0.xsd#L208-221">oneM2M
 	 *      XSD stdEventCats</a>
 	 */
 	public Integer eventCategory;
