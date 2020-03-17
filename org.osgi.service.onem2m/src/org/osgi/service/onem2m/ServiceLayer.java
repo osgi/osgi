@@ -11,7 +11,7 @@ import org.osgi.util.promise.Promise;
 /**
  * Primary Interface for an oneM2M application entity to send request and get response to/from other
  * oneM2M entity.
- * 
+ * <p>
  * It contains low level API and high level API.
  * The only low level method is request() and other methods are categorized as high level API.
  *
@@ -19,7 +19,7 @@ import org.osgi.util.promise.Promise;
 public interface ServiceLayer {
 	/**
 	 * send a request and receive response.
-	 * 
+	 * <p>
 	 * This method allows very raw data type access and it enables all possible message 
 	 * exchanges among oneM2M entities. This is called the low level API.
      * This method allows all possible operation of oneM2M. For the return type, OSGi Promise
@@ -33,7 +33,7 @@ public interface ServiceLayer {
 
 	/**
 	 * create resource
-	 *
+	 * <p>
 	 * The create() method is a method to create new resource under specified uri.
 	 * The second argument resource is expression of resource to be generated. 
 	 * The resourceType field of the resourceDTO must be assigned. 
@@ -48,7 +48,7 @@ public interface ServiceLayer {
 
 	/**
 	 * retrieve resource
-	 *
+	 * <p>
 	 * retrieve resource on URI specified by uri argument. This method retrieve all attributes of the resource.
 	 *
 	 * @param uri URI for retrieving resource
@@ -58,8 +58,8 @@ public interface ServiceLayer {
 
 	/**
 	 * retrieve resource with selected attributes.
-	 * 
-	 *  retrieve resource on URI specified by uri argument. This method retrieve selected attributes by targetAttributes argument.
+	 * <p>
+	 * retrieve resource on URI specified by uri argument. This method retrieve selected attributes by targetAttributes argument.
 	 * The retrieve() methods are methods to retrieve resource on URI specified by uri argument. 
 	 *
 	 * @param uri URI for retrieving resource
@@ -70,7 +70,7 @@ public interface ServiceLayer {
 
 	/**
 	 * update resource
-	 * 
+	 * <p>
 	 * The update() method is a method to update resource on the URI specified by uri argument. 
 	 * The resource argument holds attributes to be updated. 
 	 * Attributes not to be updated shall not included in the argument.
@@ -83,7 +83,7 @@ public interface ServiceLayer {
 
 	/**
 	 * delete resource
-	 *
+	 * <p>
 	 * delete resource on the URI specified by uri argument.
 	 *
 	 * @param uri target URI for deleting resource
@@ -93,7 +93,7 @@ public interface ServiceLayer {
 
 	/**
 	 * find resources with filter condition specified in fc argument. 
-	 * 
+	 * <p>
 	 *  Discovery Result Type is kept as blank and
 	 * default value of target CSE is used for the parameter.
 	 *
@@ -105,7 +105,7 @@ public interface ServiceLayer {
 
 	/**
 	 * find resources
-	 *
+	 * <p>
 	 * @param uri URI for resource tree to start the search
 	 * @param fc filter criteria
 	 * @param drt Discovery Result Type (structured/unstructured)
@@ -116,7 +116,7 @@ public interface ServiceLayer {
 
 	/**
 	 * send notification
-	 *
+	 * <p>
 	 * @param uri uri of destination
 	 * @param notification content of notification
 	 * @return Promise of notification execution status
