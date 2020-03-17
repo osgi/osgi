@@ -15,7 +15,7 @@ import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
-import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.DiscoveryResultType;
+import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.DesiredIdentiferResultType;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.Operation;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.service.onem2m.dto.ResponsePrimitiveDTO;
@@ -237,7 +237,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.operation = Operation.Retrieve;
 		req.to = uri;
 		req.filterCriteria = fc;
-		req.discoveryResultType = DiscoveryResultType.structured;
+		req.discoveryResultType = DesiredIdentiferResultType.structured;
 
 		// Set the source of the request
 		req.from = this.origin;
@@ -253,7 +253,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 	}
 
 	@Override
-	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, DiscoveryResultType drt) {
+	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, DesiredIdentiferResultType drt) {
 		LOGGER.info("START DISCOVERY_RESULT_TYPE");
 
 		// Setting RequestPrimitiveDTO

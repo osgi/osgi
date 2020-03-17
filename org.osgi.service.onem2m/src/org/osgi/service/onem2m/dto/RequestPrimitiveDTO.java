@@ -6,44 +6,74 @@ import org.osgi.dto.DTO;
 
 /**
  * DTO expresses Request Primitive.
+ * 
+ * @see <a href=
+ *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+ *      TS-0004 6.4.1</a>
+ * @see <a href=
+ *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-requestPrimitive-v3_11_0.xsd">oneM2M
+ *      XSD requestPrimitive</a>
  */
 public class RequestPrimitiveDTO extends DTO {
-//	@javax.xml.bind.annotation.XmlElement(required = true)
 	/**
 	 * Operation
+	 * 
+	 * This field is mandatory.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.5</a>
 	 */
 	public Operation operation;
-//	@javax.xml.bind.annotation.XmlElement(required = true)
-	
+
 	/**
 	 * To Parameter
 	 */
 	public String to;
-	
+
 	/**
 	 * From Parameter.
+	 * <p>
+	 * Originator of the request is stored.
 	 * 
-	 * In other word, originator of request is stored.
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.5</a>
 	 */
 	public String from;
-//	@javax.xml.bind.annotation.XmlElement(required = true)
 
 	/**
 	 * Request Identifier
+	 *
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.3</a>
+	 * 
 	 */
 	public String requestIdentifier;
-//	@javax.xml.bind.annotation.XmlElement(required = false)
 
 	/**
 	 * Resource Type
+	 *
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.1</a>
+	 * 
 	 */
 	public Integer resourceType;
-	
+
 	/**
 	 * Primitive Content
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.5.5</a>
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 7.2.1.1</a>
 	 */
 	public PrimitiveContentDTO content;
-	
+
 	/**
 	 * Role IDs
 	 */
@@ -53,16 +83,31 @@ public class RequestPrimitiveDTO extends DTO {
 	 * Originating Timestamp
 	 */
 	public String originatingTimestamp;
-	
+
 	/**
 	 * Request Expiration Timestamp
+	 * <p>
+	 * * This parameter is related to CMDH(Communication Management and Delivery
+	 * Handling) policy.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 D.12</a>
 	 */
 	public String requestExpirationTimestamp;
+
 	/**
 	 * Result Expiration Timestamp
+	 * <p>
+	 * This parameter is related to CMDH(Communication Management and Delivery
+	 * Handling) policy.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 D.12</a>
 	 */
 	public String resultExpirationTimestamp;
-	
+
 	/**
 	 * Operation Execution Time
 	 */
@@ -70,62 +115,124 @@ public class RequestPrimitiveDTO extends DTO {
 
 	/**
 	 * Response Type Info
+	 *
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.5.30</a>
 	 */
 	public ResponseTypeInfoDTO responseType;
-	
+
 	/**
 	 * Result Persistence
+	 * <p>
+	 * This parameter is related to CMDH(Communication Management and Delivery
+	 * Handling) policy.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 D.12</a>
 	 */
 	public String resultPersistence;
-//	@javax.xml.bind.annotation.XmlElement(required = false)
+
 	/**
 	 * Result Content
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.7</a>
+	 * 
 	 */
 	public ResultContent resultContent;
-	
+
 	/**
 	 * Event Category
+	 * <p>
+	 * allowed values are 2(Immediate), 3(BestEffort), 4(Latest), and 100-999 as
+	 * user defined range.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.3</a>
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L326">oneM2M
+	 *      XSD eventCat</a>
+	 * 
+	 * @see <href="https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-enumerationTypes-v3_11_0.xsd#L208-221">oneM2M
+	 *      XSD stdEventCats</a>
 	 */
-	public String eventCategory;
-//	@javax.xml.bind.annotation.XmlElement(required = false)
-	
+	public Integer eventCategory;
+
 	/**
 	 * Delivery Aggregation
+	 * <p>
+	 * This parameter is related to CMDH(Communication Management and Delivery
+	 * Handling) policy.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 D.12</a>
 	 */
 	public Boolean deliveryAggregation;
-	
+
 	/**
 	 * Group Request Identifier
+	 * 
+	 * TODO: search doc.
 	 */
 	public String groupRequestIdentifier;
-	
+
 	/**
 	 * Filter Criteria
+	 *
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.5.8</a>
 	 */
 	public FilterCriteriaDTO filterCriteria;
-//	@javax.xml.bind.annotation.XmlElement(required = false)
-	
+
 	/**
-	 * Discovery Result Type
+	 * Desired Identifier Result Type
+	 * <p>
+	 * This parameter specifies identifier type in response, such as structured or
+	 * unstructured. This parameter used to be Discovery Result Type in previous
+	 * oneM2M release.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.8</a>
 	 */
-	public DiscoveryResultType discoveryResultType;
-	
+	public DesiredIdentiferResultType desiredIdentiferResultType;
+
 	/**
-	 * tokens
+	 * Tokens
+	 * <p>
+	 * Each token is in m2m:dynAuthJWT
+	 * 
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L417-426">oneM2M
+	 *      XSD signatureList</a>
 	 */
-	public String tokens;
-	
+	public List<String> tokens;
+
 	/**
 	 * Token Identifiers
+	 * <p>
+	 * In oneM2M this parameter is expressed as list of m2m:tokenID.
+	 * 
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L66-70">oneM2M
+	 *      XSD signatureList</a>
 	 */
 	public List<String> tokenIDs;
-	
+
 	/**
 	 * Local Token Identifiers
+	 * <p>
+	 * In oneM2M this parameter is expressed as list of xs:NCName.
+	 * 
 	 */
 	public List<String> localTokenIDs;
-//	@javax.xml.bind.annotation.XmlElement(required = false)
-	
+
 	/**
 	 * Token Request Indicator
 	 */
@@ -136,42 +243,67 @@ public class RequestPrimitiveDTO extends DTO {
 	 * Group Request Target Members
 	 */
 	public List<String> groupRequestTargetMembers;
-	
+
 	/**
-	 * Author Sign Indicator
+	 * Authorization Signature Indicator
 	 */
-	public Boolean authorSignIndicator;
-	
+	public Boolean authorizationSignatureIndicator;
+
 	/**
-	 * Author Signs
+	 * Authorization Signatures
+	 * <p>
+	 * In oneM2M this parameter is expressed in m2m:signatureList.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.8</a>
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L129-137">oneM2M
+	 *      XSD signatureList</a>
 	 */
-	public List<String> authorSigns;
-	
+	public List<String> authorizationSignatures;
+
 	/**
-	 * Author Relation Indicator
+	 * Authorization Relationship Indicator
 	 */
-	public Boolean authorRelIndicator;// Rel = Relation
-	
+	public Boolean authorizationRelationshipIndicator;
+
 	/**
 	 * Semantic Query Indicator
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 7.3.3.19</a>
 	 */
 	public Boolean semanticQueryIndicator;
-	
+
 	/**
 	 * Release Version
 	 */
 	public ReleaseVersion releaseVersionIndicator;
-	
+
 	/**
 	 * Vendor Information
+	 * <p>
+	 * Used for vendor specific information. No procedure is defined for the
+	 * parameter.
 	 */
 	public String vendorInformation;
 
-	public static enum DiscoveryResultType {
+	/**
+	 * 
+	 * Enum for DesiredIdentiferResultType
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
+	 *      TS-0004 6.3.4.2.8</a>
+	 * 
+	 */
+	public static enum DesiredIdentiferResultType {
 		/**
 		 * structured
 		 */
-		structured(1), 
+		structured(1),
 		/**
 		 * unstructured
 		 */
@@ -179,7 +311,7 @@ public class RequestPrimitiveDTO extends DTO {
 
 		int value;
 
-		private DiscoveryResultType(int i) {
+		private DesiredIdentiferResultType(int i) {
 			value = i;
 		}
 
@@ -187,16 +319,19 @@ public class RequestPrimitiveDTO extends DTO {
 			return value;
 		}
 	}
+
 	/**
 	 * enum type for Result Content
 	 * 
-	 *
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v1_0_0/CDT-enumerationTypes-v1_0_0.xsd#L183-205">oneM2M
+	 *      XSD resultContent</a>
 	 */
 	public static enum ResultContent {
 		/**
 		 * nothing
 		 */
-		nothing(1), 
+		nothing(1),
 		/**
 		 * attributes
 		 */
@@ -204,11 +339,11 @@ public class RequestPrimitiveDTO extends DTO {
 		/**
 		 * hierarchicalAddress
 		 */
-		hierarchicalAddress(3), 
+		hierarchicalAddress(3),
 		/**
 		 * hierarchicalAddressAndAttributes
 		 */
-		hierarchicalAddressAndAttributes(4), 
+		hierarchicalAddressAndAttributes(4),
 		/**
 		 * attributesAndChildResources
 		 */
@@ -216,11 +351,11 @@ public class RequestPrimitiveDTO extends DTO {
 		/**
 		 * attributesAndChildResourceReferences
 		 */
-		attributesAndChildResourceReferences(6), 
+		attributesAndChildResourceReferences(6),
 		/**
 		 * childResourceReferences
 		 */
-		childResourceReferences(7), 
+		childResourceReferences(7),
 		/**
 		 * originalResource
 		 */
@@ -238,6 +373,7 @@ public class RequestPrimitiveDTO extends DTO {
 
 		/**
 		 * get assigned integer value
+		 * 
 		 * @return assigned integer value
 		 */
 		public int getValue() {
@@ -248,7 +384,10 @@ public class RequestPrimitiveDTO extends DTO {
 	/**
 	 * enum type for Operation
 	 * 
-	 *
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v1_0_0/CDT-enumerationTypes-v1_0_0.xsd#L149-166">oneM2M
+	 *      XSD resultContent</a>
+	 * 
 	 */
 	public static enum Operation {
 		/**
@@ -258,7 +397,7 @@ public class RequestPrimitiveDTO extends DTO {
 		/**
 		 * Retrieve
 		 */
-		Retrieve(2), 
+		Retrieve(2),
 		/**
 		 * Update
 		 */
@@ -266,7 +405,7 @@ public class RequestPrimitiveDTO extends DTO {
 		/**
 		 * Delete
 		 */
-		Delete(4), 
+		Delete(4),
 		/**
 		 * Notify
 		 */
@@ -280,6 +419,7 @@ public class RequestPrimitiveDTO extends DTO {
 
 		/**
 		 * get assigned integer value
+		 * 
 		 * @return assigned integer value
 		 */
 		public int getValue() {

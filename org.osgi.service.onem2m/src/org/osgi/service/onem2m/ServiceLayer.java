@@ -112,7 +112,7 @@ public interface ServiceLayer {
 	 * @return list of URIs matching the condition specified in fc
 	 * 
 	 */
-	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, RequestPrimitiveDTO.DiscoveryResultType drt);
+	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, RequestPrimitiveDTO.DesiredIdentiferResultType drt);
 
 	/**
 	 * send notification

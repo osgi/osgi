@@ -1,33 +1,41 @@
 package org.osgi.service.onem2m.dto;
 
-import java.util.Map;
-
 import org.osgi.dto.DTO;
 
 /**
- * DTO expressing Security Info.
+ * DTO expresses Security Info.
+ * <p>
+ * This class is used as union. SecurityInfoType field indicates which type of
+ * content is stored.
+ * 
+ * @see <a href=
+ *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oenM2M
+ *      TS-0004 6.3.5.4.8</a>
  */
 public class SecurityInfoDTO extends DTO {
-//	@javax.xml.bind.annotation.XmlElement( required  = false)
 	/**
 	 * Security Info Type
+	 *
+	 * x@see <a href=
+	 * "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oenM2M
+	 * TS-0004 6.3.4.2.35</a>
 	 */
 	public SecurityInfoType securityInfoType;
 
 	/**
 	 * Das Request
 	 */
-	public Map<String, Object> dasRequest;// DynAuthDasRequestDTO
+	public GenericDTO dasRequest;
 
 	/**
 	 * Das Response
 	 */
-	public Map<String, Object> dasResponse;// DynAuthDasResponseDTO
+	public GenericDTO dasResponse;
 
 	/**
-	 * Esprim Rand Objecgt
+	 * Esprim Rand Object
 	 */
-	public Map<String, Object> esprimRandObject;// ReceiverESPrimRandObjectDTO
+	public GenericDTO esprimRandObject;
 
 	/**
 	 * Esprim Object
@@ -42,6 +50,9 @@ public class SecurityInfoDTO extends DTO {
 	/**
 	 * Enum SecurityInfoType
 	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oenM2M
+	 *      TS-0004 6.3.4.2.35</a>
 	 */
 	public static enum SecurityInfoType {
 
