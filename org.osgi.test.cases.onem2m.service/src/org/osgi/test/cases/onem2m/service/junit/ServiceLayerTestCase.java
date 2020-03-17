@@ -295,9 +295,10 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		req2.resourceName = res.resourceName;
 		req2.resourceType = res.resourceType;
 		req2.resourceID = res.resourceID;
+		req2.attribute = new HashMap<String,Object>();
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
-		req2.labels = lbl;
+		req2.attribute.put("labels",lbl );
 
 		try {
 			Thread.sleep(1200);// to ensure second digit to change
@@ -330,7 +331,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 					+ res3.lastModifiedTime);
 			fail();
 		}
-		assertEquals(lblText, res3.labels.get(0));
+		assertEquals(lblText, ((List)res3.attribute.get("labels")).get(0));
 
 		LOGGER.info("----Update Test 1 is complete----");
 	}
@@ -347,7 +348,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		uri = "-/updateCnt2";
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
-		req.labels = lbl;
+		req.attribute = new HashMap<String,Object>();
+		req.attribute.put("labels", lbl);
 
 		try {
 			res = serviceLayerService.update(uri, req).getValue();
@@ -612,7 +614,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		String lblText = "updated";
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
-		r.labels = lbl;
+		r.attribute = new HashMap<String, Object>();
+		r.attribute.put("labels", lbl);
 
 		try {
 			r2 = serviceLayerService.update(uri, r).getValue();

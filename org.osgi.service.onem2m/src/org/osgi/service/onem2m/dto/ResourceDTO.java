@@ -1,67 +1,85 @@
 package org.osgi.service.onem2m.dto;
-import java.util.List;
+
 import java.util.Map;
 
 import org.osgi.dto.DTO;
 
 /**
  * DTO expressing Resource.
+ * <p>
+ * Universal attributes are expressed in field of the class. Common attributes
+ * and other attributes are stored in attribute field.
+ * 
+ * @see <a href=
+ *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+ *      TS-0001 9.6.1.3.1</a>
  *
  */
-public class ResourceDTO extends DTO{
+public class ResourceDTO extends DTO {
 
 	// Universal Attribute, which can be held by all resources.
-//	@javax.xml.bind.annotation.XmlElement( required  = true)
 	/**
 	 * Resource Type
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public Integer resourceType;
-//	@javax.xml.bind.annotation.XmlElement( required  = true)
-	
+
 	/**
 	 * Resource ID
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public String resourceID;
-//	@javax.xml.bind.annotation.XmlElement( required  = true)
-	
+
 	/**
 	 * Parent ID
 	 * 
 	 * Resource ID of parent resource.
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public String parentID;
-//	@javax.xml.bind.annotation.XmlElement( required  = true)
-	
+
 	/**
 	 * Creation time
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public String creationTime;
-//	@javax.xml.bind.annotation.XmlElement( required  = true)
-	
+
 	/**
 	 * last modified time
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public String lastModifiedTime;
 
 	/**
 	 * Resource name
+	 * 
+	 * @see <a href=
+	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf">oneM2M
+	 *      TS-0001 9.6.1.3.1</a>
 	 */
 	public String resourceName;
-
-	// optional, Universal Attributes
-	/**
-	 * Labels
-	 * 
-	 * This field is optional.
-	 */
-	public List<String> labels;
 
 	/**
 	 * Non Universal Attribute.
 	 * 
-	 * Value Part must be the types that are allowed for OSGi DTO.
-	 * In case of value part can be expressed DTO in this package, the DTO must be used.
-	 * In case of value part have sub-elements, GenericDTO must be used. 
+	 * Value Part must be the types that are allowed for OSGi DTO. In case of value
+	 * part can be expressed DTO in this package, the DTO must be used. In case of
+	 * value part have sub-elements, GenericDTO must be used.
 	 */
 	public Map<String, Object> attribute;
 
