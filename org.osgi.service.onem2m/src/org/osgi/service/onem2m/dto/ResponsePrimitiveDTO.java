@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2019, 2020). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.service.onem2m.dto;
 
 import java.util.List;
@@ -13,6 +29,7 @@ import org.osgi.dto.DTO;
  * @see <a href=
  *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-responsePrimitive-v3_11_0.xsd">oneM2M
  *      XSD responsePrimitive</a>
+ * @NotThreadSafe
  */
 public class ResponsePrimitiveDTO extends DTO {
 	/**
@@ -22,7 +39,7 @@ public class ResponsePrimitiveDTO extends DTO {
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.4.2.9</a>
 	 */
-	public Integer responseStatusCode;
+	public Integer							responseStatusCode;
 
 	/**
 	 * Request Identifier
@@ -30,9 +47,8 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.3</a>
-	 * 
 	 */
-	public String requestIdentifier;
+	public String							requestIdentifier;
 
 	/**
 	 * Primitive Content
@@ -43,9 +59,8 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 7.2.1.2</a>
-	 * 
 	 */
-	public PrimitiveContentDTO content;
+	public PrimitiveContentDTO				content;
 
 	/**
 	 * To Parameter
@@ -54,23 +69,21 @@ public class ResponsePrimitiveDTO extends DTO {
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.3</a>
 	 */
-	public String to;
+	public String							to;
 
 	/**
 	 * From Parameter
 	 */
-	public String from;
+	public String							from;
 
 	/**
-	 * Originating Timestamp
-	 * 
-	 * To Parameter
+	 * Originating Timestamp To Parameter
 	 * 
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 Table 6.3.3-1</a>
 	 */
-	public String originatingTimestamp;
+	public String							originatingTimestamp;
 
 	/**
 	 * ResultExpiration Timestamp
@@ -78,9 +91,8 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 Table 6.3.3-1</a>
-	 * 
 	 */
-	public String resultExpirationTimestamp;
+	public String							resultExpirationTimestamp;
 
 	/**
 	 * Event Category
@@ -94,11 +106,11 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * @see <a href=
 	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-commonTypes-v3_11_0.xsd#L326">oneM2M
 	 *      XSD eventCat</a>
-	 * 
-	 * @see <a href="https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-enumerationTypes-v3_11_0.xsd#L208-221">oneM2M
+	 * @see <a href=
+	 *      "https://git.onem2m.org/PRO/XSD/blob/master/v3_11_0/CDT-enumerationTypes-v3_11_0.xsd#L208-221">oneM2M
 	 *      XSD stdEventCats</a>
 	 */
-	public Integer eventCategory;
+	public Integer							eventCategory;
 
 	/**
 	 * Content Status
@@ -107,12 +119,12 @@ public class ResponsePrimitiveDTO extends DTO {
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.4.2.44</a>
 	 */
-	public ContentStatus contentStatus;
+	public ContentStatus					contentStatus;
 
 	/**
 	 * Content Offset
 	 */
-	public Integer contentOffset;
+	public Integer							contentOffset;
 
 	/**
 	 * Assigned Token Identifiers
@@ -120,29 +132,27 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.5.43</a>
-	 * 
 	 */
-	public List<LocalTokenIdAssignmentDTO> assignedTokenIdentifiers;
+	public List<LocalTokenIdAssignmentDTO>	assignedTokenIdentifiers;
 	/**
 	 * Token Request Info
 	 * 
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.5.45</a>
-	 * 
 	 */
-	public List<DasInfoDTO> tokenReqInfo;
+	public List<DasInfoDTO>					tokenReqInfo;
 
 	// Added R3.0
 	/**
 	 * AuthSignatureReqInfo
 	 */
-	public Boolean AuthSignatureReqInfo;
+	public Boolean							AuthSignatureReqInfo;
 
 	/**
 	 * Release Version Indicator
 	 */
-	public ReleaseVersion releaseVersionIndicator;
+	public ReleaseVersion					releaseVersionIndicator;
 
 	/**
 	 * Vendor Information
@@ -150,7 +160,7 @@ public class ResponsePrimitiveDTO extends DTO {
 	 * Used for vendor specific information. No procedure is defined for the
 	 * parameter.
 	 */
-	public String vendorInformation;
+	public String							vendorInformation;
 
 	/**
 	 * Enum ContentStatus
@@ -159,7 +169,7 @@ public class ResponsePrimitiveDTO extends DTO {
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.4.2.44</a>
 	 */
-	public static enum ContentStatus {
+	public enum ContentStatus {
 		/**
 		 * PARTIAL_CONTENT
 		 */

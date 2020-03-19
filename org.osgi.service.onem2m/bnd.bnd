@@ -1,16 +1,10 @@
-Bundle-Version: 1.0.0
-Bundle-Name: org.osgi.service.onem2m
--buildpath: \
-	slf4j.api,\
-	org.osgi.dto;version=latest,\
-	org.osgi.util.promise;version=latest, \
-        osgi.annotation; version=6.0.1
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
--dsannotations:
-Export-Package: \
-	org.osgi.service.onem2m,\
-	org.osgi.service.onem2m.dto
-Private-Package: \
-	org.osgi.service.onem2m,\
-	org.osgi.service.onem2m.dto
+Export-Package: ${p}.*; -split-package:=first
 
+-buildpath = \
+    osgi.annotation; version=latest, \
+    osgi.core; version=6.0.0, \
+    osgi.promise;version=6.0.0, \
+    org.osgi.namespace.extender;version=latest
