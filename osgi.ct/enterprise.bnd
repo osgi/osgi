@@ -1,5 +1,0 @@
-Bundle-Description: OSGi Enterprise Release ${versionmask;=;${build.version}} Compliance Tests
-
--includeresource: {legal}
-
--ctpack: ${build.enterprise.tests},${jar.enterprise.tests}

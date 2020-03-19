@@ -72,6 +72,4 @@ org.osgi:org.osgi.util.xml:1.0.1
 org.osgi:osgi.annotation:7.0.0
 org.osgi:osgi.cmpn:7.0.0
 org.osgi:osgi.core:7.0.0
-org.osgi:osgi.enterprise:7.0.0
 org.osgi:osgi.promise:7.0.1
-org.osgi:osgi.residential:6.0.0

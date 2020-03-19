@@ -1,5 +1,6 @@
 osgi.cmpn.specs = \
      org.osgi.application, \
+     org.osgi.jmx, \
      org.osgi.namespace.contract, \
      org.osgi.namespace.extender, \
      org.osgi.namespace.implementation, \

@@ -78,6 +78,8 @@
 
   <xi:include href="../123/service.jta.xml"/>
 
+  <xi:include href="../124/service.jmx.xml"/>
+
   <xi:include href="../125/service.jdbc.xml"/>
 
   <xi:include href="../126/service.jndi.xml"/>
