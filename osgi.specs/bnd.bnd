@@ -18,7 +18,6 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
     org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
     org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon; version=latest, \
-    org.osgi.service.io; version=project, \
     ${batik_buildpath}
 
 javadoc.specs = ${osgi.companion.specs}

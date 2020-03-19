@@ -515,7 +515,7 @@ tag                  ::= 'tag' '=' argument</programlisting>
 
       <section>
         <title>Import-Package:
-        org.osgi.util.tracker,org.osgi.service.io;version=1.4</title>
+        org.osgi.util.tracker,org.osgi.service.log;version=1.4</title>
 
         <para>The Import-Package header declares the imported packages for
         this bundle. See <xref

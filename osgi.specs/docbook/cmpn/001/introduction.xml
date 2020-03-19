@@ -205,17 +205,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.io"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.io"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.io-version"
-              linkend="service.io"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.provisioning"
               xrefstyle="template:%n %t"/></entry>
 

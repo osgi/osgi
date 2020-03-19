@@ -50,8 +50,6 @@
 
   <xi:include href="../108/service.wireadmin.xml"/>
 
-  <xi:include href="../109/service.io.xml"/>
-
   <xi:include href="../110/service.provisioning.xml"/>
 
   <xi:include href="../111/service.upnp.xml"/>
