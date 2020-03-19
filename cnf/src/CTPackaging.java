@@ -157,6 +157,8 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
 		String runsystempackages = project
 				.getProperty(Constants.RUNSYSTEMPACKAGES);
+		String runsystemcapabilities = project
+				.getProperty(Constants.RUNSYSTEMCAPABILITIES);
 		String runframework = project.getProperty(Constants.RUNFRAMEWORK);
 		String runvm = project.getProperty(Constants.RUNVM);
 		String tester = project.getProperty(Constants.TESTER);
@@ -224,6 +226,13 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append(Constants.RUNSYSTEMPACKAGES);
 			sb.append(" = \\\n    ");
 			sb.append(runsystempackages);
+		}
+
+		if (runsystemcapabilities != null) {
+			sb.append("\n\n");
+			sb.append(Constants.RUNSYSTEMCAPABILITIES);
+			sb.append(" = \\\n    ");
+			sb.append(runsystemcapabilities);
 		}
 
 		if (runframework != null) {
