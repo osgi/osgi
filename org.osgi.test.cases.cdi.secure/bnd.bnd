@@ -1,6 +1,7 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
+Bundle-Description: Secure CT for the OSGi/CDI integration
 -conditionalpackage: org.osgi.test.support.*
 
 -privatepackage: ${p}.junit.*
@@ -12,20 +13,22 @@
 	tb4.jar,\
 	tb5.jar,\
 	tbextension.jar
+Test-Cases: ${testcases}
 
--runsystempackages: \
-	sun.misc
+-runsystempackages: sun.misc
 
 -buildpath: \
+	osgi.annotation;version=7.0.0,\
+	osgi.core;version=7.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.log;version=latest,\
 	org.osgi.service.component.annotations;version=latest,\
-	org.osgi.annotation.bundle;version=latest,\
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.service;version=latest,\
-	org.osgi.framework;version=latest,\
 	org.osgi.util.tracker;version=latest,\
+	org.osgi.util.converter;version=latest,\
+	org.osgi.util.promise;version=latest,\
 	org.osgi.resource;version=latest,\
 	org.osgi.dto;version=latest,\
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
@@ -42,7 +45,8 @@
 	osgi.implementation;osgi.implementation="osgi.cm";uses:="org.osgi.service.cm,org.apache.felix.cm";version:Version="1.6"
 
 -runproperties: \
-	${runsecureproperties}
+	${runsecureproperties},\
+	eclipse.consoleLog=true,\
+	eclipse.log.level=DEBUG
 
-Test-Cases: ${testcases}
-
+javac.profile=

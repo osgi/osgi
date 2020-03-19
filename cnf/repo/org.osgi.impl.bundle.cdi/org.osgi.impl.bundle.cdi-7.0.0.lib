@@ -20,7 +20,7 @@ slf4j.api; version=1.7.7
 slf4j.nop; version=1.7.7
 
 org.osgi.service.cdi;version=latest
-org.osgi.util.promise;version=1.1.1
-org.osgi.util.function;version=1.1.0
+org.osgi.util.promise;version=latest
+org.osgi.util.function;version=latest
 
 org.osgi.impl.service.cm;version=latest
