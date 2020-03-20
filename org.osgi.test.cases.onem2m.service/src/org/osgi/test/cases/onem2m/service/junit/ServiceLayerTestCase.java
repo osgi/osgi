@@ -12,6 +12,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.onem2m.NotificationListener;
+import org.osgi.service.onem2m.OneM2MException;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO.FilterUsage;
@@ -191,7 +192,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	}
 
 	/**
-	 * Duplicate creation
+	 * Duplicate creation. 2nd call will fail.
 	 */
 	@Test
 	public void testCreate2() {
@@ -204,15 +205,29 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		req.resourceName = "cnt1";
 		req.resourceType = RT_container;
 
+		Throwable th = null;
 		try {
 			res = serviceLayerService.create(uri, req).getValue();
-			res = serviceLayerService.create(uri, req).getValue();
+
+			Promise<ResourceDTO> pr = serviceLayerService.create(uri, req);
+
+			th = pr.getFailure();
+			// res = pr.getValue();
+			LOGGER.info("Throwable:" + th);
+			// LOGGER.info("Response:"+res);
 		} catch (Exception e) {
+			LOGGER.warn("Exception Caught ex:" + e);
+			e.printStackTrace();
 			fail();
 		}
 
 		// Check result
-		assertEquals(null, res);
+
+		// assertNull(res);
+		assertNotNull(th);
+		assertEquals(OneM2MException.class, th.getClass());
+		OneM2MException oex = (OneM2MException) th;
+		assertEquals(4105, oex.errorCode);
 
 		LOGGER.info("----CREATE Test 2 is complete----");
 	}
@@ -468,8 +483,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		for (String u : uril) {
 			System.out.println(u);
-			String[] subelements = u.split("/",2);
-			if(subelements.length == 1) {
+			String[] subelements = u.split("/", 2);
+			if (subelements.length == 1) {
 				continue;
 			}
 			switch (subelements[1]) {// "remove "cb/" part from "cb/disCnt1", for example.
@@ -550,7 +565,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(true, ret);
 		assertEquals(false, set.isEmpty());
-		
+
 		reg.unregister();
 		LOGGER.info("---- Notify Test 1 is complete----");
 	}
@@ -582,7 +597,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(false, ret);
 		assertEquals(true, set.isEmpty());
-		
+
 		reg.unregister();
 		LOGGER.info("---- Notify Test 2 is complete----");
 	}
@@ -642,7 +657,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("returned resource :" + r2);
 
 		assertEquals(1, set.size());
-		
+
 		reg.unregister();
 		LOGGER.info("---- Notify Test 3 is complete----");
 	}
@@ -685,6 +700,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	}
 
 	private void cleanup() {
+		LOGGER.info("---- Clean Up -----");
 		List<String> uril = null;
 		FilterCriteriaDTO fc = new FilterCriteriaDTO();
 		fc.filterUsage = FilterUsage.DiscoveryCriteria;
@@ -693,11 +709,11 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 			uril = serviceLayerService.discovery("-", fc).getValue();
 
 			if (uril == null) {
-				LOGGER.warn("retured uril is null");
+				LOGGER.warn("returned uril is null.");
 				return;// TODO:
 			}
 			for (String url : uril) {
-				if (!url.equals("cb")) {// skip CSEBase
+				if (url.contains("/")) {// skip CSEBase
 					LOGGER.warn("removing " + url);
 					serviceLayerService.delete(url).getValue();
 				}
@@ -705,6 +721,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		LOGGER.info("---- Clean Up done. -----");
 
 	}
 }

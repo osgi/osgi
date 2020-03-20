@@ -10,6 +10,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.onem2m.NotificationListener;
+import org.osgi.service.onem2m.OneM2MException;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
@@ -38,55 +39,111 @@ public class ServiceLayerImplService implements ServiceLayer {
 		this.context = context;
 	}
 
+	class LowLevelThread extends Thread {
+		Deferred<ResponsePrimitiveDTO> dret;
+		RequestPrimitiveDTO request;
+
+		LowLevelThread(RequestPrimitiveDTO request, Deferred<ResponsePrimitiveDTO> dret) {
+			this.dret = dret;
+			this.request = request;
+		}
+
+		@Override
+		public void run() {
+			ResponsePrimitiveDTO ret = null;
+			try {
+				switch (request.operation) {
+				case Create:
+					ret = cse.create(request);
+					break;
+
+				case Retrieve:
+					ret = cse.retrieve(request);
+					break;
+
+				case Update:
+					ret = cse.update(request);
+					break;
+
+				case Delete:
+					ret = cse.delete(request);
+					break;
+
+				case Notify:
+					ret = cse.notify(request);
+					break;
+				}
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				LOGGER.warn("Exception Caught:" + e);
+				dret.fail(e);
+				return;
+			}
+			dret.resolve(ret);
+		}
+	}
+
 	@Override
 	public Promise<ResponsePrimitiveDTO> request(RequestPrimitiveDTO request) {
 
 		Deferred<ResponsePrimitiveDTO> dret = new Deferred<ResponsePrimitiveDTO>();
-		class Exec implements Runnable {
-			Deferred<ResponsePrimitiveDTO> dret;
 
-			Exec(Deferred<ResponsePrimitiveDTO> dret) {
-				this.dret = dret;
-			}
-
-			@Override
-			public void run() {
-				ResponsePrimitiveDTO ret = new ResponsePrimitiveDTO();
-				try {
-					switch (request.operation) {
-					case Create:
-						ret = cse.create(request);
-						break;
-
-					case Retrieve:
-						ret = cse.retrieve(request);
-						break;
-
-					case Update:
-						ret = cse.update(request);
-						break;
-
-					case Delete:
-						ret = cse.delete(request);
-						break;
-
-					case Notify:
-						ret = cse.notify(request);
-						break;
-					}
-				} catch (RuntimeException e) {
-					e.printStackTrace();
-					dret.fail(e);
-				}
-				dret.resolve(ret);
-			}
-		}
-
-		Exec ee = new Exec(dret);
-		Thread t = new Thread(ee);
+		Thread t = new LowLevelThread(request, dret);
 		t.start();
 
 		return dret.getPromise();
+	}
+
+	class HighLevelThread extends Thread {
+		Deferred<ResourceDTO> deferredResource;
+		RequestPrimitiveDTO request;
+
+		HighLevelThread(RequestPrimitiveDTO request, Deferred<ResourceDTO> dres) {
+			this.request = request;
+			this.deferredResource = dres;
+		}
+
+		@Override
+		public void run() {
+			ResponsePrimitiveDTO ret = null;
+			try {
+				switch (request.operation) {
+				case Create:
+					ret = cse.create(request);
+					break;
+
+				case Retrieve:
+					ret = cse.retrieve(request);
+					break;
+
+				case Update:
+					ret = cse.update(request);
+					break;
+
+				case Delete:
+					ret = cse.delete(request);
+					break;
+
+				case Notify:
+					ret = cse.notify(request);
+					break;
+				}
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				LOGGER.warn("Exception Caught:" + e);
+				deferredResource.fail(e);
+				return;
+			}
+			if (ret.responseStatusCode >= 2000 && ret.responseStatusCode < 3000) {
+				deferredResource.resolve(ret.content.resource);
+			} else {
+				LOGGER.warn("error code:" + ret.responseStatusCode);
+				OneM2MException ex = new OneM2MException();
+				ex.errorCode = ret.responseStatusCode;
+				ex.cause = "Unknown(Not implemented yet)";
+				deferredResource.fail(ex);
+			}
+		}
 	}
 
 	@Override
@@ -110,10 +167,14 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.from = this.origin;
 
 		// Execute request transmission processing
-		Promise<ResponsePrimitiveDTO> res = this.request(req);
+		Deferred<ResourceDTO> d = new Deferred<ResourceDTO>();
+
+		Thread thread = new HighLevelThread(req, d);
+		thread.start();
 
 		LOGGER.info("END CREATE");
-		return res.map(p -> p.content.resource);
+		return d.getPromise();
+		// return res.map(p -> p.content.resource);
 	}
 
 	@Override
