@@ -1,26 +1,15 @@
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd
 
-Bundle-Name: org.osgi.impl.service.onem2m
-Bundle-Version: 1.0.0
-Bundle-Activator: org.osgi.impl.service.onem2m.Activator
+Bundle-Activator: ${p}.Activator
+
 -buildpath: \
 	slf4j.api,\
 	org.osgi.service.onem2m;version=latest,\
-	org.osgi.framework;version=latest,\
-	org.osgi.dto;version=latest,\
+	osgi.core;version=6.0,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.util.function;version=latest
 
-
--includeresource = \
-    lib
-
-Bundle-ClassPath: .
-
-Private-Package: \
-	org.osgi.impl.service.onem2m,\
-	org.osgi.impl.service.onem2m.protocol,\
-	org.osgi.impl.service.onem2m.serialization,\
-	org.osgi.impl.service.onem2m.protocol.service
+-privatepackage     = \
+    ${p}.*
 

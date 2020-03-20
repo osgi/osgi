@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.osgi.framework.*;
-
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.OneM2MException;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
@@ -25,11 +21,15 @@ import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("boxing")
 public class ServiceLayerImplService implements ServiceLayer {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerImplService.class);
-	private CseService cse;
+	static final Logger		LOGGER	= LoggerFactory
+			.getLogger(ServiceLayerImplService.class);
+	CseService					cse;
 	private final String origin;
+	@SuppressWarnings("unused")
 	private BundleContext context;
+	@SuppressWarnings("unused")
 	private Bundle bundleFor;
 
 	public ServiceLayerImplService(String origin, BundleContext context, Bundle bundle) {
@@ -138,9 +138,8 @@ public class ServiceLayerImplService implements ServiceLayer {
 				deferredResource.resolve(ret.content.resource);
 			} else {
 				LOGGER.warn("error code:" + ret.responseStatusCode);
-				OneM2MException ex = new OneM2MException();
-				ex.errorCode = ret.responseStatusCode;
-				ex.cause = "Unknown(Not implemented yet)";
+				OneM2MException ex = new OneM2MException(
+						"Unknown(Not implemented yet)", ret.responseStatusCode);
 				deferredResource.fail(ex);
 			}
 		}
@@ -343,6 +342,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		});
 	}
 
+	@SuppressWarnings("unused")
 	private List<String> dataListing(Object res) {
 		String strRes = null;
 		if (res instanceof byte[]) {

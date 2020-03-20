@@ -1,8 +1,8 @@
 package org.osgi.impl.service.onem2m.protocol;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -31,14 +31,15 @@ public class ServiceLayerUtil {
 	public static final String PROPERTY_KEY = "symbolicName";
 	public static final String NOTIFICATION_URI = "notificationURI";
 
-	private static String PROPERTY_URI = "./conf/aeConfig.properties";
+	private static String		PROPERTY_URI		= "conf/aeConfig.properties";
 
     public static Map<String, String> getProperty(final String key, BundleContext context) {
     	// Get Properties
     	Properties properties = new Properties();
     	String value = null;
     	try {
-            InputStream istream = new FileInputStream(PROPERTY_URI);
+			URL entry = context.getBundle().getEntry(PROPERTY_URI);
+			InputStream istream = entry.openStream();
             properties.load(istream);
             value = properties.getProperty(key);
         } catch (IOException e) {

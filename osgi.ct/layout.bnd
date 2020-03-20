@@ -69,6 +69,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.monitor, \
+    org.osgi.test.cases.onem2m, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
     org.osgi.test.cases.promise, \

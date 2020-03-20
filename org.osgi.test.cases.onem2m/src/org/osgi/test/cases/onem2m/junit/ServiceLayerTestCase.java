@@ -1,4 +1,6 @@
-package org.osgi.test.cases.onem2m.service.junit;
+package org.osgi.test.cases.onem2m.junit;
+
+import static org.osgi.service.onem2m.dto.Constants.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -24,7 +26,6 @@ import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.osgi.service.onem2m.dto.Constants.*;
 
 /**
  * Test Case for oneM2M
@@ -33,6 +34,7 @@ import static org.osgi.service.onem2m.dto.Constants.*;
  * tree.
  * 
  */
+@SuppressWarnings("boxing")
 public class ServiceLayerTestCase extends OSGiTestCase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerTestCase.class);
@@ -199,6 +201,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("----Start CREATE Test 2----");
 
 		ResourceDTO req = new ResourceDTO();
+		@SuppressWarnings("unused")
 		ResourceDTO res = null;
 
 		String uri = "-";
@@ -227,7 +230,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		assertNotNull(th);
 		assertEquals(OneM2MException.class, th.getClass());
 		OneM2MException oex = (OneM2MException) th;
-		assertEquals(4105, oex.errorCode);
+		assertEquals(4105, oex.getErrorCode());
 
 		LOGGER.info("----CREATE Test 2 is complete----");
 	}
@@ -291,6 +294,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("----CREATE Test 4 is complete----");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testUpdate1() {
 		LOGGER.info("----Start Update Test 1----");
@@ -352,7 +356,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 					+ res3.lastModifiedTime);
 			fail();
 		}
-		assertEquals(lblText, ((List) res3.attribute.get("labels")).get(0));
+		assertEquals(lblText, ((List<String>) res3.attribute.get("labels")).get(0));
 
 		LOGGER.info("----Update Test 1 is complete----");
 	}
@@ -539,12 +543,13 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	public void testNotify1() {
 		LOGGER.info("----Start Notify Test 1----");
 
+		@SuppressWarnings("hiding")
 		String myaddress = getMyAddress();
 
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration<NotificationListener> reg = con.registerService(NotificationListener.class, listener, null);
 
 		NotificationDTO notif = new NotificationDTO();
 		notif.notificationEvent = new NotificationEventDTO();
@@ -576,7 +581,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration<NotificationListener> reg = con.registerService(NotificationListener.class, listener, null);
 
 		NotificationDTO notif = new NotificationDTO();
 		notif.notificationEvent = new NotificationEventDTO();
@@ -608,7 +613,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration<NotificationListener> reg = con.registerService(NotificationListener.class, listener, null);
 
 		ResourceDTO r = new ResourceDTO();
 		ResourceDTO r2 = null;

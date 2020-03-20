@@ -1,42 +1,34 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
--dependson: org.osgi.service.onem2m, org.osgi.impl.service.onem2m
 
-Bundle-Description: Tests the service layre bundle
+Bundle-Description: Tests the service layer bundle
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package: \
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage: \
 	${p}.junit.*
-
-Import-Package:  *
+-includeresource: conf=conf
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.onem2m, org.osgi.service.onem2m.dto
 
 -buildpath: \
 	${junit4},\
-	osgi.core;version=4.3.1,\
+	osgi.core;version=6,\
 	org.osgi.test.support;version=latest,\
-	org.osgi.framework;version=latest,\
 	slf4j.api;version=1.7.7,\
 	org.osgi.service.onem2m;version=latest,\
-	org.osgi.util.promise;version=latest,\
-	org.osgi.dto;version=latest
-
+    org.osgi.util.promise;version=latest,\
+    org.osgi.util.function;version=latest
 
 -runbundles							= \
     ${junit4},\
  	slf4j.api;version=1.7.7, \
-        slf4j.simple;version=1.7.7, \
-	org.osgi.framework;version=latest,\
-	org.osgi.dto;version=latest,\
+    slf4j.simple;version=1.7.7, \
 	org.osgi.util.promise;version=latest,\
 	org.osgi.util.function;version=latest,\
 	org.osgi.service.onem2m;version=latest,\
 	org.osgi.impl.service.onem2m;version=latest
 
-
-
-
--runproperties: \
+-runproperties: ${runproperties},\
 	org.osgi.framework.bootdelegation=*

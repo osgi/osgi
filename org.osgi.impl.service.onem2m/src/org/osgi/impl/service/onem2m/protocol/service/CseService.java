@@ -1,7 +1,8 @@
 package org.osgi.impl.service.onem2m.protocol.service;
 
-import java.text.SimpleDateFormat;
+import static org.osgi.service.onem2m.dto.Constants.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,20 +12,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO.FilterUsage;
 import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.NotificationEventDTO;
-import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.service.onem2m.dto.ResponsePrimitiveDTO;
-import static org.osgi.service.onem2m.dto.Constants.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("boxing")
 public class CseService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CseService.class);
 
@@ -368,7 +371,7 @@ public class CseService {
 		if (element[1].equals(cseID)) {
 
 			LOGGER.debug("NOW prepare to send notification.");
-			ServiceReference[] rs;
+			ServiceReference< ? >[] rs;
 			try {
 				rs = context.getServiceReferences(NotificationListener.class.getName(), null);
 			} catch (InvalidSyntaxException e) {
@@ -377,7 +380,7 @@ public class CseService {
 				return res;
 			}
 			int count = 0;
-			for (ServiceReference ref : rs) {
+			for (ServiceReference< ? > ref : rs) {
 
 				if (ref.getBundle().getSymbolicName().equals(bsn)) {
 					NotificationListener lis = (NotificationListener) context.getService(ref);
@@ -395,11 +398,11 @@ public class CseService {
 	}
 
 	private String aeNameBySybolicName(String symbolicName) {
-		if (symbolicName.equals("org.osgi.test.cases.onem2m.service")) {
+		if (symbolicName.equals("org.osgi.test.cases.onem2m")) {
 			return "CAE1";
-		} else if (symbolicName.equals("org.osgi.test.cases.onem2m.service2")) {
+		} else if (symbolicName.equals("org.osgi.test.cases.onem2m2")) {
 			return "CAE2";
-		} else if (symbolicName.equals("org.osgi.test.cases.onem2m.service3")) {
+		} else if (symbolicName.equals("org.osgi.test.cases.onem2m3")) {
 			return "CAE3";
 		}
 		throw new IllegalArgumentException("unexpected bundleSymbolicName:" + symbolicName);
@@ -407,11 +410,11 @@ public class CseService {
 
 	private String symbolicNameByAeName(String aeName) {
 		if (aeName.equals("CAE1")) {
-			return "org.osgi.test.cases.onem2m.service";
+			return "org.osgi.test.cases.onem2m";
 		} else if (aeName.equals("CAE2")) {
-			return "org.osgi.test.cases.onem2m.service2";
+			return "org.osgi.test.cases.onem2m2";
 		} else if (aeName.equals("CAE3")) {
-			return "org.osgi.test.cases.onem2m.service3";
+			return "org.osgi.test.cases.onem2m3";
 		}
 		throw new IllegalArgumentException("unexpected aeName:" + aeName);
 
