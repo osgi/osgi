@@ -1,4 +1,5 @@
 package org.osgi.test.cases.onem2m.service.junit;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.onem2m.NotificationListener;
 import org.osgi.service.onem2m.ServiceLayer;
 import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
@@ -35,18 +37,18 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerTestCase.class);
 
 	private ServiceLayer serviceLayerService = null;
-	private String uri = null;
+	// private String uri = null;
 	private BundleContext con = null;
 
 	protected void setUp() throws Exception {
 		if (serviceLayerService == null) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				fail();
-				return;
-			}
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//				fail();
+//				return;
+//			}
 			con = getContext();
 			// Get ServiceLayerFactory
 			ServiceReference<?> serviceLayerFactory = con.getServiceReference(ServiceLayer.class.getName());
@@ -60,7 +62,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	}
 
 	protected void tearDown() throws Exception {
-
+		cleanup();
 	}
 
 	@Test
@@ -147,7 +149,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		ResourceDTO res = null;
 
-		uri = "/in-cse2/-";
+		String uri = "/in-cse2/-";
 
 		try {
 			res = serviceLayerService.retrieve(uri).getValue();
@@ -168,7 +170,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "-";
+		String uri = "-";
 		req.resourceName = "cnt1";
 		req.resourceType = RT_container;
 
@@ -188,6 +190,9 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("----CREATE Test 1 is complete----");
 	}
 
+	/**
+	 * Duplicate creation
+	 */
 	@Test
 	public void testCreate2() {
 		LOGGER.info("----Start CREATE Test 2----");
@@ -195,11 +200,12 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "-";
+		String uri = "-";
 		req.resourceName = "cnt1";
 		req.resourceType = RT_container;
 
 		try {
+			res = serviceLayerService.create(uri, req).getValue();
 			res = serviceLayerService.create(uri, req).getValue();
 		} catch (Exception e) {
 			fail();
@@ -221,7 +227,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = new ResourceDTO();
 
-		uri = "/in-cse2/-";
+		String uri = "/in-cse2/-";
 		req.resourceName = "cnt2";
 		req.resourceType = RT_container;
 
@@ -244,7 +250,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		ResourceDTO r = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "-";
+		String uri = "-";
 		r.resourceName = "ae1";
 		r.resourceType = RT_AE;
 		r.attribute = new HashMap<String, Object>();
@@ -277,7 +283,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		ResourceDTO req = new ResourceDTO();
 		ResourceDTO res = null;
 
-		uri = "-";
+		String uri = "-";
 		req.resourceName = "updateCnt";
 		req.resourceType = RT_container;
 
@@ -295,10 +301,10 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		req2.resourceName = res.resourceName;
 		req2.resourceType = res.resourceType;
 		req2.resourceID = res.resourceID;
-		req2.attribute = new HashMap<String,Object>();
+		req2.attribute = new HashMap<String, Object>();
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
-		req2.attribute.put("labels",lbl );
+		req2.attribute.put("labels", lbl);
 
 		try {
 			Thread.sleep(1200);// to ensure second digit to change
@@ -331,7 +337,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 					+ res3.lastModifiedTime);
 			fail();
 		}
-		assertEquals(lblText, ((List)res3.attribute.get("labels")).get(0));
+		assertEquals(lblText, ((List) res3.attribute.get("labels")).get(0));
 
 		LOGGER.info("----Update Test 1 is complete----");
 	}
@@ -345,10 +351,10 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		String lblText = "updateTest";
 
-		uri = "-/updateCnt2";
+		String uri = "-/updateCnt2";
 		List<String> lbl = new ArrayList<String>();
 		lbl.add(lblText);
-		req.attribute = new HashMap<String,Object>();
+		req.attribute = new HashMap<String, Object>();
 		req.attribute.put("labels", lbl);
 
 		try {
@@ -369,7 +375,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		ResourceDTO req = new ResourceDTO();
 
-		uri = "-";
+		String uri = "-";
 		req.resourceName = "deleteCnt";
 		req.resourceType = RT_container;
 
@@ -396,7 +402,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	public void testDelete2() {
 		LOGGER.info("----Start Delete Test 2----");
 
-		uri = "-/deleteCnt2";
+		String uri = "-/deleteCnt2";
 
 		try {
 			if (serviceLayerService.delete(uri).getValue()) {
@@ -415,7 +421,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		ResourceDTO req1 = new ResourceDTO();
 
-		uri = "-";
+		String uri = "-";
 		req1.resourceName = "disCnt1";
 		req1.resourceType = RT_container;
 
@@ -460,11 +466,15 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 			fail();
 		}
 
-		for (String uri : uril) {
-			System.out.println(uri);
-			switch (uri) {
-			case "cb/disCnt1":
-			case "cb/disCnt1/disCnt3":
+		for (String u : uril) {
+			System.out.println(u);
+			String[] subelements = u.split("/",2);
+			if(subelements.length == 1) {
+				continue;
+			}
+			switch (subelements[1]) {// "remove "cb/" part from "cb/disCnt1", for example.
+			case "disCnt1":
+			case "disCnt1/disCnt3":
 				break;
 			default:
 				fail();
@@ -476,6 +486,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 	@Test
 	public void testDiscovery2() {
+		String uri;
 		LOGGER.info("----Start Discovery Test 2----");
 
 		List<String> uril = null;
@@ -512,16 +523,19 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	@Test
 	public void testNotify1() {
 		LOGGER.info("----Start Notify Test 1----");
+
+		String myaddress = getMyAddress();
+
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
 
 		NotificationDTO notif = new NotificationDTO();
 		notif.notificationEvent = new NotificationEventDTO();
 		notif.notificationEvent.representation = "dummy:URI";
 
-		Promise<Boolean> pb = serviceLayerService.notify("/in-cse/Cae1", notif);
+		Promise<Boolean> pb = serviceLayerService.notify(myaddress, notif);
 
 		boolean ret = false;
 		try {
@@ -536,6 +550,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(true, ret);
 		assertEquals(false, set.isEmpty());
+		
+		reg.unregister();
 		LOGGER.info("---- Notify Test 1 is complete----");
 	}
 
@@ -545,13 +561,13 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
 
 		NotificationDTO notif = new NotificationDTO();
 		notif.notificationEvent = new NotificationEventDTO();
 		notif.notificationEvent.representation = "dummy:URI";
 
-		Promise<Boolean> pb = serviceLayerService.notify("/mn-cse/Cae2", notif);// disconnected cse
+		Promise<Boolean> pb = serviceLayerService.notify("/mn-cse-not-exist/CAE2", notif);// disconnected cse
 
 		boolean ret = false;
 		try {
@@ -566,6 +582,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		assertEquals(false, ret);
 		assertEquals(true, set.isEmpty());
+		
+		reg.unregister();
 		LOGGER.info("---- Notify Test 2 is complete----");
 	}
 
@@ -575,28 +593,27 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();
 
 		NotificationListener listener = new MyListener(set);
-		con.registerService(NotificationListener.class.getName(), listener, null);
+		ServiceRegistration reg = con.registerService(NotificationListener.class.getName(), listener, null);
 
 		ResourceDTO r = new ResourceDTO();
 		ResourceDTO r2 = null;
 
-		uri = "-";
 		r.resourceName = "cont";
 		r.resourceType = RT_container;
 
 		try {
-			r2 = serviceLayerService.create(uri, r).getValue();
+			r2 = serviceLayerService.create("-", r).getValue();
 		} catch (Exception e) {
 			fail();
 		}
 		LOGGER.info("returned resource :" + r2);
 
-		uri = "-/cont";
+		String uri = "-/cont";
 		ResourceDTO sub = new ResourceDTO();
 		sub.resourceName = "sub";
 		sub.resourceType = RT_subscription;
 		sub.attribute = new HashMap<String, Object>();
-		sub.attribute.put("notificationURI", "/in-cse/Cae1"); // TODO fix it.
+		sub.attribute.put("notificationURI", getMyAddress());
 
 		try {
 			r2 = serviceLayerService.create(uri, sub).getValue();
@@ -625,12 +642,69 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("returned resource :" + r2);
 
 		assertEquals(1, set.size());
+		
+		reg.unregister();
 		LOGGER.info("---- Notify Test 3 is complete----");
 	}
-//    @Test
-//   	public void testDummy(){
-//    	// try to fail
-//    	assertEquals("foo","bar");
-//   	
-//   }
+
+	String myaddress = null;
+
+	private String getMyAddress() {
+		if (myaddress != null)
+			return myaddress;
+		try {
+			ResourceDTO res = null;
+
+			res = serviceLayerService.retrieve("-").getValue();
+
+			String cseid = (String) res.attribute.get("CSE-ID");
+
+			ResourceDTO r = new ResourceDTO();
+
+			String uri = "-";
+			r.resourceName = "dummyae";
+			r.resourceType = RT_AE;
+			r.attribute = new HashMap<String, Object>();
+			r.attribute.put("App-ID", "TESTAPP");
+			r.attribute.put("requestReachability", true);
+
+			res = serviceLayerService.create(uri, r).getValue();
+
+			LOGGER.warn("res:" + res);
+			String aeid = (String) res.attribute.get("AE-ID");
+			myaddress = "/" + cseid + "/" + aeid;
+			return myaddress;
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private void cleanup() {
+		List<String> uril = null;
+		FilterCriteriaDTO fc = new FilterCriteriaDTO();
+		fc.filterUsage = FilterUsage.DiscoveryCriteria;
+
+		try {
+			uril = serviceLayerService.discovery("-", fc).getValue();
+
+			if (uril == null) {
+				LOGGER.warn("retured uril is null");
+				return;// TODO:
+			}
+			for (String url : uril) {
+				if (!url.equals("cb")) {// skip CSEBase
+					LOGGER.warn("removing " + url);
+					serviceLayerService.delete(url).getValue();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 }

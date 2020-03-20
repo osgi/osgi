@@ -53,7 +53,7 @@ public class CseService {
 		cseBase.attribute.put("cseType", 1);// means IN-CSE
 
 		HashSet<Integer> set = new HashSet<Integer>();
-		for (int i = 0; i < 80; i++) {
+		for (int i = 0; i < 23; i++) {
 			set.add(i);
 		}
 		cseBase.attribute.put("supportedResourceType", set);
@@ -82,6 +82,11 @@ public class CseService {
 			throw new IllegalArgumentException("Absolute ID is not expected. URI=" + uri);
 		} else if (uri.startsWith("/")) {// SP relative ID.
 			String[] elem = uri.split("/", 3);
+			LOGGER.info("elment count:" + elem.length);
+			for (int i = 0; i < elem.length; i++) {
+				LOGGER.info("elment [" + i + "] :" + elem[i]);
+
+			}
 			if (cseID.equals(elem[1])) {// for me
 				return convertShortcut(elem[2]);
 			} else {
@@ -122,10 +127,15 @@ public class CseService {
 			return res;
 		}
 		String regularTo = cseRelativeURI(req.to);
+
+		LOGGER.info("to:" + req.to);
+		LOGGER.info("regularTo:" + regularTo);
+
 		ResourceDTO parent = resourceTree.get(regularTo);
 		if (parent == null) {
 			LOGGER.warn("Parent doesn't exit. uri:" + regularTo);
 			res.responseStatusCode = 4004;// need to change to right one.
+			return res;
 		}
 		resource.parentID = parent.resourceID;
 		String targetUri = regularTo + "/" + resource.resourceName;
@@ -138,8 +148,10 @@ public class CseService {
 			res.content = con;
 			res.responseStatusCode = 2001;
 			resourceTree.put(targetUri, resource);
+			LOGGER.info("resource created. uri:" + targetUri + " resource:" + resource);
 		} else {
-			LOGGER.warn("Name already present in the parent collection.");
+			LOGGER.warn("Name already present in the parent collection. uri:" + targetUri + " resource:"
+					+ resourceTree.get(targetUri));
 			res.responseStatusCode = 4105;
 		}
 		return res;
@@ -195,13 +207,24 @@ public class CseService {
 				res.responseStatusCode = 2000;
 				con.listOfURIs = uril;
 			} else {
-				LOGGER.warn("Root resource not found for discovery.");
+				LOGGER.warn("Root resource not found for discovery. root:" + target);
+				dumpResourceTree();
 				res.responseStatusCode = 4004;
 
 			}
 		}
 		res.content = con;
 		return res;
+	}
+
+	private void dumpResourceTree() {
+		LOGGER.info("---------dump of resource Tree");
+		Set<String> keys = resourceTree.keySet();
+		for (String key : keys) {
+			LOGGER.info("uri:" + key + " resource:" + resourceTree.get(key).toString());
+		}
+		LOGGER.info("--------- end of dump");
+
 	}
 
 	public ResponsePrimitiveDTO update(RequestPrimitiveDTO req) {
@@ -246,7 +269,8 @@ public class CseService {
 	}
 
 	private void updateNotify(String uri, ResourceDTO resource) {
-		LOGGER.info("updateNotify is called. uri:" + uri + " resource:" + resource);
+		LOGGER.info("updateNotify() is called. uri:" + uri + " resource:" + resource);
+		dumpResourceTree();
 
 		Set<Entry<String, ResourceDTO>> h = resourceTree.entrySet();
 		int len = uri.length();
@@ -262,8 +286,10 @@ public class CseService {
 				if (!child.contains("/")) {
 					// u2 is direct child of uri.
 					ResourceDTO sub = en.getValue();
-					if (sub.resourceType != RT_subscription)
+					if (sub.resourceType != RT_subscription) {
+						LOGGER.info("resource is not subscription uri:" + u2 + " resurceType:" + sub.resourceType);
 						continue;
+					}
 
 					LOGGER.info("subscription found" + u2 + " sub:" + sub);
 					String notificationURI = (String) sub.attribute.get("notificationURI");
@@ -327,6 +353,7 @@ public class CseService {
 	}
 
 	public ResponsePrimitiveDTO notify(RequestPrimitiveDTO req) {
+		LOGGER.info("notify() req:" + req);
 		ResponsePrimitiveDTO res = new ResponsePrimitiveDTO();
 		String to = req.to;
 		if (to == null) {
@@ -334,9 +361,13 @@ public class CseService {
 			return res;
 		}
 		String[] element = to.split("/");
+		LOGGER.info("to:" + to);
+
+		String aeid = element[2];
+		String bsn = symbolicNameByAeName(aeid);
 		if (element[1].equals(cseID)) {
 
-			LOGGER.info("NOW prepare to send notification!!!");
+			LOGGER.debug("NOW prepare to send notification.");
 			ServiceReference[] rs;
 			try {
 				rs = context.getServiceReferences(NotificationListener.class.getName(), null);
@@ -345,15 +376,17 @@ public class CseService {
 				res.responseStatusCode = 1000;
 				return res;
 			}
+			int count = 0;
 			for (ServiceReference ref : rs) {
-				LOGGER.info("symbolic name:" + ref.getBundle().getSymbolicName());
-				LOGGER.info("bundle location:" + ref.getBundle().getLocation());
 
-				if (ref.getBundle().getSymbolicName().equals("org.osgi.test.cases.onem2m.service")) {
+				if (ref.getBundle().getSymbolicName().equals(bsn)) {
 					NotificationListener lis = (NotificationListener) context.getService(ref);
 					lis.notified(req);
+					count++;
 				}
 			}
+
+			LOGGER.debug("Count of Notification:" + count);
 			res.responseStatusCode = 2000;
 		} else {
 			res.responseStatusCode = 1000;// error

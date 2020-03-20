@@ -52,26 +52,31 @@ public class ServiceLayerImplService implements ServiceLayer {
 			@Override
 			public void run() {
 				ResponsePrimitiveDTO ret = new ResponsePrimitiveDTO();
-				switch (request.operation) {
-				case Create:
-					ret = cse.create(request);
-					break;
+				try {
+					switch (request.operation) {
+					case Create:
+						ret = cse.create(request);
+						break;
 
-				case Retrieve:
-					ret = cse.retrieve(request);
-					break;
+					case Retrieve:
+						ret = cse.retrieve(request);
+						break;
 
-				case Update:
-					ret = cse.update(request);
-					break;
+					case Update:
+						ret = cse.update(request);
+						break;
 
-				case Delete:
-					ret = cse.delete(request);
-					break;
+					case Delete:
+						ret = cse.delete(request);
+						break;
 
-				case Notify:
-					ret = cse.notify(request);
-					break;
+					case Notify:
+						ret = cse.notify(request);
+						break;
+					}
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+					dret.fail(e);
 				}
 				dret.resolve(ret);
 			}
@@ -86,8 +91,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<ResourceDTO> create(String uri, ResourceDTO resource) {
-		LOGGER.info("START CREATE");
-		LOGGER.debug("Request Uri is [" + uri + "].");
+		LOGGER.info("START CREATE uri:" + uri + " resource:" + resource);
 
 		// When DTO is NULL End without request processing
 		if (resource == null) {
@@ -114,8 +118,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<ResourceDTO> retrieve(String uri) {
-		LOGGER.info("START RETRIEVE");
-		LOGGER.debug("Request Uri is [" + uri + "].");
+		LOGGER.info("START RETRIEVE uri:" + uri);
 
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
@@ -136,8 +139,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<ResourceDTO> retrieve(String uri, List<String> targetAttributes) {
-		LOGGER.info("START RETRIEVE");
-		LOGGER.debug("Request Uri is [" + uri + "].");
+		LOGGER.info("START RETRIEVE uri:" + uri + " targetAttribute:" + targetAttributes);
 
 		// When List is NULL or size 0, it terminates without request processing
 		if (targetAttributes == null || targetAttributes.size() == 0) {
@@ -174,8 +176,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<ResourceDTO> update(String uri, ResourceDTO resource) {
-		LOGGER.info("START UPDATE");
-		LOGGER.debug("Request Uri is [" + uri + "].");
+		LOGGER.info("START UPDATE uri:" + uri + " resource" + resource);
 
 		// When DTO is NULL End without request processing
 		if (resource == null) {
@@ -203,8 +204,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<Boolean> delete(String uri) {
-		LOGGER.info("START DELETE");
-		LOGGER.debug("Request Uri is [" + uri + "].");
+		LOGGER.info("START DELETE uri:" + uri);
 
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
@@ -231,30 +231,12 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc) {
-		// Setting RequestPrimitiveDTO
-		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
-		req.content = new PrimitiveContentDTO();
-		req.operation = Operation.Retrieve;
-		req.to = uri;
-		req.filterCriteria = fc;
-		req.desiredIdentiferResultType = DesiredIdentiferResultType.structured;
-
-		// Set the source of the request
-		req.from = this.origin;
-
-		LOGGER.info("START DISCOVERY");
-
-		// Execute request transmission processing
-		Promise<ResponsePrimitiveDTO> res = this.request(req);
-
-		LOGGER.info("END DISCOVERY");
-
-		return res.map(p -> p.content.listOfURIs);
+		return discovery(uri, fc, DesiredIdentiferResultType.structured);
 	}
 
 	@Override
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, DesiredIdentiferResultType drt) {
-		LOGGER.info("START DISCOVERY_RESULT_TYPE");
+		LOGGER.info("START DISCOVERY_RESULT_TYPE uri:" + uri + " fc:" + fc);
 
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
@@ -279,10 +261,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<Boolean> notify(String uri, NotificationDTO notification) {
-		// not implemented
-
-		LOGGER.info("START notify");
-		LOGGER.debug("Uri is [" + uri + "].");
+		LOGGER.info("START NOTIFY uri:" + uri + " notification:" + notification);
 
 		// Setting RequestPrimitiveDTO
 		RequestPrimitiveDTO req = new RequestPrimitiveDTO();
