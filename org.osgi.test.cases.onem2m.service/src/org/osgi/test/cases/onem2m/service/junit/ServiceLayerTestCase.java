@@ -1,5 +1,4 @@
 package org.osgi.test.cases.onem2m.service.junit;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +21,7 @@ import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.osgi.service.onem2m.dto.Constants.*;
 
 /**
  * Test Case for oneM2M
@@ -82,7 +82,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("Response Data:\n" + res.toString());
 
 		assertNotNull("Response is Null.", res);
-		assertEquals(String.valueOf(res.resourceType), "5");
+		assertEquals(res.resourceType.intValue(), RT_CSEBase);
 		assertNotNull("ResourceID is Null.", res.resourceID);
 		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
 		assertNotNull("CreationTime is Null.", res.creationTime);
@@ -105,7 +105,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("Response Data:\n" + res.toString());
 
 		assertNotNull("Response is Null.", res);
-		assertEquals(String.valueOf(res.resourceType), "5");
+		assertEquals(res.resourceType.intValue(), RT_CSEBase);
 		assertNotNull("ResourceID is Null.", res.resourceID);
 		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
 		assertNotNull("CreationTime is Null.", res.creationTime);
@@ -128,7 +128,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		LOGGER.info("Response Data:\n" + res.toString());
 
 		assertNotNull("Response is Null.", res);
-		assertEquals(String.valueOf(res.resourceType), "5");
+		assertEquals(res.resourceType.intValue(), RT_CSEBase);
 		assertNotNull("ResourceID is Null.", res.resourceID);
 		assertNotNull("LastModifiedTime is Null", res.lastModifiedTime);
 		assertNotNull("CreationTime is Null.", res.creationTime);
@@ -170,7 +170,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		req.resourceName = "cnt1";
-		req.resourceType = 3;
+		req.resourceType = RT_container;
 
 		try {
 			res = serviceLayerService.create(uri, req).getValue();
@@ -197,7 +197,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		req.resourceName = "cnt1";
-		req.resourceType = 3;
+		req.resourceType = RT_container;
 
 		try {
 			res = serviceLayerService.create(uri, req).getValue();
@@ -223,7 +223,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "/in-cse2/-";
 		req.resourceName = "cnt2";
-		req.resourceType = 3;
+		req.resourceType = RT_container;
 
 		try {
 			res = serviceLayerService.create(uri, req).getValue();
@@ -246,7 +246,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		r.resourceName = "ae1";
-		r.resourceType = 2;
+		r.resourceType = RT_AE;
 		r.attribute = new HashMap<String, Object>();
 		r.attribute.put("App-ID", "TESTAPP");
 		r.attribute.put("requestReachability", true);
@@ -279,7 +279,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		req.resourceName = "updateCnt";
-		req.resourceType = 3;
+		req.resourceType = RT_container;
 
 		try {
 			res = serviceLayerService.create(uri, req).getValue();
@@ -371,7 +371,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		req.resourceName = "deleteCnt";
-		req.resourceType = 3;
+		req.resourceType = RT_container;
 
 		try {
 			serviceLayerService.create(uri, req).getValue();
@@ -417,7 +417,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		req1.resourceName = "disCnt1";
-		req1.resourceType = 3;
+		req1.resourceType = RT_container;
 
 		try {
 			serviceLayerService.create(uri, req1).getValue();
@@ -441,7 +441,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-/disCnt1";
 		req3.resourceName = "disCnt3";
-		req3.resourceType = 3;
+		req3.resourceType = RT_container;
 
 		try {
 			serviceLayerService.create(uri, req3).getValue();
@@ -582,7 +582,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 
 		uri = "-";
 		r.resourceName = "cont";
-		r.resourceType = 3;// container
+		r.resourceType = RT_container;
 
 		try {
 			r2 = serviceLayerService.create(uri, r).getValue();
@@ -594,7 +594,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		uri = "-/cont";
 		ResourceDTO sub = new ResourceDTO();
 		sub.resourceName = "sub";
-		sub.resourceType = 23;// subscription
+		sub.resourceType = RT_subscription;
 		sub.attribute = new HashMap<String, Object>();
 		sub.attribute.put("notificationURI", "/in-cse/Cae1"); // TODO fix it.
 
@@ -609,7 +609,7 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		uri = "-/cont";
 		r = new ResourceDTO();// create new object
 		r.resourceName = "cont";
-		r.resourceType = 3;// container
+		r.resourceType = RT_container;
 
 		String lblText = "updated";
 		List<String> lbl = new ArrayList<String>();

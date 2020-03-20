@@ -1,6 +1,7 @@
 package org.osgi.impl.service.onem2m.protocol.service;
 
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.service.onem2m.dto.ResponsePrimitiveDTO;
+import static org.osgi.service.onem2m.dto.Constants.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +42,7 @@ public class CseService {
 		// CSEBase
 		ResourceDTO cseBase = new ResourceDTO();
 		cseBase.resourceName = csebaseName;
-		cseBase.resourceType = 5;
+		cseBase.resourceType = RT_CSEBase;
 		String now = getDate();
 		cseBase.resourceID = String.valueOf(id++);
 		cseBase.creationTime = now;
@@ -109,7 +112,7 @@ public class CseService {
 
 		ResourceDTO resource = req.content.resource;
 
-		if (resource.resourceType == 2) {// check Type is AE.
+		if (resource.resourceType == RT_AE) {// check Type is AE.
 			completeAE(resource);
 		}
 		if (!isURIForMe(req.to)) {
@@ -259,7 +262,7 @@ public class CseService {
 				if (!child.contains("/")) {
 					// u2 is direct child of uri.
 					ResourceDTO sub = en.getValue();
-					if (sub.resourceType != 23)
+					if (sub.resourceType != RT_subscription)
 						continue;
 
 					LOGGER.info("subscription found" + u2 + " sub:" + sub);

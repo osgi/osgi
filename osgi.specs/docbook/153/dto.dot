@@ -1,0 +1,51 @@
+digraph {
+ graph[
+   rankkdir = LR;
+ ] 
+ AttributeDTO [shape=box,width=1] 
+ ChildResourceRefDTO [shape=box,width=1] 
+ DasInfoDTO [shape=box,width=1] 
+ FilterCriteriaDTO [shape=box,width=1] 
+ GenericDTO [shape=box,width=1] 
+ IPEDiscoveryRequestDTO [shape=box,width=1] 
+ LocalTokenIdAssignmentDTO [shape=box,width=1] 
+ NotificationDTO [shape=box,width=1] 
+ NotificationEventDTO [shape=box,width=1] 
+ PrimitiveContentDTO [shape=box,width=1] 
+ RequestPrimitiveDTO [shape=box,width=1] 
+ ResourceDTO [shape=box,width=1] 
+ ResourceWrapperDTO [shape=box,width=1] 
+ ResponsePrimitiveDTO [shape=box,width=1] 
+ ResponseTypeInfoDTO [shape=box,width=1] 
+ SecurityInfoDTO [shape=box,width=1] 
+ 
+
+ RequestPrimitiveDTO->ResponseTypeInfoDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ RequestPrimitiveDTO->FilterCriteriaDTO->AttributeDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ RequestPrimitiveDTO->PrimitiveContentDTO   [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ ResponsePrimitiveDTO->PrimitiveContentDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ ResponsePrimitiveDTO->LocalTokenIdAssignmentDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ ResponsePrimitiveDTO->DasInfoDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ PrimitiveContentDTO->ResourceDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->NotificationDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->ResourceWrapperDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->ChildResourceRefDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->SecurityInfoDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->ResponsePrimitiveDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ PrimitiveContentDTO->RequestPrimitiveDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ ResourceWrapperDTO->ResourceDTO  [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ NotificationDTO->NotificationEventDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ NotificationDTO->IPEDiscoveryRequestDTO->FilterCriteriaDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ ResourceDTO->GenericDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ NotificationEventDTO->GenericDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ AttributeDTO->GenericDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ SecurityInfoDTO->GenericDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+ DasInfoDTO->GenericDTO [arrowhead=none, arrowtail=odiamond, dir=both];
+
+ {rank = same; RequestPrimitiveDTO; ResponsePrimitiveDTO;}
+}

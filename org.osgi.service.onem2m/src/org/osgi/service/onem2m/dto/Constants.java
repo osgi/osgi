@@ -3,10 +3,14 @@ package org.osgi.service.onem2m.dto;
 /**
  * This interface defines constants for resource types.
  * 
- * @sea TS-0004 6.3.4.2.1
+ * @see TS-0004 6.3.4.2.1
  * 
  */
-public interface Constants {
+public final class Constants {
+	
+	private Constants() {	
+	}
+	
 	/**
 	 * resource type for accessControlPolicy
 	 */
