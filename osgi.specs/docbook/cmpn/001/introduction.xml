@@ -549,17 +549,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="util.position"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.util.position"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.util.position-version"
-              linkend="util.position"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="util.measurement"
               xrefstyle="template:%n %t"/></entry>
 
