@@ -62,8 +62,6 @@
 
   <xi:include href="../117/service.dmt.xml"/>
 
-  <xi:include href="../119/service.monitor.xml"/>
-
   <xi:include href="../120/service.oat.xml"/>
 
   <xi:include href="../121/service.blueprint.xml"/>

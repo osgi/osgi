@@ -29,7 +29,6 @@ osgi.cmpn.specs = \
      org.osgi.service.log, \
      org.osgi.service.metatype, \
      org.osgi.service.metatype.annotations, \
-     org.osgi.service.monitor, \
      org.osgi.service.onem2m, \
      org.osgi.service.prefs, \
      org.osgi.service.provisioning, \

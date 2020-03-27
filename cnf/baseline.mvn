@@ -36,7 +36,6 @@ org.osgi:org.osgi.service.jpa:1.1.0
 org.osgi:org.osgi.service.log:1.4.0
 org.osgi:org.osgi.service.metatype:1.4.0
 org.osgi:org.osgi.service.metatype.annotations:1.4.0
-org.osgi:org.osgi.service.monitor:1.0.0
 org.osgi:org.osgi.service.networkadapter:1.0.0
 org.osgi:org.osgi.service.packageadmin:1.2.0
 org.osgi:org.osgi.service.permissionadmin:1.2.0

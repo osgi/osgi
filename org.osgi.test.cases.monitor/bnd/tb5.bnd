@@ -1,4 +1,0 @@
-Bundle-Version: 4
-Bundle-Activator: $(p).tb5.MonitorableActivator
-
--privatepackage	: $(p).tb5
