@@ -256,29 +256,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.deploymentadmin"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.deploymentadmin"/></code></para><para><code><xref
-              linkend="org.osgi.service.deploymentadmin.spi"/></code></para></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.deploymentadmin-version"
-              linkend="service.deploymentadmin"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.autoconf"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code>-</code></entry>
-
-              <entry><code><xref endterm="service.autoconf-version"
-              linkend="service.autoconf"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.application"
               xrefstyle="template:%n %t"/></entry>
 

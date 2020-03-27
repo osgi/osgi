@@ -23,7 +23,6 @@ org.osgi:org.osgi.service.configurator:1.0.0
 org.osgi:org.osgi.service.coordinator:1.0.2
 org.osgi:org.osgi.service.dal:1.0.1
 org.osgi:org.osgi.service.dal.functions:1.0.0
-org.osgi:org.osgi.service.deploymentadmin:1.1.0
 org.osgi:org.osgi.service.device:1.1.0
 org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.enocean:1.0.0

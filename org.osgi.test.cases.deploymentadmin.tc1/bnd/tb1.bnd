@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.tb1
-Bundle-Version:                          1.1
--privatepackage:                         ${p}.tb1.*
-Bundle-Activator: 											${p}.tb1.Activator
-Export-Package                           = ${p}.tb1.*

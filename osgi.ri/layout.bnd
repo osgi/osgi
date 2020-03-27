@@ -10,7 +10,6 @@ jar.core.impls = \
     ${repo;org.osgi.impl.service.resolver;latest}
 
 build.cmpn.impls = \
-	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.annotations, \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
@@ -20,7 +19,6 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
     org.osgi.impl.service.async, \
-	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
 	org.osgi.impl.service.jdbc, \
