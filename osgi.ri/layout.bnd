@@ -46,7 +46,6 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.bundle.jmx;latest}, \
 	${repo;org.osgi.impl.bundle.serviceloader;latest}, \
 	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
-	${repo;org.osgi.impl.service.blueprint;latest}, \
 	${repo;org.osgi.impl.service.clusterinfo;latest}, \
 	${repo;org.osgi.impl.service.cm;latest}, \
 	${repo;org.osgi.impl.service.component;latest}, \

@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.ServiceOne_inline_service_listener
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.serviceexport, ${p}.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/ServiceOne_inline_service_listener.xml
-

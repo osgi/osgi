@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
-
-   <bean id="compIndexedString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <argument value="ABC"/>
-       <argument value="compIndexedString" index="0"/>
-   </bean>
-</blueprint>
-

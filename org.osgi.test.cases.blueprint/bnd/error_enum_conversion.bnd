@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_enum_conversion
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, org.osgi.test.cases.blueprint.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/error_enum_conversion.xml
-

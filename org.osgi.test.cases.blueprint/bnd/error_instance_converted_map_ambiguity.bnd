@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_instance_converted_map_ambiguity
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/error_instance_converted_map_ambiguity.xml
-

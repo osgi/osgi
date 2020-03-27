@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.managed_service_export2
-Bundle-Version:                          4.2
-Import-Package:                          org.osgi.test.cases.blueprint.components.serviceexport, org.osgi.test.cases.blueprint.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/managed_service_export2.xml
-

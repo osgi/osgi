@@ -8,7 +8,6 @@ osgi.cmpn.specs = \
      org.osgi.namespace.unresolvable, \
      org.osgi.service.async, \
      org.osgi.service.application, \
-     org.osgi.service.blueprint, \
      org.osgi.service.cdi, \
      org.osgi.service.clusterinfo, \
      org.osgi.service.cm, \
@@ -53,7 +52,6 @@ osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};$;.*}
 
 osgi.cmpn.resources = {${project.workspace}/osgi.companion/legal/jar}, \
                 xmlns/app=${project.workspace}/xmlns/app, \
-                xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
                 xmlns/metatype=${project.workspace}/xmlns/metatype, \
                 xmlns/rsa=${project.workspace}/xmlns/rsa, \
                 xmlns/repository=${project.workspace}/xmlns/repository, \

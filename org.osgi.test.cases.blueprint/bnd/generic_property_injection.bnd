@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.generic_property_injection
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, org.osgi.test.cases.blueprint.services, org.osgi.service.blueprint.container
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/generic_property_injection.xml
-

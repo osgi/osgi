@@ -1,6 +1,0 @@
-Bundle-SymbolicName:                     ${p}.inner_component_basic
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/inner_component_basic.xml

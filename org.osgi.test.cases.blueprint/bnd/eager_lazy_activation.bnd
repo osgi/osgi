@@ -1,8 +1,0 @@
-Bundle-SymbolicName:                     ${p}.eager_lazy_activation
-Bundle-Version:                          4.2
-Bundle-ActivationPolicy:                 lazy
-Import-Package:                          ${p}.components.servicedynamics, ${p}.components.serviceexport, ${p}.services
--privatepackage                          ${p}.build
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/servicedynamics/eager_lazy_activation.xml
-

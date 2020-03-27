@@ -1,9 +1,0 @@
-Bundle-SymbolicName:                     ${p}.comp1_dir_only;blueprint.timeout:=60000;blueprint.graceperiod:=false
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.comp1, ${p}.services
--resourceonly: true
-Bundle-Blueprint: config/comp1_named.xml
--includeresource					= \
-	config/comp1_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_named.xml, \
-	OSGI-INF/blueprint/comp2_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2_named.xml
-

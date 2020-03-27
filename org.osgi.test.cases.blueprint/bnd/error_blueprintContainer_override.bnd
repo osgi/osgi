@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_blueprintContainer_override
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.errors, ${p}.services, ${p}.components.injection
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_blueprintContainer_override.xml
-

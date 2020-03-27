@@ -1,9 +1,0 @@
-Bundle-SymbolicName:                     ${p}.ServiceOne_import_denied;blueprint.timeout:=1000
-Bundle-Version:                          4.2
-Import-Package:                          org.osgi.test.cases.blueprint.components.serviceimport, org.osgi.test.cases.blueprint.services
--resourceonly: true
--includeresource					= \
-        OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/secure/components/security/ServiceOne_import.xml, \
-        {OSGI-INF/permissions.perm=perms/service_import_denied.perm}
-
-

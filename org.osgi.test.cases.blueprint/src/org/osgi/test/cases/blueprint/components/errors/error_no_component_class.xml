@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
-
-   <bean id="comp1">
-       <argument value="comp1"/>
-     <!-- collaborators and configuration for this component go here -->
-   </bean>
-</blueprint>
-

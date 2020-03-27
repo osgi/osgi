@@ -1,8 +1,0 @@
-Bundle-SymbolicName:                     ${p}.comp1_different_version
-Bundle-Version:                          4.2
-Import-Package:                          =org.osgi.service.blueprint.container;version=2.0
-
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/comp1.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1.xml
-

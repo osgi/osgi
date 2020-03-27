@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.builtin_collection_conversion
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
--resourceonly: true
--includeresource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/builtin_collection_conversion.xml
-
