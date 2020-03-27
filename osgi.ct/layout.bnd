@@ -60,7 +60,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.log.stream, \
-    org.osgi.test.cases.measurement, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.onem2m, \

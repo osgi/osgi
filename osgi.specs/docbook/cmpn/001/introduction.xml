@@ -549,17 +549,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="util.measurement"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.util.measurement"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.util.measurement-version"
-              linkend="util.measurement"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="util.promise"
               xrefstyle="template:%n %t"/></entry>
 

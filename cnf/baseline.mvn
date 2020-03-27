@@ -58,7 +58,6 @@ org.osgi:org.osgi.service.wireadmin:1.0.1
 org.osgi:org.osgi.service.zigbee:1.0.0
 org.osgi:org.osgi.util.converter:1.0.1
 org.osgi:org.osgi.util.function:1.1.0
-org.osgi:org.osgi.util.measurement:1.0.2
 org.osgi:org.osgi.util.promise:1.1.1
 org.osgi:org.osgi.util.pushstream:1.0.1
 org.osgi:org.osgi.util.tracker:1.5.2

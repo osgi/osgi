@@ -34,7 +34,6 @@ build.cmpn.impls = \
 	org.osgi.impl.service.useradmin, \
     org.osgi.util.converter, \
     org.osgi.util.function, \
-    org.osgi.util.measurement, \
     org.osgi.util.promise, \
     org.osgi.util.pushstream, \
     org.osgi.util.xml

@@ -106,8 +106,6 @@
 
   <xi:include href="../702/util.xml.xml"/>
 
-  <xi:include href="../704/util.measurement.xml"/>
-
   <xi:include href="../705/util.promise.xml"/>
 
   <xi:include href="../706/util.pushstream.xml"/>
