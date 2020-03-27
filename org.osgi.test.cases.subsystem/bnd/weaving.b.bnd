@@ -1,3 +1,0 @@
-Bundle-SymbolicName: weaving.b
-Bundle-Activator: ${p}.weaving.b.Activator
--privatepackage: ${p}.weaving.b

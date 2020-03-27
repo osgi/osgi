@@ -1,6 +1,0 @@
-Bundle-SymbolicName: app.service.dep.b
-Bundle-Version: 1
-Import-Package: org.osgi.framework
-Provide-Capability: osgi.service;objectClass=${p}.app.service.dep.b.B;effective:=active
-Export-Package: ${p}.app.service.dep.b;version=0
-Bundle-Activator: ${p}.app.service.dep.b.Activator

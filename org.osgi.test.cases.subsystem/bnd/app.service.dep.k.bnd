@@ -1,5 +1,0 @@
-Bundle-SymbolicName: app.service.dep.k
-Require-Capability: osgi.service;filter:="(objectClass=${p}.app.service.dep.h.H1)";effective:=active,osgi.service;filter:="(objectClass=${p}.app.service.dep.h.H2)";effective:=active;resolution:=optional
-Import-Package: ${p}.app.service.dep.h
-
--fixupmessages.empty: The JAR is empty

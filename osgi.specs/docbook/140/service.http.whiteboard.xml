@@ -185,8 +185,8 @@
 
     <para>Some environments may use <xref
     linkend="service.http.whiteboard-service.hook.ref"/> to isolate
-    <code>ServletContextHelper</code> service registrations. For example,
-    <xref linkend="service.subsystem"/>. The Whiteboard implementation must
+    <code>ServletContextHelper</code> service registrations.
+    The Whiteboard implementation must
     check that the bundle registering the Whiteboard service has the ability
     to find the <code>ServletContextHelper</code> service before allowing the
     Whiteboard service to bind to the Servlet Context Helper. This can be done

@@ -1,6 +1,0 @@
-Bundle-SymbolicName: app.service.dep.d
-Import-Package: ${p}.app.service.dep.e
-Require-Capability: osgi.service;filter:="(objectClass=${p}.app.service.dep.e.E1)";effective:=active
--includeresource = \
-	OSGI-INF/blueprint/blueprint.xml=src/org/osgi/test/cases/subsystem/app/service/dep/d/blueprint.xml
--privatepackage: ${p}.app.service.dep.d

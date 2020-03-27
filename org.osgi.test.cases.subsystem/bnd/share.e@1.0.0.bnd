@@ -1,5 +1,0 @@
-Bundle-SymbolicName: share.e
-Bundle-Version: 1.0.0
-Require-Capability: y; filter:="(y=test)"
-
--fixupmessages.empty: The JAR is empty

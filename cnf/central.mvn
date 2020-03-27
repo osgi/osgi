@@ -22,20 +22,14 @@ javax.ejb:javax.ejb-api:3.2
 javax.transaction:javax.transaction-api:1.2
 
 org.apache.aries:org.apache.aries.util:1.1.1
-org.apache.aries.application:org.apache.aries.application.api:1.0.0
-org.apache.aries.application:org.apache.aries.application.modeller:1.0.0
-org.apache.aries.application:org.apache.aries.application.utils:1.0.0
-org.apache.aries.blueprint:org.apache.aries.blueprint:1.0.0
 org.apache.aries.cdi:org.apache.aries.cdi.extender:1.0.2
 org.apache.aries.cdi:org.apache.aries.cdi.extra:1.0.2
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:1.0.4
 org.apache.aries.jmx:org.apache.aries.jmx:1.1.5
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
-org.apache.aries.proxy:org.apache.aries.proxy:1.0.1
 org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:1.0.4
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.2
-org.apache.aries.subsystem:org.apache.aries.subsystem:2.0.2
 org.apache.aries.rsa:org.apache.aries.rsa.core:1.13.0
 org.apache.aries.rsa:org.apache.aries.rsa.spi:1.13.0
 org.apache.aries.rsa:org.apache.aries.rsa.topology-manager:1.13.0
@@ -88,7 +82,6 @@ org.eclipse.platform:org.eclipse.equinox.ip:1.1.600
 org.eclipse.platform:org.eclipse.equinox.log.stream:1.0.100
 org.eclipse.platform:org.eclipse.equinox.metatype:1.4.600
 org.eclipse.platform:org.eclipse.equinox.wireadmin:1.0.800
-org.eclipse.platform:org.eclipse.equinox.region:1.4.300
 org.eclipse.platform:org.eclipse.equinox.util:1.1.200
 
 org.eclipse.persistence:javax.persistence:2.1.1

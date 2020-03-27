@@ -84,8 +84,6 @@
 
   <xi:include href="../133/service.loader.xml"/>
 
-  <xi:include href="../134/service.subsystem.xml"/>
-
   <xi:include href="../135/service.namespaces.xml"/>
 
   <xi:include href="../137/service.rest.xml"/>

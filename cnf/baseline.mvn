@@ -48,7 +48,6 @@ org.osgi:org.osgi.service.rest:1.0.0
 org.osgi:org.osgi.service.serial:1.0.0
 org.osgi:org.osgi.service.serviceloader:1.0.0
 org.osgi:org.osgi.service.startlevel:1.1.0
-org.osgi:org.osgi.service.subsystem:1.1.0
 org.osgi:org.osgi.service.tr069todmt:1.0.1
 org.osgi:org.osgi.service.transaction.control:1.0.0
 org.osgi:org.osgi.service.upnp:1.2.0

@@ -78,8 +78,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.rest.client.js, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.serviceloader.secure, \
-    org.osgi.test.cases.subsystem, \
-    org.osgi.test.cases.subsystem.secure, \
     org.osgi.test.cases.transaction, \
     org.osgi.test.cases.transaction.control, \
     org.osgi.test.cases.transaction.control.jdbc, \

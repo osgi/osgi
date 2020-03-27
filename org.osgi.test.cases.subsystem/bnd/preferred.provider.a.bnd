@@ -1,4 +1,0 @@
-Bundle-SymbolicName: preferred.provider.a
-Export-Package: foo,bar;uses:=foo
-
--fixupmessages.empty: The JAR is empty

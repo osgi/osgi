@@ -407,17 +407,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.subsystem"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.subsystem"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.subsystem-version"
-              linkend="service.subsystem"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.namespaces"
               xrefstyle="template:%n %t"/></entry>
 

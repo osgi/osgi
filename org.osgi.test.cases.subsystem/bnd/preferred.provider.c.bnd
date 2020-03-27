@@ -1,4 +1,0 @@
-Bundle-SymbolicName: preferred.provider.c
-Import-Package: foo,bar
-
--fixupmessages.empty: The JAR is empty

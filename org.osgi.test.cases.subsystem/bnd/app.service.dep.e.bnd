@@ -1,5 +1,0 @@
-Bundle-SymbolicName: app.service.dep.e
-Import-Package: org.osgi.framework
-Provide-Capability: osgi.service;objectClass=${p}.app.service.dep.e.E1;effective:=active,osgi.service;objectClass=${p}.app.service.dep.e.E2;effective:=active
-Export-Package: ${p}.app.service.dep.e
-Bundle-Activator: ${p}.app.service.dep.e.Activator

@@ -1,7 +1,0 @@
-Bundle-SymbolicName: app.service.dep.g
-Import-Package: ${p}.app.service.dep.e,org.osgi.service.component
-Require-Capability: osgi.service;filter:="(objectClass=${p}.app.service.dep.e.E1)";effective:=active
--includeresource = \
-	OSGI-INF/component.xml=src/org/osgi/test/cases/subsystem/app/service/dep/g/component.xml
--privatepackage: ${p}.app.service.dep.g
-Service-Component: OSGI-INF/component.xml

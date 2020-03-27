@@ -65,5 +65,4 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
     ${repo;org.osgi.impl.service.repository;latest}, \
-    ${repo;org.osgi.impl.service.subsystem;latest}, \
 	${repo;org.osgi.impl.service.wireadmin;latest}

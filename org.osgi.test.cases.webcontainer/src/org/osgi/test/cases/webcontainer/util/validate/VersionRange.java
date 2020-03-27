@@ -56,11 +56,6 @@ public class VersionRange {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.aries.application.impl.VersionRange#toString()
-     */
     @Override
     public String toString() {
         return this.version;

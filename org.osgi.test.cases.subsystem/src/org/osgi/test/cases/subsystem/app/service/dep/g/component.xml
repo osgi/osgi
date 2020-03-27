@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component 
-		name="component"
-		xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0">
-	<implementation class="org.osgi.test.cases.subsystem.app.service.dep.g.Component"/>
-	<reference name="E1" interface="org.osgi.test.cases.subsystem.app.service.dep.e.E1"/>
-	<reference name="E2" interface="org.osgi.test.cases.subsystem.app.service.dep.e.E2"/>
-</scr:component>
-
