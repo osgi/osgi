@@ -88,7 +88,7 @@ public class PromiseTest {
 				: callbackExecutor;
 		factory = callbacksExecutorOnly
 				? new PromiseFactory(executor, scheduledExecutor,
-						Option.CALLBACKS_EXECUTOR_ONLY)
+						Option.CALLBACKS_EXECUTOR_THREAD)
 				: new PromiseFactory(executor, scheduledExecutor);
 	}
 

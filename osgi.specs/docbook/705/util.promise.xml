@@ -28,14 +28,11 @@
     some limitations however in that they have no mechanism for registering
     callbacks. Java 8 introduces the class
     <code>java.util.concurrent.CompletableFuture</code> which addresses this
-    but the requirement of Java 8 is unsuitable for many OSGi users at this
-    time.</para>
+    but it is a complex API.</para>
 
-    <para>This specification defines a Promises API which can be used on many
-    versions of Java including Java 5 and Java ME CDC/Foundation. The Promises
-    API defined by this specification is independent of all other OSGi
-    specifications including the OSGi Framework and thus can be easily used
-    outside of the OSGi environment.</para>
+    <para>This specification defines a Promises API which is independent of
+    all other OSGi specifications including the OSGi Framework and thus can be
+    easily used outside of the OSGi environment.</para>
 
     <para>A Promise object holds the result of a potentially asynchronous
     task. The receiver of a Promise object can register callbacks on the
@@ -670,6 +667,18 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     method on the <xref linkend="org.osgi.util.promise.Promises"
     xrefstyle="hyperlink"/> class returning a Promise which uses the
     implementation default executors.</para>
+
+    <para>For interoperation with CompletableFutures, two methods are
+    provided. The <xref
+    linkend="org.osgi.util.promise.PromiseFactory.promiseFrom-CompletionStage-"
+    xrefstyle="hyperlink"/> method returns a Promise that is resolved by the
+    specified CompletionStage using the <xref
+    linkend="org.osgi.util.promise.PromiseFactory" xrefstyle="hyperlink"/>
+    <xref linkend="org.osgi.util.promise.PromiseFactory.executor--"
+    xrefstyle="hyperlink"/>. The <xref
+    linkend="org.osgi.util.promise.Promise.toCompletionStage--"
+    xrefstyle="hyperlink"/> method returns a CompletionStage that is resolved
+    by the receiving Promise.</para>
   </section>
 
   <section>
@@ -688,20 +697,21 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>JavaScript
-      Promises</title><biblioid class="uri"><link
+      <bibliomixed><title>JavaScript Promises</title><biblioid
+      class="uri"><link
       xlink:href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="util.promise-ref.javascript"><title>JavaScript
       Promises</title><biblioid class="uri"><link
       xlink:href="http://www.html5rocks.com/en/tutorials/es6/promises/"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>ECMAScript 6
-      drafts</title><biblioid class="uri"><link
+      <bibliomixed><title>ECMAScript 6 drafts</title><biblioid
+      class="uri"><link
       xlink:href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="util.promise-ref.monad"><title>Monad</title><biblioid class="uri"><link
+      xml:id="util.promise-ref.monad"><title>Monad</title><biblioid
+      class="uri"><link
       xlink:href="https://en.wikipedia.org/wiki/Monad_%28functional_programming%29"/></biblioid></bibliomixed>
 
       <bibliomixed
@@ -716,29 +726,22 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <para><itemizedlist>
         <listitem>
-          <para>Function and Predicate are updated so that their methods are
-          now declared to throw Exception.</para>
+          <para>Added support for creating a Promise resolved by a
+          CompletionStage and creating a CompletionStage resolved by a
+          Promise.</para>
         </listitem>
 
         <listitem>
-          <para>The Consumer functional interface is added to the
-          org.osgi.util.function package. New methods are added to Promise
-          which accept a Consumer. See <xref
-          linkend="util.promise-callbacks.consumer"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para>New timeout and delay methods are added to Promise. See <xref
-          linkend="util.promise-timing.methods"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para>The new PromiseFactory class has constructors which allow the
-          caller to specify the executors to be used by Deferred and Promise
-          objects created by a PromiseFactory object. The PromiseFactory class
-          provides an inlineExecutor which can be used to provide behavior
-          similar to how callbacks were executed in the default Promise
-          implementation of the Promise 1.0 specification.</para>
+          <para>The PromiseFactory class has a new constructor, <xref
+          linkend="org.osgi.util.promise.PromiseFactory.PromiseFactory-Executor-ScheduledExecutorService-Option...-"
+          xrefstyle="hyperlink"/>, which allows the caller to specify <xref
+          linkend="org.osgi.util.promise.PromiseFactory.Option"
+          xrefstyle="hyperlink"/>s. The option <xref
+          linkend="org.osgi.util.promise.PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD"
+          xrefstyle="hyperlink"/> specifies to run callbacks on an executor
+          thread. If this option is not set, callbacks added to a resolved
+          promise may be immediately called on the caller's thread to avoid a
+          thread context switch.</para>
         </listitem>
       </itemizedlist></para>
   </section>

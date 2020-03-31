@@ -63,18 +63,18 @@ public class PromiseFactory {
 	 * <p>
 	 * The default options are no options unless the boolean system property
 	 * {@code org.osgi.util.promise.allowCurrentThread} is set to {@code false}.
-	 * When this is the case, the option {@link Option#CALLBACKS_EXECUTOR_ONLY}
+	 * When this is the case, the option {@link Option#CALLBACKS_EXECUTOR_THREAD}
 	 * is a default option.
 	 *
 	 * @since 1.2
 	 */
 	public enum Option {
 		/**
-		 * All callbacks must be run on an executor thread. If this option is
-		 * not set, callbacks added to a resolved promise may be immediately
-		 * called on the caller's thread to avoid a thread context switch.
+		 * Run callbacks on an executor thread. If this option is not set,
+		 * callbacks added to a resolved promise may be immediately called on
+		 * the caller's thread to avoid a thread context switch.
 		 */
-		CALLBACKS_EXECUTOR_ONLY
+		CALLBACKS_EXECUTOR_THREAD
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class PromiseFactory {
 				System.getProperty("org.osgi.util.promise.allowCurrentThread",
 						Boolean.TRUE.toString()));
 		return allowCurrentThread ? new Option[0] : new Option[] {
-				Option.CALLBACKS_EXECUTOR_ONLY
+				Option.CALLBACKS_EXECUTOR_THREAD
 		};
 	}
 
@@ -154,7 +154,7 @@ public class PromiseFactory {
 		this.scheduledExecutor = scheduledExecutor;
 		boolean callbacksExecutorOnly = false;
 		for (Option option : options) {
-			if (option == Option.CALLBACKS_EXECUTOR_ONLY) {
+			if (option == Option.CALLBACKS_EXECUTOR_THREAD) {
 				callbacksExecutorOnly = true;
 				continue;
 			}
