@@ -80,6 +80,8 @@
 
   <xi:include href="../130/service.coordinator.xml"/>
 
+  <xi:include href="../131/service.tr069todmt.xml"/>
+
   <xi:include href="../132/service.repository.xml"/>
 
   <xi:include href="../133/service.loader.xml"/>

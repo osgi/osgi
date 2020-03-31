@@ -384,6 +384,17 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.tr069todmt"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.tr069todmt-version"
+              linkend="service.tr069todmt"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.repository"
               xrefstyle="template:%n %t"/></entry>
 
@@ -654,12 +665,14 @@
     <itemizedlist>
       <listitem>
         <para>Added <xref linkend="service.jmx"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> from the OSGi Enterprise
+        Specification.</para>
       </listitem>
 
       <listitem>
         <para>Added <xref linkend="service.cdi"
-        xrefstyle="template:%t"/>.</para>
+        xrefstyle="template:%t"/> from the OSGi Enterprise
+        Specification.</para>
       </listitem>
 
       <listitem>
@@ -677,6 +690,12 @@
         <para>Added <xref linkend="tr157softwaremodules"
         xrefstyle="template:%t"/> from the OSGi Residential
         Specification as Chapter 155.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.tr069todmt"
+        xrefstyle="template:%t"/> from the OSGi Residential
+        Specification.</para>
       </listitem>
     </itemizedlist>
   </section>

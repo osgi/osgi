@@ -35,6 +35,7 @@ osgi.cmpn.specs = \
      org.osgi.service.repository, \
      org.osgi.service.rest, \
      org.osgi.service.serviceloader, \
+     org.osgi.service.tr069todmt, \
      org.osgi.service.transaction.control, \
      org.osgi.service.upnp, \
      org.osgi.service.useradmin, \
