@@ -37,6 +37,9 @@ build.cmpn.tests = \
     org.osgi.test.cases.converter, \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
+    org.osgi.test.cases.dal, \
+    org.osgi.test.cases.dal.functions, \
+    org.osgi.test.cases.dal.secure, \
     org.osgi.test.cases.device, \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \

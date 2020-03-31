@@ -16,6 +16,8 @@ osgi.cmpn.specs = \
      org.osgi.service.component.annotations, \
      org.osgi.service.configurator, \
      org.osgi.service.coordinator, \
+     org.osgi.service.dal, \
+     org.osgi.service.dal.functions, \
      org.osgi.service.device, \
      org.osgi.service.dmt, \
      org.osgi.service.enocean, \

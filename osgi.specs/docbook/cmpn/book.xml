@@ -96,6 +96,10 @@
 
   <xi:include href="../140/service.http.whiteboard.xml"/>
 
+  <xi:include href="../141/service.dal.xml"/>
+
+  <xi:include href="../142/service.dal.functions.xml"/>
+
   <xi:include href="../147/service.transaction.control.xml"/>
 
   <xi:include href="../148/service.clusterinfo.xml"/>

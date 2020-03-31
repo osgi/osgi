@@ -19,6 +19,8 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
     org.osgi.impl.service.async, \
+    org.osgi.impl.service.dal, \
+    org.osgi.impl.service.dal.step, \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
 	org.osgi.impl.service.enocean, \
