@@ -539,6 +539,18 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.onem2m"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.onem2m"/></code></para><para><code><xref
+              linkend="org.osgi.service.onem2m.dto"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.onem2m-version"
+              linkend="service.onem2m"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="dmtree.residential"
               xrefstyle="template:%n %t"/></entry>
 
@@ -647,6 +659,11 @@
 
       <listitem>
         <para>Added <xref linkend="service.cdi"
+        xrefstyle="template:%t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.onem2m"
         xrefstyle="template:%t"/>.</para>
       </listitem>
 
