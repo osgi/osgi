@@ -6,14 +6,14 @@ osgi.cmpn.specs = \
      org.osgi.namespace.implementation, \
      org.osgi.namespace.service, \
      org.osgi.namespace.unresolvable, \
-     org.osgi.service.async, \
      org.osgi.service.application, \
+     org.osgi.service.async, \
      org.osgi.service.cdi, \
      org.osgi.service.clusterinfo, \
      org.osgi.service.cm, \
-     org.osgi.service.conditionfactory, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
+     org.osgi.service.conditionfactory, \
      org.osgi.service.configurator, \
      org.osgi.service.coordinator, \
      org.osgi.service.dal, \

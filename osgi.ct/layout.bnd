@@ -4,16 +4,16 @@ jar.core.tests = \
     ${repo;org.apache.servicemix.bundles.bcel;latest}
 
 build.core.tests = \
+    org.osgi.test.cases.bundle.annotations, \
+    org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.launch, \
     org.osgi.test.cases.framework.launch.secure, \
-    org.osgi.test.cases.bundle.annotations, \
-    org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
     org.osgi.test.cases.resolver, \
-    org.osgi.test.cases.url, \
-    org.osgi.test.cases.tracker
+    org.osgi.test.cases.tracker, \
+    org.osgi.test.cases.url
 
 jar.cmpn.tests = \
     ${repo;org.osgi.impl.service.jdbc.support;latest}, \
@@ -24,7 +24,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.application, \
     org.osgi.test.cases.async, \
     org.osgi.test.cases.async.secure, \
-    org.osgi.test.cases.bundle.annotations, \
     org.osgi.test.cases.cdi, \
     org.osgi.test.cases.cdi.secure, \
     org.osgi.test.cases.clusterinfo, \

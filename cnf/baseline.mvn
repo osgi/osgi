@@ -12,8 +12,8 @@ org.osgi:org.osgi.namespace.unresolvable:1.0.0
 org.osgi:org.osgi.resource:1.0.0
 org.osgi:org.osgi.service.application:1.1.0
 org.osgi:org.osgi.service.async:1.0.0
-org.osgi:org.osgi.service.clusterinfo:1.0.0
 org.osgi:org.osgi.service.cdi:1.0.0
+org.osgi:org.osgi.service.clusterinfo:1.0.0
 org.osgi:org.osgi.service.cm:1.6.0
 org.osgi:org.osgi.service.component:1.4.0
 org.osgi:org.osgi.service.component.annotations:1.4.0
