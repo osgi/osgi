@@ -457,6 +457,18 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.enocean"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.enocean"/></code></para><para><code><xref
+              linkend="org.osgi.service.enocean.descriptions"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.enocean-version"
+              linkend="service.enocean"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.http.whiteboard"
               xrefstyle="template:%n %t"/></entry>
 
@@ -694,6 +706,12 @@
 
       <listitem>
         <para>Added <xref linkend="service.tr069todmt"
+        xrefstyle="template:%t"/> from the OSGi Residential
+        Specification.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.enocean"
         xrefstyle="template:%t"/> from the OSGi Residential
         Specification.</para>
       </listitem>

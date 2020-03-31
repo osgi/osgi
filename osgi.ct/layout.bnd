@@ -42,6 +42,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.dmt.tc2, \
     org.osgi.test.cases.dmt.tc3, \
     org.osgi.test.cases.dmt.tc4, \
+    org.osgi.test.cases.enocean, \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \

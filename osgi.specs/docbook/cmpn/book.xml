@@ -92,6 +92,8 @@
 
   <xi:include href="../138/service.async.xml"/>
 
+  <xi:include href="../139/service.enocean.xml"/>
+
   <xi:include href="../140/service.http.whiteboard.xml"/>
 
   <xi:include href="../147/service.transaction.control.xml"/>

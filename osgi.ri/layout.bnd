@@ -21,6 +21,7 @@ build.cmpn.impls = \
     org.osgi.impl.service.async, \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
+	org.osgi.impl.service.enocean, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.service.onem2m, \

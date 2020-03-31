@@ -18,6 +18,7 @@ osgi.cmpn.specs = \
      org.osgi.service.coordinator, \
      org.osgi.service.device, \
      org.osgi.service.dmt, \
+     org.osgi.service.enocean, \
      org.osgi.service.event, \
      org.osgi.service.http, \
      org.osgi.service.http.whiteboard, \
