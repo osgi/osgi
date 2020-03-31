@@ -1,3 +1,4 @@
+javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 

@@ -47,6 +47,7 @@ osgi.cmpn.specs = \
      org.osgi.service.usbinfo, \
      org.osgi.service.useradmin, \
      org.osgi.service.wireadmin, \
+     org.osgi.service.zigbee, \
      org.osgi.util.converter, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
