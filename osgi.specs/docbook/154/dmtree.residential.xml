@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="2" revision="$Id$"
+<chapter label="154" revision="$Id$"
          version="5.0" xml:id="dmtree.residential"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -782,9 +782,9 @@ try {
     </table>
   </section>
 
-  <xi:include href="../../../generated/residentialdmt/treesummary.xml"/>
+  <xi:include href="../../generated/residentialdmt/treesummary.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.residential-ddf.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.dmt.residential-ddf.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.service.log-ddf.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.dmt.service.log-ddf.xml"/>
 </chapter>

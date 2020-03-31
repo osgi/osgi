@@ -104,6 +104,10 @@
 
   <xi:include href="../153/service.onem2m.xml"/>
 
+  <xi:include href="../154/dmtree.residential.xml"/>
+
+  <xi:include href="../155/tr157softwaremodules.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../705/util.promise.xml"/>

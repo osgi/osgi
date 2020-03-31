@@ -539,6 +539,27 @@
             </row>
 
             <row>
+              <entry><xref linkend="dmtree.residential"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.dmt.residential"/></code><superscript>2</superscript></entry>
+
+              <entry><code><xref endterm="org.osgi.dmt.residential-version"
+              linkend="dmtree.residential"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="tr157softwaremodules"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code><xref endterm="tr157softwaremodules-version"
+              linkend="tr157softwaremodules"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -591,12 +612,15 @@
     </section>
 
     <section>
-      <title>Note</title>
+      <title>Notes</title>
 
       <orderedlist>
         <listitem>
           <para>The <code>org.osgi.jmx</code> sub-packages are individually
           versioned to be aligned with the service they manage.</para>
+        </listitem>
+        <listitem>
+          <para>This is not a Java package but contains DMT Types.</para>
         </listitem>
       </orderedlist>
     </section>
@@ -627,8 +651,15 @@
       </listitem>
 
       <listitem>
-        <para>Resolver Service Specification moved to OSGi Core, Chapter
-        58.</para>
+        <para>Added <xref linkend="dmtree.residential"
+        xrefstyle="template:%t"/> from the OSGi Residential
+        Specification as Chapter 154.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="tr157softwaremodules"
+        xrefstyle="template:%t"/> from the OSGi Residential
+        Specification as Chapter 155.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -20,7 +20,7 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
     com.icl.saxon; version=latest, \
     ${batik_buildpath}
 
-javadoc.specs = ${osgi.companion.specs}
+javadoc.specs = ${osgi.companion.specs}, org.osgi.dmt
 
 saxon    = ${repo;com.icl.saxon;latest}
 log4j    = ${repo;log4j:log4j;latest}

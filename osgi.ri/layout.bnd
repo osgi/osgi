@@ -26,6 +26,7 @@ build.cmpn.impls = \
 	org.osgi.service.onem2m, \
 	org.osgi.impl.service.onem2m , \
 	org.osgi.impl.service.prefs , \
+	org.osgi.impl.service.residentialmanagement, \
 	org.osgi.impl.service.rest , \
 	org.osgi.impl.service.rest.client , \
 	org.osgi.impl.service.rest.client.js , \

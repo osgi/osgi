@@ -105,7 +105,7 @@ books.forEach { book ->
       ext.stylesheet = file('docbook/xsl/identity.xsl')
       inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
       inputs.files javadoc, xmlns
-      if (book == 'residential') {
+      if (book != 'core') {
         inputs.files rdmtsummary
       }
 

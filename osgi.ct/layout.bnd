@@ -71,6 +71,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.repository, \
+    org.osgi.test.cases.residentialmanagement, \
     org.osgi.test.cases.rest, \
     org.osgi.test.cases.rest.client, \
     org.osgi.test.cases.rest.client.js, \
