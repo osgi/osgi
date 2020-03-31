@@ -535,6 +535,17 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.usbinfo"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.usbinfo"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.usbinfo-version"
+              linkend="service.usbinfo"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.transaction.control"
               xrefstyle="template:%n %t"/></entry>
 
@@ -785,6 +796,12 @@
 
       <listitem>
         <para>Added <xref linkend="service.resourcemonitoring"
+        xrefstyle="template:%t"/> from the OSGi Residential
+        Specification.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.usbinfo"
         xrefstyle="template:%t"/> from the OSGi Residential
         Specification.</para>
       </listitem>

@@ -43,6 +43,7 @@ osgi.cmpn.specs = \
      org.osgi.service.tr069todmt, \
      org.osgi.service.transaction.control, \
      org.osgi.service.upnp, \
+     org.osgi.service.usbinfo, \
      org.osgi.service.useradmin, \
      org.osgi.service.wireadmin, \
      org.osgi.util.converter, \

@@ -40,6 +40,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
+	org.osgi.impl.service.usbinfo, \
 	org.osgi.impl.service.useradmin, \
     org.osgi.util.converter, \
     org.osgi.util.function, \
