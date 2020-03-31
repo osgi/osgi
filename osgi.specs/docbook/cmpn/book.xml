@@ -100,6 +100,8 @@
 
   <xi:include href="../142/service.dal.functions.xml"/>
 
+  <xi:include href="../143/service.network.xml"/>
+
   <xi:include href="../147/service.transaction.control.xml"/>
 
   <xi:include href="../148/service.clusterinfo.xml"/>

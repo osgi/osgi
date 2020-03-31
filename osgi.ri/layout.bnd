@@ -26,6 +26,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.enocean, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
+	org.osgi.impl.service.networkadapter, \
 	org.osgi.service.onem2m, \
 	org.osgi.impl.service.onem2m , \
 	org.osgi.impl.service.prefs , \
