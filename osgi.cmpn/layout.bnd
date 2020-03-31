@@ -39,6 +39,7 @@ osgi.cmpn.specs = \
      org.osgi.service.repository, \
      org.osgi.service.resourcemonitoring, \
      org.osgi.service.rest, \
+     org.osgi.service.serial, \
      org.osgi.service.serviceloader, \
      org.osgi.service.tr069todmt, \
      org.osgi.service.transaction.control, \

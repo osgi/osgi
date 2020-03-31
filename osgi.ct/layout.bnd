@@ -81,6 +81,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.rest, \
     org.osgi.test.cases.rest.client, \
     org.osgi.test.cases.rest.client.js, \
+    org.osgi.test.cases.serial, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.serviceloader.secure, \
     org.osgi.test.cases.tr069todmt, \

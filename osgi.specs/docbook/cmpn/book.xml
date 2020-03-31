@@ -106,6 +106,8 @@
 
   <xi:include href="../145/service.usbinfo.xml"/>
 
+  <xi:include href="../146/service.serial.xml"/>
+
   <xi:include href="../147/service.transaction.control.xml"/>
 
   <xi:include href="../148/service.clusterinfo.xml"/>

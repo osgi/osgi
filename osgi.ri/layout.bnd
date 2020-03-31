@@ -37,6 +37,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.rest , \
 	org.osgi.impl.service.rest.client , \
 	org.osgi.impl.service.rest.client.js , \
+	org.osgi.impl.service.serial, \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
