@@ -130,7 +130,9 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 				"FRAMEWORK_START_LEVEL_ZERO",
 				"FRAMEWORK_START_LEVEL_EXCEPTION",
 				"FRAMEWORK_START_LEVEL_INIT_BSL",
-				"STOP");
+				"CONDITION_TRUE",
+				"STOP",
+				"CONDITION_TRUE");
 		assertTestResults(expectedTests, tb1Results);
 
 		expectedTests = Arrays.asList("START");
@@ -164,15 +166,16 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 				"FRAMEWORK_START_LEVEL",
 				"FRAMEWORK_START_LEVEL_ZERO",
 				"FRAMEWORK_START_LEVEL_EXCEPTION",
-				"FRAMEWORK_START_LEVEL_INIT_BSL");
+				"FRAMEWORK_START_LEVEL_INIT_BSL",
+				"CONDITION_TRUE");
 		assertTestResults(expectedTests, testResults);
 
 		testResults.clear();
-		expectedTests = new ArrayList<String>();
-
+		
 		stopFramework(framework);
 
-		expectedTests.add("STOP");
+		expectedTests = Arrays.asList("STOP",
+				"CONDITION_TRUE");
 		assertTestResults(expectedTests, testResults);
 
 	}

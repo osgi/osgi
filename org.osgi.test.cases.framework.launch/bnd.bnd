@@ -34,12 +34,14 @@ Import-Package: ${-signaturetest}, *
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.connect , \
-	org.osgi.framework.launch
+	org.osgi.framework.launch , \
+	org.osgi.service.condition
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
+	org.osgi.service.condition;				version=project , \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
 	${junit4}

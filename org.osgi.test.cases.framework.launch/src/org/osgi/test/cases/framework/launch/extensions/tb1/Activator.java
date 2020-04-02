@@ -43,9 +43,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.service.condition.Condition;
 
 public class Activator implements BundleActivator {
 	private static final String name = Activator.class.getPackage().getName();
@@ -61,6 +64,7 @@ public class Activator implements BundleActivator {
 		testSystemBundle(results, systemBundle);
 		testFrameworkWiring(results, systemBundle);
 		testFrameworkStartLevel(results, systemBundle);
+		testTrueCondition(results, context);
 	}
 
 	private static List<String> getResults(String test) {
@@ -185,8 +189,24 @@ public class Activator implements BundleActivator {
 				"REGISTER_SERVICE", getServiceProps("REGISTER_SERVICE")));
 	}
 
+	private void testTrueCondition(List<String> results, BundleContext context)
+			throws InvalidSyntaxException {
+		ServiceReference<Condition> conditionRef = context
+				.getServiceReferences(Condition.class,
+						'(' + Condition.CONDITION_ID + '='
+								+ Condition.CONDITION_ID_TRUE + ')')
+				.iterator()
+				.next();
+		if (conditionRef != null) {
+			results.add("CONDITION_TRUE");
+		}
+	}
+
 	public void stop(BundleContext context) throws Exception {
-		getResults(name).add("STOP");
+		List<String> results = getResults(name);
+		results.add("STOP");
+		testTrueCondition(results, context);
+
 		for (ServiceRegistration<String> reg : services) {
 			reg.unregister();
 		}
