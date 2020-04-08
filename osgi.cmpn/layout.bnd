@@ -1,12 +1,10 @@
 osgi.cmpn.specs = \
-     org.osgi.application, \
      org.osgi.jmx, \
      org.osgi.namespace.contract, \
      org.osgi.namespace.extender, \
      org.osgi.namespace.implementation, \
      org.osgi.namespace.service, \
      org.osgi.namespace.unresolvable, \
-     org.osgi.service.application, \
      org.osgi.service.async, \
      org.osgi.service.cdi, \
      org.osgi.service.clusterinfo, \

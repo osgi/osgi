@@ -1,3 +1,0 @@
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb2.Activator
--privatepackage	: ${p}.tb2.*

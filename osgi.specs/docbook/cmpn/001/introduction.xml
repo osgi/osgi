@@ -256,18 +256,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.application"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.application"/></code></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.application-version"
-              linkend="service.application"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.dmt"
               xrefstyle="template:%n %t"/></entry>
 
@@ -280,17 +268,6 @@
 
               <entry><code><xref endterm="org.osgi.service.dmt-version"
               linkend="service.dmt"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.oat"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.application"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.application-version"
-              linkend="service.oat"/></code></entry>
             </row>
 
             <row>

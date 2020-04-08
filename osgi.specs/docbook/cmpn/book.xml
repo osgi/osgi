@@ -58,11 +58,7 @@
 
   <xi:include href="../113/service.event.xml"/>
 
-  <xi:include href="../116/service.application.xml"/>
-
   <xi:include href="../117/service.dmt.xml"/>
-
-  <xi:include href="../120/service.oat.xml"/>
 
   <xi:include href="../122/service.remoteserviceadmin.xml"/>
 

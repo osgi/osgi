@@ -1,6 +1,5 @@
 org.osgi:org.osgi.annotation.bundle:1.0.0
 org.osgi:org.osgi.annotation.versioning:1.0.0
-org.osgi:org.osgi.application:1.0.0
 org.osgi:org.osgi.dto:1.1.0
 org.osgi:org.osgi.framework:1.9.0
 org.osgi:org.osgi.jmx:1.1.0
@@ -10,7 +9,6 @@ org.osgi:org.osgi.namespace.implementation:1.0.0
 org.osgi:org.osgi.namespace.service:1.0.0
 org.osgi:org.osgi.namespace.unresolvable:1.0.0
 org.osgi:org.osgi.resource:1.0.0
-org.osgi:org.osgi.service.application:1.1.0
 org.osgi:org.osgi.service.async:1.0.0
 org.osgi:org.osgi.service.cdi:1.0.0
 org.osgi:org.osgi.service.clusterinfo:1.0.0

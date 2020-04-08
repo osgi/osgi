@@ -14,10 +14,8 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.metatype.annotations, \
-	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
-	org.osgi.impl.service.application, \
     org.osgi.impl.service.async, \
     org.osgi.impl.service.dal, \
     org.osgi.impl.service.dal.step, \

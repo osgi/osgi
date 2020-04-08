@@ -1,9 +1,0 @@
-<?xml version="1.0" ?> 
-<descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0">
-	<application class="org.osgi.test.cases.application.tb1.TestApplication">
-        <reference name="log" interface="org.osgi.service.log.LogService" cardinality="0..n"/>
-        <reference name="activator" interface="org.osgi.test.cases.application.tbc.util.TestingActivator" cardinality="0..n"/>        
-        <reference name="app" interface="org.osgi.test.cases.application.tbc.util.TestAppController"/>
-        <reference name="reg" interface="org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService" cardinality="0..n"/>
-	</application>
-</descriptor>
