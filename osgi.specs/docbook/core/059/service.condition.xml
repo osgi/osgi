@@ -14,11 +14,11 @@
     linkend="org.osgi.service.condition"/></releaseinfo>
   </info>
 
-  <section>
+  <section xml:id="service.condition.introduction">
     <title>Introduction</title>
-    <para>OSGi due to its modular nature provides <code>Requirements</code> and <code>Capabilities</code> to declare what a Bundle needs in order to run properly. This is honored by the resolver and enforced by the Framework at runtime. The dynamic nature however can provide some impediments at runtime. That there is a Bundle that might provide a certain service or capability does not mean, that it will be available when and a component expects it be.</para> 
-	<para>Conditions are to the Service Layer what Requirements and Capabilities are to the module Layer.</para>
- 	<para>The <code>Condition</code> interface is designed to address this issue. Its task is to provide a marker that can be tracked if a some Condition is meet and for example a Requirement is meet at Runtime.</para>
+    <para>OSGi due to its modular nature provides <code>Requirements</code> and <code>Capabilities</code> to declare what a Bundle needs in order to run properly. This is honored by the resolver and enforced by the Framework at runtime. At runtime however, the dynamic nature can provide some impediments. That there is a Bundle that might provide a certain service or capability does not mean, that it will be available when a component expects it be.</para> 
+ 	<para>The <code>Condition</code> interface is designed to address this issue. Its task is to provide a marker that can be tracked if a some Condition is meet at Runtime.</para>
+	<para>Thus Conditions are to the Service Layer what Requirements and Capabilities are to the module Layer.</para>
     <section>
       <title>Essentials</title>
 
@@ -29,7 +29,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="service.condition.entities">
       <title>Entities</title>
 
       <itemizedlist>
@@ -40,18 +40,18 @@
     </section>
   </section>
   
-  <section>
+  <section xml:id="service.condition.operation">
     <title>Operation</title>
-    <para>Anybody can register a <code>Condition</code> service to indicate that some Condition is meet. The Service is just a marker Interface and provides no additional methods. Service providers can implement it as well as make use of the <code>org.osgi.service.Condition.INSTANCE</code> to avoid unnecessary object instances in the JVM. A <code>Condition</code> must be registered with a ```org.osgi.service.Condition.CONDITION_ID``` property as an identifier. Additional properties  can be added, to specify more information about the <code>Condition</code>.</para>
+    <para>Anybody can register a <code>Condition</code> service to indicate that some Condition is meet. The Service is just a marker Interface and provides no additional methods. Service providers can implement it as well as make use of the <code>org.osgi.service.Condition.INSTANCE</code> to avoid unnecessary object instances in the JVM. A <code>Condition</code> must be registered with a <code>org.osgi.service.Condition.CONDITION_ID</code> (<code>osgi.condition.id</code>) property as an identifier. Additional properties can be added, to specify more information about the <code>Condition</code>.</para>
       <section>
         <title>The Default True Condition</title>
     	<para>The Framework will always register a default Condition anybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
   	  </section>
   </section>
 
-  <section>
+  <section xml:id="service.condition.security">
     <title>Security</title>
-    <para>TODO Add implied (2.4.1 Core Spec) permission to register and get Conditions</para>
+    <para>Requires <xref linkend="framework.security.impliedpermissions"/> to register and get Conditions</para>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condition.xml"/>
