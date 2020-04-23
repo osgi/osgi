@@ -6,9 +6,11 @@
 
 ## Build
 
-Prerequisite is an installed JDK 8.
+Prerequisite is an installed JDK 8. 
 
     ./gradlew
+
+If your main JDK is higher then 8 you can set it on each run by adding `-Dorg.gradle.java.home=<pathToYouJDK>`.
 
 ## Only run tests for a specific reference implementation
 
@@ -28,9 +30,28 @@ Inside Eclipse use `Import... / Existing projects into workspace`.
 
 Test classes can be run using run as "Bnd OSGi Test launcher (junit)".
 
-##  Switching to a new version of a reference implementation
+## Switching to a new version of a reference implementation
 
 Update necessary versions in `cnf/central.mvn` and add local snapshots in a new file local.mvn.
 Eventually you will also need to update the .lib file of the reference impl inside `cmf/repo`.
 
 When running a test the installed bundle versions are shown. So you can validate if the switch worked.
+
+## Building the Specs
+
+The Specs can be build in diverent Versions. Currently available are `html`, `pdf` and `zip`. The `zip` version contains the html specs.
+
+In order to build the specs one successful build need to have happened before, so the javadoc is available.
+
+After this the following tasks can be used:
+
+ ```
+./gradlew :osgi.specs:core.pdf
+./gradlew :osgi.specs:core.html
+./gradlew :osgi.specs:core.zip
+./gradlew :osgi.specs:cmpn.pdf
+./gradlew :osgi.specs:cmpn.html
+./gradlew :osgi.specs:cmpn.zip
+ ```
+
+**Note:** If the docbook build encounters an error, it usually prints out a line the main `book.xml` it currently builds. To find the real problem, run the build with `--debug` to get more detailed error messages for the specification  you are working on.
