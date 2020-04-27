@@ -16,6 +16,76 @@
 
   <section xml:id="service.condition.introduction">
     <title>Introduction</title>
+    <para>In dynamic systems, such as OSGi, one of the more challenging problems can be start ordering.
+    The <xref linkend="org.osgi.framework.startlevel.BundleStartLevel" xrefstyle="hyperlink"/>
+    can be used to control the order in which bundles are activated when the
+    Framework is launched. In some scenarios it can be helpful to have lower level bundles activate before higher
+    level ones so that the necessary services provided by the lower levels are ready before the higher levels start.
+    However, such solutions have drawbacks in a dynamic system because any dependency can be appear and disappear
+    at any time. There is no guarantee that when a bundle finishes activation that it has registered all the services
+    that it ever will for the lifetime of its active state.</para>
+    
+    <para>A better solution is to model ordering as a dependency. Once something is a service dependency, an
+    injection framework, such as Declarative Services or CDI OSGi integration, can defer component activation
+    until the dependency is available. With a proper dependency, when the dependency disappears any components
+    that depend on it will be deactivated automatically. Such a system will tend to automatically initialize
+    and tear down components in the correct order.</para>
+
+    <para>The OSGi service layer provides a very expressive tool for describing the aspects of a service
+    through its service properties (see <xref linkend="framework.service.serviceproperties"/>) and for
+    selecting and matching available services with the service filter
+    (see <xref linkend="i2671413"/>). Dependency injection frameworks such as Declarative Services and OSGi CDI integration use
+    the expressive nature of the service layer by allowing a target option for dependencies. The target
+    specifies a filter that is used to assert the properties provided by a specific dependency.</para>
+
+    <para>The notion of a target for a dependency is very powerful and allows for additional control
+    over when a component can be activated. With Declarative Services and CDI OSGi integration
+    a dependency target can be overwritten with configuration. This gives the deployer of the system
+    power to select specific services for dependencies and therefore power over what conditions
+    are necessary for a component to be activated.</para>
+
+    <para>Translating ordering dependencies to service dependencies is often straightforward to do, but 
+    some scenarios make it more challenging. For example, if a component depends on a system wide state
+    in order to be fully functional. This type of problem can be common when using the whiteboard pattern.
+    An example of a whiteboard pattern is one that allows for a listener service to be registered that can
+    receive events about the system.  As a listener implementation it is only required to register a listener
+    service and that listener will automatically get used to dispatch events to by the whiteboard implementation.
+    However, in some scenarios a deployer may want to ensure that one or more specific listeners are
+    registered before allowing the whiteboard implementation to be active. By default the whiteboard implementation
+    does not need any listeners to be active, but a deployer may want to ensure at least one listener
+    is available to ensure all events from the system are recorded. For this example a deployer wants
+    to ensure one listener logs to local storage and one listener logs remotely.</para>
+
+    <para>With Declarative Services one could incorrectly try the following to achieve this:</para>
+
+    <programlisting>// THIS IS WRONG
+@Reference(target= "(&amp;(persist=LOCAL)(persist=REMOTE))")
+volatile List&lt;Listener&gt; listeners;</programlisting>
+
+    <para>This does not work because no single listener will satisfy both LOCAL and REMOTE
+    persistence. The result is that the list of listeners will remain empty for the system.
+    Condition services provide a mechanism for declaring and controlling what conditions
+    are necessary to enable a component. For example, with the listener whiteboard implementation
+    the following condition service requirement could be specified:</para>
+
+    <programlisting>@Reference(target= "(osgi.condition.id=true)")
+Condition requiredCondition;</programlisting>
+
+    <para>By default this component requires the <xref linkend="org.osgi.service.condition.Condition.CONDITION_ID_TRUE" xrefstyle="hyperlink"/> condition which is always available
+    at runtime. This allows the component to activate as soon as all of its other
+    requirements are met. In addition a deployer can now use configuration to change the target
+    of the required condition. For example, the target could be changed to a condition that represents
+    when all the required listeners the deployer requires are available at runtime. For
+    example, the following condition target could be used:</para>
+
+    <programlisting>target= "(&amp;(osgi.condition.id=listeners)(persist=LOCAL)(persist=REMOTE))"</programlisting>
+
+    <para>By declaring a requirement on the invariably available true condition a developer can open
+    up a component to be configured for activation based on a condition that can
+    controlled at runtime with configuration. Conditions can also be enabled based on the availability of
+    other conditions. This allows for more powerful layering of conditions for a system.</para>
+
+    <para>ORIGINAL INTRO FOLLOWS</para>
     <para>OSGi due to its modular nature provides <code>Requirements</code> and <code>Capabilities</code> to declare what a Bundle needs in order to run properly. This is honored by the resolver and enforced by the Framework at runtime. At runtime however, the dynamic nature can provide some impediments. That there is a Bundle that might provide a certain service or capability does not mean, that it will be available when a component expects it be.</para> 
  	<para>The <code>Condition</code> interface is designed to address this issue. Its task is to provide a marker that can be tracked if a some Condition is meet at Runtime.</para>
 	<para>Thus Conditions are to the Service Layer what Requirements and Capabilities are to the module Layer.</para>
@@ -24,7 +94,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Condition</emphasis> -  A requirement somebody needs fulfilled at runtime.</para>
+          <para><emphasis>Condition</emphasis> - Represents a required state of the runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Target</emphasis> - A configurable filter used to match a required condition.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Configuration</emphasis> - At runtime configuration can be used to influence the required conditions of a system.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -34,7 +110,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Condition</emphasis> - An Maker Interface used to register a Condition as a Service</para>
+          <para><emphasis>Condition</emphasis> - A service interface used to represent a condition at runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Deployer</emphasis> - An agent that is responsible for managing and configuring a system.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Component</emphasis> - A component may have required conditions in order to function at runtime.</para>
         </listitem>
       </itemizedlist>
     </section>
