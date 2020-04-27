@@ -81,7 +81,7 @@ Condition requiredCondition;</programlisting>
     <programlisting>target= "(&amp;(osgi.condition.id=listeners)(persist=LOCAL)(persist=REMOTE))"</programlisting>
 
     <para>By declaring a requirement on the invariably available true condition a developer can open
-    up a component to be configured for activation based on a condition that can
+    up a component to be configured for activation based on a condition that can be
     controlled at runtime with configuration. Conditions can also be enabled based on the availability of
     other conditions. This allows for more powerful layering of conditions for a system.</para>
 
@@ -113,12 +113,27 @@ Condition requiredCondition;</programlisting>
           <para><emphasis>Condition</emphasis> - A service interface used to represent a condition at runtime.</para>
         </listitem>
         <listitem>
-          <para><emphasis>Deployer</emphasis> - An agent that is responsible for managing and configuring a system.</para>
+          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from Framework initialization.</para>
         </listitem>
         <listitem>
-          <para><emphasis>Component</emphasis> - A component may have required conditions in order to function at runtime.</para>
+          <para><emphasis>Deployer</emphasis> - An agent that is responsible for managing and configuring a system which may include configuring the
+          required and available conditions at runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Component</emphasis> - A component may have required conditions declared and configured in order to function at runtime.</para>
         </listitem>
       </itemizedlist>
+      <figure pgwide="1">
+        <title>Condition Class Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="7.000in"
+                       contentwidth="6.125in"
+                       fileref="condition-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
   </section>
   
