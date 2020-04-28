@@ -651,7 +651,7 @@ com.acme.osgi.connect.Factory</programlisting>
     specified <code>Class</code>.</para>
 
     <section>
-      <title>Helper Implementations</title>
+      <title>&lt;</title>
 
       <para>A module connector implementation can hook into the <code>FrameworkUtil</code> class
       by providing an implementation of the <xref 
@@ -696,6 +696,101 @@ com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</programlisting>
       implementations. The list of helpers cannot change during the lifetime of the
       <code>FrameworkUtil</code> class.</para>
     </section>
+  </section>
+
+  <section>
+    <title>Example Class Path Connector</title>
+    <para>To illustrate how the Connect specification can be used the following is an example
+    connector that discovers the JAR files contained on the Java class path and represents them
+    as connect content.  This example assumes the module connector implementation
+    exists on the class path along with other bundle JARs that it can discover. This example does not show
+    how the JAR files are discovered on the running Java class path.</para>
+    <programlisting>
+public class ClassPathConnector implements ModuleConnector {
+
+    @Override
+    public Optional&lt;ConnectModule&gt; connect(String location) throws BundleException {
+        return getJarFile(location).map((j) -&gt; () -&gt; new ClassPathContent(j));
+    }
+
+    private Optional&lt;JarFile&gt; getJarFile(String location) {
+        // find a jar file for the specified location from the running class path
+        return Optional.empty();
+    }
+
+    static class ClassPathContent implements ConnectContent {
+        private final JarFile jar;
+        public ClassPathContent(JarFile jar) {
+            this.jar = jar;
+        }
+
+        @Override
+        public Optional&lt;ClassLoader&gt; getClassLoader() {
+            // assume this classes class loader can be used by all JARs found
+            // on the class path
+            return Optional.of(getClass().getClassLoader());
+        }
+
+        @Override
+        public Iterable&lt;String&gt; getEntries() throws IOException {
+            return jar.stream().map((e) -&gt; e.getName()).collect(Collectors.toList());
+        }
+
+        @Override
+        public Optional&lt;ConnectEntry&gt; getEntry(String path) {
+            return Optional.ofNullable(getConnectEntry(path));
+        }
+
+        ConnectEntry getConnectEntry(final String path) {
+            final ZipEntry entry = jar.getEntry(path);
+            return entry == null ? null : new ConnectEntry() {
+
+                @Override
+                public String getName() {
+                    return path;
+                }
+
+                @Override
+                public long getContentLength() {
+                    return entry.getSize();
+                }
+
+                @Override
+                public long getLastModified() {
+                    return entry.getTime();
+                }
+
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    return jar.getInputStream(entry);
+                }
+                
+            };
+        }
+
+        @Override
+        public Optional&lt;Map&lt;String, String&gt;&gt; getHeaders() {
+            return Optional.empty();
+        }
+
+        @Override
+        public void open() throws IOException {}
+
+        @Override
+        public void close() throws IOException {}
+        
+    }
+
+    @Override
+    public void initialize(File storage, Map&lt;String, String&gt; configuration) {}
+
+    @Override
+    public Optional&lt;BundleActivator&gt; newBundleActivator() {
+        return Optional.empty();
+    }
+}
+
+    </programlisting>
   </section>
 
   <section>
