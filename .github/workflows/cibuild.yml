@@ -25,6 +25,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
+        server-id: https://oss.sonatype.org
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_PASSWORD
     - name: Build
       shell: bash
       run: |

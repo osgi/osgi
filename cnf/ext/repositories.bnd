@@ -49,5 +49,3 @@
 -maven-release: javadoc;path=${target}/docs/javadoc
 
 publishrepo: ${if;(&(env.GITHUB_REPOSITORY=osgi/build)(env.GITHUB_REF=refs/heads/master)(!(env.GITHUB_EVENT_NAME=pull_request))(env.OSSRH_USERNAME=*)(!(env.OSSRH_USERNAME=$*)));OSGiNexus}
-
--connection-settings.ossrh: ${if;${publishrepo};${.}/ossrh-settings.xml}
