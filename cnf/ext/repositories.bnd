@@ -1,0 +1,53 @@
+-plugin.repositories = \
+    aQute.lib.deployer.FileRepo; \
+        name='Main'; \
+        location="${mainrepo}"; \
+        readonly=true, \
+    aQute.lib.deployer.FileRepo; \
+        name='Licensed'; \
+        location="${licensedrepo}"; \
+        readonly=true, \
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='Maven Central';\
+        releaseUrl="${centralrepo}";\
+        snapshotUrl="${uri;${bnd_snapshots}}";\
+        index=${.}/central.mvn;\
+        readOnly=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='SpringSource EBR';\
+        releaseUrl="http://repository.springsource.com/maven/bundles/external";\
+        index=${.}/springsource.mvn;\
+        readOnly=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='Apache Snapshots';\
+        snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
+        index=${.}/apache-snapshots.mvn;\
+        readOnly=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='Local';\
+        noupdateOnRelease=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='Release';\
+        releaseUrl="${fileuri;${releaserepo}}";\
+        snapshotUrl="${fileuri;${releaserepo}}";\
+        noupdateOnRelease=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='Baseline';\
+        releaseUrl="${centralrepo}";\
+        index=${.}/baseline.mvn;\
+        readOnly=true
+
+-plugin.repositories.nexus: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        name='OSGiNexus'; \
+        snapshotUrl="https://oss.sonatype.org/content/repositories/snapshots/"; \
+        releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
+        index=${.}/osgi-nexus.mvn
+
+-releaserepo:
+-baselinerepo: Baseline
+-maven-release: javadoc;path=${target}/docs/javadoc
+
+publishrepo: ${if;(&(env.GITHUB_REPOSITORY=osgi/build)(env.GITHUB_REF=refs/heads/master)(!(env.GITHUB_EVENT_NAME=pull_request))(env.OSSRH_USERNAME=*)(!(env.OSSRH_USERNAME=$*)));OSGiNexus}
+
+-connection-settings.ossrh: ${if;${publishrepo};${.}/ossrh-settings.xml}

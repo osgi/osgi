@@ -1,38 +1,17 @@
 # Very general
-project.dependson       = ${p-dependson;:}
-project.bootclasspath   = ${p-bootclasspath;:}
-project.buildpath       = ${p-buildpath;:}
-project.sourcepath      = ${p-sourcepath;:}
-project.allsourcepath   = ${p-allsourcepath;:}
-project.output          = ${p-output}
-project.testpath        = ${p-testpath;:}
-project.workspace		= ${workspace}
-project.dir				= ${project}
+project.workspace = ${workspace}
+project.dir = ${project}
 
--verbose				= true
-verbose					= false
-src                     = src
-bin                     = bin
-target-dir				= generated
-target					= ${project}/${target-dir}
-build					= ${workspace}/cnf
-licensed				= ${workspace}/licensed
-project.name            = ${basename;${project}}
-p			            = ${project.name}
-prebuild				= 
+-verbose = true
+verbose = false
+licensed = ${workspace}/licensed
 
 # Java compiler options
-java 					= java
-javac 					= javac
-javac.debug				= on
-javac.source 			= 1.8
-javac.target 			= 1.8
-javac.profile           = compact1
--eeprofile              = auto
-
-#Bnd options
--sources               	= true
--sourcepath             = ${project}/${src}
+javac.debug = on
+javac.source = 1.8
+javac.target  = 1.8
+javac.profile = compact1
+-eeprofile = auto
 
 # Include the gradle.properties to get the values of bnd_* which are used
 # for the bnd build repository.
@@ -43,68 +22,21 @@ centralrepo             = https://repo.maven.apache.org/maven2
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 
--plugin = aQute.lib.deployer.FileRepo; \
-            name='Main'; \
-            location="${mainrepo}"; \
-            readonly=true, \
-          aQute.lib.deployer.FileRepo; \
-            name='Licensed'; \
-            location="${licensedrepo}"; \
-            readonly=true, \
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='Maven Central';\
-            releaseUrl="${centralrepo}";\
-            snapshotUrl="${uri;${bnd_snapshots}}";\
-            index=${.}/central.mvn;\
-            readOnly=true,\
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='SpringSource EBR';\
-            releaseUrl="http://repository.springsource.com/maven/bundles/external";\
-            index=${.}/springsource.mvn;\
-            readOnly=true,\
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='Apache Snapshots';\
-            snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
-            index=${.}/apache-snapshots.mvn;\
-            readOnly=true,\
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='Local';\
-            noupdateOnRelease=true,\
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='Release';\
-            releaseUrl="${fileuri;${releaserepo}}";\
-            snapshotUrl="${fileuri;${releaserepo}}";\
-            noupdateOnRelease=true,\
-          aQute.bnd.repository.maven.provider.MavenBndRepository;\
-           name='Baseline';\
-           releaseUrl="${centralrepo}";\
-           index=${.}/baseline.mvn;\
-           readOnly=true,\
-          aQute.bnd.signing.JartoolSigner; \
-            keystore="${build}/keystore"; \
-            keypass=testtest; \
-            storepass=testtest; \
-            digestalg=SHA-1, \
-          Packaging; \
-            path:="${build}/${bin}"; \
-            command:=-pack, \
-          CTPackaging; \
-            path:="${build}/${bin}"; \
-            command:=-ctpack, \
-          SignatureTest; \
-            path:="${build}/${bin}"; \
-            command:="-signaturetest"
-
--plugin.osgi.nexus: \
-    aQute.bnd.repository.maven.provider.MavenBndRepository; \
-        snapshotUrl="https://oss.sonatype.org/content/repositories/snapshots/"; \
-        releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
-        index=${.}/osgi-nexus.mvn; \
-        name='OSGiNexus'
-
--releaserepo:
--baselinerepo: Baseline
--maven-release: javadoc;path=${target}/docs/javadoc
+-plugin.commands = \
+    aQute.bnd.signing.JartoolSigner; \
+        keystore="${build}/keystore"; \
+        keypass=testtest; \
+        storepass=testtest; \
+        digestalg=SHA-1, \
+    Packaging; \
+        path:="${build}/${bin}"; \
+        command:=-pack, \
+    CTPackaging; \
+        path:="${build}/${bin}"; \
+        command:=-ctpack, \
+    SignatureTest; \
+        path:="${build}/${bin}"; \
+        command:="-signaturetest"
 
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd"
@@ -155,12 +87,7 @@ Bundle-Developers: osgi; \
 
 -reproducible: true
 -noextraheaders: true
--removeheaders			= Include-Resource, Private-Package, Conditional-Package
-
-junit4: biz.aQute.junit;version=latest
-tester: biz.aQute.tester;version=latest
-junit.tester: biz.aQute.junit;version=latest
--tester: ${tester}
+-removeheaders = Include-Resource, Private-Package, Conditional-Package
 
 -runfw = org.osgi.impl.framework; version=latest
 
@@ -172,16 +99,3 @@ runsecureproperties = ${runproperties}, \
 	org.osgi.framework.trust.repositories=${build}/keystore
 
 -runproperties = ${runproperties}
-
-testcases.junit3 = ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
-testcases.junit4 = ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
-testcases.junit5 = \
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.Test;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.RepeatedTest;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.params.ParameterizedTest;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.TestFactory;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.TestTemplate;CONCRETE}
-
-testcases = ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}
-
-
