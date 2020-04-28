@@ -39,8 +39,9 @@
     The Module Layer then provides the access for reading content and meta-data from the bundle and loading 
     classes from the bundle. This can make it difficult to use classes or services that are already present in the running
     environment, for example, from the class path or anything else whose class space is managed outside of
-    the framework.  Content that lives outside the control of the Framework cannot easily benefit from the rich
-    Service Layer because there is no way to represent the outside content as bundles inside the Framework.</para>
+    the framework.  Without the Connect specification, content that lives outside the control of the
+    Framework cannot easily benefit from the rich Service Layer because there is no way to represent the outside
+    content as bundles inside the Framework.</para>
 
     <para>This specification defines a Connect Framework Factory to create and launch an OSGi
     Framework instance that can connect bundles in the Framework with content managed outside of the Framework
@@ -69,6 +70,13 @@
           <para><emphasis>OSGi Extender Pattern</emphasis> - It must be possible to support
           the OSGi Extender Pattern in environments that do not have the full OSGi Module
           Layer. For example, Declarative Services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>OSGi Technologies</emphasis> - It must be possible to support
+          other OSGi technologies and specifications such as Configuration Admin,
+          Metatype Service, Log Service etc. in environments that do not have the full
+          OSGi Module Layer.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -115,6 +123,10 @@
           </imageobject>
         </mediaobject>
       </figure>
+      <para>A launcher is in control of discovering and loading the connect framework factory implementation and the module connector implementation.
+      The launcher is then able to use the connect framework factory to create a Framework instance that uses the module connector instance.
+      When a connect bundle is installed it will be connected to a single connect module. Each bundle revision for the connect bundle is furthermore
+      connected with a single connect content.</para>
     </section>
   </section>
 
@@ -267,7 +279,7 @@
       <title>Java Service Provider Configuration Support for Connect</title>
 
       <para>Similar to how a framework factory is obtained in <xref
-      linkend="i3309166"/> the connect framework factory name is
+      linkend="i3309166"/> the connect framework factory implementation name is
       obtained by reading the content of the configuration resource with the path 
       <code>META-INF/services/org.osgi.framework.connect.ConnectFrameworkFactory</code></para>
 
@@ -281,6 +293,10 @@
 
       <programlisting># ACME Impl. for OSGi connect framework factory
 com.acme.osgi.connect.Factory</programlisting>
+
+      <para>Note that if the Framework implementation is loaded as a Java module then it must also specify
+      the the provides directive in its module-info class.  For example:</para>
+      <programlisting>provides org.osgi.framework.connect.ConnectFrameworkFactory with com.acme.osgi.connect.Factory;</programlisting>
     </section>
   </section>
   <section xml:id="framework.connect.bundle">
@@ -489,7 +505,7 @@ com.acme.osgi.connect.Factory</programlisting>
         as defined by  <xref linkend="framework.weavinghooks"/> will not be notified of the classes defined by the module
         connect class loaders. This implies that the <xref linkend="org.osgi.framework.hooks.weaving.WeavingHook" xrefstyle="hyperlink"/>
         and <xref linkend="org.osgi.framework.hooks.weaving.WovenClassListener" xrefstyle="hyperlink"/> implementations
-        will not be called for and will not be able to weave the classes from connect bundles. The activation policy as
+        will not be called for and will not be able to weave these classes. The activation policy as
         defined by <xref linkend="i3270445"/> also cannot be supported because The Framework will not have the necessary
         hooks into the module connector class loader implementation to cause bundle activation on class load.</para>
 
