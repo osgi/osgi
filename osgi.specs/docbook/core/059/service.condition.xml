@@ -21,7 +21,7 @@
     can be used to control the order in which bundles are activated when the
     Framework is launched. In some scenarios it can be helpful to have lower level bundles activate before higher
     level ones so that the necessary services provided by the lower levels are ready before the higher levels start.
-    However, such solutions have drawbacks in a dynamic system because any dependency can be appear and disappear
+    However, such solutions have drawbacks in a dynamic system because any dependency can appear and disappear
     at any time. There is no guarantee that when a bundle finishes activation that it has registered all the services
     that it ever will for the lifetime of its active state.</para>
     
