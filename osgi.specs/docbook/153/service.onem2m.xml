@@ -29,9 +29,15 @@
 
     <para>
       One of characteristic aspects of oneM2M is to allow multiple protocols and serialization formats for messages. Currently specified protocols are HTTP, CoAP, MQTT and WebSocket, and 
-      specified serialization are XML, JSON and CBOR (Concise Binary Object Representation). To make specification coherent, oneM2M specifications are separated into Resource model
-      written in TS-0001 , data format and procedure written in TS-0004 and mapping to concrete protocols in TS-0009, TS-0004, TS-0010, and TS-0020 respectively.
-      Here, abstraction level independent on concrete protocols is regarded as Service Layer.     
+      specified serialization are XML, JSON and CBOR (Concise Binary Object Representation). To make specification coherent, oneM2M specifications are separated into abstract level and concrete level. 
+      As abstract level, TS-0001 <!-- <xref linkend="service.onem2m.ts-0001.ref" xrefstyle="template:%n" /> --> defines the oneM2M architecuture and resource types and 
+      TS-0004 <!-- <xref linkend="service.onem2m.ts-0004.ref" xrefstyle="template:%n" /> --> defines data procedures and data structures. 
+      As concrete level, TS-0008 <!-- <xref linkend="service.onem2m.ts-0008.ref" xrefstyle="template:%n" /> --> , 
+      TS-0009 <!-- <xref linkend="service.onem2m.ts-0009.ref" xrefstyle="template:%n" /> --> , 
+      TS-0010 <!-- <xref linkend="service.onem2m.ts-0010.ref" xrefstyle="template:%n" /> --> , and 
+      TS-0020 <!-- <xref linkend="service.onem2m.ts-0020.ref" xrefstyle="template:%n" /> --> define concrete protocol which are mappoed
+     to model of the abstract level.
+      Here, the interface defined in abstract level, which independent on concrete protocols, is regarded as oneM2M Service Layer.     
     </para>
     <para>oneM2M Partners Type 1 (ARIB, ATIS, CCSA, ETSI, TIA, TSDSI, TTA, TTC) register oneM2M trademarks and logos in their respective jurisdictions.
     </para>
@@ -52,11 +58,11 @@
      <para>
         This chapter provides interface to oneM2M applications for communicating communicate CSE at Service Layer of oneM2M.
         The providing API is protocol and serialization agnostic for preventing the problem above.
-        Once application developer write code, it can be run in other environment where different communication method is used.d
+        Once application developer write code, it can be run in other environment where different communication method is used.
      </para>
      <para>
         Another benefit of the service is reduction of computational resources, typically latency of execution in a certain cases, where both application and CSE is implemented on OSGi framework. 
-       In that case, requires serialization/deserialization of data, context-switch of applications can be reduced, compared to the case where they communicates with a certain communication protocol.
+       In that case, it is possible to reduce executiontime for serialization/deserialization of data, context-switch of applications, compared to the case where they communicates with a certain communication protocol.
     </para>
   </section>
 
@@ -79,7 +85,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Use of DTO</emphasis> - DTO is used as parameters passing on API. Since oneM2M defines many types, concrete DTOs are specified for the higher level structure, and for lower structures generic DTO is used.  </para>
+        <para><emphasis>Use of Data Transfer Object (DTO)</emphasis> - DTO is used as parameters passing on API. Since oneM2M defines many types, concrete DTOs are specified for the higher level structure, and for lower structures generic DTO is used.  </para>
       </listitem>
 
       <listitem>
@@ -135,13 +141,13 @@
   <section>
     <title>oneM2M ServiceLayer</title>
     <para>
-      org.osgi.service.onem2m.ServiceLayer is the interface used by an application for sending request and get response as return method.
+      oneM2M ServiceLayer is the interface used by an application for sending request and get response as return method.
       It contains low level API and high level API.
     </para>
     <para>
      request() method allows very raw data type access and it enables all possible message exchanges among oneM2M entities. This is called the low level API.
      The method takes requestPrimitive as an argument and returns responseRequest. 
-     It allows all possible operation of oneM2M. For the return type, OSGi Promise (TODO:Link to org.osgi.util.promise.Promise  ) is used for allowing synchronous and asynchronous calling manner.
+     It allows all possible operation of oneM2M. For the return type, OSGi Promise ( <xref linkend="util.promise" /> ) is used for allowing synchronous and asynchronous calling manner.
     </para>
 
 <!--
@@ -229,7 +235,7 @@ public interface NotificationListener
   <section>
     <title>DTO</title>
     <para>
-      OSGi DTOs (TODO: link ) are used for representing data structured passed on API.
+      OSGi DTOs are used for representing data structured passed on API.
       Some of the data structures, which are directly referred from API or in small number of hops, are specified with concrete field names. The following figure shows DTOs with concrete field names, and reference relationship of class. 
       Following DTO's rule, instances must not have loop reference relationship.
     </para>
@@ -251,10 +257,11 @@ public interface NotificationListener
     <para>
        oneM2M specifies two types of key names for representing name of resources, attributes, and elements of data structure, which are long name and short name. Long name is human readable representation, for example &quot;resourceID&quot;,
       meanwhile short name is compact representation for minimizing network transfer, consist with typically 2-4 alphabetical characters, for example &quot;ri&quot;.
-      All field names in concrete DTOs are based on long name. Long name should be used for key names of GenericDTO and attribute names of ResourceDTO. Following lists shows parts of the DTO definition.
+      All field names in concrete DTOs are based on long name. Long name should be used for key names of GenericDTO and attribute names of ResourceDTO. 
     </para>
 
 <!--
+Following lists shows parts of the DTO definition.
     <programlisting> 
 public class ResourceDTO extends DTO{
     public Integer resourceType;
@@ -307,12 +314,6 @@ public class GenericDTO extends DTO{
 
   <section>
     <title>References</title>
-
-    <bibliolist>
-      <bibliomixed xml:id="service.onem2m-jls.ref"><title>The Java Language
-      Specification, Java SE 8 Edition</title><biblioid class="uri"><link
-      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
-    </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0001.ref"><title>oneM2M: TS-0001 Functional Architecture V3.15.1
       </title><biblioid class="uri"><link
@@ -322,6 +323,26 @@ public class GenericDTO extends DTO{
       <bibliomixed xml:id="service.onem2m.ts-0004.ref"><title>oneM2M: TS-0004 Service Layer Core Protocol  V3.11.2
       </title><biblioid class="uri"><link
       xlink:href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf"/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0008.ref"><title>oneM2M: TS-0008 CoAP Protocol Binding V3.3.1
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0008-CoAP_Protocol_Binding-V3_3_1cl.pdf"/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0009.ref"><title>oneM2M: TS-0009 HTTP Protocol Binding V3.2.1
+      </title><biblioid class="uri">https://www.onem2m.org/images/files/deliverables/Release3/TS-0009-HTTP_Protocol_Binding-V3_2_1cl.pdf<link
+      xlink:href=""/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0010.ref"><title>oneM2M: TS-0010 MQTT Protocol Binding V3.0.1
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0010-MQTT_protocol_binding-V3_0_1.pdf"/></biblioid></bibliomixed>
+    </bibliolist>
+    <bibliolist>
+      <bibliomixed xml:id="service.onem2m.ts-0020.ref"><title>oneM2M: TS-0020 WebSocket Protocol Binding V3.0.1
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0020-WebSocket_Protocol_Binding-V3_0_1.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.xsd.ref"><title>oneM2M-schemas 
