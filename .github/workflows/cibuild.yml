@@ -37,6 +37,15 @@ jobs:
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+    - name: Publish Specification HTML  
+      if: (github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/master') && (github.event_name != 'pull_request')
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.DRAFT_DEPLOY_KEY }}
+        external_repository: osgi/draft
+        publish_branch: gh-pages
+        publish_dir: osgi.specs/generated/html
+        force_orphan: true
     - name: Upload Specification HTML
       uses: actions/upload-artifact@v2
       with:
