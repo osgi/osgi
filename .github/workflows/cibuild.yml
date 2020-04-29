@@ -1,6 +1,12 @@
 name: CI Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
 
 env:
   LC_ALL: en_US.UTF-8
@@ -14,7 +20,7 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Git Unshallow
-      if: (github.repository == 'osgi/build') && (github.event_name != 'pull_request')
+      if: (github.repository == 'osgi/osgi') && (github.event_name != 'pull_request')
       shell: bash
       run: |
         git fetch --prune --unshallow
