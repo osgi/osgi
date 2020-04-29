@@ -17,7 +17,7 @@
   <section xml:id="service.condition.introduction">
     <title>Introduction</title>
     <para>In dynamic systems, such as OSGi, one of the more challenging problems can be to define when a System or part 
-    of it is ready to do work. The answer can change depending one the individual perspective. The developer of a Webserver 
+    of it is ready to do work. The answer can change depending on the individual perspective. The developer of a Webserver 
     might say, the System is ready when the server starts listening to port 80. An Application developer however would 
     define the system as ready, when the database connection is up and all Servlets are registered. Taking the Application 
     developers view, the Server should start Listening on Port 80 when the System is ready and not beforehand.</para>
@@ -92,7 +92,7 @@ Condition requiredCondition;</programlisting>
 
     <para>The OSGi <xref linkend="framework.service" xrefstyle="hyperlink"/> already provides all tools to register any 
     service as a Marker for when a System is ready. The Condition Service Specification simply provides a specified 
-    method to signal such states. WIth this other specifications and users have a known method to listen for such signals.</para>
+    method to signal such states. With this other specifications and users have a known method to listen for such signals.</para>
 
     <section>
       <title>Essentials</title>
@@ -146,7 +146,7 @@ Condition requiredCondition;</programlisting>
   
   <section xml:id="service.condition.operation">
     <title>Operation</title>
-    <para>Anybody can register a <code>Condition</code> service to indicate that some Condition is meet. The Service is just a marker Interface and provides no additional methods. Service providers can implement it as well as make use of the <code>org.osgi.service.Condition.INSTANCE</code> to avoid unnecessary object instances in the JVM. A <code>Condition</code> must be registered with a <code>org.osgi.service.Condition.CONDITION_ID</code> (<code>osgi.condition.id</code>) property as an identifier. Additional properties can be added, to specify more information about the <code>Condition</code>.</para>
+    <para>Everybody can register a <code>Condition</code> service to indicate that some Condition is meet. The Service is just a marker Interface and provides no additional methods. Service providers can implement it as well as make use of the <code>org.osgi.service.Condition.INSTANCE</code> to avoid unnecessary object instances in the JVM. A <code>Condition</code> must be registered with a <code>org.osgi.service.Condition.CONDITION_ID</code> (<code>osgi.condition.id</code>) property as an identifier. Additional properties can be added, to specify more information about the <code>Condition</code>.</para>
     <para>Looking back at the service example from the introduction the following static Condition could achieve the defined goal:</para>
    <programlisting>@Component(property = {
    	"osgi.condition.id=listeners", 
@@ -160,7 +160,7 @@ public class ListenerCondition implements Condition{
 }</programlisting>
       <section>
         <title>The Default True Condition</title>
-    	<para>The Framework will always register a default Condition anybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
+    	<para>The Framework will always register a default Condition everybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
   	  </section>
   </section>
 
