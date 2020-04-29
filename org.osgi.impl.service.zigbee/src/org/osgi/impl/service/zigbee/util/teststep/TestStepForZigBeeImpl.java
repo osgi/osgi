@@ -35,7 +35,7 @@ public class TestStepForZigBeeImpl implements TestStep {
 	static public final String	ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
 	public static final String	EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String	configFilePath			= "zigbee-ct-template.xml";
+	private static final String	configFilePath			= System.getProperty("org.osgi.test.cases.zigbee.template", "zigbee-ct-template.xml");
 
 	private ZigBeeBaseDriver	baseDriver;
 

@@ -77,6 +77,8 @@ public class ConfigurationFileReader {
 		return instance;
 	}
 
+	private static final String		zclFilename			= System.getProperty("org.osgi.impl.service.zigbee.zcl", "zcl.xml");
+
 	/**
 	 * Parse the input stream passed as parameter. The input stream refers to
 	 * the xml file that contains the node configuratiosn.
@@ -86,7 +88,7 @@ public class ConfigurationFileReader {
 
 	private void readXmlFile(InputStream is) throws Exception {
 
-		profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
+		profiles = ZigBeeProfiles.getInstance(new FileInputStream(zclFilename));
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;

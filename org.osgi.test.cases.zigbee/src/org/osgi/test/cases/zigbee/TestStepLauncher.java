@@ -46,7 +46,7 @@ public class TestStepLauncher {
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String		configFilename			= "zigbee-ct-template.xml";
+	private static final String		configFilename			= System.getProperty("org.osgi.test.cases.zigbee.template", "zigbee-ct-template.xml");
 
 	private ConfigurationFileReader	confReader;
 	private static TestStepProxy	tproxy;
