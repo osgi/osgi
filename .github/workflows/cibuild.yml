@@ -41,3 +41,13 @@ jobs:
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+    - name: Upload Specification HTML
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Specification-HTML
+        path: osgi.specs/generated/html/
+    - name: Upload Specification PDF
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Specification-PDF
+        path: osgi.specs/generated/*.pdf
