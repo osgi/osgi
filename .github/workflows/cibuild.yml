@@ -1,0 +1,37 @@
+name: CI Build
+
+on: [push, pull_request]
+
+env:
+  LC_ALL: en_US.UTF-8
+  GRADLE_OPTS: -Dorg.gradle.parallel=false
+
+jobs:
+  JDK8_Linux:
+    name: JDK8 ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+    - name: Git Unshallow
+      if: (github.repository == 'osgi/build') && (github.event_name != 'pull_request')
+      shell: bash
+      run: |
+        git fetch --prune --unshallow
+        git describe --dirty --always --abbrev=9
+    - name: Gradle Wrapper Validation
+      uses: gradle/wrapper-validation-action@v1
+    - name: Set up Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+        server-id: https://oss.sonatype.org
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_PASSWORD
+    - name: Build
+      shell: bash
+      run: |
+        ./.github/scripts/build.sh
+      env:
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
