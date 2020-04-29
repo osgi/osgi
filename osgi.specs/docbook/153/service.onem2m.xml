@@ -331,8 +331,8 @@ public class GenericDTO extends DTO{
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0009.ref"><title>oneM2M: TS-0009 HTTP Protocol Binding V3.2.1
-      </title><biblioid class="uri">https://www.onem2m.org/images/files/deliverables/Release3/TS-0009-HTTP_Protocol_Binding-V3_2_1cl.pdf<link
-      xlink:href=""/></biblioid></bibliomixed>
+      </title><biblioid class="uri"><link
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0009-HTTP_Protocol_Binding-V3_2_1cl.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0010.ref"><title>oneM2M: TS-0010 MQTT Protocol Binding V3.0.1
