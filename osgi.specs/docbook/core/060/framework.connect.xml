@@ -35,7 +35,7 @@
     to manage bundles in the Module Layer.</para>
 
     <para>The Module and Life Cycle Layers assume the Framework is in control
-    of the actual deployment unit (bundle) which is deployed as a Java ARchive (JAR) file.
+    of the actual deployment unit (bundle) which is deployed as a Java archive (JAR) file.
     The Module Layer then provides the access for reading content and meta-data from the bundle and loading 
     classes from the bundle. This can make it difficult to use classes or services that are already present in the running
     environment, for example, from the class path or anything else whose class space is managed outside of
@@ -238,7 +238,7 @@
         exists for the Framework. Before invoking extension bundle activators as defined by
         <xref linkend="framework.lifecycle.extension.start"/> the Framework must call
         the <code>ModuleConnector</code> method <xref 
-        linkend="org.osgi.framework.connect.ModuleConnector.createBundleActivator--" xrefstyle="hyperlink"/>.
+        linkend="org.osgi.framework.connect.ModuleConnector.newBundleActivator--" xrefstyle="hyperlink"/>.
         If the module connector provides a bundle activator then the <xref
         linkend="org.osgi.framework.BundleActivator.start-BundleContext-" xrefstyle="hyperlink"/> method must be
         called before returning from the <code>Framework</code> <xref 
@@ -293,10 +293,6 @@
 
       <programlisting># ACME Impl. for OSGi connect framework factory
 com.acme.osgi.connect.Factory</programlisting>
-
-      <para>Note that if the Framework implementation is loaded as a Java module then it must also specify
-      the the provides directive in its module-info class.  For example:</para>
-      <programlisting>provides org.osgi.framework.connect.ConnectFrameworkFactory with com.acme.osgi.connect.Factory;</programlisting>
     </section>
   </section>
   <section xml:id="framework.connect.bundle">
@@ -651,7 +647,7 @@ com.acme.osgi.connect.Factory</programlisting>
     specified <code>Class</code>.</para>
 
     <section>
-      <title>&lt;</title>
+      <title>Helper Implementations</title>
 
       <para>A module connector implementation can hook into the <code>FrameworkUtil</code> class
       by providing an implementation of the <xref 
@@ -705,17 +701,19 @@ com.acme.osgi.connect.classpath.AcmeFrameworkUtilHelpler</programlisting>
     as connect content.  This example assumes the module connector implementation
     exists on the class path along with other bundle JARs that it can discover. This example does not show
     how the JAR files are discovered on the running Java class path.</para>
+
     <programlisting>
 public class ClassPathConnector implements ModuleConnector {
 
     @Override
-    public Optional&lt;ConnectModule&gt; connect(String location) throws BundleException {
+    public Optional&lt;ConnectModule&gt; connect(String location)
+            throws BundleException {
         return getJarFile(location).map((j) -&gt; () -&gt; new ClassPathContent(j));
     }
 
     private Optional&lt;JarFile&gt; getJarFile(String location) {
         // find a jar file for the specified location from the running class path
-        return Optional.empty();
+        return ...
     }
 
     static class ClassPathContent implements ConnectContent {
@@ -733,7 +731,8 @@ public class ClassPathConnector implements ModuleConnector {
 
         @Override
         public Iterable&lt;String&gt; getEntries() throws IOException {
-            return jar.stream().map((e) -&gt; e.getName()).collect(Collectors.toList());
+            return jar.stream().map((e) -&gt; e.getName()).
+                    collect(Collectors.toList());
         }
 
         @Override
@@ -764,7 +763,6 @@ public class ClassPathConnector implements ModuleConnector {
                 public InputStream getInputStream() throws IOException {
                     return jar.getInputStream(entry);
                 }
-                
             };
         }
 
