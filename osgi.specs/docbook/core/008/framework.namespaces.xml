@@ -958,7 +958,7 @@ Bundle B:
       <title>osgi.identity Namespace definition</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="4*"/>
+        <colspec colnum="1" colwidth="3*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
