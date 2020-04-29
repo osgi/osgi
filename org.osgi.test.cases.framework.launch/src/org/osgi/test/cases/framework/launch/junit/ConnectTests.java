@@ -143,7 +143,7 @@ public class ConnectTests extends LaunchTest {
 		}
 
 		@Override
-		public Optional<BundleActivator> createBundleActivator() {
+		public Optional<BundleActivator> newBundleActivator() {
 			createBundleActivatorCalled.getAndIncrement();
 			return Optional.empty();
 		}
@@ -368,8 +368,8 @@ public class ConnectTests extends LaunchTest {
 		final AtomicInteger bundleActvatorStopCalled = new AtomicInteger();
 		ModuleConnector activatorFactory = new TestCountingConnectFramework() {
 			@Override
-			public Optional<BundleActivator> createBundleActivator() {
-				super.createBundleActivator();
+			public Optional<BundleActivator> newBundleActivator() {
+				super.newBundleActivator();
 				return Optional.of(new BundleActivator() {
 
 					@Override
@@ -408,8 +408,8 @@ public class ConnectTests extends LaunchTest {
 		final AtomicReference<ServiceReference<Condition>> trueConditionStop = new AtomicReference<>();
 		ModuleConnector activatorFactory = new TestCountingConnectFramework() {
 			@Override
-			public Optional<BundleActivator> createBundleActivator() {
-				super.createBundleActivator();
+			public Optional<BundleActivator> newBundleActivator() {
+				super.newBundleActivator();
 				return Optional.of(new BundleActivator() {
 					@Override
 					public void start(BundleContext context) throws Exception {
