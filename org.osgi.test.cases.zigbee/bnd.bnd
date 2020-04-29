@@ -41,6 +41,8 @@ Test-Cases			= ${testcases}
 
 -runproperties = ${runproperties}, \
     comm.rxtx.disable=true, \
+	org.osgi.test.cases.zigbee.template=${.}/zigbee-ct-template.xml, \
+	org.osgi.impl.service.zigbee.zcl=${.}/zcl.xml, \
 	org.osgi.service.zigbee.host.path=:testcase:, \
 	org.osgi.service.zigbee.loglevel.debug=true, \
 	org.osgi.service.zigbee.loglevel.warn=true, \

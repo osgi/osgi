@@ -81,10 +81,11 @@ public class ConfigurationFileReader {
 		}
 		return instance;
 	}
+	private static final String		zclFilename			= System.getProperty("org.osgi.impl.service.zigbee.zcl", "zcl.xml");
 
 	private void readXmlFile(InputStream is) throws Exception {
 
-		this.profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
+		this.profiles = ZigBeeProfiles.getInstance(new FileInputStream(zclFilename));
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
