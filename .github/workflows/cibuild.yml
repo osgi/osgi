@@ -5,10 +5,12 @@ on:
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
+    - 'LICENSE'
   pull_request:
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
+    - 'LICENSE'
 
 env:
   LC_ALL: en_US.UTF-8
