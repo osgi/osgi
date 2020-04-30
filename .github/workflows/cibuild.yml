@@ -56,3 +56,8 @@ jobs:
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
+    - name: Upload Generated Repo
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Generated-Repo
+        path: cnf/generated/repo/
