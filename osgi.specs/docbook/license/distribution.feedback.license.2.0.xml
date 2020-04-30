@@ -130,6 +130,6 @@
 
     <para>Comments about this specification can be raised at:</para>
 
-    <para><code><link xlink:href="https://osgi.org/bugzilla/"/></code></para>
+    <para><code><link xlink:href="https://github.com/osgi/design/issues"/></code></para>
   </section>
 </preface>
