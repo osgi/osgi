@@ -2,7 +2,13 @@ name: CI Build
 
 on:
   push:
+    paths-ignore:
+    - 'README.md'
+    - 'CONTRIBUTING.md'
   pull_request:
+    paths-ignore:
+    - 'README.md'
+    - 'CONTRIBUTING.md'
 
 env:
   LC_ALL: en_US.UTF-8
