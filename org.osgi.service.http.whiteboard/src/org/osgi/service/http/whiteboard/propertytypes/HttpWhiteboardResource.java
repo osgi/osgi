@@ -50,7 +50,9 @@ public @interface HttpWhiteboardResource {
 	String PREFIX_ = "osgi.http.whiteboard.resource.";
 
 	/**
-	 * Service property identifying resource patterns.
+ 	 * Service property specifying the request mappings for resources.
+         * The specified patterns are used to determine whether a request should be mapped 
+	 * to resources.
 	 * 
 	 * @return The resource patterns.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
@@ -59,7 +61,9 @@ public @interface HttpWhiteboardResource {
 	String[] pattern();
 
 	/**
-	 * Service property identifying resource prefix.
+	 * Service property specifying the resource entry prefix for a resource service. This prefix is
+	 * used to map a requested resource to the bundle's entries. The value must not end with slash 
+	 * ("/") with the exception that a name of the form "/" is used to denote the root of the bundle. 
 	 * 
 	 * @return The resource prefix.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
