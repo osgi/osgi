@@ -222,7 +222,7 @@ abstract class FilterImpl implements Filter {
 	 */
 	@Override
 	public boolean matchCase(Dictionary<String, ? > dictionary) {
-		return matches0((dictionary != null) ? FrameworkUtil.asMap(dictionary)
+		return matches0((dictionary != null) ? DictionaryMap.asMap(dictionary)
 				: Collections.emptyMap());
 	}
 
@@ -1320,14 +1320,46 @@ abstract class FilterImpl implements Filter {
 	}
 
 	/**
+	 * This Map is used for key lookup during filter evaluation. This Map
+	 * implementation only supports the get operation using a String key as no
+	 * other operations are used by the Filter implementation.
+	 */
+	private static class DictionaryMap extends AbstractMap<String,Object>
+			implements Map<String,Object> {
+		static Map<String, ? > asMap(Dictionary<String, ? > dictionary) {
+			if (dictionary instanceof Map) {
+				@SuppressWarnings("unchecked")
+				Map<String, ? > coerced = (Map<String, ? >) dictionary;
+				return coerced;
+			}
+			return new DictionaryMap(dictionary);
+		}
+
+		private final Dictionary<String, ? > dictionary;
+
+		DictionaryMap(Dictionary<String, ? > dictionary) {
+			this.dictionary = requireNonNull(dictionary);
+		}
+
+		@Override
+		public Object get(Object key) {
+			return dictionary.get(key);
+		}
+
+		@Override
+		public Set<Entry<String,Object>> entrySet() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	/**
 	 * This Map is used for case-insensitive key lookup during filter
 	 * evaluation. This Map implementation only supports the get operation using
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
 	private static final class CaseInsensitiveMap
-			extends AbstractMap<String,Object> implements Map<String,Object> {
-		private final Dictionary<String, ? >	dictionary;
+			extends DictionaryMap implements Map<String,Object> {
 		private final String[]					keys;
 
 		/**
@@ -1338,7 +1370,7 @@ abstract class FilterImpl implements Filter {
 		 *             variants of the same key name.
 		 */
 		CaseInsensitiveMap(Dictionary<String, ? > dictionary) {
-			this.dictionary = requireNonNull(dictionary);
+			super(dictionary);
 			List<String> keyList = new ArrayList<>(dictionary.size());
 			for (Enumeration< ? > e = dictionary.keys(); e.hasMoreElements();) {
 				Object k = e.nextElement();
@@ -1360,15 +1392,10 @@ abstract class FilterImpl implements Filter {
 			String k = (String) o;
 			for (String key : keys) {
 				if (key.equalsIgnoreCase(k)) {
-					return dictionary.get(key);
+					return super.get(key);
 				}
 			}
 			return null;
-		}
-
-		@Override
-		public Set<Entry<String,Object>> entrySet() {
-			throw new UnsupportedOperationException();
 		}
 	}
 
