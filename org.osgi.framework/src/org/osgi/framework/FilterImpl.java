@@ -417,17 +417,9 @@ abstract class FilterImpl implements Filter {
 			if (value1 instanceof Collection< ? >) {
 				return compare_Collection((Collection< ? >) value1);
 			}
-			if (value1 instanceof Integer) {
-				return compare_Integer(((Integer) value1).intValue());
-			}
-			if (value1 instanceof Long) {
-				return compare_Long(((Long) value1).longValue());
-			}
-			if (value1 instanceof Byte) {
-				return compare_Byte(((Byte) value1).byteValue());
-			}
-			if (value1 instanceof Short) {
-				return compare_Short(((Short) value1).shortValue());
+			if (value1 instanceof Integer || value1 instanceof Long
+					|| value1 instanceof Byte || value1 instanceof Short) {
+				return compare_Long(((Number) value1).longValue());
 			}
 			if (value1 instanceof Character) {
 				return compare_Character(((Character) value1).charValue());
@@ -472,7 +464,7 @@ abstract class FilterImpl implements Filter {
 			if (Integer.TYPE.isAssignableFrom(type)) {
 				int[] array = (int[]) primarray;
 				for (int value1 : array) {
-					if (compare_Integer(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -490,7 +482,7 @@ abstract class FilterImpl implements Filter {
 			if (Byte.TYPE.isAssignableFrom(type)) {
 				byte[] array = (byte[]) primarray;
 				for (byte value1 : array) {
-					if (compare_Byte(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -499,7 +491,7 @@ abstract class FilterImpl implements Filter {
 			if (Short.TYPE.isAssignableFrom(type)) {
 				short[] array = (short[]) primarray;
 				for (short value1 : array) {
-					if (compare_Short(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -564,10 +556,6 @@ abstract class FilterImpl implements Filter {
 			return false;
 		}
 
-		boolean compare_Byte(byte byteval) {
-			return false;
-		}
-
 		boolean compare_Character(char charval) {
 			return false;
 		}
@@ -580,15 +568,7 @@ abstract class FilterImpl implements Filter {
 			return false;
 		}
 
-		boolean compare_Integer(int intval) {
-			return false;
-		}
-
 		boolean compare_Long(long longval) {
-			return false;
-		}
-
-		boolean compare_Short(short shortval) {
 			return false;
 		}
 
@@ -735,17 +715,6 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Byte(byte byteval) {
-			byte byteval2;
-			try {
-				byteval2 = Byte.parseByte(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Byte.compare(byteval, byteval2));
-		}
-
-		@Override
 		boolean compare_Character(char charval) {
 			char charval2;
 			try {
@@ -779,17 +748,6 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Integer(int intval) {
-			int intval2;
-			try {
-				intval2 = Integer.parseInt(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Integer.compare(intval, intval2));
-		}
-
-		@Override
 		boolean compare_Long(long longval) {
 			long longval2;
 			try {
@@ -798,17 +756,6 @@ abstract class FilterImpl implements Filter {
 				return false;
 			}
 			return comparison(Long.compare(longval, longval2));
-		}
-
-		@Override
-		boolean compare_Short(short shortval) {
-			short shortval2;
-			try {
-				shortval2 = Short.parseShort(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Short.compare(shortval, shortval2));
 		}
 
 		@Override
