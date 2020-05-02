@@ -33,6 +33,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * RFC 1960-based Filter. Filter objects can be created by calling the
@@ -222,7 +223,7 @@ abstract class FilterImpl implements Filter {
 	 */
 	@Override
 	public boolean matchCase(Dictionary<String, ? > dictionary) {
-		return matches0((dictionary != null) ? FrameworkUtil.asMap(dictionary)
+		return matches0((dictionary != null) ? DictionaryMap.asMap(dictionary)
 				: Collections.emptyMap());
 	}
 
@@ -417,17 +418,9 @@ abstract class FilterImpl implements Filter {
 			if (value1 instanceof Collection< ? >) {
 				return compare_Collection((Collection< ? >) value1);
 			}
-			if (value1 instanceof Integer) {
-				return compare_Integer(((Integer) value1).intValue());
-			}
-			if (value1 instanceof Long) {
-				return compare_Long(((Long) value1).longValue());
-			}
-			if (value1 instanceof Byte) {
-				return compare_Byte(((Byte) value1).byteValue());
-			}
-			if (value1 instanceof Short) {
-				return compare_Short(((Short) value1).shortValue());
+			if (value1 instanceof Integer || value1 instanceof Long
+					|| value1 instanceof Byte || value1 instanceof Short) {
+				return compare_Long(((Number) value1).longValue());
 			}
 			if (value1 instanceof Character) {
 				return compare_Character(((Character) value1).charValue());
@@ -472,7 +465,7 @@ abstract class FilterImpl implements Filter {
 			if (Integer.TYPE.isAssignableFrom(type)) {
 				int[] array = (int[]) primarray;
 				for (int value1 : array) {
-					if (compare_Integer(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -490,7 +483,7 @@ abstract class FilterImpl implements Filter {
 			if (Byte.TYPE.isAssignableFrom(type)) {
 				byte[] array = (byte[]) primarray;
 				for (byte value1 : array) {
-					if (compare_Byte(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -499,7 +492,7 @@ abstract class FilterImpl implements Filter {
 			if (Short.TYPE.isAssignableFrom(type)) {
 				short[] array = (short[]) primarray;
 				for (short value1 : array) {
-					if (compare_Short(value1)) {
+					if (compare_Long(value1)) {
 						return true;
 					}
 				}
@@ -564,10 +557,6 @@ abstract class FilterImpl implements Filter {
 			return false;
 		}
 
-		boolean compare_Byte(byte byteval) {
-			return false;
-		}
-
 		boolean compare_Character(char charval) {
 			return false;
 		}
@@ -580,15 +569,7 @@ abstract class FilterImpl implements Filter {
 			return false;
 		}
 
-		boolean compare_Integer(int intval) {
-			return false;
-		}
-
 		boolean compare_Long(long longval) {
-			return false;
-		}
-
-		boolean compare_Short(short shortval) {
 			return false;
 		}
 
@@ -702,10 +683,21 @@ abstract class FilterImpl implements Filter {
 
 	static class Equal extends Item {
 		final String value;
+		private Object	cached;
 
 		Equal(String attr, String value) {
 			super(attr);
 			this.value = value;
+		}
+		
+		private <T> T convert(Class<T> type, Function<String, ? extends T> converter) {
+			@SuppressWarnings("unchecked")
+			T converted = (T) cached;
+			if ((converted != null) && type.isInstance(converted)) {
+				return converted;
+			}
+			cached = converted = converter.apply(value.trim());
+			return converted;
 		}
 
 		boolean comparison(int compare) {
@@ -720,7 +712,7 @@ abstract class FilterImpl implements Filter {
 		@Override
 		boolean compare_Version(Version value1) {
 			try {
-				Version version2 = Version.valueOf(value);
+				Version version2 = convert(Version.class, Version::valueOf);
 				return comparison(value1.compareTo(version2));
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
@@ -730,19 +722,8 @@ abstract class FilterImpl implements Filter {
 
 		@Override
 		boolean compare_Boolean(boolean boolval) {
-			boolean boolval2 = Boolean.parseBoolean(value.trim());
+			boolean boolval2 = convert(Boolean.class, Boolean::valueOf).booleanValue();
 			return comparison(Boolean.compare(boolval, boolval2));
-		}
-
-		@Override
-		boolean compare_Byte(byte byteval) {
-			byte byteval2;
-			try {
-				byteval2 = Byte.parseByte(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Byte.compare(byteval, byteval2));
 		}
 
 		@Override
@@ -760,7 +741,7 @@ abstract class FilterImpl implements Filter {
 		boolean compare_Double(double doubleval) {
 			double doubleval2;
 			try {
-				doubleval2 = Double.parseDouble(value.trim());
+				doubleval2 = convert(Double.class, Double::valueOf).doubleValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -771,7 +752,7 @@ abstract class FilterImpl implements Filter {
 		boolean compare_Float(float floatval) {
 			float floatval2;
 			try {
-				floatval2 = Float.parseFloat(value.trim());
+				floatval2 = convert(Float.class, Float::valueOf).floatValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -779,36 +760,14 @@ abstract class FilterImpl implements Filter {
 		}
 
 		@Override
-		boolean compare_Integer(int intval) {
-			int intval2;
-			try {
-				intval2 = Integer.parseInt(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Integer.compare(intval, intval2));
-		}
-
-		@Override
 		boolean compare_Long(long longval) {
 			long longval2;
 			try {
-				longval2 = Long.parseLong(value.trim());
+				longval2 = convert(Long.class, Long::valueOf).longValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
 			return comparison(Long.compare(longval, longval2));
-		}
-
-		@Override
-		boolean compare_Short(short shortval) {
-			short shortval2;
-			try {
-				shortval2 = Short.parseShort(value.trim());
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-			return comparison(Short.compare(shortval, shortval2));
 		}
 
 		@Override
@@ -1320,14 +1279,46 @@ abstract class FilterImpl implements Filter {
 	}
 
 	/**
+	 * This Map is used for key lookup during filter evaluation. This Map
+	 * implementation only supports the get operation using a String key as no
+	 * other operations are used by the Filter implementation.
+	 */
+	private static class DictionaryMap extends AbstractMap<String,Object>
+			implements Map<String,Object> {
+		static Map<String, ? > asMap(Dictionary<String, ? > dictionary) {
+			if (dictionary instanceof Map) {
+				@SuppressWarnings("unchecked")
+				Map<String, ? > coerced = (Map<String, ? >) dictionary;
+				return coerced;
+			}
+			return new DictionaryMap(dictionary);
+		}
+
+		private final Dictionary<String, ? > dictionary;
+
+		DictionaryMap(Dictionary<String, ? > dictionary) {
+			this.dictionary = requireNonNull(dictionary);
+		}
+
+		@Override
+		public Object get(Object key) {
+			return dictionary.get(key);
+		}
+
+		@Override
+		public Set<Entry<String,Object>> entrySet() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	/**
 	 * This Map is used for case-insensitive key lookup during filter
 	 * evaluation. This Map implementation only supports the get operation using
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
 	private static final class CaseInsensitiveMap
-			extends AbstractMap<String,Object> implements Map<String,Object> {
-		private final Dictionary<String, ? >	dictionary;
+			extends DictionaryMap implements Map<String,Object> {
 		private final String[]					keys;
 
 		/**
@@ -1338,7 +1329,7 @@ abstract class FilterImpl implements Filter {
 		 *             variants of the same key name.
 		 */
 		CaseInsensitiveMap(Dictionary<String, ? > dictionary) {
-			this.dictionary = requireNonNull(dictionary);
+			super(dictionary);
 			List<String> keyList = new ArrayList<>(dictionary.size());
 			for (Enumeration< ? > e = dictionary.keys(); e.hasMoreElements();) {
 				Object k = e.nextElement();
@@ -1360,15 +1351,10 @@ abstract class FilterImpl implements Filter {
 			String k = (String) o;
 			for (String key : keys) {
 				if (key.equalsIgnoreCase(k)) {
-					return dictionary.get(key);
+					return super.get(key);
 				}
 			}
 			return null;
-		}
-
-		@Override
-		public Set<Entry<String,Object>> entrySet() {
-			throw new UnsupportedOperationException();
 		}
 	}
 
