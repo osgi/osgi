@@ -33,6 +33,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * RFC 1960-based Filter. Filter objects can be created by calling the
@@ -682,10 +683,21 @@ abstract class FilterImpl implements Filter {
 
 	static class Equal extends Item {
 		final String value;
+		private Object	cached;
 
 		Equal(String attr, String value) {
 			super(attr);
 			this.value = value;
+		}
+		
+		private <T> T convert(Class<T> type, Function<String, ? extends T> converter) {
+			@SuppressWarnings("unchecked")
+			T converted = (T) cached;
+			if ((converted != null) && type.isInstance(converted)) {
+				return converted;
+			}
+			cached = converted = converter.apply(value.trim());
+			return converted;
 		}
 
 		boolean comparison(int compare) {
@@ -700,7 +712,7 @@ abstract class FilterImpl implements Filter {
 		@Override
 		boolean compare_Version(Version value1) {
 			try {
-				Version version2 = Version.valueOf(value);
+				Version version2 = convert(Version.class, Version::valueOf);
 				return comparison(value1.compareTo(version2));
 			} catch (Exception e) {
 				// if the valueOf or compareTo method throws an exception
@@ -710,7 +722,7 @@ abstract class FilterImpl implements Filter {
 
 		@Override
 		boolean compare_Boolean(boolean boolval) {
-			boolean boolval2 = Boolean.parseBoolean(value.trim());
+			boolean boolval2 = convert(Boolean.class, Boolean::valueOf).booleanValue();
 			return comparison(Boolean.compare(boolval, boolval2));
 		}
 
@@ -729,7 +741,7 @@ abstract class FilterImpl implements Filter {
 		boolean compare_Double(double doubleval) {
 			double doubleval2;
 			try {
-				doubleval2 = Double.parseDouble(value.trim());
+				doubleval2 = convert(Double.class, Double::valueOf).doubleValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -740,7 +752,7 @@ abstract class FilterImpl implements Filter {
 		boolean compare_Float(float floatval) {
 			float floatval2;
 			try {
-				floatval2 = Float.parseFloat(value.trim());
+				floatval2 = convert(Float.class, Float::valueOf).floatValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
@@ -751,7 +763,7 @@ abstract class FilterImpl implements Filter {
 		boolean compare_Long(long longval) {
 			long longval2;
 			try {
-				longval2 = Long.parseLong(value.trim());
+				longval2 = convert(Long.class, Long::valueOf).longValue();
 			} catch (IllegalArgumentException e) {
 				return false;
 			}
