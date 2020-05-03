@@ -379,7 +379,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				"# you may not use this file except in compliance with the License.\n");
 		sb.append("# You may obtain a copy of the License at\n");
 		sb.append("#\n");
-		sb.append("#      http://www.apache.org/licenses/LICENSE-2.0\n");
+		sb.append("#      https://www.apache.org/licenses/LICENSE-2.0\n");
 		sb.append("#\n");
 		sb.append(
 				"# Unless required by applicable law or agreed to in writing, software\n");
