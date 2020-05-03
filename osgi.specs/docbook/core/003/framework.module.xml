@@ -5722,11 +5722,11 @@ URL(String protocol, String host, String file)</programlisting>
 
       <bibliomixed xml:id="i3215677"><title>OSGi Header
       Registry</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/bundle-headers-reference/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/bundle-headers.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="framework.module.namespace-registry"><title>OSGi
       Namespace Registry</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/capability-namespaces-reference/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/capability-namespaces.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
       Specification (Second Edition)</title><biblioid class="uri"><link
@@ -5738,19 +5738,19 @@ URL(String protocol, String host, String file)</programlisting>
 
       <bibliomixed><title>OSGi Semantic Versioning</title><biblioid
       class="uri"><link
-      xlink:href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/whitepaper/semantic-versioning/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3242547"><title>Specification
       References</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246261"><title>Google Android</title><biblioid
       class="uri"><link
-      xlink:href="http://developer.android.com/index.html"/></biblioid></bibliomixed>
+      xlink:href="http://developer.android.com/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246276"><title>Google App Engine</title><biblioid
       class="uri"><link
-      xlink:href="https://cloud.google.com/appengine/"/></biblioid></bibliomixed>
+      xlink:href="https://cloud.google.com/appengine/docs/standard/java"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3246284"><title>Google Web
       Toolkit</title><biblioid class="uri"><link

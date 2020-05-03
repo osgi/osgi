@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,7 @@ import java.lang.annotation.Target;
  * provider type from an imported package, then the bundle's import range for
  * that package must require the package's exact major and minor version.
  * 
- * @see <a href=
- *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ * @see <a href= "https://docs.osgi.org/whitepaper/semantic-versioning/" >
  *      Semantic Versioning</a>
  * @author $Id$
  */

@@ -2085,12 +2085,12 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <bibliomixed
       xml:id="service.jaxrs-portable.java.contracts.ref"><title>Portable Java
       Contract Definitions</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jaxrs-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.jaxrs-iana.media.types"><title>IANA Media
       Type Registrations</title><biblioid class="uri"><link

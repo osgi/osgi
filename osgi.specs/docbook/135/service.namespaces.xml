@@ -760,12 +760,12 @@ DynamicImport-Package:
     <bibliolist>
       <bibliomixed xml:id="i1772882"><title>Specification
       References</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/developer/specifications/reference/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.namespaces-portable.java.contracts.ref"><title>Portable
       Java Contract Definitions</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1777721"><title>Resources API
       Specification</title>OSGi Core, Chapter 6 Resource API

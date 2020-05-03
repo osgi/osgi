@@ -1196,7 +1196,7 @@ public class DivTests extends DefaultTestBundleControl {
 		sb.append("Current osname=\"").append(os).append("\" processor=\"")
 				.append(proc);
 		sb
-				.append("\". For allowed constants see http://www.osgi.org/Specifications/Reference");
+				.append("\". For allowed constants see https://docs.osgi.org/reference/");
 		return sb.toString();
 	}
 

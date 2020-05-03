@@ -640,9 +640,6 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
       <programlisting>&lt;metatype:MetaData 
     xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.4.0"&gt;</programlisting>
 
-      <para>The file can be found in the osgi.jar file that can be downloaded
-      from the www.osgi.org web site.</para>
-
       <figure>
         <title>XML Schema Instance Structure (Type name = Element
         name)</title>

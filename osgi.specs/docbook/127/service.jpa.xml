@@ -1604,7 +1604,7 @@ Require-Capability: osgi.contract;
       <bibliomixed
       xml:id="service.jpa-portable.java.contracts.ref"><title>Portable Java
       Contract Definitions</title><biblioid class="uri"><link
-      xlink:href="http://www.osgi.org/Specifications/ReferenceContract"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 
