@@ -1618,12 +1618,12 @@ client.installBundle({
 
       <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
       Schemas</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/xmlns/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

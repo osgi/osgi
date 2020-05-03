@@ -52,8 +52,7 @@ import java.lang.annotation.Target;
  * that package must require the exact major version and a minor version greater
  * than or equal to the package's version.
  * 
- * @see <a href=
- *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ * @see <a href= "https://docs.osgi.org/whitepaper/semantic-versioning/" >
  *      Semantic Versioning</a>
  * @author $Id$
  */

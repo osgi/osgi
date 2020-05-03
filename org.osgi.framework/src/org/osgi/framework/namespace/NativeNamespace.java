@@ -44,7 +44,7 @@ public final class NativeNamespace extends Namespace {
 	 * The capability attribute contains alias values of the
 	 * {@link Constants#FRAMEWORK_OS_NAME org.osgi.framework.os.name} launching
 	 * property value according to the
-	 * <a href="https://www.osgi.org/developer/specifications/reference/">OSGi
+	 * <a href="https://docs.osgi.org/reference/">OSGi
 	 * Specification References</a>. The value of this attribute must be of type
 	 * {@code List<String>}.
 	 */
@@ -62,7 +62,7 @@ public final class NativeNamespace extends Namespace {
 	 * The capability attribute contains alias values of the
 	 * {@link Constants#FRAMEWORK_PROCESSOR org.osgi.framework.processor}
 	 * launching property value according to the
-	 * <a href="https://www.osgi.org/developer/specifications/reference/">OSGi
+	 * <a href="https://docs.osgi.org/reference/">OSGi
 	 * Specification References</a>. The value of this attribute must be of type
 	 * {@code List<String>}.
 	 */

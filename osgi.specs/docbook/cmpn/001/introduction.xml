@@ -70,7 +70,7 @@
       specification can be downloaded from:</para>
 
       <programlisting><link
-          xlink:href="https://www.osgi.org/developer/specifications/"/></programlisting>
+          xlink:href="https://docs.osgi.org/specification/"/></programlisting>
     </section>
 
     <section>
@@ -739,7 +739,7 @@
     <bibliolist>
       <bibliomixed xml:id="i311124"><title>OSGi
       Specifications</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/specification/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 

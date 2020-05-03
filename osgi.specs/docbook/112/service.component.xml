@@ -6179,7 +6179,7 @@ public class MyComponent implements AcmeService {}</programlisting>
 
       <bibliomixed xml:id="i1655737"><title>OSGi XML Schemas</title><biblioid
       class="uri"><link
-      xlink:href="https://www.osgi.org/developer/specifications/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/xmlns/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.component-jvms.ref"><title>The Java Virtual
       Machine Specification, Java SE 8 Edition</title><biblioid

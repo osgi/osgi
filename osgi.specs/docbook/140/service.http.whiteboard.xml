@@ -2674,7 +2674,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <bibliomixed
       xml:id="service.http.whiteboard-portable.java.contracts.ref"><title>Portable
       Java Contract Definitions</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21220308"><title>RFC 2617:
       HTTP Authentication: Basic and Digest Access
@@ -2684,7 +2684,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <bibliomixed
       xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title><biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/wp-content/uploads/whiteboard1.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-service.hook.ref"><title>Core Service

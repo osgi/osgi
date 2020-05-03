@@ -19,8 +19,7 @@
  * <p>
  * This package is not used at runtime.
  *
- * @see <a href=
- *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ * @see <a href= "https://docs.osgi.org/whitepaper/semantic-versioning/" >
  *      Semantic Versioning</a>
  * @author $Id$
  */

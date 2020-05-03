@@ -3928,7 +3928,7 @@ compName ::= &lt; component name &gt;</programlisting>
       <bibliomixed
       xml:id="service.cdi-bib.portable.java.contract"><title>Portable Java
       Contract</title> <biblioid class="uri"><link
-      xlink:href="https://www.osgi.org/portable-java-contract-definitions/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.cdi-bib.jls.ref"><title>The Java Language
       Specification, Java SE 8 Edition</title> <biblioid class="uri"><link

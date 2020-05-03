@@ -54,8 +54,7 @@ import java.lang.annotation.Target;
  * provider type from an imported package, then the bundle's import range for
  * that package must require the package's exact major and minor version.
  * 
- * @see <a href=
- *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ * @see <a href= "https://docs.osgi.org/whitepaper/semantic-versioning/" >
  *      Semantic Versioning</a>
  * @author $Id$
  */
