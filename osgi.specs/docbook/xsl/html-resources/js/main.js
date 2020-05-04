@@ -52,3 +52,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	hljs.initHighlightingOnLoad();
 });
+
+window.addEventListener('popstate', function(event) {
+	var id = "scrollable";
+	if (window.location.hash) {
+		id = window.location.hash.substring(1);
+	}
+	var el = document.getElementById(id);
+	if (el) {
+		el.scrollIntoView();
+	}
+}, false);
