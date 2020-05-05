@@ -782,6 +782,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see
           </row>
 
           <row>
+            <entry><xref linkend="framework.connect"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.connect"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework.connect-version"
+            linkend="framework.connect"/></code></entry>
+          </row>
+
+          <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 
@@ -863,13 +874,13 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="org.osgi.annotation.bundle"
+        <para>Added <xref linkend="service.condition"
         xrefstyle="template:%t"/>.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="service.resolver" xrefstyle="template:%t"/> moved
-        to Core from OSGi Compendium, Chapter 136.</para>
+        <para>Added <xref linkend="framework.connect"
+        xrefstyle="template:%t"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
