@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="1" revision="$Id$"
-         version="5.0" xmlns="http://docbook.org/ns/docbook"
+         version="5.0" xml:id="framework.introduction"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -262,12 +263,12 @@ alpha           ::= [a..zA..Z]
 alphanum        ::= alpha | digit
 token           ::= ( alphanum | '_' | '-' )+
 number          ::= digit+
-jletter         ::= &lt;see <xref linkend="i487605"/>
+jletter         ::= &lt;see <xref linkend="framework.introduction-jls"/>
                      for JavaLetter&gt;
-jletterordigit  ::= &lt;see <xref linkend="i487605"/>
+jletterordigit  ::= &lt;see <xref linkend="framework.introduction-jls"/>
                      for JavaLetterOrDigit&gt;
 
-qname           ::= &lt;see <xref linkend="i487605"/>
+qname           ::= &lt;see <xref linkend="framework.introduction-jls"/>
                      for fully qualified class names&gt;
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | '_' | '-' | '.' )+
@@ -282,8 +283,8 @@ symbolic-name   ::= token ( '.' token )*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string
-special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
-                                         for whitespace&gt;]</programlisting>
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see
+                     <xref linkend="framework.introduction-jls"/> for whitespace&gt;]</programlisting>
 
       <para>Whitespaces between terminals are ignored unless specifically
       noted. Any value that contains a space, a comma, colon, semi-colon,
@@ -561,6 +562,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
     <para>This document specifies OSGi Core <xref endterm="core.book-release"
     linkend="core.book"/>. This specification is backward compatible to all
     prior releases.</para>
+
+    <para>This specification is based upon the <xref
+    linkend="framework.introduction-jls"/>.</para>
 
     <para>All Security, Module, Life Cycle and Service Layers are part of the
     Framework Specification</para>
@@ -844,9 +848,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="i487605"><title>Java Language
-      Specification</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="framework.introduction-jls"><title>Java Language
+      Specification: Java SE 8 Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 
@@ -855,10 +859,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
     <itemizedlist>
       <listitem>
-        <para>Added <xref linkend="framework.numbered.lists"
-        xrefstyle="template:%t"/> to specify the
-        <emphasis>happens-before</emphasis> relationship between items in
-        numbered lists.</para>
+        <para>The base Java language level version is now Java 8.</para>
       </listitem>
 
       <listitem>
