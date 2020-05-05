@@ -34,6 +34,7 @@ Export-Package						= \
 	lifecycle.tb10.jar, \
 	permissions.admin1.jar, \
 	permissions.admin2.jar, \
+	permissions.condition.jar, \
 	permissions.exporter1.jar, \
 	permissions.exporter2.jar, \
 	permissions.get.jar, \
@@ -66,6 +67,7 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
+	org.osgi.service.condition;				version=project	, \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
 	${junit4}

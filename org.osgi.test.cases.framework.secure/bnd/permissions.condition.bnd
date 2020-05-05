@@ -1,0 +1,10 @@
+Bundle-SymbolicName: ${p}.permissions.condition
+Bundle-Name: ${p}.permissions.condition
+Bundle-Description: Test that condition service permission get is implied
+Bundle-Activator: ${p}.permissions.condition.GetConditionActivator
+Bundle-Category: osgi,test
+
+-privatepackage	= \
+	${p}.permissions.condition
+
+-includeresource: {OSGI-INF/permissions.perm=perms/permissions.condition.perm}
