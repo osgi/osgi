@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.framework.launch;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -129,12 +130,6 @@ public interface Framework extends Bundle {
 	 *         <li>{@link FrameworkEvent#STOPPED_UPDATE STOPPED_UPDATE} - This
 	 *         Framework has been updated which has shutdown and will now
 	 *         restart.</li>
-	 * 
-	 *         <li> {@link FrameworkEvent#STOPPED_BOOTCLASSPATH_MODIFIED
-	 *         STOPPED_BOOTCLASSPATH_MODIFIED} - This Framework has been stopped
-	 *         and a bootclasspath extension bundle has been installed or
-	 *         updated. The VM must be restarted in order for the changed boot
-	 *         class path to take effect. </li>
 	 * 
 	 *         <li>{@link FrameworkEvent#ERROR ERROR} - The Framework
 	 *         encountered an error while shutting down or an error has occurred

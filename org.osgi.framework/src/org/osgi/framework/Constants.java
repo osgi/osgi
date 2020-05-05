@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1025,7 +1025,6 @@ public interface Constants {
 	/**
 	 * Framework environment property identifying whether the Framework supports
 	 * bootclasspath extension bundles.
-	 * 
 	 * <p>
 	 * If the value of this property is {@code true}, then the Framework
 	 * supports bootclasspath extension bundles. The default value is
@@ -1035,6 +1034,7 @@ public interface Constants {
 	 * {@code BundleContext.getProperty} method.
 	 * 
 	 * @since 1.3
+	 * @deprecated As of 1.10.
 	 */
 	String	SUPPORTS_BOOTCLASSPATH_EXTENSION		= "org.osgi.supports.bootclasspath.extension";
 

@@ -417,7 +417,7 @@
     </table>
   </section>
 
-  <section xml:id="i1773241">
+  <section xml:id="framework.namespaces.osgi.wiring.package">
     <title>osgi.wiring.package Namespace</title>
 
     <para>The <code>osgi.wiring.package</code> namespace reflects the
@@ -612,7 +612,7 @@ Bundle B:
     Require-Capability and Provide-Capability headers.</para>
   </section>
 
-  <section xml:id="i1773242">
+  <section xml:id="framework.namespaces.osgi.wiring.bundle">
     <title>osgi.wiring.bundle Namespace</title>
 
     <para>The <code>osgi.wiring.bundle</code> namespace reflects the
@@ -773,7 +773,7 @@ Bundle B:
     Require-Capability and Provide-Capability headers.</para>
   </section>
 
-  <section xml:id="i1773243">
+  <section xml:id="framework.namespaces.osgi.wiring.host">
     <title>osgi.wiring.host Namespace</title>
 
     <para>The <code>osgi.wiring.host</code> namespace reflects the information
@@ -895,11 +895,10 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>'framework'
-            |</code></para><para><code>'bootclasspath'</code></para></entry>
+            <entry><para><code>'framework'</code></para></entry>
 
             <entry><para>Indicates if the requiring fragment bundle is a
-            framework or boot class path extension. See <xref
+            framework extension. See <xref
             linkend="framework.module.fragmenthost"/>.</para></entry>
           </row>
         </tbody>
@@ -935,7 +934,7 @@ Bundle B:
     Require-Capability and Provide-Capability headers.</para>
   </section>
 
-  <section xml:id="i1776750">
+  <section xml:id="framework.namespaces.osgi.identity">
     <title>osgi.identity Namespace</title>
 
     <para>The <code>osgi.identity</code> namespace has a capability that can
@@ -999,8 +998,8 @@ Bundle B:
             <entry><code>symbolic-name</code></entry>
 
             <entry><para>The identity of the resource, for an OSGi bundle this
-            is the bundle symbolic name as defined in the
-            Bundle-SymbolicName header.</para></entry>
+            is the bundle symbolic name as defined in the Bundle-SymbolicName
+            header.</para></entry>
           </row>
 
           <row>
@@ -1019,7 +1018,7 @@ Bundle B:
 
             <entry><para>The type of the resource</para></entry>
           </row>
- 
+
           <row>
             <entry><code>version</code></entry>
 
@@ -1031,9 +1030,8 @@ Bundle B:
 
             <entry><code>version</code></entry>
 
-            <entry><para>The version of the resource. For an
-            OSGi bundle this is as defined in the
-            Bundle-Version header.</para></entry>
+            <entry><para>The version of the resource. For an OSGi bundle this
+            is as defined in the Bundle-Version header.</para></entry>
           </row>
 
           <row>
@@ -1048,9 +1046,9 @@ Bundle B:
             <entry><code>'true' |'false'</code></entry>
 
             <entry><para>If this resource is a singleton. The default value is
-            <code>false</code>. For an OSGi bundle this
-            is the singleton directive as defined in the
-            Bundle-SymbolicName header.</para></entry>
+            <code>false</code>. For an OSGi bundle this is the singleton
+            directive as defined in the Bundle-SymbolicName
+            header.</para></entry>
           </row>
 
           <row>
@@ -1125,9 +1123,9 @@ Bundle B:
 
             <entry><code>extended ( ',' extended )*</code></entry>
 
-            <entry><para>A list of tag names used to identify an aspect of this
-            resource that is not otherwise expressed by the capabilities of
-            this resource.</para></entry>
+            <entry><para>A list of tag names used to identify an aspect of
+            this resource that is not otherwise expressed by the capabilities
+            of this resource.</para></entry>
           </row>
 
           <row>
@@ -1141,9 +1139,9 @@ Bundle B:
 
             <entry><code>*</code></entry>
 
-            <entry><para>Any other attributes for the resource.  For an OSGi bundle
-            this is includes the attributes defined in the Bundle-SymbolicName
-            header.</para></entry>
+            <entry><para>Any other attributes for the resource. For an OSGi
+            bundle this is includes the attributes defined in the
+            Bundle-SymbolicName header.</para></entry>
           </row>
 
           <row>
@@ -1447,15 +1445,20 @@ Bundle B:
 
     <itemizedlist>
       <listitem>
-        <para>Added <code>osgi.ee</code> capability names for Java SE Embedded
-        compact profiles in <xref
-        linkend="framework.namespaces.osgi.ee"/>.</para>
+        <para>Added '*' (any) attribute description to <xref
+        linkend="framework.namespaces-wiring.bundle.namespace"/>, <xref
+        linkend="framework.namespaces-wiring.host.namespace"/>, and <xref
+        linkend="framework.namespaces-identity.namespace"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <code>osgi.ee</code> description to indicate that
-        bundles should import the java.* packages they require to ensure the
-        runtime provides them.</para>
+        <para>Removed deprecated <code>bootclasspath</code> extension type in
+        <xref linkend="framework.namespaces.osgi.wiring.host"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added new <code>tags</code> attribute to <xref
+        linkend="framework.namespaces-identity.namespace"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

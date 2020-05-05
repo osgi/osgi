@@ -703,8 +703,6 @@ public class DivTests extends DefaultTestBundleControl {
 		assertConstant(Integer.valueOf(0x00000040), "STOPPED", FrameworkEvent.class);
 		assertConstant(Integer.valueOf(0x00000080), "STOPPED_UPDATE",
 				FrameworkEvent.class);
-		assertConstant(Integer.valueOf(0x00000100),
-				"STOPPED_BOOTCLASSPATH_MODIFIED", FrameworkEvent.class);
 		assertConstant(Integer.valueOf(0x00000200), "WAIT_TIMEDOUT",
 				FrameworkEvent.class);
 	}
