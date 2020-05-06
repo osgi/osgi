@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="157"
+         revision="$Id$"
+         version="5.0" xml:id="service.typedevent"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Typed Event Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.typedevent-version"
+    linkend="org.osgi.service.typedevent"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Eventing systems are a common part of software programs, used to 
+    distribute information between parts of an application. To address this
+    the <xref linkend="service.event"/> was created as one of the earliest 
+    specifications defined by the OSGi Compendium. The design and usage of 
+    the Event Admin specification, however, makes certain trade-offs that do 
+    not fit well with modern application design:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Type Safety</emphasis> - Events are sent and received 
+        as opaque maps of key-value pairs. The “schema” of an event is therefore 
+        ill-defined and relies on “magic strings” being used correctly to locate 
+        data, and on careful handling of data values with unknown types.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Unhandled Events</emphasis> - Events that are sent but have 
+        no associated Event Handlers are silently discarded. There is no way to know 
+        that an event was not handled, short of disrupting the system by registering
+        a handler for <emphasis>all</emphasis> events.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Observability</emphasis> - There is no simple, non-invasive 
+        way to monitor the flow of events through the system. The ability to monitor
+        and profile applications using Event Admin is therefore relatively limited.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Adding these features to the original <xref linkend="service.event"/> 
+    specification is not feasible without breaking backward compatibility for clients.
+    Therefore this specification exists to provide an alternative eventing model which
+    supports these different requirements by making different design trade-offs.</para>
+
+    <section>
+      <title>Essentials</title>
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Event</emphasis> - A set of data created by an Event Source, 
+          encapsulated as an object and delivered to one or more Event Handers</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Event Schema</emphasis> - A definition of the expected data
+          layout within an event, including the names of data fields and the types of 
+          data that they contain.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Topic</emphasis> - A String identifying the 
+          <emphasis>topic</emphasis> of an Event, effectively defining the Event Schema 
+          and the purpose of the event.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Source</emphasis> - A software component which creates 
+          and sends events.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Consumer</emphasis> - A software component which receives
+          events.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>DTO</emphasis> - A Data Transfer Object as per the OSGi DTO 
+          Specification</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Bus</emphasis> - A software component used by an Event 
+          Source and responsible for delivering Events to Event Handers.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.100in"
+                       contentwidth="7.000in"
+                       fileref="typed-event-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Typed Event Bus</emphasis> - A service registered by the Typed Event implementation
+          that can be passed an Event object and that will distribute that event to any suitable
+          Event Handler Services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Handler</emphasis> - A service registered by an Event Consumer suitable
+          for receiving Event data from the Typed Event Bus.</para>
+        </listitem>
+
+      </itemizedlist>
+    </section>
+  </section>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.annotations.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.monitor.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.propertytypes.xml"/>
+  
+</chapter>
