@@ -4875,12 +4875,7 @@ bundle-description  ::= symbolic-name
           <itemizedlist>
             <listitem>
               <para><code>framework</code> - The fragment bundle is a
-              Framework extension bundle (default).</para>
-            </listitem>
-
-            <listitem>
-              <para><code>bootclasspath</code> - The fragment bundle is a boot
-              class path extension bundle.</para>
+              Framework extension bundle.</para>
             </listitem>
           </itemizedlist>
 
@@ -5789,6 +5784,12 @@ URL(String protocol, String host, String file)</programlisting>
       <listitem>
         <para>Added new FrameworkUtil.getBundle(ClassLoader) method. See <xref
         linkend="framework.module-finding-a-bundle"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Removed reference to deprecated <code>bootclasspath</code>
+        extension type in <xref
+        linkend="framework.module.fragmenthost"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

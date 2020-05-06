@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,6 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * fragment. The default value is {@link #EXTENSION_FRAMEWORK framework}.
 	 * 
 	 * @see #EXTENSION_FRAMEWORK
-	 * @see #EXTENSION_BOOTCLASSPATH
 	 */
 	public final static String	REQUIREMENT_EXTENSION_DIRECTIVE				= "extension";
 
@@ -153,6 +152,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * loaded by the boot class loader.
 	 * 
 	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
+	 * @deprecated As of 1.2.
 	 */
 	public final static String	EXTENSION_BOOTCLASSPATH						= "bootclasspath";
 

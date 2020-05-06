@@ -1200,14 +1200,6 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;bootclasspath.extension</code></para></entry>
-
-              <entry><para>Must be set to <code>true</code> or
-              <code>false</code>, see <xref
-              linkend="framework.module.requiringbundles"/>.</para></entry>
-            </row>
-
-            <row>
               <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;framework.fragment</code></para></entry>
 
               <entry><para>Support for fragment bundles is mandatory, must
@@ -1256,8 +1248,6 @@
           <para><code>update</code> - Stop the framework. This returns the
           Framework event <xref
           linkend="org.osgi.framework.FrameworkEvent.STOPPED_UPDATE"
-          xrefstyle="hyperlink"/> or <xref
-          linkend="org.osgi.framework.FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED"
           xrefstyle="hyperlink"/> to the <code>waitForStop</code> method and
           then restarts the framework to its previous state. The launcher
           should then take the appropriate action and then call the
@@ -1539,15 +1529,6 @@
           been updated. The framework will begin to restart. The framework
           will return to its state before it was updated, either
           <code>ACTIVE</code> or <code>STARTING</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para><xref
-          linkend="org.osgi.framework.FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED"
-          xrefstyle="hyperlink"/> - This framework object has been stopped
-          because a boot class path extension bundle has been installed or
-          updated. The VM must be restarted in order for the changed boot
-          class path to take affect.</para>
         </listitem>
 
         <listitem>
@@ -3506,14 +3487,6 @@ D: Export-Package: s</programlisting>
 
             <listitem>
               <para><xref
-              linkend="org.osgi.framework.FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED"
-              xrefstyle="hyperlink"/> - Sent by the Framework because of a
-              stop operation on the system bundle and a boot class path
-              extension bundle has been installed or updated.</para>
-            </listitem>
-
-            <listitem>
-              <para><xref
               linkend="org.osgi.framework.FrameworkEvent.STOPPED_UPDATE"
               xrefstyle="hyperlink"/> - Sent by the Framework because of an
               update operation on the system bundle. The Framework will be
@@ -4015,14 +3988,13 @@ D: Export-Package: s</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Launching property <code>org.osgi.framework.storage</code> must
-        be set when default value used.</para>
+        <para>Deprecated launching property
+        <code>org.osgi.supports.bootclasspath.extension</code> removed.</para>
       </listitem>
 
       <listitem>
-        <para>Added support for multi-release JARs. See <xref
-        linkend="framework.lifecycle-lastmodified"/> and <xref
-        linkend="framework.lifecycle-getheaders"/>.</para>
+        <para>References to deprecated FrameworkEvent type
+        <code>STOPPED_BOOTCLASSPATH_MODIFIED</code> removed.</para>
       </listitem>
     </itemizedlist>
   </section>
