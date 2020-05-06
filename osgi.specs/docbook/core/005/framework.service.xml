@@ -1879,6 +1879,13 @@
         xrefstyle="hyperlink"/> to facilitate working with Dictionaries and
         services.</para>
       </listitem>
+      <listitem>
+        <para>Updated <xref linkend="org.osgi.framework.ServiceReference"
+        xrefstyle="hyperlink"/>.<xref
+        linkend="org.osgi.framework.ServiceReference.isAssignableTo-Bundle-String-"
+        xrefstyle="hyperlink"/> to clarify the behavior when no package source
+        can be found.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>

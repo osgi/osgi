@@ -133,14 +133,24 @@ public interface ServiceReference<S>
 	 * <p>
 	 * This method performs the following checks:
 	 * <ol>
+	 * <li>If the specified bundle is equal to the bundle that registered the
+	 * service referenced by this {@code ServiceReference} (registrant bundle)
+	 * return {@code true}.</li>
 	 * <li>Get the package name from the specified class name.</li>
-	 * <li>For the bundle that registered the service referenced by this
-	 * {@code ServiceReference} (registrant bundle); find the source for the
-	 * package. If no source is found then return {@code true} if the registrant
-	 * bundle is equal to the specified bundle; otherwise return {@code false}.</li>
-	 * <li>If the package source of the registrant bundle is equal to the
-	 * package source of the specified bundle then return {@code true};
-	 * otherwise return {@code false}.</li>
+	 * <li>For the specified bundle; find the source for the package. If no
+	 * source is found then return {@code true} (use of reflection is assumed by
+	 * the specified bundle).</li>
+	 * <li>For the registrant bundle; find the source for the package. If the
+	 * package source is found then return {@code true} if the package source
+	 * equals the package source of the specified bundle; otherwise return
+	 * {@code false}.</li>
+	 * <li>If no package source is found for the registrant bundle then
+	 * determine the package source based on the service object. If the service
+	 * object is a {@code ServiceFactory} and the factory implementation is not
+	 * from the registrant bundle return {@code true}; otherwise attempt to find
+	 * the package source based on the service object class. If the package
+	 * source is found and is equal to package source of the specified bundle
+	 * return {@code true}; otherwise return {@code false}.</li>
 	 * </ol>
 	 * 
 	 * @param bundle The {@code Bundle} object to check.
@@ -150,8 +160,8 @@ public interface ServiceReference<S>
 	 *         bundle use the same source for the package of the specified class
 	 *         name. Otherwise {@code false} is returned.
 	 * @throws IllegalArgumentException If the specified {@code Bundle} was not
-	 *         created by the same framework instance as this
-	 *         {@code ServiceReference}.
+	 *             created by the same framework instance as this
+	 *             {@code ServiceReference}.
 	 * @since 1.3
 	 */
 	public boolean isAssignableTo(Bundle bundle, String className);
