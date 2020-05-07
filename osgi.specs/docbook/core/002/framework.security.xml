@@ -1061,17 +1061,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Updated references to current URLs.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed MD5 and added SHA-256 digest algorithms.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added Package Permission <code>IMPORT</code> for
-        <code>java.*</code> to the implied permissions. See <xref
-        linkend="framework.security.impliedpermissions"/>.</para>
+        <para><remark>Are there any changes for Security?</remark></para>
       </listitem>
     </itemizedlist>
   </section>

@@ -3931,9 +3931,9 @@ D: Export-Package: s</programlisting>
       1997<?line-break ?><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2068.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i1199923"><title>Java Language
-      Specification</title><biblioid class="uri"><link
-      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="i1199923"><title>Java Language Specification: Java
+      SE 8 Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1199796"><title>A String Representation of LDAP
       Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid
@@ -3988,7 +3988,7 @@ D: Export-Package: s</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Deprecated launching property
+        <para>References to deprecated launching property
         <code>org.osgi.supports.bootclasspath.extension</code> removed.</para>
       </listitem>
 

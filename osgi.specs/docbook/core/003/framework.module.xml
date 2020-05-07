@@ -193,10 +193,11 @@
         <programlisting>Bundle-Developers ::= developer ( ',' developer ) *
 developer         ::= identifier ( ';' developer-attr ) *
 identifier        ::= argument
-developer-attr    ::= email | name | organization | 
+developer-attr    ::= email | name | url | organization | 
                         organization-url | roles | timezone
 email             ::= 'email' '=' &lt;email&gt;
 name              ::= 'name' '=' argument
+url               ::= 'url' '=' &lt;url&gt;
 organization      ::= 'organization' '=' argument
 organization-url  ::= 'organizationUrl' '=' &lt;url&gt;
 roles             ::= 'roles' '=' argument
@@ -216,12 +217,17 @@ timezone          ::= 'timezone' '=' argument</programlisting>
           </listitem>
 
           <listitem>
+            <para><code>url</code> - (optional) The URL of the
+            developer.</para>
+          </listitem>
+
+          <listitem>
             <para><code>organization</code> - (optional) The name of the
             organization of the developer.</para>
           </listitem>
 
           <listitem>
-            <para><code>organization-url</code> - (optional) The URL for the
+            <para><code>organization-url</code> - (optional) The URL of the
             organization of the developer.</para>
           </listitem>
 
@@ -3393,7 +3399,7 @@ boot-description    ::= package-name        // See <xref
       to the parent class loader first, which is the same as the Release 3
       behavior.</para>
 
-      <para>For example, when running on an Oracle JVM, it may be necessary to
+      <para>For example, when running on an OpenJDK, it may be necessary to
       specify a value like:</para>
 
       <programlisting>org.osgi.framework.bootdelegation=sun.*,com.sun.*</programlisting>
@@ -5665,9 +5671,9 @@ URL(String protocol, String host, String file)</programlisting>
       1997<?line-break ?><biblioid class="uri"><link
       xlink:href="http://www.ietf.org/rfc/rfc2068.txt"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3024191"><title>Java Language
-      Specification</title><biblioid class="uri"><link
-      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="i3024191"><title>Java Language Specification: Java
+      SE 8 Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
       Search Filters</title>RFC 1960, UMich, 1996<?line-break ?><biblioid
@@ -5782,7 +5788,9 @@ URL(String protocol, String host, String file)</programlisting>
       </listitem>
 
       <listitem>
-        <para>Added new FrameworkUtil.getBundle(ClassLoader) method. See <xref
+        <para>Added new <xref
+        linkend="org.osgi.framework.FrameworkUtil.getBundle-ClassLoader-"/>
+        method. See <xref
         linkend="framework.module-finding-a-bundle"/>.</para>
       </listitem>
 

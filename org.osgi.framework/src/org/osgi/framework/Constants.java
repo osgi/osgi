@@ -1833,8 +1833,8 @@ public interface Constants {
 	 * Service property identifying the monotonically increasing change count of
 	 * a service.
 	 * <p>
-	 * A service may optional provide this property to indicate there has been a
-	 * change in some data provided by the service. The change count must be
+	 * A service may provide this property to indicate there has been a change
+	 * in some data provided by the service. The change count must be
 	 * incremented with a positive value every time the data provided by the
 	 * service is changed. The service announces the modified change count by
 	 * updating its service properties with the new value for this service
