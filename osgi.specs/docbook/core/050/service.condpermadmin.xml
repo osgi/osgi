@@ -2230,16 +2230,4 @@ AllPermission</programlisting>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condpermadmin.xml"/>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified the behavior of relative path names for
-        <code>FilePermission</code>. See <xref
-        linkend="service.condpermadmin-file.permission"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

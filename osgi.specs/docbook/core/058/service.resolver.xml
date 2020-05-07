@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="58" revision="$Id$" version="5.0" xml:id="service.resolver"
+<chapter label="58" revision="$Id$"
+         version="5.0" xml:id="service.resolver"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1248,8 +1249,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         </listitem>
 
         <listitem>
-          <para>Should include optional resources <emphasis>R</emphasis><subscript>o</subscript>
-          as provided by <xref
+          <para>Should include optional resources
+          <emphasis>R</emphasis><subscript>o</subscript> as provided by <xref
           linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--"
           xrefstyle="hyperlink"/>.</para>
         </listitem>
@@ -1443,16 +1444,5 @@ ServicePermission[...Resolver, GET ]
       Service Specification</title>OSGi Compendium, Chapter 132 Repository
       Service Specification</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added new methods: findRelatedResources, onCancel,
-        getSubstitutionWires, and resolveDynamic.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

@@ -911,15 +911,4 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       </listitem>
     </itemizedlist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for multi-release JARs. See <xref
-        linkend="framework.wiring-bundleclasspathorder"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
