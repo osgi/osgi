@@ -19,11 +19,12 @@
     <title>Introduction</title>
 
     <para>The OSGi Service Layer defines a dynamic collaborative model that is
-    highly integrated with the Life Cycle Layer. The <emphasis>service</emphasis>
-    model is a publish, find and bind model. A service is a normal
-    Java object that is registered under one or more Java interfaces with the
-    service registry. Bundles can register services, search for them, or
-    receive notifications when their registration state changes.</para>
+    highly integrated with the Life Cycle Layer. The
+    <emphasis>service</emphasis> model is a publish, find and bind model. A
+    service is a normal Java object that is registered under one or more Java
+    interfaces with the service registry. Bundles can register services,
+    search for them, or receive notifications when their registration state
+    changes.</para>
 
     <section>
       <title>Essentials</title>
@@ -319,7 +320,13 @@
 
       <para>The service object being registered may be further described by a
       <code>Dictionary</code> object, which contains the properties of the
-      service as a collection of key/value pairs.</para>
+      service as a collection of key/value pairs. The methods <xref
+      linkend="org.osgi.framework.FrameworkUtil.asMap-Dictionary-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.framework.FrameworkUtil.asDictionary-Map-"
+      xrefstyle="hyperlink"/> can be helpful when working with service
+      properties to provide Map views over Dictionaries and Dictionary views
+      over Maps.</para>
 
       <para>The service interface names under which a service object has been
       successfully registered are automatically added to the service's
@@ -595,6 +602,22 @@
               registering the service object to indicate the
               vendor.</para></entry>
             </row>
+
+            <row>
+              <entry><code>service.changecount</code></entry>
+
+              <entry><code>Long</code></entry>
+
+              <entry><para><link
+              linkend="org.osgi.framework.Constants.SERVICE_CHANGECOUNT"
+              xrefstyle="hyperlink">SERVICE_</link></para><para><link
+              linkend="org.osgi.framework.Constants.SERVICE_CHANGECOUNT"
+              xrefstyle="hyperlink">CHANGECOUNT</link></para></entry>
+
+              <entry><para>This optional property can be used by the bundle
+              registering the service object to indicate there has been a
+              change in some data provided by the service.</para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -766,6 +789,12 @@
           <para><xref
           linkend="org.osgi.framework.ServiceReference.getProperty-String-"
           xrefstyle="hyperlink"/> - Returns the value of a property.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.framework.ServiceReference.getProperties--"
+          xrefstyle="hyperlink"/> - Returns a copy of the properties.</para>
         </listitem>
       </itemizedlist>
 
@@ -1399,10 +1428,8 @@
       <listitem>
         <para><xref linkend="org.osgi.framework.Filter.matches-Map-"
         xrefstyle="hyperlink"/> - Match the entries in the given
-        <code>Map</code> object. The map defines the case sensitivity of the
-        match, standard maps are case sensitive but for example a
-        <code>TreeMap(String.CASE_INSENSITIVE_ORDER)</code> provides a case
-        insensitive map.</para>
+        <code>Map</code> object performing key lookup in a case sensitive
+        way.</para>
       </listitem>
     </itemizedlist>
 
@@ -1413,12 +1440,13 @@
     object.</para>
 
     <para>This matching requires comparing the value string in the filter to a
-    target object from the service properties or dictionary. This comparison
-    can be executed with the <code>Comparable</code> interface if the target
-    object's class implements the <code>Comparable</code> interface. If the
-    target object's class does not implement <code>Comparable</code>, the =,
-    ~=, &lt;= &gt;= operators must return only true when the objects are equal
-    (using the <code>equals(Object)</code> method).</para>
+    target object from the service properties, dictionary, or map. This
+    comparison can be executed with the <code>Comparable</code> interface if
+    the target object's class implements the <code>Comparable</code>
+    interface. If the target object's class does not implement
+    <code>Comparable</code>, the =, ~=, &lt;= &gt;= operators must return only
+    true when the objects are equal (using the <code>equals(Object)</code>
+    method).</para>
 
     <para>The value string in the filter can be converted into an object
     suitable for comparison with the target object if the target object's
@@ -1844,9 +1872,12 @@
 
     <itemizedlist>
       <listitem>
-        <para>Updated <xref
-        linkend="framework.service.prototypeServiceFactory"/> to specify that
-        customized service objects must be use counted.</para>
+        <para>Added methods <xref
+        linkend="org.osgi.framework.FrameworkUtil.asMap-Dictionary-"
+        xrefstyle="hyperlink"/> and <xref
+        linkend="org.osgi.framework.FrameworkUtil.asDictionary-Map-"
+        xrefstyle="hyperlink"/> to facilitate working with Dictionaries and
+        services.</para>
       </listitem>
     </itemizedlist>
   </section>
