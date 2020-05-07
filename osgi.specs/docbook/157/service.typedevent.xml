@@ -276,6 +276,84 @@
       automatically generated topic names and other topics.</para>
     </section>
   </section>
+  
+  <section>
+    <title>Receiving Events</title>
+    
+    <para>Event Consumers can Receive events by registering an appropriate Event Handler 
+    service in the Service Registry. This is a 
+    <xref linkend="org.osgi.service.typedevent.TypedEventHandler" xrefstyle="hyperlink"/> 
+    to receive events as type-safe objects, or an
+    <xref linkend="org.osgi.service.typedevent.UntypedEventHandler" xrefstyle="hyperlink"/>
+    to receive events as untyped Map structures.</para>
+    
+    <para>Published events are then delivered, using the whiteboard pattern, to any 
+    Event Handler service which has registered interest in the topic to which the event 
+    was published.</para>
+    
+    <section>
+      <title>Receiving Typed Events</title>
+      
+      <para>Typed Events are received by registering a <code>TypedEventHandler</code> implementation. 
+      This service has a single method <code>notify</code> which receives the String topic name and 
+      Object event data. The TypedEventHandler implementation must be registered as a service in the 
+      service registry using the TypedEventHandler interface.</para>
+      
+      <para>The TypedEventHandler interface is parameterized, and so it is expected that the implementation 
+      reifies the type parameter into a specific type. In this case the Typed Event implementation must 
+      adapt the Event object into the type defined by the TypedEventHandler implementation.
+      Implementations of this specification are free to choose their own adaptation mechanism,
+      however it must guarantee at least the same functionality as <xref linkend="util.converter"/></para>
+      
+      <para>If the TypedEventHandler implementation is unable to reify the type, or the required type is 
+      more specific than the reified type, then the Typed Event Handler must be registered with the 
+      <code>event.type</code> service property. This property has a string value containing the 
+      fully-qualified type name of the type that the Typed Event Handler expects to receive. This type must 
+      be loaded by the Typed Event implementation using the classloader of the bundle which registered the 
+      Typed Event Handler service. The loaded type must then be used as the target type when converting events.
+      </para>
+      
+      <para>By default the reified type of the TypedEventHandler will be used as the target topic for the 
+      Event Handler. If the event.type property is set then this is used as the default topic instead of the 
+      reified type. To use a specific named topic the Typed Event Handler service may be registered with an 
+      <code>event.topics</code> service property specifying the topic(s) as a String+ value.</para>   
+    </section>
+    
+    <section>
+      <title>Receiving Untyped Events</title>
+      
+      <para>Untyped Events are received by registering an <code>UntypedEventHandler</code> implementation. 
+      This service has a single method notifyUntyped which receives the <code>String</code> topic name and 
+      <code>Map</code> event data. The UntypedEventHandler implementation must be registered as a service in 
+      the service registry using the UntypedEventHandler interface.</para>
+      
+      <para>When delivering an event to an UntypedEventHandler the Typed Event Service must, if necessary,
+      convert the event data to a nested map structure.</para>
+      
+      <para>The event.topics service property must be used when registering an UntypedEventHander service. 
+      If it is not then no events will be delivered to the Event Handler service</para>
+    </section>
+    
+    <section>
+      <title>Wildcard Topics</title>
+      
+      <para>The event.topics property may contain one or more wildcard topics. These are Strings which contain 
+      a topic name and append “/*”. This value means that the Event Handler must be called for Events in the 
+      named topic and all sub-topics</para>
+    </section>
+    
+    <section>
+      <title>Unhandled Events</title>
+      
+      <para>Unhandled Events are events sent by an Event Source but which have no Event Handler service listening
+      to their topic. Rather than these events being discarded, the Typed Event implementation will search the 
+      service registry for services implementing <xref linkend="org.osgi.service.typedevent.UnhandledEventHandler" 
+      xrefstyle="hyperlink"/>.</para>
+      <para>If any services are found then the Typed Event implementation will call the <code>notifyUnhandled</code> 
+      method passing the topic name and event data to all of the registered UnhandledEventHandler service(s).</para>
+    </section>
+
+  </section>
 
   
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.xml"/>
