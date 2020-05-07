@@ -125,6 +125,159 @@
     </section>
   </section>
   
+  <section>
+    <title>Events</title>
+    
+    <para>In this specification an Event is a set of string keys associated with data values. 
+    The defined set of allowable keys and permitted value types for the keys in an 
+    Event is known as the Event Schema. Both the Event Source and Event Consumers must
+    agree on a schema (or set of compatible schemas) in order for events to be consumed
+    correctly.</para>
+  
+    
+    <section>
+      <title>Type Safe Events</title>
+      
+      <para>A Type Safe Event is one in which the Event Schema is defined as a Java class. Using
+      a Java class provides a formal definition of the schema - event data uses fields in the class
+      as the keys, and each field definition defines the permitted type of the value.</para>
+      
+      <para>Type Safe Event classes are expected to conform to OSGi DTO rules. The architecture of 
+      OSGi DTOs is described in <xref linkend="intro.core.release" xrefstyle="template:%t"/>. All 
+      methods, all static fields, and any non public instance fields of an event object must be 
+      ignored by the Typed Event Service when processing the Event data.</para>
+      
+      <section>
+        <title>Nested Data Structures</title>
+        <para>OSGi DTOs are permitted to have data values which are also DTOs, allowing nested data
+        structures to be created. This is also allowed for Type Safe Events, but with the same 
+        restriction that the event data must be a tree. There is no restriction on the depth of
+        nesting permitted.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Untyped Events</title>
+      
+      <para>An Untyped Event is one in which there is no Java class defining the Event Schema.
+      In this case the event data is defined using a <code>Map</code> type with <code>String</code>
+      keys and values limited to types acceptable as fields in a DTO, excepting:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>DTO types - an untyped event may not have DTOs inside it as these form
+          part of a typed schema</para>
+        </listitem>
+        
+        <listitem>
+          <para>Maps are only permitted if they follow the rules for Untyped events, that is having
+          <code>String</code> keys and DTO restricted value types excluding DTOs.</para>
+        </listitem>
+      </itemizedlist>       
+     
+      <para>Untyped Event instances are capable of representing exactly the same data as present
+      in a Type Safe Event instance, and are also subject to the same restrictions, that is 
+      the data must be a tree. Nested data should be included as sub-maps within the event map,
+      and these sub-maps may in turn contain nested data.</para>
+    </section>
+    
+    <section>
+      <title>Non Standard Type Safe Events</title>
+        
+      <para>Some Event schemas may be represented by an existing type which does not match the 
+      OSGi DTO rules. In this case there are two main options:</para>
+        
+      <itemizedlist>
+        <listitem>
+          <para>Create a DTO representation of the event schema, and convert from the existing 
+          type in code.</para>
+        </listitem>
+
+        <listitem>
+          <para>Create a custom <code>Converter</code> (as defined in <xref linkend="util.converter"/>) 
+          capable of transforming the event data into an Untyped Event.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Event Mutability</title>
+      
+      <para>DTO types provide a simple yet powerful mechanism for defining an Event Schema in a 
+      type-safe way, however their use of mutable public fields means that they are potentially
+      dangerous when shared between threads. Bundles publishing or consuming events should 
+      assume that their event instances are shared between threads and should not mutate 
+      their fields after publication or receipt.</para>
+    </section>
+  </section>
+  
+  <section>
+
+    <title>Publishing Events</title>
+    
+    <para>To publish an event, the Event Source must retrieve the Typed Event Bus
+    service from the OSGi service registry. The Event Source then creates an event
+    object and calls one of the Typed Event Bus service's methods to publish the event.
+    Event publication is asynchronous, meaning that when a call to the Typed Event Bus
+    returns there is no guarantee that all (or even any) listeners have been notified.</para>
+    
+    <section xml:id="typedevent.event.topics">
+      <title>Event Topics</title>
+
+      <para>Events are always published to a topic. The topic of an event 
+      defines the <emphasis>schema</emphasis> of the event. Topics exist
+      in order to give Event Consumers information about the schema of
+      the event, and the opportunity to register for just the events they 
+      are interested in. When a topic is designed, its name should not 
+      include any other information, such as the publisher of the event 
+      or the data associated with the event, those
+      parts are intended to be stored in the event properties.</para>
+
+      <para>The topic therefore serves as a first-level filter for
+      determining which handlers should receive the event. Typed Event service
+      implementations use the structure of the topic to optimize the
+      dispatching of the events to the handlers.</para>
+
+      <para>Topics are arranged in a hierarchical namespace. Each level is
+      defined by a token and levels are separated by solidi (<code>'/'
+      \u002F</code>). More precisely, the topic must conform to the following
+      grammar:</para>
+
+      <programlisting>  topic ::= token ( '/' token ) *    // See General Syntax Definitions in Core</programlisting>
+
+      <para>Topics should be designed to become more specific when going from
+      left to right. Consumers can provide a prefix that matches a topic, using
+      the preferred order allows a handler to minimize the number of prefixes
+      it needs to register.</para>
+
+      <para>Topics are case-sensitive. As a convention, topics should follow
+      the reverse domain name scheme used by Java packages to guarantee
+      uniqueness. The separator must be a solidus (<code>'/' \u002F</code>)
+      instead of the full stop (<code>'.' \u002E</code>).</para>
+
+      <para>This specification uses the convention
+      <code>fully/qualified/package/ClassName/ACTION</code>. If necessary, a
+      pseudo-class-name is used.</para>
+    </section>
+    
+    <section>
+      <title>Automatically Generated Topics</title>
+      
+      <para>In many cases the name of a topic contains no information other than
+      defining the schema of the events sent on that topic. Therefore when publishing
+      a Typed Event to the Typed Event Bus the Typed Event implementation is able to
+      automatically generate a topic name based on the the type of the event object
+      being published.</para>
+      
+      <para>For all publication methods on the Typed Event Bus where no topic string
+      is provided the implementation must create a topic string using the fully
+      qualified class name of the event object. The use of a fully qualified
+      class name, including full stop separators, helps to distinguish between
+      automatically generated topic names and other topics.</para>
+    </section>
+  </section>
+
+  
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.annotations.xml"/>
