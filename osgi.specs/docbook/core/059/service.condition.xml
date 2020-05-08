@@ -160,13 +160,30 @@ public class ListenerCondition implements Condition{
 }</programlisting>
       <section>
         <title>The Default True Condition</title>
-    	<para>The Framework will always register a default Condition everybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
-  	  </section>
+        <para>The Framework will always register a default Condition everybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
+      </section>
   </section>
 
   <section xml:id="service.condition.security">
     <title>Security</title>
-    <para>Requires <xref linkend="framework.security.impliedpermissions"/> to register and get Conditions</para>
+    <section>
+        <title>Conditions</title>
+        <para>A Condition service has no function outside of providing a marker service to indicate a particular state and
+        is therefore not required to be a trusted service.</para>
+    </section>
+    <section>
+        <title>Minimum Implementation Permissions</title>
+        <programlisting>PackagePermission[org.osgi.service.condition,IMPORT]
+ServicePermission[org.osgi.service.condition.Condition, REGISTER ]</programlisting>
+    </section>
+    <section>
+        <title>Minumum Using Permissions</title>
+        <para>No permissions are necessary to get a Condition service. 
+        The Service Permission <code>GET</code> must be implied by the framework to get Condition services
+        (see <xref linkend="framework.security.impliedpermissions"/>).
+        Note that the <code>org.osgi.service.condition</code> package does
+        not need to be imported for a bundle to be able to get a Condition service.</para>
+    </section>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condition.xml"/>

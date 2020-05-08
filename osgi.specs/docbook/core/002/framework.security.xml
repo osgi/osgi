@@ -898,6 +898,11 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
           <para>Package Permission <code>IMPORT</code> for
           <code>java.*</code>.</para>
         </listitem>
+
+        <listitem>
+          <para>Service Permission <code>GET</code> for
+          <code>org.osgi.service.condition.Condition</code></para>
+        </listitem>
       </itemizedlist>
     </section>
 
