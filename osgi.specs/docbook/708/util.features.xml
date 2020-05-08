@@ -19,7 +19,39 @@
   <section>
     <title>Introduction</title>
 
-    <para>The introduction...</para>
+    <para>
+        OSGi has become a platform capable of running large applications for a variety of purposes, 
+        including rich client applications, server-side systems and cloud and container based architectures. 
+        As these applications are generally based on many bundles, describing each bundle individually 
+        in the application definition becomes unwieldy once the number of bundles reaches a certain level. 
+
+        When developing large scale applications it is often the case that few people know the role of every 
+        bundle or configuration item in the application. To keep the architecture understandable a grouping 
+        mechanism is needed that allows for the representation of parts of the application into larger 
+        entities that keep reasoning about the application manageable. In such a domain members of teams 
+        spread across the organization will need to be able to both develop new parts for the application 
+        as well as make tweaks or enhancements to their respective parts such as adding configuration and 
+        resources or changing one or more bundles relevant to their part of the application.
+
+        The higher level constructs that define the application should be reusable in different contexts, 
+        for example if one team has developed a component to handle job processing, different applications 
+        should be able to use it, and if needed tune its configuration or other aspects so that it works in 
+        each setting without having to know each and every detail that the job processing component is built 
+        up from.
+
+        Applications often carry additional definitions, for example configurations or custom artifacts.
+        Architects often require that the various components be encapsulated in a single definition.
+
+        Systems are often composed by reusing existing building blocks, combining various applications 
+        or subsystems together to create a larger system, where all these building blocks work together.
+        The architect of these systems need to think about components without having to dive into the 
+        individual implementation details of each subcomponent. 
+
+        This specification defines OSGi Features which can be used to model such applications. Features
+        contain the definition of an application or component and can be composed into larger systems.
+
+
+    </para>
 
   </section>
 
