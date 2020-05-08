@@ -859,7 +859,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     </itemizedlist>
   </section>
 
-  <section>
+  <section xml:id="service.log-mapping.events">
     <title>Mapping of Events</title>
 
     <para>Implementations of a Log Service must log Framework-generated events
@@ -903,7 +903,14 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"Events.Bundle"</code>.</para></entry>
+              <code>"Events.Bundle.&lt;bsn&gt;"</code> where
+              <code>&lt;bsn&gt;</code> is the Bundle Symbolic Name of the
+              bundle identified by <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/>. If <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/> return <code>null</code>, then the
+              logger name is <code>"Events.Bundle"</code>.</para></entry>
             </row>
 
             <row>
@@ -1031,7 +1038,14 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"Events.Service"</code>.</para></entry>
+              <code>"Events.Service.&lt;bsn&gt;"</code> where
+              <code>&lt;bsn&gt;</code> is the Bundle Symbolic Name of the
+              bundle identified by <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/>. If <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/> return <code>null</code>, then the
+              logger name is <code>"Events.Service"</code>.</para></entry>
             </row>
 
             <row>
@@ -1135,7 +1149,14 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"Events.Framework"</code>.</para></entry>
+              <code>"Events.Framework.&lt;bsn&gt;"</code> where
+              <code>&lt;bsn&gt;</code> is the Bundle Symbolic Name of the
+              bundle identified by <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/>. If <xref
+              linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/> return <code>null</code>, then the
+              logger name is <code>"Events.Framework"</code>.</para></entry>
             </row>
 
             <row>
@@ -1408,16 +1429,19 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.log-log.service">
     <title>Log Service</title>
 
     <para>The members of the <xref linkend="org.osgi.service.log.LogService"
     xrefstyle="hyperlink"/> interface are deprecated. Its <code>log</code>
     methods can still be used by bundles. These <code>log</code> methods are
     now specified to log to the Logger with the logger name
-    <code>"LogService"</code> which allows legacy logging to be configured as
-    specified above. Furthermore, the integer log level values used with the
-    <code>log</code> methods are mapped to the new <xref
+    <code>"LogService.&lt;bsn&gt;"</code> where <code>&lt;bsn&gt;</code> is
+    the Bundle Symbolic Name of the bundle which obtained the <xref
+    linkend="org.osgi.service.log.LogService" xrefstyle="hyperlink"/> object.
+    This allows legacy logging to be configured as specified above.
+    Furthermore, the integer log level values used with the <code>log</code>
+    methods are mapped to the new <xref
     linkend="org.osgi.service.log.LogLevel" xrefstyle="hyperlink"/>s as
     follows:</para>
 
@@ -1573,6 +1597,22 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         <para>The list of Bundle Event types in <xref
         linkend="service.log-table.bundle.event.log.entries"/> has been
         updated to include additional event types.</para>
+      </listitem>
+
+      <listitem>
+        <para>The names of the Loggers used for mapping framework, bundle and
+        service events into the log have been modified to include the bundle
+        symbolic name of the bundle associated with the event. This change
+        allows finer control over the logging. See <xref
+        linkend="service.log-mapping.events"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The names of the Loggers used for the deprecated LogService log
+        methods have been modified to include the bundle symbolic name of the
+        bundle which obtained the LogService object. This change allows finer
+        control over the logging. See <xref
+        linkend="service.log-log.service"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
