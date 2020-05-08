@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +75,11 @@ public interface LogService extends LoggerFactory {
 	 * The {@code ServiceReference} field and the {@code Throwable} field of the
 	 * {@code LogEntry} object will be set to {@code null}.
 	 * <p>
-	 * This method will log to the {@link Logger} named {@code "LogService"} for
-	 * the bundle. The specified level is mapped to a {@link LogLevel} as
-	 * follows:
+	 * This method will log to the bundle's {@link Logger} named
+	 * {@code "LogService.<bsn>"} where {@code <bsn>} is the Bundle Symbolic
+	 * Name of the bundle.
+	 * <p>
+	 * The specified level is mapped to a {@link LogLevel} as follows:
 	 * <ul>
 	 * <li>{@link #LOG_ERROR} - {@link LogLevel#ERROR}</li>
 	 * <li>{@link #LOG_WARNING} - {@link LogLevel#WARN}</li>
@@ -105,9 +107,11 @@ public interface LogService extends LoggerFactory {
 	 * The {@code ServiceReference} field of the {@code LogEntry} object will be
 	 * set to {@code null}.
 	 * <p>
-	 * This method will log to the {@link Logger} named {@code "LogService"} for
-	 * the bundle. The specified level is mapped to a {@link LogLevel} as
-	 * follows:
+	 * This method will log to the bundle's {@link Logger} named
+	 * {@code "LogService.<bsn>"} where {@code <bsn>} is the Bundle Symbolic
+	 * Name of the bundle.
+	 * <p>
+	 * The specified level is mapped to a {@link LogLevel} as follows:
 	 * <ul>
 	 * <li>{@link #LOG_ERROR} - {@link LogLevel#ERROR}</li>
 	 * <li>{@link #LOG_WARNING} - {@link LogLevel#WARN}</li>
@@ -138,9 +142,11 @@ public interface LogService extends LoggerFactory {
 	 * The {@code Throwable} field of the {@code LogEntry} will be set to
 	 * {@code null}.
 	 * <p>
-	 * This method will log to the {@link Logger} named {@code "LogService"} for
-	 * the bundle. The specified level is mapped to a {@link LogLevel} as
-	 * follows:
+	 * This method will log to the bundle's {@link Logger} named
+	 * {@code "LogService.<bsn>"} where {@code <bsn>} is the Bundle Symbolic
+	 * Name of the bundle.
+	 * <p>
+	 * The specified level is mapped to a {@link LogLevel} as follows:
 	 * <ul>
 	 * <li>{@link #LOG_ERROR} - {@link LogLevel#ERROR}</li>
 	 * <li>{@link #LOG_WARNING} - {@link LogLevel#WARN}</li>
@@ -168,9 +174,11 @@ public interface LogService extends LoggerFactory {
 	 * Logs a message with an exception associated and a
 	 * {@code ServiceReference} object.
 	 * <p>
-	 * This method will log to the {@link Logger} named {@code "LogService"} for
-	 * the bundle. The specified level is mapped to a {@link LogLevel} as
-	 * follows:
+	 * This method will log to the bundle's {@link Logger} named
+	 * {@code "LogService.<bsn>"} where {@code <bsn>} is the Bundle Symbolic
+	 * Name of the bundle.
+	 * <p>
+	 * The specified level is mapped to a {@link LogLevel} as follows:
 	 * <ul>
 	 * <li>{@link #LOG_ERROR} - {@link LogLevel#ERROR}</li>
 	 * <li>{@link #LOG_WARNING} - {@link LogLevel#WARN}</li>
