@@ -121,6 +121,10 @@ Bundle-ClassPath: .,div.tb6.jar
 	classloading.tb17h.jar, \
 	classloading.tb17i.jar, \
 	classloading.tb17j.jar, \
+	classloading.tb18a.jar, \
+	classloading.tb18b.jar, \
+	classloading.tb18c.jar, \
+	classloading.tb18d.jar, \
 	classpath.tb1.jar, \
 	classpath.tb2.jar, \
 	classpath.tb3.jar, \

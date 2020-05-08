@@ -1,0 +1,5 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb18b
+Bundle-SymbolicName: ${p}.classloading.tb18b
+Bundle-Version: 1
+-privatepackage: ${p}.classloading.exports.service

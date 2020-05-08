@@ -29,12 +29,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.function.BiFunction;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
@@ -287,6 +292,187 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1.stop();
 			tb1.uninstall();
 		}
+	}
+
+	private static final String	SOME_SERVICE_CLASS	= "org.osgi.test.cases.framework.classloading.exports.service.SomeService";
+	private static final String	SOME_SERVICE_IMPL	= "org.osgi.test.cases.framework.classloading.exports.service.SimpleSomeServiceImpl";
+
+	private enum IMPL_BUNDLE {
+		VERSION1, VERSION2, REGISTRANT, USER
+	}
+
+	/**
+	 * User bundle has no package source; should see other's service
+	 * 
+	 * @throws Exception
+	 */
+	public void testBundleContextIsAssignableTo003() throws Exception {
+		BiFunction<Bundle,Object,ServiceReference< ? >> register = (b, s) -> {
+			return b.getBundleContext()
+					.registerService(SOME_SERVICE_CLASS, s, null)
+					.getReference();
+		};
+		doTestBundleContextIsAssibnableTo( //
+				"classloading.tb18c.jar", //
+				"classloading.tb18d.jar", //
+				IMPL_BUNDLE.VERSION1, //
+				true, //
+				register);
+	}
+
+	/**
+	 * Tests two bundles have private packages; should not see eachother's
+	 * service
+	 * 
+	 * @throws Exception
+	 */
+	public void testBundleContextIsAssignableTo004() throws Exception {
+		BiFunction<Bundle,Object,ServiceReference< ? >> register = (b, s) -> {
+			return b.getBundleContext()
+					.registerService(SOME_SERVICE_CLASS, s, null)
+					.getReference();
+		};
+		doTestBundleContextIsAssibnableTo( //
+				"classloading.tb18a.jar", //
+				"classloading.tb18b.jar", //
+				IMPL_BUNDLE.REGISTRANT, //
+				false, //
+				register);
+	}
+
+	/**
+	 * Test user has package source, registrant does not, a factory from another
+	 * bundle is used; should see the service
+	 * 
+	 * @throws Exception
+	 */
+	public void testBundleContextIsAssignableTo005() throws Exception {
+		BiFunction<Bundle,Object,ServiceReference< ? >> register = (b, s) -> {
+			return b.getBundleContext()
+					.registerService(SOME_SERVICE_CLASS,
+							new ServiceFactory<Object>() {
+
+								@Override
+								public Object getService(Bundle bundle,
+										ServiceRegistration<Object> registration) {
+									return s;
+								}
+
+								@Override
+								public void ungetService(Bundle bundle,
+										ServiceRegistration<Object> registration,
+										Object service) {
+								}
+
+							}, null)
+					.getReference();
+		};
+		doTestBundleContextIsAssibnableTo( //
+				"classloading.tb18d.jar", //
+				"classloading.tb18c.jar", //
+				IMPL_BUNDLE.VERSION1, //
+				true, //
+				register);
+	}
+
+	/**
+	 * Test user has package source, registrant does not, register an object
+	 * that has a different package source; should not see service
+	 * 
+	 * @throws Exception
+	 */
+	public void testBundleContextIsAssignableTo006() throws Exception {
+		BiFunction<Bundle,Object,ServiceReference< ? >> register = (b, s) -> {
+			return b.getBundleContext()
+					.registerService(SOME_SERVICE_CLASS, s, null)
+					.getReference();
+		};
+		doTestBundleContextIsAssibnableTo( //
+				"classloading.tb18d.jar", //
+				"classloading.tb18c.jar", //
+				IMPL_BUNDLE.VERSION2, //
+				false, //
+				register);
+	}
+
+	/**
+	 * Test user has package source, registrant does not, register an object
+	 * that has same package source as user; should see service
+	 * 
+	 * @throws Exception
+	 */
+	public void testBundleContextIsAssignableTo007() throws Exception {
+		BiFunction<Bundle,Object,ServiceReference< ? >> register = (b, s) -> {
+			return b.getBundleContext()
+					.registerService(SOME_SERVICE_CLASS, s, null)
+					.getReference();
+		};
+		doTestBundleContextIsAssibnableTo( //
+				"classloading.tb18d.jar", //
+				"classloading.tb18c.jar", //
+				IMPL_BUNDLE.VERSION1, //
+				true, //
+				register);
+	}
+
+	private void doTestBundleContextIsAssibnableTo(String registrantLoc,
+			String userLoc, IMPL_BUNDLE implBundle, boolean expected,
+			BiFunction<Bundle,Object,ServiceReference< ? >> register)
+			throws Exception {
+		List<Bundle> bundles = new ArrayList<>();
+
+		try {
+			Bundle exporter1;
+			Bundle exporter2;
+			Bundle registrant;
+			Bundle user;
+			bundles.add(exporter1 = installBundle("classloading.tb1.jar"));
+			bundles.add(exporter2 = installBundle("classloading.tb2.jar"));
+			bundles.add(registrant = installBundle(registrantLoc));
+			bundles.add(user = installBundle(userLoc));
+			bundles.forEach(b -> {
+				try {
+					b.start();
+				} catch (BundleException e) {
+					sneakyThrow(e);
+				}
+			});
+			Class< ? > serviceImpl;
+			switch (implBundle) {
+				case VERSION1 :
+					serviceImpl = exporter1.loadClass(SOME_SERVICE_IMPL);
+					break;
+				case VERSION2 :
+					serviceImpl = exporter2.loadClass(SOME_SERVICE_IMPL);
+					break;
+				case REGISTRANT :
+					serviceImpl = registrant.loadClass(SOME_SERVICE_IMPL);
+					break;
+				case USER :
+					serviceImpl = user.loadClass(SOME_SERVICE_IMPL);
+				default :
+					throw new RuntimeException("unknown");
+			}
+			ServiceReference< ? > ref = register.apply(registrant,
+					serviceImpl.getConstructor().newInstance());
+			assertEquals("Wrong result from isAssignableTo.", expected,
+					ref.isAssignableTo(user,
+							"org.osgi.test.cases.framework.classloading.exports.service.SomeService"));
+
+		} finally {
+			bundles.forEach(b -> {
+				try {
+					b.uninstall();
+				} catch (BundleException e) {
+					sneakyThrow(e);
+				}
+			});
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <E extends Throwable> void sneakyThrow(Throwable e) throws E {
+		throw (E) e;
 	}
 
 	/**

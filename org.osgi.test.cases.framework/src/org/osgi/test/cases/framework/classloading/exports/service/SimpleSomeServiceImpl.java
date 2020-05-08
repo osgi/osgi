@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2020). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -22,45 +22,15 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
+package org.osgi.test.cases.framework.classloading.exports.service;
 
-package org.osgi.test.cases.framework.classloading.tb18a;
+import org.osgi.framework.Bundle;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+public class SimpleSomeServiceImpl implements SomeService {
 
-/**
- * A bundle activator to execute some tests
- * 
- * @author left
- * @author $Id$
- */
-public class Activator implements BundleActivator {
-
-	/**
-	 * Creates a new instance of Activator
-	 */
-	public Activator() {
-
-	}
-
-	/**
-	 * Start the bundle
-	 * 
-	 * @param context the bundle context
-	 * @throws Exception if some problem occur
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-	}
-
-	/**
-	 * Stop the bundle
-	 * 
-	 * @param context the bundle context
-	 * @throws Exception if some problem occur
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
+	@Override
+	public Bundle getRegistrantBundle() {
+		return null;
 	}
 
 }

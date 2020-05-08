@@ -1,0 +1,4 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb18d
+Bundle-SymbolicName: ${p}.classloading.tb18d
+Bundle-Version: 1

@@ -54,26 +54,16 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		ServiceReference< ? > sr;
-
-		sr = context.getServiceReference(SomeService.class.getName());
-
-		try {
-			// If the method getServiceReference() does not return a service
-			// reference to this bundle than the method is checking if the
-			// service is assignable. But, if the method return an reference (an
-			// incorrect behavior), we check the behavior of the method
-			// isAssignableTo().
-			if ((sr != null)
-					&& (sr.isAssignableTo(context.getBundle(),
-							SomeService.class.getName()))) {
+		ServiceReference< ? >[] refs = context
+				.getAllServiceReferences(SomeService.class.getName(), null);
+		if (refs == null || refs.length == 0) {
+			throw new BundleException("Found no service.");
+		}
+		for (ServiceReference< ? > ref : refs) {
+			if (ref.isAssignableTo(context.getBundle(),
+					SomeService.class.getName())) {
 				throw new BundleException(
 						"The method isAssignableTo must return false when the package source of the getter bundle is not the same of the registrant bundle");
-			}
-		}
-		finally {
-			if (sr != null) {
-				context.ungetService(sr);
 			}
 		}
 	}
