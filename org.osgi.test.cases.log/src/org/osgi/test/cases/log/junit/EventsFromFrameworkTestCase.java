@@ -156,25 +156,31 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 		tb1.stop();
 		tb1.uninstall();
 
-		List<String> expectedEventTypes1 = Arrays.asList("INSTALLED",
-				"RESOLVED", "STARTED", "STOPPED", "UNRESOLVED", "UPDATED",
-				"RESOLVED", "STARTED", "STOPPED", "UNRESOLVED", "UNINSTALLED");
-
-		List<String> expectedEventTypes2 = Arrays.asList("INSTALLED",
-				"RESOLVED", "STARTING", "STARTED", "STOPPING", "STOPPED",
-				"UNRESOLVED", "UPDATED", "RESOLVED", "STARTING", "STARTED",
-				"STOPPING", "STOPPED", "UNRESOLVED", "UNINSTALLED");
+		List<String> expectedEventTypes = Arrays.asList( //
+				"INSTALLED", //
+				"RESOLVED", //
+				"STARTING", //
+				"STARTED", //
+				"STOPPING", //
+				"STOPPED", //
+				"UNRESOLVED", //
+				"UPDATED", //
+				"RESOLVED", //
+				"STARTING", //
+				"STARTED", //
+				"STOPPING", //
+				"STOPPED", //
+				"UNRESOLVED", //
+				"UNINSTALLED");
 
 		eventLogListener.waitForEntry(10000, "BundleEvent UNINSTALLED");
 		List<LogEntry> actualLogs = eventLogListener.getLogs();
 
 		int logsCount = actualLogs.size();
-		if (logsCount == expectedEventTypes1.size()) {
-			assertBundleEventLog(actualLogs, expectedEventTypes1);
-		} else if (logsCount == expectedEventTypes2.size()) {
-			assertBundleEventLog(actualLogs, expectedEventTypes2);
+		if (logsCount == expectedEventTypes.size()) {
+			assertBundleEventLog(actualLogs, expectedEventTypes);
 		} else {
-			fail("Expected bundle events are not logged");
+			fail("Expected bundle events are not logged: " + actualLogs);
 		}
 	}
 
