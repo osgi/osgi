@@ -22,6 +22,39 @@
     define the system as ready, when the database connection is up and all Servlets are registered. Taking the Application 
     developers view, the Server should start Listening on Port 80 when the System is ready and not beforehand.</para>
     
+    <para>The OSGi <xref linkend="framework.service" xrefstyle="hyperlink"/> already provides all necessary tools to register any 
+    service as a Marker, for when a System is ready. The Condition Service Specification simply provides a specified 
+    method to signal such states. With this, other specifications and users have a known method to listen for such signals.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Condition</emphasis> - Represents a particular state of the runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Target</emphasis> - A filter used to match a required condition.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="service.condition.entities">
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Condition</emphasis> - A service interface used to represent a state at runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from the moment ofFramework initialization.</para>
+        </listitem>
+      </itemizedlist>
+  	</section>
+  </section>
+  <section xml:id="service.condition.operation">
+    <title>Condition Service</title>
+    
     <para>The <xref linkend="org.osgi.framework.startlevel.BundleStartLevel" xrefstyle="hyperlink"/>
     can be used to control the order in which bundles are activated when the
     Framework is launched. In some scenarios it can be helpful to have lower level bundles activate before higher
@@ -52,23 +85,32 @@
     <para>Translating ordering dependencies to service dependencies is often straightforward to do, but 
     some scenarios make it more challenging. For example, if a component depends on a system wide state
     in order to be fully functional. This type of problem can be common when using the whiteboard pattern.
-    An example of a whiteboard pattern is one that allows for a listener service to be registered that can
-    receive events about the system.  As a listener implementation it is only required to register a listener
-    service and that listener will automatically get used to dispatch events to by the whiteboard implementation.
-    However, in some scenarios a deployer may want to ensure that one or more specific listeners are
-    registered before allowing the whiteboard implementation to be active. By default the whiteboard implementation
-    does not need any listeners to be active, but a deployer may want to ensure at least one listener
-    is available to ensure all events from the system are recorded. For this example a deployer wants
-    to ensure one listener logs to local storage and one listener logs remotely.</para>
+    An example of a whiteboard pattern is above mentioned Webserver. As a Servlet implementation it is only required to register a Servlet
+    service and that servlet will automatically get used to dispatch requests to by the Webserver implementation.
+    However, in some scenarios a deployer may want to ensure that one or more specific Servlets are
+    registered before allowing the Webserver to be active. By default the webserver
+    does not need any servlets to be active, but a deployer may want to ensure at least one listener
+    is available. For this example a deployer wants a Servlet 1 and Servlet 2 to be available.</para>
+
+ 	<figure pgwide="1">
+        <title>Service Activation without Condition</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" 
+                       fileref="without-condition-sequence.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
 
     <para>With Declarative Services one could incorrectly try the following to achieve this:</para>
 
     <programlisting>// THIS WILL NEVER WORK
-@Reference(target= "(&amp;(persist=LOCAL)(persist=REMOTE))")
-volatile List&lt;Listener&gt; listeners;</programlisting>
+@Reference(target= "(&amp;(servlet=1)(servlet=2))")
+volatile List&lt;Servlet&gt; servlets;</programlisting>
 
-    <para>This does not work because no single listener will satisfy both LOCAL and REMOTE
-    persistence. The result is that the list of listeners will remain empty for the system.
+    <para>This does not work because no single Servlet will satisfy both properties. 
+    The result is that the list of servlets will remain empty for the system and the webserver will not start.
     Condition services provide a mechanism for declaring and controlling what conditions
     are necessary to enable a component. For example, with the listener whiteboard implementation
     the following condition service requirement could be specified:</para>
@@ -83,80 +125,34 @@ Condition requiredCondition;</programlisting>
     when all the required listeners the deployer requires are available at runtime. For
     example, the following condition target could be used:</para>
 
-    <programlisting xml:id="service.condition.into.example">target= "(&amp;(osgi.condition.id=listeners)(persist=LOCAL)(persist=REMOTE))"</programlisting>
+    <programlisting xml:id="service.condition.into.example">target= "(&amp;(osgi.condition.id=listeners)(servlet=1)(servlet=2))"</programlisting>
 
+    <figure pgwide="1">
+       <title>Service Activation with Condition</title>
+
+       <mediaobject>
+         <imageobject>
+           <imagedata align="center"
+                      fileref="condition-sequence.svg"/>
+         </imageobject>
+       </mediaobject>
+     </figure>
+    
     <para>By declaring a requirement on the invariably available true condition a developer can open
     up a component to be configured for activation based on a condition that can be
     controlled at runtime with configuration. Conditions can also be enabled based on the availability of
     other conditions. This allows for more powerful layering of conditions for a system.</para>
-
-    <para>The OSGi <xref linkend="framework.service" xrefstyle="hyperlink"/> already provides all tools to register any 
-    service as a Marker for when a System is ready. The Condition Service Specification simply provides a specified 
-    method to signal such states. With this other specifications and users have a known method to listen for such signals.</para>
-
-    <section>
-      <title>Essentials</title>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Condition</emphasis> - Represents a required state of the runtime.</para>
-        </listitem>
-        <listitem>
-          <para><emphasis>Target</emphasis> - A filter used to match a required condition.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="service.condition.entities">
-      <title>Entities</title>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Condition</emphasis> - A service interface used to represent a condition at runtime.</para>
-        </listitem>
-        <listitem>
-          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from Framework initialization.</para>
-        </listitem>
-      </itemizedlist>
-      <figure pgwide="1">
-        <title>Condition Class Diagram</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="7.000in"
-                       contentwidth="6.125in"
-                       fileref="condition-classes.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-      <itemizedlist>
-         <listitem>
-          <para><emphasis>Configuration</emphasis> - At runtime configuration can be used to influence the required conditions of a system.</para>
-        </listitem>
-        <listitem>
-          <para><emphasis>Deployer</emphasis> - An agent that is responsible for managing and configuring a system which may include configuring the
-          required and available conditions at runtime.</para>
-        </listitem>
-        <listitem>
-          <para><emphasis>Component</emphasis> - A component may have required conditions declared and configured in order to function at runtime.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </section>
-  
-  <section xml:id="service.condition.operation">
-    <title>Operation</title>
-    <para>Everybody can register a <code>Condition</code> service to indicate that some Condition is meet. The Service is just a marker Interface and provides no additional methods. Service providers can implement it as well as make use of the <code>org.osgi.service.Condition.INSTANCE</code> to avoid unnecessary object instances in the JVM. A <code>Condition</code> must be registered with a <code>org.osgi.service.Condition.CONDITION_ID</code> (<code>osgi.condition.id</code>) property as an identifier. Additional properties can be added, to specify more information about the <code>Condition</code>.</para>
-    <para>Looking back at the service example from the introduction the following static Condition could achieve the defined goal:</para>
+    
+    <para>The Condition that provides the servlets are ready state can then look as follows:</para>
    <programlisting>@Component(property = {
-   	"osgi.condition.id=listeners", 
-   	"persist=LOCAL", 
-   	"persist=REMOTE"})
-public class ListenerCondition implements Condition{
-	@Reference(target = "(persist=LOCAL)")
-	private Listener local;
-	@Reference(target = "(persist=REMOTE)")
-	private Listener remote;
+   	"osgi.condition.id=application", 
+   	"servlet=1", 
+   	"servlet=2"})
+public class ApplicationCondition implements Condition{
+	@Reference(target = "(servlet=1)")
+	private Servlet servlet1;
+	@Reference(target = "(servlet=2)")
+	private Servlet servlet2;
 }</programlisting>
       <section>
         <title>The Default True Condition</title>
