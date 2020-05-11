@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam defaultFontName ProductusOSGiBookc
+
+participant Webserver as wb
+participant ApplicationCondition as c
+participant "Servlet 1" as ll
+participant "Servlet 2" as rl
+
+activate ll
+activate c
+ll -> c: addServlet1
+activate rl
+rl -> c: addServlet2
+activate wb
+c -> wb: setApplicationConditon
+ll -> wb: addServlet
+rl -> wb: addServlet
+wb -> wb: StartListening
+ll -> wb: removeServlet
+ll -> c: removeServlet
+deactivate ll
+c -> wb: removeListenerCondition
+deactivate c
+deactivate wb
+@enduml

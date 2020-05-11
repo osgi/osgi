@@ -1,0 +1,20 @@
+@startuml
+skinparam monochrome true
+skinparam defaultFontName ProductusOSGiBookc
+
+participant Webserver as wb
+participant "Servlet 1" as ll
+participant "Servlet 2" as rl
+
+activate ll
+ll -> wb: addServlet
+activate wb
+wb -> wb: startListening
+activate rl
+rl -> wb: addServlet
+ll -> wb: removeServlet
+deactivate ll
+rl -> wb: removeServlet
+deactivate rl
+deactivate wb
+@enduml

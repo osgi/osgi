@@ -19,19 +19,18 @@ package org.osgi.service.condition;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * OSGi due to its modular nature provides <code>Requirements</code> and
- * <code>Capabilities</code> to declare what a Bundle needs in order to run
- * properly. This is honored by the resolver and enforced by the Framework at
- * runtime. The dynamic nature however can provide some impediments at runtime.
- * That there is a Bundle that might provide a certain service or capability
- * does not mean, that it will be available when and a component expects it be.
- * <p>
- * Conditions are to the Service Layer what Requirements and Capabilities are to
- * the module Layer
+ * In dynamic systems, such as OSGi, one of the more challenging problems can be
+ * to define when a System or part of it is ready to do work. The answer can
+ * change depending on the individual perspective. The developer of a Webserver
+ * might say, the System is ready when the server starts listening to port 80.
+ * An Application developer however would define the system as ready, when the
+ * database connection is up and all Servlets are registered. Taking the
+ * Application developers view, the Server should start Listening on Port 80
+ * when the System is ready and not beforehand.
  * <p>
  * The <code>Condition</code> interface is designed to address this issue. Its
- * task is to provide a marker that can be tracked if a some Condition is meet
- * and for example a Requirement is meet at Runtime.
+ * task is to provide a marker that can be tracked. It acts as a defined signal
+ * to other services.
  * <p>
  * A Condition must be registered with the {@link Condition#CONDITION_ID} as
  * property.
@@ -41,9 +40,11 @@ import org.osgi.annotation.versioning.ConsumerType;
  */
 @ConsumerType
 public interface Condition {
+
 	/**
-	 * Service property identifying a condition's unique identifier. The type of
-	 * this service property is {@code String+}
+	 * Service property identifying a condition's unique identifier. As a
+	 * Condition can potentially describe more then one state, the type of this
+	 * service property is {@code String+}
 	 */
 	public static final String		CONDITION_ID		= "osgi.condition.id";
 
