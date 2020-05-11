@@ -25,15 +25,15 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
 import org.osgi.service.typedevent.UntypedEventHandler;
-import org.osgi.service.typedevent.annotations.RequireTypeSafeEvents;
+import org.osgi.service.typedevent.annotations.RequireTypedEvents;
 
 /**
- * Component Property Type for the {@link TypedEventConstants#TYPE_SAFE_EVENT_TOPICS}
+ * Component Property Type for the {@link TypedEventConstants#TYPED_EVENT_TOPICS}
  * service property of a {@link TypedEventHandler} or
  * {@link UntypedEventHandler} service.
  * <p>
  * This annotation can be used on a component to declare the values of the
- * {@link TypedEventConstants#TYPE_SAFE_EVENT_TOPICS} service property.
+ * {@link TypedEventConstants#TYPED_EVENT_TOPICS} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -41,14 +41,14 @@ import org.osgi.service.typedevent.annotations.RequireTypeSafeEvents;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@RequireTypeSafeEvents
+@RequireTypedEvents
 public @interface EventTopics {
 	/**
 	 * Service property specifying the {@code Event} topics of interest to an
 	 * {@link TypedEventHandler} or {@link UntypedEventHandler} service.
 	 * 
 	 * @return The event topics.
-	 * @see TypedEventConstants#TYPE_SAFE_EVENT_TOPICS
+	 * @see TypedEventConstants#TYPED_EVENT_TOPICS
 	 */
 	String[] value();
 }

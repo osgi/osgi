@@ -353,6 +353,208 @@
       method passing the topic name and event data to all of the registered UnhandledEventHandler service(s).</para>
     </section>
 
+    <section>
+      <title>Error Handling</title>
+      
+      <para>There are several possible error scenarios for Event Handlers:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>TypedEventHandler</code> - If the target event type is not discoverable, that is there is no 
+          reified type information, nor is there an <code>event.type</code> property, then the target type for the 
+          event is not known. In this situation there is no way for the Typed Event implementation to correctly target 
+          an event schema, and the <code>TypedEventHandler</code> must be ignored. The implementation must write a 
+          message to the log indicating which service is being ignored.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>TypedEventHandler</code> - If the target event type is discoverable but cannot be loaded
+          using the classloader of the bundle which registered the Typed Event Handler service then there is no 
+          way for the Typed Event implementation to correctly target an event schema, and the Event Handler must 
+          be ignored. </para>
+        </listitem>
+
+        <listitem>
+          <para>All Handler Types - If the event data cannot be adapted to the target type, that is the incoming
+          data cannot be transformed due to badly mismatched property names or values, then that specific Event 
+          cannot be submitted to the Handler. The Typed Event implementation must write a message to the log 
+          indicating which service failed to receive the event. If this error occurs repeatedly then the Typed Event 
+          implementation may choose to blacklist and ignore the Event Handler service. Blacklisting decisions
+          must be written to the log</para>
+        </listitem>
+
+        <listitem>
+          <para>All Handler Types - If the <code>event.topic</code> property contains one or more invalid 
+          values then the Event Handler service must be ignored. The implementation must write a message to the 
+          log indicating which service is being ignored.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+  </section>
+  
+  <section>
+    <title>The Typed Event Bus Service</title>
+    
+    <para>The Typed Event implementation must register a Typed Event Bus service in the service registry. This
+    service must implement and advertise the <xref linkend="org.osgi.service.typedevent.TypedEventBus" 
+    xrefstyle="hyperlink"/> interface.</para>
+      
+    <section>
+      <title>Error Handling</title>
+      
+      <para>It is not possible to know that an Event cannot be delivered until delivery is attempted. It is 
+      therefore not possible (or acceptable, given the asynchronous nature of delivery) to throw an exception 
+      to the sender of an event if there are problems delivering the event. The Event Bus service should not 
+      throw exceptions from any publication methods except:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>IllegalArgumentException</code> if the event data is <code>null</code>.</para>
+        </listitem>
+        <listitem>
+          <para><code>IllegalArgumentException</code> if a topic name is supplied and it violates the
+          topic name syntax.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+      
+  </section>
+  
+  <section>
+    <title>Monitoring Events</title> 
+    
+    <para>An important part of a software system is the ability to monitor it appropriately to determine 
+    whether it is functioning correctly, without having the measurements disrupt the system. To this end 
+    the Typed Event implementation must register a <xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor" 
+    xrefstyle="hyperlink"/> service which can be used to monitor the flow of events through the Event Bus.</para>
+    
+    <para>Events flowing through the Typed Event Bus can be monitored using one of the <code>monitorEvents</code> 
+    methods from the <code>TypeSafeEventMonitor</code> service. These methods return a 
+    <xref linkend="org.osgi.util.pushstream.PushStream" xrefstyle="hyperlink"/> which delivers
+    <xref linkend="org.osgi.service.typedevent.monitor.MonitorEvent"  xrefstyle="hyperlink"/> 
+    instances each time an event is sent via the <code>TypedEventBus</code>. The monitor events contain the event 
+    topic, the event data, and a timestamp indicating when the event was sent.</para>
+    
+    <section>
+      <title>Event History</title>
+      
+      <para>In a running system it is often useful for monitoring tools to replay recent data immediately 
+      after a problem has occurred. For that reason Typed Event Monitor instances may store past events so that 
+      they can be replayed if requested. There are two <code>monitorEvents</code> methods capable of replaying history</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><xref linkend="org.osgi.service.typedevent.monitor.MonitorEvent-monitorEvents-int-" xrefstyle="hyperlink"/>  
+          takes an <code>int</code> representing the number of past events that should be replayed from the cached history</para>
+        </listitem>
+        <listitem>
+          <para><xref linkend="org.osgi.service.typedevent.monitor.MonitorEvent-monitorEvents-Instant-" xrefstyle="hyperlink"/> 
+          takes an <code>Instant</code>, representing the time in the past from which the stream of monitoring events should start.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that storing Event History is considered a best-effort option and it is not required that the 
+      implementation supply the full set of requested events. If insufficient past events are available then the 
+      implementation must provide the maximum amount of history available.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Capabilities</title>
+    
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The Typed Event implementation bundle must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with the name <xref
+      linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_IMPLEMENTATION"
+      xrefstyle="hyperlink"/>. This capability can be used by provisioning
+      tools and during resolution to ensure that a Typed Event implementation
+      is present. The capability must also declare a uses constraint for the
+      <code>org.osgi.service.typedevent</code> package and provide the version of
+      this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.typedevent";
+       uses:="org.osgi.service.typedevent";
+       version:Version="<xref endterm="org.osgi.service.typedevent-version.number"
+          linkend="org.osgi.service.typedevent"/>"</programlisting>
+
+      <para>The <xref
+      linkend="org.osgi.service.event.annotations.RequireTypedEvents"
+      xrefstyle="hyperlink"/> annotation can be used to require this
+      capability.</para>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the Typed Event Bus service must provide a
+      capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare a
+      uses constraint for the <code>org.osgi.service.typedevent</code>
+      package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.typedevent.TypedEventBus";
+  uses:="org.osgi.service.typedevent"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+    
+    <para>TODO: do we need a TopicPermission?</para>
+    
+    <section>
+      <title>Required Permissions</title>
+
+      <para>Bundles that need to consume events must be granted permission to
+      register the appropriate handler service. For Example
+      <code>ServicePermission</code>[<code>org.osgi.service.typedevent.TypedEventHandler</code>,
+      <code>REGISTER</code>] or 
+      <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UntypedEventHandler</code>,
+      <code>REGISTER</code>].</para>
+
+      <para>Bundles that need to publish events must be granted permission
+      to get the <code>TypedEventBus</code> service, that is
+      <code>ServicePermission[ org.osgi.service.typedevent.TypedEventBus, GET]</code>
+      so that they may retrieve the Typed Event Bus and use it.</para>
+
+      <para>Bundles that need to monitor events flowing through the bus must be granted permission
+      to get the <code>TypedEventMonitor</code> service, that is
+      <code>ServicePermission[ org.osgi.service.typedevent.monitor.TypedEventMonitor, GET]</code>
+      so that they may retrieve the Typed Event Monitor and use it.</para>
+
+      <para>The Typed Event implementation must be granted
+      <code>ServicePermission[org.osgi.service.typedevent.TypedEventHandler, GET]</code>,
+      <code>ServicePermission[org.osgi.service.typedevent.UntypedEventHandler, GET]</code>,
+      <code>ServicePermission[org.osgi.service.typedevent.TypedEventBus, REGISTER]</code> and
+      <code>ServicePermission[org.osgi.service.typedevent.monitor.TypedEventMonitor, REGISTER]</code>
+      as these actions are all required to implement the specification.</para>
+    </section>
+    
+    <section>
+      <title>Security Context During Event Callbacks</title>
+
+      <para>During an event notification, the Typed Event implementation's
+      Protection Domain will be on the stack above the handler's Protection Domain.
+      Therefore, if a handler needs to perform a secure operation using
+      its own privileges, it must invoke the <code>doPrivileged</code> method
+      to isolate its security context from that of its caller.</para>
+
+      <para>The event delivery mechanism must not wrap event notifications in
+      a <code>doPrivileged</code> call.</para>
+    </section>
   </section>
 
   

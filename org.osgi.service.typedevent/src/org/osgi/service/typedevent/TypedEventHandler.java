@@ -27,10 +27,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@code TypedEventHandler} objects are expected to reify the type parameter
  * {@code T} with the type of object they wish to receive when implementing this
  * interface. This type can be overridden using the
- * {@link TypedEventConstants#TYPE_SAFE_EVENT_TOPICS} service property.
+ * {@link TypedEventConstants#TYPED_EVENT_TOPICS} service property.
  * <p>
  * {@code TypedEventHandler} objects may be registered with a service property
- * {@link TypedEventConstants#TYPE_SAFE_EVENT_TOPICS} whose value is the list of
+ * {@link TypedEventConstants#TYPED_EVENT_TOPICS} whose value is the list of
  * topics in which the event handler is interested.
  * <p>
  * For example:

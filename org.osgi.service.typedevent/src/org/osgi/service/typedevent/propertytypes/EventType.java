@@ -24,14 +24,14 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
-import org.osgi.service.typedevent.annotations.RequireTypeSafeEvents;
+import org.osgi.service.typedevent.annotations.RequireTypedEvents;
 
 /**
- * Component Property Type for the {@link TypedEventConstants#TYPE_SAFE_EVENT_TYPE}
+ * Component Property Type for the {@link TypedEventConstants#TYPED_EVENT_TYPE}
  * service property of an {@link TypedEventHandler} service.
  * <p>
  * This annotation can be used on an {@link TypedEventHandler} component to
- * declare the value of the {@link TypedEventConstants#TYPE_SAFE_EVENT_TYPE} service
+ * declare the value of the {@link TypedEventConstants#TYPED_EVENT_TYPE} service
  * property.
  * 
  * @see "Component Property Types"
@@ -40,14 +40,14 @@ import org.osgi.service.typedevent.annotations.RequireTypeSafeEvents;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@RequireTypeSafeEvents
+@RequireTypedEvents
 public @interface EventType {
 	/**
 	 * Service property specifying the {@code EventType} for a
 	 * {@link TypedEventHandler} service.
 	 * 
 	 * @return The event filter.
-	 * @see TypedEventConstants#TYPE_SAFE_EVENT_TYPE
+	 * @see TypedEventConstants#TYPED_EVENT_TYPE
 	 */
 	String value();
 }

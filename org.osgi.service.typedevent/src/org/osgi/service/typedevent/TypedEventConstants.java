@@ -33,7 +33,7 @@ public interface TypedEventConstants {
 	 * If this service property is not present then the reified type parameter
 	 * from the TypedEventHandler implementation class will be used.
 	 */
-	public static final String	TYPE_SAFE_EVENT_TYPE					= "event.type";
+	public static final String	TYPED_EVENT_TYPE					= "event.type";
 
 	/**
 	 * The name of the service property used to indicate the topic(s) to which
@@ -44,18 +44,18 @@ public interface TypedEventConstants {
 	 * from the TypedEventHandler implementation class will be used to determine
 	 * the topic.
 	 */
-	public static final String	TYPE_SAFE_EVENT_TOPICS					= "event.topics";
+	public static final String	TYPED_EVENT_TOPICS					= "event.topics";
 
 	/**
 	 * The name of the implementation capability for the Type Safe Events
 	 * specification
 	 */
-	public static final String	TYPE_SAFE_EVENT_IMPLEMENTATION			= "osgi.typedevent";
+	public static final String	TYPED_EVENT_IMPLEMENTATION			= "osgi.typedevent";
 
 	/**
 	 * The version of the implementation capability for the Type Safe Events
 	 * specification
 	 */
-	public static final String	TYPE_SAFE_EVENT_SPECIFICATION_VERSION	= "1.0.0";
+	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.0.0";
 
 }

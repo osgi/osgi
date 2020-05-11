@@ -28,7 +28,7 @@ import org.osgi.util.pushstream.PushStream;
  * @author $Id$
  */
 @ProviderType
-public interface TypeSafeEventMonitor {
+public interface TypedEventMonitor {
 
     /**
 	 * Get a stream of events, starting now.

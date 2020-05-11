@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * registry and are notified with an event object when an event is sent.
  * <p>
  * {@code UntypedEventHandler} objects must be registered with a service
- * property {@link TypedEventConstants#TYPE_SAFE_EVENT_TOPICS} whose value is the
+ * property {@link TypedEventConstants#TYPED_EVENT_TOPICS} whose value is the
  * list of topics in which the event handler is interested.
  * <p>
  * For example:

@@ -30,10 +30,10 @@
  * @author $Id$
  */
 
-@Version(TYPE_SAFE_EVENT_SPECIFICATION_VERSION)
+@Version(TYPED_EVENT_SPECIFICATION_VERSION)
 package org.osgi.service.typedevent.propertytypes;
 
-import static org.osgi.service.typedevent.TypedEventConstants.TYPE_SAFE_EVENT_SPECIFICATION_VERSION;
+import static org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 

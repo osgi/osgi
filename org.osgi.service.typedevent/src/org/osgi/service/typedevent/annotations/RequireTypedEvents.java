@@ -43,8 +43,8 @@ import org.osgi.service.typedevent.TypedEventConstants;
 		ElementType.TYPE, ElementType.PACKAGE
 })
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
-		name = TypedEventConstants.TYPE_SAFE_EVENT_IMPLEMENTATION, //
-		version = TypedEventConstants.TYPE_SAFE_EVENT_SPECIFICATION_VERSION)
-public @interface RequireTypeSafeEvents {
+		name = TypedEventConstants.TYPED_EVENT_IMPLEMENTATION, //
+		version = TypedEventConstants.TYPED_EVENT_SPECIFICATION_VERSION)
+public @interface RequireTypedEvents {
 	// This is a marker annotation.
 }
