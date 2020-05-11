@@ -55,16 +55,19 @@ jobs:
         publish_dir: osgi.specs/generated/html
         force_orphan: true
     - name: Upload Specification HTML
+      if: (github.repository == 'osgi/osgi')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
+      if: (github.repository == 'osgi/osgi')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
     - name: Upload Generated Repo
+      if: (github.repository == 'osgi/osgi')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Generated-Repo
