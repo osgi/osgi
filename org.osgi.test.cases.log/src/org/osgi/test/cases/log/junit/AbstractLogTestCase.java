@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -331,7 +331,8 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 		}
 
 		String threadName = Thread.currentThread().getName();
-		String logName = LogService.class.getSimpleName();
+		String logName = LogService.class.getSimpleName() + "."
+				+ getContext().getBundle().getSymbolicName();
 		StackTraceElement expectedLocation = null;
 		for (StackTraceElement element : Thread.currentThread()
 				.getStackTrace()) {
@@ -373,8 +374,7 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 					previousSequence < entry.getSequence());
 			assertEquals("Wrong logLevel", LogReader.getLogLevel(level),
 					entry.getLogLevel());
-			assertTrue("Wrong log name", logName.equals(entry.getLoggerName())
-					|| entry.getLoggerName().startsWith(logName + "."));
+			assertTrue("Wrong log name", logName.equals(entry.getLoggerName()));
 			if (threadName != null) {
 				assertTrue("Unexpected thread info: " + entry.getThreadInfo(),
 						entry.getThreadInfo().indexOf(threadName) >= 0);

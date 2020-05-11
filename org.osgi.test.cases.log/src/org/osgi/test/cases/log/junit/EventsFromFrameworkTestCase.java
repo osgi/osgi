@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017, 2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,13 +118,17 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 		logReaderService.addLogListener(eventLogListener);
 		Wiring.synchronousRefreshBundles(getContext(), tb1);
 
+		Bundle systemBundle = systemBundle();
+		String frameworkEventsLoggerName = EVENTS_FRAMEWORK + "."
+				+ systemBundle.getSymbolicName();
+
 		LogEntry refreshLogEntry = eventLogListener.getEntry(10000);
 		assertNotNull("No entry for refresh.", refreshLogEntry);
-		assertEventLog(refreshLogEntry, EVENTS_FRAMEWORK,
-				"FrameworkEvent PACKAGES REFRESHED", systemBundle(),
+		assertEventLog(refreshLogEntry, frameworkEventsLoggerName,
+				"FrameworkEvent PACKAGES REFRESHED", systemBundle,
 				LogService.LOG_INFO, LogLevel.INFO, null);
 
-		FrameworkStartLevel fwkStartLevel = systemBundle()
+		FrameworkStartLevel fwkStartLevel = systemBundle
 				.adapt(FrameworkStartLevel.class);
 
 		fwkStartLevel.setStartLevel(fwkStartLevel.getStartLevel() + 1);
@@ -134,13 +138,13 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 		LogEntry startLevelLog2 = eventLogListener.getEntry(10000);
 
 		assertNotNull("No entry for start level change 1.", startLevelLog1);
-		assertEventLog(startLevelLog1, EVENTS_FRAMEWORK,
-				"FrameworkEvent STARTLEVEL CHANGED", systemBundle(),
+		assertEventLog(startLevelLog1, frameworkEventsLoggerName,
+				"FrameworkEvent STARTLEVEL CHANGED", systemBundle,
 				LogService.LOG_INFO, LogLevel.INFO, null);
 
 		assertNotNull("No entry for start level change 2.", startLevelLog2);
-		assertEventLog(startLevelLog2, EVENTS_FRAMEWORK,
-				"FrameworkEvent STARTLEVEL CHANGED", systemBundle(),
+		assertEventLog(startLevelLog2, frameworkEventsLoggerName,
+				"FrameworkEvent STARTLEVEL CHANGED", systemBundle,
 				LogService.LOG_INFO, LogLevel.INFO, null);
 	}
 
@@ -178,7 +182,8 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 
 		int logsCount = actualLogs.size();
 		if (logsCount == expectedEventTypes.size()) {
-			assertBundleEventLog(actualLogs, expectedEventTypes);
+			assertBundleEventLog(actualLogs, expectedEventTypes,
+					tb1.getSymbolicName());
 		} else {
 			fail("Expected bundle events are not logged: " + actualLogs);
 		}
@@ -204,16 +209,19 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 	private void assertServiceEventLog(String eventType, LogLevel logLevel,
 			ServiceReference<String> ref) {
 		LogEntry entry = eventLogListener.getEntry(10000);
-		assertEventLog(entry, EVENTS_SERVICE, "ServiceEvent " + eventType,
+		assertEventLog(entry,
+				EVENTS_SERVICE + "."
+						+ getContext().getBundle().getSymbolicName(),
+				"ServiceEvent " + eventType,
 				getContext().getBundle(), logLevel.ordinal(), logLevel,
 				ref);
 	}
 
 	@SuppressWarnings("deprecation")
 	private void assertBundleEventLog(List<LogEntry> actualLogs,
-			List<String> expectedEventTypes) {
+			List<String> expectedEventTypes, String bsn) {
 		for (int i = 0; i < actualLogs.size(); i++) {
-			assertEventLog(actualLogs.get(i), EVENTS_BUNDLE,
+			assertEventLog(actualLogs.get(i), EVENTS_BUNDLE + "." + bsn,
 					"BundleEvent " + expectedEventTypes.get(i), tb1,
 					LogService.LOG_INFO, LogLevel.INFO, null);
 		}
@@ -224,8 +232,7 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 			String message, Bundle bundle, int level, LogLevel logLevel,
 			ServiceReference< ? > reference) {
 		assertTrue("Wrong logger name.",
-				loggerName.equals(logEntry.getLoggerName())
-						|| logEntry.getLoggerName().startsWith(loggerName + "."));
+				loggerName.equals(logEntry.getLoggerName()));
 		assertEquals("Wrong message.", message, logEntry.getMessage());
 		assertEquals("Wrong bundle.", bundle, logEntry.getBundle());
 		assertEquals("Wrong level.", level, logEntry.getLevel());
