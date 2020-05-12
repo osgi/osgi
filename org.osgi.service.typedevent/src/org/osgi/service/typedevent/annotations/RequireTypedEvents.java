@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,12 @@ import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.typedevent.TypedEventConstants;
 
 /**
- * This annotation can be used to require the Event Admin implementation. It can
+ * This annotation can be used to require the Typed Event implementation. It can
  * be used directly, or as a meta-annotation.
  * <p>
- * This annotation is applied to several of the Event Admin component property
+ * This annotation is applied to several of the Typed Event component property
  * type annotations meaning that it does not normally need to be applied to
- * Declarative Services components which use the Event Admin.
+ * Declarative Services components which use the Typed Event specification.
  * 
  * @author $Id$
  * @since 1.4

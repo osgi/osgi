@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author $Id$
  */
 @ProviderType
-public interface TypedEventConstants {
+public final class TypedEventConstants {
 
 	/**
 	 * The name of the service property used to indicate the type of the event
@@ -58,4 +58,9 @@ public interface TypedEventConstants {
 	 */
 	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.0.0";
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
+	private TypedEventConstants() {
+	}
 }

@@ -667,6 +667,20 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.typedevent"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.typedevent"/></code></para><para><code><xref
+              linkend="org.osgi.service.typedevent.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.typedevent.monitor"/></code></para><para><code><xref
+              linkend="org.osgi.service.typedevent.propertytypes"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.typedevent-version"
+              linkend="service.typedevent"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
