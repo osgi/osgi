@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * By convention, plugins with {@code service.cmRanking < 0} or
  * {@code service.cmRanking > 1000} should not make modifications to the
- * properties.
+ * properties. Any modifications made by such plugins must be ignored.
  * <p>
  * The Configuration Admin service has the right to hide properties from
  * plugins, or to ignore some or all the changes that they make. This might be
