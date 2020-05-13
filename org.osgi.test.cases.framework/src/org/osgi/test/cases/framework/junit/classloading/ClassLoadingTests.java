@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2020). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -935,7 +935,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		try {
 			try {
 				ClassLoader.getSystemClassLoader().loadClass(
-						"org.omg.CORBA.ORB");
+						"javax.xml.parsers.SAXParser");
 			}
 			catch (ClassNotFoundException ex) {
 				fail("A class required by this test cannot be loaded");
