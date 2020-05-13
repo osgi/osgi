@@ -12,7 +12,7 @@ import org.osgi.service.onem2m.dto.FilterCriteriaDTO;
 import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.PrimitiveContentDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
-import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.DesiredIdentiferResultType;
+import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.DesiredIdentifierResultType;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO.Operation;
 import org.osgi.service.onem2m.dto.ResourceDTO;
 import org.osgi.service.onem2m.dto.ResponsePrimitiveDTO;
@@ -291,11 +291,12 @@ public class ServiceLayerImplService implements ServiceLayer {
 
 	@Override
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc) {
-		return discovery(uri, fc, DesiredIdentiferResultType.structured);
+		return discovery(uri, fc, DesiredIdentifierResultType.structured);
 	}
 
 	@Override
-	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc, DesiredIdentiferResultType drt) {
+	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc,
+			DesiredIdentifierResultType drt) {
 		LOGGER.info("START DISCOVERY_RESULT_TYPE uri:" + uri + " fc:" + fc);
 
 		// Setting RequestPrimitiveDTO
@@ -304,7 +305,7 @@ public class ServiceLayerImplService implements ServiceLayer {
 		req.operation = Operation.Retrieve;
 		req.to = uri;
 		req.filterCriteria = fc;
-		req.desiredIdentiferResultType = drt;
+		req.desiredIdentifierResultType = drt;
 
 		// Set the source of the request
 		req.from = this.origin;

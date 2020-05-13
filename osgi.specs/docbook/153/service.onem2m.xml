@@ -206,14 +206,14 @@ public interface ServiceLayer {
        FilterCriteriaDTO fc = new FilterCriteriaDTO();
        fc.createdAfter = "20200101T120000";
        fc.createdBefore = "20200101T130000";
-       fc.resrouceType = new Integer(){Constants.RT_contentInstance};
-       fc.filterOperation = FilterOpration.AND;
+       fc.resouceType = new Integer[]{ new Integer(Constants.RT_contentInstance)};
+       fc.filterOperation = FilterOperation.AND;
 
        Promise &lt;List&lt;String&gt;&gt; p = sl.discovery("/CSE1/csebase/temperatureStore",fc);
        List&lt;String&gt; l = p.getValue();
        List&lt;List&gt; renderData = new List&lt;List&gt;();
        for(String uri:l){
-          ResourceDTO resource= sl.retrieve(uri);
+          ResourceDTO resource= sl.retrieve(uri).getValue();
           List adata = new List();
           adata.add(resource.creationTime);
           adata.add(resource.attribute.get("content"));
