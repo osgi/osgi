@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2010, 2011). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2010, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1149,7 +1149,7 @@ public class BundleWiringTests extends WiringTest {
 		// forth bundle requires JavaSE [1.3, 1.4)
 		Bundle tb10v130 = install("resolver.tb10.v130.jar");
 		assertFalse(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v130})));
-		// fifth bundle requires JavaSE [1.3, 2.0)
+		// fifth bundle requires JavaSE [1.3, 10000)
 		Bundle tb10v140 = install("resolver.tb10.v140.jar");
 		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v140})));
 
