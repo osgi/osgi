@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="171px" preserveAspectRatio="none" style="width:277px;height:171px;" version="1.1" viewBox="0 0 277 171" width="277px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="105.0547" style="stroke: #383838; stroke-width: 1.0;" width="10" x="44.5" y="45.6094"/><rect fill="#FFFFFF" height="74.7031" style="stroke: #383838; stroke-width: 1.0;" width="10" x="146.5" y="75.9609"/><rect fill="#FFFFFF" height="39.3516" style="stroke: #383838; stroke-width: 1.0;" width="10" x="226.5" y="111.3125"/><line style="stroke: #383838; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="49" x2="49" y1="35.6094" y2="159.6641"/><line style="stroke: #383838; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="151.5" x2="151.5" y1="35.6094" y2="159.6641"/><line style="stroke: #383838; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="231.5" x2="231.5" y1="35.6094" y2="159.6641"/><rect fill="#F8F8F8" height="31.6094" style="stroke: #383838; stroke-width: 1.5;" width="83" x="8" y="3"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="69" x="15" y="24.5332">Webserver</text><rect fill="#F8F8F8" height="31.6094" style="stroke: #383838; stroke-width: 1.5;" width="70" x="116.5" y="3"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="56" x="123.5" y="24.5332">Servlet 1</text><rect fill="#F8F8F8" height="31.6094" style="stroke: #383838; stroke-width: 1.5;" width="70" x="196.5" y="3"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="56" x="203.5" y="24.5332">Servlet 2</text><rect fill="#FFFFFF" height="105.0547" style="stroke: #383838; stroke-width: 1.0;" width="10" x="44.5" y="45.6094"/><rect fill="#FFFFFF" height="74.7031" style="stroke: #383838; stroke-width: 1.0;" width="10" x="146.5" y="75.9609"/><rect fill="#FFFFFF" height="39.3516" style="stroke: #383838; stroke-width: 1.0;" width="10" x="226.5" y="111.3125"/><line style="stroke: #383838; stroke-width: 1.0;" x1="54.5" x2="101.5" y1="62.9609" y2="62.9609"/><line style="stroke: #383838; stroke-width: 1.0;" x1="101.5" x2="101.5" y1="62.9609" y2="75.9609"/><line style="stroke: #383838; stroke-width: 1.0;" x1="60.5" x2="101.5" y1="75.9609" y2="75.9609"/><polygon fill="#383838" points="70.5,71.9609,60.5,75.9609,70.5,79.9609,66.5,75.9609" style="stroke: #383838; stroke-width: 1.0;"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="78" x="66.5" y="58.1045">startListening</text><polygon fill="#383838" points="65.5,107.3125,55.5,111.3125,65.5,115.3125,61.5,111.3125" style="stroke: #383838; stroke-width: 1.0;"/><line style="stroke: #383838; stroke-width: 1.0;" x1="59.5" x2="145.5" y1="111.3125" y2="111.3125"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="71.5" y="106.4561">addServlet</text><polygon fill="#383838" points="65.5,137.6641,55.5,141.6641,65.5,145.6641,61.5,141.6641" style="stroke: #383838; stroke-width: 1.0;"/><line style="stroke: #383838; stroke-width: 1.0;" x1="59.5" x2="225.5" y1="141.6641" y2="141.6641"/><text fill="#000000" font-family="ProductusOSGiBookc" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="71.5" y="136.8076">addServlet</text><!--MD5=[b9208280996302fb581e1167a73f0e01]
+@startuml
+hide footbox
+skinparam monochrome true
+skinparam defaultFontName ProductusOSGiBookc
+skinparam shadowing false
+
+participant Webserver as wb
+participant "Servlet 1" as ll
+participant "Servlet 2" as rl
+
+activate wb
+wb -> wb: startListening
+activate ll
+ll -> wb: addServlet
+activate rl
+rl -> wb: addServlet
+@enduml
+
+PlantUML version 1.2019.11(Sun Sep 22 12:02:15 CEST 2019)
+(EPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 13.0.1+9
+Operating System: Windows 10
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

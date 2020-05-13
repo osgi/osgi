@@ -1,6 +1,8 @@
 @startuml
+hide footbox
 skinparam monochrome true
 skinparam defaultFontName ProductusOSGiBookc
+skinparam shadowing false
 
 participant Webserver as wb
 participant ApplicationCondition as c
@@ -10,17 +12,12 @@ participant "Servlet 2" as rl
 activate ll
 activate c
 ll -> c: addServlet1
+ll -> wb: addServlet1
+activate wb
 activate rl
 rl -> c: addServlet2
-activate wb
+rl -> wb: addServlet2
 c -> wb: setApplicationConditon
-ll -> wb: addServlet
-rl -> wb: addServlet
+activate wb
 wb -> wb: StartListening
-ll -> wb: removeServlet
-ll -> c: removeServlet
-deactivate ll
-c -> wb: removeListenerCondition
-deactivate c
-deactivate wb
 @enduml
