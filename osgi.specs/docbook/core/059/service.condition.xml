@@ -17,7 +17,7 @@
   <section xml:id="service.condition.introduction">
     <title>Introduction</title>
     <para>In dynamic systems, such as OSGi, one of the more challenging problems can be to define when a System or part 
-    of it is ready to do work. The answer can change depending on the individual perspective. The developer of a Webserver 
+    of it is ready to do some work. The answer can change depending on the individual perspective. The developer of a Webserver 
     might say, the System is ready when the server starts listening to port 80. An Application developer however would 
     define the system as ready, when the database connection is up and all Servlets are registered. Taking the Application 
     developers view, the Server should start Listening on Port 80 when the System is ready and not beforehand.</para>
@@ -47,7 +47,7 @@
           <para><emphasis>Condition</emphasis> - A service interface used to represent a state at runtime.</para>
         </listitem>
         <listitem>
-          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from the moment ofFramework initialization.</para>
+          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from the moment of Framework initialization.</para>
         </listitem>
       </itemizedlist>
   	</section>
@@ -67,7 +67,7 @@
     injection framework, such as Declarative Services or OSGi CDI integration, can defer component activation
     until the dependency is available. With a proper dependency, when the dependency disappears any components
     that depend on it will be deactivated automatically. Such a system will tend to automatically initialize
-    and tear down components in the correct order. EXPLICITLY NAME (what was it? I stopped writing mid note.)</para>
+    and tear down components in the correct order.</para>
 
     <para>The OSGi service layer provides a very expressive tool for describing the aspects of a service
     through its service properties (see <xref linkend="framework.service.serviceproperties"/>) and for
@@ -85,20 +85,20 @@
     <para>Translating ordering dependencies to service dependencies is often straightforward to do, but 
     some scenarios make it more challenging. For example, if a component depends on a system wide state
     in order to be fully functional. This type of problem can be common when using the whiteboard pattern.
-    An example of a whiteboard pattern is above mentioned Webserver. As a Servlet implementation it is only required to register a Servlet
-    service and that servlet will automatically get used to dispatch requests to by the Webserver implementation.
-    However, in some scenarios a deployer may want to ensure that one or more specific Servlets are
-    registered before allowing the Webserver to be active. By default the webserver
-    does not need any servlets to be active, but a deployer may want to ensure at least one listener
-    is available. For this example a deployer wants a Servlet 1 and Servlet 2 to be available.</para>
+    An example of a whiteboard pattern is above mentioned Webserver. As a <emphasis>Servlet</emphasis> implementation it is only required to register a <emphasis>Servlet</emphasis>
+    as a service and that <emphasis>Servlet</emphasis> will automatically get used to dispatch requests to by the Webserver implementation.
+    However, in some scenarios a deployer may want to ensure that one or more specific <emphasis>Servlets</emphasis> are
+    registered before allowing the Webserver to be active. By default the Webserver
+    does not need any <emphasis>Servlets</emphasis> to be active, but a deployer may want to ensure at least one listener
+    is available. For this example a deployer wants a <emphasis>Servlet 1</emphasis>  and <emphasis>Servlet 2</emphasis> to be available.</para>
 
  	<figure pgwide="1">
-        <title>Service Activation without Condition</title>
+        <title>Service Activation with a normal Whiteboard</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" 
-                       fileref="without-condition-sequence.svg"/>
+                       fileref="normal-whiteboard-sequence.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -109,8 +109,8 @@
 @Reference(target= "(&amp;(servlet=1)(servlet=2))")
 volatile List&lt;Servlet&gt; servlets;</programlisting>
 
-    <para>This does not work because no single Servlet will satisfy both properties. 
-    The result is that the list of servlets will remain empty for the system and the webserver will not start.
+    <para>This does not work because no single <emphasis>Servlet 2</emphasis> will satisfy both properties. 
+    The result is that the list of <emphasis>Servlets</emphasis> will remain empty for the system and the Webserver will not start.
     Condition services provide a mechanism for declaring and controlling what conditions
     are necessary to enable a component. For example, with the listener whiteboard implementation
     the following condition service requirement could be specified:</para>
@@ -133,17 +133,17 @@ Condition requiredCondition;</programlisting>
        <mediaobject>
          <imageobject>
            <imagedata align="center"
-                      fileref="condition-sequence.svg"/>
+                      fileref="condition-sequence.svg"
+                      contentwidth="7.000in"
+                      contentdepth="2.743in"/>
          </imageobject>
        </mediaobject>
      </figure>
     
-    <para>By declaring a requirement on the invariably available true condition a developer can open
-    up a component to be configured for activation based on a condition that can be
-    controlled at runtime with configuration. Conditions can also be enabled based on the availability of
+    <para>Conditions can also be enabled based on the availability of
     other conditions. This allows for more powerful layering of conditions for a system.</para>
     
-    <para>The Condition that provides the servlets are ready state can then look as follows:</para>
+    <para>The Condition that provides the <emphasis>Servlets</emphasis> are ready state can then look as follows:</para>
    <programlisting>@Component(property = {
    	"osgi.condition.id=application", 
    	"servlet=1", 
@@ -154,6 +154,8 @@ public class ApplicationCondition implements Condition{
 	@Reference(target = "(servlet=2)")
 	private Servlet servlet2;
 }</programlisting>
+
+	<para>Please note, that the example Condition above is just a simplified construct. If services appear, all ServiceListeners are called sequential. This means, that the Condition may be informed about the emergence of a Service, before other parties that need to know about it. Thus the registration of the Condition itself should happen asynchronious and even better with a slight delay, so the framework has a chance to notify all listeners first.</para>
       <section>
         <title>The Default True Condition</title>
         <para>The Framework will always register a default Condition everybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
