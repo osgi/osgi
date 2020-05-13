@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2020). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -31,8 +31,8 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		//this should fail because org.omg.CORBA is not imported 
-		Class.forName("org.omg.CORBA.ORB");
+		// this should fail because javax.xml.parsers.SAXParser is not imported
+		Class.forName("javax.xml.parsers.SAXParser");
 	}
 
 	public void stop(BundleContext context) throws Exception {
