@@ -26,7 +26,6 @@
 package org.osgi.test.cases.framework.launch.secure.fragments.tb16a;
 
 import java.io.InputStream;
-import java.security.AccessControlException;
 import java.util.Collection;
 
 import org.osgi.framework.BundleActivator;
@@ -67,7 +66,7 @@ public class Activator implements BundleActivator{
 			throw new BundleException(
 					"expected extension bundle to fail install due to lack of permission");
 		}
-		catch (AccessControlException e) {
+		catch (SecurityException e) {
 			// this is the expected exception, since this bundle doesn't
 			// have AdminPermission[<bundle>, EXTENSIONLIFECYCLE] to
 			// install framework extension bundles.
