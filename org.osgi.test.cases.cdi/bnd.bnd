@@ -47,7 +47,6 @@ Test-Cases: ${testcases}
 	org.osgi.test.support;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.event;version=latest,\
-	org.osgi.service.component;version=latest,\
 	org.osgi.service.log;version=latest,\
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.service;version=latest,\
