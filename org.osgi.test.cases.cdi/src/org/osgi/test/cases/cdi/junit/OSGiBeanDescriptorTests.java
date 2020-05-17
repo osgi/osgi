@@ -56,7 +56,9 @@ public class OSGiBeanDescriptorTests extends AbstractTestCase {
 		Bundle tb2Bundle = installBundle("tb2.jar");
 
 		try {
+			timeout = 2000;
 			BeanManager beanManager = getBeanManager(tb1Bundle);
+			assertNotNull(beanManager);
 			Set<Bean<?>> beans = beanManager.getBeans("beanimpl");
 			Bean<?> bean = beanManager.resolve(beans);
 			CreationalContext<?> ctx = beanManager.createCreationalContext(bean);

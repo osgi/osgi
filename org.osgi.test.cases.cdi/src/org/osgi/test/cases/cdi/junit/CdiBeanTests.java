@@ -132,7 +132,7 @@ public class CdiBeanTests extends AbstractTestCase {
 			BeanService.class.getName(),
 				"MethodInjectedService");) {
 
-			BeanService beanService = tracker.waitForService(timeout);
+			BeanService beanService = tracker.waitForService(1000);
 
 			assertNotNull(beanService);
 			assertEquals("PREFIXMETHOD", beanService.doSomething());

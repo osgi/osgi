@@ -248,7 +248,7 @@ public abstract class AbstractTestCase {
 
 	static final Bundle bundle = FrameworkUtil.getBundle(CdiBeanTests.class);
 	static final BundleContext bundleContext = bundle.getBundleContext();
-	static final long timeout = 500;
+	long															timeout			= 500;
 	static Bundle servicesBundle;
 	static ServiceTracker<CDIComponentRuntime, CDIComponentRuntime> runtimeTracker;
 
