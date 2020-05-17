@@ -115,7 +115,7 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			stA = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=A))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=A)(ports=4567))"), null);
 			stA.open(true);
 
 			BeanService<Callable<int[]>> beanService = stA.waitForService(timeout);
@@ -126,10 +126,10 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			stB = new ServiceTracker<BeanService, BeanService>(
 				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=B))"), null);
+					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=B)(ports=80))"), null);
 			stB.open(true);
 
-			beanService = stB.waitForService(timeout);
+			beanService = stB.waitForService(1000);
 
 			assertNotNull(beanService);
 			assertEquals("green", beanService.doSomething());

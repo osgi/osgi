@@ -1,1 +1,6 @@
 # 3rd party artifacts
+org.apache.aries.cdi:org.apache.aries.cdi.extender:1.1.2-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.cdi.extension.spi:1.1.2-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.cdi.extra:1.1.2-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.cdi.spi:1.1.2-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.cdi.weld:1.1.2-SNAPSHOT
