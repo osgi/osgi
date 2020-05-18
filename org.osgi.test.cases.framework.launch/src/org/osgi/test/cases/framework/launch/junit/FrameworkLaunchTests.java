@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2019). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -492,6 +492,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
 			// expected
 		}
+		stopFramework(frameworkSingleBSN1);
 
 		// explicitly set bsnversion to single
 		Map<String, String> configurationSingle2 = getConfiguration(getName()
@@ -507,6 +508,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
 			// expected
 		}
+		stopFramework(frameworkSingleBSN2);
 	}
 
 	public void testUUID() {
