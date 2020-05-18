@@ -118,31 +118,33 @@ public interface Framework extends Bundle {
 	 * A Framework Event is returned to indicate why this Framework has stopped.
 	 * 
 	 * @param timeout Maximum number of milliseconds to wait until this
-	 *        Framework has completely stopped. A value of zero will wait
-	 *        indefinitely.
+	 *            Framework has completely stopped. A value of zero will wait
+	 *            indefinitely.
 	 * @return A Framework Event indicating the reason this method returned. The
 	 *         following {@code FrameworkEvent} types may be returned by this
 	 *         method.
 	 *         <ul>
 	 *         <li>{@link FrameworkEvent#STOPPED STOPPED} - This Framework has
-	 *         been stopped. </li>
-	 * 
+	 *         been stopped.</li>
 	 *         <li>{@link FrameworkEvent#STOPPED_UPDATE STOPPED_UPDATE} - This
 	 *         Framework has been updated which has shutdown and will now
 	 *         restart.</li>
-	 * 
+	 *         <li>{@link FrameworkEvent#STOPPED_SYSTEM_REFRESHED
+	 *         STOPPED_SYSTEM_REFRESHED} - The Framework has been stopped
+	 *         because of a refresh operation on the system bundle. A new class
+	 *         loader must be used to restart the Framework.</li>
 	 *         <li>{@link FrameworkEvent#ERROR ERROR} - The Framework
 	 *         encountered an error while shutting down or an error has occurred
-	 *         which forced the framework to shutdown. </li>
-	 * 
-	 *         <li> {@link FrameworkEvent#WAIT_TIMEDOUT WAIT_TIMEDOUT} - This
+	 *         which forced the framework to shutdown.</li>
+	 *         <li>{@link FrameworkEvent#WAIT_TIMEDOUT WAIT_TIMEDOUT} - This
 	 *         method has timed out and returned before this Framework has
 	 *         stopped.</li>
 	 *         </ul>
 	 * @throws InterruptedException If another thread interrupted the current
-	 *         thread before or while the current thread was waiting for this
-	 *         Framework to completely stop. The <i>interrupted status</i> of
-	 *         the current thread is cleared when this exception is thrown.
+	 *             thread before or while the current thread was waiting for
+	 *             this Framework to completely stop. The <i>interrupted
+	 *             status</i> of the current thread is cleared when this
+	 *             exception is thrown.
 	 * @throws IllegalArgumentException If the value of timeout is negative.
 	 */
 	FrameworkEvent waitForStop(long timeout) throws InterruptedException;

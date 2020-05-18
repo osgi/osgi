@@ -173,9 +173,9 @@ public class FrameworkEvent extends EventObject {
 	 * The Framework has stopped and the framework requires a new class loader
 	 * to restart.
 	 * <p>
-	 * This event is fired when the Framework has been stopped because of a stop
-	 * operation on the system bundle and the framework requires a new class
-	 * loader to be used to restart. For example, if a framework extension
+	 * This event is fired when the Framework has been stopped because of a
+	 * refresh operation on the system bundle and the framework requires a new
+	 * class loader to be used to restart. For example, if a framework extension
 	 * bundle has been refreshed. The source of this event is the System Bundle.
 	 * 
 	 * @since 1.9

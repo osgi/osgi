@@ -1532,6 +1532,14 @@
         </listitem>
 
         <listitem>
+          <para><xref
+          linkend="org.osgi.framework.FrameworkEvent.STOPPED_SYSTEM_REFRESHED"
+          xrefstyle="hyperlink"/> - This <code>Framework</code> object has
+          been stopped because of a refresh operation on the system bundle
+          and the framework requires a new class loader to be used to restart.</para>
+        </listitem>
+
+        <listitem>
           <para><xref linkend="org.osgi.framework.FrameworkEvent.ERROR"
           xrefstyle="hyperlink"/> - The Framework encountered an error while
           shutting down or an error has occurred that forced the framework to
