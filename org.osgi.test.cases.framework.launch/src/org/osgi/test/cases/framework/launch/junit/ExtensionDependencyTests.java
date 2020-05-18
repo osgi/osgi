@@ -27,6 +27,7 @@ package org.osgi.test.cases.framework.launch.junit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ import org.osgi.framework.namespace.ExecutionEnvironmentNamespace;
 import org.osgi.framework.namespace.HostNamespace;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.namespace.PackageNamespace;
+import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
@@ -251,6 +253,53 @@ public class ExtensionDependencyTests extends LaunchTest {
 		BundleWiring hostWiring = framework.adapt(BundleWiring.class);
 		assertWires(hostWiring, extension3.adapt(BundleWiring.class),
 				EXTENSION_TEST_NAMESPACE);
+	}
+
+	public void testNormalBundleRequireCapabilityFromExtension()
+			throws BundleException, IOException {
+		if (!isFrameworkExtensionSupported()) {
+			return;
+		}
+		List<String> bundles = Arrays.asList(new String[] {
+				EXTENSION_1_V1_JAR, "/launch.tb5.jar"
+		});
+		List<Bundle> installed = new ArrayList<Bundle>();
+
+		for (String bundle : bundles) {
+			installed.add(installBundle(framework, bundle));
+		}
+		framework.adapt(FrameworkWiring.class).resolveBundles(installed);
+		for (Bundle bundle : installed) {
+			assertTrue("Expected bundle to resolve: " + bundle,
+					(bundle.getState() & Bundle.RESOLVED) != 0);
+		}
+
+		Bundle normalBundle = installed.get(1);
+		BundleWiring provider = framework.adapt(BundleWiring.class);
+		BundleWiring requirer = normalBundle
+				.adapt(BundleWiring.class);
+
+		BundleWire extensionWire = provider.getProvidedWires(EXTENSION_TEST_NAMESPACE)
+				.get(0);
+		BundleCapability capability = provider
+				.getCapabilities(EXTENSION_TEST_NAMESPACE)
+				.get(0);
+		BundleRequirement requirement = requirer
+				.getRequirements(EXTENSION_TEST_NAMESPACE)
+				.get(0);
+
+		assertEquals("Wrong provider", provider.getResource(),
+				extensionWire.getProvider());
+		assertEquals("Wrong requirer", requirer.getResource(),
+				extensionWire.getRequirer());
+		assertEquals("Wrong provider wiring", provider,
+				extensionWire.getProviderWiring());
+		assertEquals("Wrong requirer wiring", requirer,
+				extensionWire.getRequirerWiring());
+		assertEquals("Wrong capability", capability, extensionWire.getCapability());
+		assertEquals("Wrong requirement", requirement, extensionWire.getRequirement());
+		assertTrue("Requirement does not match capability",
+				extensionWire.getRequirement().matches(extensionWire.getCapability()));
 	}
 
 	public void testMissingCapabilityFromExtension()

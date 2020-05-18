@@ -21,6 +21,7 @@ Import-Package: ${-signaturetest}, *
     launch.tb2.jar, \
     launch.tb3.jar, \
     launch.tb4.jar, \
+    launch.tb5.jar, \
     extensions.tb1.jar, \
     extensions.tb2.jar, \
     extensions.tb3.jar, \
