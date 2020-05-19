@@ -24,7 +24,7 @@ import org.osgi.framework.launch.Framework;
 /**
  * A factory for creating {@link Framework} instances.
  * <p>
- * If a framework supports {@link ModuleConnector} then the implementation jar
+ * If a framework supports {@link ModuleConnector}, then the implementation jar
  * must contain the following resource:
  * 
  * <pre>
@@ -73,7 +73,6 @@ public interface ConnectFrameworkFactory {
 	 *             {@code AllPermission}, and the Java Runtime Environment
 	 *             supports permissions.
 	 * @see ModuleConnector
-	 * @since 1.3
 	 */
 	Framework newFramework(Map<String,String> configuration,
 			ModuleConnector moduleConnector);
