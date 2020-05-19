@@ -1066,7 +1066,9 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><remark>Are there any changes for Security?</remark></para>
+        <para>Added Service Permission <code>GET</code> for
+        <code>org.osgi.service.condition.Condition</code> to the implied permissions.
+        See <xref linkend="framework.security.impliedpermissions"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
