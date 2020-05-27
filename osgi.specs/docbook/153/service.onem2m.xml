@@ -101,7 +101,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Application Bundle</emphasis> - Application, which use oneM2M CSE's capability.
+        <para><emphasis>Application Bundle</emphasis> - Application, which use oneM2M CSE's capability. This specification assumes that an application bundle consists an oneM2M application.
         </para>
       </listitem>
       <listitem>
@@ -176,52 +176,58 @@ public interface ServiceLayer {
   Following example shows temperature measurement application using
   container resource and contentInstance resource.
   <programlisting>
-     ServiceReference &lt;ServiceLayer&gt; sr = bc.getServiceReference("org.osgi.service.onem2m.ServiceLayer");
-     ServiceLayer sl = sr.getService();
 
-     ResourceDTO container = new ResourceDTO();
-     container.resourceType = Constants.RT_contentInstance;
-     container.resourceName = "temperatureStore";
-     sl.create("/CSE1/csebase", container);
+ServiceReference&lt;ServiceLayer&gt; sr = bc
+                                .getServiceReference(ServiceLayer.class);
+ServiceLayer sl = bc.getService(sr);
 
-     for(int i=0;active;i++){
+ResourceDTO container = new ResourceDTO();
+container.resourceType = Constants.RT_contentInstance;
+container.resourceName = "temperatureStore";
+sl.create("/CSE1/csebase", container).getValue();
+
+ScheduledExecutorService service = Executors
+                .newSingleThreadScheduledExecutor();
+
+AtomicInteger count = new AtomicInteger(0);
+
+service.scheduleAtFixedRate(() -&gt; {
         ResourceDTO instance = new ResourceDTO();
         instance.resourceType = Constants.RT_contentInstance;
-        instance.resourceName = "instance" + i;
-        instance.attribute = new HashMap();
-        instance.attribute.put("content", measureTemerature() );
+        instance.resourceName = "instance" + count.getAndIncrement();
+        instance.attribute = new HashMap&lt;String,Object&gt;();
+        instance.attribute.put("content", measureTemperature());
 
-        sl.create("/CSE1/csebase/temperatureStore", instane);
-        Thread.sleep(60000);// wait 1 minuite.
-     }
+        sl.create("/CSE1/csebase/temperatureStore", instance);
+}, 0, 60, TimeUnit.SECONDS);
   </programlisting>
 </para>
 
   <para>
     Following example shows visualizing application of temperature data.
     <programlisting>
-       ServiceReference &lt;ServiceLayer&gt; sr = bc.getServiceReference("org.osgi.service.onem2m.ServiceLayer");
-       ServiceLayer sl = sr.getService();
+ServiceReference&lt;ServiceLayer&gt; sr = (ServiceReference&lt;ServiceLayer&gt;) bc
+                .getServiceReference("org.osgi.service.onem2m.ServiceLayer");
+ServiceLayer sl = bc.getService(sr);
 
-       FilterCriteriaDTO fc = new FilterCriteriaDTO();
-       fc.createdAfter = "20200101T120000";
-       fc.createdBefore = "20200101T130000";
-       fc.resouceType = new Integer[]{ new Integer(Constants.RT_contentInstance)};
-       fc.filterOperation = FilterOperation.AND;
+FilterCriteriaDTO fc = new FilterCriteriaDTO();
+fc.createdAfter = "20200101T120000";
+fc.createdBefore = "20200101T130000";
+List&lt;Integer&gt; resourceTypes = new ArrayList&lt;Integer&gt;();
+resourceTypes.add(Constants.RT_contentInstance);
+fc.resourceType = resourceTypes;
+fc.filterOperation = FilterOperation.AND;
 
-       Promise &lt;List&lt;String&gt;&gt; p = sl.discovery("/CSE1/csebase/temperatureStore",fc);
-       List&lt;String&gt; l = p.getValue();
-       List&lt;List&gt; renderData = new List&lt;List&gt;();
-       for(String uri:l){
-          ResourceDTO resource= sl.retrieve(uri).getValue();
-          List adata = new List();
-          adata.add(resource.creationTime);
-          adata.add(resource.attribute.get("content"));
-          renderData.add(adata);
-       }
+List&lt;String&gt; l = sl.discovery("/CSE1/csebase/temperatureStore", fc)
+                .getValue();
+List&lt;Pair&lt;String,Double&gt;&gt; renderData = new ArrayList&lt;Pair&lt;String,Double&gt;&gt;();
+for (String uri : l) {
+        ResourceDTO resource = sl.retrieve(uri).getValue();
+        renderData.add(new Pair&lt;String,Double&gt;(resource.creationTime,
+                        (Double) resource.attribute.get("content")));
+}
 
-       renderService(renderData);
-
+renderService(renderData);
     </programlisting></para>
 <!--
 <para>
@@ -291,23 +297,24 @@ public interface ServiceLayer {
 
     <para>
       <programlisting>
-        public class MyListener{
-          public void notified(RequestPrimitiveDTO request){
-            NotificationDTO notification = request.content.notification;
-            NotificationEventDTO event = notification.notificationEvent;
-            Object updatedResource = event.object
-            NotificationEventType type = event.notificationEventType;
-            if( type == NotificationEventType.update_of_resource ){
-              // check updated resource, execute some actions.
-            }
-          }
-        }
+public class MyListener implements NotificationListener {
+    public void notified(RequestPrimitiveDTO request){
+	      NotificationDTO notification = request.content.notification;
+	      NotificationEventDTO event = notification.notificationEvent;
+			  Object updatedResource = event.representation;
+	      NotificationEventType type = event.notificationEventType;
+	      if( type == NotificationEventType.update_of_resource ){
+	          // check updated resource, execute some actions.
+	      }
+	  }
+}
 
-        @Activate
-        public void activate(BundelContext bc){
-          NotificagtionListener l = new MyListener();
-          bc.registerService(NotificationListener.class, l, null);
-        }
+@Activate
+public void activate(BundleContext bc) {
+    NotificationListener l = new MyListener();
+		    bc.registerService(NotificationListener.class, l, null);
+    }
+}
       </programlisting>
     </para>
 <!--
