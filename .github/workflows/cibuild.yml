@@ -16,6 +16,10 @@ env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: -Dorg.gradle.parallel=false
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   JDK8_Linux:
     name: JDK8 ubuntu-latest
@@ -25,7 +29,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Git Unshallow
       if: (github.repository == 'osgi/osgi') && (github.event_name != 'pull_request')
-      shell: bash
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
@@ -39,7 +42,7 @@ jobs:
         server-username: OSSRH_USERNAME
         server-password: OSSRH_PASSWORD
     - name: Build
-      shell: bash
+      id: build
       run: |
         ./.github/scripts/build.sh
       env:
@@ -72,3 +75,8 @@ jobs:
       with:
         name: OSGi-Generated-Repo
         path: cnf/generated/repo/
+    - name: Core CT
+      id: ct_core
+      if: (steps.build.conclusion == 'success')
+      run: |
+        ./.github/scripts/ct-core.sh
