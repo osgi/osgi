@@ -19,21 +19,23 @@ package org.osgi.service.condition;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
+ * Condition Service interface.
+ * <p>
  * In dynamic systems, such as OSGi, one of the more challenging problems can be
- * to define when a System or part of it is ready to do work. The answer can
- * change depending on the individual perspective. The developer of a Webserver
- * might say, the System is ready when the server starts listening to port 80.
- * An Application developer however would define the system as ready, when the
- * database connection is up and all Servlets are registered. Taking the
- * Application developers view, the Server should start Listening on Port 80
- * when the System is ready and not beforehand.
+ * to define when a system or part of it is ready to do work. The answer can
+ * change depending on the individual perspective. The developer of a web server
+ * might say, the system is ready when the server starts listening on port 80.
+ * An application developer however would define the system as ready when the
+ * database connection is up and all servlets are registered. Taking the
+ * application developers view, the web server should start listening on port 80
+ * when the application is ready and not beforehand.
  * <p>
- * The <code>Condition</code> interface is designed to address this issue. Its
- * task is to provide a marker that can be tracked. It acts as a defined signal
- * to other services.
+ * The {@code Condition} service interface is a marker interface designed to
+ * address this issue. Its role is to provide a dependency that can be tracked.
+ * It acts as a defined signal to other services.
  * <p>
- * A Condition must be registered with the {@link Condition#CONDITION_ID} as
- * property.
+ * A {@code Condition} service must be registered with the
+ * {@link Condition#CONDITION_ID} service property.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -42,25 +44,34 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface Condition {
 
 	/**
-	 * Service property identifying a condition's unique identifier. As a
-	 * Condition can potentially describe more then one state, the type of this
-	 * service property is {@code String+}
+	 * Service property identifying a condition's unique identifier.
+	 * <p>
+	 * Since a {@code Condition} service can potentially describe more then one
+	 * condition, the type of this service property is {@code String+}.
 	 */
-	public static final String		CONDITION_ID		= "osgi.condition.id";
+	String		CONDITION_ID		= "osgi.condition.id";
 
 	/**
-	 * The unique identifier for the TRUE Condition. The TRUE condition is
-	 * registered by the framework and therefore can always be relied upon.
+	 * The unique identifier for the default True condition.
+	 * <p>
+	 * The default True condition is registered by the framework during
+	 * framework initialization and therefore can always be relied upon.
 	 * 
 	 * @see Condition#CONDITION_ID
 	 */
-	public static final String		CONDITION_ID_TRUE	= "true";
+	String		CONDITION_ID_TRUE	= "true";
 
 	/**
-	 * A singleton condition instance that can be used to register condition
+	 * A condition instance that can be used to register {@code Condition}
 	 * services.
+	 * <p>
+	 * This can be helpful to avoid a bundle having to implement this interface
+	 * to register a {@code Condition} service
 	 */
-	public static final Condition	INSTANCE			= new Condition() {
-															/* Nothing to do */};
+	Condition	INSTANCE			= new ConditionImpl();
+}
 
+final class ConditionImpl implements Condition {
+	ConditionImpl() {
+	}
 }

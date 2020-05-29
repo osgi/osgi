@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="59" revision="$Id$" version="5.0" xml:id="service.condition"
+<chapter label="59" revision="$Id$"
+         version="5.0" xml:id="service.condition"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -16,25 +17,36 @@
 
   <section xml:id="service.condition.introduction">
     <title>Introduction</title>
-    <para>In dynamic systems, such as OSGi, one of the more challenging problems can be to define when a System or part 
-    of it is ready to do some work. The answer can change depending on the individual perspective. The developer of a Webserver 
-    might say, the System is ready when the server starts listening to port 80. An Application developer however would 
-    define the system as ready, when the database connection is up and all Servlets are registered. Taking the Application 
-    developers view, the Server should start Listening on Port 80 when the System is ready and not beforehand.</para>
-    
-    <para>The OSGi <xref linkend="framework.service" xrefstyle="hyperlink"/> already provides all necessary tools to register any 
-    service as a Marker, for when a System is ready. The Condition Service Specification simply provides a specified 
-    method to signal such states. With this, other specifications and users have a known method to listen for such signals.</para>
+
+    <para>In dynamic systems, such as OSGi, one of the more challenging
+    problems can be to define when a system or part of it is ready to do some
+    work. The answer can change depending on the individual perspective. The
+    developer of a web server might say, the system is ready when the server
+    starts listening on port 80. An application developer however would define
+    the system as ready, when the database connection is up and all servlets
+    are registered. Taking the application developers view, the web server
+    should start listening on port 80 when the application is ready and not
+    beforehand.</para>
+
+    <para>The <xref linkend="framework.service" xrefstyle="template:%t"/>
+    already provides all the necessary tools to register any service as an
+    indicator for when a system is ready. The Condition Service Specification
+    simply provides a specified service to signal such conditions. With this,
+    other specifications and users have a known service to listen for such
+    conditions.</para>
 
     <section>
       <title>Essentials</title>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Condition</emphasis> - Represents a particular state of the runtime.</para>
+          <para><emphasis>Condition</emphasis> - Represents a particular state
+          of the runtime.</para>
         </listitem>
+
         <listitem>
-          <para><emphasis>Target</emphasis> - A filter used to match a required condition.</para>
+          <para><emphasis>Target</emphasis> - A filter used to match a
+          required condition.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -44,146 +56,198 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Condition</emphasis> - A service interface used to represent a state at runtime.</para>
+          <para><emphasis>Condition</emphasis> - A service used to represent a
+          state at runtime.</para>
         </listitem>
+
         <listitem>
-          <para><emphasis>True Condition</emphasis> - A condition registered by the Framework which is always available from the moment of Framework initialization.</para>
+          <para><emphasis>True Condition</emphasis> - A condition registered
+          by the Framework with a well known name which is always available
+          from the moment of Framework initialization.</para>
         </listitem>
       </itemizedlist>
-  	</section>
+    </section>
   </section>
+
   <section xml:id="service.condition.operation">
     <title>Condition Service</title>
-    
-    <para>The <xref linkend="org.osgi.framework.startlevel.BundleStartLevel" xrefstyle="hyperlink"/>
-    can be used to control the order in which bundles are activated when the
-    Framework is launched. In some scenarios it can be helpful to have lower level bundles activate before higher
-    level ones so that the necessary services provided by the lower levels are ready before the higher levels start.
-    However, such solutions have drawbacks in a dynamic system because any dependency can appear and disappear
-    at any time. There is no guarantee that when a bundle finishes activation that it has registered all the services
-    that it ever will for the lifetime of its active state.</para>
-    
-    <para>A better solution is to model ordering as a dependency. Once something is a service dependency, an
-    injection framework, such as Declarative Services or OSGi CDI integration, can defer component activation
-    until the dependency is available. With a proper dependency, when the dependency disappears any components
-    that depend on it will be deactivated automatically. Such a system will tend to automatically initialize
-    and tear down components in the correct order.</para>
 
-    <para>The OSGi service layer provides a very expressive tool for describing the aspects of a service
-    through its service properties (see <xref linkend="framework.service.serviceproperties"/>) and for
-    selecting and matching available services with the service filter
-    (see <xref linkend="i2671413"/>). Dependency injection frameworks such as Declarative Services and OSGi CDI integration use
-    the expressive nature of the service layer by allowing a target option for dependencies. The target
-    specifies a filter that is used to assert the properties provided by a specific dependency.</para>
+    <para><xref linkend="org.osgi.framework.startlevel.BundleStartLevel"
+    xrefstyle="hyperlink"/> can be used to control the order in which bundles
+    are activated when the Framework is launched. In some scenarios it can be
+    helpful to have certain bundles activate before other bundles so that the
+    necessary services provided by the previously activated bundles are ready
+    before the later activated bundles start. However, such solutions have
+    drawbacks in a dynamic system because dependencies can appear and
+    disappear at any time. Also, there is no guarantee that when a bundle
+    finishes activation, that it has registered all the services that it ever
+    will for the lifetime of its active state.</para>
 
-    <para>The notion of a target for a dependency is very powerful and allows for additional control
-    over when a component can be activated. With Declarative Services and OSGi CDI integration
-    a dependency target can be overwritten with configuration. This gives the deployer of the system
-    power to select specific services for dependencies and therefore power over what conditions
-    are necessary for a component to be activated.</para>
+    <para>A better solution is to model ordering as a dependency. Once
+    something is a service dependency, an injection framework, such as
+    Declarative Services or CDI Integration, can defer component activation
+    until the dependency is available. With a proper dependency, when the
+    dependency disappears any components that depend on it will be deactivated
+    automatically. Such a system will tend to automatically initialize and
+    tear down components in the correct order.</para>
 
-    <para>Translating ordering dependencies to service dependencies is often straightforward to do, but 
-    some scenarios make it more challenging. For example, if a component depends on a system wide state
-    in order to be fully functional. This type of problem can be common when using the whiteboard pattern.
-    An example of a whiteboard pattern is above mentioned Webserver. As a <emphasis>Servlet</emphasis> implementation it is only required to register a <emphasis>Servlet</emphasis>
-    as a service and that <emphasis>Servlet</emphasis> will automatically get used to dispatch requests to by the Webserver implementation.
-    However, in some scenarios a deployer may want to ensure that one or more specific <emphasis>Servlets</emphasis> are
-    registered before allowing the Webserver to be active. By default the Webserver
-    does not need any <emphasis>Servlets</emphasis> to be active, but a deployer may want to ensure at least one listener
-    is available. For this example a deployer wants a <emphasis>Servlet 1</emphasis>  and <emphasis>Servlet 2</emphasis> to be available.</para>
+    <para>The <xref linkend="framework.service" xrefstyle="template:%t"/>
+    provides an expressive tool for describing the aspects of a service
+    through its service properties, see <xref
+    linkend="framework.service.serviceproperties"/>, and for selecting and
+    matching available services with the service filter, see <xref
+    linkend="i2671413"/>. Dependency injection frameworks, such as Declarative
+    Services and CDI Integration, use the expressive nature of the service
+    layer by allowing a target option for dependencies. The target specifies a
+    filter that is used to assert the properties provided by a specific
+    dependency.</para>
 
- 	<figure pgwide="1">
-        <title>Service Activation with a normal Whiteboard</title>
+    <para>The notion of a target for a dependency is very powerful and allows
+    for additional control over when a component can be activated. With
+    Declarative Services and CDI Integration, a dependency target can be
+    specified via configuration. This gives the deployer of the system power
+    to select specific services for dependencies and therefore control over
+    what conditions are necessary for a component to be activated.</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" 
-                       fileref="normal-whiteboard-sequence.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-    <para>With Declarative Services one could incorrectly try the following to achieve this:</para>
-
-    <programlisting>// THIS WILL NEVER WORK
-@Reference(target= "(&amp;(servlet=1)(servlet=2))")
-volatile List&lt;Servlet&gt; servlets;</programlisting>
-
-    <para>This does not work because no single <emphasis>Servlet 2</emphasis> will satisfy both properties. 
-    The result is that the list of <emphasis>Servlets</emphasis> will remain empty for the system and the Webserver will not start.
-    Condition services provide a mechanism for declaring and controlling what conditions
-    are necessary to enable a component. For example, with the listener whiteboard implementation
-    the following condition service requirement could be specified:</para>
-
-    <programlisting>@Reference(target= "(osgi.condition.id=true)")
-Condition requiredCondition;</programlisting>
-
-    <para>By default this component requires the <xref linkend="org.osgi.service.condition.Condition.CONDITION_ID_TRUE" xrefstyle="hyperlink"/> condition which is always available
-    at runtime. This allows the component to activate as soon as all of its other
-    requirements are met. In addition a deployer can now use configuration to change the target
-    of the required condition. For example, the target could be changed to a condition that represents
-    when all the required listeners the deployer requires are available at runtime. For
-    example, the following condition target could be used:</para>
-
-    <programlisting xml:id="service.condition.into.example">target= "(&amp;(osgi.condition.id=listeners)(servlet=1)(servlet=2))"</programlisting>
+    <para>Translating ordering dependencies to service dependencies is often
+    straightforward to do, but some scenarios make it more challenging. For
+    example, a component may depend upon a system wide state in order to be
+    fully functional. This type of problem can be common when using the
+    whiteboard pattern. An example of a whiteboard pattern is the previously
+    mentioned web server. A servlet implementation is only required to
+    register itself as a <emphasis>Servlet</emphasis> service and that servlet
+    can start receiving requests from the web server implementation. However
+    in some scenarios, a deployer may want to ensure that one or more specific
+    servlets are registered before allowing the web server to begin processing
+    requests. By default the web server does not need any servlets to be
+    active, but a deployer may want to ensure at least one servlet is
+    available. For this example, a deployer wants both <emphasis>Servlet
+    1</emphasis> and <emphasis>Servlet 2</emphasis> to be available.</para>
 
     <figure pgwide="1">
-       <title>Service Activation with Condition</title>
+      <title>Service Activation with a normal Whiteboard</title>
 
-       <mediaobject>
-         <imageobject>
-           <imagedata align="center"
-                      fileref="condition-sequence.svg"
-                      contentwidth="7.000in"
-                      contentdepth="2.743in"/>
-         </imageobject>
-       </mediaobject>
-     </figure>
-    
-    <para>Conditions can also be enabled based on the availability of
-    other conditions. This allows for more powerful layering of conditions for a system.</para>
-    
-    <para>The Condition that provides the <emphasis>Servlets</emphasis> are ready state can then look as follows:</para>
-   <programlisting>@Component(property = {
-   	"osgi.condition.id=application", 
-   	"servlet=1", 
-   	"servlet=2"})
-public class ApplicationCondition implements Condition{
-	@Reference(target = "(servlet=1)")
-	private Servlet servlet1;
-	@Reference(target = "(servlet=2)")
-	private Servlet servlet2;
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="normal-whiteboard-sequence.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Using Declarative Services, one could incorrectly try the following
+    to achieve this:</para>
+
+    <programlisting>// THIS WILL NEVER WORK
+@Reference(target="(&amp;(servlet=1)(servlet=2))")
+volatile List&lt;Servlet&gt; servlets;</programlisting>
+
+    <para>This does not work because no individual servlet service will
+    satisfy both properties. The result is that the list of servlet services
+    will remain empty for the system and the web server will not start.
+    Condition services provide a mechanism for declaring and controlling what
+    conditions are necessary to enable a component. For example, with the
+    listener whiteboard implementation the following condition service
+    requirement could be specified:</para>
+
+    <programlisting>@Reference(target="(osgi.condition.id=true)")
+Condition requiredCondition;</programlisting>
+
+    <para>This component requires the <xref
+    linkend="service.condition-true.condition" xrefstyle="template:%t"/> which
+    is always available at runtime. This allows the component to activate as
+    soon as all of its other requirements are met. In addition, a deployer can
+    now use configuration to change the target of the required condition. For
+    example, the target could be changed to reference a condition that
+    represents when all the servlets required by the deployer are available at
+    runtime. For example, the following condition target could be used:</para>
+
+    <programlisting xml:id="service.condition.into.example">(osgi.condition.id=application)</programlisting>
+
+    <figure pgwide="1">
+      <title>Service Activation with Condition</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.743in"
+                     contentwidth="7.000in" fileref="condition-sequence.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Conditions can also be enabled based on the availability of other
+    conditions. This allows for more powerful aggregation of conditions for a
+    system.</para>
+
+    <para>The Condition that indicates that the servlets are ready could be
+    implemented as follows:</para>
+
+    <programlisting>@Component(property="osgi.condition.id=application")
+public class ApplicationCondition implements Condition {
+    @Reference(target="(servlet=1)")
+    private Servlet servlet1;
+    @Reference(target="(servlet=2)")
+    private Servlet servlet2;
 }</programlisting>
 
-	<para>Please note, that the example Condition above is just a simplified construct. If services appear, all ServiceListeners are called sequential. This means, that the Condition may be informed about the emergence of a Service, before other parties that need to know about it. Thus the registration of the Condition itself should happen asynchronious and even better with a slight delay, so the framework has a chance to notify all listeners first.</para>
-      <section>
-        <title>The Default True Condition</title>
-        <para>The Framework will always register a default Condition everybody can rely on. The Condition will be registered during Framework <code>INIT</code> as the Framework registers framework services. It is registered with the <code>org.osgi.service.Condition.CONDITION_ID</code> property set to <code>org.osgi.service.Condition.CONDITION_ID_TRUE</code></para>
-      </section>
+    <para>Please note, that the example Condition implementation above is just
+    a simplified construct. When a service is registered, all service
+    listeners are called in some sequence. This means, that the example
+    Condition implementation above may observe the availability of a servlet
+    service before other parties that are also interested in servlet services,
+    such as the web server. Thus the registration of the Condition service
+    should happen asynchronously, and perhaps even after a slight delay, so
+    the framework has a chance to notify all service listeners regarding the
+    relevant service.</para>
+
+    <section xml:id="service.condition-true.condition">
+      <title>True Condition</title>
+
+      <para>The Framework will always register a default True Condition that
+      all bundles can rely on being always available. The default True
+      Condition will be registered during Framework initialization as the
+      Framework registers framework services. It is registered with the <xref
+      linkend="org.osgi.service.condition.Condition.CONDITION_ID"
+      xrefstyle="hyperlink"/> property set to the value of <xref
+      linkend="org.osgi.service.condition.Condition.CONDITION_ID_TRUE"
+      xrefstyle="hyperlink"/>.</para>
+    </section>
   </section>
 
   <section xml:id="service.condition.security">
     <title>Security</title>
+
     <section>
-        <title>Conditions</title>
-        <para>A Condition service has no function outside of providing a marker service to indicate a particular state and
-        is therefore not required to be a trusted service.</para>
+      <title>Conditions</title>
+
+      <para>A Condition service has no function outside of providing a marker
+      service to indicate a particular state and is therefore not required to
+      be a trusted service.</para>
     </section>
+
     <section>
-        <title>Minimum Implementation Permissions</title>
-        <programlisting>PackagePermission[org.osgi.service.condition,IMPORT]
+      <title>Minimum Implementation Permissions</title>
+
+      <para>To implement and register a Condition service, a bundle must have
+      the following permissions.</para>
+
+      <programlisting>PackagePermission[org.osgi.service.condition,IMPORT]
 ServicePermission[org.osgi.service.condition.Condition, REGISTER ]</programlisting>
     </section>
+
     <section>
-        <title>Minumum Using Permissions</title>
-        <para>No permissions are necessary to get a Condition service. 
-        The Service Permission <code>GET</code> must be implied by the framework to get Condition services
-        (see <xref linkend="framework.security.impliedpermissions"/>).
-        Note that the <code>org.osgi.service.condition</code> package does
-        not need to be imported for a bundle to be able to get a Condition service.</para>
+      <title>Minimum Using Permissions</title>
+
+      <para>No permissions are necessary to get a Condition service. Service
+      Permission with the <code>GET</code> action for the Condition service
+      must be granted by the framework, see <xref
+      linkend="framework.security.impliedpermissions"/>. Note that the
+      <code>org.osgi.service.condition</code> package does not necessarily
+      need to be imported for a bundle to be able to get a Condition service
+      unless the bundle actually has a runtime reference to the <xref
+      linkend="org.osgi.service.condition.Condition" xrefstyle="hyperlink"/>
+      type.</para>
     </section>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.condition.xml"/>
-
 </chapter>
