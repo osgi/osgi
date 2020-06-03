@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Export 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 /**
- * OSGi Bundle Annotations Package Version 1.0.
+ * OSGi Bundle Annotations Package Version 1.1.
  * <p>
  * This package is not used at runtime.
  *
  * @author $Id$
  */
-@Version("1.0")
+@Version("1.1")
 package org.osgi.annotation.bundle;
 
 import org.osgi.annotation.versioning.Version;
