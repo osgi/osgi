@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
 /**
  * Mark types as referenced.
  * <p>
- * The references must cause the packages of the specified types to be imported
- * by a bundle containing the annotated type.
+ * A reference can cause the package of a specified type to be imported if the
+ * bundle does not contain the package.
  * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * generate bundle manifests.
@@ -43,8 +43,9 @@ public @interface Referenced {
 	 * A list of referenced classes.
 	 * <p>
 	 * Specifying a class in this annotation must be treated by tools as if the
-	 * annotated type has a code reference to the class which will result in an
-	 * import of the package of the class.
+	 * annotated type has a code reference to the class which may result in an
+	 * import of the package of the class if the bundle does not contain that
+	 * package.
 	 */
 	Class< ? >[] value();
 }
