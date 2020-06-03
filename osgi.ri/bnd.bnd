@@ -1,5 +1,4 @@
 -include            : ${build}/eclipse/jdt.bnd, layout.bnd
--nobundles: ${is;${driver};eclipse}
 -dependson          : osgi.companion, ${build.impls}
 -resourceonly       : true
 
