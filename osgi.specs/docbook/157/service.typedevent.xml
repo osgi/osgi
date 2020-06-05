@@ -359,6 +359,63 @@
     </section>
 
     <section>
+      <title>Event Handler Service Properties</title>
+      
+      <para>The service properties that can be used to configure an Event Handler service are
+      outlined in the following table.</para>
+      
+      <table pgwide="1">
+        <title>Service properties applicable to Event Handler services</title>
+
+        <tgroup cols="4">
+          <colspec colnum="1" colwidth="1.9*"/>
+
+          <colspec colnum="2" colwidth="0.7*"/>
+
+          <colspec colnum="3" colwidth="4.2*"/>
+
+          <thead>
+            <row>
+              <entry>Service Property Name</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>event.topics</code></entry>
+
+              <entry><code>String+</code></entry>
+
+              <entry><para>Declares the topic pattern(s) for which the service should be called. This
+              service property is <ns:emphasis>required</ns:emphasis> for <code>UntypedEventHandler</code>
+              services, but <code>TypedEventHandler</code> services may omit it if they are only interested
+              in the default topic name for their reified type.</para><para>See <xref
+              linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TOPICS"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>event.type</code></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>Defines the target type into which events should be converted before being
+              passed to the Event Handler service. This service property is <ns:emphasis>forbidden</ns:emphasis> 
+              for <code>UntypedEventHandler</code> services, but <code>TypedEventHandler</code> services may use
+              it if they wish to further refine the type of data they wish to receive.</para><para>See <xref
+              linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TYPE"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
       <title>Error Handling</title>
       
       <para>There are several possible error scenarios for Event Handlers:</para>
