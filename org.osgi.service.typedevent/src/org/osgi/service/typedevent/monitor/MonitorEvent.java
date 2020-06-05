@@ -19,13 +19,12 @@ import java.time.Instant;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.dto.DTO;
 
 /**
  * A monitoring event.
  */
 @ProviderType
-public class MonitorEvent extends DTO {
+public class MonitorEvent {
 
 	/**
 	 * The Event Topic
