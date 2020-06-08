@@ -577,7 +577,28 @@
   <section>
     <title>Security</title>
     
-    <remark>TODO: do we need a TopicPermission?</remark>
+    <section>
+      <title>Topic Permission</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.typedevent.TopicPermission"
+      xrefstyle="hyperlink"/> class allows fine-grained control
+      over which bundles may post events to a given topic and which bundles
+      may receive those events.</para>
+
+      <para>The target parameter for the permission is the topic name.
+      <code>TopicPermission</code> classes uses a wildcard matching algorithm
+      similar to the <code>BasicPermission</code> class, except that solidi
+      (<code>'/' \u002F</code>) are used as separators instead of full stop
+      characters. For example, a name of <code>a/b/*</code> implies
+      <code>a/b/c</code> but not <code>x/y/z</code> or
+      <code>a/b</code>.</para>
+
+      <para>There are two available actions: <code>PUBLISH</code> and
+      <code>SUBSCRIBE</code>. These control a bundle's ability to either
+      publish or receive events, respectively. Neither one implies the
+      other.</para>
+    </section>
     
     <section>
       <title>Required Permissions</title>
@@ -589,17 +610,29 @@
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UntypedEventHandler</code>,
       <code>REGISTER</code>] or 
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UnhandledEventHandler</code>,
-      <code>REGISTER</code>].</para>
+      <code>REGISTER</code>]. In addition, bundles that consume events require
+      <code>TopicPermission[ &lt;topic&gt;, SUBSCRIBE ]</code> for each topic
+      they want to be notified about.</para>
 
       <para>Bundles that need to publish events must be granted permission
       to get the <code>TypedEventBus</code> service, that is
       <code>ServicePermission[ org.osgi.service.typedevent.TypedEventBus, GET]</code>
-      so that they may retrieve the Typed Event Bus and use it.</para>
+      so that they may retrieve the Typed Event Bus and use it. In
+      addition, event sources require <code>TopicPermission[ &lt;topic&gt;,
+      PUBLISH]</code> for each topic they want to send events to. This
+      includes any default topic names that are used when publishing</para>
 
       <para>Bundles that need to monitor events flowing through the bus must be granted permission
       to get the <code>TypedEventMonitor</code> service, that is
       <code>ServicePermission[ org.osgi.service.typedevent.monitor.TypedEventMonitor, GET]</code>
       so that they may retrieve the Typed Event Monitor and use it.</para>
+
+      <para>Only a bundle that provides a Typed Event implementation
+      should be granted <code>ServicePermission[
+      org.osgi.service.typedevent.TypedEventBus, REGISTER]</code> and
+      <code>ServicePermission[
+      org.osgi.service.typedevent.monitor.TypedEventMonitor, REGISTER]</code> to register the
+      services defined by this specification.</para>
 
       <para>The Typed Event implementation must be granted
       <code>ServicePermission[org.osgi.service.typedevent.TypedEventHandler, GET]</code>,
