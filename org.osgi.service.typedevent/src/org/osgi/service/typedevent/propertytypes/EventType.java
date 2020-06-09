@@ -49,5 +49,5 @@ public @interface EventType {
 	 * @return The event filter.
 	 * @see TypedEventConstants#TYPED_EVENT_TYPE
 	 */
-	String value();
+	Class<?> value();
 }
