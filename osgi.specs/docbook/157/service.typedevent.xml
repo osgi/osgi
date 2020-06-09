@@ -200,7 +200,37 @@
         </listitem>
       </itemizedlist>
       
-      <remark>TODO: add an example using the converter</remark>
+      <para>For example, the following code demonstrates how an object following the JavaBeans 
+      pattern can be converted into a DTO type or an untyped map:</para>
+      
+      <programlisting>public class ExampleJavaBean {
+    private String message;
+    
+    public String getMessage() { return message; }
+
+    public void setMessage(String message) { this.message = message; }
+}
+      
+public class ExampleEvent {
+    public String message;
+}
+            
+            
+@Component
+public class ExampleEventSource {
+
+    private ExampleEvent createEventFromJavaBean(ExampleJavaBean bean) {
+
+        return Converters.standardConverter().convert(bean)
+                .to(ExampleEvent.class);
+    }
+    
+    private Map&lt;String, Object&gt; createMapFromJavaBean(ExampleJavaBean bean) {
+
+        return Converters.standardConverter().convert(bean)
+                .to(new TypeReference&lt;Map&gt;String, Object&gt;&gt;(){});
+    }
+}</programlisting>
     </section>
     
     <section>
@@ -239,7 +269,28 @@
       <para>The topic therefore serves as a first-level filter for
       determining which handlers should receive the event. Typed Event service
       implementations use the structure of the topic to optimize the
-      dispatching of the events to the handlers.</para>
+      dispatching of the events to the handlers. The following
+      example code demonstrates how to send an event to a topic.</para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+            
+            
+@Component
+public class ExampleEventSource {
+
+    @Reference
+    TypedEventBus bus;
+
+    public void sendEvent() {
+
+        ExampleEvent event = new ExampleEvent();
+        event.message = "The time is " + LocalDateTime.now();
+
+        bus.deliver("org/osgi/example/ExampleEvent", event);
+    }
+}</programlisting>
 
       <para>Topics are arranged in a hierarchical namespace. Each level is
       defined by a token and levels are separated by solidi (<code>'/'
@@ -261,8 +312,6 @@
       <para>This specification uses the convention
       <code>fully/qualified/package/ClassName/ACTION</code>. If necessary, a
       pseudo-class-name is used.</para>
-      
-      <remark>TODO: Add an Example</remark>
     </section>
     
     <section>
@@ -279,6 +328,32 @@
       qualified class name of the event object. The use of a fully qualified
       class name, including full stop separators, helps to distinguish between
       automatically generated topic names and other topics.</para>
+      
+      <para>The following example demonstrates how to make use of an
+      automatically generated topic name.</para>
+      
+      <programlisting>package org.osgi.example;
+
+public class ExampleEvent {
+    public String message;
+}
+            
+            
+@Component
+public class ExampleEventSource {
+
+    @Reference
+    TypedEventBus bus;
+
+    public void sendEvent() {
+
+        ExampleEvent event = new ExampleEvent();
+        event.message = "The time is " + LocalDateTime.now();
+
+        //This event will be delivered to the topic "org.osgi.example.ExampleEvent"
+        bus.deliver(event);
+    }
+}</programlisting>
     </section>
   </section>
   
@@ -310,18 +385,75 @@
       Implementations of this specification are free to choose their own adaptation mechanism,
       however it must guarantee at least the same functionality as <xref linkend="util.converter"/></para>
       
+      <para>A simple example of receiving a typed event follows:</para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+            
+            
+@Component
+public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
+
+	@Override
+	public void notify(String topic, ExampleEvent event) {
+		System.out.println("Received event: " + event.message);
+	}
+
+}</programlisting>
+      
       <para>If the TypedEventHandler implementation is unable to reify the type, or the required type is 
       more specific than the reified type, then the Typed Event Handler must be registered with the 
       <code>event.type</code> service property. This property has a string value containing the 
       fully-qualified type name of the type that the Typed Event Handler expects to receive. This type must 
       be loaded by the Typed Event implementation using the classloader of the bundle which registered the 
       Typed Event Handler service. The loaded type must then be used as the target type when converting events.
+      For example:
       </para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+            
+public class SpecialisedExampleEvent extends ExampleEvent {
+
+	public int sequenceId = Integer.MIN_VALUE;
+
+}
+            
+@Component
+@EventType(SpecialisedExampleEvent.class)
+public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
+
+	@Override
+	public void notify(String topic, ExampleEvent event) {
+		System.out.println("Received event: " + event.message);
+		
+		// The event will always be of type SpecialisedExampleEvent
+		System.out.println("Event sequence id was " + 
+		    ((SpecialisedExampleEvent) event).sequenceId);
+	}
+}</programlisting>
       
       <para>By default the reified type of the TypedEventHandler will be used as the target topic for the 
       Event Handler. If the <code>event.type</code> property is set then this is used as the default topic instead of the 
       reified type. To use a specific named topic the Typed Event Handler service may be registered with an 
-      <code>event.topics</code> service property specifying the topic(s) as a String+ value.</para>   
+      <code>event.topics</code> service property specifying the topic(s) as a String+ value.</para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+                       
+@Component
+@EventTopics({"foo", "foo/bar"})
+public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
+
+	@Override
+	public void notify(String topic, ExampleEvent event) {
+		System.out.println("Event received on topic: " + topic + 
+		        " with message: " + event.message);
+	}
+}</programlisting>   
     </section>
     
     <section>
@@ -337,6 +469,21 @@
       
       <para>The <code>event.topics</code> service property must be used when registering an Untyped Event Hander service. 
       If it is not then no events will be delivered to that Untyped Event Handler service</para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+                       
+@Component
+@EventTopics({"foo", "foo/bar"})
+public class ExampleUntypedConsumer implements UntypedEventHandler {
+
+	@Override
+	public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
+		System.out.println("Event received on topic: " + topic
+				+ " with message: " + event.get("message"));
+	}
+}</programlisting>
     </section>
     
     <section>
@@ -356,6 +503,19 @@
       xrefstyle="hyperlink"/>.</para>
       <para>If any services are found then the Typed Event implementation will call the <code>notifyUnhandled</code> 
       method passing the topic name and event data to all of the registered Unhandled Event Handler services.</para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}
+                       
+@Component
+public class ExampleUnhandledConsumer implements UnhandledEventHandler {
+
+	@Override
+	public void notifyUnhandled(String topic, Map&lt;String,Object&gt; event) {
+		System.out.println("Unhandled Event received on topic: " + topic);
+	}
+}</programlisting>
     </section>
 
     <section>
