@@ -868,8 +868,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       xrefstyle="hyperlink"/> can then no longer provide capabilities. For
       example:</para>
 
-      <programlisting>    Map&lt;String,Resource&gt; whitelist = new HashMap&lt;String,Resource&gt;();
-    
+      <programlisting>    Map&lt;String,Resource&gt; allowlist = new HashMap&lt;String,Resource&gt;();
+
     void prune( List&lt;Capability&gt; list ) {
         Map&lt;String,Resource&gt; singletons = new HashMap&lt;String,Resource&gt;();
 
@@ -878,7 +878,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
             Version now = getVersion( r );
             String identity = getIdentity( r );
 
-            if ( isSingleton( r ) &amp;&amp; !whitelist.containsKey(identity ) ) {
+            if ( isSingleton( r ) &amp;&amp; !allowlist.containsKey(identity ) ) {
                 Resource selected = singletons.get( identity );
                 if ( selected == null )
                     singletons.put( identity, r );
@@ -890,13 +890,13 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
             }
       }
 
-      this.whitelist.putAll( singletons );
-        
+      this.allowlist.putAll( singletons );
+
         for ( Iterator&lt;Capability&gt; i=list.iterator(); i.hasNext();) {
             Capability c = i.next();
             Resource r = c.getResource();
             String identity = getIdentity( r );
-            Resource selected = this.whitelist.get( identity );
+            Resource selected = this.allowlist.get( identity );
             if ( selected != null &amp;&amp; !selected.equals( r ))
                 i.remove();
         }

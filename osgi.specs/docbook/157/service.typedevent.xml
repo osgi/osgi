@@ -379,8 +379,8 @@
           data cannot be transformed due to badly mismatched property names or values, then that specific Event 
           cannot be submitted to the Handler. The Typed Event implementation must write a message to the log 
           indicating which service failed to receive the event. If this error occurs repeatedly then the Typed Event 
-          implementation may choose to blacklist and ignore the Event Handler service. Blacklisting decisions
-          must be written to the log</para>
+          implementation may choose to deny list and ignore the Event Handler service. Deny listing decisions
+          must be written to the log.</para>
         </listitem>
 
         <listitem>

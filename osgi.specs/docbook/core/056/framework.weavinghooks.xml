@@ -443,10 +443,10 @@
 
           <itemizedlist>
             <listitem>
-              <para>The framework must blacklist the weaving hook registration
+              <para>The framework must deny list the weaving hook registration
               and never call that Weaving Hook service again as long as it is
               registered. This Weaving Hook service is considered
-              <emphasis>blacklisted</emphasis>.</para>
+              <emphasis>deny listed</emphasis>.</para>
             </listitem>
           </itemizedlist>
         </listitem>
