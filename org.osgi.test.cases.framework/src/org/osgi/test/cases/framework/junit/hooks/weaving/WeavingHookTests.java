@@ -497,10 +497,11 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	}
 
 	/**
-	 * Test that an exception causes blacklisting
+	 * Test that an exception causes deny listing
+	 * 
 	 * @throws Exception
 	 */
-	public void testExceptionCausesBlackListing() throws Exception {
+	public void testExceptionCausesDenyListing() throws Exception {
 
 		ConfigurableWeavingHook hook1 = new ConfigurableWeavingHook();
 		ConfigurableWeavingHook hook2 = new ConfigurableWeavingHook();
@@ -582,10 +583,11 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	}
 
 	/**
-	 * Test that a WeavingException does not result in blacklisting
+	 * Test that a WeavingException does not result in deny listing
+	 * 
 	 * @throws Exception
 	 */
-	public void testWeavingExceptionDoesNotCauseBlackListing() throws Exception {
+	public void testWeavingExceptionDoesNotCauseDenyListing() throws Exception {
 
 		ConfigurableWeavingHook hook1 = new ConfigurableWeavingHook();
 		ConfigurableWeavingHook hook2 = new ConfigurableWeavingHook();
@@ -651,10 +653,11 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	}
 
 	/**
-	 * Test that the registration, not the object, is blacklisted
+	 * Test that the registration, not the object, is deny listed
+	 * 
 	 * @throws Exception
 	 */
-	public void testBlackListingOnlyAppliesToRegistration () throws Exception {
+	public void testDenyListingOnlyAppliesToRegistration() throws Exception {
 
 		ConfigurableWeavingHook hook1 = new ConfigurableWeavingHook();
 		ConfigurableWeavingHook hook2 = new ConfigurableWeavingHook();

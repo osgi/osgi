@@ -1068,9 +1068,9 @@ UNREGISTERING</programlisting>
       invalid and spawn a new event delivery thread. Event delivery must
       resume with the next handler to be notified.</para>
 
-      <para>Implementations can choose to blacklist any handlers that they
-      determine are misbehaving. Blacklisted handlers must not be notified of
-      any events. If a handler is blacklisted, the event admin should log a
+      <para>Implementations can choose to deny list any handlers that they
+      determine are misbehaving. Deny listed handlers must not be notified of
+      any events. If a handler is deny listed, the event admin should log a
       message that explains the reason for it.</para>
     </section>
   </section>

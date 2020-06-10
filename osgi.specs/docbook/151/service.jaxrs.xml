@@ -1555,9 +1555,9 @@ public class MyApplication extends Application {
       <listitem>
         <para><emphasis>Failure to obtain a service instance</emphasis> - In
         the case where a published service is unable to be obtained by the
-        JAX-RS whiteboard then the service is blacklisted by the container. A
+        JAX-RS whiteboard then the service is deny listed by the container. A
         failure DTO is made available from the JaxrsServiceRuntime
-        representing the blacklisted service object.</para>
+        representing the deny listed service object.</para>
       </listitem>
 
       <listitem>
@@ -1566,9 +1566,9 @@ public class MyApplication extends Application {
         or to extend certain types. If a service advertises itself using a
         JAX-RS whiteboard service property, but fails to advertise an
         appropriate JAX-RS type, or fails to provide any resource methods then
-        this is an error and the service must be blacklisted by the container.
+        this is an error and the service must be deny listed by the container.
         A failure DTO is available from the JaxrsServiceRuntime representing
-        the blacklisted service object.</para>
+        the deny listed service object.</para>
       </listitem>
 
       <listitem>
