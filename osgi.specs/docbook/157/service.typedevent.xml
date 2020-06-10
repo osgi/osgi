@@ -214,19 +214,15 @@
 public class ExampleEvent {
     public String message;
 }
-            
-            
+                       
 @Component
 public class ExampleEventSource {
-
     private ExampleEvent createEventFromJavaBean(ExampleJavaBean bean) {
-
         return Converters.standardConverter().convert(bean)
                 .to(ExampleEvent.class);
     }
     
     private Map&lt;String, Object&gt; createMapFromJavaBean(ExampleJavaBean bean) {
-
         return Converters.standardConverter().convert(bean)
                 .to(new TypeReference&lt;Map&gt;String, Object&gt;&gt;(){});
     }
@@ -274,17 +270,14 @@ public class ExampleEventSource {
       
       <programlisting>public class ExampleEvent {
     public String message;
-}
-            
+}         
             
 @Component
 public class ExampleEventSource {
-
     @Reference
     TypedEventBus bus;
 
     public void sendEvent() {
-
         ExampleEvent event = new ExampleEvent();
         event.message = "The time is " + LocalDateTime.now();
 
@@ -336,17 +329,14 @@ public class ExampleEventSource {
 
 public class ExampleEvent {
     public String message;
-}
-            
+}          
             
 @Component
 public class ExampleEventSource {
-
     @Reference
     TypedEventBus bus;
 
     public void sendEvent() {
-
         ExampleEvent event = new ExampleEvent();
         event.message = "The time is " + LocalDateTime.now();
 
@@ -394,12 +384,10 @@ public class ExampleEventSource {
             
 @Component
 public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
-
-	@Override
-	public void notify(String topic, ExampleEvent event) {
-		System.out.println("Received event: " + event.message);
-	}
-
+    @Override
+    public void notify(String topic, ExampleEvent event) {
+        System.out.println("Received event: " + event.message);
+    }
 }</programlisting>
       
       <para>If the TypedEventHandler implementation is unable to reify the type, or the required type is 
@@ -416,23 +404,20 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
 }
             
 public class SpecialisedExampleEvent extends ExampleEvent {
-
-	public int sequenceId = Integer.MIN_VALUE;
-
+    public int sequenceId = Integer.MIN_VALUE;
 }
             
 @Component
 @EventType(SpecialisedExampleEvent.class)
 public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
-
-	@Override
-	public void notify(String topic, ExampleEvent event) {
-		System.out.println("Received event: " + event.message);
-		
-		// The event will always be of type SpecialisedExampleEvent
-		System.out.println("Event sequence id was " + 
-		    ((SpecialisedExampleEvent) event).sequenceId);
-	}
+    @Override
+    public void notify(String topic, ExampleEvent event) {
+        System.out.println("Received event: " + event.message);
+        
+        // The event will always be of type SpecialisedExampleEvent
+        System.out.println("Event sequence id was " + 
+            ((SpecialisedExampleEvent) event).sequenceId);
+    }
 }</programlisting>
       
       <para>By default the reified type of the TypedEventHandler will be used as the target topic for the 
@@ -447,12 +432,11 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
 @Component
 @EventTopics({"foo", "foo/bar"})
 public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
-
-	@Override
-	public void notify(String topic, ExampleEvent event) {
-		System.out.println("Event received on topic: " + topic + 
-		        " with message: " + event.message);
-	}
+    @Override
+    public void notify(String topic, ExampleEvent event) {
+        System.out.println("Event received on topic: " + topic + 
+                " with message: " + event.message);
+    }
 }</programlisting>   
     </section>
     
@@ -477,12 +461,11 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
 @Component
 @EventTopics({"foo", "foo/bar"})
 public class ExampleUntypedConsumer implements UntypedEventHandler {
-
-	@Override
-	public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
-		System.out.println("Event received on topic: " + topic
-				+ " with message: " + event.get("message"));
-	}
+    @Override
+    public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
+        System.out.println("Event received on topic: " + topic
+                + " with message: " + event.get("message"));
+    }
 }</programlisting>
     </section>
     
@@ -510,11 +493,10 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
                        
 @Component
 public class ExampleUnhandledConsumer implements UnhandledEventHandler {
-
-	@Override
-	public void notifyUnhandled(String topic, Map&lt;String,Object&gt; event) {
-		System.out.println("Unhandled Event received on topic: " + topic);
-	}
+    @Override
+    public void notifyUnhandled(String topic, Map&lt;String,Object&gt; event) {
+        System.out.println("Unhandled Event received on topic: " + topic);
+    }
 }</programlisting>
     </section>
 
