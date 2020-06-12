@@ -379,8 +379,7 @@ public class ExampleEventSource {
       
       <programlisting>public class ExampleEvent {
     public String message;
-}
-            
+}         
             
 @Component
 public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&gt; {
@@ -473,8 +472,28 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       <title>Wildcard Topics</title>
       
       <para>The <code>event.topics</code> property may contain one or more wildcard topics. These are Strings which contain 
-      a topic name and append “/*”. This value means that the Event Handler must be called for Events in the 
-      named topic and all sub-topics.</para>
+      a topic name and append “/*”. This value means that the Event Handler must be called for Events sent to
+      sub-topics of the named topic. For example the component:</para>
+      
+            <programlisting>@Component
+@EventTopics("foo/*")
+public class ExampleUntypedConsumer implements UntypedEventHandler {
+    @Override
+    public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
+        System.out.println("Event received on topic: " + topic
+                + " with message: " + event.get("message"));
+    }
+}</programlisting>
+
+      <para>would receive events sent to the topics <code>foo/bar</code> and <code>foo/baz</code>, but not the topics
+      <code>foo</code> or <code>foobar/fizzbuzz</code>.</para>
+    
+      <para>The <code>*</code> character in a wildcard topic must always follow a solidus <code>/</code> character,
+      and must be the final character in the topic string, meaning that topic names such as <code>foo*</code>
+      and <code>foo/*/bar</code> are not valid. The only exception to this rule is that it is valid to use the 
+      topic name <code>*</code> to receive events on <emphasis>all</emphasis> topics. While it is valid to do so,
+      using the topic <code>*</code> is not typically recommended. For a mechanism to monitor the events flowing 
+      through the system see <xref linkend="service.typedevent-monitor"/>.</para>
     </section>
     
     <section>
@@ -625,7 +644,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       
   </section>
   
-  <section>
+  <section xml:id="service.typedevent-monitor">
     <title>Monitoring Events</title> 
     
     <para>An important part of a software system is the ability to monitor it appropriately to determine 
