@@ -58,7 +58,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Event</emphasis> - A set of data created by an Event Source, 
-          encapsulated as an object and delivered to one or more Event Consumers</para>
+          encapsulated as an object and delivered to one or more Event Consumers.</para>
         </listitem>
         <listitem>
           <para><emphasis>Event Schema</emphasis> - A definition of the expected data
@@ -84,7 +84,7 @@
 
         <listitem>
           <para><emphasis>DTO</emphasis> - A Data Transfer Object as per the OSGi DTO 
-          Specification</para>
+          Specification.</para>
         </listitem>
 
         <listitem>
@@ -168,7 +168,7 @@
       <itemizedlist>
         <listitem>
           <para>DTO types - an untyped event may not have DTOs inside it as these form
-          part of a typed schema</para>
+          part of a typed schema.</para>
         </listitem>
         
         <listitem>
@@ -373,7 +373,7 @@ public class ExampleEventSource {
       reifies the type parameter into a specific type. In this case the Typed Event implementation must 
       adapt the Event object into the type defined by the TypedEventHandler implementation.
       Implementations of this specification are free to choose their own adaptation mechanism,
-      however it must guarantee at least the same functionality as <xref linkend="util.converter"/></para>
+      however it must guarantee at least the same functionality as <xref linkend="util.converter"/>.</para>
       
       <para>A simple example of receiving a typed event follows:</para>
       
@@ -452,7 +452,7 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
       convert the event data to a nested map structure.</para>
       
       <para>The <code>event.topics</code> service property must be used when registering an Untyped Event Hander service. 
-      If it is not then no events will be delivered to that Untyped Event Handler service</para>
+      If it is not then no events will be delivered to that Untyped Event Handler service.</para>
       
       <programlisting>public class ExampleEvent {
     public String message;
@@ -474,7 +474,7 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       
       <para>The <code>event.topics</code> property may contain one or more wildcard topics. These are Strings which contain 
       a topic name and append “/*”. This value means that the Event Handler must be called for Events in the 
-      named topic and all sub-topics</para>
+      named topic and all sub-topics.</para>
     </section>
     
     <section>
@@ -575,7 +575,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
           <para><code>TypedEventHandler</code> - If the target event type is discoverable but cannot be loaded
           using the classloader of the bundle which registered the Typed Event Handler service then there is no 
           way for the Typed Event implementation to correctly target an event schema, and the Event Handler must 
-          be ignored. </para>
+          be ignored.</para>
         </listitem>
 
         <listitem>
@@ -645,7 +645,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       
       <para>In a running system it is often useful for monitoring tools to replay recent data immediately 
       after a problem has occurred. For that reason Typed Event Monitor instances may store past events so that 
-      they can be replayed if requested. There are two <code>monitorEvents</code> methods capable of replaying history</para>
+      they can be replayed if requested. There are two <code>monitorEvents</code> methods capable of replaying history:</para>
       
       <itemizedlist>
         <listitem>
