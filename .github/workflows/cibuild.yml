@@ -79,4 +79,4 @@ jobs:
       id: ct_core
       if: (steps.build.conclusion == 'success')
       run: |
-        ./.github/scripts/ct-core.sh
+        ./.github/scripts/ct.sh ct.core
