@@ -8,7 +8,6 @@ Export-Package: ${p}.*; -split-package:=first
     osgi.annotation;version=7.0.0,\
     org.osgi.service.component.annotations;version=latest,\
     org.osgi.namespace.implementation;version=latest,\
-    org.osgi.util.converter;version=latest,\
     org.osgi.util.pushstream;version=latest,\
     org.osgi.util.promise;version=latest,\
     org.osgi.util.function;version=latest

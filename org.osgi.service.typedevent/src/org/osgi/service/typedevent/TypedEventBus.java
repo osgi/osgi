@@ -19,7 +19,6 @@ package org.osgi.service.typedevent;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.util.converter.Converter;
 
 /**
  * The Type Safe Event service. Bundles wishing to publish events must obtain
@@ -43,6 +42,7 @@ public interface TypedEventBus {
 	 * 
 	 * @param event The event to send to all listeners which subscribe to the
 	 *            topic of the event.
+	 * @throws NullPointerException if the event object is null
 	 */
 	void deliver(Object event);
 
@@ -54,6 +54,8 @@ public interface TypedEventBus {
 	 * @param topic The topic to which this event should be sent.
 	 * @param event The event to send to all listeners which subscribe to the
 	 *            topic.
+	 * @throws NullPointerException if the event object is null
+	 * @throws IllegalArgumentException if the topic name is not valid
 	 */
 	void deliver(String topic, Object event);
 
@@ -65,21 +67,9 @@ public interface TypedEventBus {
 	 * @param topic The topic to which this event should be sent.
 	 * @param event A Map representation of the event data to send to all
 	 *            listeners which subscribe to the topic.
+	 * @throws NullPointerException if the event map is null
+	 * @throws IllegalArgumentException if the topic name is not valid
 	 */
 	void deliverUntyped(String topic, Map<String, ? > event);
-
-	/**
-	 * Initiate asynchronous, ordered delivery of event data. This method
-	 * returns to the caller before delivery of the event is completed. Events
-	 * are delivered in the order that they are received by this method.
-	 * 
-	 * @param topic The topic to which this event should be sent.
-	 * @param event A Map representation of the event data to send to all
-	 *            listeners which subscribe to the topic.
-	 * @param converter A converter which can be used to convert the event
-	 *            object into the necessary target types for Event Delivery and
-	 *            Monitoring
-	 */
-	void deliverCustom(String topic, Object event, Converter converter);
 
 }

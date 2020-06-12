@@ -614,7 +614,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       
       <itemizedlist>
         <listitem>
-          <para><code>IllegalArgumentException</code> if the event data is <code>null</code>.</para>
+          <para><code>NullPointerException</code> if the event data is <code>null</code>.</para>
         </listitem>
         <listitem>
           <para><code>IllegalArgumentException</code> if a topic name is supplied and it violates the
