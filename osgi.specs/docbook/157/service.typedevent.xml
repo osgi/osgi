@@ -634,7 +634,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     xrefstyle="hyperlink"/> service which can be used to monitor the flow of events through the Event Bus.</para>
     
     <para>Events flowing through the Typed Event Bus can be monitored using one of the <code>monitorEvents</code> 
-    methods from the <code>TypeSafeEventMonitor</code> service. These methods return a 
+    methods from the <code>TypedEventMonitor</code> service. These methods return a 
     <xref linkend="org.osgi.util.pushstream.PushStream" xrefstyle="hyperlink"/> which delivers
     <xref linkend="org.osgi.service.typedevent.monitor.MonitorEvent"  xrefstyle="hyperlink"/> 
     instances each time an event is sent via the <code>TypedEventBus</code>. The monitor events contain the event 
