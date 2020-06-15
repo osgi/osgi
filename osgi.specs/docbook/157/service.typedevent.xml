@@ -290,7 +290,14 @@ public class ExampleEventSource {
       \u002F</code>). More precisely, the topic must conform to the following
       grammar:</para>
 
-      <programlisting>  topic ::= token ( '/' token ) *    // See General Syntax Definitions in Core</programlisting>
+      <remark> This grammar is more lenient than it might be to allow full compatiblity with Event Admin.
+      Just using  "topic ::= identifier ( '/' identifier ) *" would be simpler but disallow "-" in tokens
+      </remark>
+      <programlisting>  // For further information see General Syntax Definitions in Core
+
+      topictoken  :: ( jletterordigit | '_' | '-' ) +
+      
+      topic       ::= topictoken ( '/' topictoken ) *</programlisting>
 
       <para>Topics should be designed to become more specific when going from
       left to right. Consumers can provide a prefix that matches a topic, using
@@ -316,13 +323,20 @@ public class ExampleEventSource {
       automatically generate a topic name based on the the type of the event object
       being published.</para>
       
-      <para>For all publication methods on the Typed Event Bus where no topic string
+      <para>For the <xref linkend="org.osgi.service.typedevent.TypedEventBus.deliver-Object-"
+      xrefstyle="hyperlink"/> method on the Typed Event Bus where no topic string
       is provided the implementation must create a topic string using the fully
-      qualified class name of the event object. The use of a fully qualified
-      class name, including full stop separators, helps to distinguish between
-      automatically generated topic names and other topics.</para>
+      qualified class name of the event object. To convert the class name into
+      a valid topic the full stop <code>.</code> separators must be converted
+      into solidus <code>/</code> separators. A non-normative example implementation follows:</para>
       
-      <para>The following example demonstrates how to make use of an
+      <programlisting>public void publish(Object event) {
+    String topicName = event.getClass().getName().replace('.', '/');
+    
+    this.publish(topicName, event);
+}</programlisting>
+      
+      <para>The following example demonstrates how an Event Source can make use of an
       automatically generated topic name.</para>
       
       <programlisting>package org.osgi.example;
@@ -340,7 +354,7 @@ public class ExampleEventSource {
         ExampleEvent event = new ExampleEvent();
         event.message = "The time is " + LocalDateTime.now();
 
-        //This event will be delivered to the topic "org.osgi.example.ExampleEvent"
+        //This event will be delivered to the topic "org/osgi/example/ExampleEvent"
         bus.deliver(event);
     }
 }</programlisting>
@@ -487,7 +501,7 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
 
       <para>would receive events sent to the topics <code>foo/bar</code> and <code>foo/baz</code>, but not the topics
       <code>foo</code> or <code>foobar/fizzbuzz</code>.</para>
-    
+      
       <para>The <code>*</code> character in a wildcard topic must always follow a solidus <code>/</code> character,
       and must be the final character in the topic string, meaning that topic names such as <code>foo*</code>
       and <code>foo/*/bar</code> are not valid. The only exception to this rule is that it is valid to use the 
