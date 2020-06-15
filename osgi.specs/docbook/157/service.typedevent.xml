@@ -142,8 +142,6 @@
       a Java class provides a formal definition of the schema - event data uses fields in the class
       as the keys, and each field definition defines the permitted type of the value.</para>
       
-      <remark>TODO: should we also support record types?</remark>
-      
       <para>Type Safe Event classes are expected to conform to OSGi DTO rules. The architecture of 
       OSGi DTOs is described in <xref linkend="intro.core.release" xrefstyle="template:%t"/>. All 
       methods, all static fields, and any non public instance fields of an event object must be 
