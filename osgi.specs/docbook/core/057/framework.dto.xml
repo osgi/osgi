@@ -163,7 +163,8 @@
       </itemizedlist></para>
 
     <para>The List, Set, Map and array aggregates must only hold objects of
-    the listed types.</para>
+    the listed types. The types for Map keys are limited to primitive wrapper
+    classes, <code>String</code>, enums, and <code>Version</code>.</para>
 
     <para>Data Transfer Objects are public classes with no methods, other than
     the compiler supplied default constructor, having only public fields
@@ -543,6 +544,12 @@ ServiceReferenceDTO referenceDTO = reference.adapt(ServiceReferenceDTO.class);</
         <para>Updated <xref linkend="framework.dto-obtaining-dtos"/> to
         reflect that ServiceReference can now be adapted to
         ServiceReferenceDTO.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified that the allowed key types for Map values in DTOs are
+        limited to primitive wrapper classes, <code>String</code>, enums, and
+        <code>Version</code>.</para>
       </listitem>
     </itemizedlist>
   </section>
