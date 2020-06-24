@@ -125,8 +125,9 @@ public interface ServiceLayer {
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc);
 
 	/**
-	 * find resources
+	 * find resources with filter condition specified in fc argument.
 	 * <p>
+	 * With this method application can specify desired identifier in result
 	 * 
 	 * @param uri URI for resource tree to start the search
 	 * @param fc filter criteria
@@ -134,7 +135,7 @@ public interface ServiceLayer {
 	 * @return list of URIs matching the condition specified in fc
 	 */
 	public Promise<List<String>> discovery(String uri, FilterCriteriaDTO fc,
-			RequestPrimitiveDTO.DesiredIdentiferResultType drt);
+			RequestPrimitiveDTO.DesiredIdentifierResultType drt);
 
 	/**
 	 * send notification
