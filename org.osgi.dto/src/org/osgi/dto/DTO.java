@@ -270,6 +270,7 @@ public abstract class DTO {
 		return result;
 	}
 
+	private static final int MAX_LENGTH = 100;
 	/**
 	 * Compress, in length, the specified string.
 	 * 
@@ -278,13 +279,15 @@ public abstract class DTO {
 	 */
 	private static CharSequence compress(final CharSequence in) {
 		final int length = in.length();
-		if (length <= 21) {
+		if (length <= MAX_LENGTH) {
 			return in;
 		}
-		StringBuilder result = new StringBuilder(21);
-		result.append(in, 0, 9);
-		result.append("...");
-		result.append(in, length - 9, length);
+		StringBuilder result = new StringBuilder(MAX_LENGTH)
+				.append(in, 0, MAX_LENGTH / 2 - 3)
+				.append('.')
+				.append('.')
+				.append('.')
+				.append(in, length - (MAX_LENGTH / 2), length);
 		return result;
 	}
 }
