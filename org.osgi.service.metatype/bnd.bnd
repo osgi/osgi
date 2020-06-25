@@ -4,8 +4,8 @@
 Export-Package: !${p}.annotations, ${p}.*; -split-package:=first
 
 -buildpath = \
-    osgi.core; version=5, \
-    osgi.annotation; version=latest,\
+    osgi.core;maven-scope=provided;version=5, \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
     org.osgi.namespace.extender;version=latest,\
     org.osgi.namespace.implementation;version=latest
 

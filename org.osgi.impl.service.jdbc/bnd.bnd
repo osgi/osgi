@@ -13,4 +13,4 @@ Bundle-Category: 		osgi
 -buildpath = \
 	org.osgi.service.jdbc; 	version=project, \
 	org.osgi.impl.bundle.derby; version=latest, \
-	osgi.core;				version=4.3.1
+	osgi.core;maven-scope=provided;version=4.3.1

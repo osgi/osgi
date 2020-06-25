@@ -18,7 +18,7 @@ Import-Package: ${-signaturetest}, *
 -buildpath = \
     org.osgi.test.support;          version=project, \
     org.osgi.service.repository;    version=project , \
-    osgi.core;                      version=5.0     , \
+    osgi.core;maven-scope=provided;version=5.0     , \
     osgi.promise;                   version=6.0, \
     ${junit4}
 

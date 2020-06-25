@@ -29,7 +29,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 
 -buildpath 					= \
 	${replace;${osgi.core.specs};$;\\;version=project}, \
-	osgi.annotation;version=latest
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
 
 -include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Core

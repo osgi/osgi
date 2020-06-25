@@ -20,7 +20,7 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.event;                 version=latest , \
-	osgi.core;									version=6.0	, \
+	osgi.core;maven-scope=provided;version=6.0	, \
 	osgi.cmpn;									version=6.0	, \
 	${junit4}
 

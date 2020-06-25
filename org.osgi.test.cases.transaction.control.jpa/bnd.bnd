@@ -17,8 +17,8 @@ javac.profile=compact2
 	org.osgi.service.jpa;version=project,\
 	org.osgi.service.jdbc;version=project,\
 	org.apache.aries.jpa.javax.persistence_2.1,\
-	org.osgi.annotation.bundle;version=project,\
-	osgi.core;version=6.0.0,\
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	osgi.core;maven-scope=provided;version=6.0.0,\
     org.h2; version="[1.4.193,2)", \
 	${junit4}
 

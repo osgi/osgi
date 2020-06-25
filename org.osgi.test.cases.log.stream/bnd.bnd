@@ -9,8 +9,8 @@ Import-Package: \
 	*
 
 -buildpath: \
-	osgi.annotation;version=latest,\
-	osgi.core;version=6.0.0,\
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	osgi.core;maven-scope=provided;version=6.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.log;version=project,\
 	org.osgi.service.cm;version=latest,\

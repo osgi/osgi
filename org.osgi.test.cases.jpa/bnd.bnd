@@ -37,7 +37,7 @@ Import-Package						= \
 	org.osgi.test.support;version=project,\
 	org.osgi.service.jpa;version=project,\
 	org.osgi.service.jdbc;version=project,\
-	osgi.core;version=4.3.1,\
+	osgi.core;maven-scope=provided;version=4.3.1,\
 	org.osgi.util.tracker;version=latest,\
 	org.eclipse.persistence.jpa_spec;version=2.0,\
 	${junit4},\

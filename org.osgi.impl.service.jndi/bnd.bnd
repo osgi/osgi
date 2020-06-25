@@ -10,5 +10,5 @@ Export-Package				= org.osgi.service.jndi; -split-package:=first; provide:=true
 
 -buildpath 					= \
 	org.osgi.service.jndi;		version=project, \
-	osgi.core;					version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;					version=4.3.1

@@ -65,6 +65,8 @@ osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.mic
 
 build.version				= ${osgi.version}.${project.build}
 
+osgi.annotation.version=7.0.0
+
 # Documentation
 -groupid: org.osgi
 Bundle-Copyright: ${copyright}

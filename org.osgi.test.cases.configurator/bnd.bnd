@@ -32,7 +32,7 @@ Test-Cases                          = ${testcases}
     org.osgi.service.configurator;          version=project , \
     org.osgi.util.function;                 version=project , \
     org.osgi.util.promise;                  version=project , \
-    osgi.core;                              version=6.0.0   , \
+    osgi.core;maven-scope=provided;version=6.0.0   , \
     osgi.cmpn;                              version=6.0.0   , \
     ${junit4}
 

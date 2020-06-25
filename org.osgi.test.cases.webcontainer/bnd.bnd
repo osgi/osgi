@@ -42,7 +42,7 @@ Export-Package =\
 -buildpath = \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.1_spec; version=latest, \
-	osgi.core;									version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn; 									version=4.3.1, \
 	org.osgi.test.support;						version=project, \
 	${junit4}

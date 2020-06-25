@@ -6,9 +6,8 @@ Export-Package:  \
 
 -contract: JavaServlet
 -buildpath: \
-	osgi.core;version=6.0,\
-	osgi.annotation;version=latest,\
-	org.osgi.annotation.bundle;version=latest,\
+	osgi.core;maven-scope=provided;version=6.0,\
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
 	org.osgi.service.component.annotations;version=latest,\
 	org.apache.felix.http.servlet-api;version=1.1,\
 	org.osgi.namespace.implementation;version=latest
