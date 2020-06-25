@@ -11,5 +11,5 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     osgi.core;maven-scope=provided;version=6.0, \
     org.osgi.util.function;version=1.0,\
     org.osgi.util.promise;version=1.0, \
-    org.osgi.namespace.extender;version=latest, \
+    org.osgi.namespace.extender;version=1.0.1, \
     org.osgi.service.component;version=project

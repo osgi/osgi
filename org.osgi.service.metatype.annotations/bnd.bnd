@@ -9,6 +9,6 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 -buildpath = \
     osgi.core;maven-scope=provided;version=5, \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-    org.osgi.namespace.extender;version=latest,\
-    org.osgi.namespace.implementation;version=latest, \
+    org.osgi.namespace.extender;version=1.0.1,\
+    org.osgi.namespace.implementation;version=1.0, \
     org.osgi.service.metatype; version=project
