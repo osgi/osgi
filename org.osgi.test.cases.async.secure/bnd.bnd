@@ -15,7 +15,8 @@ Export-Package						= \
 	org.osgi.service.async;version=project,\
 	osgi.core;maven-scope=provided;version=6.0.0,\
 	osgi.cmpn;version=4.3.1,\
-	osgi.promise;version=6.0,\
+    org.osgi.util.function;version=1.0,\
+    org.osgi.util.promise;version=1.0,\
 	${junit4}
 
 -runbundles						= \

@@ -7,8 +7,10 @@ org.osgi:osgi.core:7.0.0
 org.osgi:osgi.cmpn:4.3.1
 org.osgi:osgi.cmpn:5.0.0
 org.osgi:osgi.cmpn:6.0.0
-org.osgi:osgi.promise:6.0.0
-org.osgi:osgi.promise:7.0.1
+org.osgi:org.osgi.util.function:1.0.0
+org.osgi:org.osgi.util.function:1.1.0
+org.osgi:org.osgi.util.promise:1.0.0
+org.osgi:org.osgi.util.promise:1.1.1
 
 # bnd_version is set in gradle.properties
 biz.aQute.bnd:biz.aQute.bnd:${bnd_version}
