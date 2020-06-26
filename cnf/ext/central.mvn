@@ -16,6 +16,7 @@ org.osgi:org.osgi.resource:1.0.0
 org.osgi:org.osgi.service.component.annotations:1.4.0
 org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.jdbc:1.0.0
+org.osgi:org.osgi.service.log:1.4.0
 org.osgi:org.osgi.util.function:1.0.0
 org.osgi:org.osgi.util.function:1.1.0
 org.osgi:org.osgi.util.promise:1.0.0

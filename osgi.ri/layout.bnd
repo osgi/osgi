@@ -7,6 +7,7 @@ build.core.impls = \
 
 jar.core.impls = \
 	${repo;org.osgi.impl.framework;latest}, \
+    ${repo;org.osgi.impl.service.log;latest}, \
     ${repo;org.osgi.impl.service.resolver;latest}
 
 build.cmpn.impls = \
@@ -64,7 +65,6 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jaxrs;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
-	${repo;org.osgi.impl.service.log;latest}, \
 	${repo;org.osgi.impl.service.log.stream;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \

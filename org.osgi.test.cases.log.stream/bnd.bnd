@@ -13,7 +13,7 @@ Import-Package: \
 	osgi.core;maven-scope=provided;version=6.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.log;version=project,\
-	org.osgi.service.cm;version=latest,\
+	org.osgi.service.log.stream;version=project,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.resource;version=latest,\
 	org.osgi.util.pushstream;version=latest,\
@@ -26,8 +26,7 @@ Test-Cases							= ${testcases}
 
 -runbundles						= \
     ${junit4},\
-	org.osgi.impl.service.log.stream;  version=latest,\
-	org.osgi.impl.service.cm;  version=latest
+	org.osgi.impl.service.log.stream;  version=latest
 
 -runproperties					= ${runproperties}, \
   equinox.log.history.max=200

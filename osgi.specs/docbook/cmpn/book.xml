@@ -34,8 +34,6 @@
 
   <xi:include href="../100/service.remoteservices.xml"/>
 
-  <xi:include href="../101/service.log.xml"/>
-
   <xi:include href="../102/service.http.xml"/>
 
   <xi:include href="../103/service.device.xml"/>
@@ -125,6 +123,8 @@
   <xi:include href="../156/service.condition.factory.xml"/>
 
   <xi:include href="../157/service.typedevent.xml"/>
+
+  <xi:include href="../158/service.log.stream.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 
