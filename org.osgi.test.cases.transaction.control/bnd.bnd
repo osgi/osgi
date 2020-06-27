@@ -10,7 +10,7 @@ javac.profile=compact2
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.transaction.control;version=project,\
-	osgi.core;version=6.0.0,\
+	osgi.core;maven-scope=provided;version=6.0.0,\
 	${junit4}
 
 -runbundles						= \

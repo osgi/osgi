@@ -12,4 +12,4 @@ Import-Service = org.osgi.service.log.LogService
 	org.osgi.service.tr069todmt;version=project, \
 	org.osgi.service.dmt;version=project, \
 	osgi.cmpn; version=4.3.1, \
-	osgi.core; version=4.3.1
+	osgi.core;maven-scope=provided;version=4.3.1

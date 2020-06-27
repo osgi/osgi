@@ -18,8 +18,8 @@ Test-Cases: ${testcases}
 -runsystempackages: sun.misc
 
 -buildpath: \
-	osgi.annotation;version=7.0.0,\
-	osgi.core;version=7.0.0,\
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	osgi.core;maven-scope=provided;version=7.0.0,\
 	org.osgi.test.support;version=project,\
 	org.osgi.service.cdi;version=project,\
 	org.osgi.service.log;version=latest,\

@@ -29,8 +29,8 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 
 -buildpath 					= \
 	${replace;${osgi.cmpn.specs};$;\\;version=project}, \
-    osgi.annotation;version=latest, \
-    osgi.core;version=latest, \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    osgi.core;maven-scope=provided;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
     org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\

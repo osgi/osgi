@@ -7,8 +7,9 @@ Bundle-Description: 			General Support for OSGi JUnit based testing
 Export-Package:  				org.osgi.test.*
 
 -buildpath:   \
-    osgi.core; version=4.3.1, \
+    osgi.core;maven-scope=provided;version=4.3.1, \
     osgi.cmpn; version=4.3.1, \
-    osgi.promise; version=7.0.1, \
+    org.osgi.util.function;version=1.1,\
+    org.osgi.util.promise;version=1.1.1, \
     org.osgi.util.converter; version=latest,\
     ${junit4}

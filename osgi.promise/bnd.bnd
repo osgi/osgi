@@ -22,7 +22,7 @@ Export-Package: ${osgi.promise.packages}
 -dependson = ${osgi.promise.specs} 
 
 -buildpath = ${replace;${osgi.promise.specs};$;\\;version=project}, \
-    osgi.annotation;version=latest
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
 
 -include = ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Promise

@@ -15,7 +15,7 @@ Test-Cases		= \
 -buildpath		= \
 	org.osgi.test.support;	version=latest, \
 	org.osgi.service.dal;	version=latest, \
-	osgi.core;				version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;				version=4.3.1, \
 	${junit4}
 

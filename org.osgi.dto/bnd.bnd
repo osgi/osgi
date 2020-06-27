@@ -5,4 +5,4 @@ Export-Package: ${p}.*; -split-package:=first
 
 # Remarkably, this project MUST not have the OSGi libs!
 -buildpath = \
-  osgi.annotation; version=latest
+  osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}

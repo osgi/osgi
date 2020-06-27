@@ -30,9 +30,10 @@
 
     <para xml:id="i1294527">Bundles can use the Logger Factory to log
     information for the Operator. Other bundles, oriented toward management of
-    the environment, can use the Log Stream Provider or Log Reader Service to
-    retrieve Log Entry objects that were recorded recently or to receive Log
-    Entry objects as they are logged by other bundles.</para>
+    the environment, can use the <xref linkend="service.log-log.stream.ref"/>
+    or Log Reader Service to retrieve Log Entry objects that were recorded
+    recently or to receive Log Entry objects as they are logged by other
+    bundles.</para>
 
     <section>
       <title>Entities</title>
@@ -65,12 +66,6 @@
           that can be logged through the Logger as well as a time stamp, a
           sequence number, thread information, and location
           information.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>LogStreamProvider</emphasis> - A service interface
-          that allows access to a PushStream of <code>LogEntry</code>
-          objects.</para>
         </listitem>
 
         <listitem>
@@ -489,7 +484,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       must be used. This allows external <xref
       linkend="org.osgi.service.log.admin.LoggerContext"
       xrefstyle="hyperlink"/> configuration such as via <xref
-      linkend="service.configurator"/>. The name of the <xref
+      linkend="service.log-configurator.ref"/>. The name of the <xref
       linkend="org.osgi.service.log.admin.LoggerContext"
       xrefstyle="hyperlink"/> is mapped to a Configuration Admin targeted PID
       as follows:</para>
@@ -606,105 +601,6 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       linkend="org.osgi.service.log.LogLevel.WARN"
       xrefstyle="hyperlink"/>.</para>
     </section>
-  </section>
-
-  <section>
-    <title>Log Stream Provider</title>
-
-    <para>The Log Stream Provider service can be used to create Push Streams
-    of Log Entries. Since the log is basically an ongoing stream of Log
-    Entries having asynchronous arrival, a Push Stream of <xref
-    linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> objects
-    can be used receive the Log Entries. See <xref linkend="util.pushstream"/>
-    for information on Push Streams and how to use them.</para>
-
-    <figure pgwide="1">
-      <title>Log Stream Diagram org.osgi.service.log.stream package</title>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata align="center" contentdepth="3.000in"
-                     contentwidth="5.000in" fileref="logstream-classes.svg"/>
-        </imageobject>
-      </mediaobject>
-    </figure>
-
-    <para>Push Streams created by the <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> must:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Be buffered with a buffer large enough to contain the history,
-        if included.</para>
-      </listitem>
-
-      <listitem>
-        <para>Have the <code>QueuePolicyOption.DISCARD_OLDEST</code> queue
-        policy option.</para>
-      </listitem>
-
-      <listitem>
-        <para>Use a shared executor.</para>
-      </listitem>
-
-      <listitem>
-        <para>Have a parallelism of one.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>The following code snippet show how one could get future Log Entries
-    and print them.</para>
-
-    <programlisting>logStreamProvider.createStream()
-  .forEach(l -&gt; System.out.println(l))
-  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
-
-    <para>An existing <xref linkend="org.osgi.service.log.LogListener"
-    xrefstyle="hyperlink"/> implementation can also be used with the Push
-    Streams.</para>
-
-    <programlisting>logStreamProvider.createStream()
-  .forEach(logListener::logged)
-  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
-
-    <para>The <xref linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> service offers a <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider.Options.HISTORY"
-    xrefstyle="hyperlink"/> option which will prime the returned Push Stream
-    with the available log history, if any. The following code will process
-    the available historical log entries followed by any new log
-    entries.</para>
-
-    <programlisting>logStreamProvider.createStream(LogStreamProvider.Options.HISTORY)
-  .forEach(l -&gt; System.out.println(l))
-  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
-
-    <para>The <xref linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> interface is in a separate package, <xref
-    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/>, so that the
-    <xref linkend="org.osgi.service.log" xrefstyle="hyperlink"/> package does
-    not have a dependency on the <xref linkend="org.osgi.util.pushstream"
-    xrefstyle="hyperlink"/> package. The <xref
-    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package
-    requires <xref linkend="org.osgi.util.promise" xrefstyle="hyperlink"/> and
-    Java 8. Having <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> in a separate package allows the <xref
-    linkend="org.osgi.service.log" xrefstyle="hyperlink"/> package to be
-    implemented in a framework and avoid dependencies on <xref
-    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/>, <xref
-    linkend="org.osgi.util.promise" xrefstyle="hyperlink"/> and Java 8. In
-    this situation, <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> can be implemented by a bundle which sources Log
-    Entries from the <xref linkend="org.osgi.service.log.LogReaderService"
-    xrefstyle="hyperlink"/>. Since <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> requires Java 8, the <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> service is optional when implementations of this
-    specification run on Java versions prior to Java 8.</para>
   </section>
 
   <section xml:id="i1210758">
@@ -1535,18 +1431,6 @@ logger.error("Cannot access file %s", myFile);</programlisting>
  objectClass:List&lt;String&gt;="org.osgi.service.log.admin.LoggerAdmin";
  uses:="org.osgi.service.log.admin" </programlisting>
 
-    <para>The bundle providing the <xref
-    linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> service must provide a capability in the
-    <code>osgi.service</code> namespace representing this service. This
-    capability must also declare a uses constraint for the <xref
-    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/>
-    package:</para>
-
-    <programlisting>Provide-Capability: osgi.service;
- objectClass:List&lt;String&gt;="org.osgi.service.log.stream.LogStreamProvider";
- uses:="org.osgi.service.log.stream" </programlisting>
-
     <para>These capabilities must follow the rules defined for the
     <code>osgi.service</code> Namespace.</para>
   </section>
@@ -1556,7 +1440,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
     <para>The Log Service specification should only be implemented by trusted
     bundles. These bundles require
-    <code>ServicePermission[LoggerFactory|LogReaderService|LoggerAdmin|LogStreamProvider|LogService,
+    <code>ServicePermission[LoggerFactory|LogReaderService|LoggerAdmin|LogService,
     REGISTER]</code> and
     <code>ServicePermission[ConfigurationAdmin|EventAdmin, GET]</code>.</para>
 
@@ -1565,8 +1449,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     log.</para>
 
     <para>Only trusted bundles who must be able to access log entries should
-    be assigned <code>ServicePermission[LogStreamProvider|LogReaderService,
-    GET]</code>.</para>
+    be assigned <code>ServicePermission[LogReaderService, GET]</code>.</para>
 
     <para>Only trusted bundles who must be able to change log configuration
     should be assigned <code>ServicePermission[LogAdmin, GET]</code>.</para>
@@ -1576,8 +1459,6 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.admin.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.stream.xml"/>
-
   <section>
     <title>References</title>
 
@@ -1586,6 +1467,14 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       xml:id="service.log-slf4j.ref"><title>SLF4J</title><biblioid
       class="uri"><link
       xlink:href="http://www.slf4j.org"/></biblioid></bibliomixed>
+
+      <bibliomixed
+      xml:id="service.log-configurator.ref"><title>Configurator</title>OSGi
+      Compendium, Chapter 150 Configurator Specification</bibliomixed>
+
+      <bibliomixed xml:id="service.log-log.stream.ref"><title>Log Stream
+      Provider Service</title>OSGi Compendium, Chapter 158 Log Stream Provider
+      Service Specification</bibliomixed>
     </bibliolist>
   </section>
 
@@ -1613,6 +1502,11 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         bundle which obtained the LogService object. This change allows finer
         control over the logging. See <xref
         linkend="service.log-log.service"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Log Stream Provider Service was moved out of this chapter
+        into chapter 158 of the Compendium specification.</para>
       </listitem>
     </itemizedlist>
   </section>

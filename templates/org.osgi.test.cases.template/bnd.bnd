@@ -9,7 +9,7 @@ Import-Package: ${-signaturetest}, *
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.template;					version=project	, \
-	osgi.core;									version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	${junit4}
 
 -runbundles						= \

@@ -6,7 +6,7 @@ Bundle-Activator: ${p}.Activator
 -buildpath: \
 	slf4j.api,\
 	org.osgi.service.onem2m;version=latest,\
-	osgi.core;version=6.0,\
+	osgi.core;maven-scope=provided;version=6.0,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.util.function;version=latest
 

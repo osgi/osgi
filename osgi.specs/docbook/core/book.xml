@@ -72,5 +72,7 @@
 
   <xi:include href="060/framework.connect.xml"/>
 
+  <xi:include href="../101/service.log.xml"/>
+
   <xi:include href="../701/util.tracker.xml"/>
 </book>

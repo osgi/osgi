@@ -1,7 +1,8 @@
 build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}}
 
 jar.core.tests = \
-    ${repo;org.apache.servicemix.bundles.bcel;latest}
+    ${repo;org.apache.servicemix.bundles.bcel;latest}, \
+    ${repo;org.osgi.impl.service.cm;latest}
 
 build.core.tests = \
     org.osgi.test.cases.bundle.annotations, \
@@ -10,6 +11,8 @@ build.core.tests = \
     org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.launch, \
     org.osgi.test.cases.framework.launch.secure, \
+    org.osgi.test.cases.log, \
+    org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.permissionadmin, \
     org.osgi.test.cases.resolver, \
     org.osgi.test.cases.tracker, \
@@ -59,8 +62,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.jndi, \
     org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
-    org.osgi.test.cases.log, \
-    org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.log.stream, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.metatype.annotations, \

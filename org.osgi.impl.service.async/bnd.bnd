@@ -23,6 +23,6 @@ Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.asyn
 	org.osgi.service.async;version=project,\
 	org.osgi.util.function;version=project,\
 	org.osgi.util.promise;version=project,\
-	osgi.core;version=4.3.1,\
+	osgi.core;maven-scope=provided;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
 	com.springsource.net.sf.cglib

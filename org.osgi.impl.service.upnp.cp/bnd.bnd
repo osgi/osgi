@@ -13,6 +13,6 @@ Export-Package				= \
 
 -buildpath = \
 	org.osgi.service.upnp; 			version=project, \
-	osgi.core;						version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;						version=4.3.1, \
 	org.osgi.impl.bundle.servlet; 	version=2.1

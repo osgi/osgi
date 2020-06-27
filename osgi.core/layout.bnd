@@ -4,6 +4,7 @@ osgi.core.specs = \
  org.osgi.resource, \
  org.osgi.service.condition, \
  org.osgi.service.condpermadmin, \
+ org.osgi.service.log, \
  org.osgi.service.packageadmin, \
  org.osgi.service.permissionadmin, \
  org.osgi.service.resolver, \

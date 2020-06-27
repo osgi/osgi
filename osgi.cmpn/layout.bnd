@@ -26,7 +26,7 @@ osgi.cmpn.specs = \
      org.osgi.service.jdbc, \
      org.osgi.service.jndi, \
      org.osgi.service.jpa, \
-     org.osgi.service.log, \
+     org.osgi.service.log.stream, \
      org.osgi.service.metatype, \
      org.osgi.service.metatype.annotations, \
      org.osgi.service.networkadapter, \

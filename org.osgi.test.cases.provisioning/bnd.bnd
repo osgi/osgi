@@ -45,7 +45,7 @@ Import-Package: ${-signaturetest}, *
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.provisioning;			version=project	, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	osgi.core;								version=4.3.1, \
+	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;								version=4.3.1, \
 	${junit4}
 

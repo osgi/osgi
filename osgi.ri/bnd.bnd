@@ -9,3 +9,5 @@ Bundle-Name: ${-groupid}:${bsn}
 
 # Build the osgi spec files
 -sub       = !layout.bnd, *.bnd
+-buildpath = \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
