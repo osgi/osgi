@@ -1,6 +1,6 @@
 javac.profile=compact3
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage                 = org.osgi.test.support.*
 -privatepackage                     =  \
@@ -14,16 +14,13 @@ Import-Package: ${-signaturetest}, *
     org.osgi.test.support;          version=project, \
     org.osgi.jmx;                   version=project , \
     osgi.core;maven-scope=provided;version=4.3.1   , \
-    osgi.cmpn;                      version=4.3.1   , \
-    ${junit4}
+    osgi.cmpn;                      version=4.3.1
 
 -runbundles                         = \
-    ${junit4},\
     org.osgi.impl.bundle.jmx; version=latest, \
     org.osgi.impl.service.log; version=latest, \
     org.osgi.impl.service.cm; version=latest
 
-Test-Cases                          = ${testcases}
 -signaturetest                      = \
             org.osgi.jmx, \
             org.osgi.jmx.service.cm

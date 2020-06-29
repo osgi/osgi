@@ -1,0 +1,8 @@
+# -include for testing promises and promise asserts
+# Must be included with osgi.ct.junit-platform.bnd
+
+-runbundles.osgi.ct.promise: osgi.ct.promise;version=latest
+
+-buildpath.osgi.ct.promise: osgi.ct.promise;version=latest
+
+repo.osgi.ct.promise: ${repo;osgi.ct.promise;latest}

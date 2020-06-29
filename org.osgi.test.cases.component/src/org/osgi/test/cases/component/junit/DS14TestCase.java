@@ -18,7 +18,7 @@ package org.osgi.test.cases.component.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.test.cases.component.junit.DTOUtil.*;
-import static org.osgi.test.support.dictionary.Dictionaries.*;
+import static org.osgi.test.common.dictionary.Dictionaries.*;
 
 import java.util.Collection;
 import java.util.Dictionary;
@@ -52,7 +52,7 @@ import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.Logger;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ObjectProvider1;
-import org.osgi.test.support.dictionary.Dictionaries;
+import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.map.Maps;
 import org.osgi.test.support.sleep.Sleep;

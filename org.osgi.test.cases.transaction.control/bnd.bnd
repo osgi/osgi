@@ -1,7 +1,7 @@
 javac.profile=compact2
 
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
@@ -10,16 +10,12 @@ javac.profile=compact2
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.transaction.control;version=project,\
-	osgi.core;maven-scope=provided;version=6.0.0,\
-	${junit4}
+	osgi.core;maven-scope=provided;version=6.0.0
 
 -runbundles						= \
-    ${junit4},\
 	org.osgi.impl.service.transaction.control; version=latest
 
 -runproperties = ${runproperties},\
  org.apache.aries.tx.control.service.xa.recovery.log.enabled=true
-
-Test-Cases							= ${testcases}
 
 -signaturetest                      = org.osgi.service.transaction.control

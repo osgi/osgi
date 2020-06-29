@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
@@ -14,18 +14,15 @@ Import-Package: ${-signaturetest}, *
 	tb1.jar, \
 	tb2.jar
 	
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.event
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.event;                 version=latest , \
 	osgi.core;maven-scope=provided;version=6.0	, \
-	osgi.cmpn;									version=6.0	, \
-	${junit4}
+	osgi.cmpn;									version=6.0
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
 	org.osgi.impl.service.log; version=latest

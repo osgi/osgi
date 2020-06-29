@@ -4,12 +4,11 @@
 javac.profile=compact2
 
 Bundle-Description: 			General Support for OSGi JUnit based testing
-Export-Package:  				org.osgi.test.*
+Export-Package:  				org.osgi.test.support.*
 
 -buildpath:   \
     osgi.core;maven-scope=provided;version=4.3.1, \
     osgi.cmpn; version=4.3.1, \
-    org.osgi.util.function;version=1.1,\
-    org.osgi.util.promise;version=1.1.1, \
     org.osgi.util.converter; version=latest,\
-    ${junit4}
+    osgi.ct.junit-platform;version=latest,\
+    org.apiguardian:apiguardian-api;version=latest

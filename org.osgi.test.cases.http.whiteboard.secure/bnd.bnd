@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage					= org.osgi.test.support.*, \
  org.apache.http.*,\
@@ -25,16 +25,11 @@ Import-Package: org.apache.avalon.framework.logger;resolution:=optional,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;maven-scope=provided;version=6.0.0,\
-	osgi.cmpn;version=6.0.0,\
-	${junit4}
+	osgi.cmpn;version=6.0.0
 
 -runbundles						= \
-    ${junit4},\
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runsecureproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
 	org.osgi.service.http.port=8080
-
-Test-Cases							= ${testcases}
-

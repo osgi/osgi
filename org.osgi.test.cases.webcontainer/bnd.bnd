@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
@@ -44,11 +44,9 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-annotation_1.1_spec; version=latest, \
 	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn; 									version=4.3.1, \
-	org.osgi.test.support;						version=project, \
-	${junit4}
+	org.osgi.test.support;						version=project
 
 -runbundles						= \
-    ${junit4},\
 	org.osgi.impl.service.cm; 			version=latest, \
 	org.osgi.impl.service.event; 		version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
@@ -59,5 +57,3 @@ Export-Package =\
 	org.osgi.service.webcontainer.http.port=8080, \
 	org.osgi.test.testcase.timeout=10000, \
 	org.osgi.test.testcase.scaling=1
-
-Test-Cases						= ${testcases}

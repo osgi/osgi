@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Export-Package: org.osgi.test.support.step;-noimport:=true, \
  ${p}.step.*;-noimport:=true
@@ -9,18 +9,13 @@ Export-Package: org.osgi.test.support.step;-noimport:=true, \
 -privatepackage	= \
 	${p}
 
-Test-Cases		= \
-	${testcases}
-
 -buildpath		= \
 	org.osgi.test.support;	version=latest, \
 	org.osgi.service.dal;	version=latest, \
 	osgi.core;maven-scope=provided;version=4.3.1, \
-	osgi.cmpn;				version=4.3.1, \
-	${junit4}
+	osgi.cmpn;				version=4.3.1
 
 -runbundles		= \
-    ${junit4},\
 	org.osgi.impl.service.dal;		version=latest, \
 	org.osgi.impl.service.dal.step;	version=latest, \
 	org.osgi.impl.service.event;	version=latest

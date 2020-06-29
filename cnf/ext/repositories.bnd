@@ -14,13 +14,18 @@
         index=${.}/central.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='OSSRH';\
+        snapshotUrl="${ossrhrepo}";\
+        index=${.}/ossrh.mvn;\
+        readOnly=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='SpringSource EBR';\
         releaseUrl="http://repository.springsource.com/maven/bundles/external";\
         index=${.}/springsource.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='Apache Snapshots';\
-        snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
+        snapshotUrl="${apachesnapshotrepo}";\
         index=${.}/apache-snapshots.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\

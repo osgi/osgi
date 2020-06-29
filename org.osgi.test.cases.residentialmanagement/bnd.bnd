@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
@@ -10,11 +10,9 @@
 	org.osgi.service.log; 			version=latest, \
 	org.osgi.test.support;      	version=project 	, \
 	org.osgi.service.dmt;			version=project		, \
-	osgi.cmpn;				version=4.3.1		, \
-	${junit4}
+	osgi.cmpn;				version=4.3.1
 
 -runbundles			= \
-    ${junit4},\
 	org.osgi.impl.service.log;						version=latest, \
     org.osgi.impl.service.cm;						version=latest, \
     org.osgi.impl.service.event;					version=latest, \
@@ -25,8 +23,6 @@
 	org.osgi.framework.system.packages.extra=${p}.syspkg;"version=1.0.0" ,\
 	org.osgi.dmt.residential=./Scaffold/RMT ,\
 	org.osgi.test.cases.rmt.delay=1000
-
-Test-Cases: ${testcases}
 
 Export-Package = \
 	${p}.util;version=1.0.0

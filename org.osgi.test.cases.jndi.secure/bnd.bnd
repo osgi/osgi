@@ -1,6 +1,6 @@
 javac.profile=compact3
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Export-Package						= \
 	${p}.provider, \
@@ -20,16 +20,12 @@ Import-Package 						= \
 	factoryBundle.jar , \
 	inaccessibleBundleContext.jar
 
-Test-Cases							= ${testcases}
-
 -buildpath = \
 	org.osgi.service.jndi;					version=project, \
     org.osgi.test.support;                  version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1, \
-	${junit4}
+	osgi.core;maven-scope=provided;version=4.3.1
 
 -runbundles = \
-    ${junit4},\
 	org.osgi.impl.service.jndi; version=latest
 
 -runproperties = ${runsecureproperties}, \

@@ -1,15 +1,4 @@
-junit4: biz.aQute.junit;version=latest
-tester: biz.aQute.tester;version=latest
-junit.tester: biz.aQute.junit;version=latest
--tester: ${tester}
-
-testcases.junit3 = ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
-testcases.junit4 = ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
-testcases.junit5 = \
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.Test;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.RepeatedTest;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.params.ParameterizedTest;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.TestFactory;CONCRETE},\
- ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.jupiter.api.TestTemplate;CONCRETE}
-
-testcases = ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}
+junit-jupiter.version=5.6.2
+junit-platform.version=1.6.2
+assertj.version=3.16.1
+osgi-test.version=0.9.0-SNAPSHOT

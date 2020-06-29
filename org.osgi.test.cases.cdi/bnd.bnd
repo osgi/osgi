@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: CT for the OSGi/CDI integration
 -conditionalpackage: org.osgi.test.support.*
@@ -35,8 +35,6 @@ Import-Package: ${-signaturetest}, *
 	tb152_3_1_1k.jar,\
 	tb152_3_1_1l.jar
 
-Test-Cases: ${testcases}
-
 -signaturetest: org.osgi.service.cdi
 
 -runsystempackages: sun.misc
@@ -58,11 +56,9 @@ Test-Cases: ${testcases}
 	org.osgi.dto;version=latest,\
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
-	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
-	${junit4}
+	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1
 
 -runbundles: \
-	${junit4},\
 	org.osgi.impl.bundle.cdi;version=latest
 
 -runproperties: \

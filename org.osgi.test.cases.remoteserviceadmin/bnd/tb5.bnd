@@ -3,7 +3,7 @@ Bundle-Version:                          1.0
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage:                         ${p}.tb5.*, org.osgi.test.support.tracker
 Import-Package:                          ${p}.common;version="[1.0.0,2)",\
- junit.framework;version="[3.8,4)",\
+ junit.framework,\
  org.osgi.framework;version="[1.5,2)",\
  org.osgi.framework.wiring;version="[1.0,2)",\
  org.osgi.util.tracker;version="[1.4,2)"

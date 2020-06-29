@@ -2,7 +2,8 @@ build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests},
 
 jar.core.tests = \
     ${repo;org.apache.servicemix.bundles.bcel;latest}, \
-    ${repo;org.osgi.impl.service.cm;latest}
+    ${repo;org.osgi.impl.service.cm;latest},\
+    ${repo;osgi.ct.junit-platform;latest}
 
 build.core.tests = \
     org.osgi.test.cases.bundle.annotations, \
@@ -21,7 +22,9 @@ build.core.tests = \
 jar.cmpn.tests = \
     ${repo;org.osgi.impl.service.jdbc.support;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
-    ${repo;org.osgi.test.filter;latest}
+    ${repo;org.osgi.test.filter;latest},\
+    ${repo;osgi.ct.junit-platform;latest},\
+    ${repo;osgi.ct.promise;latest}
 
 build.cmpn.tests = \
     org.osgi.test.cases.async, \

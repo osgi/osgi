@@ -1,5 +1,6 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd
+
 
 -conditionalpackage: org.osgi.test.support.*,\
  org.apache.http.*,\
@@ -27,23 +28,16 @@ DynamicImport-Package: javax.servlet.*
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;maven-scope=provided;version=6.0.0,\
-	org.osgi.util.function;version=latest,\
-	org.osgi.util.promise;version=latest,\
-	${junit4},\
 	org.osgi.namespace.implementation;version=latest,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.namespace.contract;version=latest
 
 -runbundles                     = \
-    ${junit4},\
     org.osgi.impl.service.cm;                   version=latest,\
-    org.osgi.util.function;version=latest,\
-    org.osgi.util.promise;version=latest,\
     org.osgi.impl.service.jaxrs;                version=latest
 
 -runproperties                  = ${runproperties}
 
-Test-Cases                          = ${testcases}
 -signaturetest                      = org.osgi.service.jaxrs.runtime,\
                                       org.osgi.service.jaxrs.runtime.dto,\
                                       org.osgi.service.jaxrs.whiteboard

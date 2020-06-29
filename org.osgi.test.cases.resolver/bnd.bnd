@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Tests the Resolver service
 
@@ -45,18 +45,16 @@ Import-Package: ${-signaturetest}, *
 				   resolver.tb1.v120.jar, \
 				   resolver.tb5.jar
 	
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.resolver
 
 -buildpath							= \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
     org.osgi.test.support;                  version=project  , \
     org.osgi.service.resolver;              version=project , \
 	osgi.core;maven-scope=provided;version=5.0		, \
-	osgi.cmpn;	        					version=5.0 , \
-	${junit4}
+	osgi.cmpn;	        					version=5.0
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}

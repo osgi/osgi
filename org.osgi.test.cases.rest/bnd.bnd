@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description = Rest Service test cases.
 
@@ -23,18 +23,15 @@ Bundle-Category: osgi,test
   tb5.jar, \
   tb6.jar
 
-Test-Cases              = ${testcases}
 -signaturetest          = org.osgi.service.rest
 
 -buildpath: org.osgi.test.support;version=project,\
   org.osgi.service.rest;version=project,\
   osgi.core;maven-scope=provided;version=6.0.0,\
   osgi.cmpn;version=6.0.0,\
-  org.osgi.impl.service.rest.support; version=6.0,\
-  ${junit4}
+  org.osgi.impl.service.rest.support; version=6.0
 
 -runbundles            = \
-    ${junit4},\
   org.osgi.impl.service.rest; version=latest, \
   org.osgi.impl.service.rest.support; version=latest
 

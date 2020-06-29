@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd
 
 -conditionalpackage: org.osgi.test.support.*
 -includepackage:   \
@@ -16,18 +16,12 @@ Import-Package: \
 	org.osgi.service.log.stream;version=project,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.resource;version=latest,\
-	org.osgi.util.pushstream;version=latest,\
-	org.osgi.util.promise;version=latest,\
-	org.osgi.util.function;version=latest,\
-	${junit4}
+	org.osgi.util.pushstream;version=latest
 
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log.stream
 
 -runbundles						= \
-    ${junit4},\
 	org.osgi.impl.service.log.stream;  version=latest
 
 -runproperties					= ${runproperties}, \
   equinox.log.history.max=200
-

@@ -1,5 +1,7 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit4-runpath.bnd
+# The test case wipes out permissions for all bundles, so we need
+# to place the tester on the classpath rather than being in a bundle.
 
 Bundle-Description: Conditional Permission Admin Test R42
 Bundle-Vendor: OSGi Alliance
@@ -21,20 +23,14 @@ Import-Package: !${p}.testcond, ${-signaturetest}, *
 	tb3.jar, \
 	testcond.jar, \
 	
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.condpermadmin
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.condpermadmin;         version=project , \
-	osgi.core;maven-scope=provided;version=6.0	, \
-	${junit4}
+	osgi.core;maven-scope=provided;version=6.0
 
 -runbundles:
-# The test case wipes out permissions for all bundles, so we need
-# to place the tester on the classpath rather than being in a bundle.
--tester: ${junit.tester}
-
 
 -runproperties = ${runsecureproperties}
 

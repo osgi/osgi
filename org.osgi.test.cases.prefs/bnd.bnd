@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Test Bundle for Preference Service tests
 
@@ -8,17 +8,14 @@ Bundle-Description: Test Bundle for Preference Service tests
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
 
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.prefs
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.prefs;                 version=project , \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-	${junit4}
+	osgi.core;maven-scope=provided;version=4.3.1
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.prefs; version=latest
 
 -runproperties = ${runproperties}

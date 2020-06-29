@@ -15,7 +15,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.support.dictionary.Dictionaries;
+import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.support.map.Maps;
 
 @Capability(namespace = "osgi.cdi.extension", name = "tb.extension")

@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd
 
 Bundle-Description: Tests the service layer bundle
 
@@ -9,24 +9,17 @@ Bundle-Description: Tests the service layer bundle
 	${p}.junit.*
 -includeresource: conf=conf
 
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.onem2m, org.osgi.service.onem2m.dto
 
 -buildpath: \
-	${junit4},\
 	osgi.core;maven-scope=provided;version=6,\
 	org.osgi.test.support;version=latest,\
 	slf4j.api;version=1.7.7,\
-	org.osgi.service.onem2m;version=latest,\
-    org.osgi.util.promise;version=latest,\
-    org.osgi.util.function;version=latest
+	org.osgi.service.onem2m;version=latest
 
 -runbundles							= \
-    ${junit4},\
  	slf4j.api;version=1.7.7, \
     slf4j.simple;version=1.7.7, \
-	org.osgi.util.promise;version=latest,\
-	org.osgi.util.function;version=latest,\
 	org.osgi.service.onem2m;version=latest,\
 	org.osgi.impl.service.onem2m;version=latest
 

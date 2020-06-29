@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Test Bundle for ServiceLoader
 
@@ -36,15 +36,9 @@ Bundle-Category: osgi,test
 	org.osgi.test.support;			version=project, \
     org.osgi.service.serviceloader; version=project , \
 	osgi.core;maven-scope=provided;version=5.0,\
-	osgi.cmpn      ;				version=5.0, \
-	${junit4}	
+	osgi.cmpn      ;				version=5.0
 
 -runbundles = \
-    ${junit4},\
 	org.osgi.impl.bundle.serviceloader;version=latest
 
-Test-Cases							= ${testcases}
-
 -runproperties: ${runproperties}
-
--fixupmessages.directive: "Unknown directive register: in Provide-Capability"

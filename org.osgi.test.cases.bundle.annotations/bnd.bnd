@@ -1,8 +1,8 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
--conditionalpackage					= org.osgi.test.support.*,org.osgi.test.assertj.*
+-conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
 	${p}.junit
 -includeresource					= resources, \
@@ -13,14 +13,10 @@ javac.profile=compact2
     org.osgi.annotation.bundle; version=latest, \
     org.osgi.annotation.versioning; version=latest, \
 	osgi.core;maven-scope=provided;version=6.0.0, \
-	osgi.cmpn;									version=6.0.0, \
-	${junit4}
+	osgi.cmpn;version=6.0.0
 
 -runbundles = \
-    ${junit4},\
-    org.osgi.impl.bundle.annotations; version=latest
+    org.osgi.impl.bundle.annotations;version=latest
 
 -runproperties = ${runproperties}, \
 	${p}.bundle.symbolic.name=org.osgi.impl.bundle.annotations
-
-Test-Cases: ${testcases}
