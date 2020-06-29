@@ -44,8 +44,9 @@
         releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
         noupdateOnRelease=true
 
+publishrepo: ${if;${env;OSSRH_USERNAME};OSGiNexus}
+-connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
+
 -releaserepo:
 -baselinerepo: Baseline
 -maven-release: javadoc;path=${target}/docs/javadoc
-
-publishrepo: ${if;(&(env.GITHUB_REPOSITORY=osgi/osgi)(env.GITHUB_REF=refs/heads/main)(!(env.GITHUB_EVENT_NAME=pull_request))(env.OSSRH_USERNAME=*)(!(env.OSSRH_USERNAME=$*)));OSGiNexus}

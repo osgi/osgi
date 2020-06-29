@@ -21,35 +21,43 @@ defaults:
     shell: bash
 
 jobs:
-  JDK8_Linux:
-    name: JDK8 ubuntu-latest
-    runs-on: ubuntu-latest
+  Build_Matrix:
+    strategy:
+      matrix:
+        include:
+        - os: ubuntu-latest
+          java: 8
+          canonical: ${{ (github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
+    name: JDK${{ matrix.java }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Git Unshallow
-      if: (github.repository == 'osgi/osgi') && (github.event_name != 'pull_request')
+      if: (matrix.canonical)
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
-    - name: Set up Java 8
+    - name: Set up Java ${{ matrix.java }}
       uses: actions/setup-java@v1
       with:
-        java-version: 8
-        server-id: https://oss.sonatype.org
-        server-username: OSSRH_USERNAME
-        server-password: OSSRH_PASSWORD
+        java-version: ${{ matrix.java }}
     - name: Build
       id: build
       run: |
         ./.github/scripts/build.sh
+    - name: Release
+      id: release
+      if: (matrix.canonical && (steps.build.outcome == 'success'))
+      run: |
+        ./.github/scripts/publish.sh
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Publish Specification HTML  
-      if: (github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request')
+      if: (steps.release.outcome == 'success')
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.DRAFT_DEPLOY_KEY }}
@@ -58,25 +66,25 @@ jobs:
         publish_dir: osgi.specs/generated/html
         force_orphan: true
     - name: Upload Specification HTML
-      if: (github.repository == 'osgi/osgi')
+      if: (steps.release.outcome == 'success')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
-      if: (github.repository == 'osgi/osgi')
+      if: (steps.release.outcome == 'success')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
     - name: Upload Generated Repo
-      if: (github.repository == 'osgi/osgi')
+      if: (steps.release.outcome == 'success')
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Generated-Repo
         path: cnf/generated/repo/
     - name: Core CT
       id: ct_core
-      if: (steps.build.conclusion == 'success')
+      if: (steps.build.outcome == 'success')
       run: |
         ./.github/scripts/ct.sh ct.core
