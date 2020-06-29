@@ -51,10 +51,6 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 	protected final static int INT_NEGATIVE = -2;
 	protected final static int INT_BIG = 1000000;
 
-//	public void setBundleContext(BundleContext context) {
-//		this.context = context;
-//	}
-
 	public final MBeanServer getMBeanServer() {
 		return mBeanServer;
 	}
@@ -150,7 +146,7 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		    throw new IllegalStateException("MBean not found. ObjectName: " + objectName0);
 		}
 
-		T mbean = (T) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, names.iterator().next(),
+		T mbean = MBeanServerInvocationHandler.newProxyInstance(mBeanServer, names.iterator().next(),
 				type, false);
 		return mbean;
 	}

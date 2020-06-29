@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -44,11 +43,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl implements ResourceListener {
 
 	private static final String			CONTEXT_NAME	= "context1";
-
-	/**
-	 * bundle context
-	 */
-	private BundleContext				bundleContext;
 
 	/**
 	 * resource monitor
@@ -96,12 +90,13 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	private ResourceEvent				lastEvent;
 
-	public void setBundleContext(BundleContext context) {
-		bundleContext = context;
-
+	protected void setUp() throws Exception {
+		super.setUp();
 		// retrieve the ResourceMonitoringService
-		ServiceReference resourceMonitoringServiceSr = bundleContext.getServiceReference(ResourceMonitoringService.class);
-		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(resourceMonitoringServiceSr);
+		ServiceReference resourceMonitoringServiceSr = getContext()
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) getContext()
+				.getService(resourceMonitoringServiceSr);
 
 		// retrieve cpu factory
 		StringBuffer filter = new StringBuffer();
@@ -115,18 +110,16 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
-			Collection factorySrs = bundleContext.getServiceReferences(ResourceMonitorFactory.class, filter.toString());
+			Collection factorySrs = getContext().getServiceReferences(
+					ResourceMonitorFactory.class, filter.toString());
 			if ((factorySrs != null) && (factorySrs.size() > 0)) {
-				cpuFactory = (ResourceMonitorFactory) bundleContext.getService((ServiceReference) factorySrs.iterator().next());
+				cpuFactory = (ResourceMonitorFactory) getContext().getService(
+						(ServiceReference) factorySrs.iterator().next());
 			}
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 			fail("Can not get the already existing OSGi service resource monitor factories.");
 		}
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
 
 		// create a ResourceContext
 		resourceContext = resourceMonitoringService.createContext(CONTEXT_NAME, null);
@@ -292,7 +285,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		}
 		dictionary.put(ResourceListener.RESOURCE_CONTEXT, resourceContext.getName());
 		dictionary.put(ResourceListener.RESOURCE_TYPE, resourceMonitor.getResourceType());
-		listenerSr = bundleContext.registerService(ResourceListener.class, this, dictionary);
+		listenerSr = getContext().registerService(ResourceListener.class, this,
+				dictionary);
 	}
 
 	/**

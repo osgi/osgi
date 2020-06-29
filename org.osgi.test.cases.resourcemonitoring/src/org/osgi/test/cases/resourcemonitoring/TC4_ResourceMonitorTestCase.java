@@ -18,7 +18,6 @@ package org.osgi.test.cases.resourcemonitoring;
 
 import java.util.Collection;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -34,11 +33,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author $Id$
  */
 public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
-
-	/**
-	 * bundle context.
-	 */
-	private BundleContext				bundleContext;
 
 	/**
 	 * ResourceMonitoringService.
@@ -60,11 +54,12 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 */
 	private final String				resourceContextName	= "context1";
 
-	public void setBundleContext(BundleContext context) {
-		bundleContext = context;
-
-		ServiceReference serviceReference = bundleContext.getServiceReference(ResourceMonitoringService.class);
-		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
+	protected void setUp() throws Exception {
+		super.setUp();
+		ServiceReference serviceReference = getContext()
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) getContext()
+				.getService(serviceReference);
 
 		StringBuffer filter = new StringBuffer();
 		filter.append("(&(");
@@ -77,11 +72,13 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
-			Collection factoryReferences = bundleContext.getServiceReferences(ResourceMonitorFactory.class, filter.toString());
+			Collection factoryReferences = getContext().getServiceReferences(
+					ResourceMonitorFactory.class, filter.toString());
 			if (factoryReferences != null) {
 				if (factoryReferences.size() > 0) {
 					ServiceReference factoryReference = (ServiceReference) factoryReferences.iterator().next();
-					cpuFactory = (ResourceMonitorFactory) bundleContext.getService(factoryReference);
+					cpuFactory = (ResourceMonitorFactory) getContext()
+							.getService(factoryReference);
 
 				}
 			}
@@ -89,10 +86,6 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			e.printStackTrace();
 			fail("Can not get the already existing OSGi service resource monitor factories.");
 		}
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
 
 		resourceContext = resourceMonitoringService.createContext(resourceContextName, null);
 

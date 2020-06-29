@@ -35,6 +35,7 @@ import org.osgi.test.cases.transaction.util.SimpleTestResource;
 public class SimpleTransactionManagerTest extends TransactionTestBundleControl {
     
     public void setUp() throws Exception {
+		super.setUp();
         super.setUpTransactionManager();
     }
 

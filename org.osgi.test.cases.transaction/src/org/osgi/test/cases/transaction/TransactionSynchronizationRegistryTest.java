@@ -33,6 +33,7 @@ import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFa
 public class TransactionSynchronizationRegistryTest extends TransactionTestBundleControl {
 
     public void setUp() throws Exception {
+		super.setUp();
         super.setUpTransactionManager();
     }
     

@@ -18,25 +18,18 @@
 
 package org.osgi.test.cases.template.junit;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.template.TemplateService;
+import org.osgi.test.support.OSGiTestCase;
 
-public class TemplateTestCase extends TestCase {
-
-	private BundleContext	context;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-	}
+public class TemplateTestCase extends OSGiTestCase {
 
 	public void testTemplate() {
-		ServiceReference reference = context
+		ServiceReference reference = getContext()
 				.getServiceReference(TemplateService.class.getName());
 		assertNotNull(reference);
-		TemplateService service = (TemplateService) context
+		TemplateService service = (TemplateService) getContext()
 				.getService(reference);
 		assertNotNull(service);
 	}

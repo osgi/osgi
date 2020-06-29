@@ -21,7 +21,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContext;
@@ -57,11 +56,6 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	private static final long			BUNDLE_ID2				= 2l;
 
 	/**
-	 * bundle context
-	 */
-	private BundleContext				bundleContext;
-
-	/**
 	 * ResourceMonitoringService
 	 */
 	private ResourceMonitoringService	resourceMonitoringService;
@@ -84,16 +78,6 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * set bundle context.
-	 */
-	public void setBundleContext(BundleContext context) {
-		bundleContext = context;
-
-		ServiceReference sr = bundleContext.getServiceReference(ResourceMonitoringService.class.getName());
-		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(sr);
-	}
-
-	/**
 	 * Setup test.
 	 * <p>
 	 * Clears events list.
@@ -101,6 +85,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	protected void setUp() throws Exception {
 		super.setUp();
 
+		ServiceReference sr = getContext()
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		resourceMonitoringService = (ResourceMonitoringService) getContext()
+				.getService(sr);
 		events.clear();
 	}
 
@@ -288,7 +276,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts);
 			}
 		}
-		listenerServiceRegistration = bundleContext.registerService(ResourceContextListener.class.getName(), this, properties);
+		listenerServiceRegistration = getContext().registerService(
+				ResourceContextListener.class.getName(), this, properties);
 	}
 
 	/**
