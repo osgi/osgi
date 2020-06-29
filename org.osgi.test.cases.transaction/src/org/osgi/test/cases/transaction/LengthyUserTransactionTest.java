@@ -32,6 +32,7 @@ public class LengthyUserTransactionTest extends TransactionTestBundleControl {
     private static final int SUITABLE_DELAY = 5;
 
     public void setUp() throws Exception {
+		super.setUp();
         super.setUpUserTransaction();
     }
 

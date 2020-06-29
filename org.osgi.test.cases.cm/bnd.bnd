@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Configuration Management Test R7
 Bundle-Vendor: OSGi Alliance
@@ -29,24 +29,17 @@ Export-Package = \
 	${p}.shared;version=1.0.0
 Import-Package: ${-signaturetest}, *
 	
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.cm
 
 -buildpath							= \
 	org.osgi.service.cm;			version=project, \
     org.osgi.test.support;			version=project, \
 	osgi.core;maven-scope=provided;version=6.0.0, \
-    osgi.cmpn;                      version=6.0.0, \
-	${junit4}
+    osgi.cmpn;                      version=6.0.0
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.coordinator; version=latest
 	
 -runproperties = ${runsecureproperties}
-
-
-
-

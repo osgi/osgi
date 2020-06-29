@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.resourcemonitoring;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
@@ -31,11 +30,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBundleControl {
 
 	/**
-	 * bundleContext
-	 */
-	private BundleContext					bundleContext;
-
-	/**
 	 * ResourceMonitoringService
 	 */
 	private ResourceMonitoringService		resourceMonitoringService;
@@ -45,20 +39,17 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	private ResourceContextListenerTestImpl	resourceContextListener;
 
-	public void setBundleContext(BundleContext bundleContext) {
-		this.bundleContext = bundleContext;
-
-		ServiceReference resourceMonitoringServiceSr = bundleContext.getServiceReference(ResourceMonitoringService.class.getName());
-		if (resourceMonitoringServiceSr != null) {
-			resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(resourceMonitoringServiceSr);
-		}
-	}
-
 	protected void setUp() throws Exception {
 		super.setUp();
 
+		ServiceReference resourceMonitoringServiceSr = getContext()
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		if (resourceMonitoringServiceSr != null) {
+			resourceMonitoringService = (ResourceMonitoringService) getContext()
+					.getService(resourceMonitoringServiceSr);
+		}
 		resourceContextListener = new ResourceContextListenerTestImpl();
-		resourceContextListener.start(bundleContext);
+		resourceContextListener.start(getContext());
 
 		// delete all existing ResourceContext
 		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
@@ -93,7 +84,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	public void testAddingABundleToAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// create ResourceContext
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
@@ -127,7 +118,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	public void testAddingABundlePreviouslyAssociatedWithAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final String name2 = "context2";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// Create ResourceContexts.
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
@@ -170,7 +161,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	public void testRemoveBundleFromAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// create ResourceContext
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
@@ -215,7 +206,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	public void testRemoveABundleWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// create two Resource Context
 		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
@@ -265,7 +256,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	public void testRemoveABundleWithANullDestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// create ResourceContext
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
@@ -304,7 +295,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 			ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 
 		// create ResourceContexts
 		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);

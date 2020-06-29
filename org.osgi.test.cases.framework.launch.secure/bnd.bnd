@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit4-runpath.bnd
 
 Bundle-Description					: Framework test cases.
 
@@ -14,19 +14,15 @@ Bundle-Description					: Framework test cases.
 	fragments.tb18.jar, \
     launch.secure.tb1.jar
 	
-Test-Cases							= ${testcases}
-
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;maven-scope=provided;version=4.3.1	, \
-	osgi.cmpn;								version=4.3.1	, \
-	${junit4}
+	osgi.cmpn;								version=4.3.1
 
 -runbundles:
 -runframework: none
--tester: ${junit.tester}
 
 -runproperties = ${runproperties}, \
 	${p}.trust.repositories=${build}/keystore, \

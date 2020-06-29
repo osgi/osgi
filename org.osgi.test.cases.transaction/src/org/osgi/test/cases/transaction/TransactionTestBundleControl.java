@@ -18,7 +18,6 @@ package org.osgi.test.cases.transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFactory;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
@@ -36,18 +35,19 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public abstract class TransactionTestBundleControl extends DefaultTestBundleControl {
 
-    BundleContext context;
     private final int DEFAULTTIME = 30;
     static TransactionManager tm;
     static UserTransaction ut;
 
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-        UserTransactionFactory.setBundleContext(context);
-        TransactionSynchronizationRegistryFactory.setBundleContext(context);
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		TransactionManagerFactory.setBundleContext(getContext());
+		UserTransactionFactory.setBundleContext(getContext());
+		TransactionSynchronizationRegistryFactory
+				.setBundleContext(getContext());
     }
-    
+
     /*
      * get the wait time in seconds, check the user preference first
      */

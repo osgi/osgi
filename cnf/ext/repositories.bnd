@@ -14,13 +14,18 @@
         index=${.}/central.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
+        name='OSSRH';\
+        snapshotUrl="${ossrhrepo}";\
+        index=${.}/ossrh.mvn;\
+        readOnly=true,\
+    aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='SpringSource EBR';\
         releaseUrl="http://repository.springsource.com/maven/bundles/external";\
         index=${.}/springsource.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='Apache Snapshots';\
-        snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
+        snapshotUrl="${apachesnapshotrepo}";\
         index=${.}/apache-snapshots.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
@@ -44,8 +49,9 @@
         releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
         noupdateOnRelease=true
 
+publishrepo: ${if;${env;OSSRH_USERNAME};OSGiNexus}
+-connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
+
 -releaserepo:
 -baselinerepo: Baseline
 -maven-release: javadoc;path=${target}/docs/javadoc
-
-publishrepo: ${if;(&(env.GITHUB_REPOSITORY=osgi/osgi)(env.GITHUB_REF=refs/heads/main)(!(env.GITHUB_EVENT_NAME=pull_request))(env.OSSRH_USERNAME=*)(!(env.OSSRH_USERNAME=$*)));OSGiNexus}

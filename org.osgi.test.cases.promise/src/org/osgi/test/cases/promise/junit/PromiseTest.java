@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,11 +47,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.assertj.core.api.AbstractListAssert;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.osgi.util.function.Consumer;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.FailedPromisesException;
@@ -63,9 +63,6 @@ import org.osgi.util.promise.Success;
 import org.osgi.util.promise.TimeoutException;
 
 public class PromiseTest {
-	@Rule
-	public TestName				testName	= new TestName();
-
 	ExecutorService				callbackExecutor;
 	ScheduledExecutorService	scheduledExecutor;
 	PromiseFactory				factory;
@@ -74,8 +71,11 @@ public class PromiseTest {
 	private static final Random	random		= new Random();
 	private String				originalAllowCurrentThread;
 
-	@Before
-	public void setUp() throws Exception {
+	String						testMethodName;
+
+	@BeforeEach
+	public void setUp(TestInfo info) throws Exception {
+		testMethodName = info.getTestMethod().map(Method::getName).get();
 		boolean callbacksExecutorOnly = random.nextBoolean();
 		boolean inlineExecutor = random.nextBoolean();
 		originalAllowCurrentThread = System
@@ -92,7 +92,7 @@ public class PromiseTest {
 				: new PromiseFactory(executor, scheduledExecutor);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
 		callbackExecutor.shutdown();
 		scheduledExecutor.shutdown();
@@ -111,7 +111,7 @@ public class PromiseTest {
 		assertThat(p).isNotDone();
 		String value = new String("value");
 		d.resolve(value);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
 	}
 
@@ -122,7 +122,7 @@ public class PromiseTest {
 		assertThat(p).isNotDone();
 		String value = new String("value");
 		d.resolve(value);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
 	}
 
@@ -136,9 +136,9 @@ public class PromiseTest {
 		assertThat(p2).isNotDone();
 		Integer value = Integer.valueOf(15);
 		d.resolve(value);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValueMatching(v -> v.intValue() == value.intValue());
 	}
 
@@ -212,7 +212,7 @@ public class PromiseTest {
 		assertThat(p).isNotDone();
 		Throwable failure = new RuntimeException();
 		d.fail(failure);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -226,7 +226,7 @@ public class PromiseTest {
 		assertThat(p).isNotDone();
 		Throwable failure = new RuntimeException();
 		d.fail(failure);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -391,13 +391,13 @@ public class PromiseTest {
 		Promise<String> p1 = d.getPromise();
 		String value = new String("10");
 		d.resolve(value);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS);
 
 		Promise<Integer> p2 = p1.then(promise -> factory
 				.resolved(Integer.valueOf(promise.getValue())));
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(Integer.valueOf(10));
 	}
 
@@ -434,7 +434,7 @@ public class PromiseTest {
 		assertThat(p1).isDone();
 		assertThat(p2).isNotDone();
 		latch2.countDown();
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(20);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS).hasValue(20);
 	}
 
 	@Test
@@ -445,7 +445,8 @@ public class PromiseTest {
 		d.resolve(value); // resolve before then
 
 		Promise<String> p2 = p1.then(null, null);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -456,7 +457,8 @@ public class PromiseTest {
 		Promise<String> p2 = p1.then(null, null);
 		d.resolve(value); // resolve after then
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -465,7 +467,8 @@ public class PromiseTest {
 		Promise<String> p1 = factory.resolved(value);
 		Promise<String> p2 = p1.then(null, null);
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -476,7 +479,7 @@ public class PromiseTest {
 		d.fail(failure); // fail before then
 		Promise<String> p2 = p1.then(null, null);
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -491,7 +494,7 @@ public class PromiseTest {
 		Promise<String> p2 = p1.then(null, null);
 		d.fail(failure); // fail after then
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -504,7 +507,7 @@ public class PromiseTest {
 		Promise<String> p1 = factory.failed(failure);
 		Promise<String> p2 = p1.then(null, null);
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -569,7 +572,7 @@ public class PromiseTest {
 			}
 		});
 		d.resolve("first");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue("first");
 		assertThat(fail).isFalse();
 		assertThatIllegalStateException().isThrownBy(() -> d.resolve("second"));
@@ -592,7 +595,7 @@ public class PromiseTest {
 			}
 		});
 		d.fail(new Exception("first"));
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("first");
 		assertThatThrownBy(() -> p.getValue())
@@ -646,7 +649,7 @@ public class PromiseTest {
 		p.onResolve(() -> {
 			throw new Error("bad callback upon onResolve");
 		});
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 	}
@@ -657,10 +660,10 @@ public class PromiseTest {
 		final Promise<String> p1 = factory.resolved(value1);
 		final Promise<String> p2 = factory.resolved(null);
 		assertThat(p1).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(null);
 	}
 
@@ -670,10 +673,10 @@ public class PromiseTest {
 		final Promise<String> p1 = Promises.resolved(value1);
 		final Promise<String> p2 = Promises.resolved(null);
 		assertThat(p1).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(null);
 	}
 
@@ -682,7 +685,7 @@ public class PromiseTest {
 		Throwable failure = new Exception("value");
 		final Promise<String> p = factory.failed(failure);
 		assertThat(p).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -695,7 +698,7 @@ public class PromiseTest {
 		Throwable failure = new Exception("value");
 		final Promise<String> p = Promises.failed(failure);
 		assertThat(p).isDone()
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -716,16 +719,16 @@ public class PromiseTest {
 		assertThat(latched).isNotDone();
 		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
 		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
-				latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 						.hasValueThat()
 						.asList()
 						.containsExactly(value1, value2);
@@ -748,16 +751,16 @@ public class PromiseTest {
 		assertThat(latched).isNotDone();
 		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
 		Integer value2 = Integer.valueOf(24);
 		d2.resolve(value2);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
-				latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 						.hasValueThat()
 						.asList()
 						.containsExactly(value1, value2);
@@ -778,16 +781,16 @@ public class PromiseTest {
 		assertThat(latched).isNotDone();
 		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
 		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
-				latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 						.hasValueThat()
 						.asList()
 						.containsExactly(value1, value2);
@@ -811,16 +814,16 @@ public class PromiseTest {
 		assertThat(latched).isNotDone();
 		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
 		Integer value2 = Integer.valueOf(24);
 		d2.resolve(value2);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
-				latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 						.hasValueThat()
 						.asList()
 						.containsExactly(value1, value2);
@@ -843,22 +846,22 @@ public class PromiseTest {
 		assertThat(latched).isNotDone();
 		Throwable f1 = new Exception("fail1");
 		d1.fail(f1);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(f1);
 		assertThat(p2).isNotDone();
 		assertThat(latched).isNotDone();
 		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 		assertThat(latched).isNotDone();
 		Throwable f3 = new Exception("fail3");
 		d3.fail(f3);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(f3);
-		assertThat(latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(FailedPromisesException.class);
 		assertThat(((FailedPromisesException) latched.getFailure())
@@ -872,7 +875,7 @@ public class PromiseTest {
 	public void testAllEmptyCollection() throws Exception {
 		Collection<Promise<String>> promises = Collections.emptyList();
 		final Promise<List<String>> latched = factory.all(promises);
-		assertThat(latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValueThat()
 				.asList()
 				.isEmpty();
@@ -881,7 +884,7 @@ public class PromiseTest {
 	@Test
 	public void testAllEmptyVarargs() throws Exception {
 		final Promise<List<Object>> latched = Promises.all();
-		assertThat(latched).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValueThat()
 				.asList()
 				.isEmpty();
@@ -902,17 +905,17 @@ public class PromiseTest {
 		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p2).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p3).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
 
 		Integer value = Integer.valueOf(42);
 		d1.resolve(value);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(null);
 	}
 
@@ -923,23 +926,24 @@ public class PromiseTest {
 		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p2).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p3).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
 
 		Throwable failure = new RuntimeException();
 		d1.fail(failure);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p1.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -949,24 +953,24 @@ public class PromiseTest {
 		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p1).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p2).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
-		assertThat(p3).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p1).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
 
 		Integer value = Integer.valueOf(42);
 		d2.resolve(value);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p3).doesNotResolve(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
 
 		Throwable failure = new RuntimeException();
 		d1.fail(failure);
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p1.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatThrownBy(() -> p3.getValue())
@@ -982,7 +986,7 @@ public class PromiseTest {
 		d2.resolve(value);
 
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatThrownBy(() -> p3.getValue())
@@ -999,7 +1003,7 @@ public class PromiseTest {
 		d2.fail(failure);
 
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatThrownBy(() -> p3.getValue())
@@ -1014,9 +1018,10 @@ public class PromiseTest {
 		final Deferred<Number> d2 = new Deferred<>();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -1026,9 +1031,10 @@ public class PromiseTest {
 		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -1038,12 +1044,13 @@ public class PromiseTest {
 		final Deferred<Number> d2 = factory.deferred();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS).hasValue(null);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
 	}
 
 	@Test
@@ -1062,15 +1069,15 @@ public class PromiseTest {
 		Promise<String> p4 = p1.filter(t -> t.length() == 0);
 		Promise<String> p5 = p3.filter(t -> t.length() > 0);
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
-		assertThat(p4).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(NoSuchElementException.class);
 		assertThatThrownBy(() -> p4.getValue())
 				.isInstanceOf(InvocationTargetException.class)
 				.hasCauseInstanceOf(NoSuchElementException.class);
-		assertThat(p5).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p5).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(NoSuchElementException.class);
 		assertThatThrownBy(() -> p5.getValue())
@@ -1091,7 +1098,7 @@ public class PromiseTest {
 			return t.length() > 0;
 		});
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1110,7 +1117,7 @@ public class PromiseTest {
 			return t.length() > 0;
 		});
 
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1132,7 +1139,7 @@ public class PromiseTest {
 		Promise<Integer> p1 = factory.resolved(value1);
 		Promise<String> p2 = p1.map(t -> Long.valueOf(t.longValue()))
 				.map(t -> t.toString());
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(value1.toString());
 	}
 
@@ -1148,7 +1155,7 @@ public class PromiseTest {
 			latch.countDown();
 			return t.toString();
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1170,7 +1177,7 @@ public class PromiseTest {
 		Promise<String> p2 = p1
 				.flatMap(t -> factory.resolved(Long.valueOf(t.longValue())))
 				.flatMap(t -> factory.resolved(t.toString()));
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue(value1.toString());
 	}
 
@@ -1186,7 +1193,7 @@ public class PromiseTest {
 			latch.countDown();
 			return factory.resolved(t.toString());
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1211,7 +1218,7 @@ public class PromiseTest {
 			latch.countDown();
 			return value2;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
 	}
@@ -1225,7 +1232,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return value2;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 	}
 
@@ -1237,7 +1244,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return null;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1253,7 +1260,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure1);
 			throw failure2;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure2);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1277,7 +1284,7 @@ public class PromiseTest {
 			latch.countDown();
 			return factory.resolved(value2);
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
 	}
@@ -1291,7 +1298,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return factory.resolved(value2);
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
 	}
 
@@ -1303,7 +1310,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
 			return null;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1319,7 +1326,7 @@ public class PromiseTest {
 			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure1);
 			throw failure2;
 		});
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure2);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1340,7 +1347,7 @@ public class PromiseTest {
 		final Promise<Number> p1 = factory.resolved(value1);
 		final Promise<Long> p2 = factory.resolved(value2);
 		final Promise<Number> p3 = p1.fallbackTo(p2);
-		assertThat(p3).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value1);
 	}
 
@@ -1353,7 +1360,7 @@ public class PromiseTest {
 		final Promise<Number> p2 = factory.failed(failure2);
 		final Promise<Long> p3 = factory.resolved(value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
-		assertThat(p4).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value3);
 	}
 
@@ -1366,7 +1373,7 @@ public class PromiseTest {
 		final Promise<Number> p2 = factory.failed(failure2);
 		final Promise<Long> p3 = factory.failed(failure3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
-		assertThat(p4).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure1);
 		assertThat(catchThrowableOfType(() -> p4.getValue(),
@@ -1401,19 +1408,19 @@ public class PromiseTest {
 			fail2.set(true);
 		});
 		assertThat(d.resolveWith(factory.resolved("first")))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.isSuccessful();
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasValue("first");
 		assertThat(fail1).isFalse();
 		assertThat(fail2).isFalse();
 		assertThat(d.resolveWith(factory.resolved("second")))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException().isThrownBy(() -> d.resolve("second"));
 		assertThat(d.resolveWith(factory.failed(new Exception("second"))))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException()
@@ -1443,21 +1450,21 @@ public class PromiseTest {
 			fail2.set(true);
 		});
 		assertThat(d.resolveWith(factory.failed(new Exception("first"))))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.isSuccessful();
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("first");
 		assertThat(fail1).isFalse();
 		assertThat(fail2).isFalse();
 		assertThat(d.resolveWith(factory.failed(new Exception("second"))))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException()
 				.isThrownBy(() -> d.fail(new Exception("second")));
 		assertThat(d.resolveWith(factory.resolved("second")))
-				.doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
 		assertThatIllegalStateException().isThrownBy(() -> d.resolve("second"));
@@ -1468,7 +1475,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(TimeoutException.class);
 		assertThatThrownBy(() -> t.getValue())
@@ -1483,9 +1490,9 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.resolve("no timeout");
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(t.getValue());
 	}
 
@@ -1495,9 +1502,9 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(t.getValue());
 	}
 
@@ -1507,10 +1514,10 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.fail(new Exception("no timeout"));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(t.getFailure());
 	}
@@ -1521,10 +1528,10 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.fail(new Exception("no timeout"));
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(t.getFailure());
 	}
@@ -1535,9 +1542,9 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(t.getValue());
 	}
 
@@ -1546,7 +1553,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(TimeoutException.class);
 		assertThatThrownBy(() -> t.getValue())
@@ -1561,9 +1568,9 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		Promise<String> t = p.timeout(0);
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no timeout");
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(t.getValue());
 	}
 
@@ -1572,7 +1579,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.timeout(0);
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(TimeoutException.class);
 		assertThatThrownBy(() -> t.getValue())
@@ -1588,7 +1595,7 @@ public class PromiseTest {
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.resolve("no delay");
 		assertThat(t).isNotDone()
-				.doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no delay");
 		assertThat(p).hasSameValue(t.getValue());
 	}
@@ -1600,7 +1607,7 @@ public class PromiseTest {
 		d.resolve("no delay");
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		assertThat(t).isNotDone()
-				.doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no delay");
 		assertThat(p).hasSameValue(t.getValue());
 	}
@@ -1612,7 +1619,7 @@ public class PromiseTest {
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		d.fail(new Exception("no delay"));
 		assertThat(t).isNotDone()
-				.doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("no delay");
 		assertThat(p).hasFailedWithThrowableThat().isSameAs(t.getFailure());
@@ -1625,7 +1632,7 @@ public class PromiseTest {
 		d.fail(new Exception("no delay"));
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		assertThat(t).isNotDone()
-				.doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+				.resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.hasMessage("no delay");
 		assertThat(p).hasFailedWithThrowableThat().isSameAs(t.getFailure());
@@ -1636,7 +1643,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
+		assertThat(t).doesNotResolveWithin(WAIT_TIME * 2, TimeUnit.SECONDS);
 		assertThat(p).isNotDone();
 	}
 
@@ -1646,7 +1653,7 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.resolve("no delay");
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no delay");
 		assertThat(p).hasSameValue(t.getValue());
 	}
@@ -1656,7 +1663,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
-		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
+		assertThat(t).doesNotResolveWithin(WAIT_TIME * 2, TimeUnit.SECONDS);
 		assertThat(p).isNotDone();
 	}
 
@@ -1666,7 +1673,7 @@ public class PromiseTest {
 		Promise<String> p = d.getPromise();
 		d.resolve("no delay");
 		Promise<String> t = p.delay(0);
-		assertThat(t).doesResolve(WAIT_TIME * 2, TimeUnit.SECONDS)
+		assertThat(t).resolvesWithin(WAIT_TIME * 2, TimeUnit.SECONDS)
 				.hasValue("no delay");
 		assertThat(p).hasSameValue(t.getValue());
 	}
@@ -1676,7 +1683,7 @@ public class PromiseTest {
 		Deferred<String> d = factory.deferred();
 		Promise<String> p = d.getPromise();
 		Promise<String> t = p.delay(0);
-		assertThat(t).doesNotResolve(WAIT_TIME * 2, TimeUnit.SECONDS);
+		assertThat(t).doesNotResolveWithin(WAIT_TIME * 2, TimeUnit.SECONDS);
 		assertThat(p).isNotDone();
 	}
 
@@ -1722,12 +1729,12 @@ public class PromiseTest {
 		final Exception e = new Exception("failure");
 		d.fail(e);
 		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
-		assertThat(p1).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(e);
 		assertThat(catchThrowableOfType(() -> p1.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(e);
-		assertThat(p2).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(e);
 		assertThat(catchThrowableOfType(() -> p2.getValue(),
@@ -1874,9 +1881,9 @@ public class PromiseTest {
 
 	@Test
 	public void testSubmitSuccess() throws Exception {
-		Promise<String> p = factory.submit(() -> testName.getMethodName());
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
-				.hasValue(testName.getMethodName());
+		Promise<String> p = factory.submit(() -> testMethodName);
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(testMethodName);
 	}
 
 	@Test
@@ -1885,7 +1892,7 @@ public class PromiseTest {
 		Promise<String> p = factory.submit(() -> {
 			throw failure;
 		});
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -1898,8 +1905,8 @@ public class PromiseTest {
 		final PromiseFactory factory = new PromiseFactory(command -> {
 			throw failure;
 		}, scheduledExecutor);
-		Promise<String> p = factory.submit(() -> testName.getMethodName());
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		Promise<String> p = factory.submit(() -> testMethodName);
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p.getValue(),
@@ -1974,7 +1981,7 @@ public class PromiseTest {
 		assertThat(c).isNotCompleted();
 		assertThat(p).isNotDone();
 		c.complete(value);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
 	}
 
@@ -1985,7 +1992,7 @@ public class PromiseTest {
 				.completedFuture(value);
 		assertThat(c).isCompleted();
 		final Promise<String> p = factory.promiseFrom(c);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
 	}
 
@@ -1997,7 +2004,7 @@ public class PromiseTest {
 		assertThat(c).isNotCompleted();
 		assertThat(p).isNotDone();
 		c.completeExceptionally(failure);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 	}
@@ -2009,7 +2016,7 @@ public class PromiseTest {
 		c.completeExceptionally(failure);
 		assertThat(c).isCompletedExceptionally();
 		final Promise<String> p = factory.promiseFrom(c);
-		assertThat(p).doesResolve(WAIT_TIME, TimeUnit.SECONDS)
+		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 	}

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Declarative Services Test Case
 -debug: true
@@ -46,7 +46,6 @@ Import-Package: ${-signaturetest}, *
 	tb29.jar, \
 	tbf1.jar
 	
-Test-Cases							= ${testcases}
 -signaturetest = \
  org.osgi.service.component, \
  org.osgi.service.component.runtime, \
@@ -57,11 +56,9 @@ Test-Cases							= ${testcases}
     org.osgi.service.component;             version=project, \
     org.osgi.service.log;             version=latest, \
 	osgi.core;maven-scope=provided;version=7.0.0,\
-	osgi.cmpn;version=6.0.0,\
-	${junit4}
+	osgi.cmpn;version=6.0.0
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \

@@ -40,11 +40,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBundleControl {
 
 	/**
-	 * bundle context
-	 */
-	private BundleContext					bundleContext;
-
-	/**
 	 * ResourceMonitoringService.
 	 */
 	private ResourceMonitoringService		resourceMonitoringService;
@@ -54,21 +49,16 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 */
 	private ResourceContextListenerTestImpl	resourceContextListener;
 
-	/**
-	 * Set bundle context.
-	 */
-	public void setBundleContext(BundleContext context) {
-		bundleContext = context;
-
-		ServiceReference serviceReference = bundleContext.getServiceReference(ResourceMonitoringService.class);
-		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
-	}
-
 	protected void setUp() throws Exception {
 		super.setUp();
 
+		ServiceReference serviceReference = getContext()
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) getContext()
+				.getService(serviceReference);
+
 		resourceContextListener = new ResourceContextListenerTestImpl();
-		resourceContextListener.start(bundleContext);
+		resourceContextListener.start(getContext());
 
 		// delete all existing resource contexts.
 		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
@@ -304,7 +294,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 */
 	public void testRetrievingAResourceContextBasedOnABundleIdentifier() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = bundleContext.getBundle().getBundleId();
+		final long bundleId = getContext().getBundle().getBundleId();
 		// Retrieve the ResourceContext associated with bundle id 1.
 		ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
 		// Check that the returned ResourceContext object is null.

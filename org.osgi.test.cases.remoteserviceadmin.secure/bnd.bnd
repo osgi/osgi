@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description					: Remote Service Admin secure test cases.
 Bundle-Vendor: TIBCO Software Inc.
@@ -24,17 +24,13 @@ Bundle-Category: osgi,test
 	tb_importer_noperm.jar=tb_importer_noperm.jar, \
 	tb_reader_noperm.jar=tb_reader_noperm.jar
 	
-Test-Cases							= ${testcases}
-
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.remoteserviceadmin;	version=project	, \
 	osgi.core;maven-scope=provided;version=4.3.1	, \
-    osgi.cmpn;           				version=4.3.1 , \
-	${junit4}
+    osgi.cmpn;           				version=4.3.1
 
 -runbundles							= \
-    ${junit4},\
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \
@@ -51,4 +47,4 @@ Test-Cases							= ${testcases}
 	${p}.system.packages.extra="", \
     ${p}.serverconfig="service.exported.configs", \
     service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo;biz.aQute.junit;latest},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"

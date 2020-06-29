@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description					= ZigBee Test Bundle
 
@@ -14,7 +14,6 @@ Import-Package: \
 -privatepackage: \
 	${p}.*
 
-Test-Cases			= ${testcases}
 -signaturetest = \
  org.osgi.service.zigbee, \
  org.osgi.service.zigbee.descriptions, \
@@ -28,11 +27,9 @@ Test-Cases			= ${testcases}
 	org.osgi.util.function;version=project,\
 	org.osgi.util.promise;version=project,\
 	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1,\
-	${junit4}
+	osgi.cmpn;version=4.3.1
 
 -runbundles: \
-    ${junit4},\
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\

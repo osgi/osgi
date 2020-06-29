@@ -1,6 +1,6 @@
 javac.profile=compact3
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 -noee = true
 
 -conditionalpackage                 = org.osgi.test.support.*
@@ -19,16 +19,13 @@ Import-Package: ${-signaturetest}, *
     org.osgi.test.support;          version=project, \
     org.osgi.jmx;                   version=project , \
     osgi.core;maven-scope=provided;version=4.3.1   , \
-    osgi.cmpn;                      version=4.3.1   , \
-    ${junit4}
+    osgi.cmpn;                      version=4.3.1
 
 -runbundles                         = \
-    ${junit4},\
     org.osgi.impl.bundle.jmx; version=latest, \
     org.osgi.impl.service.cm; version=latest, \
     org.osgi.impl.service.log; version=latest
 
-Test-Cases                          = ${testcases}
 -signaturetest                      = \
             org.osgi.jmx, \
             org.osgi.jmx.framework, \
@@ -36,6 +33,6 @@ Test-Cases                          = ${testcases}
 
 -runproperties = ${runproperties}, \
     ${p}.system.packages.extra="", \
-    ${p}.bundles="${uniq;${repo;biz.aQute.junit;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
 #   osgi.console=1111
 

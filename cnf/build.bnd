@@ -19,6 +19,8 @@ javac.profile = compact1
 
 mainrepo                = ${build}/repo
 centralrepo             = https://repo.maven.apache.org/maven2
+ossrhrepo               = https://oss.sonatype.org/content/repositories/snapshots/
+apachesnapshotrepo      = https://repository.apache.org/content/repositories/snapshots/
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 

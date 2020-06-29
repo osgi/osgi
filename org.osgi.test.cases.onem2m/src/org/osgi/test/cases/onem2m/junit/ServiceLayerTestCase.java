@@ -1,5 +1,6 @@
 package org.osgi.test.cases.onem2m.junit;
 
+import static org.junit.Assert.*;
 import static org.osgi.service.onem2m.dto.Constants.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -22,7 +25,7 @@ import org.osgi.service.onem2m.dto.NotificationDTO;
 import org.osgi.service.onem2m.dto.NotificationEventDTO;
 import org.osgi.service.onem2m.dto.RequestPrimitiveDTO;
 import org.osgi.service.onem2m.dto.ResourceDTO;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.util.promise.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 @SuppressWarnings("boxing")
-public class ServiceLayerTestCase extends OSGiTestCase {
+public class ServiceLayerTestCase extends AbstractOSGiTestCase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerTestCase.class);
 
@@ -43,7 +46,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 	// private String uri = null;
 	private BundleContext con = null;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		if (serviceLayerService == null) {
 //			try {
 //				Thread.sleep(1000);
@@ -64,7 +68,8 @@ public class ServiceLayerTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		cleanup();
 	}
 

@@ -9,7 +9,9 @@
 package org.osgi.test.cases.log.stream.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -17,45 +19,51 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.LongUnaryOperator;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.stream.LogStreamProvider;
-import org.osgi.test.support.junit4.AbstractOSGiTestCase;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.test.junit5.service.ServiceExtension;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class LogStreamTest extends AbstractOSGiTestCase {
+@ExtendWith(BundleContextExtension.class)
+@ExtendWith(ServiceExtension.class)
+public class LogStreamTest {
 	private static int									SLEEP	= 1000;
 
-	ServiceTracker<LogService,LogService>				logServiceTracker;
+	@InjectBundleContext
+	BundleContext										context;
+	@InjectService
 	LogService											logService;
 	ServiceTracker<LogStreamProvider,LogStreamProvider>	logStreamProviderTracker;
 	LogStreamProvider									logStreamProvider;
 
-	@Before
-	public void setUp() throws Exception {
-		logServiceTracker = new ServiceTracker<LogService,LogService>(
-				getContext(), LogService.class, null);
-		logServiceTracker.open();
-
+	String												testMethodName;
+	@BeforeEach
+	public void setUp(TestInfo info) throws Exception {
+		testMethodName = info.getTestMethod().map(Method::getName).get();
 		logStreamProviderTracker = new ServiceTracker<LogStreamProvider,LogStreamProvider>(
-				getContext(), LogStreamProvider.class, null);
+				context, LogStreamProvider.class, null);
 		logStreamProviderTracker.open();
 
-		logService = Tracker.waitForService(logServiceTracker, SLEEP);
+		// logService = Tracker.waitForService(logServiceTracker, SLEEP);
 		logStreamProvider = Tracker.waitForService(logStreamProviderTracker,
 				SLEEP);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
-		logServiceTracker.close();
-
 		logStreamProviderTracker.close();
 	}
 
@@ -63,7 +71,7 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 	public void testLogStreamIsBuffered() throws Exception {
 		LongUnaryOperator backPressure = i -> 100L;
 		for (int i = 0; i < 5; i++) {
-			logService.getLogger(testName.getMethodName())
+			logService.getLogger(testMethodName)
 					.audit(String.valueOf(i + 1));
 		}
 
@@ -74,13 +82,13 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 				.createStream(LogStreamProvider.Options.HISTORY)) {
 
 			for (int i = 5; i < 10; i++) {
-				logService.getLogger(testName.getMethodName())
+				logService.getLogger(testMethodName)
 						.audit(String.valueOf(i + 1));
 			}
 
 			long startTime = System.nanoTime();
 			stream.adjustBackPressure(backPressure)
-					.filter(l -> testName.getMethodName()
+					.filter(l -> testMethodName
 							.equals(l.getLoggerName()))
 					.forEach(l -> {
 						System.out.printf("%s[%s]: %s%n", l.getLoggerName(),
@@ -90,7 +98,7 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 					});
 
 			for (int i = 10; i < 30; i++) {
-				logService.getLogger(testName.getMethodName())
+				logService.getLogger(testMethodName)
 						.audit(String.valueOf(i + 1));
 			}
 
@@ -116,7 +124,7 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 	@Test
 	public void testLogWithHistory() throws Exception {
 		for (int i = 0; i < 50; i++) {
-			logService.getLogger(testName.getMethodName())
+			logService.getLogger(testMethodName)
 					.audit(String.valueOf(i + 1));
 		}
 
@@ -125,12 +133,12 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 				.createStream(LogStreamProvider.Options.HISTORY)) {
 
 			for (int i = 50; i < 100; i++) {
-				logService.getLogger(testName.getMethodName())
+				logService.getLogger(testMethodName)
 						.audit(String.valueOf(i + 1));
 			}
 
 			stream.filter(
-					l -> testName.getMethodName().equals(l.getLoggerName()))
+					l -> testMethodName.equals(l.getLoggerName()))
 					.forEach(l -> {
 						System.out.printf("%s[%s]: %s%n", l.getLoggerName(),
 								l.getSequence(), l.getMessage());
@@ -138,7 +146,7 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 					});
 
 			for (int i = 100; i < 150; i++) {
-				logService.getLogger(testName.getMethodName())
+				logService.getLogger(testMethodName)
 						.audit(String.valueOf(i + 1));
 			}
 
@@ -157,7 +165,7 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 
 		CountDownLatch latch = new CountDownLatch(messageSet.size());
 		try (PushStream<LogEntry> ps = logStreamProvider.createStream()) {
-			ps.filter(l -> testName.getMethodName().equals(l.getLoggerName()))
+			ps.filter(l -> testMethodName.equals(l.getLoggerName()))
 					.forEach(l -> {
 						System.out.printf("%s[%s]: %s%n", l.getLoggerName(),
 								l.getSequence(), l.getMessage());
@@ -165,9 +173,9 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 						latch.countDown();
 					});
 
-			logService.getLogger(testName.getMethodName()).audit("test1");
-			logService.getLogger(testName.getMethodName()).audit("test2");
-			logService.getLogger(testName.getMethodName()).audit("test3");
+			logService.getLogger(testMethodName).audit("test1");
+			logService.getLogger(testMethodName).audit("test2");
+			logService.getLogger(testMethodName).audit("test3");
 
 			latch.await(SLEEP, TimeUnit.MILLISECONDS);
 		}
@@ -182,23 +190,24 @@ public class LogStreamTest extends AbstractOSGiTestCase {
 		PushStream<LogEntry> stream = logStreamProvider.createStream();
 		try {
 			p = stream.filter(
-					l -> testName.getMethodName().equals(l.getLoggerName()))
+					l -> testMethodName.equals(l.getLoggerName()))
 					.filter(l -> l.getMessage().startsWith("count"))
 					.count();
 
-			logService.getLogger(testName.getMethodName()).audit("count1");
-			logService.getLogger(testName.getMethodName()).audit("count2");
-			logService.getLogger(testName.getMethodName()).audit("nocount1");
-			logService.getLogger(testName.getMethodName()).audit("count3");
-			logService.getLogger(testName.getMethodName()).audit("nocount2");
+			logService.getLogger(testMethodName).audit("count1");
+			logService.getLogger(testMethodName).audit("count2");
+			logService.getLogger(testMethodName).audit("nocount1");
+			logService.getLogger(testMethodName).audit("count3");
+			logService.getLogger(testMethodName).audit("nocount2");
 
 			latch.await(SLEEP, TimeUnit.MILLISECONDS);
 		} finally {
 			// ungetService closes the stream
 			logStreamProviderTracker.close();
 		}
-		long count = p.getValue();
-		assertThat(count).as("Incorrect count").isEqualTo(3);
+		assertThat(p).as("Incorrect count")
+				.resolvesWithin(5L, TimeUnit.SECONDS)
+				.hasValue(3L);
 	}
 
 }

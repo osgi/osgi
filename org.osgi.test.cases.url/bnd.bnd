@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Tests the URL service control bundle
 
@@ -8,16 +8,14 @@ Bundle-Description: Tests the URL service control bundle
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
 
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.url
 
 -buildpath							= \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.url;					version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-	${junit4}
+	osgi.core;maven-scope=provided;version=4.3.1
 
--runbundles							= \
-    ${junit4}
+-runbundles =
 
 -runproperties = ${runproperties}

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Test Bundle for Metatype Service tests
 
@@ -20,18 +20,15 @@ Import-Package: ${-signaturetest}, *
 	bug2487.jar, \
 	bug2487-r6.jar
 
-Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.metatype
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.metatype;              version=latest , \
 	osgi.core;maven-scope=provided;version=6.0	, \
-	osgi.cmpn;								version=6.0	, \
-	${junit4}
+	osgi.cmpn;								version=6.0
 
 -runbundles							= \
-    ${junit4},\
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest

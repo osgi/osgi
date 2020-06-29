@@ -39,7 +39,7 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Before;
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.support.dictionary.Dictionaries;
+import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.string.Strings;
 import org.osgi.test.support.xpath.BaseNamespaceContext;

@@ -35,6 +35,7 @@ public class SimpleTransactionSynchronizationRegistryTest extends TransactionTes
     
     // 4.4 locating TransactionSynchronizationRegistry OSGi service
     public void setUp() throws Exception {
+		super.setUp();
         super.setUpTransactionManager();
     }
  

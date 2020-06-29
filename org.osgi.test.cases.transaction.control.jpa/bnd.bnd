@@ -1,7 +1,7 @@
 javac.profile=compact2
 
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
@@ -19,18 +19,14 @@ javac.profile=compact2
 	org.apache.aries.jpa.javax.persistence_2.1,\
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
 	osgi.core;maven-scope=provided;version=6.0.0,\
-    org.h2; version="[1.4.193,2)", \
-	${junit4}
+    org.h2; version="[1.4.193,2)"
 
 -runbundles						= \
-    ${junit4},\
     org.osgi.impl.service.jpa; version=latest, \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest,\
 	org.osgi.impl.service.transaction.control.jpa; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 
 -runproperties = ${runproperties}
-
-Test-Cases							= ${testcases}
 
 -signaturetest                      = org.osgi.service.transaction.control.jpa

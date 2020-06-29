@@ -23,18 +23,18 @@ import static org.osgi.resource.Namespace.REQUIREMENT_FILTER_DIRECTIVE;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
-import org.osgi.test.support.junit4.AbstractOSGiTestCase;
+import org.osgi.test.support.junit5.AbstractOSGiTestCase;
 
 public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 	protected Bundle			impl;
 	protected BundleRevision	revision;
 
-	@Before
+	@BeforeEach
 	public void obtainBundleRevision() throws Exception {
 		final String propName = "org.osgi.test.cases.bundle.annotations.bundle.symbolic.name";
 		String bsn = getProperty(propName);

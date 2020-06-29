@@ -17,9 +17,9 @@
 package org.osgi.test.cases.bundle.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.osgi.test.support.dictionary.Dictionaries.asMap;
+import static org.osgi.test.common.dictionary.Dictionaries.asMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HeaderAnnotationsTestClass extends AnnotationsTestCase {
 

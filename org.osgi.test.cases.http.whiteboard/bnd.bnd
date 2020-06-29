@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage = org.osgi.test.support.*,\
  org.osgi.util.converter.*,\
@@ -31,11 +31,9 @@ Export-Package: ${p}.junit.mock
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
 	osgi.core;maven-scope=provided;version=6.0.0,\
-	osgi.cmpn;version=6.0.0,\
-	${junit4}
+	osgi.cmpn;version=6.0.0
 
 -runbundles						= \
-    ${junit4},\
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runproperties}, \
@@ -43,7 +41,6 @@ Export-Package: ${p}.junit.mock
 	org.osgi.service.http.port=8080, \
 	org.apache.felix.http.whiteboard.changecount.delay=0
 
-Test-Cases							= ${testcases}
 -signaturetest = \
   org.osgi.service.http.whiteboard, \
   org.osgi.service.http.context, \

@@ -34,7 +34,8 @@ import org.osgi.test.cases.transaction.util.XAResourceImpl;
 public class TransactionTest extends TransactionTestBundleControl {
     
     public void setUp() throws Exception {
-        super.setUpTransactionManager();
+		super.setUp();
+		super.setUpTransactionManager();
     }
     
     public void testTI001() throws Exception {

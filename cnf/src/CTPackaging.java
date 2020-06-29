@@ -154,13 +154,13 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = new LinkedHashSet<>(
 				project.getRunbundles());
-		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
+		String runproperties = project.mergeProperties(Constants.RUNPROPERTIES);
 		String runsystempackages = project
-				.getProperty(Constants.RUNSYSTEMPACKAGES);
+				.mergeProperties(Constants.RUNSYSTEMPACKAGES);
 		String runsystemcapabilities = project
-				.getProperty(Constants.RUNSYSTEMCAPABILITIES);
+				.mergeProperties(Constants.RUNSYSTEMCAPABILITIES);
 		String runframework = project.getProperty(Constants.RUNFRAMEWORK);
-		String runvm = project.getProperty(Constants.RUNVM);
+		String runvm = project.mergeProperties(Constants.RUNVM);
 		String tester = project.getProperty(Constants.TESTER);
 		StringBuilder sb = new StringBuilder();
 		addNotice(sb);
@@ -272,6 +272,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			switch (container.getBundleSymbolicName()) {
 				case "biz.aQute.junit" :
 				case "biz.aQute.tester" :
+				case "biz.aQute.tester.junit-platform" :
 				case "biz.aQute.launcher" :
 					if (sb != null) {
 						sb.append("\\\n    ");
@@ -317,6 +318,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 						switch (info.bsn) {
 							case "biz.aQute.junit" :
 							case "biz.aQute.tester" :
+							case "biz.aQute.tester.junit-platform" :
 							case "biz.aQute.launcher" :
 								path = "${repo;" + info.bsn + ";latest}";
 								storeFile = false;

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description: Secure CT for the OSGi/CDI integration
 -conditionalpackage: org.osgi.test.support.*
@@ -13,7 +13,6 @@ Bundle-Description: Secure CT for the OSGi/CDI integration
 	tb4.jar,\
 	tb5.jar,\
 	tbextension.jar
-Test-Cases: ${testcases}
 
 -runsystempackages: sun.misc
 
@@ -32,11 +31,9 @@ Test-Cases: ${testcases}
 	org.osgi.dto;version=latest,\
 	org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
 	org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1,\
-	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
-	${junit4}
+	org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1
 
 -runbundles: \
-	${junit4},\
 	org.osgi.impl.bundle.cdi;version=latest
 
 # This is to work around the missing (org.osgi.framework.CapabilityPermission "osgi.implementation" "provide") in Felix ConfigAdmin

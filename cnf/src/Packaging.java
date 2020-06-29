@@ -153,6 +153,7 @@ public class Packaging implements AnalyzerPlugin {
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
 			File sub, Map<String,String> map, boolean store,
 			Map<String,String> fileToPath) throws Exception {
+		sub = getOriginalFile(sub);
 		String path = fileToPath.get(sub.getAbsolutePath());
 		if (path == null) {
 			path = "jar/" + new BundleInfo(analyzer, sub).canonicalName();
@@ -176,6 +177,18 @@ public class Packaging implements AnalyzerPlugin {
 			}
 			sb.append(", ");
 		}
+	}
+
+	private File getOriginalFile(File file) {
+		// file has source attached
+		if (file.getName().startsWith("+") && file.exists()) {
+			File originalFile = new File(file.getParentFile(),
+					file.getName().substring(1));
+			if (originalFile.exists()) {
+				return originalFile;
+			}
+		}
+		return file;
 	}
 
 	public static class BundleInfo {

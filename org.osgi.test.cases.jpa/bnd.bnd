@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
@@ -40,7 +40,6 @@ Import-Package						= \
 	osgi.core;maven-scope=provided;version=4.3.1,\
 	org.osgi.util.tracker;version=latest,\
 	org.eclipse.persistence.jpa_spec;version=2.0,\
-	${junit4},\
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.contract;version=latest,\
 	org.osgi.resource;version=latest
@@ -48,13 +47,9 @@ Import-Package						= \
 # If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
 # Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
-    ${junit4},\
 	org.osgi.impl.service.jpa; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 
 -runproperties					= ${runproperties}
 
-Test-Cases							= ${testcases}
-
 -signaturetest                      = org.osgi.service.jpa
-

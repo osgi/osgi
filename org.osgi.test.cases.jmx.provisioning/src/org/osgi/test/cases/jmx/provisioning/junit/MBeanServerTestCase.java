@@ -22,33 +22,27 @@ import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServer;
 
-import junit.framework.TestCase;
-
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.OSGiTestCase;
 
 
-public class MBeanServerTestCase extends TestCase {
+public class MBeanServerTestCase extends OSGiTestCase {
 
 	private ServiceReference ref;
 	private MBeanServer mBeanServer;
-	private BundleContext	context;
 
 	protected void setUp() {
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		context.registerService(
+		getContext().registerService(
                 MBeanServer.class.getCanonicalName(),
                 mBeanServer, null);
 	}
 	
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-	}
-
 	public void testMBeanServerExistence() {
-		ref = context.getServiceReference(MBeanServer.class.getCanonicalName());
+		ref = getContext()
+				.getServiceReference(MBeanServer.class.getCanonicalName());
 		assertNotNull("No MBeanServer service available", ref);
-		mBeanServer = (MBeanServer) context.getService(ref);
+		mBeanServer = (MBeanServer) getContext().getService(ref);
 		assertNotNull(mBeanServer);
 	}
 }

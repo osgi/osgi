@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description					: Framework test cases.
 
@@ -288,10 +288,8 @@ Bundle-ClassPath: .,div.tb6.jar
 	org.osgi.framework;						version=project	, \
 	osgi.cmpn;								version=4.3.1	, \
 	org.apache.servicemix.bundles.bcel;     version=5.2 , \
-    org.osgi.test.support;                  version=project , \
-	${junit4}
+    org.osgi.test.support;                  version=project
 
-Test-Cases							= ${testcases}
 -signaturetest                      = \
     org.osgi.dto, \
     org.osgi.resource, \
@@ -309,7 +307,6 @@ Test-Cases							= ${testcases}
     org.osgi.framework.wiring.dto
 
 -runbundles						= \
-    ${junit4},\
 	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \

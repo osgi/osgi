@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd
 
 Bundle-Description = A test case for PushStreams.
 
@@ -8,22 +8,14 @@ Bundle-Description = A test case for PushStreams.
     ${p}.junit
 Import-Package: ${-signaturetest}, *
 
-Test-Cases = ${testcases}
 -signaturetest = org.osgi.util.pushstream
 
 -buildpath: \
 	osgi.core;maven-scope=provided;version=5.0,\
 	org.osgi.test.support;version=project,\
-	org.osgi.util.pushstream;version=project,\
-	org.osgi.util.function;version=project,\
-	org.osgi.util.promise;version=project,\
-	${junit4},\
-	org.easymock
+	org.osgi.util.pushstream;version=project
 
 -runbundles: \
-    ${junit4},\
-	org.osgi.util.pushstream;version=latest,\
-	org.osgi.util.function;version=latest,\
-	org.osgi.util.promise;version=latest
+	org.osgi.util.pushstream;version=latest
 
 -runproperties = ${runproperties}

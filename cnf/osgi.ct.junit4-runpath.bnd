@@ -1,0 +1,10 @@
+# -include for testing with junit 3/4 with JUnit on classpath
+
+-buildpath.osgi.ct: biz.aQute.junit;version=latest
+
+-tester: biz.aQute.junit;version=latest
+
+testcases.junit3 = ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
+testcases.junit4 = ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
+
+Test-Cases: ${sort;${uniq;${testcases.junit3};${testcases.junit4}}}

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd
 
 Bundle-Description					= Resource Monitoring Test Bundle
 -conditionalpackage					= org.osgi.test.support.*
@@ -10,17 +10,14 @@ Import-Package: ${-signaturetest}, *
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.resourcemonitoring;version=project,\
 	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1,\
-	${junit4}
+	osgi.cmpn;version=4.3.1
 
 -runbundles: \
-    ${junit4},\
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.resourcemonitoring;version=latest,\
 	org.osgi.impl.service.resourcemonitoring.util;version=latest,\
 	org.osgi.impl.service.resourcemonitoring.fakemonitors;version=latest\
 
-Test-Cases							= ${testcases}
 -signaturetest                      =  \
     org.osgi.service.resourcemonitoring, \
     org.osgi.service.resourcemonitoring.monitor
