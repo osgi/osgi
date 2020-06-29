@@ -211,7 +211,7 @@ public class RequestPrimitiveDTO extends DTO {
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.4.2.8</a>
 	 */
-	public DesiredIdentiferResultType	desiredIdentiferResultType;
+	public DesiredIdentifierResultType	desiredIdentifierResultType;
 
 	/**
 	 * Tokens
@@ -300,13 +300,13 @@ public class RequestPrimitiveDTO extends DTO {
 	public String						vendorInformation;
 
 	/**
-	 * Enum for DesiredIdentiferResultType
+	 * Enum for DesiredIdentifierResultType
 	 * 
 	 * @see <a href=
 	 *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oneM2M
 	 *      TS-0004 6.3.4.2.8</a>
 	 */
-	public enum DesiredIdentiferResultType {
+	public enum DesiredIdentifierResultType {
 		/**
 		 * structured
 		 */
@@ -318,7 +318,7 @@ public class RequestPrimitiveDTO extends DTO {
 
 		private final int value;
 
-		private DesiredIdentiferResultType(int i) {
+		private DesiredIdentifierResultType(int i) {
 			value = i;
 		}
 
