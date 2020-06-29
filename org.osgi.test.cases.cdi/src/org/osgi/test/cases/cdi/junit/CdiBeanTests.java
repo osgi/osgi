@@ -14,6 +14,7 @@
 
 package org.osgi.test.cases.cdi.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.osgi.framework.Constants.SERVICE_RANKING;
 
@@ -212,8 +213,7 @@ public class CdiBeanTests extends AbstractTestCase {
 		assertNotNull(bcb);
 		@SuppressWarnings("unchecked")
 		BeanService<BundleContext> bti = (BeanService<BundleContext>)bcb;
-		assertNotNull(bti.get());
-		assertTrue(bti.get() instanceof BundleContext);
+		assertThat(bti.get()).isInstanceOf(BundleContext.class);
 	}
 
 	@Test
