@@ -10,13 +10,8 @@
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='Maven Central';\
         releaseUrl="${centralrepo}";\
-        snapshotUrl="${uri;${bnd_snapshots}}";\
+        snapshotUrl="${ossrhrepo},${uri;${bnd_snapshots}}";\
         index=${.}/central.mvn;\
-        readOnly=true,\
-    aQute.bnd.repository.maven.provider.MavenBndRepository;\
-        name='OSSRH';\
-        snapshotUrl="${ossrhrepo}";\
-        index=${.}/ossrh.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='SpringSource EBR';\
