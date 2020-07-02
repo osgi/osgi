@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section role="package" version="5" xreflabel="JavaScript Client API"
+<section role="package" version="5.0" xreflabel="JavaScript Client API"
          xml:id="service.rest-javascript.api"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:ns6="http://www.w3.org/1999/xlink"
