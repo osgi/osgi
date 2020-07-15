@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd, ${build}/cmpn.bnd
 
 -conditionalpackage: org.osgi.test.support.*
 -includepackage:   \

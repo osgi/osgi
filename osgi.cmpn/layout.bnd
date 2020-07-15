@@ -1,64 +1,14 @@
-osgi.cmpn.specs = \
-     org.osgi.jmx, \
-     org.osgi.namespace.contract, \
-     org.osgi.namespace.extender, \
-     org.osgi.namespace.implementation, \
-     org.osgi.namespace.service, \
-     org.osgi.namespace.unresolvable, \
-     org.osgi.service.async, \
-     org.osgi.service.cdi, \
-     org.osgi.service.clusterinfo, \
-     org.osgi.service.cm, \
-     org.osgi.service.component, \
-     org.osgi.service.component.annotations, \
-     org.osgi.service.conditionfactory, \
-     org.osgi.service.configurator, \
-     org.osgi.service.coordinator, \
-     org.osgi.service.dal, \
-     org.osgi.service.dal.functions, \
-     org.osgi.service.device, \
-     org.osgi.service.dmt, \
-     org.osgi.service.enocean, \
-     org.osgi.service.event, \
-     org.osgi.service.http, \
-     org.osgi.service.http.whiteboard, \
-     org.osgi.service.jaxrs, \
-     org.osgi.service.jdbc, \
-     org.osgi.service.jndi, \
-     org.osgi.service.jpa, \
-     org.osgi.service.log.stream, \
-     org.osgi.service.metatype, \
-     org.osgi.service.metatype.annotations, \
-     org.osgi.service.networkadapter, \
-     org.osgi.service.onem2m, \
-     org.osgi.service.prefs, \
-     org.osgi.service.provisioning, \
-     org.osgi.service.remoteserviceadmin, \
-     org.osgi.service.repository, \
-     org.osgi.service.resourcemonitoring, \
-     org.osgi.service.rest, \
-     org.osgi.service.serial, \
-     org.osgi.service.serviceloader, \
-     org.osgi.service.tr069todmt, \
-     org.osgi.service.transaction.control, \
-     org.osgi.service.typedevent, \
-     org.osgi.service.upnp, \
-     org.osgi.service.usbinfo, \
-     org.osgi.service.useradmin, \
-     org.osgi.service.wireadmin, \
-     org.osgi.service.zigbee, \
-     org.osgi.util.converter, \
-     org.osgi.util.function, \
-     org.osgi.util.promise, \
-     org.osgi.util.pushstream, \
-     org.osgi.util.xml
+osgi.cmpn.projects: ${sort;${filterout;${projectswhere;packaging;*cmpn*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
 
-osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};$;.*}
+osgi.cmpn.specs: ${osgi.cmpn.projects}
 
-osgi.cmpn.resources = {${project.workspace}/osgi.companion/legal/jar}, \
-                xmlns/app=${project.workspace}/xmlns/app, \
-                xmlns/metatype=${project.workspace}/xmlns/metatype, \
-                xmlns/rsa=${project.workspace}/xmlns/rsa, \
-                xmlns/repository=${project.workspace}/xmlns/repository, \
-                xmlns/rest=${project.workspace}/xmlns/rest, \
-                xmlns/scr=${project.workspace}/xmlns/scr
+osgi.cmpn.packages: ${replace;${osgi.cmpn.specs};$;.*}
+
+osgi.cmpn.resources: \
+ {${project.workspace}/osgi.companion/legal/jar}, \
+ xmlns/app=${project.workspace}/xmlns/app, \
+ xmlns/metatype=${project.workspace}/xmlns/metatype, \
+ xmlns/rsa=${project.workspace}/xmlns/rsa, \
+ xmlns/repository=${project.workspace}/xmlns/repository, \
+ xmlns/rest=${project.workspace}/xmlns/rest, \
+ xmlns/scr=${project.workspace}/xmlns/scr

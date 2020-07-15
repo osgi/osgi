@@ -1,0 +1,6 @@
+# bnd instructions for Core projects
+
+# Uncomment the following line to build the non-snapshot version.
+#-snapshot:
+
+packaging: core

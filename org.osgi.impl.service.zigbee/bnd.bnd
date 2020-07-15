@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Vendor				= Orange and TIM
 Bundle-Activator			= ${p}.ZigBeeBundleActivator

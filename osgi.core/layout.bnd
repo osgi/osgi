@@ -1,17 +1,8 @@
-osgi.core.specs = \
- org.osgi.dto, \
- org.osgi.framework, \
- org.osgi.resource, \
- org.osgi.service.condition, \
- org.osgi.service.condpermadmin, \
- org.osgi.service.log, \
- org.osgi.service.packageadmin, \
- org.osgi.service.permissionadmin, \
- org.osgi.service.resolver, \
- org.osgi.service.startlevel, \
- org.osgi.service.url, \
- org.osgi.util.tracker
+osgi.core.projects: ${sort;${filterout;${projectswhere;packaging;*core*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
 
-osgi.core.packages = ${replace;${osgi.core.specs};$;.*}
+osgi.core.specs: ${osgi.core.projects}
 
-osgi.core.resources = {${project.workspace}/osgi.companion/legal/jar}
+osgi.core.packages: ${replace;${osgi.core.specs};$;.*}
+
+osgi.core.resources: \
+ {${project.workspace}/osgi.companion/legal/jar}
