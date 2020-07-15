@@ -1,3 +1,5 @@
+-include: ${build}/core.bnd
+
 Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Compliance Tests
 
 -resourceonly: true

@@ -1,7 +1,8 @@
-osgi.promise.specs = \
-    org.osgi.util.promise, \
-    org.osgi.util.function
+osgi.promise.projects: ${sort;${filterout;${projectswhere;packaging;*promise*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
 
-osgi.promise.packages = ${replace;${osgi.promise.specs};$;.*}
+osgi.promise.specs: ${osgi.promise.projects}
 
-osgi.promise.resources = {${project.workspace}/osgi.companion/legal/jar}
+osgi.promise.packages: ${replace;${osgi.promise.specs};$;.*}
+
+osgi.promise.resources: \
+ {${project.workspace}/osgi.companion/legal/jar}

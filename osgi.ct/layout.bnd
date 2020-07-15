@@ -1,100 +1,20 @@
-build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}}
+build.tests: ${uniq;org.osgi.test.filter,${build.core.tests},${build.cmpn.tests}}
 
-jar.core.tests = \
-    ${repo;org.apache.servicemix.bundles.bcel;latest}, \
+osgi.core.projects: ${sort;${filter;${projectswhere;packaging;*core*};org\\.osgi\\.test\\..*}}
+osgi.cmpn.projects: ${sort;${filter;${projectswhere;packaging;*cmpn*};org\\.osgi\\.test\\..*}}
+
+jar.core.tests: \
+    ${repo;org.apache.servicemix.bundles.bcel;latest},\
     ${repo;org.osgi.impl.service.cm;latest},\
     ${repo;osgi.ct.junit-platform;latest}
 
-build.core.tests = \
-    org.osgi.test.cases.bundle.annotations, \
-    org.osgi.test.cases.condpermadmin, \
-    org.osgi.test.cases.framework, \
-    org.osgi.test.cases.framework.secure, \
-    org.osgi.test.cases.framework.launch, \
-    org.osgi.test.cases.framework.launch.secure, \
-    org.osgi.test.cases.log, \
-    org.osgi.test.cases.log.launch, \
-    org.osgi.test.cases.permissionadmin, \
-    org.osgi.test.cases.resolver, \
-    org.osgi.test.cases.tracker, \
-    org.osgi.test.cases.url
+build.core.tests: ${osgi.core.projects}
 
-jar.cmpn.tests = \
-    ${repo;org.osgi.impl.service.jdbc.support;latest}, \
-    ${repo;org.osgi.impl.service.rest.support;latest}, \
+jar.cmpn.tests: \
+    ${repo;org.osgi.impl.service.jdbc.support;latest},\
+    ${repo;org.osgi.impl.service.rest.support;latest},\
     ${repo;org.osgi.test.filter;latest},\
     ${repo;osgi.ct.junit-platform;latest},\
     ${repo;osgi.ct.promise;latest}
 
-build.cmpn.tests = \
-    org.osgi.test.cases.async, \
-    org.osgi.test.cases.async.secure, \
-    org.osgi.test.cases.cdi, \
-    org.osgi.test.cases.cdi.secure, \
-    org.osgi.test.cases.clusterinfo, \
-    org.osgi.test.cases.clusterinfo.secure, \
-    org.osgi.test.cases.cm, \
-    org.osgi.test.cases.component, \
-    org.osgi.test.cases.component.annotations, \
-    org.osgi.test.cases.configurator, \
-    org.osgi.test.cases.configurator.secure, \
-    org.osgi.test.cases.converter, \
-    org.osgi.test.cases.coordinator, \
-    org.osgi.test.cases.coordinator.secure, \
-    org.osgi.test.cases.dal, \
-    org.osgi.test.cases.dal.functions, \
-    org.osgi.test.cases.dal.secure, \
-    org.osgi.test.cases.device, \
-    org.osgi.test.cases.dmt.tc1, \
-    org.osgi.test.cases.dmt.tc2, \
-    org.osgi.test.cases.dmt.tc3, \
-    org.osgi.test.cases.dmt.tc4, \
-    org.osgi.test.cases.enocean, \
-    org.osgi.test.cases.event, \
-    org.osgi.test.cases.event.secure, \
-    org.osgi.test.cases.http, \
-    org.osgi.test.cases.http.whiteboard, \
-    org.osgi.test.cases.http.whiteboard.secure, \
-    org.osgi.test.cases.jaxrs, \
-    org.osgi.test.cases.jdbc, \
-    org.osgi.test.cases.jmx.cm, \
-    org.osgi.test.cases.jmx.framework, \
-    org.osgi.test.cases.jmx.framework.secure, \
-    org.osgi.test.cases.jmx.provisioning, \
-    org.osgi.test.cases.jmx.useradmin, \
-    org.osgi.test.cases.jndi, \
-    org.osgi.test.cases.jndi.secure, \
-    org.osgi.test.cases.jpa, \
-    org.osgi.test.cases.log.stream, \
-    org.osgi.test.cases.metatype, \
-    org.osgi.test.cases.metatype.annotations, \
-    org.osgi.test.cases.networkadapter, \
-    org.osgi.test.cases.onem2m, \
-    org.osgi.test.cases.prefs, \
-    org.osgi.test.cases.promise, \
-    org.osgi.test.cases.provisioning, \
-    org.osgi.test.cases.pushstream, \
-    org.osgi.test.cases.remoteserviceadmin, \
-    org.osgi.test.cases.remoteserviceadmin.secure, \
-    org.osgi.test.cases.remoteservices, \
-    org.osgi.test.cases.repository, \
-    org.osgi.test.cases.residentialmanagement, \
-    org.osgi.test.cases.resourcemonitoring, \
-    org.osgi.test.cases.rest, \
-    org.osgi.test.cases.rest.client, \
-    org.osgi.test.cases.rest.client.js, \
-    org.osgi.test.cases.serial, \
-    org.osgi.test.cases.serviceloader, \
-    org.osgi.test.cases.serviceloader.secure, \
-    org.osgi.test.cases.tr069todmt, \
-    org.osgi.test.cases.transaction, \
-    org.osgi.test.cases.transaction.control, \
-    org.osgi.test.cases.transaction.control.jdbc, \
-    org.osgi.test.cases.transaction.control.jpa, \
-    org.osgi.test.cases.upnp, \
-    org.osgi.test.cases.usbinfo, \
-    org.osgi.test.cases.useradmin, \
-    org.osgi.test.cases.webcontainer, \
-    org.osgi.test.cases.wireadmin, \
-    org.osgi.test.cases.xml, \
-    org.osgi.test.cases.zigbee
+build.cmpn.tests: ${osgi.cmpn.projects}

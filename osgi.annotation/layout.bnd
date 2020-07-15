@@ -1,7 +1,8 @@
-osgi.annotation.specs = \
-    org.osgi.annotation.versioning, \
-    org.osgi.annotation.bundle
+osgi.annotation.projects: ${sort;${filterout;${projectswhere;packaging;*annotation*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
 
-osgi.annotation.packages = ${replace;${osgi.annotation.specs};$;.*}
+osgi.annotation.specs: ${osgi.annotation.projects}
 
-osgi.annotation.resources = {${project.workspace}/osgi.companion/legal/jar}
+osgi.annotation.packages: ${replace;${osgi.annotation.specs};$;.*}
+
+osgi.annotation.resources: \
+ {${project.workspace}/osgi.companion/legal/jar}

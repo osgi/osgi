@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Vendor				= Orange
 Bundle-Description: Resource Monitoring Utils provides classes common for Resource Monitor Factories bundles. It includes the EventNotifier class which can be used by Resource Monitor to notify all their related ResourceListeners.

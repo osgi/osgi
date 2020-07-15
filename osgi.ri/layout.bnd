@@ -1,76 +1,49 @@
-build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}}
+build.impls: ${uniq;${build.core.impls},${build.cmpn.impls}}
 
-build.core.impls = \
-    org.osgi.dto, \
-    org.osgi.util.tracker, \
-	org.osgi.impl.bundle.annotations
+osgi.core.projects: ${sort;${filter;${projectswhere;packaging;*core*};org\\.osgi\\.impl\\..*}}
+osgi.cmpn.projects: ${sort;${filter;${projectswhere;packaging;*cmpn*};org\\.osgi\\.impl\\..*}}
 
-jar.core.impls = \
-	${repo;org.osgi.impl.framework;latest}, \
-    ${repo;org.osgi.impl.service.log;latest}, \
+build.core.impls: \
+    org.osgi.dto,\
+    org.osgi.util.tracker,\
+	${osgi.core.projects}
+
+jar.core.impls: \
+	${repo;org.osgi.impl.framework;latest},\
+    ${repo;org.osgi.impl.service.log;latest},\
     ${repo;org.osgi.impl.service.resolver;latest}
 
-build.cmpn.impls = \
-	org.osgi.impl.bundle.annotations, \
-	org.osgi.impl.bundle.component.annotations, \
-	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.metatype.annotations, \
-	org.osgi.impl.bundle.rsh, \
-	org.osgi.impl.bundle.transaction, \
-    org.osgi.impl.service.async, \
-    org.osgi.impl.service.dal, \
-    org.osgi.impl.service.dal.step, \
-	org.osgi.impl.service.device.manager, \
-	org.osgi.impl.service.dmt, \
-	org.osgi.impl.service.enocean, \
-	org.osgi.impl.service.jdbc, \
-	org.osgi.impl.service.jndi, \
-	org.osgi.impl.service.networkadapter, \
-	org.osgi.service.onem2m, \
-	org.osgi.impl.service.onem2m, \
-	org.osgi.impl.service.prefs, \
-	org.osgi.impl.service.residentialmanagement, \
-	org.osgi.impl.service.resourcemonitoring, \
-	org.osgi.impl.service.resourcemonitoring.fakemonitors, \
-	org.osgi.impl.service.resourcemonitoring.util, \
-	org.osgi.impl.service.rest, \
-	org.osgi.impl.service.rest.client, \
-	org.osgi.impl.service.rest.client.js, \
-	org.osgi.impl.service.serial, \
-	org.osgi.impl.service.tr069todmt, \
-	org.osgi.impl.service.upnp.cp, \
-	org.osgi.impl.service.upnp.cd, \
-	org.osgi.impl.service.usbinfo, \
-	org.osgi.impl.service.useradmin, \
-	org.osgi.impl.service.zigbee, \
-    org.osgi.util.converter, \
-    org.osgi.util.function, \
-    org.osgi.util.promise, \
-    org.osgi.util.pushstream, \
-    org.osgi.util.xml
+build.cmpn.impls: \
+	org.osgi.service.onem2m,\
+    org.osgi.util.converter,\
+    org.osgi.util.function,\
+    org.osgi.util.promise,\
+    org.osgi.util.pushstream,\
+    org.osgi.util.xml,\
+    ${osgi.cmpn.projects}
 
-jar.cmpn.impls = \
-	${repo;org.osgi.impl.bundle.cdi;latest}, \
-	${repo;org.osgi.impl.bundle.derby;latest}, \
-	${repo;org.osgi.impl.bundle.jmx;latest}, \
-	${repo;org.osgi.impl.bundle.serviceloader;latest}, \
-	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
-	${repo;org.osgi.impl.service.clusterinfo;latest}, \
-	${repo;org.osgi.impl.service.cm;latest}, \
-	${repo;org.osgi.impl.service.component;latest}, \
-	${repo;org.osgi.impl.service.configurator;latest}, \
-	${repo;org.osgi.impl.service.coordinator;latest}, \
-	${repo;org.osgi.impl.service.event;latest}, \
-	${repo;org.osgi.impl.service.http;latest}, \
-	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
-	${repo;org.osgi.impl.service.jaxrs;latest}, \
-	${repo;org.osgi.impl.service.jpa;latest}, \
-	${repo;org.osgi.impl.service.log.stream;latest}, \
-	${repo;org.osgi.impl.service.metatype;latest}, \
-	${repo;org.osgi.impl.service.provisioning;latest}, \
-	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
-    ${repo;org.osgi.impl.service.repository;latest}, \
-	${repo;org.osgi.impl.service.transaction.control;latest}, \
-	${repo;org.osgi.impl.service.transaction.control.jdbc;latest}, \
-	${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
+jar.cmpn.impls: \
+	${repo;org.osgi.impl.bundle.cdi;latest},\
+	${repo;org.osgi.impl.bundle.derby;latest},\
+	${repo;org.osgi.impl.bundle.jmx;latest},\
+	${repo;org.osgi.impl.bundle.serviceloader;latest},\
+	${repo;org.osgi.impl.bundle.webcontainer;latest},\
+	${repo;org.osgi.impl.service.clusterinfo;latest},\
+	${repo;org.osgi.impl.service.cm;latest},\
+	${repo;org.osgi.impl.service.component;latest},\
+	${repo;org.osgi.impl.service.configurator;latest},\
+	${repo;org.osgi.impl.service.coordinator;latest},\
+	${repo;org.osgi.impl.service.event;latest},\
+	${repo;org.osgi.impl.service.http;latest},\
+	${repo;org.osgi.impl.service.http.whiteboard;latest},\
+	${repo;org.osgi.impl.service.jaxrs;latest},\
+	${repo;org.osgi.impl.service.jpa;latest},\
+	${repo;org.osgi.impl.service.log.stream;latest},\
+	${repo;org.osgi.impl.service.metatype;latest},\
+	${repo;org.osgi.impl.service.provisioning;latest},\
+	${repo;org.osgi.impl.service.remoteserviceadmin;latest},\
+    ${repo;org.osgi.impl.service.repository;latest},\
+	${repo;org.osgi.impl.service.transaction.control;latest},\
+	${repo;org.osgi.impl.service.transaction.control.jdbc;latest},\
+	${repo;org.osgi.impl.service.transaction.control.jpa;latest},\
 	${repo;org.osgi.impl.service.wireadmin;latest}

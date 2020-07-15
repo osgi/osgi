@@ -1,6 +1,6 @@
 javac.profile=compact3
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Activator			= org.osgi.impl.service.jndi.Activator
 Bundle-Description			= OSGi JNDI Reference Implementation by Oracle Corporation.

@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/core.bnd
+
 Automatic-Module-Name: ${bsn}
 Bundle-License: Apache-2.0; \
                 link="https://www.apache.org/licenses/LICENSE-2.0"; \
@@ -31,5 +34,4 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 	${replace;${osgi.core.specs};$;\\;version=project}, \
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
 
--include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Core

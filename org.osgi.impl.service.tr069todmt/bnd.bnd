@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Activator = ${p}.TR069ConnectorFactoryImpl
 Export-Package = org.osgi.service.tr069todmt; -split-package:=first; provide:=true
