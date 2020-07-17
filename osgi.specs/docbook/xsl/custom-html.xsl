@@ -52,6 +52,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="bibliography.numbered">1</xsl:param>
 <xsl:param name="root.filename">toc</xsl:param>
 
+<xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="draft.watermark.image">draft.png</xsl:param>
 
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
@@ -132,12 +133,9 @@ example before
   </l:l10n>
 </l:i18n>
 
-<xsl:param name="book.status">
-  <xsl:value-of select="/d:book/@status"/>
-</xsl:param>
 <xsl:param name="show.comments">
   <xsl:choose>
-    <xsl:when test="$book.status = 'draft'">
+    <xsl:when test="$draft.mode != 'no'">
       <xsl:value-of select="1"/>
     </xsl:when>
     <xsl:otherwise>

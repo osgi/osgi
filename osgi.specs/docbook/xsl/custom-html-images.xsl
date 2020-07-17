@@ -6,10 +6,13 @@
 
 <xsl:output method="text" encoding="UTF-8" omit-xml-declaration="yes" indent="no" />
 
+<xsl:param name="draft.mode">yes</xsl:param>
+<xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
+
 <xsl:template match="/">
-    <xsl:if test="/d:book/@status = 'draft'">
-        <xsl:text>../graphics/draft.svg&#xa;</xsl:text>
-        <xsl:text>../graphics/proposed-final-draft.svg&#xa;</xsl:text>
+    <xsl:if test="$draft.mode != 'no'">
+        <xsl:value-of select="$draft.watermark.image"/>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
 	<xsl:for-each select="//d:imagedata">
 	    <xsl:variable name="imagePath">

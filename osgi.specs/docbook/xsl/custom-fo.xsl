@@ -49,10 +49,7 @@ book toc,title
 
 <xsl:param name="page.height.portrait">24.587cm</xsl:param>
 <xsl:param name="page.width.portrait">18.898cm</xsl:param>
-<xsl:param name="book.status">
-  <xsl:value-of select="/d:book/@status"/>
-</xsl:param>
-<xsl:param name="draft.mode">maybe</xsl:param>
+<xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
 <xsl:param name="copyright.year">
   <xsl:value-of select="/d:book/d:info/d:copyright/d:year"/>
@@ -1458,7 +1455,7 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
-    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
+    <xsl:if test="$draft.mode = 'no'">
       <xsl:message terminate="yes">
         A non-draft book must not have any remark elements.
       </xsl:message>
@@ -1478,7 +1475,7 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
-    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
+    <xsl:if test="$draft.mode = 'no'">
       <xsl:message terminate="yes">
         A non-draft book must not have any remark elements.
       </xsl:message>
@@ -2072,16 +2069,7 @@ should be discarded -->
     </fo:block>
 
     <fo:block xsl:use-attribute-sets="verso.frontmatter.properties">
-      <xsl:choose>
-        <xsl:when test="$book.status = 'draft'">
-          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'draft']"
-                               mode="frontmatter"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'final']"
-                               mode="frontmatter"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter']" mode="frontmatter"/>
     </fo:block>
   </fo:block>
 </xsl:template>

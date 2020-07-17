@@ -87,7 +87,7 @@
     <script type="text/javascript" src="js/highlight.pack.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
-    <xsl:if test="$book.status = 'draft'">
+    <xsl:if test="$draft.mode != 'no'">
       <style>
         <xsl:text><![CDATA[#scrollable {
     background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;

@@ -10,6 +10,13 @@
 
 <xsl:import href="../../../licensed/docbook-xsl-ns/profiling/profile.xsl"/>
 
-<xsl:param name="profile.condition" select="/d:book/@status"/>
+<xsl:param name="draft.mode">yes</xsl:param>
+
+<xsl:param name="profile.status">
+  <xsl:choose>
+    <xsl:when test="$draft.mode = 'no'">final</xsl:when>
+    <xsl:otherwise>draft</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
 
 </xsl:stylesheet>

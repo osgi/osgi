@@ -1,11 +1,16 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+
 -nobundles = true
 
 -dependson = osgi.companion
 
-javac.profile=
-# Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+# Set draft status of the specification. Valid values are:
+# 'draft', 'proposed-final-draft', and either 'no' or unset.
+core.draft: draft
+cmpn.draft: draft
 
+javac.profile=
 fop_home: ${licensed}/fop
 batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;${fop_home};xml-apis*.jar}};^.*;${fop_home}/$0\\;version=file}
 
