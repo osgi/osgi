@@ -102,12 +102,15 @@ books.forEach { book ->
       group 'documentation'
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('book'))
       ext.bookxml = destinationDirectory.file(name)
-      ext.stylesheet = file('docbook/xsl/identity.xsl')
+      def stylesheet = file('docbook/xsl/custom-profile.xsl')
+      def watermark = bnd("${book}.draft", 'no')
+      ext.draftmode = (watermark != 'no') ? 'yes' : 'no'
       inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
       inputs.files javadoc, xmlns
       if (book != 'core') {
         inputs.files rdmtsummary
       }
+      inputs.property 'draft.mode', draftmode
 
       outputs.file bookxml
       doFirst {
@@ -128,6 +131,7 @@ books.forEach { book ->
             pathelement('location': bnd.saxon)
           }
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+          param('name': 'draft.mode', 'expression': draftmode)
         }
         javaexec {
           classpath sourceSets.main.runtimeClasspath
@@ -143,7 +147,7 @@ books.forEach { book ->
       group 'documentation'
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('book'))
       ext.bookxml = destinationDirectory.file(name)
-      ext.stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
+      def stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
       ext.baselinexml = file("baseline/${book}.xml")
       inputs.files booktask, stylesheet, baselinexml
       outputs.file bookxml
@@ -185,8 +189,10 @@ books.forEach { book ->
 
       def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("images/${book}"))
+      def watermark = bnd("${book}.draft", 'no')
 
       inputs.files booktask, imagesXSL, fileTree('dir': 'docbook', 'include': '**/*.svg'), sourceSets.main.runtimeClasspath
+      inputs.property 'watermark', watermark
       outputs.dir destinationDirectory
 
       doFirst {
@@ -200,6 +206,10 @@ books.forEach { book ->
           'out': imagesFile) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+          param('name': 'draft.mode', 'expression': booktask.get().draftmode)
+          if (booktask.get().draftmode != 'no') {
+            param('name': 'draft.watermark.image', 'expression': "../graphics/${watermark}.svg")
+          }
         }
 
         def svgFiles = imagesFile.collect { line ->
@@ -226,13 +236,19 @@ books.forEach { book ->
 
       def stylesheet = file('docbook/xsl/custom-html.xsl')
       def commonXSL = file('docbook/xsl/custom-html-common.xsl')
-      def profileXSL = file('docbook/xsl/custom-html-profile.xsl')
       def htmlResources = file('docbook/xsl/html-resources')
       def licensedResources = file("${bnd.licensed}/webresources")
-      ext.watermark = 'draft.png'
+      def watermark = bnd("${book}.draft", 'no')
+      def copyright_year = bnd('copyright.year')
+      def release_version = bnd('osgi.release')
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("html/${book}"))
 
-      inputs.files booktask, rasterizetask, stylesheet, commonXSL, profileXSL, htmlResources, licensedResources
+      inputs.files booktask, rasterizetask, stylesheet, commonXSL
+      inputs.dir htmlResources
+      inputs.dir licensedResources
+      inputs.property 'watermark', watermark
+      inputs.property 'copyright_year', copyright_year
+      inputs.property 'release_version', release_version
       outputs.dir destinationDirectory
 
       doFirst {
@@ -240,24 +256,19 @@ books.forEach { book ->
         project.mkdir(destinationDirectory)
       }
       doLast {
-        def tmpxml = new File(temporaryDir, 'book.xml')
-        ant.xslt('style': profileXSL,
-          'in': file(booktask.get().bookxml),
-          'out': tmpxml,
-          'force': true) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-        }
         ant.xslt('style': stylesheet,
-          'in': tmpxml,
+          'in': file(booktask.get().bookxml),
           'out': new File(temporaryDir, 'book.txt')) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
-          param('name': 'draft.watermark.image', 'expression': watermark)
+          param('name': 'copyright.year', 'expression': "2000, ${copyright_year}")
+          param('name': 'draft.mode', 'expression': booktask.get().draftmode)
+          if (booktask.get().draftmode != 'no') {
+            param('name': 'draft.watermark.image', 'expression': "${watermark}.png")
+          }
           param('name': 'webhelp.base.dir', 'expression': file(destinationDirectory))
-          param('name': 'webhelp.default.topic', 'expression': "index.html")
-          param('name': 'release.version', 'expression': bnd('osgi.release'))
+          param('name': 'webhelp.default.topic', 'expression': 'index.html')
+          param('name': 'release.version', 'expression': release_version)
         }
 
         copy {
@@ -305,9 +316,13 @@ private Closure fotaskConfiguration(bookName, xmltask) {
       group 'documentation'
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('fo'))
       ext.bookfo = destinationDirectory.file(name)
-      ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
-      ext.watermark = 'docbook/graphics/draft.svg'
+      def stylesheet = file('docbook/xsl/custom-fo.xsl')
+      def watermark = bnd("${bookName}.draft", 'no')
+      def copyright_year = bnd('copyright.year')
+
       inputs.files xmltask, stylesheet
+      inputs.property 'watermark', watermark
+      inputs.property 'copyright_year', copyright_year
       outputs.file bookfo
       doFirst {
         project.mkdir(destinationDirectory)
@@ -318,8 +333,11 @@ private Closure fotaskConfiguration(bookName, xmltask) {
           'out': file(bookfo)) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.watermark.image', 'expression': watermark)
-          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
+          param('name': 'draft.mode', 'expression': xmltask.get().draftmode)
+          if (xmltask.get().draftmode != 'no') {
+            param('name': 'draft.watermark.image', 'expression': "docbook/graphics/${watermark}.svg")
+          }
+          param('name': 'copyright.year', 'expression': "2000, ${copyright_year}")
         }
       }
     }
