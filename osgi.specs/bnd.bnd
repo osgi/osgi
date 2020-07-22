@@ -7,7 +7,7 @@
 
 # Set draft status of the specification. Valid values are:
 # 'draft', 'proposed-final-draft', and either 'no' or unset.
-core.draft: proposed-final-draft
+core.draft: no
 cmpn.draft: draft
 
 javac.profile=
