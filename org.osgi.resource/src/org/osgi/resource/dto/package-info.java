@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version("1.0.1")
 package org.osgi.resource.dto;
 
 import org.osgi.annotation.versioning.Version;
