@@ -264,7 +264,7 @@ books.forEach { book ->
           param('name': 'copyright.year', 'expression': "2000, ${copyright_year}")
           param('name': 'draft.mode', 'expression': booktask.get().draftmode)
           if (booktask.get().draftmode != 'no') {
-            param('name': 'draft.watermark.image', 'expression': "${watermark}.png")
+            param('name': 'draft.watermark.image', 'expression': "images/${watermark}.png")
           }
           param('name': 'webhelp.base.dir', 'expression': file(destinationDirectory))
           param('name': 'webhelp.default.topic', 'expression': 'index.html')
