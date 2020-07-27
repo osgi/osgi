@@ -72,6 +72,19 @@
 </xsl:template>
 
 <!-- HTML <head> section customizations -->
+<xsl:template name="head.content.style">
+  <xsl:param name="node" select="."/>
+  <style type="text/css">
+    <xsl:text>
+#scrollable {
+    background: transparent url('</xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text>') repeat-y center top;
+    background-attachment: local;
+    background-size: 120%;
+}
+    </xsl:text>
+  </style>
+</xsl:template>
+
 <xsl:template name="user.head.content">
     <xsl:param name="title">
         <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
@@ -86,16 +99,6 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
     <script type="text/javascript" src="js/highlight.pack.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-
-    <xsl:if test="$draft.mode != 'no'">
-      <style>
-        <xsl:text><![CDATA[#scrollable {
-    background: transparent url(images/]]></xsl:text><xsl:value-of select="$draft.watermark.image"/><xsl:text><![CDATA[) repeat-y center top;
-    background-attachment: local;
-    background-size: 120%;
-}]]></xsl:text>
-      </style>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template match="/">
