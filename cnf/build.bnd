@@ -23,6 +23,7 @@ ossrhrepo               = https://oss.sonatype.org/content/repositories/snapshot
 apachesnapshotrepo      = https://repository.apache.org/content/repositories/snapshots/
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
+workspacepluginpath     = ${build}/${bin}
 
 -plugin.commands = \
     aQute.bnd.signing.JartoolSigner; \
@@ -31,13 +32,13 @@ releaserepo             = ${build}/${target-dir}/repo
         storepass=testtest; \
         digestalg=SHA-1, \
     Packaging; \
-        path:="${build}/${bin}"; \
+        path:="${workspacepluginpath}"; \
         command:=-pack, \
     CTPackaging; \
-        path:="${build}/${bin}"; \
+        path:="${workspacepluginpath}"; \
         command:=-ctpack, \
     SignatureTest; \
-        path:="${build}/${bin}"; \
+        path:="${workspacepluginpath}"; \
         command:="-signaturetest"
 
 -make                   =  \

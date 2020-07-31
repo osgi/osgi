@@ -6,3 +6,4 @@ Bundle-Activator:                        ${p}.resolver.tb2.Activator
 Import-Package:                          org.osgi.framework,org.osgi.test.cases.framework.resolver.tb1,*
 
 -noee=true
+-noimportjava=true

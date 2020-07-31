@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.component.junit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.osgi.test.cases.component.junit.DTOUtil.*;
 import static org.osgi.test.common.dictionary.Dictionaries.*;
 
@@ -45,6 +45,7 @@ import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
 import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
@@ -582,10 +583,16 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 					assertThat(Dictionaries.asMap(componentProps))
 							.containsEntry(PID_ROOT, "config")
 							.containsEntry(Constants.SERVICE_PID, PID);
+					assertThat(
+							coordination.fail(new RuntimeException("failed")))
+									.as("Fail the coordination")
+									.isTrue();
+					System.out.println("coordination failed");
 				} finally {
-					coordination.fail(new RuntimeException("failed"));
+					assertThatThrownBy(() -> coordination.end())
+							.as("End the failed coordination")
+							.isInstanceOf(CoordinationException.class);
 				}
-				System.out.println("coordination failed");
 
 				Sleep.sleep(SLEEP * 2);
 				componentProps = b1.getProperties();
