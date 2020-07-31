@@ -1,12 +1,16 @@
 package org.osgi.impl.bundle.rsh;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.provisioning.*;
-import org.osgi.service.url.*;
-import org.osgi.util.tracker.*;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.provisioning.ProvisioningService;
+import org.osgi.service.url.AbstractURLStreamHandlerService;
+import org.osgi.service.url.URLConstants;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This is the BundleActivator and the URLStreamHandler for the RSH protocol.
@@ -16,7 +20,7 @@ import org.osgi.util.tracker.*;
  */
 public class RshHandler extends AbstractURLStreamHandlerService implements
 		BundleActivator {
-	ServiceTracker	st;
+	ServiceTracker<ProvisioningService,ProvisioningService>	st;
 	BundleContext	bc;
 
 	/**
@@ -29,11 +33,13 @@ public class RshHandler extends AbstractURLStreamHandlerService implements
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(BundleContext)
 	 */
-	public void start(BundleContext bc) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext bc)
+			throws Exception {
 		this.bc = bc;
-		st = new ServiceTracker(bc, ProvisioningService.class.getName(), null);
+		st = new ServiceTracker<>(bc, ProvisioningService.class, null);
 		st.open();
-		Hashtable dict = new Hashtable();
+		Hashtable<String,Object> dict = new Hashtable<>();
 		dict.put(URLConstants.URL_HANDLER_PROTOCOL, new String[] {"rsh"});
 		bc.registerService("org.osgi.service.url.URLStreamHandlerService",
 				this, dict);
@@ -42,12 +48,13 @@ public class RshHandler extends AbstractURLStreamHandlerService implements
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		st.close();
 	}
 
 	String getSPID() throws IOException {
-		ProvisioningService prov = (ProvisioningService) st.getService();
+		ProvisioningService prov = st.getService();
 		Object spid = prov.getInformation().get(
 				ProvisioningService.PROVISIONING_SPID);
 		if (spid == null)
@@ -58,7 +65,7 @@ public class RshHandler extends AbstractURLStreamHandlerService implements
 	}
 
 	byte[] getRshSecret() throws IOException {
-		ProvisioningService prov = (ProvisioningService) st.getService();
+		ProvisioningService prov = st.getService();
 		Object secret = prov.getInformation().get(
 				ProvisioningService.PROVISIONING_RSH_SECRET);
 		if (secret == null)
@@ -68,9 +75,10 @@ public class RshHandler extends AbstractURLStreamHandlerService implements
 		return (byte[]) secret;
 	}
 
+	@Override
 	public URLConnection openConnection(URL u) throws IOException {
 		String clientFG;
-		ProvisioningService ps = (ProvisioningService) st.getService();
+		ProvisioningService ps = st.getService();
 		if (ps == null) {
 			throw new IOException("ProvisioningService not available");
 		}

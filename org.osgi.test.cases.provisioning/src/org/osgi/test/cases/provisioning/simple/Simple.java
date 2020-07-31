@@ -37,20 +37,21 @@ import org.osgi.service.provisioning.ProvisioningService;
 public class Simple implements BundleActivator {
 	
 	public void start(BundleContext context) {
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put("test.case", "org.osgi.test.cases.provisioning" );
 		if ( context.getBundle().hasPermission( new AllPermission() ) )
 			properties.put( "allpermission", "true" );
 		else
 			properties.put( "allpermission", "false" );
 
-		ServiceReference		ref 		= context.getServiceReference(ProvisioningService.class.getName());
-		ProvisioningService		ps 			= (ProvisioningService) context.getService( ref );
+		ServiceReference<ProvisioningService> ref = context
+				.getServiceReference(ProvisioningService.class);
+		ProvisioningService		ps 			= context.getService( ref );
 		byte [] data = (byte[]) ps.getInformation().get( ProvisioningService.PROVISIONING_AGENT_CONFIG );
 		if ( data != null )
 			properties.put( "config.data", data );
 		
-		context.registerService( Bundle.class.getName(), context.getBundle(), properties );
+		context.registerService(Bundle.class, context.getBundle(), properties);
 	}
 	public void stop( BundleContext context ) {
 		// empty
