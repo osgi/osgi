@@ -28,7 +28,7 @@ import org.osgi.test.support.OSGiTestCase;
 
 public class MBeanServerTestCase extends OSGiTestCase {
 
-	private ServiceReference ref;
+	private ServiceReference< ? >	ref;
 	private MBeanServer mBeanServer;
 
 	protected void setUp() {

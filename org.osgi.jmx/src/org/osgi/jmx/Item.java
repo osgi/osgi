@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.jmx;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.OpenDataException;
@@ -58,7 +59,7 @@ public class Item {
 	/**
 	 * The type of this item.
 	 */
-	private final OpenType	type;
+	private final OpenType< ? >	type;
 
 	/**
 	 * Create a triple of name, description, and type. This triplet is used in
@@ -69,7 +70,8 @@ public class Item {
 	 * @param type The Open Type of this item.
 	 * @param restrictions Ignored, contains list of restrictions
 	 */
-	public Item(String name, String description, OpenType type, String... restrictions) {
+	public Item(String name, String description, OpenType< ? > type,
+			String... restrictions) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
@@ -115,9 +117,10 @@ public class Item {
 	 * @param elementType The element type
 	 * @return A new Array Type
 	 */
-	public static ArrayType arrayType(int dim, OpenType elementType) {
+	public static <T> ArrayType<T> arrayType(int dim,
+			OpenType< ? > elementType) {
 		try {
-			return new ArrayType(dim, elementType);
+			return new ArrayType<>(dim, elementType);
 		} catch (OpenDataException e) {
 			throw new RuntimeException(e);
 		}
@@ -149,7 +152,7 @@ public class Item {
 		int size = all.size();
 		String names[] = new String[size];
 		String descriptions[] = new String[size];
-		OpenType types[] = new OpenType[size];
+		OpenType< ? > types[] = new OpenType[size];
 
 		int m = 0;
 		for (Item item : all) {

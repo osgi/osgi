@@ -47,7 +47,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.jmx.framework.system.packages.extra";
 
-	private Framework framework;
+	Framework					framework;
 	private String frameworkFactoryClassName;
 	private FrameworkFactory frameworkFactory;
 	private String rootStorageArea;
@@ -88,11 +88,13 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		MBeanServer newMBeanServer = MBeanServerFactory.newMBeanServer();//use new mbean server ManagementFactory.getPlatformMBeanServer();
 
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), newMBeanServer, null);
-		String key = MBeanServer.class.getCanonicalName();
-		ServiceReference reference = context.getServiceReference(key);
+		@SuppressWarnings("unused")
+		ServiceRegistration<MBeanServer> registration = context
+				.registerService(MBeanServer.class, newMBeanServer, null);
+		ServiceReference<MBeanServer> reference = context
+				.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
+		MBeanServer mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -118,11 +120,13 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		MBeanServer newMBeanServer = MBeanServerFactory.newMBeanServer();
 
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), newMBeanServer, null);
-		String key = MBeanServer.class.getCanonicalName();
-		ServiceReference reference = context.getServiceReference(key);
+		@SuppressWarnings("unused")
+		ServiceRegistration<MBeanServer> registration = context
+				.registerService(MBeanServer.class, newMBeanServer, null);
+		ServiceReference<MBeanServer> reference = context
+				.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
+		MBeanServer mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -157,12 +161,13 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		MBeanServer newMBeanServer = MBeanServerFactory.newMBeanServer();
 
-		ServiceRegistration registration = context.registerService(
-				MBeanServer.class.getCanonicalName(), newMBeanServer, null);
-		String key = MBeanServer.class.getCanonicalName();
-		ServiceReference reference = context.getServiceReference(key);
+		@SuppressWarnings("unused")
+		ServiceRegistration<MBeanServer> registration = context
+				.registerService(MBeanServer.class, newMBeanServer, null);
+		ServiceReference<MBeanServer> reference = context
+				.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
+		MBeanServer mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -197,12 +202,13 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		MBeanServer newMBeanServer = MBeanServerFactory.newMBeanServer();
 
-		ServiceRegistration registration = context.registerService(
-				MBeanServer.class.getCanonicalName(), newMBeanServer, null);
-		String key = MBeanServer.class.getCanonicalName();
-		ServiceReference reference = context.getServiceReference(key);
+		@SuppressWarnings("unused")
+		ServiceRegistration<MBeanServer> registration = context
+				.registerService(MBeanServer.class, newMBeanServer, null);
+		ServiceReference<MBeanServer> reference = context
+				.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
+		MBeanServer mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -232,11 +238,11 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context = framework.getBundleContext();
 
-		registration = context.registerService(MBeanServer.class
-				.getCanonicalName(), newMBeanServer, null);
-		reference = context.getServiceReference(key);
+		registration = context.registerService(MBeanServer.class,
+				newMBeanServer, null);
+		reference = context.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		mBeanServer = (MBeanServer) context.getService(reference);
+		mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
         ObjectName objectName2 = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -266,11 +272,11 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context = framework.getBundleContext();
 
-		registration = context.registerService(MBeanServer.class
-				.getCanonicalName(), newMBeanServer, null);
-		reference = context.getServiceReference(key);
+		registration = context.registerService(MBeanServer.class,
+				newMBeanServer, null);
+		reference = context.getServiceReference(MBeanServer.class);
 		assertNotNull(reference);
-		mBeanServer = (MBeanServer) context.getService(reference);
+		mBeanServer = context.getService(reference);
 		assertNotNull(mBeanServer);
 
         ObjectName objectName3 = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
@@ -342,17 +348,23 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	private FrameworkFactory getFrameworkFactory() {
 		try {
-			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.getConstructor().newInstance();
+			Class<FrameworkFactory> clazz = loadFrameworkClass(
+					frameworkFactoryClassName);
+			return clazz.getConstructor().newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}
 		return null;
 	}
 
-	private Class loadFrameworkClass(String className)	throws ClassNotFoundException {
+	private Class<FrameworkFactory> loadFrameworkClass(String className)
+			throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
+		@SuppressWarnings("unchecked")
+		Class<FrameworkFactory> result = (Class<FrameworkFactory>) (context == null
+				? Class.forName(className)
+				: getContext().getBundle(0).loadClass(className));
+		return result;
 	}
 
 	private String getStorageAreaRoot() {
@@ -382,7 +394,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		return (true);
 	}
 
-	private Framework createFramework(Map configuration) {
+	private Framework createFramework(Map<String,String> configuration) {
 		Framework framework = null;
 		try {
 			framework = frameworkFactory.newFramework(configuration);
@@ -422,7 +434,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		Framework f = getFramework();
 
-		List bundles = new LinkedList();
+		List<Bundle> bundles = new LinkedList<>();
 
 		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.jmx.framework.bundles", ""), ",");
@@ -437,8 +449,8 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 			bundles.add(b);
 		}
 
-		for (Iterator it = bundles.iterator(); it.hasNext();) {
-			Bundle b = (Bundle) it.next();
+		for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
+			Bundle b = it.next();
 
 			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
 				b.start();

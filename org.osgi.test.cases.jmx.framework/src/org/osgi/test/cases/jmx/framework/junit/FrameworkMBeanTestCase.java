@@ -248,7 +248,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			//get last modification time
 			long lastModifiedTime = bundleStateMBean.getLastModified(testBundle);
 			//wait some time
-			Thread.currentThread().sleep(10);
+			Thread.sleep(10);
 			//update bundle
 			frameworkMBean.updateBundleFromURL(testBundle, entry2.toString());
 			//get new last modification time
@@ -280,7 +280,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			long lastModifiedTime1 = bundleStateMBean.getLastModified(testBundle1);
 			long lastModifiedTime2 = bundleStateMBean.getLastModified(testBundle2);
 			//wait some time
-			Thread.currentThread().sleep(10);
+			Thread.sleep(10);
 			//update bundle
 			CompositeData result = frameworkMBean.updateBundlesFromURL(new long[] { testBundle1, testBundle2 }, new String[] {entry1.toString(), entry2.toString() });
 			assertCompositeDataKeys(result, "BATCH_ACTION_RESULT_TYPE", new String[] { "BundleInError", "Completed", "Error", "Remaining", "Success" });
@@ -474,7 +474,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testItemArrayType() {
-		ArrayType type = Item.arrayType(1, SimpleType.STRING);
+		ArrayType<String[]> type = Item.arrayType(1, SimpleType.STRING);
 		assertTrue("type was not created with right dimentsion", type.getDimension() == 1);
 		assertTrue("type was not created as array", type.isArray());
 	}
@@ -509,7 +509,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testItemComplex() {
-		ArrayType arrayType = Item.arrayType(2, SimpleType.STRING);
+		ArrayType<String[][]> arrayType = Item.arrayType(2, SimpleType.STRING);
 		Item item1 = new Item("arr", "The array property",arrayType);
 		Item item2 = new Item("key", "The key property",SimpleType.STRING);
 		CompositeType type1 = Item.compositeType("Test type", "Test description", item1);
@@ -531,7 +531,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			testBundle = frameworkMBean.installBundle("file:" + destFile.getAbsolutePath());
 			long lastModifiedTime = bundleStateMBean.getLastModified(testBundle);
 			//wait some time
-			Thread.currentThread().sleep(10);
+			Thread.sleep(10);
 			//update bundle
 			frameworkMBean.updateBundle(testBundle);
 			//get new last modification time
@@ -576,7 +576,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			long lastModifiedTime2 = bundleStateMBean.getLastModified(testBundles[0]);
 			long lastModifiedTime1 = bundleStateMBean.getLastModified(testBundles[1]);
 			//wait some time
-			Thread.currentThread().sleep(10);
+			Thread.sleep(10);
 			//update bundle
 			frameworkMBean.updateBundles(testBundles);
 			//get new last modification time

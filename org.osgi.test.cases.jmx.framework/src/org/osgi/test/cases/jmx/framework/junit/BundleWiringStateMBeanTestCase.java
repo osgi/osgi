@@ -59,7 +59,6 @@ public class BundleWiringStateMBeanTestCase extends MBeanGeneralTestCase {
         bundleContext = super.getContext();
     }
 
-    @SuppressWarnings("unchecked")
     public void testObjectNameStructure() throws Exception {
         ObjectName queryName = new ObjectName(BundleWiringStateMBean.OBJECTNAME + ",*");
         Set<ObjectName> names = getMBeanServer().queryNames(queryName, null);
@@ -1373,9 +1372,9 @@ public class BundleWiringStateMBeanTestCase extends MBeanGeneralTestCase {
     }
 
     public static class CapReqData {
-        private final String namespace;
-        private final Map<String, Object> attrs;
-        private final Map<String, String> dirs;
+		final String						namespace;
+		final Map<String,Object>	attrs;
+		final Map<String,String>	dirs;
 
         public CapReqData(String namespace, Map<String, Object> attrs, Map<String, String> dirs) {
             this.namespace = namespace;

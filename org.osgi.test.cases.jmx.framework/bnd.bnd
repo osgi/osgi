@@ -36,3 +36,5 @@ Import-Package: ${-signaturetest}, *
     ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
 #   osgi.console=1111
 
+-fixupmessages.host: "Host * for this fragment"
+

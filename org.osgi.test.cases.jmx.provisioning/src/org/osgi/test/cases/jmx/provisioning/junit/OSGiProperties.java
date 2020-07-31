@@ -24,6 +24,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -96,10 +97,11 @@ public class OSGiProperties {
 	 * @param properties
 	 * @return the tabular data representation of the properties
 	 */
-	public static TabularData tableFrom(Dictionary properties) {
+	public static TabularData tableFrom(Dictionary<String, ? > properties) {
 		TabularDataSupport table = new TabularDataSupport(PROPERTY_TABLE);
-		for (Enumeration keys = properties.keys(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
+		for (Enumeration<String> keys = properties.keys(); keys
+				.hasMoreElements();) {
+			String key = keys.nextElement();
 			table.put(encode(key, properties.get(key)));
 		}
 		return table;
@@ -112,7 +114,7 @@ public class OSGiProperties {
 	 * @param ref
 	 * @return the tabular data representing the service reference properties
 	 */
-	public static TabularData tableFrom(ServiceReference ref) {
+	public static TabularData tableFrom(ServiceReference< ? > ref) {
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		for (String key : ref.getPropertyKeys()) {
 			props.put(key, ref.getProperty(key));
@@ -132,8 +134,8 @@ public class OSGiProperties {
 
 		if (clazz.isArray()) {
 			return encodeArray(key, value, clazz.getComponentType());
-		} else if (clazz.equals(Vector.class)) {
-			return encodeVector(key, (Vector) value);
+		} else if (clazz.equals(List.class)) {
+			return encodeList(key, (List< ? >) value);
 		}
 		return propertyData(key, value.toString(), typeOf(clazz));
 	}
@@ -145,12 +147,12 @@ public class OSGiProperties {
 	 * @return the hashtable represented by the tabular data
 	 */
 	public static Hashtable<String, Object> propertiesFrom(TabularData table) {
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		if (table == null) {
 			return props;
 		}
 		for (CompositeData data : (Collection<CompositeData>) table.values()) {
-			props.put(data.get(KEY), parse((String) data.get(VALUE),
+			props.put((String) data.get(KEY), parse((String) data.get(VALUE),
 					(String) data.get(TYPE)));
 		}
 
@@ -238,13 +240,13 @@ public class OSGiProperties {
 	}
 
 	/**
-	 * Encode the vector as composite data
+	 * Encode the list as composite data
 	 *
 	 * @param key
 	 * @param value
 	 * @return the composite data representation
 	 */
-	protected static CompositeData encodeVector(String key, Vector value) {
+	protected static CompositeData encodeList(String key, List< ? > value) {
 		String type = "String";
 		if (value.size() > 0) {
 			type = typeOf(value.get(0).getClass());
@@ -616,7 +618,7 @@ public class OSGiProperties {
 	private static CompositeType createPropertyType() {
 		String description = "This type encapsulates a key/value pair";
 		String[] itemNames = PROPERTIES;
-		OpenType[] itemTypes = new OpenType[itemNames.length];
+		OpenType< ? >[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.STRING;
 		itemTypes[1] = SimpleType.STRING;

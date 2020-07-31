@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.jmx;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.SimpleType;
@@ -46,11 +47,13 @@ public class JmxConstants {
 	/**
 	 * The MBean Open type for an array of strings
 	 */
-	public static final ArrayType		STRING_ARRAY_TYPE	= Item.arrayType(1, SimpleType.STRING);
+	public static final ArrayType<String[]>	STRING_ARRAY_TYPE	= Item
+			.arrayType(1, SimpleType.STRING);
 	/**
 	 * The MBean Open type for an array of longs
 	 */
-	public static final ArrayType		LONG_ARRAY_TYPE		= Item.arrayType(1, SimpleType.LONG);
+	public static final ArrayType<Long[]>	LONG_ARRAY_TYPE		= Item
+			.arrayType(1, SimpleType.LONG);
 
 	/**
 	 * For an encoded array we need to start with ARRAY_OF. This must be

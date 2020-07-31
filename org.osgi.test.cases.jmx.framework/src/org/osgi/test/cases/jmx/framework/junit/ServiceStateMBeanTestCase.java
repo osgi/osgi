@@ -83,7 +83,8 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 
 
 	private Long getServiceId(String expectedInterface) {
-		ServiceReference ref = getContext().getServiceReference(expectedInterface);
+		ServiceReference< ? > ref = getContext()
+				.getServiceReference(expectedInterface);
 		Long serviceId = (Long)ref.getProperty("service.id");
 		return serviceId;
 	}
@@ -140,8 +141,8 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 				+ expectedInterface,
 				list.size() > 0);
 		assertTabularDataStructure(list, "PROPERTIES_TYPE", "Key", new String[] {"Key", "Value", "Type"});
-		Collection values = list.values();
-		Iterator iter = values.iterator();
+		Collection< ? > values = list.values();
+		Iterator< ? > iter = values.iterator();
 		boolean found = false;
 		while (iter.hasNext()) {
 			CompositeData item = (CompositeData) iter.next();
@@ -211,8 +212,8 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertTabularDataStructure(list, "SERVICE_TYPE", "Identifier",
 		        new String[] {"Identifier", "BundleIdentifier", "Properties", "objectClass", "UsingBundles"});
 
-		Collection values = list.values();
-		Iterator iter = values.iterator();
+		Collection< ? > values = list.values();
+		Iterator< ? > iter = values.iterator();
 		boolean found = false;
 		while (iter.hasNext()) {
 			CompositeData item = (CompositeData) iter.next();

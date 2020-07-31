@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version("1.1")
+@Version("1.1.1")
 package org.osgi.jmx.framework.wiring;
 
 import org.osgi.annotation.versioning.Version;
