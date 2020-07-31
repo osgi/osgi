@@ -142,6 +142,7 @@ public class JPARecoveryTestCase extends JPAResourceTestCase {
 
 		TestTransactionControl tran = new TestTxControlImpl(false, true, true);
 
+		@SuppressWarnings("unused")
 		EntityManager em = provider.getResource(tran);
 
 		ServiceTracker<RecoverableXAResource,RecoverableXAResource> tracker = new ServiceTracker<>(

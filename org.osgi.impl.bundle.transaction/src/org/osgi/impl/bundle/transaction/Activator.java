@@ -17,10 +17,11 @@ package org.osgi.impl.bundle.transaction;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
-import javax.transaction.xa.XAException;
+
 import org.apache.geronimo.transaction.GeronimoUserTransaction;
 import org.apache.geronimo.transaction.manager.GeronimoTransactionManager;
 import org.osgi.framework.BundleActivator;
@@ -37,7 +38,9 @@ public class Activator implements BundleActivator {
 	/**
 	 * Start
 	 */
-	public void start(BundleContext context) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 		this.manager = new GeronimoTransactionManager(TRANSACTION_TIMEOUT_SECONDS);
 		this.context = context;
 
@@ -48,10 +51,13 @@ public class Activator implements BundleActivator {
 	/**
 	 * Stop
 	 */
-	public void stop(BundleContext context) throws Exception {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
+		// nothing to do
 	}
 	
-	private void registerTransactionManager() throws XAException {
+	private void registerTransactionManager() {
         Dictionary<String, Object> p = new Hashtable<String, Object>();
 		p.put("service.description", SERVICE_DESCRIPTION);
 		String[] ifaces = { TransactionManager.class.getName(),
@@ -59,8 +65,7 @@ public class Activator implements BundleActivator {
 		context.registerService(ifaces, manager, p);
 	}
 
-	private void registerUserTransaction()
-			throws XAException {
+	private void registerUserTransaction() {
         Dictionary<String, Object> p = new Hashtable<String, Object>();
 		p.put("service.description", SERVICE_DESCRIPTION);
 		GeronimoUserTransaction userTx = new GeronimoUserTransaction(manager);

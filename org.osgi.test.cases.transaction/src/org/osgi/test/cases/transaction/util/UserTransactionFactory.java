@@ -27,7 +27,7 @@ import org.osgi.test.support.sleep.Sleep;
  */
 public class UserTransactionFactory {
 
-    private static ServiceReference _userTxServiceRef;
+	private static ServiceReference<UserTransaction>	_userTxServiceRef;
     private static UserTransaction _userTx;
     private static BundleContext _context;
 
@@ -46,7 +46,7 @@ public class UserTransactionFactory {
         if (waitTime == 0) {
             // get UserTransaction from Service Reference
             _userTxServiceRef = _context
-                    .getServiceReference(UserTransaction.class.getName());
+					.getServiceReference(UserTransaction.class);
         }
 
         if (waitTime > 0) {
@@ -55,7 +55,7 @@ public class UserTransactionFactory {
             while (!done) {
                 // get UserTransaction from Service Reference
                 _userTxServiceRef = _context
-                        .getServiceReference(UserTransaction.class.getName());
+						.getServiceReference(UserTransaction.class);
 
                 // check if we are able to get a valid _tmRef. If not, wait a
                 // second
@@ -81,7 +81,7 @@ public class UserTransactionFactory {
             }
         }
 
-        _userTx = (UserTransaction) _context.getService(_userTxServiceRef);
+        _userTx = _context.getService(_userTxServiceRef);
         return _userTx;
     }
 

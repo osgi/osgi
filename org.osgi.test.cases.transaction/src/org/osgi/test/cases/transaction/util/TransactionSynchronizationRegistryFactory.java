@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceReference;
  */
 public class TransactionSynchronizationRegistryFactory {
 
-    private static ServiceReference _sr;
+	private static ServiceReference<TransactionSynchronizationRegistry>	_sr;
     private static TransactionSynchronizationRegistry _tsr;
     private static BundleContext _context;
 
@@ -41,9 +41,8 @@ public class TransactionSynchronizationRegistryFactory {
         
         // setup TransactionSynchronizationRegistryFactory
         _sr = _context
-                .getServiceReference(TransactionSynchronizationRegistry.class
-                        .getName());
-        _tsr = (TransactionSynchronizationRegistry) _context.getService(_sr);
+				.getServiceReference(TransactionSynchronizationRegistry.class);
+        _tsr = _context.getService(_sr);
         return _tsr;
 
     }

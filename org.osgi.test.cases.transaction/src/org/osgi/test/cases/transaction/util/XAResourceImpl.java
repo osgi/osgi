@@ -39,14 +39,14 @@ import org.osgi.test.support.sleep.Sleep;
 public class XAResourceImpl implements XAResource, Serializable {
     static final long serialVersionUID = -2141508727147091254L;
 
-    private static Hashtable _resources = new Hashtable();
+	private static Hashtable<Integer,XAResourceData>	_resources			= new Hashtable<>();
 
     private static int prepareCount = 0;
     private static int commitCount = 0;
     private static int[] prepareOrder = new int[20];
     private static int[] commitOrder = new int[20];
 
-    private static ArrayList _XAEvents = new ArrayList();
+	private static ArrayList<XAEvent>					_XAEvents			= new ArrayList<>();
 
     protected Integer _key;
     private static transient int _nextKey = 0;
@@ -87,7 +87,7 @@ public class XAResourceImpl implements XAResource, Serializable {
     public class XAResourceData implements Serializable {
         private static final long serialVersionUID = -253646295143893358L;
 
-        private int key;
+		int							key;
         private UID RM; // use UID as UUID is only avail in JDK 1.5
         private int prepareAction = XAResource.XA_OK;
         private int rollbackAction = XAResource.XA_OK;
@@ -734,10 +734,10 @@ public class XAResourceImpl implements XAResource, Serializable {
     }
 
     public static boolean allInState(int state) {
-        Enumeration e = _resources.keys();
+		Enumeration<Integer> e = _resources.keys();
         while (e.hasMoreElements()) {
-            Integer key = (Integer) e.nextElement();
-            XAResourceData res = (XAResourceData) _resources.get(key);
+            Integer key = e.nextElement();
+            XAResourceData res = _resources.get(key);
             if (!res.inState(state)) {
                 return false;
             }
@@ -747,10 +747,10 @@ public class XAResourceImpl implements XAResource, Serializable {
     }
 
     public static boolean checkForgotten() {
-        Enumeration e = _resources.keys();
+		Enumeration<Integer> e = _resources.keys();
         while (e.hasMoreElements()) {
-            Integer key = (Integer) e.nextElement();
-            XAResourceData res = (XAResourceData) _resources.get(key);
+            Integer key = e.nextElement();
+            XAResourceData res = _resources.get(key);
             if (res.isHeuristic() && !res.isForgotten()) {
                 return false;
             }
@@ -770,7 +770,7 @@ public class XAResourceImpl implements XAResource, Serializable {
     }
 
     private XAResourceData self() {
-        return (XAResourceData) _resources.get(_key);
+        return _resources.get(_key);
     }
 
     static public int resourceCount() {
@@ -824,7 +824,7 @@ public class XAResourceImpl implements XAResource, Serializable {
         return commitOrder;
     }
 
-    public static ArrayList getXAEvents() {
+	public static ArrayList<XAEvent> getXAEvents() {
         return _XAEvents;
     }
 
