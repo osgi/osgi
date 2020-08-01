@@ -20,13 +20,17 @@ public class AsyncServiceFactory implements ServiceFactory<Async> {
 		this.executor = executor;
 	}
 
+	@Override
 	public Async getService(Bundle bundle,
 			ServiceRegistration<Async> registration) {
 		
 		return new AsyncService(bundle, executor, logServiceTracker);
 	}
 
+	@Override
 	public void ungetService(Bundle bundle,
-			ServiceRegistration<Async> registration, Async service) {}
+			ServiceRegistration<Async> registration, Async service) {
+		// empty
+	}
 
 }

@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 
-import net.sf.cglib.proxy.Enhancer;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
@@ -19,17 +17,19 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
+import net.sf.cglib.proxy.Enhancer;
+
 
 public class AsyncService implements Async {
 
 	private static final class CGLibAwareClassLoader extends ClassLoader {
 		private final ClassLoader serviceTypeLoader;
 
-		private CGLibAwareClassLoader(Bundle registeringBundle) {
+		CGLibAwareClassLoader(Bundle registeringBundle) {
 			this.serviceTypeLoader = registeringBundle.adapt(BundleWiring.class).getClassLoader();
 		}
 
-		private CGLibAwareClassLoader(ClassLoader loader) {
+		CGLibAwareClassLoader(ClassLoader loader) {
 			this.serviceTypeLoader = loader;
 		}
 
@@ -59,23 +59,23 @@ public class AsyncService implements Async {
 		this.logServiceTracker = logServiceTracker;
 	}
 
+	@Override
 	public <T> T mediate(final T service, final Class<T> iface) {
-		return AccessController.doPrivileged(new PrivilegedAction<T>() {
-			public T run() {
-				return privMediate(service, iface);
-			}
-		});
+		return AccessController.doPrivileged(
+				(PrivilegedAction<T>) () -> privMediate(service, iface));
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T privMediate(T service, Class<T> iface) {
+	<T> T privMediate(T service, Class<T> iface) {
 		
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, service);
 		
 		if(iface.isInterface()) {
 			return (T) Proxy.newProxyInstance(
-					new ClassLoader(service.getClass().getClassLoader()){}, 
+					new ClassLoader(service.getClass().getClassLoader()) {
+						// empty
+					}, 
 					new Class[] {iface}, handler);
 		} else {
 			return (T) proxyClass(iface, handler, 
@@ -83,16 +83,14 @@ public class AsyncService implements Async {
 		}
 	}
 
+	@Override
 	public <T> T mediate(final ServiceReference<? extends T> ref, final Class<T> iface) {
-		return AccessController.doPrivileged(new PrivilegedAction<T>() {
-			public T run() {
-				return privMediate(ref, iface);
-			}
-		});
+		return AccessController.doPrivileged(
+				(PrivilegedAction<T>) () -> privMediate(ref, iface));
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T> T privMediate(ServiceReference<? extends T> ref, Class<T> iface) {
+	<T> T privMediate(ServiceReference< ? extends T> ref, Class<T> iface) {
 
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, ref);
@@ -101,7 +99,10 @@ public class AsyncService implements Async {
 
 		if(iface.isInterface()) {
 			return (T) Proxy.newProxyInstance(
-					new ClassLoader(registeringBundle.adapt(BundleWiring.class).getClassLoader()){}, 
+					new ClassLoader(registeringBundle.adapt(BundleWiring.class)
+							.getClassLoader()) {
+						// empty
+					}, 
 					new Class[] {iface}, handler);
 		} else {
 			return (T) proxyClass(iface, handler, 
@@ -145,16 +146,19 @@ public class AsyncService implements Async {
 		}
 	}
 
+	@Override
 	public <T> Promise<T> call(T call) throws IllegalStateException {
 		MethodCall currentInvocation = consumeCurrentInvocation();
 		if(currentInvocation == null) throw new IllegalStateException("Incorrect API usage - this thread has no pending method calls");
 		return currentInvocation.invokeAsynchronously(clientBundle, executor);
 	}
 
+	@Override
 	public Promise<?> call() throws IllegalStateException {
 		return call(null);
 	}
 
+	@Override
 	public Promise<Void> execute() throws IllegalStateException {
 		MethodCall currentInvocation = consumeCurrentInvocation();
 		if(currentInvocation == null) throw new IllegalStateException("Incorrect API usage - this thread has no pending method calls");

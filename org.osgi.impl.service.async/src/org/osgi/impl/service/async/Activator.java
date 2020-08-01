@@ -20,23 +20,19 @@ public class Activator implements BundleActivator {
 		
 		private final AtomicInteger count = new AtomicInteger();
 		
+																			@Override
 		public Thread newThread(final Runnable r) {
-			Thread t = new Thread(new Runnable(){
-				public void run() {
-					AccessController.doPrivileged(new PrivilegedAction<Void>() {
-						public Void run() {
-							r.run();
-							return null;
-						}
-					});
-				}
-			}, "Asynchronous Execution Service Thread " + count.incrementAndGet());
+			Thread t = new Thread((Runnable) () -> AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+				r.run();
+				return null;
+			}), "Asynchronous Execution Service Thread " + count.incrementAndGet());
 			return t;
 		}
 	});
 	
 	private volatile ServiceTracker<LogService, LogService> logServiceTracker;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		logServiceTracker = new ServiceTracker<LogService, LogService>(context, LogService.class, null);
 		logServiceTracker.open();
@@ -44,6 +40,7 @@ public class Activator implements BundleActivator {
 		context.registerService(Async.class.getName(), new AsyncServiceFactory(executor, logServiceTracker), new Hashtable<String, Object>());
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		executor.shutdownNow();
 		logServiceTracker.close();
