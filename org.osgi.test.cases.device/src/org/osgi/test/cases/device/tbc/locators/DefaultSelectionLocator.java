@@ -1,5 +1,7 @@
 package org.osgi.test.cases.device.tbc.locators;
 
+import static org.osgi.test.support.compatibility.DefaultTestBundleControl.log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -30,12 +32,12 @@ public class DefaultSelectionLocator implements DriverLocator {
 	/**
 	 * Searches for drivers
 	 * 
-	 * @param props the properties of the registed Device service
-	 * @retunrs a String array of 3 elements - the IDs of the drivers that will
-	 *          be filtered from the default selection algorythm
+	 * @param props the properties of the registered Device service
+	 * @returns a String array of 3 elements - the IDs of the drivers that will
+	 *          be filtered from the default selection algorithm
 	 */
-	public String[] findDrivers(Dictionary props) {
-		master.log("searching for " + props.get("deviceID"));
+	public String[] findDrivers(Dictionary<String, ? > props) {
+		log("searching for " + props.get("deviceID"));
 		String[] toReturn = new String[3];
 		toReturn[0] = "Driver_Winner";
 		toReturn[1] = "Driver_Common";
@@ -53,11 +55,11 @@ public class DefaultSelectionLocator implements DriverLocator {
 	 *         id.
 	 */
 	public InputStream loadDriver(final String id) throws IOException {
-		master.log("loading for " + id);
+		log("loading for " + id);
 		try {
-			return (InputStream) AccessController
-					.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run() throws Exception {
+			return AccessController
+					.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
+						public InputStream run() throws Exception {
 							if ("Driver_Winner".equals(id)) {
 								URL url = new URL(master.getWebServer()
 										+ "drv4.jar");
@@ -77,7 +79,7 @@ public class DefaultSelectionLocator implements DriverLocator {
 										return url.openStream();
 									}
 									else {
-										master.log("unknown driver ID passed "
+								log("unknown driver ID passed "
 												+ id);
 										return null;
 									}

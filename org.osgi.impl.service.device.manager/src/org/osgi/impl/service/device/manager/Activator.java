@@ -16,11 +16,16 @@
 
 package org.osgi.impl.service.device.manager;
 
+import static java.util.stream.Collectors.toList;
+
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -87,26 +92,27 @@ public class Activator extends Thread implements BundleActivator,
 
     private Filter isLocator;
 
-    private Vector /* DriverRef */drivers = new Vector();
+	private List<DriverRef>											drivers				= new Vector<>();
 
-    private ServiceReference[] locatorRefs;
+	private Collection<ServiceReference<DriverLocator>>				locatorRefs;
 
-    DriverLocator[] locators;
+	List<DriverLocator>												locators;
 
-    private ServiceReference selectorRef;
+	private ServiceReference<DriverSelector>						selectorRef;
 
     private DriverSelector selector;
 
-    private ServiceReference logRef;
+	private ServiceReference<LogService>							logRef;
 
     private LogService log;
 
-    private Hashtable /* Integer->MatchValue */cache = new Hashtable();
+	private Hashtable<Integer,MatchValue>					cache				= new Hashtable<>();
 
-    private Hashtable /* ServiceReference->ServiceReference */newDevices = new Hashtable(
+	private Hashtable<ServiceReference< ? >,ServiceReference< ? >>	newDevices			= new Hashtable<>(
             20);
 
-    private Hashtable /* Bundle->Long */tempDrivers = new Hashtable(10);
+	private Hashtable<Bundle,Long>							tempDrivers			= new Hashtable<>(
+			10);
 
     private long reapTime;
 
@@ -114,7 +120,9 @@ public class Activator extends Thread implements BundleActivator,
         super("DeviceManager");
     }
 
-    public void start(BundleContext bc) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext bc)
+			throws Exception {
         this.bc = bc;
 
         isLog = bc.createFilter(LOG_FILTER);
@@ -135,7 +143,8 @@ public class Activator extends Thread implements BundleActivator,
             info("Passive start");
     }
 
-    public void stop(BundleContext bc) {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext bc) {
         info("Stopping");
         quit = true;
         synchronized (this) {
@@ -157,30 +166,36 @@ public class Activator extends Thread implements BundleActivator,
         startService(GLOBAL_FILTER);
     }
 
-    public void frameworkEvent(FrameworkEvent e) {
+	@Override
+	public void frameworkEvent(FrameworkEvent e) {
         try {
             if (e.getType() == FrameworkEvent.STARTED)
                 activate();
         } catch (Exception e1) {
+			// ignore
         }
     }
 
     private void startService(String filter) throws Exception {
         bc.addServiceListener(this, filter);
-        ServiceReference[] sra = bc.getServiceReferences((String) null, filter);
+		ServiceReference< ? >[] sra = bc.getServiceReferences((String) null,
+				filter);
         if (sra != null) {
             for (int i = 0; i < sra.length; i++) {
                 try {
                     serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED,
                             sra[i]));
                 } catch (Exception e) {
+					// ignore
                 }
             }
         }
     }
 
-    public void serviceChanged(ServiceEvent e) {
-        ServiceReference sr = e.getServiceReference();
+	@SuppressWarnings("unchecked")
+	@Override
+	public void serviceChanged(ServiceEvent e) {
+		ServiceReference< ? > sr = e.getServiceReference();
         if (isDevice.match(sr)) {
             switch (e.getType()) {
             case ServiceEvent.REGISTERED:
@@ -203,7 +218,7 @@ public class Activator extends Thread implements BundleActivator,
                 switch (e.getType()) {
                 case ServiceEvent.REGISTERED:
                     info("driver found, " + showDriver(sr));
-                    driverAppeared(sr);
+					driverAppeared((ServiceReference<Driver>) sr);
                     touchAllDevices();
                     break;
                 case ServiceEvent.MODIFIED:
@@ -213,62 +228,67 @@ public class Activator extends Thread implements BundleActivator,
                     break;
                 case ServiceEvent.UNREGISTERING:
                     info("driver lost, " + showDriver(sr));
-                    driverGone(sr);
+					driverGone((ServiceReference<Driver>) sr);
                     touchAllDevices();
                     break;
                 }
             } catch (Exception e1) {
+				// ignore
             }
         }
         if (isSelector.match(sr)) {
             try {
                 bc.ungetService(selectorRef);
             } catch (Exception e1) {
+				// ignore
             }
             selector = null;
             try {
-                selectorRef = bc.getServiceReference(DriverSelector.class
-                        .getName());
-                selector = (DriverSelector) bc.getService(selectorRef);
+				selectorRef = bc.getServiceReference(DriverSelector.class);
+                selector = bc.getService(selectorRef);
             } catch (Exception e1) {
+				// ignore
             }
         }
         if (isLocator.match(sr)) {
             try {
-                for (int i = 0; i < locatorRefs.length; i++) {
-                    bc.ungetService(locatorRefs[i]);
+				for (ServiceReference<DriverLocator> locatorRef : locatorRefs) {
+					bc.ungetService(locatorRef);
                 }
             } catch (Exception e1) {
+				// ignore
             }
             locatorRefs = null;
             locators = null;
             try {
-                locatorRefs = bc.getServiceReferences(DriverLocator.class
-                        .getName(), null);
-                locators = new DriverLocator[locatorRefs.length];
-                for (int i = 0; i < locatorRefs.length; i++) {
-                    locators[i] = (DriverLocator) bc.getService(locatorRefs[i]);
-                }
+				locatorRefs = bc.getServiceReferences(DriverLocator.class,
+						null);
+				locators = locatorRefs.stream()
+						.map(bc::getService)
+						.collect(toList());
             } catch (Exception e1) {
+				// ignore
             }
         }
         if (isLog.match(sr)) {
             try {
                 bc.ungetService(logRef);
             } catch (Exception e1) {
+				// ignore
             }
             try {
-                logRef = bc.getServiceReference(LogService.class.getName());
-                log = (LogService) bc.getService(logRef);
+				logRef = bc.getServiceReference(LogService.class);
+                log = bc.getService(logRef);
             } catch (Exception e1) {
+				// ignore
             }
         }
     }
 
-    private void driverAppeared(ServiceReference sr) {
+	private void driverAppeared(ServiceReference<Driver> sr) {
         try {
             for (int i = 0; i < drivers.size(); i++) {
-                DriverRef dr = (DriverRef) drivers.elementAt(i);
+				DriverRef dr = drivers.get(i);
                 if (dr.sr == sr)
                     return;
             }
@@ -278,6 +298,7 @@ public class Activator extends Thread implements BundleActivator,
                         .getProperty(org.osgi.framework.Constants.SERVICE_RANKING))
                         .intValue();
             } catch (Exception e) {
+				// ignore
             }
             dr.servid = ((Long) sr
                     .getProperty(org.osgi.framework.Constants.SERVICE_ID))
@@ -286,29 +307,32 @@ public class Activator extends Thread implements BundleActivator,
                     .getProperty(org.osgi.service.device.Constants.DRIVER_ID);
             dr.sr = sr;
             if (dr.id != null)
-                dr.drv = (Driver) bc.getService(sr);
+                dr.drv = bc.getService(sr);
             else
                 error("ignoring driver without id " + showDriver(sr));
             if (dr.drv != null)
-                drivers.addElement(dr);
+				drivers.add(dr);
         } catch (Exception e) {
+			// ignore
         }
     }
 
-    private void driverGone(ServiceReference sr) {
+	private void driverGone(ServiceReference<Driver> sr) {
         try {
             for (int i = 0; i < drivers.size(); i++) {
-                DriverRef dr = (DriverRef) drivers.elementAt(i);
+				DriverRef dr = drivers.get(i);
                 if (dr.sr == sr) {
-                    drivers.removeElementAt(i);
+					drivers.remove(i);
                     return;
                 }
             }
         } catch (Exception e) {
+			// ignore
         }
     }
 
-    public void bundleChanged(BundleEvent e) {
+	@Override
+	public void bundleChanged(BundleEvent e) {
         if (e.getType() == BundleEvent.UNINSTALLED) {
             tempDrivers.remove(e.getBundle());
         }
@@ -330,16 +354,18 @@ public class Activator extends Thread implements BundleActivator,
         }
     }
 
-    public void run() {
+	@Override
+	public void run() {
         while (!quit) {
             boolean sleep = true;
             try {
-                ServiceReference dev = (ServiceReference) newDevices.keys()
+				ServiceReference< ? > dev = newDevices.keys()
                         .nextElement();
                 newDevices.remove(dev);
                 sleep = false;
                 handleDevice(dev);
             } catch (Exception e) {
+				// ignore
             }
 
             if (!sleep)
@@ -358,42 +384,44 @@ public class Activator extends Thread implements BundleActivator,
                     try {
                         wait(reapTime - now);
                     } catch (Exception e) {
+						// ignore
                     }
             }
         }
     }
 
-    private void handleDevice(ServiceReference dev) {
+	private void handleDevice(ServiceReference< ? > dev) {
         if (isUsed(dev))
             return;
 
-        Dictionary props = collectProperties(dev);
+		Dictionary<String,Object> props = collectProperties(dev);
 
-        Vector /* MatchImpl */matches = new Vector();
+		List<MatchImpl> matches = new Vector<>();
 
         // Populate matches with driver locator recommendations
-        DriverLocator[] dla = locators;
+		List<DriverLocator> dla = locators;
         if (dla != null) {
-            for (int i = 0; i < dla.length; i++) {
+			for (int i = 0; i < dla.size(); i++) {
                 try {
-                    DriverLocator dl = dla[i];
+					DriverLocator dl = dla.get(i);
                     String[] dria = dl.findDrivers(props);
                     for (int j = 0; j < dria.length; j++) {
                         String dri = dria[j];
                         MatchImpl m = null;
                         for (int k = 0; k < matches.size(); k++) {
-                            m = (MatchImpl) matches.elementAt(k);
+							m = matches.get(k);
                             if (m.equals(dri))
                                 break;
                             m = null;
                         }
                         if (m == null) {
                             m = new MatchImpl(this, dev, dri);
-                            matches.addElement(m);
+							matches.add(m);
                         }
                         m.addDriverLocator(dl);
                     }
                 } catch (Exception e) {
+					// ignore
                 }
             }
         }
@@ -401,17 +429,17 @@ public class Activator extends Thread implements BundleActivator,
         for (;;) {
             // Add current drivers to matches
             for (int i = 0; i < drivers.size(); i++) {
-                DriverRef dr = (DriverRef) drivers.elementAt(i);
+				DriverRef dr = drivers.get(i);
                 MatchImpl m = null;
                 for (int k = 0; k < matches.size(); k++) {
-                    m = (MatchImpl) matches.elementAt(k);
+					m = matches.get(k);
                     if (m.connect(dr))
                         break;
                     m = null;
                 }
                 if (m == null) {
                     m = new MatchImpl(this, dev, dr);
-                    matches.addElement(m);
+					matches.add(m);
                 }
             }
 
@@ -420,7 +448,7 @@ public class Activator extends Thread implements BundleActivator,
 
             // Count good matches and trigger loading
             for (int i = 0; i < matches.size(); i++) {
-                MatchImpl m = (MatchImpl) matches.elementAt(i);
+				MatchImpl m = matches.get(i);
                 int match = m.getMatchValue();
                 if (match == MatchImpl.UNKNOWN)
                     loading = true;
@@ -443,7 +471,7 @@ public class Activator extends Thread implements BundleActivator,
             Match[] sel = new Match[n];
             n = 0;
             for (int i = 0; i < matches.size(); i++) {
-                MatchImpl m = (MatchImpl) matches.elementAt(i);
+				MatchImpl m = matches.get(i);
                 if (m.getMatchValue() > Device.MATCH_NONE) {
                     sel[n++] = m;
                     if (best == null || best.compare(m) < 0)
@@ -462,6 +490,7 @@ public class Activator extends Thread implements BundleActivator,
                 try {
                     best = (MatchImpl) sel[ix];
                 } catch (Exception e) {
+					// ignore
                 }
             }
 
@@ -494,14 +523,14 @@ public class Activator extends Thread implements BundleActivator,
             // Append the referred match
             MatchImpl m = null;
             for (int i = 0; i < matches.size(); i++) {
-                m = (MatchImpl) matches.elementAt(i);
+				m = matches.get(i);
                 if (m.equals(ref))
                     break;
                 m = null;
             }
             if (m == null) {
                 m = new MatchImpl(this, dev, ref);
-                matches.addElement(m);
+				matches.add(m);
             }
         }
     }
@@ -510,14 +539,14 @@ public class Activator extends Thread implements BundleActivator,
         tempDrivers.put(b, Long.valueOf(System.currentTimeMillis() + t));
     }
 
-    private boolean isUsed(ServiceReference sr) {
+	private boolean isUsed(ServiceReference< ? > sr) {
         Bundle[] ba = sr.getUsingBundles();
         if (ba != null) {
             for (int i = 0; i < ba.length; i++) {
                 Bundle b = ba[i];
                 try {
                     for (int j = 0; j < drivers.size(); j++) {
-                        DriverRef dr = (DriverRef) drivers.elementAt(j);
+						DriverRef dr = drivers.get(j);
                         if (dr.sr.getBundle() == b)
                             return true;
                     }
@@ -537,10 +566,10 @@ public class Activator extends Thread implements BundleActivator,
                 try {
                     Bundle b = ba[i];
                     if (b.getLocation().startsWith(DYNAMIC_DRIVER_TAG)) {
-                        Long expire = (Long) tempDrivers.get(b);
+                        Long expire = tempDrivers.get(b);
                         boolean inUse = false;
 
-                        ServiceReference[] sra = b.getServicesInUse();
+						ServiceReference< ? >[] sra = b.getServicesInUse();
                         if (sra != null) {
                             for (int j = 0; j < sra.length; j++) {
                                 if (isDevice.match(sra[j])) {
@@ -560,12 +589,13 @@ public class Activator extends Thread implements BundleActivator,
                         }
                     }
                 } catch (Exception e) {
+					// ignore
                 }
             }
         }
     }
 
-    private void touchDevice(ServiceReference dev) {
+	private void touchDevice(ServiceReference< ? > dev) {
         if (newDevices.put(dev, dev) == null) {
             synchronized (this) {
                 notifyAll();
@@ -576,16 +606,17 @@ public class Activator extends Thread implements BundleActivator,
     private void touchAllDevices() {
         boolean added = false;
         try {
-            ServiceReference[] sra = bc.getServiceReferences((String) null,
+			ServiceReference< ? >[] sra = bc.getServiceReferences((String) null,
                     DEVICE_FILTER);
             if (sra != null) {
                 for (int i = 0; i < sra.length; i++) {
-                    ServiceReference dev = sra[i];
+					ServiceReference< ? > dev = sra[i];
                     if (newDevices.put(dev, dev) == null)
                         added = true;
                 }
             }
         } catch (Exception e) {
+			// ignore
         }
         if (added) {
             synchronized (this) {
@@ -594,7 +625,7 @@ public class Activator extends Thread implements BundleActivator,
         }
     }
 
-    private void tellNotFound(ServiceReference dev) {
+	private void tellNotFound(ServiceReference< ? > dev) {
         // NB: Should we avoid repeating the call to the same device?
 
         info("no driver for " + showDevice(dev));
@@ -603,17 +634,19 @@ public class Activator extends Thread implements BundleActivator,
             d = bc.getService(dev);
             ((Device) d).noDriverFound();
         } catch (Exception e) {
+			// ignore
         } finally {
             try {
                 bc.ungetService(dev);
             } catch (Exception e1) {
+				// ignore
             }
         }
     }
 
-    private Dictionary /* String->Object */collectProperties(
-            ServiceReference sr) {
-        Dictionary props = new Hashtable();
+	private Dictionary<String,Object> collectProperties(
+			ServiceReference< ? > sr) {
+		Dictionary<String,Object> props = new Hashtable<>();
         String[] keys = sr.getPropertyKeys();
         if (keys != null) {
             for (int i = 0; i < keys.length; i++) {
@@ -637,17 +670,19 @@ public class Activator extends Thread implements BundleActivator,
             try {
                 b.uninstall();
             } catch (Exception e1) {
+				// ignore
             }
             return null;
         } finally {
             try {
                 is.close();
             } catch (Exception e1) {
+				// ignore
             }
         }
     }
 
-    void removeSRCachedMatch(ServiceReference sr) {
+	void removeSRCachedMatch(ServiceReference< ? > sr) {
 
         // NB: Index to speed up this process?
 
@@ -656,12 +691,13 @@ public class Activator extends Thread implements BundleActivator,
             pid = (String) sr
                     .getProperty(org.osgi.framework.Constants.SERVICE_PID);
         } catch (Exception e) {
+			// ignore
         }
         if (pid != null)
             return;
-        for (Enumeration e = cache.keys(); e.hasMoreElements();) {
-            Integer k = (Integer) e.nextElement();
-            MatchValue mv0 = (MatchValue) cache.get(k);
+		for (Enumeration<Integer> e = cache.keys(); e.hasMoreElements();) {
+            Integer k = e.nextElement();
+            MatchValue mv0 = cache.get(k);
             MatchValue mv = mv0;
             while (mv != null) {
                 if (mv.dev != sr) {
@@ -684,28 +720,29 @@ public class Activator extends Thread implements BundleActivator,
         }
     }
 
-    int getCachedMatch(String drvid, ServiceReference dev) {
+	int getCachedMatch(String drvid, ServiceReference< ? > dev) {
         MatchValue mv = findMatch(drvid, dev, false);
         return mv != null ? mv.match : MatchImpl.UNKNOWN;
     }
 
-    void putCachedMatch(String drvid, ServiceReference dev, int match) {
+	void putCachedMatch(String drvid, ServiceReference< ? > dev, int match) {
         MatchValue mv = findMatch(drvid, dev, true);
         mv.match = match;
     }
 
-    private MatchValue findMatch(String drvid, ServiceReference dev,
+	private MatchValue findMatch(String drvid, ServiceReference< ? > dev,
             boolean create) {
         String pid = null;
         try {
             pid = (String) dev
                     .getProperty(org.osgi.framework.Constants.SERVICE_PID);
         } catch (Exception e) {
+			// ignore
         }
         int k1 = pid != null ? pid.hashCode() : dev.hashCode();
         int k2 = drvid.hashCode();
         Integer key = Integer.valueOf(k1 + k2);
-        MatchValue mv0 = (MatchValue) cache.get(key);
+        MatchValue mv0 = cache.get(key);
         MatchValue mv = mv0;
         while (mv != null) {
             if (drvid.equals(mv.drvid) && pid != null ? pid.equals(mv.pid)
@@ -728,7 +765,7 @@ public class Activator extends Thread implements BundleActivator,
         return mv;
     }
 
-    private String showDevice(ServiceReference sr) {
+	private String showDevice(ServiceReference< ? > sr) {
         StringBuffer sb = new StringBuffer();
         Object o = sr
                 .getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY);
@@ -753,7 +790,7 @@ public class Activator extends Thread implements BundleActivator,
         return sb.toString();
     }
 
-    private String showDriver(ServiceReference sr) {
+	private String showDriver(ServiceReference< ? > sr) {
         StringBuffer sb = new StringBuffer();
         String s = (String) sr
                 .getProperty(org.osgi.service.device.Constants.DRIVER_ID);

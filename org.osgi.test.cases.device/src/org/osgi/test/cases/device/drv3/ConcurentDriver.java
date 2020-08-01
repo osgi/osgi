@@ -1,9 +1,13 @@
 package org.osgi.test.cases.device.drv3;
 
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.device.Driver;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * A driver implementation that should be a concurence to the WinnerDriver in
@@ -15,10 +19,10 @@ import org.osgi.test.cases.device.tbc.*;
  * @version 1.0
  */
 public class ConcurentDriver implements Driver, BundleActivator {
-	private ServiceRegistration	driverRegistration	= null;
+	private ServiceRegistration<Driver>			driverRegistration	= null;
 	private BundleContext		bc					= null;
 	private TestBundleControl	master				= null;
-	private ServiceReference	masterRef			= null;
+	private ServiceReference<TestBundleControl>	masterRef			= null;
 
 	/**
 	 * The start method of the activator of the ConcurentDriver bundle. As
@@ -28,16 +32,16 @@ public class ConcurentDriver implements Driver, BundleActivator {
 	public void start(BundleContext bc) {
 		/* get the master of this test case */
 		this.bc = bc;
-		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
-		master = (TestBundleControl) bc.getService(masterRef);
+		masterRef = bc.getServiceReference(TestBundleControl.class);
+		master = bc.getService(masterRef);
 		log("starting driver budnle");
 		/* register the driver service */
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("DRIVER_ID", "concurent_dirver");
 		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(4242));
 		log("registering service");
 		driverRegistration = bc.registerService(
-				"org.osgi.service.device.Driver", this, h);
+				Driver.class, this, h);
 	}
 
 	/**
@@ -55,7 +59,7 @@ public class ConcurentDriver implements Driver, BundleActivator {
 	 *        property)"basicDevice"
 	 * @return 255 each time
 	 */
-	public int match(ServiceReference reference) {
+	public int match(ServiceReference< ? > reference) {
 		return 255;
 	}
 
@@ -69,7 +73,7 @@ public class ConcurentDriver implements Driver, BundleActivator {
 	 *        attachtes always successfully
 	 * @returns null
 	 */
-	public String attach(ServiceReference reference) throws Exception {
+	public String attach(ServiceReference< ? > reference) throws Exception {
 		log("attaching to " + (String) reference.getProperty("deviceID")
 				+ " ERROR!");
 		master.setMessage(TestBundleControl.MESSAGE_ERROR);

@@ -1,9 +1,10 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.util.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.io.InputStream;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * This locator is registered to check that it will be called when a driver is
@@ -28,7 +29,7 @@ public class EmptyLocator implements DriverLocator {
 	 * @param props the props of the device
 	 * @return null every time
 	 */
-	public String[] findDrivers(Dictionary props) {
+	public String[] findDrivers(Dictionary<String, ? > props) {
 		// Also gets called for UPnP devices it seems ...
 		if (props.get("device.test").equals(Boolean.TRUE)) {
 			if ("standalone driver test device".equals(props.get("deviceID"))) {

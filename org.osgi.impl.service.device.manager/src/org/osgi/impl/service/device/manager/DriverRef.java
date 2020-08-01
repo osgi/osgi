@@ -26,7 +26,7 @@ public class DriverRef {
 
     String id;
 
-    ServiceReference sr;
+	ServiceReference<Driver>	sr;
 
     Driver drv;
 }

@@ -1,20 +1,23 @@
 package org.osgi.test.cases.device.drv5;
 
-import org.osgi.framework.*;
-import org.osgi.service.device.Driver;
-import org.osgi.service.device.Device;
-import org.osgi.test.cases.device.tbc.TestBundleControl;
 import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.device.Device;
+import org.osgi.service.device.Driver;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * A driver that returns NO_MATCH from its match method. Used just to check that
  * no such drivers will be attached
  */
 public class NotMatchingDriver implements Driver, BundleActivator {
-	private ServiceRegistration	driverRegistration	= null;
-	private BundleContext		bc					= null;
+	private ServiceRegistration<Driver>			driverRegistration	= null;
 	private TestBundleControl	master				= null;
-	private ServiceReference	masterRef			= null;
+	private ServiceReference<TestBundleControl>	masterRef			= null;
 
 	/**
 	 * The start method of the activator of this Driver bundle. As required
@@ -22,14 +25,14 @@ public class NotMatchingDriver implements Driver, BundleActivator {
 	 */
 	public void start(BundleContext bc) {
 		/* get the master of this test case */
-		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
-		master = (TestBundleControl) bc.getService(masterRef);
+		masterRef = bc.getServiceReference(TestBundleControl.class);
+		master = bc.getService(masterRef);
 		logRemark("starting bundle");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("DRIVER_ID", "not matching driver");
 		logRemark("registering service");
 		driverRegistration = bc.registerService(
-				"org.osgi.service.device.Driver", this, h);
+				Driver.class, this, h);
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class NotMatchingDriver implements Driver, BundleActivator {
 	 * @param reference service reference to the registred device.
 	 * @returns Device.MATCH_NONE
 	 */
-	public int match(ServiceReference reference) {
+	public int match(ServiceReference< ? > reference) {
 		return Device.MATCH_NONE;
 	}
 
@@ -58,7 +61,7 @@ public class NotMatchingDriver implements Driver, BundleActivator {
 	 * @param reference service reference to the registred device.
 	 * @returns null
 	 */
-	public String attach(ServiceReference reference) throws Exception {
+	public String attach(ServiceReference< ? > reference) throws Exception {
 		// should not be called but I should force test case failure if called
 		log("attaching to " + (String) reference.getProperty("deviceID"));
 		master.setMessage(TestBundleControl.MESSAGE_ERROR);
