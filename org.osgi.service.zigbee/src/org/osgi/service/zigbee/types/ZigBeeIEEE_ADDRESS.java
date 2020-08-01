@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -47,26 +48,32 @@ public class ZigBeeIEEE_ADDRESS
 		return instance;
 	}
 
+	@Override
 	public String getName() {
 		return "IEEE_ADDRESS";
 	}
 
+	@Override
 	public boolean isAnalog() {
 		return false;
 	}
 
-	public Class getJavaDataType() {
+	@Override
+	public Class< ? > getJavaDataType() {
 		return BigInteger.class;
 	}
 
+	@Override
 	public short getId() {
 		return ZigBeeDataTypes.IEEE_ADDRESS;
 	}
 
+	@Override
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.IEEE_ADDRESS, value);
 	}
 
+	@Override
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
 		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.IEEE_ADDRESS);
 	}

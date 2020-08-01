@@ -18,10 +18,12 @@ package org.osgi.test.cases.zigbee;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -131,12 +133,13 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 			return null;
 		}
 
-		ServiceTracker st = new ServiceTracker(bc, filter, null);
+		ServiceTracker<ZigBeeHost,ZigBeeHost> st = new ServiceTracker<>(bc,
+				filter, null);
 		st.open();
 
 		ZigBeeHost service = null;
 		try {
-			service = (ZigBeeHost) st.waitForService(timeout);
+			service = st.waitForService(timeout);
 		} catch (InterruptedException e) {
 		} finally {
 			st.close();
@@ -144,7 +147,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		return service;
 	}
 
-	protected ServiceReference getZigBeeHostServiceReference() {
+	protected ServiceReference<ZigBeeHost> getZigBeeHostServiceReference() {
 
 		ZigBeeHostConfig host = conf.getZigBeeHost();
 
@@ -154,11 +157,12 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String filter = "(&" + classFilter + ieeeAddressFilter + ")";
 
 		try {
-			ServiceReference[] sRefs = getContext().getServiceReferences(ZigBeeHost.class.getName(), filter);
-			if (sRefs == null || (sRefs != null && sRefs.length > 1)) {
+			Collection<ServiceReference<ZigBeeHost>> sRefs = getContext()
+					.getServiceReferences(ZigBeeHost.class, filter);
+			if (sRefs == null || (sRefs != null && sRefs.size() > 1)) {
 				fail("found more than one ZigBeeHost matching the IEEE_ADDRESS " + host.getIEEEAddress());
 			}
-			return sRefs[0];
+			return sRefs.iterator().next();
 		} catch (InvalidSyntaxException e) {
 			fail("Internal error: filter expression is wrong", e);
 		}
@@ -196,13 +200,14 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 			return null;
 		}
 
-		ServiceTracker st = new ServiceTracker(bc, filter, null);
+		ServiceTracker<ZigBeeNode,ZigBeeNode> st = new ServiceTracker<>(bc,
+				filter, null);
 		st.open();
 
 		ZigBeeNode service = null;
 
 		try {
-			service = (ZigBeeNode) st.waitForService(timeout);
+			service = st.waitForService(timeout);
 		} catch (InterruptedException e) {
 		} finally {
 			st.close();
@@ -210,19 +215,21 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		return service;
 	}
 
-	protected ServiceReference waitForServiceReference(String clazz, String filter, long timeout) {
+	protected <T> ServiceReference<T> waitForServiceReference(Class<T> clazz,
+			String filter, long timeout) {
 
 		BundleContext bc = getContext();
 
-		ServiceTracker st = new ServiceTracker(bc, clazz, null);
+		ServiceTracker<T,T> st = new ServiceTracker<>(bc, clazz, null);
 		st.open();
 
-		ServiceReference sRef = null;
+		ServiceReference<T> sRef = null;
 		try {
 			if (st.waitForService(timeout) != null) {
-				ServiceReference[] sRefs = bc.getServiceReferences(clazz, filter);
-				if (sRefs.length > 0) {
-					return sRefs[0];
+				Collection<ServiceReference<T>> sRefs = bc
+						.getServiceReferences(clazz, filter);
+				if (sRefs.size() > 0) {
+					return sRefs.iterator().next();
 				}
 			}
 		} catch (InterruptedException e) {
@@ -244,14 +251,17 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 		String filter = "(&" + ieeeAddressFilter + endpointIdFilter + ")";
 		try {
-			ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), filter);
+			@SuppressWarnings("unchecked")
+			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) getContext()
+					.getAllServiceReferences(ZigBeeEndpoint.class.getName(),
+							filter);
 			if (sRefs.length > 1) {
 				fail("we expect to have just one ZigBeeEndpoint service registered with the same ENDPOINT_ID and IEEE_ADDRESS.");
 			} else if (sRefs.length == 0) {
 				fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 			}
 
-			return (ZigBeeEndpoint) getContext().getService(sRefs[0]);
+			return getContext().getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
 			fail("CT internal error", e);
 		}
@@ -273,14 +283,17 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 		String filter = "(&" + ieeeAddressFilter + endpointIdFilter + ")";
 		try {
-			ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), filter);
+			@SuppressWarnings("unchecked")
+			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) getContext()
+					.getAllServiceReferences(ZigBeeEndpoint.class.getName(),
+							filter);
 			if (sRefs != null && sRefs.length > 1) {
 				fail("we expect to have just one ZigBeeEndpoint service registered with the same ENDPOINT_ID and IEEE_ADDRESS.");
 			} else if (sRefs == null) {
 				fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 			}
 
-			return (ZigBeeEndpoint) getContext().getService(sRefs[0]);
+			return getContext().getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
 			fail("CT internal error", e);
 		}
@@ -297,8 +310,8 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 *         represented by the passed ServiceReference.
 	 */
 
-	protected Map getProperties(ServiceReference ref) {
-		Map map = new HashMap();
+	protected Map<String,Object> getProperties(ServiceReference< ? > ref) {
+		Map<String,Object> map = new HashMap<>();
 		String[] keys = ref.getPropertyKeys();
 		for (int i = 0; i < keys.length; i++) {
 			Object value = ref.getProperty(keys[i]);
@@ -313,7 +326,8 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 * @throws InterruptedException
 	 */
 
-	protected void waitForPromise(Promise p, long timeout) throws InterruptedException {
+	protected void waitForPromise(Promise< ? > p, long timeout)
+			throws InterruptedException {
 		long start = System.currentTimeMillis();
 		while ((System.currentTimeMillis() - start) < timeout) {
 			if (p.isDone()) {
@@ -350,21 +364,23 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 * @param clazz The class of the value that is returned by the promise.
 	 * @return the promise value
 	 */
-	protected Object assertPromiseValueClass(Promise p, Class clazz) throws InterruptedException {
-		Object value = null;
+	protected <T> T assertPromiseValueClass(Promise<T> p, Class< ? > clazz)
+			throws InterruptedException {
+		T value = null;
 		try {
 			value = p.getValue();
 		} catch (InvocationTargetException e) {
 			fail("internal CT error. The promise must never fail here.");
 		}
 
-		if (value != null && value.getClass().isInstance(clazz)) {
+		if (value != null && !clazz.isInstance(value)) {
 			fail("promise did return a wrong class value. Expected " + clazz.getName() + " got " + value.getClass().getName());
 		}
 		return value;
 	}
 
-	protected static void assertPromiseFailure(Promise p, String message, Class want) throws InterruptedException {
+	protected static void assertPromiseFailure(Promise< ? > p, String message,
+			Class< ? extends Throwable> want) throws InterruptedException {
 		if (p.getFailure() != null) {
 			assertException(message, want, p.getFailure());
 		} else {
@@ -372,9 +388,10 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		}
 	}
 
-	protected static void assertPromiseZCLException(Promise p, String message, int errorCode) throws InterruptedException {
+	protected static void assertPromiseZCLException(Promise< ? > p,
+			String message, int errorCode) throws InterruptedException {
 
-		Class want = ZCLException.class;
+		Class<ZCLException> want = ZCLException.class;
 
 		if (p.getFailure() != null) {
 			assertException(message, want, p.getFailure());
@@ -387,9 +404,10 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		}
 	}
 
-	protected static void assertPromiseZDPException(Promise p, String message, int errorCode) throws InterruptedException {
+	protected static void assertPromiseZDPException(Promise< ? > p,
+			String message, int errorCode) throws InterruptedException {
 
-		Class want = ZDPException.class;
+		Class<ZDPException> want = ZDPException.class;
 
 		if (p.getFailure() != null) {
 			assertException(message, want, p.getFailure());
@@ -414,14 +432,15 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 * @param length
 	 */
 
-	protected void assertMapContent(String context, Map map, Class keyClass, Class valueClass, int expectedSize) {
+	protected <K, V> void assertMapContent(String context, Map<K,V> map,
+			Class<K> keyClass, Class<V> valueClass, int expectedSize) {
 		assertNotNull(context + ": cannot return a null Map.", map);
 		if (expectedSize >= 0) {
 			assertEquals(context + " returned map size is wrong", expectedSize, map.size());
 		}
 
-		Set keys = map.keySet();
-		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
+		Set<K> keys = map.keySet();
+		for (Iterator<K> iterator = keys.iterator(); iterator.hasNext();) {
 			Object key = iterator.next();
 			if (!keyClass.isInstance(key)) {
 				fail(context + ": expected:[" + keyClass.getName() + "] but was:[" + key.getClass().getName() + "]");
@@ -437,7 +456,10 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		}
 	}
 
-	public static Object getParameterChecked(String context, Map properties, String parameterName, boolean required, Class want) {
+	@SuppressWarnings("unchecked")
+	public static <V> V getParameterChecked(String context,
+			Map<String, ? > properties, String parameterName, boolean required,
+			Class<V> want) {
 		if (properties == null) {
 			throw new NullPointerException("CT internal errror, passing null 'properties' argument");
 		}
@@ -451,9 +473,10 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 				fail(context + ": missing required property: " + parameterName);
 			}
 		} else if (want.isInstance(value)) {
-			return value;
+			return (V) value;
 		} else {
-			fail(context + ": expected:[" + value.getClass().getName() + "] but was:[" + value.getClass().getName() + "]");
+			fail(context + ": expected:[" + want.getName() + "] but was:["
+					+ value.getClass().getName() + "]");
 		}
 		return null;
 	}

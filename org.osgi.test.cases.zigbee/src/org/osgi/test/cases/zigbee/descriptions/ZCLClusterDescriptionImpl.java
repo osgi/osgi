@@ -27,6 +27,7 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 
 	private ZCLGlobalClusterDescription		global;
+	@SuppressWarnings("unused")
 	private boolean							isServer;
 	private ZCLAttributeDescriptionImpl[]	attributeDescriptions;
 	private ZCLCommandDescription[]			commandDescriptions;

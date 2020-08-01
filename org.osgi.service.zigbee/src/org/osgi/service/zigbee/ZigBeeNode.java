@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.zigbee;
 
 import java.math.BigInteger;
 import java.util.Map;
+
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -180,7 +181,7 @@ public interface ZigBeeNode {
 	 *         do not return success, the promise must fail with a
 	 *         {@link ZDPException} exception with the correct status code.
 	 */
-	public Promise /* <ZigBeeNodeDescriptor> */ getNodeDescriptor();
+	public Promise<ZigBeeNodeDescriptor> getNodeDescriptor();
 
 	/**
 	 * Retrieves the ZigBee node Power Descriptor.
@@ -201,7 +202,7 @@ public interface ZigBeeNode {
 	 *         do not return success, the promise must fail with a
 	 *         {@link ZDPException} exception with the correct status code.
 	 */
-	public Promise /* <ZigBeePowerDescriptor> */ getPowerDescriptor();
+	public Promise<ZigBeePowerDescriptor> getPowerDescriptor();
 
 	/**
 	 * 
@@ -225,7 +226,7 @@ public interface ZigBeeNode {
 	 *         fail with a {@link ZDPException} exception with the correct
 	 *         status code.
 	 */
-	public Promise /* <ZigBeeComplexDescriptor> */ getComplexDescriptor();
+	public Promise<ZigBeeComplexDescriptor> getComplexDescriptor();
 
 	/**
 	 * 
@@ -252,7 +253,7 @@ public interface ZigBeeNode {
 	 *         node. In case of errors the promise must fail with the correct
 	 *         {@link ZDPException}.
 	 */
-	public Promise /* <ZigBeeLinkQuality> */ getLinksQuality();
+	public Promise<Map<String,ZigBeeLinkQuality>> getLinksQuality();
 
 	/**
 	 * 
@@ -275,7 +276,7 @@ public interface ZigBeeNode {
 	 *         exception with the correct status code must be used to fail the
 	 *         promise.
 	 */
-	public Promise /* <Map<String,ZigBeeRoute>> */ getRoutingTable();
+	public Promise<Map<String,ZigBeeRoute>> getRoutingTable();
 
 	/**
 	 * Requests this node to leave the ZigBee network.
@@ -295,7 +296,7 @@ public interface ZigBeeNode {
 	 *         In case of success, the promise is resolved with a {@code null}
 	 *         value, otherwise with the correct {@link ZDPException} exception.
 	 */
-	public Promise leave();
+	public Promise<Void> leave();
 
 	/**
 	 * Requests the device to leave the network.
@@ -323,7 +324,7 @@ public interface ZigBeeNode {
 	 *         first and then the promise may be resolved with a {@code null}
 	 *         value, otherwise with the correct {@link ZDPException} exception.
 	 */
-	public Promise leave(boolean rejoin, boolean removeChildren);
+	public Promise<Void> leave(boolean rejoin, boolean removeChildren);
 
 	/**
 	 * Sends the {@link ZDPFrame} to this {@link ZigBeeNode} with the specified
@@ -339,7 +340,8 @@ public interface ZigBeeNode {
 	 *         In case of success the promise resolves with the response
 	 *         {@link ZDPFrame}.
 	 */
-	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message);
+	public Promise<ZDPFrame> invoke(int clusterIdReq, int expectedClusterIdRsp,
+			ZDPFrame message);
 
 	/**
 	 * Sends the {@link ZDPFrame} to this {@link ZigBeeNode} with the specified
@@ -356,7 +358,7 @@ public interface ZigBeeNode {
 	 *         In case of success the promise resolves with the response
 	 *         {@link ZDPFrame}.
 	 */
-	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, ZDPFrame message);
+	public Promise<ZDPFrame> invoke(int clusterIdReq, ZDPFrame message);
 
 	/**
 	 * Broadcasts a given ZCL Frame to cluster {@code clusterID} on all the
@@ -410,7 +412,7 @@ public interface ZigBeeNode {
 	 *         {@link ZDPException} exception containing the response status
 	 *         code value.
 	 */
-	Promise /* <String> */ getUserDescription();
+	Promise<String> getUserDescription();
 
 	/**
 	 * Sets the user description of this node. As described in <em>Table 2.137
@@ -430,5 +432,5 @@ public interface ZigBeeNode {
 	 *         case of errors the promise must fail with a {@link ZDPException}
 	 *         exception containing the response status code value.
 	 */
-	Promise /* <Void> */ setUserDescription(String userDescription);
+	Promise<Void> setUserDescription(String userDescription);
 }

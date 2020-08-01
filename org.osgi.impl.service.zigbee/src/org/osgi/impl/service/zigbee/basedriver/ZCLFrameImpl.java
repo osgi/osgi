@@ -95,6 +95,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 		this.zclHeader = header;
 	}
 
+	@Override
 	public ZCLHeader getHeader() {
 		return zclHeader;
 	}
@@ -105,6 +106,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 * returned byte array (@see ZCLFrameImpl} and left empty.
 	 */
 
+	@Override
 	public byte[] getBytes() {
 		int headerSize = this.getHeaderSize();
 		byte[] d = new byte[headerSize + index];
@@ -117,12 +119,14 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 * payload and not the ZCL frame header.
 	 */
 
+	@Override
 	public int getBytes(byte[] buffer) {
 		int headerSize = this.getHeaderSize();
 		System.arraycopy(data, 0, buffer, headerSize, index);
 		return index + headerSize;
 	}
 
+	@Override
 	public int getSize() {
 		return index + getHeaderSize();
 	}

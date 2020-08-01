@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@
  * @see org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription
  * @author $Id$
  */
-@Version("1.0")
+@Version("1.0.1")
 package org.osgi.service.zigbee.types;
 
 import org.osgi.annotation.versioning.Version;

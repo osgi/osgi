@@ -19,8 +19,10 @@ package org.osgi.test.cases.zigbee.config.file;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
@@ -403,6 +405,7 @@ public class ConfigurationFileReader {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void parseFrameElement(Document doc) {
 		NodeList nList = doc.getElementsByTagName("frame");
 		Node node = nList.item(0);

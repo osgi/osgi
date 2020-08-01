@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.event.EndResponse;
@@ -64,14 +65,14 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 	private String						nodePid;
 
-	private List						endpointsServiceRegs	= new ArrayList();
+	private List<ServiceRegistration<ZigBeeEndpoint>>	endpointsServiceRegs	= new ArrayList<>();
 
 	/**
 	 * If true enables the ZigBeeNode to fail for those methods that could file
 	 * because the feature is not available.
 	 */
 	private boolean						forceFailure			= true;
-	private ServiceRegistration			nodeServiceReg;
+	private ServiceRegistration<ZigBeeNode>				nodeServiceReg;
 
 	public ZigBeeNodeImpl(BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
 			ZigBeeNodeDescriptor nodeDescriptor, ZigBeePowerDescriptor powerDescriptor, String userdescription) {
@@ -97,35 +98,43 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		nodePid = IEEEAddress.toString() + ".node.pid";
 	}
 
+	@Override
 	public BigInteger getIEEEAddress() {
 		return this.IEEEAddress;
 	}
 
+	@Override
 	public int getNetworkAddress() {
 		return this.nwkAddress;
 	}
 
+	@Override
 	public String getHostPid() {
 		return host.getHostPid();
 	}
 
+	@Override
 	public int getPanId() {
 		return host.getPanId();
 	}
 
+	@Override
 	public BigInteger getExtendedPanId() {
 		return host.getExtendedPanId();
 	}
 
-	public Promise getNodeDescriptor() {
+	@Override
+	public Promise<ZigBeeNodeDescriptor> getNodeDescriptor() {
 		return Promises.resolved(nodeDescriptor);
 	}
 
-	public Promise getPowerDescriptor() {
+	@Override
+	public Promise<ZigBeePowerDescriptor> getPowerDescriptor() {
 		return Promises.resolved(powerDescriptor);
 	}
 
-	public Promise getComplexDescriptor() {
+	@Override
+	public Promise<ZigBeeComplexDescriptor> getComplexDescriptor() {
 		if (nodeDescriptor.isComplexDescriptorAvailable()) {
 			return Promises.resolved(complexDescriptor);
 		} else {
@@ -133,7 +142,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		}
 	}
 
-	public Promise getLinksQuality() throws ZDPException {
+	@Override
+	public Promise<Map<String,ZigBeeLinkQuality>> getLinksQuality()
+			throws ZDPException {
 
 		if (forceFailure) {
 			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
@@ -145,49 +156,57 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 		ZigBeeLinkQuality linkQuality = new ZigBeeLinkQuality() {
 
+			@Override
 			public int getRelationship() {
 				return 0;
 			}
 
+			@Override
 			public String getNeighbor() {
 				return "neighbor";
 			}
 
+			@Override
 			public int getLQI() {
 				return 3;
 			}
 
+			@Override
 			public int getDepth() {
 				return 1;
 			}
 		};
 
-		Map linksQualityMap = new HashMap();
+		Map<String,ZigBeeLinkQuality> linksQualityMap = new HashMap<>();
 		linksQualityMap.put(nodePid, linkQuality);
 
 		return Promises.resolved(linksQualityMap);
 	}
 
-	public Promise getRoutingTable() {
+	@Override
+	public Promise<Map<String,ZigBeeRoute>> getRoutingTable() {
 		if (forceFailure) {
 			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
 		}
 
-		Map routingTableMap = new HashMap();
+		Map<String,ZigBeeRoute> routingTableMap = new HashMap<>();
 
 		/*
 		 * Return a fake content.
 		 */
 
 		ZigBeeRoute routeEntry = new ZigBeeRoute() {
+			@Override
 			public int getStatus() {
 				return 0;
 			}
 
+			@Override
 			public String getNextHop() {
 				return "";
 			}
 
+			@Override
 			public String getDestination() {
 				return "";
 			}
@@ -198,14 +217,16 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return Promises.resolved(routingTableMap);
 	}
 
-	public Promise leave() {
+	@Override
+	public Promise<Void> leave() {
 		if (forceFailure) {
 			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
 		}
 		return Promises.resolved(null);
 	}
 
-	public Promise leave(boolean rejoin, boolean removeChildren) {
+	@Override
+	public Promise<Void> leave(boolean rejoin, boolean removeChildren) {
 		if (forceFailure) {
 			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
 		}
@@ -213,15 +234,19 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message) {
+	@Override
+	public Promise<ZDPFrame> invoke(int clusterIdReq, int expectedClusterIdRsp,
+			ZDPFrame message) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public Promise invoke(int clusterIdReq, ZDPFrame message) {
+	@Override
+	public Promise<ZDPFrame> invoke(int clusterIdReq, ZDPFrame message) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public Promise getUserDescription() {
+	@Override
+	public Promise<String> getUserDescription() {
 		if (nodeDescriptor.isUserDescriptorAvailable()) {
 			return Promises.resolved(userDescription);
 		} else {
@@ -229,7 +254,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		}
 	}
 
-	public Promise setUserDescription(String userDescriptor) {
+	@Override
+	public Promise<Void> setUserDescription(String userDescriptor) {
 		if (nodeDescriptor.isUserDescriptorAvailable()) {
 			this.userDescription = userDescriptor;
 			return Promises.resolved(null);
@@ -238,6 +264,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		}
 	}
 
+	@Override
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
 		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
@@ -250,6 +277,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return impl;
 	}
 
+	@Override
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID) {
 		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
@@ -262,6 +290,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return impl;
 	}
 
+	@Override
 	public ZigBeeEndpoint[] getEndpoints() {
 		if (endpoints == null) {
 			return new ZigBeeEndpoint[0];
@@ -269,6 +298,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return endpoints;
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
 				+ ", hostPId: " + host.getHostPid() + "]";
@@ -285,7 +315,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 		for (int j = 0; j < endpoints.length; j++) {
 			ZigBeeEndpointImpl endpoint = endpoints[j];
-			Dictionary props = new Hashtable();
+			Dictionary<String,Object> props = new Hashtable<>();
 
 			props.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
 			props.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
@@ -298,7 +328,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			props.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
 			props.put("service.pid", getEndpointServicePid(endpoint));
 
-			ServiceRegistration endpointServiceReg = bc.registerService(ZigBeeEndpoint.class.getName(), endpoint, props);
+			ServiceRegistration<ZigBeeEndpoint> endpointServiceReg = bc
+					.registerService(ZigBeeEndpoint.class, endpoint, props);
 			endpointsServiceRegs.add(endpointServiceReg);
 		}
 
@@ -306,7 +337,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		 * The ZigBeeNode must be registered only after its ZigBeeEndpoints have
 		 * been registered.
 		 */
-		Dictionary nodeProperties = new Hashtable();
+		Dictionary<String,Object> nodeProperties = new Hashtable<>();
 
 		nodeProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
 		nodeProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
@@ -323,7 +354,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			nodeProperties.put(org.osgi.service.device.Constants.DEVICE_SERIAL, complexDescriptor.getSerialNumber());
 		}
 
-		nodeServiceReg = bc.registerService(ZigBeeNode.class.getName(), this, nodeProperties);
+		nodeServiceReg = bc.registerService(ZigBeeNode.class, this,
+				nodeProperties);
 	}
 
 	/**
@@ -340,8 +372,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 		nodeServiceReg.unregister();
 
-		for (Iterator iterator = endpointsServiceRegs.iterator(); iterator.hasNext();) {
-			ServiceRegistration sReg = (ServiceRegistration) iterator.next();
+		for (Iterator<ServiceRegistration<ZigBeeEndpoint>> iterator = endpointsServiceRegs
+				.iterator(); iterator.hasNext();) {
+			ServiceRegistration<ZigBeeEndpoint> sReg = iterator.next();
 			sReg.unregister();
 		}
 

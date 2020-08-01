@@ -45,7 +45,7 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		 * invalid value.
 		 */
 
-		Class javaType = desc.getDataType().getJavaDataType();
+		Class< ? > javaType = desc.getDataType().getJavaDataType();
 
 		if (javaType.equals(Integer.class)) {
 			value = new Integer(0);
@@ -57,15 +57,18 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		description = desc;
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public ZCLDataTypeDescription getDataType() {
 		return description.getDataType();
 	}
 
-	public Promise getValue() {
+	@Override
+	public Promise<Object> getValue() {
 		return Promises.resolved(value);
 	}
 
@@ -73,7 +76,8 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return value;
 	}
 
-	public Promise setValue(Object value) {
+	@Override
+	public Promise<Void> setValue(Object value) {
 		try {
 			this.setInternalValue(value);
 		} catch (Throwable e) {
@@ -93,6 +97,7 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		this.value = value;
 	}
 
+	@Override
 	public String toString() {
 		return ZCLAttributeImpl.class.getName() + ":[id: " + getId() + ", dataType: " + getDataType()
 				+ ", manufacturer: " + (description.isManufacturerSpecific()
@@ -100,10 +105,12 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 				+ ", description: " + description + ", value: " + value + "]";
 	}
 
+	@Override
 	public boolean isManufacturerSpecific() {
 		return description.isManufacturerSpecific();
 	}
 
+	@Override
 	public int getManufacturerCode() {
 		return description.getManufacturerCode();
 	}

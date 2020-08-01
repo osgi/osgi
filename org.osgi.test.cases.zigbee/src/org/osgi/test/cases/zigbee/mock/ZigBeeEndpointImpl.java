@@ -17,6 +17,8 @@
 package org.osgi.test.cases.zigbee.mock;
 
 import java.math.BigInteger;
+import java.util.List;
+
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -51,7 +53,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return BigInteger.valueOf(-1);
 	}
 
-	public Promise getSimpleDescriptor() {
+	public Promise<ZigBeeSimpleDescriptor> getSimpleDescriptor() {
 		return Promises.resolved(desc);
 	}
 
@@ -71,11 +73,11 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs[clientClusterId];
 	}
 
-	public Promise bind(String servicePid, int clusterId) {
+	public Promise<Void> bind(String servicePid, int clusterId) {
 		return Promises.failed(new UnsupportedOperationException());
 	}
 
-	public Promise unbind(String servicePid, int clusterId) {
+	public Promise<Void> unbind(String servicePid, int clusterId) {
 		return Promises.failed(new UnsupportedOperationException());
 	}
 
@@ -83,7 +85,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	}
 
-	public Promise getBoundEndPoints(int clusterId) {
+	public Promise<List<String>> getBoundEndPoints(int clusterId) {
 		return Promises.failed(new UnsupportedOperationException());
 	}
 

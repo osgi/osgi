@@ -48,50 +48,62 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 		this.flags = flags;
 	}
 
+	@Override
 	public ZigBeeFrequencyBand getFrequencyBand() {
 		return frequencyBand;
 	}
 
+	@Override
 	public int getManufacturerCode() {
 		return manufacturerCode;
 	}
 
+	@Override
 	public int getMaxBufferSize() {
 		return maxBufferSize;
 	}
 
+	@Override
 	public int getMaxIncomingTransferSize() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public int getMaxOutgoingTransferSize() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public ZigBeeServerMask getServerMask() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public boolean isExtendedActiveEndpointListAvailable() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public boolean isExtendedSimpleDescriptorListAvailable() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public boolean isComplexDescriptorAvailable() {
 		return isComplexDescriptorAvailable;
 	}
 
+	@Override
 	public boolean isUserDescriptorAvailable() {
 		return isUserDescriptorAvailable;
 	}
 
+	@Override
 	public short getLogicalType() {
 		return this.logicalType;
 	}
 
+	@Override
 	public ZigBeeMacCapabiliyFlags getMacCapabilityFlags() {
 		return flags;
 	}

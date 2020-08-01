@@ -34,7 +34,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	private BundleContext		bc;
 	private ZigBeeEvent			zigbeeEvent;
 	private Thread				thread;
-	private ServiceTracker		serviceTracker;
+	private ServiceTracker<ZCLEventListener,ZCLEventListener>	serviceTracker;
 
 	public ZigBeeEventSourceImpl(BundleContext bc, ZigBeeEvent zigbeeEvent) {
 		this.bc = bc;
@@ -46,7 +46,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 */
 	public void start() {
 		DefaultTestBundleControl.log("start.");
-		serviceTracker = new ServiceTracker(bc, ZCLEventListener.class.getName(), null);
+		serviceTracker = new ServiceTracker<>(bc, ZCLEventListener.class, null);
 		serviceTracker.open();
 		thread = new Thread(this, TAG + " - Whiteboard");
 		thread.start();
@@ -66,14 +66,15 @@ public class ZigBeeEventSourceImpl implements Runnable {
 		Thread current = Thread.currentThread();
 		int n = 0;
 		while (current == thread) {
-			Object[] listeners = serviceTracker.getServices();
+			ZCLEventListener[] listeners = serviceTracker
+					.getServices(new ZCLEventListener[0]);
 
 			if (listeners != null && listeners.length > 0) {
 				if (n >= listeners.length) {
 					n = 0;
 				}
 
-				ZCLEventListener aZCLEventListener = (ZCLEventListener) listeners[n++];
+				ZCLEventListener aZCLEventListener = listeners[n++];
 				DefaultTestBundleControl.log(TAG + " - is sending the following event: " + zigbeeEvent);
 				aZCLEventListener.notifyEvent(zigbeeEvent);
 			}

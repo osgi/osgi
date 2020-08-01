@@ -2,6 +2,7 @@
 package org.osgi.impl.service.zigbee.event;
 
 import org.osgi.service.zigbee.ZCLCommandResponse;
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -9,16 +10,18 @@ import org.osgi.util.promise.Promise;
  */
 public class ZCLCommandResponseImpl implements ZCLCommandResponse {
 
-	private final Promise response;
+	private final Promise<ZCLFrame> response;
 
-	public ZCLCommandResponseImpl(Promise response) {
+	public ZCLCommandResponseImpl(Promise<ZCLFrame> response) {
 		this.response = response;
 	}
 
-	public Promise getResponse() {
+	@Override
+	public Promise<ZCLFrame> getResponse() {
 		return response;
 	}
 
+	@Override
 	public boolean isEnd() {
 		return false;
 	}

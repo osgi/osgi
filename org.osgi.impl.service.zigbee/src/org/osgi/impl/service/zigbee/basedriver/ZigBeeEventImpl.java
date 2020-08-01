@@ -47,26 +47,32 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 		this.value = value;
 	}
 
+	@Override
 	public BigInteger getIEEEAddress() {
 		return ieeeAddress;
 	}
 
+	@Override
 	public short getEndpointId() {
 		return endpointId;
 	}
 
+	@Override
 	public int getClusterId() {
 		return clusterId;
 	}
 
+	@Override
 	public int getAttributeId() {
 		return attributeId;
 	}
 
+	@Override
 	public Object getValue() {
 		return value;
 	}
 
+	@Override
 	public String toString() {
 		return ZigBeeEventImpl.class.getName() + "[ieeeAddress: " + ieeeAddress + ", endpointId:" + endpointId
 				+ ", clusterId:" + clusterId + ", attributeId:" + attributeId + ", value:" + value + "]";

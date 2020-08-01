@@ -49,11 +49,11 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return description.getDataType();
 	}
 
-	public Promise getValue() {
+	public Promise<Object> getValue() {
 		return Promises.resolved(value);
 	}
 
-	public Promise setValue(Object value) {
+	public Promise<Void> setValue(Object value) {
 		if (description.isReadOnly()) {
 			return Promises.failed(new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute"));
 		}

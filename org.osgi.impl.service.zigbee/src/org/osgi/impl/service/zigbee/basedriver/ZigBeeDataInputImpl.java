@@ -38,34 +38,40 @@ public class ZigBeeDataInputImpl implements ZigBeeDataInput {
 		this.frame = frame;
 	}
 
+	@Override
 	public byte readByte() throws EOFException {
 		return frame.readByte(i++);
 	}
 
+	@Override
 	public int readInt(int size) throws EOFException {
 		int v = frame.readInt(i, size);
 		i += size;
 		return v;
 	}
 
+	@Override
 	public long readLong(int size) throws EOFException {
 		long v = frame.readLong(i, size);
 		i += size;
 		return v;
 	}
 
+	@Override
 	public float readFloat(int size) throws EOFException {
 		float v = frame.readFloat(i, size);
 		i += size;
 		return v;
 	}
 
+	@Override
 	public byte[] readBytes(int len) throws EOFException {
 		byte[] v = frame.readBytes(i, len);
 		i += len;
 		return v;
 	}
 
+	@Override
 	public double readDouble() throws EOFException {
 		double v = frame.readDouble(i);
 		i += 8;

@@ -17,6 +17,7 @@
 package org.osgi.impl.service.zigbee.event;
 
 import java.math.BigInteger;
+
 import org.osgi.impl.service.zigbee.util.Hex;
 import org.osgi.service.zigbee.ZigBeeEvent;
 
@@ -32,6 +33,7 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 	private int			clusterId;
 	private int			attributeId;
 	private Object		value;
+	@SuppressWarnings("unused")
 	private short		dataType;
 
 	public ZigBeeEventImpl(BigInteger ieeeAddress, short endpointId, int clusterId, int attributeId, short dataType, Object value) {
@@ -43,26 +45,32 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 		this.value = value;
 	}
 
+	@Override
 	public BigInteger getIEEEAddress() {
 		return ieeeAddress;
 	}
 
+	@Override
 	public short getEndpointId() {
 		return endpointId;
 	}
 
+	@Override
 	public int getClusterId() {
 		return clusterId;
 	}
 
+	@Override
 	public int getAttributeId() {
 		return attributeId;
 	}
 
+	@Override
 	public Object getValue() {
 		return value;
 	}
 
+	@Override
 	public String toString() {
 		return "[ieeeAddress: " + Hex.toHexString(ieeeAddress, 16) + ", endpointId: 0x" + Hex.toHexString(endpointId, 2) + ", clusterId: 0x" + Hex.toHexString(clusterId, 4) + ", attributeId: 0x"
 				+ Hex.toHexString(attributeId, 4) + ", value: " + value + "]";

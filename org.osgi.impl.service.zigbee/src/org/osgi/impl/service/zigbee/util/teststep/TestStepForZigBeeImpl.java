@@ -18,6 +18,7 @@ package org.osgi.impl.service.zigbee.util.teststep;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.test.support.step.TestStep;
@@ -49,6 +50,7 @@ public class TestStepForZigBeeImpl implements TestStep {
 		this.baseDriver = baseDriver;
 	}
 
+	@Override
 	public String execute(String stepId, String userPrompt) {
 		Logger.d(TAG, "execute the stepId: " + stepId + ", userPrompt: " + userPrompt);
 
@@ -76,7 +78,7 @@ public class TestStepForZigBeeImpl implements TestStep {
 			return "success";
 
 		} else if (stepId.equals(EVENT_REPORTABLE)) {
-
+			// TODO
 		}
 
 		Logger.e(TAG, "The given command is UNKNOWN.");

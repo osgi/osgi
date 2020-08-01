@@ -35,10 +35,12 @@ public class ZigBeeDataOutputImpl implements ZigBeeDataOutput {
 		this.frame = zclFrameImpl;
 	}
 
+	@Override
 	public void writeByte(byte value) {
 		frame.writeByte(value);
 	}
 
+	@Override
 	public void writeInt(int value, int size) {
 		if (size <= 4) {
 			frame.writeInt(value, size);
@@ -46,18 +48,22 @@ public class ZigBeeDataOutputImpl implements ZigBeeDataOutput {
 			throw new InvalidParameterException();
 	}
 
+	@Override
 	public void writeLong(long value, int size) {
 		frame.writeLong(value, size);
 	}
 
+	@Override
 	public void writeFloat(float value, int size) {
 		frame.writeFloat(value, size);
 	}
 
+	@Override
 	public void writeDouble(double value) {
 		frame.writeDouble(value);
 	}
 
+	@Override
 	public void writeBytes(byte[] bytes, int length) {
 		frame.writeBytes(bytes, length);
 	}

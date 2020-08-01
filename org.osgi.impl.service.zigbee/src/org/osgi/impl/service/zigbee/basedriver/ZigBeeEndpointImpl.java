@@ -17,6 +17,8 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.math.BigInteger;
+import java.util.List;
+
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -44,15 +46,18 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		this.simpleDescriptor = simpleDescriptor;
 	}
 
+	@Override
 	public short getId() {
 		return this.endpointId;
 	}
 
+	@Override
 	public BigInteger getNodeAddress() {
 		return node.getIEEEAddress();
 	}
 
-	public Promise getSimpleDescriptor() {
+	@Override
+	public Promise<ZigBeeSimpleDescriptor> getSimpleDescriptor() {
 		return Promises.resolved(simpleDescriptor);
 	}
 
@@ -60,6 +65,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return simpleDescriptor;
 	}
 
+	@Override
 	public ZCLCluster getServerCluster(int clusterId) {
 		if (clusterId < 0 || clusterId > 0xffff) {
 			throw new IllegalArgumentException("clusterId must be in the range [0, 0xffff]. Asked for clusterId " + clusterId);
@@ -74,10 +80,12 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return null;
 	}
 
+	@Override
 	public ZCLCluster[] getClientClusters() {
 		return outputs;
 	}
 
+	@Override
 	public ZCLCluster getClientCluster(int clusterId) {
 
 		if (clusterId < 0 || clusterId > 0xffff) {
@@ -93,23 +101,28 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return null;
 	}
 
+	@Override
 	public ZCLCluster[] getServerClusters() {
 		return inputs;
 	}
 
-	public Promise bind(String servicePid, int clusterId) {
+	@Override
+	public Promise<Void> bind(String servicePid, int clusterId) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public Promise unbind(String servicePid, int clusterId) {
+	@Override
+	public Promise<Void> unbind(String servicePid, int clusterId) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
+	@Override
 	public void notExported(ZigBeeException e) {
-
+		// TODO
 	}
 
-	public Promise getBoundEndPoints(int clusterId) {
+	@Override
+	public Promise<List<String>> getBoundEndPoints(int clusterId) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
@@ -123,6 +136,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		this.node = node;
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.getClass().getName() + "[id: " + endpointId + ", desc: " + simpleDescriptor + ", inputs: " + inputs + ", outputs: "
 				+ outputs + "]";

@@ -38,14 +38,17 @@ public class ZCLReadStatusRecordImpl implements ZCLReadStatusRecord {
 		this.value = value;
 	}
 
+	@Override
 	public Object getValue() {
 		return value;
 	}
 
+	@Override
 	public ZigBeeException getFailure() {
 		return failure;
 	}
 
+	@Override
 	public ZCLAttributeInfo getAttributeInfo() {
 		return attributeInfo;
 	}

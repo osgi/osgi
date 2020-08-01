@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.w3c.dom.Element;
 
@@ -65,22 +66,23 @@ public class ParserUtils {
 		}
 
 		StringTokenizer tokenizer = new StringTokenizer(listString, ",");
-		List l = new ArrayList();
+		List<Integer> l = new ArrayList<>();
 		while (tokenizer.hasMoreElements()) {
 			l.add(Integer.valueOf(tokenizer.nextToken()));
 		}
 
 		int[] array = new int[l.size()];
 		for (int i = 0; i < array.length; i++) {
-			array[i] = ((Integer) l.get(i)).intValue();
+			array[i] = l.get(i).intValue();
 		}
 		return array;
 	}
 
 	public static ZCLDataTypeDescription dataTypeName2dataType(String dataTypeName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-		Class cls = Class.forName("org.osgi.service.zigbee.types." + dataTypeName);
+		Class< ? > cls = Class
+				.forName("org.osgi.service.zigbee.types." + dataTypeName);
 
-		Class[] classes = {};
+		Class< ? >[] classes = {};
 		Method method = cls.getMethod("getInstance", classes);
 		ZCLDataTypeDescription dataType = (ZCLDataTypeDescription) method
 				.invoke(null);
@@ -194,12 +196,13 @@ public class ParserUtils {
 		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 
-	public static String getAttribute(Map element, String attributeName, boolean required, final String defaultValue) {
+	public static String getAttribute(Map<String,String> element,
+			String attributeName, boolean required, final String defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null) {
 			if (!required) {
 				return defaultValue;
@@ -211,12 +214,13 @@ public class ParserUtils {
 		return attributeValue;
 	}
 
-	public static int getAttribute(Map element, String attributeName, boolean required, final int defaultValue) {
+	public static int getAttribute(Map<String,String> element,
+			String attributeName, boolean required, final int defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null || (attributeValue != null && attributeValue.length() == 0)) {
 			if (!required) {
 				return defaultValue;
@@ -232,12 +236,13 @@ public class ParserUtils {
 		}
 	}
 
-	public static short getAttribute(Map element, String attributeName, boolean required, final short defaultValue) {
+	public static short getAttribute(Map<String,String> element,
+			String attributeName, boolean required, final short defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null || (attributeValue != null && attributeValue.length() == 0)) {
 			if (!required) {
 				return defaultValue;
@@ -252,12 +257,13 @@ public class ParserUtils {
 		}
 	}
 
-	public static byte getAttribute(Map element, String attributeName, boolean required, final byte defaultValue) {
+	public static byte getAttribute(Map<String,String> element,
+			String attributeName, boolean required, final byte defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null || (attributeValue != null && attributeValue.length() == 0)) {
 			if (!required) {
 				return defaultValue;
@@ -272,12 +278,14 @@ public class ParserUtils {
 		}
 	}
 
-	public static BigInteger getAttribute(Map element, String attributeName, boolean required, final BigInteger defaultValue) {
+	public static BigInteger getAttribute(Map<String,String> element,
+			String attributeName, boolean required,
+			final BigInteger defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null || (attributeValue != null && attributeValue.length() == 0)) {
 			if (!required) {
 				return defaultValue;
@@ -289,12 +297,13 @@ public class ParserUtils {
 		return new BigInteger(attributeValue);
 	}
 
-	public static boolean getAttribute(Map element, String attributeName, boolean required, boolean defaultValue) {
+	public static boolean getAttribute(Map<String,String> element,
+			String attributeName, boolean required, boolean defaultValue) {
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
 
-		String attributeValue = (String) element.get(attributeName);
+		String attributeValue = element.get(attributeName);
 		if (attributeValue == null || (attributeValue != null && attributeValue.length() == 0)) {
 			if (!required) {
 				return defaultValue;
@@ -305,7 +314,8 @@ public class ParserUtils {
 		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 
-	public static BigInteger getParameter(Map properties, String parameterName, boolean required, BigInteger defaultValue) {
+	public static BigInteger getParameter(Map<String, ? > properties,
+			String parameterName, boolean required, BigInteger defaultValue) {
 		if (properties == null) {
 			throw new NullPointerException("properties argument cannot be null");
 		}
@@ -325,7 +335,8 @@ public class ParserUtils {
 		}
 	}
 
-	public static boolean getParameter(Map properties, String parameterName, boolean required, boolean defaultValue) {
+	public static boolean getParameter(Map<String, ? > properties,
+			String parameterName, boolean required, boolean defaultValue) {
 		if (properties == null) {
 			throw new NullPointerException("properties argument cannot be null");
 		}
@@ -345,7 +356,8 @@ public class ParserUtils {
 		}
 	}
 
-	public static int getParameter(Map properties, String parameterName, boolean required, int defaultValue) {
+	public static int getParameter(Map<String, ? > properties,
+			String parameterName, boolean required, int defaultValue) {
 		if (properties == null) {
 			throw new NullPointerException("properties argument cannot be null");
 		}
@@ -365,7 +377,8 @@ public class ParserUtils {
 		}
 	}
 
-	public static short getParameter(Map properties, String parameterName, boolean required, short defaultValue) {
+	public static short getParameter(Map<String, ? > properties,
+			String parameterName, boolean required, short defaultValue) {
 		if (properties == null) {
 			throw new NullPointerException("properties argument cannot be null");
 		}

@@ -17,6 +17,7 @@
 package org.osgi.test.cases.zigbee.mock;
 
 import java.util.Dictionary;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.zigbee.ZCLEventListener;
@@ -30,12 +31,13 @@ import org.osgi.service.zigbee.ZigBeeEvent;
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 
+	@SuppressWarnings("unused")
 	private static final String	TAG		= ZCLEventListenerImpl.class.getName();
 
 	private BundleContext		bc;
-	private ServiceRegistration	sReg;
+	private ServiceRegistration<ZCLEventListener>	sReg;
 
-	private StreamQueueImpl		stream	= null;
+	private StreamQueueImpl<ZigBeeEvent>			stream	= null;
 
 	private ZCLException		failure;
 
@@ -47,8 +49,8 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 	/**
 	 * Register the test event listener in the OSGi Service Registry.
 	 */
-	public void start(Dictionary properties) {
-		sReg = bc.registerService(ZCLEventListener.class.getName(), this, properties);
+	public void start(Dictionary<String,Object> properties) {
+		sReg = bc.registerService(ZCLEventListener.class, this, properties);
 	}
 
 	/**
@@ -86,7 +88,7 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 
 	}
 
-	public void update(Dictionary newProperties) {
+	public void update(Dictionary<String,Object> newProperties) {
 		synchronized (this) {
 			this.failure = null;
 			if (sReg != null) {
@@ -95,9 +97,9 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 		}
 	}
 
-	public StreamQueue getStreamQueue() {
+	public StreamQueue<ZigBeeEvent> getStreamQueue() {
 		synchronized (this) {
-			stream = new StreamQueueImpl();
+			stream = new StreamQueueImpl<>();
 			return stream;
 		}
 	}
