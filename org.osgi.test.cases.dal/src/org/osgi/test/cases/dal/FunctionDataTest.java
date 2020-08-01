@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 
 /**
@@ -26,10 +27,10 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		checkEqualsAndHashCode(null);
 
 		// test with empty metadata
-		checkEqualsAndHashCode(new HashMap());
+		checkEqualsAndHashCode(new HashMap<>());
 
 		// test with comparable values
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put("test-string", "test");
 		metadata.put("test-boolean", Boolean.TRUE);
 		metadata.put("test-int", Integer.valueOf(Integer.MAX_VALUE));
@@ -41,13 +42,13 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		checkEqualsAndHashCode(metadata);
 
 		// test with Map
-		Map testMap = new HashMap();
+		Map<String,Object> testMap = new HashMap<>();
 		testMap.put("test-map-array", testArray);
 		checkEqualsAndHashCode(metadata);
 
 		metadata.clear();
 		metadata.put("test-value", Boolean.TRUE);
-		Map otherMetadata = new HashMap();
+		Map<String,Object> otherMetadata = new HashMap<>();
 		otherMetadata.put("test-value", "true");
 		assertFalse("The function data instances are equal for different metadata.",
 				(new TestFunctionData(Long.MIN_VALUE, metadata)).equals(
@@ -74,10 +75,10 @@ public class FunctionDataTest extends AbstractDeviceTest {
 	 * Validates {@link FunctionData#compareTo(Object)} method.
 	 */
 	public void testComparison() {
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put("test-value", Integer.valueOf(1));
 
-		Map otherMetadata = new HashMap();
+		Map<String,Object> otherMetadata = new HashMap<>();
 		otherMetadata.put("test-value", Integer.valueOf(2));
 		checkComparison(metadata, otherMetadata);
 
@@ -89,10 +90,10 @@ public class FunctionDataTest extends AbstractDeviceTest {
 
 		metadata.clear();
 		otherMetadata.clear();
-		Map metadataValue = new HashMap();
+		Map<String,Object> metadataValue = new HashMap<>();
 		metadataValue.put("test-value", Integer.valueOf(1));
 		metadata.put("test-value", metadataValue);
-		Map otherMetadataValue = new HashMap();
+		Map<String,Object> otherMetadataValue = new HashMap<>();
 		otherMetadataValue.put("test-value", Integer.valueOf(2));
 		otherMetadata.put("test-value", otherMetadataValue);
 	}
@@ -109,13 +110,13 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		assertNull("There is function data metadata.", data.getMetadata());
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		data = new TestFunctionData(currentTime, metadata);
 		assertSame("The function data metadata is not correct.",
 				metadata, data.getMetadata());
 
 		// check with map constructor
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(currentTime));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new TestFunctionData(fields);
@@ -130,7 +131,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 	 * invalid fields.
 	 */
 	public void testInvalidFields() {
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(FunctionData.FIELD_TIMESTAMP, "1");
 		checkInvalidFieldType(fields);
 
@@ -140,7 +141,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		checkInvalidFieldType(fields);
 	}
 
-	private void checkInvalidFieldType(Map fields) {
+	private void checkInvalidFieldType(Map<String,Object> fields) {
 		try {
 			new TestFunctionData(fields);
 			fail("The function data is built with invalid fields: " + fields);
@@ -149,7 +150,8 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		}
 	}
 
-	private void checkComparison(Map lessMetadata, Map greaterMetadata) {
+	private void checkComparison(Map<String,Object> lessMetadata,
+			Map<String,Object> greaterMetadata) {
 		long currentTime = System.currentTimeMillis();
 		long otherTime = currentTime - 1;
 
@@ -164,7 +166,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 				0, data.compareTo(new TestFunctionData(currentTime, lessMetadata)));
 	}
 
-	private void checkEqualsAndHashCode(Map metadata) {
+	private void checkEqualsAndHashCode(Map<String,Object> metadata) {
 		TestFunctionData testData = new TestFunctionData(Long.MIN_VALUE, metadata);
 		assertFalse("The function data is equal to null.", testData.equals(null)); // NOPMD
 		assertFalse("The function data is equal to java.lang.Object instance.", testData.equals(new Object()));

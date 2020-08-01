@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.dal.functions.data;
 
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.Alarm;
 
@@ -139,7 +140,7 @@ public class AlarmData extends FunctionData {
 	 * @throws IllegalArgumentException If the alarm severity is invalid.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public AlarmData(Map fields) {
+	public AlarmData(Map<String, ? > fields) {
 		super(fields);
 		Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
 		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_UNDEFINED;
@@ -158,7 +159,8 @@ public class AlarmData extends FunctionData {
 	 *
 	 * @throws IllegalArgumentException If the alarm severity is invalid.
 	 */
-	public AlarmData(long timestamp, Map metadata, int severity, int type) {
+	public AlarmData(long timestamp, Map<String, ? > metadata, int severity,
+			int type) {
 		super(timestamp, metadata);
 		this.severity = severity;
 		this.type = type;
@@ -215,6 +217,7 @@ public class AlarmData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -242,6 +245,7 @@ public class AlarmData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return super.hashCode() + this.severity + this.type;
 	}
@@ -270,6 +274,7 @@ public class AlarmData extends FunctionData {
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(Object o) {
 		int result = super.compareTo(o);
 		if (0 != result) {
@@ -288,6 +293,7 @@ public class AlarmData extends FunctionData {
 	 *
 	 * @return The string representation of this alarm data.
 	 */
+	@Override
 	public String toString() {
 		return getClass().getName() + " [severity=" + getSeverityAsString() + ", type=" + type +
 				", timestamp=" + super.getTimestamp() + ']';

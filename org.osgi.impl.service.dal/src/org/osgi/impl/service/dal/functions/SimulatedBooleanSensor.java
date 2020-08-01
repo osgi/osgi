@@ -12,6 +12,7 @@ package org.osgi.impl.service.dal.functions;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
@@ -19,6 +20,7 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanSensor;
 import org.osgi.service.dal.functions.data.BooleanData;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -26,11 +28,11 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedBooleanSensor extends SimulatedFunction implements BooleanSensor { // NO_UCD
 
-	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
+	private static final Map<String,Object>	PROPERTY_METADATA;
+	private static final Map<String,Object>	OPERATION_METADATA	= null;
 
 	static {
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(
 				PropertyMetadata.ACCESS,
 				Integer.valueOf(
@@ -42,7 +44,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue
-		PROPERTY_METADATA = new HashMap();
+		PROPERTY_METADATA = new HashMap<>();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
 
@@ -53,24 +55,29 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 	 * @param bc The bundle context to register the service.
 	 * @param eventAdminTracker The event admin service tracker to post events.
 	 */
-	public SimulatedBooleanSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
+	public SimulatedBooleanSensor(Dictionary<String,Object> functionProps,
+			BundleContext bc,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		super.register(
 				new String[] {Function.class.getName(), BooleanSensor.class.getName()},
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 
-	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
+	private static Dictionary<String,Object> addPropertyAndOperationNames(
+			Dictionary<String,Object> functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
 				new String[] {PROPERTY_DATA});
 		return functionProps;
 	}
 
+	@Override
 	public BooleanData getData() {
 		return new BooleanData(System.currentTimeMillis(), null, true);
 	}
 
+	@Override
 	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);

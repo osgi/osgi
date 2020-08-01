@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PropertyPermission;
 import java.util.Set;
+
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DevicePermission;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -53,7 +54,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testInvalidDevice() {
 		checkInvalidDevice(null, NullPointerException.class);
-		checkInvalidDevice(new TestDevice(new HashMap()), IllegalArgumentException.class);
+		checkInvalidDevice(new TestDevice(new HashMap<>()),
+				IllegalArgumentException.class);
 	}
 
 	/**
@@ -90,7 +92,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 * instance.
 	 */
 	public void testDeviceEquals() {
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, "test_device_id");
 		Device testDevice = new TestDevice(testDeviceProps);
 		checkEquals(
@@ -101,6 +103,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	/**
 	 * Tests different device permissions with filters, which are not equal.
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public void testFilterNotEquals() {
 		String testDeviceId = "test_device_id";
 		DevicePermission filterPermission = new DevicePermission(
@@ -108,7 +111,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		assertFalse("The device permission is equal to a property permission.",
 				filterPermission.equals(new PropertyPermission("test-property", "read")));
 
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		assertFalse("The device permission with a filter is equal to another one with device instance.",
 				filterPermission.equals(new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.REMOVE)));
@@ -120,9 +123,10 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	/**
 	 * Tests different device permissions with devices, which are not equal.
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public void testDeviceNotEquals() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		assertFalse("The device permission is equal to a property permission.",
@@ -156,7 +160,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testDeviceHash() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermissionFirst = new DevicePermission(
 				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
@@ -173,7 +177,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testImply() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
 				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
@@ -198,7 +202,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testNotImply() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
 				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
@@ -253,7 +257,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		PermissionCollection permCollection = filterPermission.newPermissionCollection();
 		permCollection.add(filterPermission);
-		Enumeration perms = permCollection.elements();
+		Enumeration<Permission> perms = permCollection.elements();
 		DevicePermission filterPermissionCollection = (DevicePermission) perms.nextElement();
 		assertSame("The device permission is not found in the collection.",
 				filterPermission, filterPermissionCollection);
@@ -274,7 +278,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testCollectionImply() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
 				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
@@ -299,7 +303,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testCollectionNotImply() {
 		String testDeviceId = "test_device_id";
-		Map testDeviceProps = new HashMap();
+		Map<String,Object> testDeviceProps = new HashMap<>();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
 				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
@@ -389,11 +393,13 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	}
 
 	private void assertEquals(String message, PermissionCollection expected, PermissionCollection actual) {
-		Set expectedPermsSet = new HashSet();
-		for (Enumeration expectedPerms = expected.elements(); expectedPerms.hasMoreElements();/* empty */) {
+		Set<Permission> expectedPermsSet = new HashSet<>();
+		for (Enumeration<Permission> expectedPerms = expected
+				.elements(); expectedPerms.hasMoreElements();/* empty */) {
 			expectedPermsSet.add(expectedPerms.nextElement());
 		}
-		for (Enumeration actualPerms = actual.elements(); actualPerms.hasMoreElements();/* empty */) {
+		for (Enumeration<Permission> actualPerms = actual
+				.elements(); actualPerms.hasMoreElements();/* empty */) {
 			expectedPermsSet.remove(actualPerms.nextElement());
 		}
 		assertTrue(message, expectedPermsSet.isEmpty());
@@ -422,7 +428,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 				expectedPermission, actualPermission);
 	}
 
-	private void checkInvalidDevice(Device device, Class exceptionClass) {
+	private void checkInvalidDevice(Device device,
+			Class< ? extends Throwable> exceptionClass) {
 		try {
 			new DevicePermission(device, DevicePermission.REMOVE);
 			fail("The device permission has been built with invalid device: " + device);
@@ -431,7 +438,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		}
 	}
 
-	private void checkInvalidAction(String action, Class exceptionClass) {
+	private void checkInvalidAction(String action,
+			Class< ? extends Throwable> exceptionClass) {
 		// filter constructor
 		try {
 			new DevicePermission("*", action);
@@ -448,7 +456,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		}
 	}
 
-	private void checkInvalidFilter(String filter, Class excpetionClass) {
+	private void checkInvalidFilter(String filter,
+			Class< ? extends Throwable> excpetionClass) {
 		try {
 			new DevicePermission(filter, DevicePermission.REMOVE);
 			fail("The device permission has been built with invalid filter: " + filter);

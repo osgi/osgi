@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal.functions.data;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.data.KeypadData;
 import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
@@ -49,7 +50,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 						KEY_NAME));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new KeypadData(
 				Long.MIN_VALUE,
@@ -72,7 +73,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 						KEY_NAME));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
@@ -121,7 +122,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 								KEY_NAME)));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new KeypadData(
 				Long.MIN_VALUE,
@@ -145,7 +146,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 								KEY_NAME)));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
@@ -193,7 +194,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 						KEY_NAME)).hashCode());
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new KeypadData(
 				Long.MIN_VALUE,
@@ -216,7 +217,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 						KEY_NAME)).hashCode());
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
@@ -260,7 +261,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				data);
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new KeypadData(
 				Long.MIN_VALUE,
@@ -279,7 +280,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				data);
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
@@ -301,7 +302,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 * Checks the {@code KeypadData} construction with invalid fields.
 	 */
 	public void testInvalidFields() {
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(KeypadData.FIELD_TYPE, "invalid-event-type");
 		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		checkInvalidFieldType(fields);
@@ -367,7 +368,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	public void testToString() {
 		KeypadData keypadData = new KeypadData(
 				System.currentTimeMillis(),
-				new HashMap(),
+				new HashMap<>(),
 				KeypadData.TYPE_PRESSED,
 				KeypadData.SUB_TYPE_PRESSED_LONG,
 				Integer.MIN_VALUE,
@@ -399,7 +400,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		}
 	}
 
-	private void checkInvalidFieldType(Map fields) {
+	private void checkInvalidFieldType(Map<String, ? > fields) {
 		try {
 			new KeypadData(fields);
 			fail("The keypad data is built with invalid fields: " + fields);
@@ -410,7 +411,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 
 	private void checkKeypadDataFields(
 			long timestamp,
-			Map metadata,
+			Map<String, ? > metadata,
 			int type,
 			int subType,
 			int keyCode,

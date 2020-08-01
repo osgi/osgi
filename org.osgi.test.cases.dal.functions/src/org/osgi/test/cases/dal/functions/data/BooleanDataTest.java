@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal.functions.data;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
@@ -34,7 +35,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				new BooleanData(Long.MIN_VALUE, null, true));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals("The boolean data comparison is wrong!",
@@ -45,7 +46,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				new BooleanData(Long.MIN_VALUE, metadata, false));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -72,7 +73,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				0, data.compareTo(new BooleanData(Long.MIN_VALUE, null, true)));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals(
@@ -83,7 +84,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				0, data.compareTo(new BooleanData(Long.MIN_VALUE, metadata, false)));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -109,7 +110,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				(new BooleanData(Long.MIN_VALUE, null, true)).hashCode());
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals("The boolean data hash code is wrong!",
@@ -120,7 +121,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				(new BooleanData(Long.MIN_VALUE, metadata, false)).hashCode());
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -142,13 +143,13 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		checkBooleanDataFields(Long.MIN_VALUE, null, true, data);
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		checkBooleanDataFields(Long.MIN_VALUE, metadata, false, data);
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -160,7 +161,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 	 * Checks the {@code BooleanData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(BooleanData.FIELD_VALUE, "wrong-type");
 		checkInvalidFieldType(fields);
 
@@ -196,7 +197,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 	public void testToString() {
 		BooleanData booleanData = new BooleanData(
 				System.currentTimeMillis(),
-				new HashMap(),
+				new HashMap<>(),
 				true);
 		assertNotNull("There is no string representation of the boolean data.", booleanData.toString());
 		booleanData = new BooleanData(
@@ -206,7 +207,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		assertNotNull("There is no string representation of the boolean data.", booleanData.toString());
 	}
 
-	private void checkInvalidFieldType(Map fields) {
+	private void checkInvalidFieldType(Map<String, ? > fields) {
 		try {
 			new BooleanData(fields);
 			fail("The boolean data is built with invalid fields: " + fields);
@@ -215,7 +216,8 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		}
 	}
 
-	private void checkBooleanDataFields(long timestamp, Map metadata, boolean value, BooleanData actualData) {
+	private void checkBooleanDataFields(long timestamp,
+			Map<String, ? > metadata, boolean value, BooleanData actualData) {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
 		assertEquals(
 				"The value is not correct!",

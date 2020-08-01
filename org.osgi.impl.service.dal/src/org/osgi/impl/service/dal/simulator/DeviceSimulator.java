@@ -10,7 +10,7 @@
 package org.osgi.impl.service.dal.simulator;
 
 import java.util.Dictionary;
-import org.osgi.framework.Constants;
+
 import org.osgi.service.dal.Device;
 
 /**
@@ -33,7 +33,8 @@ public interface DeviceSimulator {
 	 * @throws IllegalArgumentException If the function type is not supported.
 	 * @throws IllegalStateException If the device simulator is unregistered.
 	 */
-	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps);
+	public Device registerDevice(Dictionary<String,Object> deviceProps,
+			Dictionary<String,Object>[] functionProps);
 
 	/**
 	 * Forces the function with the given class name to publish an event.

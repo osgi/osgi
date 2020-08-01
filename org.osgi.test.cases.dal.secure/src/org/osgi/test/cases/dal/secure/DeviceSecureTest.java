@@ -9,6 +9,8 @@
 
 package org.osgi.test.cases.dal.secure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.Permission;
@@ -17,10 +19,11 @@ import java.security.Permissions;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.security.ProtectionDomain;
+import java.util.Collection;
+
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
 import org.osgi.test.cases.dal.secure.step.SecureDeviceTestSteps;
 import org.osgi.test.cases.dal.step.TestStepDeviceProxy;
@@ -56,21 +59,21 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 				SecureDeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		AccessControlContext acc = prepareACC(
 				new DevicePermission("*", DevicePermission.REMOVE));
-		ServiceReference[] deviceSRefs = getDeviceSRefs();
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(null);
 		boolean isRemoved = false;
-		for (int i = 0; i < deviceSRefs.length; i++) {
-			final Device device = (Device) super.getContext().getService(deviceSRefs[i]);
+		for (ServiceReference<Device> deviceSRef : deviceSRefs) {
+			final Device device = super.getContext().getService(deviceSRef);
 			if (null == device) {
 				continue;
 			}
 			try {
-				AccessController.doPrivileged(new PrivilegedExceptionAction() {
-					public Object run() throws DeviceException {
-						device.remove();
-						return null;
-					}
-				}, acc);
-				assertNull("The device service is not unregistered.", super.getContext().getService(deviceSRefs[i]));
+				AccessController
+						.doPrivileged((PrivilegedExceptionAction<Void>) () -> {
+							device.remove();
+							return null;
+						}, acc);
+				assertNull("The device service is not unregistered.",
+						super.getContext().getService(deviceSRef));
 				isRemoved = true;
 				break;
 			} catch (UnsupportedOperationException upe) {
@@ -92,20 +95,19 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 				SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
 				SecureDeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		AccessControlContext acc = prepareACC(null);
-		ServiceReference[] deviceSRefs = getDeviceSRefs();
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(null);
 		boolean securityCheck = false;
-		for (int i = 0; i < deviceSRefs.length; i++) {
-			final Device device = (Device) super.getContext().getService(deviceSRefs[i]);
+		for (ServiceReference<Device> deviceSRef : deviceSRefs) {
+			final Device device = super.getContext().getService(deviceSRef);
 			if (null == device) {
 				continue;
 			}
 			try {
-				AccessController.doPrivileged(new PrivilegedExceptionAction() {
-					public Object run() throws DeviceException {
-						device.remove();
-						fail("The device remove method is not protected with security check.");
-						return null;
-					}
+				AccessController
+						.doPrivileged((PrivilegedExceptionAction<Void>) () -> {
+							device.remove();
+							fail("The device remove method is not protected with security check.");
+							return null;
 				}, acc);
 			} catch (UnsupportedOperationException upe) {
 				// expected
@@ -126,10 +128,12 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 		});
 	}
 
-	private ServiceReference[] getDeviceSRefs() {
+	private Collection<ServiceReference<Device>> getDeviceSRefs(String filter) {
 		try {
-			ServiceReference[] deviceSRefs = super.getContext().getServiceReferences(Device.class.getName(), null);
-			assertNotNull("Device validation needs at least one device service.", deviceSRefs);
+			Collection<ServiceReference<Device>> deviceSRefs = super.getContext()
+					.getServiceReferences(Device.class, filter);
+			assertThat(deviceSRefs).as("No device services; filter=%s.", filter)
+					.isNotEmpty();
 			return deviceSRefs;
 		} catch (InvalidSyntaxException e) {
 			// null is a valid filter

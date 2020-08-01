@@ -21,17 +21,20 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator { // NO_UCD
 
-	private ServiceRegistration	testStepSReg;
-	private ServiceTracker		deviceSimulatorTracker;
+	private ServiceRegistration<TestStep>					testStepSReg;
+	private ServiceTracker<DeviceSimulator,DeviceSimulator>	deviceSimulatorTracker;
 
+	@Override
 	public void start(BundleContext bc) {
-		this.deviceSimulatorTracker = new ServiceTracker(bc, DeviceSimulator.class.getName(), null);
+		this.deviceSimulatorTracker = new ServiceTracker<>(bc,
+				DeviceSimulator.class, null);
 		this.deviceSimulatorTracker.open();
 		this.testStepSReg = bc.registerService(
-				TestStep.class.getName(), new TestStepImpl(deviceSimulatorTracker),
+				TestStep.class, new TestStepImpl(deviceSimulatorTracker),
 				null);
 	}
 
+	@Override
 	public void stop(BundleContext bc) {
 		this.testStepSReg.unregister();
 		this.deviceSimulatorTracker.close();

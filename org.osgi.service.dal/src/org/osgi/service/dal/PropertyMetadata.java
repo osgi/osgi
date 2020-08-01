@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,7 +134,7 @@ public interface PropertyMetadata {
 	 * @return The property metadata or {@code null} if no such metadata is
 	 *         available.
 	 */
-	public Map getMetadata(String unit);
+	public Map<String, ? > getMetadata(String unit);
 
 	/**
 	 * Returns the difference between two values in series. For example, if the

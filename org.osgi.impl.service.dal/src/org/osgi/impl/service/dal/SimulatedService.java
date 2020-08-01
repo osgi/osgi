@@ -10,6 +10,7 @@
 package org.osgi.impl.service.dal;
 
 import java.util.Dictionary;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceFactory;
@@ -20,16 +21,16 @@ import org.osgi.framework.ServiceRegistration;
  * A common simulated service. It provides an early-access the the service
  * registration with a service factory.
  */
-class SimulatedService implements ServiceFactory {
+class SimulatedService implements ServiceFactory<Object> {
 
 	/** The service registration. */
-	protected ServiceRegistration	serviceReg;
+	protected ServiceRegistration< ? >	serviceReg;
 
 	/** The service reference. */
-	protected ServiceReference		serviceRef;
+	protected ServiceReference< ? >		serviceRef;
 
 	/** The service properties. */
-	protected Dictionary			serviceProps;
+	protected Dictionary<String,Object>	serviceProps;
 
 	/**
 	 * Registers the service with a service factory. There is an early access to
@@ -39,21 +40,26 @@ class SimulatedService implements ServiceFactory {
 	 * @param props The service properties.
 	 * @param bc The bundle context used for the registration.
 	 */
-	protected void register(String[] classNames, Dictionary props, BundleContext bc) {
+	protected void register(String[] classNames,
+			Dictionary<String,Object> props, BundleContext bc) {
 		this.serviceProps = props;
 		init(bc.registerService(classNames, this, props));
 	}
 
-	public Object getService(Bundle bundle, ServiceRegistration registration) {
+	@Override
+	public Object getService(Bundle bundle,
+			ServiceRegistration<Object> registration) {
 		init(registration);
 		return this;
 	}
 
-	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+	@Override
+	public void ungetService(Bundle bundle,
+			ServiceRegistration<Object> registration, Object service) {
 		// nothing special to do here
 	}
 
-	private void init(ServiceRegistration serviceRegA) {
+	private void init(ServiceRegistration< ? > serviceRegA) {
 		if (null == this.serviceReg) {
 			this.serviceReg = serviceRegA;
 			this.serviceRef = serviceRegA.getReference();

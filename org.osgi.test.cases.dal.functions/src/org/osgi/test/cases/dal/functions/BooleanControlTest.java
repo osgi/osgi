@@ -10,6 +10,7 @@
 package org.osgi.test.cases.dal.functions;
 
 import java.util.Map;
+
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionEvent;
@@ -123,7 +124,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				opMetadata.getParametersMetadata());
 		assertNull("BooleanControl operation doesn't have return value.",
 				opMetadata.getReturnValueMetadata());
-		Map metadata = opMetadata.getMetadata();
+		Map<String, ? > metadata = opMetadata.getMetadata();
 		if (null == metadata) {
 			return;
 		}

@@ -12,6 +12,7 @@ package org.osgi.impl.service.dal;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Timer;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -38,18 +39,21 @@ public final class Activator implements BundleActivator { // NO_UCD
 	private static final int	DEVICE_COUNT			= 10;
 
 	private DeviceSimulatorImpl	deviceSimulator;
-	private ServiceTracker		eventAdminTracker;
+	private ServiceTracker<EventAdmin,EventAdmin>	eventAdminTracker;
 	private Timer				timer;
 
+	@Override
 	public void start(BundleContext bc) {
 		this.timer = new Timer();
-		this.eventAdminTracker = new ServiceTracker(bc, EventAdmin.class.getName(), null);
+		this.eventAdminTracker = new ServiceTracker<>(bc, EventAdmin.class,
+				null);
 		this.eventAdminTracker.open();
 		this.deviceSimulator = new DeviceSimulatorImpl(bc, this.eventAdminTracker, this.timer);
 		this.deviceSimulator.start();
 		registerInitialDevices();
 	}
 
+	@Override
 	public void stop(BundleContext bc) {
 		this.deviceSimulator.stop();
 		this.eventAdminTracker.close();
@@ -61,7 +65,7 @@ public final class Activator implements BundleActivator { // NO_UCD
 		for (int i = 0; i < DEVICE_COUNT; i++) {
 			String deviceUID = getDeviceUID(i);
 			referenceDeviceUIDs[i] = deviceUID;
-			Dictionary deviceProps = new Hashtable(13, 1F);
+			Dictionary<String,Object> deviceProps = new Hashtable<>(13, 1F);
 			if (i > 0) {
 				String[] referenceUIDs = new String[i];
 				System.arraycopy(referenceDeviceUIDs, 0, referenceUIDs, 0, i);
@@ -90,8 +94,10 @@ public final class Activator implements BundleActivator { // NO_UCD
 		}
 	}
 
-	private Dictionary[] getFunctionProperties(String deviceUID) {
-		Dictionary[] functionProps = new Dictionary[8];
+	private Dictionary<String,Object>[] getFunctionProperties(
+			String deviceUID) {
+		@SuppressWarnings("unchecked")
+		Dictionary<String,Object>[] functionProps = new Dictionary[8];
 		String[] referenceFunctionUIDs = new String[functionProps.length - 1];
 
 		// setup the boolean control
@@ -137,9 +143,9 @@ public final class Activator implements BundleActivator { // NO_UCD
 		return functionProps;
 	}
 
-	private static Dictionary getFunctionProps(
+	private static Dictionary<String,Object> getFunctionProps(
 			String deviceUID, String functionClass, int index, String[] referenceFunctionUIDs) {
-		Dictionary functionProps = new Hashtable();
+		Dictionary<String,Object> functionProps = new Hashtable<>();
 		if (index > 0) {
 			String[] referenceFunctionUIDsLocal = new String[index];
 			System.arraycopy(referenceFunctionUIDs, 0, referenceFunctionUIDsLocal, 0, index);

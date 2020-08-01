@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.dal.functions.data;
 
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.Keypad;
 
@@ -127,7 +128,7 @@ public class KeypadData extends FunctionData {
 	 *         or invalid arguments are specified.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public KeypadData(Map fields) {
+	public KeypadData(Map<String, ? > fields) {
 		super(fields);
 		Integer eventTypeLocal = (Integer) fields.get(FIELD_TYPE);
 		if (null == eventTypeLocal) {
@@ -160,7 +161,8 @@ public class KeypadData extends FunctionData {
 	 * @param keyName The data key name optional field or {@code null} if there
 	 *        is no key name.
 	 */
-	public KeypadData(long timestamp, Map metadata, int type, int subType, int keyCode, String keyName) {
+	public KeypadData(long timestamp, Map<String,Object> metadata, int type,
+			int subType, int keyCode, String keyName) {
 		super(timestamp, metadata);
 		this.type = type;
 		this.subType = subType;
@@ -235,6 +237,7 @@ public class KeypadData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -268,6 +271,7 @@ public class KeypadData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		int hashCode = super.hashCode();
 		if (null != this.keyName) {
@@ -300,6 +304,7 @@ public class KeypadData extends FunctionData {
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(Object o) {
 		int result = super.compareTo(o);
 		if (0 != result) {
@@ -326,6 +331,7 @@ public class KeypadData extends FunctionData {
 	 *
 	 * @return The string representation of this keypad data.
 	 */
+	@Override
 	public String toString() {
 		return getClass().getName() + " [type=" + getTypeAsString() +
 				", subType=" + subType + ", keyCode=" + keyCode +

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ final class Comparator {
 				(thisValue ? 1 : -1);
 	}
 
-	static int compare(Comparable thisValue, Object otherValue) {
+	static <T extends Comparable< ? super T>> int compare(T thisValue,
+			T otherValue) {
 		return (null == thisValue) ?
 				((null == otherValue) ? 0 : -1) :
 				((null == otherValue) ? 1 : thisValue.compareTo(otherValue));

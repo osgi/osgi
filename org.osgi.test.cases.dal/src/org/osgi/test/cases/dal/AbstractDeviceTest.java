@@ -9,6 +9,8 @@
 
 package org.osgi.test.cases.dal;
 
+import java.util.Collection;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -68,10 +70,12 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 */
 	protected Device getDevice(String deviceUID) throws InvalidSyntaxException {
 		BundleContext bc = super.getContext();
-		ServiceReference[] deviceSRefs = bc.getServiceReferences(
-				Device.class.getName(), '(' + Device.SERVICE_UID + '=' + deviceUID + ')');
-		assertEquals("One device with the given UID is expected.", 1, deviceSRefs.length);
-		Device device = (Device) bc.getService(deviceSRefs[0]);
+		Collection<ServiceReference<Device>> deviceSRefs = bc
+				.getServiceReferences(Device.class,
+						'(' + Device.SERVICE_UID + '=' + deviceUID + ')');
+		assertEquals("One device with the given UID is expected.", 1,
+				deviceSRefs.size());
+		Device device = bc.getService(deviceSRefs.iterator().next());
 		assertNotNull("The device service is missing.", device);
 		return device;
 	}
@@ -98,7 +102,8 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 			filter = '(' + propName + '=' + propValue + ')';
 		}
 		BundleContext bc = super.getContext();
-		ServiceReference[] functionSRefs = bc.getServiceReferences((String)null, filter);
+		ServiceReference< ? >[] functionSRefs = bc
+				.getServiceReferences((String) null, filter);
 		assertNotNull("There is no function with property: " + propName, functionSRefs);
 		Function[] functions = new Function[functionSRefs.length];
 		for (int i = 0; i < functions.length; i++) {
@@ -117,7 +122,8 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * @param serviceRef The reference to check.
 	 * @param propNames The property names to check.
 	 */
-	protected void checkRequiredProperties(ServiceReference serviceRef, String[] propNames) {
+	protected void checkRequiredProperties(ServiceReference< ? > serviceRef,
+			String[] propNames) {
 		for (int i = 0; i < propNames.length; i++) {
 			assertNotNull(propNames[i] + " property is missing",
 					serviceRef.getProperty(propNames[i]));
