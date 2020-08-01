@@ -143,6 +143,7 @@ public class VersionTests extends TestCase {
 		}
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public void testEquals() {
 		Version version1;
 		Version version2;

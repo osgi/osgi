@@ -17,11 +17,13 @@ package org.osgi.test.cases.framework.junit.version;
 
 import java.util.HashMap;
 import java.util.Map;
-import junit.framework.TestCase;
+
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
+
+import junit.framework.TestCase;
 
 /**
  * Tests for the VersionRange class.
@@ -129,6 +131,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public void testEquals() {
 		Version version1 = new Version(1, 2, 3);
 		Version version2 = new Version(2, 4, 6);

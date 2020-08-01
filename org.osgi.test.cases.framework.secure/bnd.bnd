@@ -60,7 +60,9 @@ Export-Package						= \
 	wiring.tb2.jar,\
 	wiring.tb3.jar,\
 	wiring.tb4.jar
-	
+
+-fixupmessages.host: "Host * for this fragment"
+
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.resource;						version=project	, \

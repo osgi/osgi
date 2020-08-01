@@ -282,6 +282,8 @@ Bundle-ClassPath: .,div.tb6.jar
 	wiring.ee.tb5.jar,\
 	wiring.ee.tb6.jar
 
+-fixupmessages.host: "Host * for this fragment"
+
 -buildpath							= \
 	org.osgi.dto;							version=project	, \
 	org.osgi.resource;						version=project	, \

@@ -11,3 +11,5 @@ Export-Package:	${p}.testcond;-noimport:=true
 Import-Package: !*
 
 -failok: true
+
+-fixupmessages.host: "Host * for this fragment"
