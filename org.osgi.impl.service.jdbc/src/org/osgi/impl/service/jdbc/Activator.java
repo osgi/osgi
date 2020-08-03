@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.jdbc;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -29,7 +30,7 @@ import org.osgi.service.jdbc.DataSourceFactory;
  * @author $Id$
  */
 public class Activator implements BundleActivator {
-    private ServiceRegistration dataSourceServiceRegistration;
+	private ServiceRegistration<DataSourceFactory> dataSourceServiceRegistration;
     
 	/*
 	 * (non-Javadoc)
@@ -38,13 +39,15 @@ public class Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_CLASS, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_CLASS_PROPERTY_VALUE );
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_NAME, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_NAME_PROPERTY_VALUE );
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_VERSION, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_VERSION_PROPERTY_VALUE );
 
-		dataSourceServiceRegistration = context.registerService( DataSourceFactory.class.getName(),
+		dataSourceServiceRegistration = context.registerService(
+				DataSourceFactory.class,
 				new DerbyEmbeddedDataSourceFactory(), 
 				props );
 	}
@@ -55,6 +58,7 @@ public class Activator implements BundleActivator {
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		if ( dataSourceServiceRegistration != null ) {
 			dataSourceServiceRegistration.unregister();
