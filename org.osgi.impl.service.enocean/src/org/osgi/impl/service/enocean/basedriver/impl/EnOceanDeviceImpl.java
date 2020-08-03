@@ -2,9 +2,9 @@
 package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -32,8 +32,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
     private static final String SECURITY_LEVEL 	= "SECURITY_LEVEL";
 
     private BundleContext bc;
-    private ServiceRegistration sReg;
-    private Properties props;
+	private ServiceRegistration<EnOceanDevice>	sReg;
+	private Dictionary<String,Object>			props;
     private EnOceanMessage lastMessage;
     private EnOceanBaseDriver driver;
     private int chip_id;
@@ -53,11 +53,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	this.bc = bundleContext;
 	this.driver = driver;
 	this.chip_id = uid;
-	props = new Properties();
+	props = new Hashtable<>();
 	props.put(Constants.DEVICE_CATEGORY, EnOceanDevice.DEVICE_CATEGORY);
 	props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 	props.put(EnOceanDevice.RORG, String.valueOf(rorg));
-	sReg = this.bc.registerService(EnOceanDevice.class.getName(), this, (Dictionary)props);
+	sReg = this.bc.registerService(EnOceanDevice.class, this,
+			props);
 	Logger.d(TAG, "registering device : " + this);
 	/* Initializations */
 	lastMessage = null;
@@ -66,7 +67,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
     /**
      * @return the base driver's properties.
      */
-    public Properties getServiceProperties() {
+	public Dictionary<String,Object> getServiceProperties() {
 	return props;
     }
 
@@ -79,30 +80,36 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	props.put(EnOceanDevice.FUNC, String.valueOf(func));
 	props.put(EnOceanDevice.TYPE, String.valueOf(type));
 	props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
-	sReg.setProperties((Dictionary)props);
+	sReg.setProperties(props);
     }
 
-    public void setLearningMode(boolean learnMode) {
+    @Override
+	public void setLearningMode(boolean learnMode) {
 	props.put(LEARNING_MODE, String.valueOf(learnMode));
     }
 
-    public int getRollingCode() {
+    @Override
+	public int getRollingCode() {
 	return getIntProperty(ROLLING_CODE, 0);
     }
 
-    public void setRollingCode(int rollingCode) {
+    @Override
+	public void setRollingCode(int rollingCode) {
 	props.put(ROLLING_CODE, String.valueOf(rollingCode));
     }
 
-    public byte[] getEncryptionKey() {
+    @Override
+	public byte[] getEncryptionKey() {
 	return (byte[]) props.get(ENCRYPTION_KEY);
     }
 
-    public void setEncryptionKey(byte[] key) {
+    @Override
+	public void setEncryptionKey(byte[] key) {
 	props.put(ENCRYPTION_KEY, key);
     }
 
-    public int[] getLearnedDevices() {
+    @Override
+	public int[] getLearnedDevices() {
 	return null;
     }
 
@@ -110,7 +117,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
      * @return the name.
      */
     public String getName() {
-	return props.getProperty(NAME);
+		return (String) props.get(NAME);
     }
 
     /**
@@ -128,7 +135,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	return lastMessage;
     }
 
-    public Map getRPCs() {
+    @Override
+	public Map<Integer,Integer[]> getRPCs() {
 	return null;
     }
 
@@ -136,10 +144,11 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
      * @return the profile name.
      */
     public String getProfileName() {
-	return props.getProperty(PROFILE_NAME);
+		return (String) props.get(PROFILE_NAME);
     }
 
-    public int getSecurityLevelFormat() {
+    @Override
+	public int getSecurityLevelFormat() {
 	return getIntProperty(SECURITY_LEVEL, 0);
     }
 
@@ -171,14 +180,16 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	props.put(EnOceanDevice.RORG, String.valueOf(rorg));
     }
 
-    public void setFunc(int func) {
+    @Override
+	public void setFunc(int func) {
 	props.put(EnOceanDevice.FUNC, String.valueOf(func));
-	sReg.setProperties((Dictionary)props);
+	sReg.setProperties(props);
     }
 
-    public void setType(int type) {
+    @Override
+	public void setType(int type) {
 	props.put(EnOceanDevice.TYPE, String.valueOf(type));
-	sReg.setProperties((Dictionary)props);
+	sReg.setProperties(props);
     }
 
     /**
@@ -186,26 +197,31 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
      */
     public void setManufacturer(int manuf) {
 	props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
-	sReg.setProperties((Dictionary)props);
+	sReg.setProperties(props);
     }
 
-    public int getChipId() {
+    @Override
+	public int getChipId() {
 	return chip_id;
     }
 
-    public int getRorg() {
+    @Override
+	public int getRorg() {
 	return getIntProperty(EnOceanDevice.RORG);
     }
 
-    public int getFunc() {
+    @Override
+	public int getFunc() {
 	return getIntProperty(EnOceanDevice.FUNC);
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
 	return getIntProperty(EnOceanDevice.TYPE);
     }
 
-    public int getManufacturer() {
+    @Override
+	public int getManufacturer() {
 	return getIntProperty(EnOceanDevice.MANUFACTURER);
     }
 
@@ -234,16 +250,18 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
     }
 
-    public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
+    @Override
+	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
 	// Generate the SYS_EX message relative to the RPC
 	MessageSYS_EX msg = new MessageSYS_EX(rpc);
-	for (Iterator it = msg.getTelegrams().iterator(); it.hasNext();) {
-	    byte[] telegram = (byte[]) it.next();
+	for (Iterator<byte[]> it = msg.getTelegrams().iterator(); it.hasNext();) {
+	    byte[] telegram = it.next();
 	    driver.send(telegram);
 	}
     }
 
-    public void remove() {
+    @Override
+	public void remove() {
 	try {
 	    sReg.unregister();
 	    Logger.e(TAG, "Unregistered device " + this);
@@ -252,7 +270,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 	return "<EnOceanDeviceImpl " + chip_id + ">" + props
 		+ "</EnOceanDeviceImpl>";
     }

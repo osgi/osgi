@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.enocean;
 
+import java.util.Collection;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
@@ -50,24 +52,24 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
     protected TestStepProxy testStepProxy;
 
     /** devices */
-    protected ServiceListener devices;
+	protected ServiceListener<EnOceanDevice>	devices;
 
     /** events */
     protected EventListener events;
 
     /** eventAdminRef */
-    protected ServiceReference eventAdminRef;
+	protected ServiceReference<EventAdmin>					eventAdminRef;
     /** eventAdmin */
     protected EventAdmin eventAdmin;
 
     /** enOceanMessageDescriptionSets */
-    protected ServiceListener enOceanMessageDescriptionSets;
+	protected ServiceListener<EnOceanMessageDescriptionSet>	enOceanMessageDescriptionSets;
 
     /** enOceanChannelDescriptionSets */
-    protected ServiceListener enOceanChannelDescriptionSets;
+	protected ServiceListener<EnOceanChannelDescriptionSet>	enOceanChannelDescriptionSets;
 
     /** enOceanHost */
-    protected ServiceListener enOceanHostServiceListener;
+	protected ServiceListener<EnOceanHost>					enOceanHostServiceListener;
 
     protected void setUp() throws Exception {
 	sleep(1000);
@@ -75,23 +77,24 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	this.testStepProxy = new TestStepProxy(super.getContext());
 
 	/* Tracks device creation */
-	devices = new ServiceListener(getContext(), EnOceanDevice.class);
+	devices = new ServiceListener<>(getContext(), EnOceanDevice.class);
 
 	/* Tracks device events */
 	String[] topics = new String[] { Fixtures.SELF_TEST_EVENT_TOPIC };
 	events = new EventListener(getContext(), topics, null);
 
-	enOceanMessageDescriptionSets = new ServiceListener(getContext(),
+	enOceanMessageDescriptionSets = new ServiceListener<>(getContext(),
 		EnOceanMessageDescriptionSet.class);
 
-	enOceanChannelDescriptionSets = new ServiceListener(getContext(),
+	enOceanChannelDescriptionSets = new ServiceListener<>(getContext(),
 		EnOceanChannelDescriptionSet.class);
 
-	enOceanHostServiceListener = new ServiceListener(getContext(), EnOceanHost.class);
+	enOceanHostServiceListener = new ServiceListener<>(getContext(),
+			EnOceanHost.class);
 
 	/* Get a global eventAdmin handle */
-	eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
-	eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
+	eventAdminRef = getContext().getServiceReference(EventAdmin.class);
+	eventAdmin = getContext().getService(eventAdminRef);
 	tlog("exit setUp");
     }
 
@@ -104,14 +107,12 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	events.close();
 	enOceanMessageDescriptionSets.close();
 	enOceanChannelDescriptionSets.close();
-	ServiceReference[] deviceRefs = getContext().getServiceReferences(
-		EnOceanDevice.class.getName(), null);
-	if (deviceRefs != null) {
-	    for (int i = 0; i < deviceRefs.length; i++) {
-		EnOceanDevice device = (EnOceanDevice) getContext().getService(deviceRefs[i]);
+	Collection<ServiceReference<EnOceanDevice>> deviceRefs = getContext().getServiceReferences(
+		EnOceanDevice.class, null);
+	for (ServiceReference<EnOceanDevice> deviceRef : deviceRefs) {
+		EnOceanDevice device = getContext().getService(deviceRef);
 		tlog("unregistering device : " + device);
 		device.remove();
-	    }
 	}
 	tlog("exit tearDown");
     }

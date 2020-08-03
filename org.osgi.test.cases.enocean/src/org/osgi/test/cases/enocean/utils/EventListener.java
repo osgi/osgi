@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.enocean.utils;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
@@ -32,12 +33,13 @@ import org.osgi.test.support.OSGiTestCaseProperties;
  */
 public class EventListener implements EventHandler {
 
+	@SuppressWarnings("unused")
 	static private final String TAG = "EventListener";
 
 	private Semaphore			waiter;
-	private LinkedList lastEvents;
+	private LinkedList<Event>					lastEvents;
 	private BundleContext		bc;
-	private ServiceRegistration	sReg;
+	private ServiceRegistration<EventHandler>	sReg;
 
 	/**
 	 * @param bc
@@ -46,13 +48,13 @@ public class EventListener implements EventHandler {
 	 */
 	public EventListener(BundleContext bc, String[] topics, String filter) {
 		this.bc = bc;
-		lastEvents = new LinkedList();
-		Hashtable ht = new Hashtable();
+		lastEvents = new LinkedList<>();
+		Dictionary<String,Object> ht = new Hashtable<>();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
 		if (filter != null) {
 			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
 		}
-		sReg = this.bc.registerService(EventHandler.class.getName(), this, ht);
+		sReg = this.bc.registerService(EventHandler.class, this, ht);
 		waiter = new Semaphore(0);
 	}
 
@@ -70,7 +72,7 @@ public class EventListener implements EventHandler {
 	 */
 	public Event waitForEvent(long timeout) throws InterruptedException {
 		if (!lastEvents.isEmpty()) {
-			return (Event) lastEvents.removeLast();
+			return lastEvents.removeLast();
 		}
 		if (waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			return lastEvents.isEmpty() ? null : (Event) lastEvents

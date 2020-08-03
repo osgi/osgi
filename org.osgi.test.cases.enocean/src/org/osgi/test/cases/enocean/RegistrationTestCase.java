@@ -57,7 +57,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 	 * almost in the same time, OSGi only generates a single SERVICE_ADDED
 	 * event.
 	 */
-	ServiceReference ref = devices.getServiceReference();
+	ServiceReference<EnOceanDevice> ref = devices.getServiceReference();
 
 	/*
 	 * Verify that the device has been registered with the correct service

@@ -17,6 +17,7 @@
 package org.osgi.test.cases.enocean.devices;
 
 import java.util.Map;
+
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
 
@@ -28,7 +29,7 @@ public abstract class EnOceanDeviceImpl implements EnOceanDevice {
 	/**  */
 	protected int[]				learntDevices;
 	/**  */
-	protected Map				availableRpcs;
+	protected Map<Integer,Integer[]>	availableRpcs;
 	/**  */
 	protected EnOceanMessage	lastMessage;
 	/**  */
@@ -69,7 +70,7 @@ public abstract class EnOceanDeviceImpl implements EnOceanDevice {
 		return learntDevices;
 	}
 
-	public Map getRPCs() {
+	public Map<Integer,Integer[]> getRPCs() {
 		return availableRpcs;
 	}
 

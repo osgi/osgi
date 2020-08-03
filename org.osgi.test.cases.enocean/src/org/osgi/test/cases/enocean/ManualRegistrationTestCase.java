@@ -55,7 +55,7 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 	String lastServiceEvent = devices.waitForService();
 	tlog("lastServiceEvent: " + lastServiceEvent);
 	assertNotNull("Timeout reached.", lastServiceEvent);
-	ServiceReference ref = devices.getServiceReference();
+	ServiceReference<EnOceanDevice> ref = devices.getServiceReference();
 	tlog("ref: " + ref);
 
 	assertEquals("Event mismatch", ServiceListener.SERVICE_ADDED, lastServiceEvent);
@@ -63,7 +63,7 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 	assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
 	assertNull("ref.getProperty(EnOceanDevice.FUNC) must not be null.", ref.getProperty(EnOceanDevice.FUNC));
 
-	EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
+	EnOceanDevice dev = getContext().getService(ref);
 	dev.setFunc(Fixtures.FUNC);
 	lastServiceEvent = devices.waitForService();
 	assertNotNull("Timeout reached.", lastServiceEvent);

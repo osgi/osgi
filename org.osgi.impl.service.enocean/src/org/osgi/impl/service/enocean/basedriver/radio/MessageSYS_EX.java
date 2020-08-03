@@ -32,15 +32,17 @@ public class MessageSYS_EX extends Message {
     
     static private final String TAG = "MessageSYS_EX";
 
-    private List subTelegrams = new ArrayList();
+	private List<byte[]>		subTelegrams	= new ArrayList<>();
 
-    private int manuf;
+	int							manuf;
 
-    public int getRorg() {
+    @Override
+	public int getRorg() {
 	return MESSAGE_SYS_EX;
     }
 
-    public int getSubTelNum() {
+    @Override
+	public int getSubTelNum() {
 	return subTelegrams.size();
     }
 
@@ -133,52 +135,65 @@ public class MessageSYS_EX extends Message {
     public EnOceanRPC getRPC() {
 	return new EnOceanRPC() {
 
-	    public void setSenderId(int chipId) {
+	    @Override
+		public void setSenderId(int chipId) {
+			// ignore
 	    }
 
-	    public int getSenderId() {
+	    @Override
+		public int getSenderId() {
 		return MessageSYS_EX.this.getSenderId();
 	    }
 
-	    public byte[] getPayload() {
+	    @Override
+		public byte[] getPayload() {
 		return MessageSYS_EX.this.getBytes();
 	    }
 
-	    public String getName() {
+	    @Override
+		public String getName() {
 		return null;
 	    }
 
-	    public int getManufacturerId() {
+	    @Override
+		public int getManufacturerId() {
 		return MessageSYS_EX.this.manuf;
 	    }
 
-	    public int getFunctionId() {
+	    @Override
+		public int getFunctionId() {
 		return MessageSYS_EX.this.getFunc();
 	    }
 	};
     }
 
-    public boolean isTeachin() {
+    @Override
+	public boolean isTeachin() {
 	return false;
     }
 
-    public boolean hasTeachInInfo() {
+    @Override
+	public boolean hasTeachInInfo() {
 	return false;
     }
 
-    public int teachInFunc() {
+    @Override
+	public int teachInFunc() {
 	return 0;
     }
 
-    public int teachInType() {
+    @Override
+	public int teachInType() {
 	return 0;
     }
 
-    public int teachInManuf() {
+    @Override
+	public int teachInManuf() {
 	return 0;
     }
 
-    public List getTelegrams() {
+    @Override
+	public List<byte[]> getTelegrams() {
 	return subTelegrams;
     }
 

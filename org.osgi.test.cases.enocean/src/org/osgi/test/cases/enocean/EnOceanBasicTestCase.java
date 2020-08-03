@@ -69,9 +69,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	// enOceanMessageDescriptionSets.waitForService() returned:
 	// SERVICE_ADDED
 
-	ServiceReference sr1 = getContext().getServiceReference(EnOceanMessageDescriptionSet.class.getName());
+	ServiceReference<EnOceanMessageDescriptionSet> sr1 = getContext()
+			.getServiceReference(EnOceanMessageDescriptionSet.class);
 	tlog("testInterfaceExceptions(), EnOceanMessageDescriptionSet sr: " + sr1);
-	EnOceanMessageDescriptionSet mdSet = (EnOceanMessageDescriptionSet) getContext().getService(sr1);
+	EnOceanMessageDescriptionSet mdSet = getContext().getService(sr1);
 	EnOceanMessageDescription msgDescription = mdSet.getMessageDescription(Fixtures.RORG,
 		Fixtures.FUNC, Fixtures.TYPE_1, -1);
 	tlog("testInterfaceExceptions(), enOceanMessageDescription: " + msgDescription);
@@ -103,9 +104,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	tlog("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: " + result);
 	assertNotNull("Timeout reached.", result);
 
-	ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
+	ServiceReference<EnOceanChannelDescriptionSet> sr2 = getContext()
+			.getServiceReference(EnOceanChannelDescriptionSet.class);
 	tlog("testInterfaceExceptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
-	EnOceanChannelDescriptionSet cdSet = (EnOceanChannelDescriptionSet) getContext().getService(sr2);
+	EnOceanChannelDescriptionSet cdSet = getContext().getService(sr2);
 	EnOceanChannelDescription channelDescription = cdSet.getChannelDescription(Fixtures.CHANNEL_ID);
 	tlog("testInterfaceExceptions(), enOceanChannelDescription: " + channelDescription);
 
@@ -207,13 +209,13 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	// [bnd] testRPC(), waitForService returned: SERVICE_ADDED
 	assertNotNull("Timeout reached.", wfs);
 
-	ServiceReference sr = devices.getServiceReference();
+	ServiceReference<EnOceanDevice> sr = devices.getServiceReference();
 	tlog("testRPC(), sr: " + sr);
 	// [bnd] testRPC(), ref:
 	// {org.osgi.service.enocean.EnOceanDevice}={enocean.device.chip_id=305419896,
 	// enocean.device.profile.rorg=165, DEVICE_CATEGORY=EnOcean,
 	// service.id=40, service.bundleid=7, service.scope=singleton}
-	EnOceanDevice device = (EnOceanDevice) getContext().getService(sr);
+	EnOceanDevice device = getContext().getService(sr);
 	tlog("testRPC(), device: " + device);
 	// [bnd] testRPC(), device:
 	// org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl@49f92de5
@@ -260,9 +262,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	// SERVICE_ADDED
 	assertNotNull("Timeout reached.", result);
 
-	ServiceReference sr1 = getContext().getServiceReference(EnOceanMessageDescriptionSet.class.getName());
+	ServiceReference<EnOceanMessageDescriptionSet> sr1 = getContext()
+			.getServiceReference(EnOceanMessageDescriptionSet.class);
 	tlog("testUseOfDescriptions(), EnOceanMessageDescriptionSet sr: " + sr1);
-	EnOceanMessageDescriptionSet mdSet = (EnOceanMessageDescriptionSet) getContext().getService(sr1);
+	EnOceanMessageDescriptionSet mdSet = getContext().getService(sr1);
 	EnOceanMessageDescription msgDescription = mdSet.getMessageDescription(Fixtures.RORG,
 		Fixtures.FUNC, Fixtures.TYPE_1, -1);
 	tlog("testUseOfDescriptions(), enOceanMessageDescription: " + msgDescription);
@@ -288,9 +291,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	tlog("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService() returned: " + result);
 	assertNotNull("Timeout reached.", result);
 
-	ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
+	ServiceReference<EnOceanChannelDescriptionSet> sr2 = getContext()
+			.getServiceReference(EnOceanChannelDescriptionSet.class);
 	tlog("testUseOfDescriptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
-	EnOceanChannelDescriptionSet cdSet = (EnOceanChannelDescriptionSet) getContext().getService(sr2);
+	EnOceanChannelDescriptionSet cdSet = getContext().getService(sr2);
 	EnOceanChannelDescription channelDescription = cdSet.getChannelDescription(Fixtures.CHANNEL_ID);
 	tlog("testUseOfDescriptions(), enOceanChannelDescription: " + channelDescription);
 

@@ -52,7 +52,7 @@ public class EnOceanBroadcastRPCTestCase extends AbstractEnOceanTestCase {
 	 */
 	EnOceanRPC rpc = new QueryFunction();
 
-	Map properties = new Hashtable();
+	Map<String,Object> properties = new Hashtable<>();
 	properties.put(EnOceanEvent.PROPERTY_EXPORTED, "1");
 	properties.put(EnOceanEvent.PROPERTY_RPC, rpc);
 	Event evt = new Event(EnOceanEvent.TOPIC_RPC_BROADCAST, properties);

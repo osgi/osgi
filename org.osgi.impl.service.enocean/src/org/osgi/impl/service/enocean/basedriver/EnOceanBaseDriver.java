@@ -5,10 +5,10 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -20,7 +20,6 @@ import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.basedriver.radio.MessageRPS;
 import org.osgi.impl.service.enocean.basedriver.radio.MessageSYS_EX;
-import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -28,8 +27,6 @@ import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
-import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
-import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -39,15 +36,16 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * EnOcean base driver's main class.
  */
-public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerCustomizer, EventHandler {
+public class EnOceanBaseDriver implements EnOceanPacketListener,
+		ServiceTrackerCustomizer<EnOceanDevice,EnOceanDevice>, EventHandler {
 
     private BundleContext bc;
-    private Hashtable devices;
-    private Hashtable hostRefs;
+	private Hashtable<String,Object>	devices;
+	private Hashtable<String,ServiceRegistration<EnOceanHost>>	hostRefs;
 
-    private ServiceTracker deviceTracker;
+	private ServiceTracker<EnOceanDevice,EnOceanDevice>	deviceTracker;
     private EventAdmin eventAdmin;
-    private ServiceRegistration eventHandlerRegistration;
+	private ServiceRegistration<EventHandler>					eventHandlerRegistration;
     private EnOceanHostImpl host;
 
     /**
@@ -73,8 +71,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
     public EnOceanBaseDriver(BundleContext bundleContext) {
 	/* Init driver internal state */
 	this.bc = bundleContext;
-	devices = new Hashtable(10);
-	hostRefs = new Hashtable(10);
+	devices = new Hashtable<>(10);
+	hostRefs = new Hashtable<>(10);
 
 	/* Register initial EnOceanHost */
 	String hostPath = System.getProperty(
@@ -90,31 +88,26 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	/* Initialize EventAdmin */
-	ServiceReference ref = this.bc.getServiceReference(EventAdmin.class
-		.getName());
+	ServiceReference<EventAdmin> ref = this.bc
+			.getServiceReference(EventAdmin.class);
 	if (ref != null) {
-	    eventAdmin = (EventAdmin) this.bc.getService(ref);
+	    eventAdmin = this.bc.getService(ref);
 	}
 
 	/* Initializes self as EventHandler */
-	Hashtable ht = new Hashtable();
+	Dictionary<String,Object> ht = new Hashtable<>();
 	ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {
 		EnOceanEvent.TOPIC_MSG_RECEIVED,
 		EnOceanEvent.TOPIC_RPC_BROADCAST, });
 	eventHandlerRegistration = this.bc.registerService(
-		EventHandler.class.getName(), this, ht);
+			EventHandler.class, this, ht);
 	Logger.d(TAG,
 		"EnOcean base driver's eventHandler (as a ServiceRegistration), eventHandlerRegistration: "
 			+ eventHandlerRegistration);
 
-	/* Track the EnOcean services */
-	try {
-	    Logger.d(TAG, "Track the EnOcean services, deviceTracker: "
-		    + deviceTracker);
-	    deviceTracker = registerDeviceListener(this.bc, this);
-	} catch (InvalidSyntaxException e) {
-	    Logger.e(TAG, e.getMessage());
-	}
+	Logger.d(TAG,
+			"Track the EnOcean services, deviceTracker: " + deviceTracker);
+	deviceTracker = registerDeviceListener(this.bc, this);
     }
 
     /**
@@ -125,7 +118,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
      * 
      * @see org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener#radioPacketReceived(byte[])
      */
-    public void radioPacketReceived(byte[] data) {
+    @Override
+	public void radioPacketReceived(byte[] data) {
 	Logger.d(TAG, "radioPacketReceived data: " + data + " / data[0]: " + data[0]);
 	Message msg;
 
@@ -189,9 +183,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
     }
 
-    public Object addingService(ServiceReference ref) {
-	Object service = this.bc.getService(ref);
-	if ((service != null) && (service instanceof EnOceanDevice)) {
+    @Override
+	public EnOceanDevice addingService(ServiceReference<EnOceanDevice> ref) {
+		EnOceanDevice service = this.bc.getService(ref);
+		if (service != null) {
 	    String servicePid = (String) ref.getProperty(Constants.SERVICE_PID);
 	    String chipId = (String) ref.getProperty(EnOceanDevice.CHIP_ID);
 	    Object hasExport = ref.getProperty(EnOceanDevice.ENOCEAN_EXPORT);
@@ -216,22 +211,25 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	return service;
     }
 
-    public void modifiedService(ServiceReference ref, Object service) {
+    @Override
+	public void modifiedService(ServiceReference<EnOceanDevice> ref,
+			EnOceanDevice service) {
 	Logger.d(TAG, "servicetracker: modifiedService: " + ref + " for " + service);
     }
 
-    public void removedService(ServiceReference ref, Object service) {
+    @Override
+	public void removedService(ServiceReference<EnOceanDevice> ref,
+			EnOceanDevice service) {
 	Logger.d(TAG, "servicetracker: removedService: " + ref + " for " + service);
-	if (service instanceof EnOceanDevice) {
 	    String servicePid = (String) ref.getProperty(Constants.SERVICE_PID);
 	    if (servicePid == null) {
 		servicePid = (String) ref.getProperty(EnOceanDevice.CHIP_ID);
 	    }
 	    Logger.d(TAG, "servicetracker: removedService: " + servicePid);
-	}
     }
 
-    public void handleEvent(Event event) {
+    @Override
+	public void handleEvent(Event event) {
 	if (event.getTopic().equals(EnOceanEvent.TOPIC_MSG_RECEIVED)) {
 	    if (event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) != null) {
 		try {
@@ -269,11 +267,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
      * Start the base driver.
      */
     public void start() {
-	try {
-	    host.startup();
-	} catch (EnOceanHostImplException e) {
-	    e.printStackTrace();
-	}
+		host.startup();
     }
 
     /**
@@ -290,13 +284,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
      * @param enOceanHost
      * @return the corresponding ServiceRegistration object.
      */
-    public ServiceRegistration registerHost(String hostPath,
+	public ServiceRegistration<EnOceanHost> registerHost(String hostPath,
 	    EnOceanHost enOceanHost) {
-	ServiceRegistration sr = null;
+		ServiceRegistration<EnOceanHost> sr = null;
 	try {
-	    Dictionary props = new Hashtable();
-	    props.put(EnOceanHost.HOST_ID, hostPath);
-	    sr = bc.registerService(EnOceanHost.class.getName(), enOceanHost, props);
+			Dictionary<String,Object> props = new Hashtable<>();
+			props.put((String) EnOceanHost.HOST_ID, hostPath);
+			sr = bc.registerService(EnOceanHost.class, enOceanHost, props);
 	    hostRefs.put(hostPath, sr);
 	} catch (Exception e) {
 	    Logger.e(TAG, "exception when registering host : " + e.getMessage());
@@ -314,8 +308,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
     }
 
     private void unregisterDevices() {
-	for (Iterator it = devices.entrySet().iterator(); it.hasNext();) {
-	    Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = devices.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
 	    if (entry.getValue() instanceof EnOceanDeviceImpl) {
 		EnOceanDeviceImpl dev = (EnOceanDeviceImpl) entry.getValue();
 		Logger.d(TAG, "unregistering device : " + dev);
@@ -327,7 +322,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
     private void sendAsEvent(EnOceanMessage msg) {
 	if (eventAdmin != null) {
-	    Map properties = new Hashtable();
+		Map<String,Object> properties = new Hashtable<>();
 	    properties.put(EnOceanDevice.CHIP_ID, String.valueOf(msg.getSenderId()));
 	    properties.put(EnOceanDevice.RORG, String.valueOf(msg.getRorg()));
 	    properties.put(EnOceanDevice.FUNC, String.valueOf(msg.getFunc()));
@@ -341,7 +336,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
     private void sendAsEvent(EnOceanRPC rpc) {
 	if (eventAdmin != null) {
-	    Map properties = new Hashtable();
+		Map<String,Object> properties = new Hashtable<>();
 	    properties.put(EnOceanEvent.PROPERTY_EXPORTED, "1");
 	    properties.put(EnOceanEvent.PROPERTY_RPC, rpc);
 	    Event evt = new Event(EnOceanEvent.TOPIC_RPC_BROADCAST, properties);
@@ -358,7 +353,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
      */
     private EnOceanDevice getAssociatedDevice(Message msg) {
 	try {
-	    ServiceReference[] ref = bc.getServiceReferences((String)null,
+		ServiceReference< ? >[] ref = bc.getServiceReferences((String) null,
 		"(&(objectClass=" + EnOceanDevice.class.getName() + ")"
 		+ "(" + EnOceanDevice.CHIP_ID + "=" + msg.getSenderId() + "))");
 	    if ((ref != null) && (ref.length == 1)) {
@@ -374,12 +369,11 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
      * The functions that come below are used to register the necessary
      * services.
      */
-    private ServiceTracker registerDeviceListener(BundleContext bundleContext,
-	    ServiceTrackerCustomizer listener) throws InvalidSyntaxException {
-	Filter filter = bundleContext.createFilter("(objectClass="
-		+ EnOceanDevice.class.getName() + ')');
-	ServiceTracker serviceTracker = new ServiceTracker(bundleContext,
-		filter, listener);
+	private ServiceTracker<EnOceanDevice,EnOceanDevice> registerDeviceListener(
+			BundleContext bundleContext,
+			ServiceTrackerCustomizer<EnOceanDevice,EnOceanDevice> listener) {
+		ServiceTracker<EnOceanDevice,EnOceanDevice> serviceTracker = new ServiceTracker<>(
+				bundleContext, EnOceanDevice.class, listener);
 	serviceTracker.open();
 	return serviceTracker;
     }

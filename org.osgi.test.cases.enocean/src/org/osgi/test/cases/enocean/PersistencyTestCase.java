@@ -19,6 +19,7 @@ package org.osgi.test.cases.enocean;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.support.OSGiTestCaseProperties;
@@ -42,11 +43,13 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
      * @throws Exception
      */
     public void testDeviceExportPersistency() throws Exception {
-	ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+		ServiceRegistration<EnOceanDevice> sReg = Fixtures
+				.registerDevice(getContext());
 
 	/* Get CHIP_ID attributed by the driver from the given service PID. */
-	ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-	EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+		ServiceReference<EnOceanHost> hostRef = getContext()
+				.getServiceReference(EnOceanHost.class);
+	EnOceanHost defaultHost = getContext().getService(hostRef);
 	int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
 	Bundle baseDriver = hostRef.getBundle();
@@ -55,17 +58,17 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 	baseDriver.stop();
 	Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
 
-	hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	hostRef = getContext().getServiceReference(EnOceanHost.class);
 	assertNull("hostRef must be null, once the base driver is stopped.", hostRef);
 
 	baseDriver.start();
 	String lastServiceEvent = enOceanHostServiceListener.waitForService();
 	assertNotNull("Timeout reached.", lastServiceEvent);
 
-	hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	hostRef = getContext().getServiceReference(EnOceanHost.class);
 	assertNotNull("One EnOceanHost service must be registered (hostRef must not be null), once the base driver is started.",
 		hostRef);
-	defaultHost = (EnOceanHost) getContext().getService(hostRef);
+	defaultHost = getContext().getService(hostRef);
 	int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
 	assertEquals("Original, and new chip ids mismatch.", originalChipId, newChipId);

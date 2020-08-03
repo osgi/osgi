@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
+import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
-import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.cm.Configuration;
@@ -50,7 +50,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
      */
     protected String donglePath;
 
-    private ArrayList listeners;
+	private List<EnOceanPacketListener>	listeners;
     private int baseId;
     private int repeaterLevel;
 
@@ -70,7 +70,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
     public EnOceanHostImpl(String path, BundleContext bc) {
 	this.bc = bc;
 	this.isRunning = false;
-	this.listeners = new ArrayList();
+	this.listeners = new ArrayList<>();
 	this.donglePath = path;
 	try {
 	    this.chipIdPidMap = new ChipPIDMapping(this.bc);
@@ -82,7 +82,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
     /**
      * @throws EnOceanHostImplException
      */
-    public void startup() throws EnOceanHostImplException {
+	public void startup() {
 	// TODO Auto-generated method stub
     }
 
@@ -91,7 +91,8 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
      * @throws ArrayIndexOutOfBoundsException
      * @throws IOException
      */
-    public void allocChipID(String servicePID) throws ArrayIndexOutOfBoundsException, IOException {
+	public void allocChipID(String servicePID)
+			throws ArrayIndexOutOfBoundsException {
 	int chipId = getChipId(servicePID);
 	if (chipId == -1) {
 	    int size = chipIdPidMap.size();
@@ -116,37 +117,45 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
     }
 
-    public void reset() throws EnOceanException {
+	@Override
+	public void reset() throws EnOceanException {
 	// TODO Auto-generated method stub
     }
 
-    public String appVersion() throws EnOceanException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    public String apiVersion() throws EnOceanException {
+    @Override
+	public String appVersion() throws EnOceanException {
 	// TODO Auto-generated method stub
 	return null;
     }
 
-    public int getBaseID() throws EnOceanException {
+    @Override
+	public String apiVersion() throws EnOceanException {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+	public int getBaseID() throws EnOceanException {
 	return baseId;
     }
 
-    public void setBaseID(int baseID) throws EnOceanException {
+    @Override
+	public void setBaseID(int baseID) throws EnOceanException {
 	this.baseId = baseID;
     }
 
-    public void setRepeaterLevel(int level) throws EnOceanException {
+    @Override
+	public void setRepeaterLevel(int level) throws EnOceanException {
 	this.repeaterLevel = level;
     }
 
-    public int getRepeaterLevel() throws EnOceanException {
+    @Override
+	public int getRepeaterLevel() throws EnOceanException {
 	return repeaterLevel;
     }
 
-    public int getChipId(String servicePID) {
+    @Override
+	public int getChipId(String servicePID) {
 	String chipId = chipIdPidMap.get(servicePID);
 	return (chipId == null) ? -1 : Integer.parseInt(chipIdPidMap.get(servicePID));
     }
@@ -157,7 +166,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
     protected void processReceivedMessage(byte[] data) {
 	Logger.d(TAG, "processMessage(" + Utils.bytesToHexString(data) + ")");
 	for (int i = 0; i < listeners.size(); i++) {
-	    EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
+	    EnOceanPacketListener listener = listeners.get(i);
 	    listener.radioPacketReceived(data);
 	}
     }
@@ -173,16 +182,17 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
     class ChipPIDMapping {
 
 	private Configuration config;
-	private Dictionary mappings;
+	private Dictionary<String,Object>		mappings;
 
 	public ChipPIDMapping(BundleContext bc) throws UnknownServiceException, IOException {
-	    ServiceReference ref = bc.getServiceReference(ConfigurationAdmin.class.getName());
+		ServiceReference<ConfigurationAdmin> ref = bc
+				.getServiceReference(ConfigurationAdmin.class);
 	    if (ref != null) {
-		ConfigurationAdmin configAdmin = (ConfigurationAdmin) bc.getService(ref);
+		ConfigurationAdmin configAdmin = bc.getService(ref);
 		config = configAdmin.getConfiguration(EnOceanBaseDriver.CONFIG_EXPORTED_PID_TABLE);
 		mappings = config.getProperties();
 		if (mappings == null) {
-		    mappings = new Properties();
+			mappings = new Hashtable<>();
 		    config.update(mappings);
 		}
 	    } else {

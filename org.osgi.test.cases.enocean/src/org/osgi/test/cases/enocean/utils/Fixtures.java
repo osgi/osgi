@@ -17,7 +17,8 @@
 package org.osgi.test.cases.enocean.utils;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -90,16 +91,17 @@ public final class Fixtures {
 	 * @param bc
 	 * @return device's service registration.
 	 */
-	public static ServiceRegistration registerDevice(BundleContext bc) {
+	public static ServiceRegistration<EnOceanDevice> registerDevice(
+			BundleContext bc) {
 		EnOceanDevice device = new Device01();
-		Dictionary props = new Properties();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(EnOceanDevice.ENOCEAN_EXPORT, Boolean.TRUE);
 		props.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
 		props.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
 		props.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
 		props.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
 		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
-		return bc.registerService(EnOceanDevice.class.getName(), device, props);
+		return bc.registerService(EnOceanDevice.class, device, props);
 	}
 
 }
