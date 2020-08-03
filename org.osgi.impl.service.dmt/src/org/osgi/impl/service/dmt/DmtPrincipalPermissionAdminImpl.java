@@ -19,27 +19,24 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.IOException;
-
 import java.security.Permission;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.MissingResourceException;
+import java.util.Map.Entry;
+
 import org.osgi.framework.AdminPermission;
-import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.util.tracker.ServiceTracker;
 
 // known problem: if a principal is called "service.pid" it will be ignored
 public class DmtPrincipalPermissionAdminImpl 
@@ -50,19 +47,18 @@ public class DmtPrincipalPermissionAdminImpl
     private static final String CONFIG_KEY_PREFIX = "principal.";
     private static final int PREFIX_LENGTH = CONFIG_KEY_PREFIX.length();
     
-    private Hashtable permissions;
+	private Map<String,PermissionInfo[]>	permissions;
     private Context context;
     
     // the field "stored" indicates whether the last provided permission table has already be stored to the CM
     // It is used by the CM-ServiceListener to determine if the a table must be stored, when the CM becomes available. 
     private boolean stored;
-    private ServiceReference configAdminRef;
     
     public DmtPrincipalPermissionAdminImpl(Context context ) {
         this.context = context;
         
         // persisted permission table will be set by the Configuration Admin
-        permissions = new Hashtable();
+		permissions = new Hashtable<>();
         
         String caFilter = "(" + org.osgi.framework.Constants.OBJECTCLASS + "=" + ConfigurationAdmin.class.getName() + ")";
         try {
@@ -74,22 +70,24 @@ public class DmtPrincipalPermissionAdminImpl
     
     
 
-	public synchronized Map getPrincipalPermissions() {
+	@Override
+	public synchronized Map<String,PermissionInfo[]> getPrincipalPermissions() {
         checkPermission(new AdminPermission());
-        return (Map) permissions.clone();
+		return new Hashtable<>(permissions);
     }
 
-    public synchronized void setPrincipalPermissions(Map permissions)
+    @Override
+	public synchronized void setPrincipalPermissions(
+			Map<String,PermissionInfo[]> permissions)
         throws IOException, IllegalArgumentException
     {
         checkPermission(new AdminPermission());
 
         // store permissions immediately, this will be overwritten by itself
         // when the (asynchronous) update arrives from the config. admin
-        this.permissions = new Hashtable(permissions);
+		this.permissions = new Hashtable<>(permissions);
         
-        ConfigurationAdmin configAdmin = (ConfigurationAdmin) 
-            context.getTracker(ConfigurationAdmin.class).getService();
+        ConfigurationAdmin configAdmin = context.getTracker(ConfigurationAdmin.class).getService();
         if(configAdmin == null) {
 //          throw new MissingResourceException("Configuration Admin not found.",
 //          ConfigurationAdmin.class.getName(), null);
@@ -102,21 +100,23 @@ public class DmtPrincipalPermissionAdminImpl
         stored = true;
     }
 
-    private synchronized void storePermissions( ConfigurationAdmin configAdmin, Map permissions ) 
+	private synchronized void storePermissions(ConfigurationAdmin configAdmin,
+			@SuppressWarnings("hiding") Map<String,PermissionInfo[]> permissions)
     		throws IOException, IllegalArgumentException {
         Configuration config = configAdmin.getConfiguration(
                 DmtAdminActivator.DMT_PERMISSION_ADMIN_SERVICE_PID);
         
-        Hashtable properties = new Hashtable();
-        Iterator i = permissions.entrySet().iterator();
+		Dictionary<String,Object> properties = new Hashtable<>();
+		Iterator<Map.Entry<String,PermissionInfo[]>> i = permissions.entrySet()
+				.iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+			Entry<String,PermissionInfo[]> entry = i.next();
             
             String principal;
             PermissionInfo[] permInfos;
             try {
-                principal = (String) entry.getKey();
-                permInfos = (PermissionInfo[]) entry.getValue();
+                principal = entry.getKey();
+                permInfos = entry.getValue();
             } catch(ClassCastException e) {
                 throw new IllegalArgumentException("Invalid data type in permission map.");
             }
@@ -130,16 +130,17 @@ public class DmtPrincipalPermissionAdminImpl
         config.update(properties);
     }
     
-    public synchronized void updated(Dictionary properties)
+    @Override
+	public synchronized void updated(Dictionary<String, ? > properties)
             throws ConfigurationException {
         if (properties == null) {
-            permissions = new Hashtable();
+			permissions = new Hashtable<>();
             return;
         }
-        Hashtable newPermissions = new Hashtable();
-        Enumeration keys = properties.keys();
+		Map<String,PermissionInfo[]> newPermissions = new Hashtable<>();
+		Enumeration<String> keys = properties.keys();
         while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
 
             if(!key.startsWith(CONFIG_KEY_PREFIX))
                 continue;
@@ -173,10 +174,10 @@ public class DmtPrincipalPermissionAdminImpl
     }
 
 
+	@Override
 	public void serviceChanged(ServiceEvent event) {
 		if ( event.getType() == ServiceEvent.REGISTERED ) {
 			if ( permissions != null && permissions.size() > 0 && ! stored ) {
-				ServiceReference caRef = event.getServiceReference();
 				ConfigurationAdmin configAdmin = (ConfigurationAdmin) context.getBundleContext().getService(event.getServiceReference());
 				try {
 					System.out.println("ConfigurationAdmin became available --> storing pending PrincipalPermissions");
@@ -192,7 +193,7 @@ public class DmtPrincipalPermissionAdminImpl
 			
 		}
 		else if ( event.getType() == ServiceEvent.UNREGISTERING ) {
-			
+			// ??
 		}
 		
 	}

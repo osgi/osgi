@@ -1,14 +1,13 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.spi.DataPlugin;
-
-import java.util.Dictionary;
-import java.util.Hashtable;
-
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.MetaNode;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
@@ -20,15 +19,17 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 	DmtSession session;
 	GenericDataPlugin dataPlugin;
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
 
 	
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println( "tearing down");
@@ -87,12 +88,12 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2 );
 		
 		if ( withMetadata ) {
-			int[] ops = { MetaNode.CMD_GET, MetaNode.CMD_REPLACE };
-			MetaNode metaNode = new MetaNode(true, MetaNode.PERMANENT, DmtData.FORMAT_STRING, ops );
+			int[] ops = { org.osgi.service.dmt.MetaNode.CMD_GET, org.osgi.service.dmt.MetaNode.CMD_REPLACE };
+			MetaNode metaNode = new MetaNode(true, org.osgi.service.dmt.MetaNode.PERMANENT, DmtData.FORMAT_STRING, ops );
 			n3.setMetaNode(metaNode);
 		}
 		
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {mountRoot});
 		registerService(DataPlugin.class.getName(), dataPlugin, props );
 	}

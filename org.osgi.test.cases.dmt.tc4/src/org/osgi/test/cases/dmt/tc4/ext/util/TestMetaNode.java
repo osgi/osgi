@@ -11,75 +11,93 @@ public class TestMetaNode implements MetaNode {
         this.isLeaf = isLeaf;
     }
 
-    public int getScope() {
+    @Override
+	public int getScope() {
         return MetaNode.DYNAMIC;
     }
 
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         return true;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return null;
     }
 
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
         return isLeaf;
     }
 
-    public boolean isZeroOccurrenceAllowed() {
+    @Override
+	public boolean isZeroOccurrenceAllowed() {
         return true;
     }
 
-    public int getMaxOccurrence() {
+    @Override
+	public int getMaxOccurrence() {
         return 0;
     }
 
-    public String[] getRawFormatNames() {
+    @Override
+	public String[] getRawFormatNames() {
         return null;
     }
 
-    public boolean isValidName(String name) {
+    @Override
+	public boolean isValidName(String name) {
         return true;
     }
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
 
-    public int getFormat() {
+    @Override
+	public int getFormat() {
         return 0;
     }
 
-    public String[] getMimeTypes() {
+    @Override
+	public String[] getMimeTypes() {
         return null;
     }
 
-    public DmtData getDefault() {
+    @Override
+	public DmtData getDefault() {
         return null;
     }
 
-    public double getMin() {
+    @Override
+	public double getMin() {
         return 0;
     }
 
-    public double getMax() {
+    @Override
+	public double getMax() {
         return 0;
     }
 
-    public boolean isValidValue(DmtData value) {
+    @Override
+	public boolean isValidValue(DmtData value) {
         return true;
     }
 
-    public DmtData[] getValidValues() {
+    @Override
+	public DmtData[] getValidValues() {
         return null;
     }
 
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
         return null;
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
         return null;
     }
 }

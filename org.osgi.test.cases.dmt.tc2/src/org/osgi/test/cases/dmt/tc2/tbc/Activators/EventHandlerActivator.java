@@ -38,6 +38,7 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -59,22 +60,25 @@ public class EventHandlerActivator implements BundleActivator {
 		this.tbc = tbc;
 	}	
 	
-	private ServiceRegistration servReg;
+	private ServiceRegistration<EventHandler>	servReg;
 	
 	private EventHandlerImpl testDmtHandlerImpl;
 
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testDmtHandlerImpl = new EventHandlerImpl(tbc);
 		String[] topics = new String[] {"org/osgi/service/dmt/DmtEvent/*"};
 		String subtree = "(nodes="+TestExecPluginActivator.ROOT + "/*)";
 		
-		Hashtable ht = new Hashtable();
+		Dictionary<String,Object> ht = new Hashtable<>();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
 		ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, subtree);
-		servReg = bc.registerService(EventHandler.class.getName(), testDmtHandlerImpl, ht);
+		servReg = bc.registerService(EventHandler.class, testDmtHandlerImpl,
+				ht);
 	}
 	
+	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		// unregistering the service
 		servReg.unregister();

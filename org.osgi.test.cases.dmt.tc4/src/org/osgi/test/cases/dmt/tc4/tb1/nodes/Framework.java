@@ -18,36 +18,44 @@ public class Framework extends InteriorNode {
 	}
 	
 
+	@Override
 	public void open() {
 		startLevel.open();
 		frameworkLifecycle.open();
 	}
 	
+	@Override
 	public void close() {
 		startLevel.close();
 		frameworkLifecycle.close();
 	}
 	
+	@Override
 	public String getNodeName() {
 		return "_Framework";
 	}
 	
+	@Override
 	public String getNodePath() {
 		return "./OSGi/_Framework";
 	}
 	
+	@Override
 	public Node[] getChildNodes() {
 //		return new Node[] {startLevel, frameworkLifecycle };
 		return new Node[] {frameworkLifecycle };
 	}
 	
+	@Override
 	public String[] getChildNodeNames() {
 //		return new String[] { startLevel.getNodeName(), frameworkLifecycle.getNodeName() };
 		return new String[] { frameworkLifecycle.getNodeName() };
 	}
 	
+	@Override
 	public MetaNode getMetaNode() {
 		return new InteriorMetaNode() {
+			@Override
 			public boolean can(int operation) {
 				if ( operation == MetaNode.CMD_GET ) {
 					return true;
@@ -56,14 +64,17 @@ public class Framework extends InteriorNode {
 				return false;
 			}
 
+			@Override
 			public String getDescription() {
 				return "Framework Root node.";
 			}
 
+			@Override
 			public int getMaxOccurrence() {
 				return 1;
 			}
 
+			@Override
 			public int getScope() {
 				return MetaNode.PERMANENT;
 			}

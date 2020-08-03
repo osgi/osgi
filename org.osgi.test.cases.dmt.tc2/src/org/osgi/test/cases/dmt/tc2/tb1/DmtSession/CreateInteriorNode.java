@@ -51,6 +51,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -66,6 +69,7 @@ public class CreateInteriorNode implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testCreateInteriorNode001();
@@ -104,12 +108,12 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode001");
+			DefaultTestBundleControl.log("#testCreateInteriorNode001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
+			TestCase.assertEquals("Asserts DmtException.getCode",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -127,14 +131,14 @@ public class CreateInteriorNode implements TestInterface {
 
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode002");
+			DefaultTestBundleControl.log("#testCreateInteriorNode002");
 			
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
-			tbc.pass("createInteriorNode was successfully executed");
+			DefaultTestBundleControl.pass("createInteriorNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -153,13 +157,13 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode003");
+			DefaultTestBundleControl.log("#testCreateInteriorNode003");
 			tbc.setPermissions(new PermissionInfo[] {
                 new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET),
                 new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD)});
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
-			tbc.pass("createInteriorNode was successfully executed");
+			DefaultTestBundleControl.pass("createInteriorNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -180,7 +184,7 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode004() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode004");
+            DefaultTestBundleControl.log("#testCreateInteriorNode004");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -193,7 +197,7 @@ public class CreateInteriorNode implements TestInterface {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
             Acl acl = session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE);
-            tbc.assertTrue("Asserts that if the principal does not have Replace access rights on the parent " +
+            TestCase.assertTrue("Asserts that if the principal does not have Replace access rights on the parent " +
                     "of the new node then the session must automatically set the ACL of the new node so that " +
                     "the creating server has Add, Delete and Replace rights on the new node. ",
                     acl.isPermitted(DmtConstants.PRINCIPAL,Acl.ADD | Acl.DELETE | Acl.REPLACE) && 
@@ -218,13 +222,13 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode005");
+			DefaultTestBundleControl.log("#testCreateInteriorNode005");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INTERIOR_NODE,
 					DmtConstants.MIMETYPE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
+			TestCase.assertEquals("Asserts DmtException.getCode",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -243,7 +247,7 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode006");
+			DefaultTestBundleControl.log("#testCreateInteriorNode006");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -251,7 +255,7 @@ public class CreateInteriorNode implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE,
 					DmtConstants.MIMETYPE);
-			tbc.pass("createInteriorNode was successfully executed");
+			DefaultTestBundleControl.pass("createInteriorNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -271,14 +275,14 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode007");
+			DefaultTestBundleControl.log("#testCreateInteriorNode007");
 			tbc.setPermissions(new PermissionInfo[] {
                     new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET),
                     new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD)});
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE,
 					DmtConstants.MIMETYPE);
-			tbc.pass("createInteriorNode was successfully executed");
+			DefaultTestBundleControl.pass("createInteriorNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -297,13 +301,13 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode008");
+			DefaultTestBundleControl.log("#testCreateInteriorNode008");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE_NAME);
 			
-			tbc
+			DefaultTestBundleControl
 					.pass("A relative URI can be used with CreateInteriorNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -320,13 +324,13 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode009() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode009");
+			DefaultTestBundleControl.log("#testCreateInteriorNode009");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE_NAME, DmtConstants.MIMETYPE);
 			
-			tbc
+			DefaultTestBundleControl
 					.pass("A relative URI can be used with CreateInteriorNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -344,12 +348,12 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode010");
+			DefaultTestBundleControl.log("#testCreateInteriorNode010");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -364,13 +368,13 @@ public class CreateInteriorNode implements TestInterface {
 	 */
 	private void testCreateInteriorNode011() {
 		DmtSession session = null;
-		tbc.log("#testCreateInteriorNode011");
+		DefaultTestBundleControl.log("#testCreateInteriorNode011");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.LEAF_NODE +"/test", null);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -388,13 +392,13 @@ public class CreateInteriorNode implements TestInterface {
 	 */
 	private void testCreateInteriorNode012() {
 		DmtSession session = null;
-		tbc.log("#testCreateInteriorNode012");
+		DefaultTestBundleControl.log("#testCreateInteriorNode012");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.LEAF_NODE +"/test");
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -413,13 +417,13 @@ public class CreateInteriorNode implements TestInterface {
 	 */
 	private void testCreateInteriorNode013() {
 		DmtSession session = null;
-		tbc.log("#testCreateInteriorNode013");
+		DefaultTestBundleControl.log("#testCreateInteriorNode013");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestReadOnlyPluginActivator.INEXISTENT_NODE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -439,7 +443,7 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode014() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode014");
+            DefaultTestBundleControl.log("#testCreateInteriorNode014");
             TestExecPlugin.resetCount();
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -447,7 +451,7 @@ public class CreateInteriorNode implements TestInterface {
             session.createInteriorNode(TestExecPluginActivator.INEXISTENT_INTERIOR_NODES);
 
            
-            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+            TestCase.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2);
         } catch (Exception e) {
@@ -466,7 +470,7 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode015() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode015");
+            DefaultTestBundleControl.log("#testCreateInteriorNode015");
             TestExecPlugin.resetCount();
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -474,7 +478,7 @@ public class CreateInteriorNode implements TestInterface {
             session.createInteriorNode(TestExecPluginActivator.INEXISTENT_INTERIOR_NODES,DmtConstants.MIMETYPE);
 
            
-            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+            TestCase.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2);
         } catch (Exception e) {
@@ -494,16 +498,16 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode016() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode016");
+            DefaultTestBundleControl.log("#testCreateInteriorNode016");
             TestExecPlugin.setExceptionAtCreateInteriorNode(true);
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.createInteriorNode(TestExecPluginActivator.INEXISTENT_INTERIOR_NODES);
             
-            tbc.failException("", DmtIllegalStateException.class);
+            DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
         } catch (DmtIllegalStateException e) {
-            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+            DefaultTestBundleControl.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
@@ -522,16 +526,16 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode017() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode017");
+            DefaultTestBundleControl.log("#testCreateInteriorNode017");
             TestExecPlugin.setExceptionAtCreateInteriorNode(true);
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.createInteriorNode(TestExecPluginActivator.INEXISTENT_INTERIOR_NODES,DmtConstants.MIMETYPE);
             
-            tbc.failException("", DmtIllegalStateException.class);
+            DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
         } catch (DmtIllegalStateException e) {
-            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+            DefaultTestBundleControl.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
@@ -550,15 +554,15 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode018() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode018");
+            DefaultTestBundleControl.log("#testCreateInteriorNode018");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(TestReadOnlyPluginActivator.INEXISTENT_NODE);
 
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -576,15 +580,15 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode019() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode019");
+            DefaultTestBundleControl.log("#testCreateInteriorNode019");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(TestReadOnlyPluginActivator.INEXISTENT_NODE,DmtConstants.MIMETYPE);
 
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -603,15 +607,15 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode020() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode020");
+            DefaultTestBundleControl.log("#testCreateInteriorNode020");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(TestNonAtomicPluginActivator.INEXISTENT_NODE);
 
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -629,15 +633,15 @@ public class CreateInteriorNode implements TestInterface {
     private void testCreateInteriorNode021() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateInteriorNode021");
+            DefaultTestBundleControl.log("#testCreateInteriorNode021");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(TestNonAtomicPluginActivator.INEXISTENT_NODE,DmtConstants.MIMETYPE);
 
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -654,13 +658,13 @@ public class CreateInteriorNode implements TestInterface {
      */
     private void testCreateInteriorNode022() {
         DmtSession session = null;
-        tbc.log("#testCreateInteriorNode022");
+        DefaultTestBundleControl.log("#testCreateInteriorNode022");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createInteriorNode(TestNonAtomicPluginActivator.INEXISTENT_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -680,14 +684,14 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode023() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode023");
+			DefaultTestBundleControl.log("#testCreateInteriorNode023");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.createInteriorNode("");
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -707,14 +711,14 @@ public class CreateInteriorNode implements TestInterface {
 	private void testCreateInteriorNode024() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateInteriorNode024");
+			DefaultTestBundleControl.log("#testCreateInteriorNode024");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.createInteriorNode("",DmtConstants.MIMETYPE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {

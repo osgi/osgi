@@ -1,10 +1,10 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import org.osgi.service.dmt.DmtException;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.osgi.service.dmt.DmtException;
 
 /**
  * A Segment represents one node in the dmtree. Segments can have a Plugin 
@@ -17,12 +17,12 @@ import java.util.List;
  * @author steffen
  *
  */
-public class Segment {
+public class Segment<P> {
 
-	final Segment parent;
+	final Segment<P>		parent;
 	final String name;
-	final List<Segment> children = new ArrayList<Segment>();
-	Plugin plugin;
+	final List<Segment<P>>	children	= new ArrayList<>();
+	Plugin<P>				plugin;
 	boolean locked;
 	Thread lockedThread;
 	String mountedOn;
@@ -35,7 +35,7 @@ public class Segment {
 		creationTime = null;
 	}
 
-	Segment(Segment parent, String name) {
+	Segment(Segment<P> parent, String name) {
 		this.name = name;
 		this.parent = parent;
 		this.creationTime = new Date();
@@ -48,7 +48,7 @@ public class Segment {
 	 * @param child
 	 * @throws DmtException
 	 */
-	synchronized void release(Segment child) throws DmtException {
+	synchronized void release(Segment<P> child) throws DmtException {
 		if (child != null)
 			getChildren().remove(child);
 		else
@@ -68,7 +68,7 @@ public class Segment {
 	 * @return
 	 */
 	private boolean hasDescendantPlugins() {
-		List<Segment> descendants = new ArrayList<Segment>();
+		List<Segment<P>> descendants = new ArrayList<>();
 		getFirstDescendantPlugins(descendants);
 //		for (Segment descendant : descendants) {
 //			if (descendant.plugin != null)
@@ -78,28 +78,30 @@ public class Segment {
 		return ! descendants.isEmpty();
 	}
 
-	protected Segment getSegmentFor(String[] path, int i, boolean add) {
+	protected Segment<P> getSegmentFor(String[] path, int i, boolean add) {
 		if (i >= path.length)
 			return this;
 
+		@SuppressWarnings("hiding")
 		String name = path[i];
-		for (Segment child : children) {
+		for (Segment<P> child : children) {
 			if (child.name.equals(name))
 				return child.getSegmentFor(path, i + 1, add);
 		}
 		if (!add)
 			return null;
-		Segment child = new Segment(this, name);
+		Segment<P> child = new Segment<>(this, name);
 		// SD: don't add mount points "#"
 		if (!"#".equals(name))
 			children.add(child);
 		return child.getSegmentFor(path, i + 1, add);
 	}
 
-	public Plugin getPluginFor(String[] path, int i) {
+	public Plugin<P> getPluginFor(String[] path, int i) {
 		if (i < path.length) {
+			@SuppressWarnings("hiding")
 			String name = path[i];
-			for (Segment child : children) {
+			for (Segment<P> child : children) {
 				if (child.name.equals(name))
 					return child.getPluginFor(path, i + 1);
 			}
@@ -107,7 +109,7 @@ public class Segment {
 		return this.getPlugin();
 	}
 
-	Plugin getPlugin() {
+	Plugin<P> getPlugin() {
 		// if (plugin == null)
 		if (plugin != null)
 			return plugin;
@@ -143,8 +145,8 @@ public class Segment {
 	 * get the top-level plugins in the given segments descendants list
 	 * @param result
 	 */
-	public void getFirstDescendantPlugins(List<Segment> result) {
-		for (Segment s : children) {
+	public void getFirstDescendantPlugins(List<Segment<P>> result) {
+		for (Segment<P> s : children) {
 			// stop at first descendant segment with attached plugin 
 			if ( s.plugin != null )
 				result.add(s);
@@ -169,7 +171,7 @@ public class Segment {
 		return sb;
 	}
 
-	public List<Segment> getChildren() {
+	public List<Segment<P>> getChildren() {
 		return children;
 	}
 
@@ -177,6 +179,7 @@ public class Segment {
 		return name;
 	}
 
+	@Override
 	public String toString() {
 		return getUri().toString();
 	}

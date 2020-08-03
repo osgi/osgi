@@ -18,9 +18,6 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -28,18 +25,21 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+
 class ConfigEntry {
     private Type type;
     private Cardinality cardinality;
     private Value value;
-    private Hashtable values;
+	private Hashtable<Integer,Value>	values;
     
     /**
      * Creates a new ConfigEntry object from a valid configuration property 
      * value.  <code>value</code> must not contain an empty Vector.
      */
     ConfigEntry(Object obj) {
-        Class cl = obj.getClass();
+		Class< ? > cl = obj.getClass();
         if(cl.equals(byte[].class) 
                 || (!cl.equals(Vector.class) && !cl.isArray())) {
             
@@ -52,13 +52,13 @@ class ConfigEntry {
         } else { // for non-scalar types (array and vector)
             
             value = null;
-            values = new Hashtable();
+			values = new Hashtable<>();
             if(obj instanceof Vector) {
                 // non-empty vector, also assuming homogeneity (CA works)
-                Vector vector = (Vector) obj;
+				Vector< ? > vector = (Vector< ? >) obj;
                 type = Type.getTypeByClass(vector.firstElement().getClass());
                 cardinality = Cardinality.VECTOR;
-                Iterator iter = vector.iterator();
+				Iterator< ? > iter = vector.iterator();
                 for(int i = 0; iter.hasNext(); i++)
                     values.put(Integer.valueOf(i), new Value(iter.next(), type));
             } else { // obj is an array
@@ -94,7 +94,7 @@ class ConfigEntry {
         return value;
     }
     
-    Hashtable getValues() {
+	Hashtable<Integer,Value> getValues() {
         return values;
     }
     
@@ -111,7 +111,7 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node does not " +
                     "exist: entry is scalar or node not created yet.");
 
-        return (Value) values.get(Integer.valueOf(index));
+        return values.get(Integer.valueOf(index));
     }
     
     /**
@@ -126,7 +126,7 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node " +
                     "does not exist: entry is scalar or node not created yet.");
         
-        return (Integer[]) values.keySet().toArray(new Integer[] {});
+        return values.keySet().toArray(new Integer[] {});
     }
     
     /**
@@ -135,7 +135,8 @@ class ConfigEntry {
      * @throws ConfigPluginException if the entry is incomplete or the indexing
      *         of array/vector contents is not continuous
      */
-    Object getObject() throws ConfigPluginException {
+	@SuppressWarnings("unchecked")
+	Object getObject() throws ConfigPluginException {
         if(type == null || cardinality == null || 
                 (value == null && values == null))
             throw new ConfigPluginException(DmtException.METADATA_MISMATCH, 
@@ -154,10 +155,10 @@ class ConfigEntry {
         if(isArray)
             obj = Array.newInstance(type.getTypeClass(), size);
         else
-            obj = new Vector(size);
+			obj = new Vector<Object>(size);
         
         for (int i = 0; i < size; i++) {
-            Value v = (Value) values.get(Integer.valueOf(i));
+            Value v = values.get(Integer.valueOf(i));
             if(v == null) // the indices are not continuous from 0 to size
                 throw new ConfigPluginException(DmtException.METADATA_MISMATCH,
                         "An array or vector value " +
@@ -166,7 +167,7 @@ class ConfigEntry {
             if(isArray)
                 Array.set(obj, i, v.getObject());
             else
-                ((Vector)obj).add(v.getObject());
+				((Vector<Object>) obj).add(v.getObject());
         }
             
         return obj;
@@ -198,9 +199,9 @@ class ConfigEntry {
         if(value != null)
             value.setType(type);
         else if(values != null) {
-            Iterator i = values.values().iterator();
+			Iterator<Value> i = values.values().iterator();
             while (i.hasNext())
-                ((Value) i.next()).setType(type);
+                i.next().setType(type);
         }
         
         this.type = type;
@@ -298,7 +299,7 @@ class ConfigEntry {
                     "The specified key must contain binary data as a scalar " +
                     "value.");
 
-        values = new Hashtable();
+		values = new Hashtable<>();
     }
     
     /**
@@ -471,16 +472,16 @@ class Cardinality {
 }
 
 class Type {
-    static final Map T = new HashMap();
+	static final Map<Class< ? >,Type>	T	= new HashMap<>();
     static final DmtData[] ALL_TYPE_DATA;
     
     static {
         initTypes();
         
         ALL_TYPE_DATA = new DmtData[T.size()];
-        Iterator iter = T.values().iterator();
+		Iterator<Type> iter = T.values().iterator();
         for(int i = 0; iter.hasNext(); i++)
-            ALL_TYPE_DATA[i] = ((Type) iter.next()).getData();
+            ALL_TYPE_DATA[i] = iter.next().getData();
     }
     
     private static void initTypes() {
@@ -496,18 +497,18 @@ class Type {
         addType(byte[].class,    "byte[]",       DmtData.FORMAT_BINARY);
     }
     
-    private static void addType(Class cl, String name, int format) {
+	private static void addType(Class< ? > cl, String name, int format) {
         T.put(cl, new Type(cl, name, null, format));
     }
     
-    private static void addType(Class cl, Class prim, int format) {
+	private static void addType(Class< ? > cl, Class< ? > prim, int format) {
         Type t = new Type(cl, cl.getName(), null, format);
         T.put(cl, t);
         T.put(prim, new Type(prim, prim.getName(), t, format));
     }
 
-    static Type getTypeByClass(Class cl) {
-        return (Type) T.get(cl);
+	static Type getTypeByClass(Class< ? > cl) {
+        return T.get(cl);
     }
     
     static Type getTypeByData(DmtData data) {
@@ -515,22 +516,22 @@ class Type {
             return null;
         
         String name = data.getString();
-        Iterator i = T.values().iterator();
+		Iterator<Type> i = T.values().iterator();
         while (i.hasNext()) {
-            Type type = (Type) i.next();
+            Type type = i.next();
             if(type.getName().equals(name))
                 return type;
         }
         return null;
     }
     
-    private Class cl;
+	private Class< ? >	cl;
     private String name;
     private Type wrapper;
     private int format;
     private DmtData data; // redundant
     
-    private Type(Class cl, String name, Type wrapper, int format) {
+	private Type(Class< ? > cl, String name, Type wrapper, int format) {
         this.cl = cl;
         this.name = name;
         this.wrapper = wrapper;
@@ -547,7 +548,7 @@ class Type {
         return name;
     }
     
-    Class getTypeClass() {
+	Class< ? > getTypeClass() {
         return cl;
     }
     
@@ -563,7 +564,8 @@ class Type {
         return cl.isPrimitive();
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return name;
     }
 }
@@ -680,7 +682,7 @@ class Value {
         // can only be one of the types without a native DM representation
         String valueString = (String) value;
         
-        Class cl = type.getTypeClass();
+		Class< ? > cl = type.getTypeClass();
         this.type = type;
         
         if(String.class.equals(cl))

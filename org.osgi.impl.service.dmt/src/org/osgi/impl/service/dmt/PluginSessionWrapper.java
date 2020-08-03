@@ -18,14 +18,6 @@
 
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -34,6 +26,14 @@ import java.security.PrivilegedExceptionAction;
 import java.util.Date;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 
 /**
@@ -45,9 +45,9 @@ import org.osgi.framework.ServiceReference;
  */
 
 public class PluginSessionWrapper implements TransactionalDataSession {
-    private ReadableDataSession      readableDataSession      = null;
-    private ReadWriteDataSession     readWriteDataSession     = null;
-    private TransactionalDataSession transactionalDataSession = null;
+	ReadableDataSession							readableDataSession			= null;
+	ReadWriteDataSession						readWriteDataSession		= null;
+	TransactionalDataSession					transactionalDataSession	= null;
     
     private final AccessControlContext securityContext;
     
@@ -60,7 +60,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
 //    private final PluginRegistration pluginRegistration;
     // SD: pluginRegistration is just for checking that registration is still valid
     // this can be done also via a ServiceRegistration directly 
-    private final ServiceReference pluginReference;
+private final ServiceReference<DataPlugin>		pluginReference;
     
     
     // redundant information, could be calculated from session variables
@@ -70,7 +70,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     private String infoString;
     
     // Note, that the session type reflects the kind of 
-    public PluginSessionWrapper(ServiceReference pluginReference, 
+	public PluginSessionWrapper(ServiceReference<DataPlugin> pluginReference,
             ReadableDataSession session, int sessionType, Node sessionRoot, 
             AccessControlContext securityContext) {
         readableDataSession = session;
@@ -96,7 +96,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         return sessionRoot;
     } 
     
-    public void nodeChanged(String[] nodePath) throws DmtException {
+    @Override
+	public void nodeChanged(String[] nodePath) throws DmtException {
         // no need to override the permissions of the plugin here,
         // only internal data structures have to be modified
         
@@ -108,7 +109,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * NOTE: if this class wraps a plugin without transactional write support,
      * this call is ignored
      */
-    public void commit() throws DmtException {
+    @Override
+	public void commit() throws DmtException {
         checkRegistration(sessionRoot.getPath());
         
         // ignore commit for non-transactional plugins
@@ -121,8 +123,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
         
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     transactionalDataSession.commit();
                     return null;
                 }
@@ -136,7 +140,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * NOTE: if this class wraps a plugin without transactional write support,
      * this call is ignored
      */
-    public void rollback() throws DmtException {
+    @Override
+	public void rollback() throws DmtException {
         checkRegistration(sessionRoot.getPath());
         
         // ignore rollback for non-transactional plugins
@@ -150,8 +155,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     transactionalDataSession.rollback();
                     return null;
                 }
@@ -161,7 +168,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
     
-    public void setNodeTitle(final String[] path, final String title)
+    @Override
+	public void setNodeTitle(final String[] path, final String title)
             throws DmtException {
         checkRegistration(path);
         
@@ -172,8 +180,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.setNodeTitle(path, title);
                     return null;
                 }
@@ -183,7 +193,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
     
-    public void setNodeValue(final String[] path, final DmtData data)
+    @Override
+	public void setNodeValue(final String[] path, final DmtData data)
             throws DmtException {
         checkRegistration(path);
         
@@ -194,8 +205,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.setNodeValue(path, data);
                     return null;
                 }
@@ -205,7 +218,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void setNodeType(final String[] path, final String type)
+    @Override
+	public void setNodeType(final String[] path, final String type)
             throws DmtException {
         checkRegistration(path);
         
@@ -216,8 +230,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.setNodeType(path, type);
                     return null;
                 }
@@ -227,7 +243,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void deleteNode(final String[] path) throws DmtException {
+    @Override
+	public void deleteNode(final String[] path) throws DmtException {
         checkRegistration(path);
         
         if (securityContext == null) {                      // local caller
@@ -237,8 +254,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.deleteNode(path);
                     return null;
                 }
@@ -248,7 +267,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void createInteriorNode(final String[] path, final String type)
+    @Override
+	public void createInteriorNode(final String[] path, final String type)
             throws DmtException {
         checkRegistration(path);
         
@@ -259,8 +279,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.createInteriorNode(path, type);
                     return null;
                 }
@@ -270,7 +292,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void createLeafNode(final String[] path, final DmtData value, 
+    @Override
+	public void createLeafNode(final String[] path, final DmtData value, 
             final String mimeType) throws DmtException {
         checkRegistration(path);
         
@@ -280,8 +303,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
         
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.createLeafNode(path, value, mimeType);
                     return null;
                 }
@@ -291,7 +316,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
     
-    public void copy(final String[] path, final String[] newPath,
+    @Override
+	public void copy(final String[] path, final String[] newPath,
             final boolean recursive) throws DmtException {
         checkRegistration(path);
         
@@ -302,8 +328,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.copy(path, newPath, recursive);
                     return null;
                 }
@@ -313,7 +341,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void renameNode(final String[] path, final String newName)
+    @Override
+	public void renameNode(final String[] path, final String newName)
             throws DmtException {
         checkRegistration(path);
         
@@ -324,8 +353,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readWriteDataSession.renameNode(path, newName);
                     return null;
                 }
@@ -335,7 +366,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public void close() throws DmtException {
+    @Override
+	public void close() throws DmtException {
         checkRegistration(sessionRoot.getPath());
         
         if (securityContext == null) {                      // local caller
@@ -345,8 +377,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+                @Override
+						public Void run() throws DmtException {
                     readableDataSession.close();
                     return null;
                 }
@@ -356,32 +390,37 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public boolean isNodeUri(final String[] path) {
+    @Override
+	public boolean isNodeUri(final String[] path) {
         checkRegistration(path);
         
         if (securityContext == null)                        // local caller
             return readableDataSession.isNodeUri(path);
         
                                                             // remote caller
-        Boolean ret = (Boolean) AccessController.doPrivileged(
-                new PrivilegedAction() {
-                    public Object run() {
+															Boolean ret = AccessController
+																	.doPrivileged(
+																			new PrivilegedAction<Boolean>() {
+                    @Override
+																				public Boolean run() {
                         return Boolean.valueOf(readableDataSession.isNodeUri(path));
                     }
                 }, securityContext);
         return ret.booleanValue();
     }
 
-    public boolean isLeafNode(final String[] path) throws DmtException {
+    @Override
+	public boolean isLeafNode(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
             return readableDataSession.isLeafNode(path);
         
         try {                                               // remote caller
-            Boolean isLeaf = (Boolean) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            Boolean isLeaf = AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<Boolean>() {
+                        @Override
+						public Boolean run() throws DmtException {
                             return Boolean.valueOf(
                                     readableDataSession.isLeafNode(path));
                         }
@@ -392,7 +431,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
     
-    public DmtData getNodeValue(final String[] path) throws DmtException {
+    @Override
+	public DmtData getNodeValue(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -400,9 +440,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (DmtData) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<DmtData>() {
+                        @Override
+						public DmtData run() throws DmtException {
                             return readableDataSession.getNodeValue(path);
                         }
                     }, securityContext);
@@ -411,7 +452,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public String getNodeTitle(final String[] path) throws DmtException {
+    @Override
+	public String getNodeTitle(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -419,9 +461,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (String) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<String>() {
+                        @Override
+						public String run() throws DmtException {
                             return readableDataSession.getNodeTitle(path);
                         }
                     }, securityContext);
@@ -430,7 +473,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public String getNodeType(final String[] path) throws DmtException {
+    @Override
+	public String getNodeType(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -438,9 +482,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (String) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<String>() {
+                        @Override
+						public String run() throws DmtException {
                             return readableDataSession.getNodeType(path);
                         }
                     }, securityContext);
@@ -449,7 +494,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public int getNodeVersion(final String[] path) throws DmtException {
+    @Override
+	public int getNodeVersion(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -457,9 +503,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            Integer ret = (Integer) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            Integer ret = AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<Integer>() {
+                        @Override
+						public Integer run() throws DmtException {
                             return Integer.valueOf(readableDataSession.getNodeVersion(path));
                         }
                     }, securityContext);
@@ -469,7 +516,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public Date getNodeTimestamp(final String[] path) throws DmtException {
+    @Override
+	public Date getNodeTimestamp(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -477,9 +525,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (Date) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<Date>() {
+                        @Override
+						public Date run() throws DmtException {
                             return readableDataSession.getNodeTimestamp(path);
                         }
                     }, securityContext);
@@ -488,7 +537,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public int getNodeSize(final String[] path) throws DmtException {
+    @Override
+	public int getNodeSize(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -496,9 +546,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            Integer ret = (Integer) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            Integer ret = AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<Integer>() {
+                        @Override
+						public Integer run() throws DmtException {
                             return Integer.valueOf(
                                     readableDataSession.getNodeSize(path));
                         }
@@ -509,7 +560,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public String[] getChildNodeNames(final String[] path) throws DmtException {
+    @Override
+	public String[] getChildNodeNames(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -517,9 +569,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (String[]) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<String[]>() {
+                        @Override
+						public String[] run() throws DmtException {
                             return readableDataSession.getChildNodeNames(path);
                         }
                     }, securityContext);
@@ -528,7 +581,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
 
-    public MetaNode getMetaNode(final String[] path) throws DmtException {
+    @Override
+	public MetaNode getMetaNode(final String[] path) throws DmtException {
         checkRegistration(path);
 
         if (securityContext == null)                        // local caller
@@ -536,9 +590,10 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
 
         try {                                               // remote caller
-            return (MetaNode) AccessController.doPrivileged(
-                    new PrivilegedExceptionAction() {
-                        public Object run() throws DmtException {
+            return AccessController.doPrivileged(
+                    new PrivilegedExceptionAction<MetaNode>() {
+                        @Override
+						public MetaNode run() throws DmtException {
                             return readableDataSession.getMetaNode(path);
                         }
                     }, securityContext);
@@ -547,7 +602,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         }
     }
     
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if(obj == null || !(obj instanceof PluginSessionWrapper))
             return false;
         
@@ -557,11 +613,13 @@ public class PluginSessionWrapper implements TransactionalDataSession {
                 readableDataSession.equals(other.readableDataSession);       
     }
     
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return sessionRoot.hashCode() ^ readableDataSession.hashCode();
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         if(infoString == null) {
             infoString = "PluginSessionWrapper(" + sessionRoot + ", ";
             if(sessionType == DmtSession.LOCK_TYPE_EXCLUSIVE)

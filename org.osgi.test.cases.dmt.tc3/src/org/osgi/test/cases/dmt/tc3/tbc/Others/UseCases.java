@@ -41,6 +41,9 @@ import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.*;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
  
 public class UseCases {
 
@@ -70,19 +73,19 @@ public class UseCases {
 	public void testUseCases001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases001");
+			DefaultTestBundleControl.log("#testUseCases001");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			session.createInteriorNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
 			session.close();
-			tbc.assertEquals("Asserts that the order of the close() calls " +
+			TestCase.assertEquals("Asserts that the order of the close() calls " +
 					"are the reverse order of joining the session and that a " +
 					"close() calls the commit() on each plugin that participates of the session",
 					FatalExceptionDataPlugin.COMMIT + NewDataPlugin.COMMIT +
 					FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -97,18 +100,18 @@ public class UseCases {
 	public void testUseCases002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases002");
+			DefaultTestBundleControl.log("#testUseCases002");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			session.createInteriorNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
 			session.commit();
-			tbc.assertEquals("Asserts that the order of the commit() calls are the reverse order " +
+			TestCase.assertEquals("Asserts that the order of the commit() calls are the reverse order " +
 					"of joining the session",
 					FatalExceptionDataPlugin.COMMIT + NewDataPlugin.COMMIT,DmtConstants.TEMPORARY);			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -123,18 +126,18 @@ public class UseCases {
 	public void testUseCases003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases003");
+			DefaultTestBundleControl.log("#testUseCases003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			session.createInteriorNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
 			session.rollback();
-			tbc.assertEquals("Asserts that the order of the rollback() calls are the reverse order " +
+			TestCase.assertEquals("Asserts that the order of the rollback() calls are the reverse order " +
 					"of joining the session",
 					FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK,DmtConstants.TEMPORARY);			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -149,21 +152,21 @@ public class UseCases {
 	public void testUseCases004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases004");
+			DefaultTestBundleControl.log("#testUseCases004");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			//The method below throws a fatal exception
 			session.createLeafNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that if a plugin throws an exception, the order of the rollback() calls " +
+			TestCase.assertEquals("Asserts that if a plugin throws an exception, the order of the rollback() calls " +
 					"are the reverse order of joining the session",
 					FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK + FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
-			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
+			TestCase.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -178,19 +181,19 @@ public class UseCases {
 	public void testUseCases005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases005");
+			DefaultTestBundleControl.log("#testUseCases005");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.getNodeType(FatalExceptionDataPluginActivator.TEST_EXCEPTION_PLUGIN_ROOT);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that the session remains open for further commands " +
+			TestCase.assertEquals("Asserts that the session remains open for further commands " +
 					"after a non-fatal plugin exception",
 					DmtSession.STATE_OPEN,session.getState());		
-			tbc.assertEquals("None fatal errors do not rollback the session.", "", DmtConstants.TEMPORARY);
+			TestCase.assertEquals("None fatal errors do not rollback the session.", "", DmtConstants.TEMPORARY);
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -207,7 +210,7 @@ public class UseCases {
 		DmtSession session = null;
 		FatalExceptionDataPluginActivator fatalExceptionActivator = tbc.getFatalExceptionDataPluginActivator();
 		try {
-			tbc.log("#testUseCases006");
+			DefaultTestBundleControl.log("#testUseCases006");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
@@ -218,16 +221,16 @@ public class UseCases {
 
 			//an DmtIllegalStateException must thrown
 			session.getChildNodeNames(FatalExceptionDataPluginActivator.TEST_EXCEPTION_PLUGIN_ROOT);
-			tbc.failException("",DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("",DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
+			TestCase.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
 				"that participates of the session (in reverse order)",
 				FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK + FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
 			
-			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
+			TestCase.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 				
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 			try {
@@ -247,17 +250,17 @@ public class UseCases {
 	public void testUseCases007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testUseCases007");
+			DefaultTestBundleControl.log("#testUseCases007");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 			session.close();
 			
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
 					DmtSession.LOCK_TYPE_SHARED);
-			tbc.pass("Asserts that a plugin can be associated with more than one node.");			
+			DefaultTestBundleControl.pass("Asserts that a plugin can be associated with more than one node.");			
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}

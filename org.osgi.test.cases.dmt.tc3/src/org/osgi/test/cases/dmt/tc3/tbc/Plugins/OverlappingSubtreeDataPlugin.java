@@ -54,15 +54,18 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
 public class OverlappingSubtreeDataPlugin implements DataPlugin {
     private final String MESSAGE = "OverlappingSubtreeDataPlugin";
     
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
         return new DefaultOverlappingPluginTransactionalDataSession(MESSAGE);
     }
     
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
         return new DefaultOverlappingPluginTransactionalDataSession(MESSAGE);
     }
 
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
         return new DefaultOverlappingPluginTransactionalDataSession(MESSAGE);
     }
 

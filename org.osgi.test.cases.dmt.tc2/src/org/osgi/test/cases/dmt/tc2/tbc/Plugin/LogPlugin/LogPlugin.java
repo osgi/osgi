@@ -19,16 +19,36 @@ package org.osgi.test.cases.dmt.tc2.tbc.Plugin.LogPlugin;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.MissingResourceException;
+import java.util.SimpleTimeZone;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.*;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 
 class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
@@ -48,34 +68,38 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
     private static final String DEFAULT_EXCLUDE = "";
     private static final int    DEFAULT_MAXR    = 0;
     
-    private static final List VALID_EXCLUDE_COMPONENTS = Arrays.asList(
+	private static final List<String>							VALID_EXCLUDE_COMPONENTS	= Arrays
+			.asList(
             new String[] { SEVERITY, TIME, SYSTEM, SUBSYSTEM, MESSAGE, DATA });
     
 	private BundleContext  bc;
-	private ServiceTracker logReaderTracker;
-	private Hashtable      requests;
+	@SuppressWarnings("unused")
+	private ServiceTracker<LogReaderService,LogReaderService>	logReaderTracker;
+	private Hashtable<String,LogRequest>						requests;
 	
     // the state of the request table is stored here in atomic sessions 
-    private Hashtable           savedRequests;
+	private Hashtable<String,LogRequest>						savedRequests;
     
-    private LinkedList			logList = new LinkedList();
+	private LinkedList<LogEntry>								logList						= new LinkedList<>();
     
-	LogPlugin(BundleContext bc, ServiceTracker logReaderTracker) 
+	LogPlugin(BundleContext bc,
+			ServiceTracker<LogReaderService,LogReaderService> logReaderTracker)
             throws BundleException {
 		this.bc = bc;
 		this.logReaderTracker = logReaderTracker;
         
         LogReaderService logReader = 
-            (LogReaderService) logReaderTracker.getService();
+            logReaderTracker.getService();
         if(logReader == null)
             throw new MissingResourceException("Log Reader service not found.",
                     LogReaderService.class.getName(), null);
 
         logReader.addLogListener(this);
         
-		requests = new Hashtable();		
+		requests = new Hashtable<>();
 	}
 
+	@Override
 	public void logged(LogEntry entry) {
 		if (logList.size() >= 100) {
 			logList.removeLast();
@@ -85,19 +109,22 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 	
 	//----- DataPlugin methods -----//
     
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         // session info not needed, it will come in the exec()
         return this;
     }
 
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         // session info not needed, it will come in the exec()
         return this;
     }
     
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         // session info not needed, it will come in the exec()
         
@@ -113,11 +140,13 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
     
 	//----- TransactionalDataSession methods -----//
     
-    public void commit() throws DmtException {
+    @Override
+	public void commit() throws DmtException {
         // only called if session lock type is atomic
         savedRequests = copyRequests(requests);
     }    
     
+	@Override
 	public void rollback() throws DmtException {
         // only called if session lock type is atomic
 	    requests = copyRequests(savedRequests);
@@ -125,19 +154,21 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 
     //----- ReadWriteDataSession methods -----//
 
-    public void setNodeTitle(String[] fullPath, String title) 
+    @Override
+	public void setNodeTitle(String[] fullPath, String title) 
             throws DmtException {
 		throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
 				               "Title property not supported.");
 	}
 
+	@Override
 	public void setNodeValue(String[] fullPath, DmtData data) 
             throws DmtException {
         String[] path = chopPath(fullPath);
         
         // path.length >= 2 because there are no leaf nodes above this
         String id = path[0];
-        LogRequest lr = (LogRequest) requests.get(id);
+        LogRequest lr = requests.get(id);
         if (lr == null) {
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                                    "No such log request exists");
@@ -160,6 +191,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         }
 	}
 
+	@Override
 	public void setNodeType(String[] fullPath, String type) 
             throws DmtException {
         // meta-data ensures that type is either null or the only possible value
@@ -168,12 +200,13 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
                     "Cannot set type property of interior nodes in Log tree.");
 	}
 
+	@Override
 	public void deleteNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         
         // path.length == 1 because only search request root is deletable
         String id = path[0];
-        LogRequest lr = (LogRequest) requests.get(id);
+        LogRequest lr = requests.get(id);
         if (lr == null)
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                                    "No such log request, cannot be deleted");
@@ -181,6 +214,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         requests.remove(id);
     }
 
+	@Override
 	public void createInteriorNode(String[] fullPath, String type)
             throws DmtException {
         if(type != null)
@@ -200,13 +234,15 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         requests.put(id, lr);
     }
 
-    public void createLeafNode(String[] fullPath, DmtData value, 
+    @Override
+	public void createLeafNode(String[] fullPath, DmtData value, 
             String mimeType) throws DmtException {
         // should never be reached because of meta-data, every leaf is automatic
         throw new DmtException(fullPath, DmtException.METADATA_MISMATCH,
                                "All leaf nodes are created automatically.");
     }
     
+	@Override
 	public void copy(String[] fullPath, String[] newFullPath, boolean recursive)
 			throws DmtException {
 		// ENHANCE allow cloning
@@ -214,6 +250,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
                                "Cannot copy log request nodes.");
 	}
 
+	@Override
 	public void renameNode(String[] fullPath, String newName) 
             throws DmtException {
 		throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
@@ -222,15 +259,18 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 
 	//----- ReadableDataSession methods -----//
 
-    public void nodeChanged(String[] fullPath) {
+    @Override
+	public void nodeChanged(String[] fullPath) {
         // do nothing - the version and timestamp properties are not supported
     }
 
+	@Override
 	public void close() throws DmtException {
 		// nothing to do
 	}
 
-    public MetaNode getMetaNode(String[] fullPath) throws DmtException {
+    @Override
+	public MetaNode getMetaNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         if (path.length == 0) // OSGi/Log
             return new LogMetaNode(MetaNode.PERMANENT, 
@@ -301,13 +341,14 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
                 "No such node defined in the logging tree");
     }
 
-    public boolean isNodeUri(String[] fullPath) {
+    @Override
+	public boolean isNodeUri(String[] fullPath) {
         String[] path = chopPath(fullPath);
         
         if (path.length == 0) // ./OSGi/Log
             return true;
         
-        LogRequest lr = (LogRequest) requests.get(path[0]);
+        LogRequest lr = requests.get(path[0]);
         if(lr == null)
             return false;
         
@@ -347,14 +388,15 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         return false;
     }
 
-    public boolean isLeafNode(String[] fullPath) throws DmtException {
+    @Override
+	public boolean isLeafNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         
         if(path.length == 0) // ./OSGi/Log
             return false;
         
         String id = path[0];
-        LogRequest lr = (LogRequest) requests.get(id);
+        LogRequest lr = requests.get(id);
         if (lr == null)
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
@@ -375,11 +417,12 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
                                "No such node");
     }
     
+	@Override
 	public DmtData getNodeValue(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         
         // path.length > 1 because there are no leaf node above this
-        LogRequest lr = (LogRequest) requests.get(path[0]);
+        LogRequest lr = requests.get(path[0]);
         if (lr == null)
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
@@ -396,7 +439,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         	if( lr.logrecords == null )
         		evaluateLogRequest( lr );
 
-        	LogResultItem lri = (LogResultItem)lr.logrecords.get( path[2] );        	
+        	LogResultItem lri = lr.logrecords.get( path[2] );        	
         	leaf = path[ 3 ];
         	
         	if( lr.include[LogRequest.TIME_ID] && leaf.equals( TIME ) )
@@ -418,11 +461,13 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
                                "No such node");
     }
 
+	@Override
 	public String getNodeTitle(String[] fullPath) throws DmtException {
 		throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
 				               "Title property not supported.");
 	}
 
+	@Override
 	public String getNodeType(String[] fullPath) throws DmtException {
         if(isLeafNode(fullPath))
             return LogMetaNode.LEAF_MIME_TYPE;
@@ -434,25 +479,28 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] fullPath) throws DmtException {
 		throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Version property not supported.");
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] fullPath) throws DmtException {
 		throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property not supported.");
 	}
 
+	@Override
 	public int getNodeSize(String[] fullPath) throws DmtException {
         return getNodeValue(fullPath).getSize();
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         if (path.length == 0) {
-            String[] requestArray = (String[]) 
-                    requests.keySet().toArray(new String[requests.size()]);
+            String[] requestArray = requests.keySet().toArray(new String[requests.size()]);
             // escape '/' and '\' characters in request IDs before returning 
             for(int i = 0; i < requestArray.length; i++)
                 requestArray[i] = escape(requestArray[i]);
@@ -460,7 +508,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
             return requestArray;
         }
 
-        LogRequest lr = (LogRequest) requests.get(path[0]);
+        LogRequest lr = requests.get(path[0]);
         if (lr == null)
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                                    "No such log request");
@@ -472,8 +520,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
     		evaluateLogRequest( lr );
     	
         if (path.length == 2) {
-            String[] recordIDArray = (String[]) 
-              lr.logrecords.keySet().toArray(new String[lr.logrecords.size()]);
+            String[] recordIDArray = lr.logrecords.keySet().toArray(new String[0]);
         	return recordIDArray;
         }
         
@@ -538,12 +585,13 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
         return sb.toString();
     }
     
-    private Hashtable copyRequests(Hashtable original) {
-        Hashtable copy = new Hashtable();
-        Iterator i = original.entrySet().iterator();
+	private Hashtable<String,LogRequest> copyRequests(
+			Hashtable<String,LogRequest> original) {
+		Hashtable<String,LogRequest> copy = new Hashtable<>();
+		Iterator<Entry<String,LogRequest>> i = original.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
-            copy.put(entry.getKey(), ((LogRequest) entry.getValue()).clone());
+			Entry<String,LogRequest> entry = i.next();
+			copy.put(entry.getKey(), entry.getValue().clone());
         }
         return copy;
     }
@@ -570,21 +618,21 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 //                    LogReaderService.class.getName(), null);
 //        
 //		Enumeration e = logReader.getLog();
-		Enumeration e = Collections.enumeration(logList);
+Enumeration<LogEntry> e = Collections.enumeration(logList);
 
 		int max = Integer.MAX_VALUE;
 		
 		int logIDCounter = 1;
-		lr.logrecords = new Hashtable();
+		lr.logrecords = new Hashtable<>();
 		
 		if (lr.maxrecords != 0)
 			max = lr.maxrecords;
 
 		while (e.hasMoreElements() && lr.logrecords.size() < max) {
-			LogEntry le = (LogEntry) e.nextElement();
+			LogEntry le = e.nextElement();
 			if (filter != null) {
 				//create a dictionary for matching with the filter
-				Hashtable dict = new Hashtable();
+				Hashtable<String,Object> dict = new Hashtable<>();
 				dict.put(SEVERITY, Integer.valueOf(le.getLevel()));
 				if (le.getBundle() != null)
 					dict.put(SYSTEM, le.getBundle().toString());
@@ -601,7 +649,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 			Bundle loggerBundle = le.getBundle();
 			String bundleStr = (loggerBundle == null) ? "" : loggerBundle.toString(); 
 			
-			ServiceReference servRef = le.getServiceReference();
+			ServiceReference< ? > servRef = le.getServiceReference();
 			String servRefStr = (servRef == null ) ? "" : servRef.toString();
 			
 			Throwable exception = le.getException();
@@ -666,7 +714,8 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
     		this.data      = data;    		
     	}
     	
-    	public Object clone() {
+    	@Override
+		public LogResultItem clone() {
     		return new LogResultItem( severity, time, system, subsystem, message, data);
     	}
     }
@@ -685,7 +734,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 		String     exclude                 = DEFAULT_EXCLUDE;
 		boolean    include[]               = new boolean[ MAX_IDS ];
 		int        maxrecords              = DEFAULT_MAXR;
-		Hashtable  logrecords              = null;
+		Hashtable<String,LogResultItem>	logrecords		= null;
         
 		LogRequest() {
 			for( int i=0; i!= MAX_IDS; i++ )
@@ -716,7 +765,8 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 			}
 		}
 		
-        public Object clone() {
+		@Override
+		public LogRequest clone() {
             LogRequest lr = new LogRequest();
             
             lr.path       = path;
@@ -728,12 +778,12 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
             	lr.include[ i ] = include[ i ];
             
             if( logrecords != null ) {
-            	lr.logrecords = new Hashtable();
-            	Iterator keys = logrecords.keySet().iterator();
+				lr.logrecords = new Hashtable<>();
+				Iterator<String> keys = logrecords.keySet().iterator();
             	
             	while( keys.hasNext() ) {
-            		String newKey = new String( (String)keys.next() );
-            		LogResultItem newValue = (LogResultItem)((LogResultItem)logrecords.get( newKey )).clone();
+            		String newKey = new String( keys.next() );
+            		LogResultItem newValue = logrecords.get( newKey ).clone();
             		lr.logrecords.put( newKey, newValue );
             	}
             } else         

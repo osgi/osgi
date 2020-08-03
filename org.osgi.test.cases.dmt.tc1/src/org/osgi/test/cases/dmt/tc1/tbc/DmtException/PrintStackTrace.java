@@ -89,7 +89,7 @@ public class PrintStackTrace extends DmtTestControl {
 	public void testPrintStackTrace002() {
 		log("#testPrintStackTrace002");
         try {
-    		Vector causes = new Vector();
+			Vector<Exception> causes = new Vector<>();
     		causes.add(0,new Exception());
     		causes.add(1,new NullPointerException());
     		

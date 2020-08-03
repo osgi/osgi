@@ -1,5 +1,6 @@
 package org.osgi.test.cases.dmt.tc4.ext.junit;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.ServiceRegistration;
@@ -11,12 +12,14 @@ import org.osgi.test.cases.dmt.tc4.ext.util.TestExecPlugin;
 
 public class ExecMountPluginTest extends DmtAdminTestCase {
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         super.setUp();
         getDmtAdmin();
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         unregisterPlugins();
         closeDmtSession();
         super.tearDown();
@@ -24,9 +27,15 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
 
     public void testExecutePluginIsNotOnDataPlugin1() throws DmtException {
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         // see Bug 2266: isNodeUri() must return false for ExecPlugins scaffolds, i.e. their scaffolds are non-visible 
@@ -45,9 +54,15 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerMountDataPlugin(dataPlugin, "./A1", new String[] { "B1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         // see Bug 2266: isNodeUri() must return false for ExecPlugins scaffolds, i.e. their scaffolds are non-visible 
@@ -73,12 +88,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, Integer.valueOf(0));
 
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
             assertExecuteFailed(execPlugin, "./A2", DmtException.NODE_NOT_FOUND);
@@ -99,13 +115,14 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, "./A1");
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] {});
 
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecute(execPlugin, "./A1", "./A1:correlator", "./A1:data");
             session.close();
@@ -121,13 +138,14 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setLeafNode(dataPlugin, "./A2");
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1", "./A2" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] {});
 
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecute(execPlugin, "./A1", "./A1:correlator", "./A1:data");
             assertExecute(execPlugin, "./A2", "./A2:correlator", "./A2:data");
@@ -144,13 +162,14 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1", "./A2" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "B1" });
 
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
             assertExecuteFailed(execPlugin, "./A2", DmtException.NODE_NOT_FOUND);
@@ -166,13 +185,14 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "B1", null });
 
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
             session.close();
@@ -188,12 +208,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
 
         TestExecPlugin execPlugin = new TestExecPlugin();
 
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "B1", "/" });
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
             assertExecuteFailed(execPlugin, "./A1/B1", DmtException.NODE_NOT_FOUND);
@@ -209,12 +230,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "B1", "./B2" });
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
             assertExecuteFailed(execPlugin, "./A1/B1", DmtException.NODE_NOT_FOUND);
@@ -231,12 +253,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin execPlugin = new TestExecPlugin();
-        Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
         serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1" });
         serviceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "B1", "B2", "B1/C1" });
-        ServiceRegistration registration = null;
+		ServiceRegistration<ExecPlugin> registration = null;
         try {
-            registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+			registration = context.registerService(ExecPlugin.class, execPlugin,
+					serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1/B1", DmtException.NODE_NOT_FOUND);
             assertExecuteFailed(execPlugin, "./A1/B2", DmtException.NODE_NOT_FOUND);
@@ -255,7 +278,10 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -271,9 +297,11 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerExecPlugin(pluginA, "./A1");
+		ServiceRegistration< ? > registrationA = registerExecPlugin(
+				pluginA, "./A1");
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerExecPlugin(pluginB, "./A1/B1");
+		ServiceRegistration< ? > registrationB = registerExecPlugin(
+				pluginB, "./A1/B1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -291,9 +319,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerExecPlugin(pluginB, "./A1/B1");
+		ServiceRegistration< ? > registrationB = registerExecPlugin(
+				pluginB, "./A1/B1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -312,9 +344,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerExecPlugin(pluginB, "./A1/B2");
+		ServiceRegistration< ? > registrationB = registerExecPlugin(
+				pluginB, "./A1/B2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -334,9 +370,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1/C1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1/C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -354,9 +394,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerExecPlugin(pluginB, "./A1/B1");
+		ServiceRegistration< ? > registrationB = registerExecPlugin(
+				pluginB, "./A1/B1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -376,9 +420,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerExecPlugin(pluginB, "./A1/B2");
+		ServiceRegistration< ? > registrationB = registerExecPlugin(
+				pluginB, "./A1/B2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -398,11 +446,16 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -424,9 +477,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
         TestExecPlugin pluginB3 = new TestExecPlugin();
-        ServiceRegistration registrationB3 = registerExecPlugin(pluginB3, "./A1/B3");
+		ServiceRegistration< ? > registrationB3 = registerExecPlugin(
+				pluginB3, "./A1/B3");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -448,16 +505,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerMountingExecPlugin(pluginC, "./A1/B1/C1", new String[] { "D1" });
+		ServiceRegistration<ExecPlugin> registrationC = registerMountingExecPlugin(
+				pluginC, "./A1/B1/C1", new String[] {
+						"D1"
+				});
 
         unregister(registrationB);
 
         TestExecPlugin pluginD = new TestExecPlugin();
-        ServiceRegistration registrationD = registerExecPlugin(pluginD, "./A1/B1/C1/D1");
+		ServiceRegistration< ? > registrationD = registerExecPlugin(
+				pluginD, "./A1/B1/C1/D1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -487,9 +554,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -507,9 +578,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -528,11 +603,16 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -554,7 +634,10 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -572,9 +655,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB3 = new TestExecPlugin();
-        ServiceRegistration registrationB3 = registerExecPlugin(pluginB3, "./A1/B3");
+		ServiceRegistration< ? > registrationB3 = registerExecPlugin(
+				pluginB3, "./A1/B3");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -594,9 +681,13 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -616,11 +707,16 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB3 = new TestExecPlugin();
-        ServiceRegistration registrationB3 = registerExecPlugin(pluginB3, "./A1/B3");
+		ServiceRegistration< ? > registrationB3 = registerExecPlugin(
+				pluginB3, "./A1/B3");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -642,11 +738,16 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -668,13 +769,19 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
         TestExecPlugin pluginB3 = new TestExecPlugin();
-        ServiceRegistration registrationB3 = registerExecPlugin(pluginB3, "./A1/B3");
+		ServiceRegistration< ? > registrationB3 = registerExecPlugin(
+				pluginB3, "./A1/B3");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -698,13 +805,19 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginB1 = new TestExecPlugin();
-        ServiceRegistration registrationB1 = registerExecPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration< ? > registrationB1 = registerExecPlugin(
+				pluginB1, "./A1/B1");
         TestExecPlugin pluginB2 = new TestExecPlugin();
-        ServiceRegistration registrationB2 = registerExecPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration< ? > registrationB2 = registerExecPlugin(
+				pluginB2, "./A1/B2");
         TestExecPlugin pluginC3 = new TestExecPlugin();
-        ServiceRegistration registrationC3 = registerExecPlugin(pluginC3, "./A1/B3/C3");
+		ServiceRegistration< ? > registrationC3 = registerExecPlugin(
+				pluginC3, "./A1/B3/C3");
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1", "B2" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
@@ -727,16 +840,24 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerExecPlugin(newPluginB, "./A1/B1");
+		ServiceRegistration< ? > newRegistrationB = registerExecPlugin(
+				newPluginB, "./A1/B1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -757,16 +878,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerMountingExecPlugin(newPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> newRegistrationB = registerMountingExecPlugin(
+				newPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -788,16 +919,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1/D1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1/D1"
+				});
         TestExecPlugin pluginD = new TestExecPlugin();
-        ServiceRegistration registrationD = registerExecPlugin(pluginD, "./A1/B1/C1/D1");
+		ServiceRegistration< ? > registrationD = registerExecPlugin(
+				pluginD, "./A1/B1/C1/D1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerMountingExecPlugin(newPluginB, "./A1/B1", new String[] { "C1/D1" });
+		ServiceRegistration<ExecPlugin> newRegistrationB = registerMountingExecPlugin(
+				newPluginB, "./A1/B1", new String[] {
+						"C1/D1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -819,16 +960,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerMountingExecPlugin(newPluginB, "./A1/B1", new String[] { "C2" });
+		ServiceRegistration<ExecPlugin> newRegistrationB = registerMountingExecPlugin(
+				newPluginB, "./A1/B1", new String[] {
+						"C2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -850,16 +1001,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC1 = new TestExecPlugin();
-        ServiceRegistration registrationC1 = registerExecPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC1 = registerExecPlugin(
+				pluginC1, "./A1/B1/C1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerMountingExecPlugin(newPluginB, "./A1/B1", new String[] { "C1", "C2" });
+		ServiceRegistration<ExecPlugin> newRegistrationB = registerMountingExecPlugin(
+				newPluginB, "./A1/B1", new String[] {
+						"C1", "C2"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -868,7 +1029,8 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         session.close();
 
         TestExecPlugin pluginC2 = new TestExecPlugin();
-        ServiceRegistration registrationC2 = registerExecPlugin(pluginC2, "./A1/B1/C2");
+		ServiceRegistration< ? > registrationC2 = registerExecPlugin(
+				pluginC2, "./A1/B1/C2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -891,16 +1053,26 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin oldPluginB = new TestExecPlugin();
-        ServiceRegistration oldRegistrationB = registerMountingExecPlugin(oldPluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> oldRegistrationB = registerMountingExecPlugin(
+				oldPluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
         unregister(oldRegistrationB);
 
         TestExecPlugin newPluginB = new TestExecPlugin();
-        ServiceRegistration newRegistrationB = registerMountingExecPlugin(newPluginB, "./A1/B1", new String[] { "C2", "C3" });
+		ServiceRegistration<ExecPlugin> newRegistrationB = registerMountingExecPlugin(
+				newPluginB, "./A1/B1", new String[] {
+						"C2", "C3"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -920,13 +1092,17 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1");
 
         TestExecPlugin mountingPlugin = new TestExecPlugin();
-        ServiceRegistration mountingPluginRegistration = registerMountingExecPlugin(mountingPlugin, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> mountingPluginRegistration = registerMountingExecPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         session.close();
 
         TestExecPlugin mountedPlugin = new TestExecPlugin();
-        ServiceRegistration mountedPluginRegistration = registerExecPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration< ? > mountedPluginRegistration = registerExecPlugin(
+				mountedPlugin, "./A1/B1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -952,14 +1128,18 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1");
 
         TestExecPlugin mountingPlugin = new TestExecPlugin();
-        ServiceRegistration mountingPluginRegistration = registerMountingExecPlugin(mountingPlugin, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> mountingPluginRegistration = registerMountingExecPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         assertExecuteFailed(mountingPlugin, "./A1/B1");
         session.close();
 
         TestExecPlugin mountedPlugin = new TestExecPlugin();
-        ServiceRegistration mountedPluginRegistration = registerExecPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration< ? > mountedPluginRegistration = registerExecPlugin(
+				mountedPlugin, "./A1/B1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -985,13 +1165,17 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1");
 
         TestExecPlugin mountedPlugin = new TestExecPlugin();
-        ServiceRegistration mountedPluginRegistration = registerExecPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration< ? > mountedPluginRegistration = registerExecPlugin(
+				mountedPlugin, "./A1/B1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin mountingPlugin = new TestExecPlugin();
-        ServiceRegistration mountingPluginRegistration = registerMountingExecPlugin(mountingPlugin, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> mountingPluginRegistration = registerMountingExecPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1017,13 +1201,17 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1");
 
         TestExecPlugin mountedPlugin = new TestExecPlugin();
-        ServiceRegistration mountedPluginRegistration = registerExecPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration< ? > mountedPluginRegistration = registerExecPlugin(
+				mountedPlugin, "./A1/B1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin mountingPlugin = new TestExecPlugin();
-        ServiceRegistration mountingPluginRegistration = registerMountingExecPlugin(mountingPlugin, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> mountingPluginRegistration = registerMountingExecPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(mountingPlugin, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(mountedPlugin, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1050,20 +1238,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         session.close();
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1100,20 +1295,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         session.close();
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecuteFailed(pluginC, "./A1/B1/C1");
         session.close();
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1150,20 +1352,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1200,20 +1409,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         session.close();
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         assertExecute(pluginC, "./A1/B1/C1", "./A1/B1/C1:corrleator", "./A1/B1/C1:data");
         session.close();
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1250,20 +1466,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginC, "./A1/B1/C1", "./A1/B1/C1:corrleator", "./A1/B1/C1:data");
         session.close();
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1");
         assertExecute(pluginC, "./A1/B1/C1", "./A1/B1/C1:corrleator", "./A1/B1/C1:data");
         session.close();
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1300,20 +1523,27 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         setInteriorNode(dataPlugin, "./A1/B1/C1");
 
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginC, "./A1/B1/C1", "./A1/B1/C1:corrleator", "./A1/B1/C1:data");
         session.close();
 
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
         assertExecute(pluginC, "./A1/B1/C1", "./A1/B1/C1:corrleator", "./A1/B1/C1:data");
         session.close();
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
         assertExecute(pluginB, "./A1/B1", "./A1/B1:corrleator", "./A1/B1:data");
@@ -1350,13 +1580,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C1", "C2" });
         registrationB.setProperties(modifiedServiceProps);
@@ -1380,13 +1617,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C1" });
         registrationB.setProperties(modifiedServiceProps);
@@ -1411,13 +1655,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1/D1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1/D1"
+				});
         TestExecPlugin pluginD = new TestExecPlugin();
-        ServiceRegistration registrationD = registerExecPlugin(pluginD, "./A1/B1/C1/D1");
+		ServiceRegistration< ? > registrationD = registerExecPlugin(
+				pluginD, "./A1/B1/C1/D1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C1/D1" });
         registrationB.setProperties(modifiedServiceProps);
@@ -1442,13 +1693,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C2" });
         registrationB.setProperties(modifiedServiceProps);
@@ -1473,13 +1731,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC1 = new TestExecPlugin();
-        ServiceRegistration registrationC1 = registerExecPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC1 = registerExecPlugin(
+				pluginC1, "./A1/B1/C1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C1", "C2" });
         registrationB.setProperties(modifiedServiceProps);
@@ -1491,7 +1756,8 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         session.close();
 
         TestExecPlugin pluginC2 = new TestExecPlugin();
-        ServiceRegistration registrationC2 = registerExecPlugin(pluginC2, "./A1/B1/C2");
+		ServiceRegistration< ? > registrationC2 = registerExecPlugin(
+				pluginC2, "./A1/B1/C2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecute(pluginA, "./A1", "./A1:corrleator", "./A1:data");
@@ -1514,13 +1780,20 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         registerDataPlugin(dataPlugin, new String[] { "./A1" });
 
         TestExecPlugin pluginA = new TestExecPlugin();
-        ServiceRegistration registrationA = registerMountingExecPlugin(pluginA, "./A1", new String[] { "B1" });
+		ServiceRegistration<ExecPlugin> registrationA = registerMountingExecPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
         TestExecPlugin pluginB = new TestExecPlugin();
-        ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<ExecPlugin> registrationB = registerMountingExecPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
         TestExecPlugin pluginC = new TestExecPlugin();
-        ServiceRegistration registrationC = registerExecPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration< ? > registrationC = registerExecPlugin(
+				pluginC, "./A1/B1/C1");
 
-        Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
         modifiedServiceProps.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { "./A1/B1" });
         modifiedServiceProps.put(ExecPlugin.MOUNT_POINTS, new String[] { "C2", "C3" });
         registrationB.setProperties(modifiedServiceProps);

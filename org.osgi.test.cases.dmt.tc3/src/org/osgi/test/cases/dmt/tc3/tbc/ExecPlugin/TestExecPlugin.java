@@ -53,6 +53,8 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
+import junit.framework.TestCase;
+
 /**
  * @author Andre Assad
  * 
@@ -72,6 +74,7 @@ public class TestExecPlugin implements ExecPlugin, DataPlugin, ReadableDataSessi
 
 	}
 
+	@Override
 	public void execute(DmtSession session, String[] nodeUri, String correlator,String data)
 			throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
@@ -81,15 +84,15 @@ public class TestExecPlugin implements ExecPlugin, DataPlugin, ReadableDataSessi
 			
 		} else {
 			if (null == session) {
-				tbc
+				TestCase
 						.fail("A reference to the session in which the operation was issued is null");
 			} else {
-				tbc
+				TestCase
 						.assertEquals(
 								"Asserts that DmtSession is fowarded to ExecPlugin with the same lock type",
 								DmtSession.LOCK_TYPE_EXCLUSIVE, session
 										.getLockType());
-				tbc
+				TestCase
 						.assertEquals(
 								"Asserts that DmtSession is fowarded to ExecPlugin with the same subtree",
 								TestExecPluginActivator.ROOT, session
@@ -104,83 +107,98 @@ public class TestExecPlugin implements ExecPlugin, DataPlugin, ReadableDataSessi
 	}
 
 	
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 
 
-    public void nodeChanged(String[] nodePath) throws DmtException {
+    @Override
+	public void nodeChanged(String[] nodePath) throws DmtException {
 
         
     }
 
 
-    public void close() throws DmtException {
+    @Override
+	public void close() throws DmtException {
         
         
     }
 
-    public String[] getChildNodeNames(String[] nodePath) throws DmtException {
+    @Override
+	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
         
         return null;
     }
 
 
-    public MetaNode getMetaNode(String[] nodePath) throws DmtException {
+    @Override
+	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
         
         return null;
     }
 
-    public int getNodeSize(String[] nodePath) throws DmtException {
+    @Override
+	public int getNodeSize(String[] nodePath) throws DmtException {
         
         return 0;
     }
 
 
-    public Date getNodeTimestamp(String[] nodePath) throws DmtException {
+    @Override
+	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
         
         return null;
     }
 
 
-    public String getNodeTitle(String[] nodePath) throws DmtException {
+    @Override
+	public String getNodeTitle(String[] nodePath) throws DmtException {
         
         return GETNODETITLE;
     }
 
 
-    public String getNodeType(String[] nodePath) throws DmtException {
+    @Override
+	public String getNodeType(String[] nodePath) throws DmtException {
         
         return null;
     }
 
 
-    public boolean isNodeUri(String[] nodePath) {
+    @Override
+	public boolean isNodeUri(String[] nodePath) {
         
         return true;
     }
 
 
-    public boolean isLeafNode(String[] nodePath) throws DmtException {
+    @Override
+	public boolean isLeafNode(String[] nodePath) throws DmtException {
         
         return false;
     }
 
 
-    public DmtData getNodeValue(String[] nodePath) throws DmtException {
+    @Override
+	public DmtData getNodeValue(String[] nodePath) throws DmtException {
         
         return null;
     }
  
-    public int getNodeVersion(String[] nodePath) throws DmtException {
+    @Override
+	public int getNodeVersion(String[] nodePath) throws DmtException {
         return 0;
     }
 }

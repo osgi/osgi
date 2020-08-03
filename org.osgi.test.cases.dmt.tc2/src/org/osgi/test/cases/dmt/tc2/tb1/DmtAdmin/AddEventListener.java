@@ -37,16 +37,13 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
 
-import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.security.DmtPrincipalPermission;
-
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tb1.DmtEvent.DmtEventListenerImpl;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
-import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -58,13 +55,11 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator
 public class AddEventListener implements TestInterface {
 	private DmtTestControl tbc;
 	
-	private int INVALID_CODE = 128;
-	private DmtEventListenerImpl event = new DmtEventListenerImpl();
-	
 	public AddEventListener(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
         testAddEventListener001();
@@ -94,12 +89,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener001() {
 		try {
-			tbc.log("#testAddEventListener001");
+			DefaultTestBundleControl.log("#testAddEventListener001");
 			// Does not compile anymore, do we need this one anymore?
 			// tbc.getDmtAdmin().addEventListener(INVALID_CODE, TestExecPluginActivator.ROOT,event);
-			tbc.failException("", IllegalArgumentException.class);
+			DefaultTestBundleControl.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			DefaultTestBundleControl.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(IllegalArgumentException.class, e);
 		}
@@ -114,12 +109,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener002() {
 		try {
-			tbc.log("#testAddEventListener002");
+			DefaultTestBundleControl.log("#testAddEventListener002");
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,INVALID_CODE, TestExecPluginActivator.ROOT, event);
-			tbc.failException("", IllegalArgumentException.class);
+			DefaultTestBundleControl.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			DefaultTestBundleControl.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(IllegalArgumentException.class, e);
 		}
@@ -133,12 +128,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener003() {
 		try {
-			tbc.log("#testAddEventListener003");
+			DefaultTestBundleControl.log("#testAddEventListener003");
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, null,event);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
@@ -152,12 +147,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener004() {
 		try {
-			tbc.log("#testAddEventListener004");
+			DefaultTestBundleControl.log("#testAddEventListener004");
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
@@ -171,12 +166,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener005() {
 		try {
-			tbc.log("#testAddEventListener005");
+			DefaultTestBundleControl.log("#testAddEventListener005");
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(null,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
@@ -190,12 +185,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener006() {
 		try {
-			tbc.log("#testAddEventListener006");
+			DefaultTestBundleControl.log("#testAddEventListener006");
 			// Does not compile anymore
 			//tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, null,event);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
@@ -209,12 +204,12 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener007() {
 		try {
-			tbc.log("#testAddEventListener007");
+			DefaultTestBundleControl.log("#testAddEventListener007");
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
@@ -229,14 +224,14 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener008() {
 		try {
-			tbc.log("#testAddEventListener008");
+			DefaultTestBundleControl.log("#testAddEventListener008");
 	        //DmtPermission is not present, so SecurityException must be thrown 
 	        tbc.setPermissions(new PermissionInfo[0]);
 			// Does not compile anymore
 			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
-			tbc.failException("", SecurityException.class);
+			DefaultTestBundleControl.failException("", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("SecurityException correctly thrown");
+			DefaultTestBundleControl.pass("SecurityException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 			prepare();
@@ -252,14 +247,14 @@ public class AddEventListener implements TestInterface {
 	 */
 	private void testAddEventListener009() {
 		try {
-			tbc.log("#testAddEventListener009");
+			DefaultTestBundleControl.log("#testAddEventListener009");
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(), 
 					DmtConstants.PRINCIPAL_2, "*"));
 			// Does not compile anymore
 			//tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
-			tbc.failException("", SecurityException.class);
+			DefaultTestBundleControl.failException("", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("SecurityException correctly thrown");
+			DefaultTestBundleControl.pass("SecurityException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 			prepare();

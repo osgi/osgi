@@ -42,6 +42,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Alexandre Santos
@@ -70,7 +73,7 @@ public class NodeChanged {
 	public void testNodeChanged001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testNodeChanged001");
+			DefaultTestBundleControl.log("#testNodeChanged001");
 			String[] principal = { "www.cesar.org.br" };
 			int[] perm = { org.osgi.service.dmt.Acl.GET
 					| org.osgi.service.dmt.Acl.EXEC };
@@ -82,18 +85,18 @@ public class NodeChanged {
 			TestDataPlugin.setNodeChangedThrowsException(true);
 			session.setNodeAcl(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, acl);
 			
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
 				.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
 				.getCode());
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 					e.getMessage().indexOf(TestDataPlugin.NODECHANGED) > -1);
 
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			tbc.cleanAcl(TestDataPluginActivator.INTERIOR_NODE);

@@ -1,14 +1,11 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.Uri;
-import org.osgi.service.dmt.spi.DataPlugin;
-
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -32,12 +29,14 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	DmtSession session;
 	GenericDataPlugin dataPlugin;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println("tearing down");
@@ -232,6 +231,7 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 //	}
 
 	
+@SuppressWarnings("unused")
 	private void registerLongSegmentPlugin(String rootSegment, String segment1)
 			throws Exception {
 		String mountRoot = "./" + rootSegment;
@@ -239,13 +239,14 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 		Node n3 = new Node(n2, segment1, "segment1");
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS,
 				new String[] {mountRoot});
 
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 	}
 
+	@SuppressWarnings("unused")
 	private void registerLongUriPlugin(String rootSegment, String segment)
 			throws Exception {
 		String mountRoot = "./" + rootSegment;
@@ -257,13 +258,14 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 		Node n7 = new Node(n6, segment, "segment5");
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS,
 				new String[] { mountRoot });
 
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 	}
 
+	@SuppressWarnings("unused")
 	private String registerMaxSegmentPlugin(String segmentName, int maxSegments, int rootLevel)
 			throws Exception {
 		String mountRoot = "./" + segmentName;
@@ -281,7 +283,7 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 		}
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, first);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS,
 				new String[] { pluginRoot });
 

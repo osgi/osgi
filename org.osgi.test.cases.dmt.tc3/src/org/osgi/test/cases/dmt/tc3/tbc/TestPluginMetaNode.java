@@ -60,50 +60,62 @@ public class TestPluginMetaNode implements MetaNode {
 	}
 
 
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         return true;
     }       	
 
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
 		return isLeaf;
 	}
 
+	@Override
 	public int getScope() {
 		return DYNAMIC;
 	}
 
+	@Override
 	public String getDescription() {
 		return "";
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		return Integer.MAX_VALUE;
 	}
 
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		return true;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		return new DmtData("test");
 	}
 
+	@Override
 	public double getMax() {
 		return Integer.MAX_VALUE;
 	}
 
+	@Override
 	public double getMin() {
 		return Integer.MIN_VALUE;
 	}
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
     
+	@Override
 	public DmtData[] getValidValues() {
 		return null;
 	}
 
+	@Override
 	public int getFormat() {
 		return format;
 	}
@@ -116,26 +128,32 @@ public class TestPluginMetaNode implements MetaNode {
 		return null;
 	}
 
+	@Override
 	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
 
+	@Override
 	public boolean isValidValue(DmtData value) {
 		return true;
 	}
 
+	@Override
 	public boolean isValidName(String name) {
 		return true;
 	}
 
+	@Override
 	public String[] getExtensionPropertyKeys() {
 		return null;
 	}
 
+	@Override
 	public Object getExtensionProperty(String key) {
 		return null;
 	}
 
+	@Override
 	public String[] getRawFormatNames() {
 		return null;
 	}

@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtEvent;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 
 
@@ -56,6 +59,7 @@ public class DmtEventConstants implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
 		testDmtEventConstants001();
 	}
@@ -68,14 +72,14 @@ public class DmtEventConstants implements TestInterface {
 	private void testDmtEventConstants001() {
 
 		try {
-			tbc.log("#testDmtEventConstants001");
-			tbc.assertEquals("Asserting DmtEvent.ADDED constant value", 1, DmtEvent.ADDED);
-			tbc.assertEquals("Asserting DmtEvent.COPIED constant value", 2, DmtEvent.COPIED);
-			tbc.assertEquals("Asserting DmtEvent.DELETED constant value", 4, DmtEvent.DELETED);
-			tbc.assertEquals("Asserting DmtEvent.RENAMED constant value", 8, DmtEvent.RENAMED);
-			tbc.assertEquals("Asserting DmtEvent.REPLACED constant value", 16, DmtEvent.REPLACED);
-			tbc.assertEquals("Asserting DmtEvent.SESSION_OPENED constant value", 32, DmtEvent.SESSION_OPENED);
-			tbc.assertEquals("Asserting DmtEvent.SESSION_CLOSED constant value", 64, DmtEvent.SESSION_CLOSED);
+			DefaultTestBundleControl.log("#testDmtEventConstants001");
+			TestCase.assertEquals("Asserting DmtEvent.ADDED constant value", 1, DmtEvent.ADDED);
+			TestCase.assertEquals("Asserting DmtEvent.COPIED constant value", 2, DmtEvent.COPIED);
+			TestCase.assertEquals("Asserting DmtEvent.DELETED constant value", 4, DmtEvent.DELETED);
+			TestCase.assertEquals("Asserting DmtEvent.RENAMED constant value", 8, DmtEvent.RENAMED);
+			TestCase.assertEquals("Asserting DmtEvent.REPLACED constant value", 16, DmtEvent.REPLACED);
+			TestCase.assertEquals("Asserting DmtEvent.SESSION_OPENED constant value", 32, DmtEvent.SESSION_OPENED);
+			TestCase.assertEquals("Asserting DmtEvent.SESSION_CLOSED constant value", 64, DmtEvent.SESSION_CLOSED);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		}

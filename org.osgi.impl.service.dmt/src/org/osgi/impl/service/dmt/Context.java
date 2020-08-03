@@ -18,8 +18,6 @@
 
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.spi.DataPlugin;
-
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -28,31 +26,37 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.dispatcher.Dispatcher;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class Context {
     private BundleContext bc;
-    private Hashtable trackers;
+	private Hashtable<Class< ? >,ServiceTracker< ? , ? >>	trackers;
     
     private Dispatcher dispatcher = null;
 
     Context(BundleContext bc) {
         this.bc = bc;
-        trackers = new Hashtable();
+		trackers = new Hashtable<>();
 
         // make the root plugin known to the dispatcher
-        getPluginDispatcher().addingService( registerRootPlugin() );
+		@SuppressWarnings({
+				"rawtypes", "unchecked"
+		})
+		ServiceReference<Object> rootPlugin = (ServiceReference) registerRootPlugin();
+		getPluginDispatcher().addingService(rootPlugin);
         
         // start tracking 
         getPluginDispatcher().open();
     }
     
-    private ServiceReference registerRootPlugin() {
+	private ServiceReference<DataPlugin> registerRootPlugin() {
     	Hashtable<String, String[]> props = new Hashtable<String, String[]>();
     	props.put( "dataRootURIs", new String[] { "." });
-    	ServiceRegistration reg = bc.registerService(DataPlugin.class.getName(), new RootPlugin(getPluginDispatcher()), props);
+		ServiceRegistration<DataPlugin> reg = bc.registerService(
+				DataPlugin.class, new RootPlugin(getPluginDispatcher()), props);
     	return reg.getReference();
     }
     
@@ -62,8 +66,10 @@ public class Context {
     }
     
     // cannot be used for tracking multiple classes or using a customizer
-    ServiceTracker getTracker(Class trackedClass) {
-        ServiceTracker tracker = (ServiceTracker) trackers.get(trackedClass);
+	<T> ServiceTracker<T,T> getTracker(Class<T> trackedClass) {
+		@SuppressWarnings("unchecked")
+		ServiceTracker<T,T> tracker = (ServiceTracker<T,T>) trackers
+				.get(trackedClass);
         if(tracker == null) // create tracker if it does not exist yet
             tracker = openTracker(trackedClass, null);
         return tracker;
@@ -73,12 +79,12 @@ public class Context {
      * SD: Bundlefest: replaced it by recursive dispatcher that supports mount-points
      * @return
      */
-    synchronized Dispatcher getPluginDispatcher() {
+	synchronized Dispatcher getPluginDispatcher() {
         if(dispatcher == null) { // create plugin tracker if it DNE yet
             try {
 	            String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPlugin)" +
 	            					"(objectClass=org.osgi.service.dmt.spi.ExecPlugin))";
-	            dispatcher = new Dispatcher(this.bc, bc.createFilter(filter));
+				dispatcher = new Dispatcher(this.bc, bc.createFilter(filter));
             } catch (InvalidSyntaxException e) {
                 // cannot happen
                 System.err.println("Internal error, invalid filter string. ");
@@ -89,9 +95,9 @@ public class Context {
     }
     
     void close() {
-        Iterator i = trackers.values().iterator();
+		Iterator<ServiceTracker< ? , ? >> i = trackers.values().iterator();
         while (i.hasNext())
-            ((ServiceTracker) i.next()).close();
+			i.next().close();
     }
 
     // Find a better place for this method...
@@ -104,16 +110,16 @@ public class Context {
             throwable.printStackTrace(System.out);
 
         LogService logService = 
-            (LogService) getTracker(LogService.class).getService();
+            getTracker(LogService.class).getService();
         
         if (logService != null)
             logService.log(severity, message, throwable);
     }
     
-    private ServiceTracker openTracker(Class trackedClass,
-            ServiceTrackerCustomizer customizer) {
+	private <T> ServiceTracker<T,T> openTracker(Class<T> trackedClass,
+			ServiceTrackerCustomizer<T,T> customizer) {
         
-        ServiceTracker tracker = new ServiceTracker(bc, trackedClass.getName(),
+		ServiceTracker<T,T> tracker = new ServiceTracker<>(bc, trackedClass,
                 customizer);
         tracker.open();
         trackers.put(trackedClass, tracker);

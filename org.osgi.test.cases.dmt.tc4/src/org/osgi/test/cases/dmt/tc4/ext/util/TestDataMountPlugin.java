@@ -9,20 +9,22 @@ import org.osgi.service.dmt.spi.MountPlugin;
 import org.osgi.service.dmt.spi.MountPoint;
 public class TestDataMountPlugin extends TestDataPlugin implements MountPlugin {
 
-    private final List eventList;
+	private final List<MountPointEvent> eventList;
 
     public TestDataMountPlugin() {
-        this.eventList = new ArrayList();
+		this.eventList = new ArrayList<>();
     }
 
-    public void mountPointAdded(MountPoint mountPoint) {
+    @Override
+	public void mountPointAdded(MountPoint mountPoint) {
         synchronized (eventList) {
             eventList.add(new MountPointEvent(MountPointEvent.MOUNT_POINTS_ADDED, mountPoint));
             eventList.notifyAll();
         }
     }
 
-    public void mountPointRemoved(MountPoint mountPoint) {
+    @Override
+	public void mountPointRemoved(MountPoint mountPoint) {
         synchronized (eventList) {
             eventList.add(new MountPointEvent(MountPointEvent.MOUNT_POINTS_REMOVED, mountPoint));
             eventList.notifyAll();
@@ -41,7 +43,7 @@ public class TestDataMountPlugin extends TestDataPlugin implements MountPlugin {
                 eventList.wait(1000);
             }
 			assertTrue("No expected mount point", index < eventList.size());
-            return (MountPointEvent) eventList.get(index);
+            return eventList.get(index);
         }
     }
 }

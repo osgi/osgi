@@ -43,6 +43,9 @@ import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.TestMetaNodeDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.TestMetaNodeDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates if DmtException.METADATA_MISMATCH is thrown when
@@ -143,7 +146,7 @@ public class MetaData {
 	public void testMetaData001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData001");
+			DefaultTestBundleControl.log("#testMetaData001");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -154,13 +157,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(false);
 			//TestDataPlugin returns the metaNodeDefault, an interior node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE, new DmtData(100));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data defines it as an interior node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -176,7 +179,7 @@ public class MetaData {
 	public void testMetaData002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData002");
+			DefaultTestBundleControl.log("#testMetaData002");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -188,13 +191,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setValidValues(new DmtData[] { new DmtData(100)});
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, new DmtData(99));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 	
@@ -211,7 +214,7 @@ public class MetaData {
 	public void testMetaData003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData003");
+			DefaultTestBundleControl.log("#testMetaData003");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -224,13 +227,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setValidValues(new DmtData[] { new DmtData(100)});
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE_INVALID_NAME, new DmtData(100));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified node name, ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -247,7 +250,7 @@ public class MetaData {
 	public void testMetaData004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData004");
+			DefaultTestBundleControl.log("#testMetaData004");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -258,13 +261,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setScope(MetaNode.PERMANENT);
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, new DmtData("<test></test>",DmtData.FORMAT_XML));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data  defines it as a permanent leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -281,7 +284,7 @@ public class MetaData {
 	public void testMetaData005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData005");
+			DefaultTestBundleControl.log("#testMetaData005");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -293,13 +296,13 @@ public class MetaData {
 			
 			//It's not a valid operation for this node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,LEAF_VALUE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -317,7 +320,7 @@ public class MetaData {
 	public void testMetaData006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData006");
+			DefaultTestBundleControl.log("#testMetaData006");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -327,13 +330,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(false);
 			//TestDataPlugin metadata returns an interior node   
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE, LEAF_VALUE, MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data defines it as an interior node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -351,7 +354,7 @@ public class MetaData {
 	public void testMetaData007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData007");
+			DefaultTestBundleControl.log("#testMetaData007");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -364,13 +367,13 @@ public class MetaData {
 			
 			//TestDataPlugin metadata only allows DmtData as an integer with the value 100
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, new DmtData(99),MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -385,7 +388,7 @@ public class MetaData {
 	public void testMetaData008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData008");
+			DefaultTestBundleControl.log("#testMetaData008");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -398,13 +401,13 @@ public class MetaData {
 			
 			//TestDataPlugin metadata only allows mimeType "text/xml", this call must not be fowarded to this plugin
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, LEAF_VALUE,"text/plain");
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified mimeType. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -423,7 +426,7 @@ public class MetaData {
 	public void testMetaData009() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData009");
+			DefaultTestBundleControl.log("#testMetaData009");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -435,13 +438,13 @@ public class MetaData {
 
 			//It's not a valid name for this node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE_INVALID_NAME, LEAF_VALUE,MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -457,7 +460,7 @@ public class MetaData {
 	public void testMetaData010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData010");
+			DefaultTestBundleControl.log("#testMetaData010");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -468,13 +471,13 @@ public class MetaData {
 			
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, new DmtData("<test></test>",DmtData.FORMAT_XML),MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data defines it as permanent. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -490,7 +493,7 @@ public class MetaData {
 	public void testMetaData011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData011");
+			DefaultTestBundleControl.log("#testMetaData011");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -503,13 +506,13 @@ public class MetaData {
 			
 			//It's not a valid operation for this node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE, LEAF_VALUE,MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -525,7 +528,7 @@ public class MetaData {
 	public void testMetaData012() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData012");
+			DefaultTestBundleControl.log("#testMetaData012");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -536,13 +539,13 @@ public class MetaData {
 
 			//There is no default value
 			session.setDefaultNodeValue(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't doesn't have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -560,7 +563,7 @@ public class MetaData {
 	public void testMetaData013() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData013");
+			DefaultTestBundleControl.log("#testMetaData013");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -573,13 +576,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanReplace(false);
 			
 			session.setDefaultNodeValue(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -596,7 +599,7 @@ public class MetaData {
 	public void testMetaData014() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData014");
+			DefaultTestBundleControl.log("#testMetaData014");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -608,13 +611,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setValidValues(new DmtData[]{new DmtData(100)});
 			
 			session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,new DmtData(101));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -635,7 +638,7 @@ public class MetaData {
 	public void testMetaData015() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData015");
+			DefaultTestBundleControl.log("#testMetaData015");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -647,13 +650,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanReplace(false);
 			
 			session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,LEAF_VALUE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -670,7 +673,7 @@ public class MetaData {
 	public void testMetaData016() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData016");
+			DefaultTestBundleControl.log("#testMetaData016");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -680,13 +683,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setValidNames(new String[] {TestPluginMetaDataActivator.INTERIOR_NODE_STRING  });
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE_INVALID_NAME);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -702,7 +705,7 @@ public class MetaData {
 	public void testMetaData017() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData017");
+			DefaultTestBundleControl.log("#testMetaData017");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -712,13 +715,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setValidNames(new String[] {TestPluginMetaDataActivator.INTERIOR_NODE_STRING  });
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE_INVALID_NAME,DmtConstants.DDF);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -735,7 +738,7 @@ public class MetaData {
 	public void testMetaData018() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData018");
+			DefaultTestBundleControl.log("#testMetaData018");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -745,13 +748,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanAdd(false);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -768,7 +771,7 @@ public class MetaData {
 	public void testMetaData019() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData019");
+			DefaultTestBundleControl.log("#testMetaData019");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -778,13 +781,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanAdd(false);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.DDF);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -801,7 +804,7 @@ public class MetaData {
 	public void testMetaData020() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData020");
+			DefaultTestBundleControl.log("#testMetaData020");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -812,13 +815,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
 
 			session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if zero occurrences of the node are not allowed, it must not be the last one.",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -836,7 +839,7 @@ public class MetaData {
 	public void testMetaData021() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData021");
+			DefaultTestBundleControl.log("#testMetaData021");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -846,13 +849,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanDelete(false);
 
 			session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the delete operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -869,7 +872,7 @@ public class MetaData {
 	public void testMetaData022() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData022");
+			DefaultTestBundleControl.log("#testMetaData022");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -879,13 +882,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanReplace(false);
 			
 			session.renameNode(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE_NAME);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the replace operation for this node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -902,7 +905,7 @@ public class MetaData {
 	public void testMetaData023() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData023");
+			DefaultTestBundleControl.log("#testMetaData023");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -913,13 +916,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanReplace(false);
 
 			session.setNodeTitle(TestPluginMetaDataActivator.LEAF_NODE,"Title");
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -936,7 +939,7 @@ public class MetaData {
 	public void testMetaData024() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData024");
+			DefaultTestBundleControl.log("#testMetaData024");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -946,13 +949,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanReplace(false);
 
 			session.setNodeType(TestPluginMetaDataActivator.INTERIOR_NODE,DmtConstants.DDF);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -970,7 +973,7 @@ public class MetaData {
 	public void testMetaData025() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData025");
+			DefaultTestBundleControl.log("#testMetaData025");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -980,13 +983,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeType(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1004,7 +1007,7 @@ public class MetaData {
 	public void testMetaData026() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData026");
+			DefaultTestBundleControl.log("#testMetaData026");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1014,13 +1017,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getChildNodeNames(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1037,7 +1040,7 @@ public class MetaData {
 	public void testMetaData027() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData027");
+			DefaultTestBundleControl.log("#testMetaData027");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1047,13 +1050,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeSize(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1070,7 +1073,7 @@ public class MetaData {
 	public void testMetaData028() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData028");
+			DefaultTestBundleControl.log("#testMetaData028");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1080,13 +1083,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeTimestamp(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1103,7 +1106,7 @@ public class MetaData {
 	public void testMetaData029() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData029");
+			DefaultTestBundleControl.log("#testMetaData029");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1113,13 +1116,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeTitle(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1136,7 +1139,7 @@ public class MetaData {
 	public void testMetaData030() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData030");
+			DefaultTestBundleControl.log("#testMetaData030");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1146,13 +1149,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeValue(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1169,7 +1172,7 @@ public class MetaData {
 	public void testMetaData031() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData031");
+			DefaultTestBundleControl.log("#testMetaData031");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1179,13 +1182,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeVersion(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1202,7 +1205,7 @@ public class MetaData {
 	public void testMetaData032() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData032");
+			DefaultTestBundleControl.log("#testMetaData032");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1212,13 +1215,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.isLeafNode(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1235,7 +1238,7 @@ public class MetaData {
 	public void testMetaData033() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData033");
+			DefaultTestBundleControl.log("#testMetaData033");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1245,13 +1248,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getEffectiveNodeAcl(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1268,7 +1271,7 @@ public class MetaData {
 	public void testMetaData034() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData034");
+			DefaultTestBundleControl.log("#testMetaData034");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1278,13 +1281,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanGet(false);
 
 			session.getNodeAcl(TestPluginMetaDataActivator.LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1302,7 +1305,7 @@ public class MetaData {
 	public void testMetaData035() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData035");
+			DefaultTestBundleControl.log("#testMetaData035");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1312,13 +1315,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setScope(MetaNode.PERMANENT);
 
 			session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow deleting a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1335,7 +1338,7 @@ public class MetaData {
 	public void testMetaData036() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData036");
+			DefaultTestBundleControl.log("#testMetaData036");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1345,13 +1348,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setScope(MetaNode.PERMANENT);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow creating a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1368,7 +1371,7 @@ public class MetaData {
 	public void testMetaData037() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData037");
+			DefaultTestBundleControl.log("#testMetaData037");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1378,13 +1381,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanExecute(false);
 
 			session.execute(TestPluginMetaDataActivator.INTERIOR_NODE,null);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown if the node cannot be executed " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown if the node cannot be executed " +
 					"according to the meta-data  (does not have MetaNode.CMD_EXECUTE access type)",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1401,7 +1404,7 @@ public class MetaData {
 	public void testMetaData038() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData038");
+			DefaultTestBundleControl.log("#testMetaData038");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1411,13 +1414,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setCanExecute(false);
 
 			session.execute(TestPluginMetaDataActivator.INTERIOR_NODE,null,null);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown if the node cannot be executed " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown if the node cannot be executed " +
 					"according to the meta-data  (does not have MetaNode.CMD_EXECUTE access type)",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1435,7 +1438,7 @@ public class MetaData {
 	public void testMetaData039() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData039");
+			DefaultTestBundleControl.log("#testMetaData039");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1445,13 +1448,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setScope(MetaNode.PERMANENT);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.DDF);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow creating a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1469,7 +1472,7 @@ public class MetaData {
 	public void testMetaData040() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData040");
+			DefaultTestBundleControl.log("#testMetaData040");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1479,13 +1482,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1502,7 +1505,7 @@ public class MetaData {
 	public void testMetaData041() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData041");
+			DefaultTestBundleControl.log("#testMetaData041");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1512,13 +1515,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.DDF);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1535,7 +1538,7 @@ public class MetaData {
 	public void testMetaData042() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData042");
+			DefaultTestBundleControl.log("#testMetaData042");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1547,13 +1550,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setFormat(DmtData.FORMAT_INTEGER);
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,new DmtData(1));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1570,7 +1573,7 @@ public class MetaData {
 	public void testMetaData043() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData043");
+			DefaultTestBundleControl.log("#testMetaData043");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1583,13 +1586,13 @@ public class MetaData {
 			
 			//It's not a valid operation for this node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,new DmtData(1),MIMETYPE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1607,7 +1610,7 @@ public class MetaData {
 	public void testMetaData044() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData044");
+			DefaultTestBundleControl.log("#testMetaData044");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1620,13 +1623,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setDefaultValue(new DmtData(10));
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1644,7 +1647,7 @@ public class MetaData {
 	public void testMetaData045() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData045");
+			DefaultTestBundleControl.log("#testMetaData045");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1658,13 +1661,13 @@ public class MetaData {
 			
 			//It's not a valid operation for this node
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -1680,7 +1683,7 @@ public class MetaData {
 	public void testMetaData046() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData046");
+			DefaultTestBundleControl.log("#testMetaData046");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1690,13 +1693,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setDefaultValue(new DmtData(10));
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data defines it as an interior node.",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1713,7 +1716,7 @@ public class MetaData {
 	public void testMetaData047() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData047");
+			DefaultTestBundleControl.log("#testMetaData047");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1725,13 +1728,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setDefaultValue(new DmtData(10));
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data defines it as a permanent leaf node",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1746,7 +1749,7 @@ public class MetaData {
 	public void testMetaData048() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData048");
+			DefaultTestBundleControl.log("#testMetaData048");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1760,13 +1763,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setDefaultValue(new DmtData(100));
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE_INVALID_NAME);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified node name ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 	
@@ -1782,7 +1785,7 @@ public class MetaData {
 	public void testMetaData049() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testMetaData049");
+			DefaultTestBundleControl.log("#testMetaData049");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestPluginMetaDataActivator.ROOT,
@@ -1791,13 +1794,13 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
 		
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+			TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
-			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+			TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -1813,7 +1816,7 @@ public class MetaData {
     public void testMetaData050() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData050");
+            DefaultTestBundleControl.log("#testMetaData050");
 
             session = tbc.getDmtAdmin().getSession(
                     TestPluginMetaDataActivator.ROOT,
@@ -1824,13 +1827,13 @@ public class MetaData {
             TestPluginMetaDataActivator.metaNodeDefault.setMimeTypes(new String[] {"text/xml"});
 
             session.setNodeType(TestPluginMetaDataActivator.LEAF_NODE,"text/html");
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data doesn't have the mimeType specified. ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1845,20 +1848,20 @@ public class MetaData {
     public void testMetaData051() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData051");
+            DefaultTestBundleControl.log("#testMetaData051");
 
             session = tbc.getDmtAdmin().getSession(
             		TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
             TestMetaNodeDataPlugin.setRootNodeAllowsAddOperation(false);
             session.copy(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE,true);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data of the parent node does not allow the Add operation ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1875,7 +1878,7 @@ public class MetaData {
     public void testMetaData052() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData052");
+            DefaultTestBundleControl.log("#testMetaData052");
 
             session = tbc.getDmtAdmin().getSession(
                     TestPluginMetaDataActivator.ROOT,
@@ -1885,13 +1888,13 @@ public class MetaData {
             TestPluginMetaDataActivator.metaNodeDefault.setValidNames(new String[] {"validName"});
            
             session.renameNode(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE_NAME);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data doesn't allow the specified node name, ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1908,20 +1911,20 @@ public class MetaData {
     public void testMetaData053() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData053");
+            DefaultTestBundleControl.log("#testMetaData053");
 
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.renameNode(TestMetaNodeDataPluginActivator.LEAF_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE_NAME);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data defines the source as a leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1938,20 +1941,20 @@ public class MetaData {
     public void testMetaData054() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData054");
+            DefaultTestBundleControl.log("#testMetaData054");
 
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.renameNode(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE_NAME);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data defines the target as leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1968,7 +1971,7 @@ public class MetaData {
     public void testMetaData055() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData055");
+            DefaultTestBundleControl.log("#testMetaData055");
 
             session = tbc.getDmtAdmin().getSession(
                     TestPluginMetaDataActivator.ROOT,
@@ -1978,13 +1981,13 @@ public class MetaData {
             TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
             //MetaNode does not have a default value
             session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,null);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data does not have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2002,7 +2005,7 @@ public class MetaData {
     public void testMetaData056() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData056");
+            DefaultTestBundleControl.log("#testMetaData056");
 
             session = tbc.getDmtAdmin().getSession(
                     TestPluginMetaDataActivator.ROOT,
@@ -2012,13 +2015,13 @@ public class MetaData {
             TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
             //MetaNode does not have a default value
             session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,null);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data does not have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2038,7 +2041,7 @@ public class MetaData {
     public void testMetaData057() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData057");
+            DefaultTestBundleControl.log("#testMetaData057");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2049,12 +2052,12 @@ public class MetaData {
             //A DmtData instance can not have FORMAT_NODE, so it is form FORMAT_INTEGER (1) to FORMAT_NULL(512).
             for (int i=1;i<=512;i=i<<1){
                 session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.getDmtData(i),null);
-                tbc.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
+                DefaultTestBundleControl.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
             }
            
             
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2071,16 +2074,16 @@ public class MetaData {
     public void testMetaData058() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData058");
+            DefaultTestBundleControl.log("#testMetaData058");
 
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.renameNode(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE_WITHOUT_PERMISSIONS_NAME);
-            tbc.pass("renameNode could be called, even if the target does not have any permission");
+            DefaultTestBundleControl.pass("renameNode could be called, even if the target does not have any permission");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2096,7 +2099,7 @@ public class MetaData {
     public void testMetaData059() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData059");
+            DefaultTestBundleControl.log("#testMetaData059");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2104,9 +2107,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2122,7 +2125,7 @@ public class MetaData {
     public void testMetaData060() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData060");
+            DefaultTestBundleControl.log("#testMetaData060");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2130,9 +2133,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,null);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2148,7 +2151,7 @@ public class MetaData {
     public void testMetaData061() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData061");
+            DefaultTestBundleControl.log("#testMetaData061");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2156,9 +2159,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2174,7 +2177,7 @@ public class MetaData {
     public void testMetaData062() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData062");
+            DefaultTestBundleControl.log("#testMetaData062");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2182,9 +2185,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,null);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2199,7 +2202,7 @@ public class MetaData {
     public void testMetaData063() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData063");
+            DefaultTestBundleControl.log("#testMetaData063");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2207,9 +2210,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,null,null);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2225,7 +2228,7 @@ public class MetaData {
     public void testMetaData064() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData064");
+            DefaultTestBundleControl.log("#testMetaData064");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2233,9 +2236,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.copy(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE,false);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and copy is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and copy is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2251,7 +2254,7 @@ public class MetaData {
     public void testMetaData065() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData065");
+            DefaultTestBundleControl.log("#testMetaData065");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2259,9 +2262,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.renameNode(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE_NAME);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and renameNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and renameNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2277,7 +2280,7 @@ public class MetaData {
     public void testMetaData066() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData066");
+            DefaultTestBundleControl.log("#testMetaData066");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2285,9 +2288,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,DmtData.NULL_VALUE);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2302,7 +2305,7 @@ public class MetaData {
     public void testMetaData067() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData067");
+            DefaultTestBundleControl.log("#testMetaData067");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2310,9 +2313,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,DmtData.NULL_VALUE,"text/xml");
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2328,7 +2331,7 @@ public class MetaData {
     public void testMetaData068() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData068");
+            DefaultTestBundleControl.log("#testMetaData068");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2336,9 +2339,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,DmtData.NULL_VALUE);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and setNodeValue is called with any value");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and setNodeValue is called with any value");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2354,7 +2357,7 @@ public class MetaData {
     public void testMetaData069() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData069");
+            DefaultTestBundleControl.log("#testMetaData069");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2362,9 +2365,9 @@ public class MetaData {
         
             TestPluginMetaDataActivator.metaNodeDefault = null;
             session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
-            tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and deleteNode is called");
+            DefaultTestBundleControl.pass("Asserts that no exception is thrown if the node does not have a metanode and deleteNode is called");
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2380,20 +2383,20 @@ public class MetaData {
     public void testMetaData070() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData070");
+            DefaultTestBundleControl.log("#testMetaData070");
 
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.renameNode(TestMetaNodeDataPluginActivator.PERMANENT_INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE_NAME);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data defines the source as permanent ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2409,20 +2412,20 @@ public class MetaData {
     public void testMetaData071() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData071");
+            DefaultTestBundleControl.log("#testMetaData071");
 
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.renameNode(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.PERMANENT_INEXISTENT_NODE_NAME);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data defines the source as permanent ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2439,7 +2442,7 @@ public class MetaData {
     public void testMetaData072() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData072");
+            DefaultTestBundleControl.log("#testMetaData072");
             
             session = tbc.getDmtAdmin().getSession(
                 TestPluginMetaDataActivator.ROOT,
@@ -2450,12 +2453,12 @@ public class MetaData {
             //A DmtData instance can not have FORMAT_NODE, so it is form FORMAT_INTEGER (1) to FORMAT_NULL(512).
             for (int i=1;i<=512;i=i<<1){
                 session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.getDmtData(i));
-                tbc.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
+                DefaultTestBundleControl.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
             }
            
             
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2471,20 +2474,20 @@ public class MetaData {
     public void testMetaData073() {
         DmtSession session = null;
         try {
-            tbc.log("#testMetaData073");
+            DefaultTestBundleControl.log("#testMetaData073");
 
             session = tbc.getDmtAdmin().getSession(
             		TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
            
             session.copy(TestMetaNodeDataPluginActivator.INTERIOR_NODE_WITHOUT_GET_PERMISSION,TestMetaNodeDataPluginActivator.INEXISTENT_NODE,true);
-            tbc.failException("",DmtException.class);
+            DefaultTestBundleControl.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+            TestCase.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
                     "if meta-data of the copied node does not allow the Get operation, ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+            TestCase.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtException.class, e);
+        	DmtTestControl.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);

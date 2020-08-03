@@ -3,7 +3,6 @@ package org.osgi.test.cases.dmt.tc4.rfc141;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import org.osgi.framework.ServiceRegistration;
@@ -27,12 +26,14 @@ public class TestBug1732_MountPointHandling extends
 	DmtSession session;
 
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println("tearing down");
@@ -110,7 +111,7 @@ public class TestBug1732_MountPointHandling extends
 		Node n = new Node(null, "A", "node A");
 		GenericDataPlugin plugin = new GenericDataPlugin("MountingPlugin", mountRoot, n);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] uris = new String[] {mountRoot, "./XY" };
 		String[] classes = null;
 		if ( asExecPlugin ) {
@@ -122,7 +123,8 @@ public class TestBug1732_MountPointHandling extends
 			classes = new String[] {DataPlugin.class.getName(), MountPlugin.class.getName()};
 		}
 
-		ServiceRegistration reg = getContext().registerService(classes, plugin, props);
+		ServiceRegistration< ? > reg = getContext().registerService(classes,
+				plugin, props);
 
 		try {
 			assertNotNull(plugin.lastAddedMountPoints);
@@ -141,10 +143,11 @@ public class TestBug1732_MountPointHandling extends
 	}
 
 
-	private void checkMountPointInList( String uri, List mountPoints ) {
+	private void checkMountPointInList(String uri,
+			List<MountPoint> mountPoints) {
 		boolean found = false;
 		for (int i = 0; i < mountPoints.size(); i++) {
-			if ( uri.equals(Uri.toUri(((MountPoint)mountPoints.get(i)).getMountPath()) ))
+			if ( uri.equals(Uri.toUri(mountPoints.get(i).getMountPath()) ))
 				found = true;
 		}
 		assertEquals( "Expected path: '" + uri + "' not found in provided mountPoints", true, found );
@@ -354,7 +357,7 @@ public class TestBug1732_MountPointHandling extends
 		Node n4 = new Node(n3, "D", "node D");
 		new Node(n4, "E", "node E");
 		GenericDataPlugin dataPlugin = new GenericDataPlugin("DataPluginForExecTests", dataPluginRoot, n);
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { dataPluginRoot });
 		// If MOUNT_POINTS is specified, ./A/B and ./A/C/D/E will be out of scope of this plugin
 		// so those nodes will not exist for the execPlugins. 
@@ -413,7 +416,7 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin mountingPlugin = new GenericDataPlugin(
 				"MountingPlugin", mountRoot, n);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] uris = null;
 		if ( additionalUri != null )
 			uris = new String[] {mountRoot, additionalUri};
@@ -451,7 +454,7 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin mountedPlugin = new GenericDataPlugin(
 				"MountedPlugin1", mountRoot, n);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		if ( asExecPlugin ) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { mountRoot });
 			registerService(ExecPlugin.class.getName(), mountedPlugin, props);			
@@ -467,13 +470,14 @@ public class TestBug1732_MountPointHandling extends
 	 *
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private GenericDataPlugin prepareMountedPlugin2( boolean asExecPlugin ) throws Exception {
 		String mountRoot = "./A/C/D/E";
 		Node n = new Node(null, "E", "node E");
 		GenericDataPlugin mountedPlugin = new GenericDataPlugin(
 				"MountedPlugin2", mountRoot, n);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		if (asExecPlugin) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { mountRoot });
 			registerService(ExecPlugin.class.getName(), mountedPlugin, props);

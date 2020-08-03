@@ -42,6 +42,9 @@ package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>getMin</code> method of MetaNode, 
@@ -67,7 +70,7 @@ public class GetMin {
 	public void testGetMin001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMin001");
+			DefaultTestBundleControl.log("#testGetMin001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -75,11 +78,11 @@ public class GetMin {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertEquals("Asserts getMin method",
+			TestCase.assertEquals("Asserts getMin method",
 					TestMetaNode.DEFAULT_MIN_VALUE, metanode
 							.getMin(), 0.0);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

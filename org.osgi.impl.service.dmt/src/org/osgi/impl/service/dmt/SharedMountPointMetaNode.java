@@ -27,63 +27,78 @@ public class SharedMountPointMetaNode implements MetaNode {
     	this.scope = scope;
     }
     
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         return operation == CMD_GET;
     }
     
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
         return false;
     }
 
-    public int getScope() {
+    @Override
+	public int getScope() {
         return scope;        
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return null;
     }
 
-    public int getMaxOccurrence() {
+    @Override
+	public int getMaxOccurrence() {
         return Integer.MAX_VALUE;
     }
 
-    public boolean isZeroOccurrenceAllowed() {
+    @Override
+	public boolean isZeroOccurrenceAllowed() {
         return true;
     }
 
-    public DmtData getDefault() {
+    @Override
+	public DmtData getDefault() {
         return null;
     }
 
-    public double getMax() {
+    @Override
+	public double getMax() {
         return Double.MAX_VALUE;
     }
 
-    public double getMin() {
+    @Override
+	public double getMin() {
         return Double.MIN_VALUE;
     }
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
     
-    public DmtData[] getValidValues() {
+    @Override
+	public DmtData[] getValidValues() {
         return null;
     }
 
-    public int getFormat() {
+    @Override
+	public int getFormat() {
         return DmtData.FORMAT_NODE;
     }
 
-    public String[] getRawFormatNames() {
+    @Override
+	public String[] getRawFormatNames() {
         return null;
     }
 
-    public String[] getMimeTypes() {
+    @Override
+	public String[] getMimeTypes() {
         return null;
     }
     
-    public boolean isValidName(String name) {
+    @Override
+	public boolean isValidName(String name) {
     	int index = -1;
     	try {
         	index = Integer.parseInt(name);
@@ -93,15 +108,18 @@ public class SharedMountPointMetaNode implements MetaNode {
         return index >= 1 && index < Integer.MAX_VALUE;
     }
     
-    public boolean isValidValue(DmtData value) {
+    @Override
+	public boolean isValidValue(DmtData value) {
         return false;
     }
 
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
     	return null;
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
     	return null;
     }
 }

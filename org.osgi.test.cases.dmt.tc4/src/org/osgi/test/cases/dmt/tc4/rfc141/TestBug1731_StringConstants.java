@@ -3,16 +3,17 @@ package org.osgi.test.cases.dmt.tc4.rfc141;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.MountPlugin;
 import org.osgi.test.support.OSGiTestCase;
 
 public class TestBug1731_StringConstants extends OSGiTestCase{
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println( "tearing down");

@@ -42,6 +42,9 @@ package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This class tests all constants of DmtSession
@@ -51,13 +54,15 @@ import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 
 public class DmtSessionConstants implements TestInterface {
     
-    private DmtTestControl tbc;
+	@SuppressWarnings("unused")
+	private DmtTestControl tbc;
 
     public DmtSessionConstants(DmtTestControl tbc) {
         this.tbc = tbc;
     }
 
-    public void run() {
+    @Override
+	public void run() {
         testConstants001();
     }
     
@@ -67,13 +72,13 @@ public class DmtSessionConstants implements TestInterface {
      * @spec 118.12.16
      */    
     private void testConstants001() {
-		tbc.log("#testConstants001");
-        tbc.assertEquals("Asserting LOCK_TYPE_SHARED value", 0, DmtSession.LOCK_TYPE_SHARED);
-        tbc.assertEquals("Asserting LOCK_TYPE_EXCLUSIVE value", 1, DmtSession.LOCK_TYPE_EXCLUSIVE);
-        tbc.assertEquals("Asserting LOCK_TYPE_ATOMIC value", 2, DmtSession.LOCK_TYPE_ATOMIC);
-        tbc.assertEquals("Asserting STATE_OPEN value", 0, DmtSession.STATE_OPEN);
-        tbc.assertEquals("Asserting STATE_CLOSED value", 1, DmtSession.STATE_CLOSED);
-        tbc.assertEquals("Asserting STATE_INVALID value", 2, DmtSession.STATE_INVALID);
+		DefaultTestBundleControl.log("#testConstants001");
+        TestCase.assertEquals("Asserting LOCK_TYPE_SHARED value", 0, DmtSession.LOCK_TYPE_SHARED);
+        TestCase.assertEquals("Asserting LOCK_TYPE_EXCLUSIVE value", 1, DmtSession.LOCK_TYPE_EXCLUSIVE);
+        TestCase.assertEquals("Asserting LOCK_TYPE_ATOMIC value", 2, DmtSession.LOCK_TYPE_ATOMIC);
+        TestCase.assertEquals("Asserting STATE_OPEN value", 0, DmtSession.STATE_OPEN);
+        TestCase.assertEquals("Asserting STATE_CLOSED value", 1, DmtSession.STATE_CLOSED);
+        TestCase.assertEquals("Asserting STATE_INVALID value", 2, DmtSession.STATE_INVALID);
     }   
     
 

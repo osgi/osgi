@@ -41,6 +41,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -68,15 +71,15 @@ public class GetNodeSize {
 	public void testGetNodeSize001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize001");
+			DefaultTestBundleControl.log("#testGetNodeSize001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			
 			int nodeSize = session.getNodeSize(TestDataPluginActivator.LEAF_NODE);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETNODESIZE
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETNODESIZE
 					+" to the correct plugin",TestDataPlugin.GETNODESIZE_VALUE,nodeSize);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -90,23 +93,23 @@ public class GetNodeSize {
 	public void testGetNodeSize002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize002");
+			DefaultTestBundleControl.log("#testGetNodeSize002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.getNodeSize(TestDataPluginActivator.LEAF_NODE_EXCEPTION);
 			
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
 			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", 
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", 
 					TestDataPluginActivator.LEAF_NODE_EXCEPTION, e.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", 
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", 
 					DmtException.ALERT_NOT_ROUTED, e.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", 
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", 
 					e.getMessage().indexOf(TestDataPlugin.GETNODESIZE)>-1);
 			
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}

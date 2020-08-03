@@ -36,13 +36,13 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.DataPlugin;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPlugin;
-
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
@@ -52,7 +52,7 @@ import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
  */
 public class TestDataPluginActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	private DmtTestControl tbc;
 
@@ -86,16 +86,17 @@ public class TestDataPluginActivator implements BundleActivator {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testDataPlugin = new TestDataPlugin(tbc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { ROOT, TEST_DATA_PLUGIN_ROOT2 });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		servReg = bc.registerService(ifs, testDataPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, testDataPlugin, props);
 		System.out.println("TestDataPlugin activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

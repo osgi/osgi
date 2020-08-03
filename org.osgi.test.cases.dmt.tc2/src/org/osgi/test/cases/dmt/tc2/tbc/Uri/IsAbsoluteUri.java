@@ -39,6 +39,9 @@ package org.osgi.test.cases.dmt.tc2.tbc.Uri;
 import org.osgi.service.dmt.Uri;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 
 /**
@@ -68,11 +71,11 @@ public class IsAbsoluteUri {
 	private void testIsAbsoluteUri001() {
 
 		try {
-			tbc.log("#testIsAbsoluteUri001");
+			DefaultTestBundleControl.log("#testIsAbsoluteUri001");
 			Uri.isAbsoluteUri(null);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
@@ -86,8 +89,8 @@ public class IsAbsoluteUri {
 	private void testIsAbsoluteUri002() {
 
 		try {
-			tbc.log("#testIsAbsoluteUri002");
-			tbc.assertTrue("Asserts that the specified URI is an absolute URI", Uri.isAbsoluteUri("./Test"));
+			DefaultTestBundleControl.log("#testIsAbsoluteUri002");
+			TestCase.assertTrue("Asserts that the specified URI is an absolute URI", Uri.isAbsoluteUri("./Test"));
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		}
@@ -101,8 +104,8 @@ public class IsAbsoluteUri {
 	private void testIsAbsoluteUri003() {
 
 		try {
-			tbc.log("#testIsAbsoluteUri003");
-			tbc.assertTrue("Asserts that the specified URI is not an absolute URI", !Uri.isAbsoluteUri("Test"));
+			DefaultTestBundleControl.log("#testIsAbsoluteUri003");
+			TestCase.assertTrue("Asserts that the specified URI is not an absolute URI", !Uri.isAbsoluteUri("Test"));
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		}
@@ -116,16 +119,16 @@ public class IsAbsoluteUri {
 	private void testIsAbsoluteUri004() {
 
 		try {
-			tbc.log("#testIsAbsoluteUri004");
+			DefaultTestBundleControl.log("#testIsAbsoluteUri004");
             //It is from 1 because 0 is 'null' and null throws NullPointerException in this method
 			for (int i = 1; i < DmtTestControl.INVALID_URIS.length; i++) {
 				String uri = null;
 				try {
 					uri = DmtTestControl.INVALID_URIS[i].toString();
 					Uri.isAbsoluteUri(uri);
-					tbc.failException("", IllegalArgumentException.class);
+					DefaultTestBundleControl.failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
-					tbc.pass("IllegalArgumentException correctly thrown when calling Uri.isAbsoluteUri(" + uri + ")");
+					DefaultTestBundleControl.pass("IllegalArgumentException correctly thrown when calling Uri.isAbsoluteUri(" + uri + ")");
 				}
 			}
 		} catch (Exception e) {

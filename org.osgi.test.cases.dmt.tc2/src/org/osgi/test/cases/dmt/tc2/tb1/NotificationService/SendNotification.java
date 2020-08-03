@@ -37,15 +37,14 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.NotificationService;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.notification.AlertItem;
 import org.osgi.service.dmt.notification.NotificationService;
 import org.osgi.service.dmt.security.AlertPermission;
-
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServicePermission;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -56,6 +55,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.Activators.HighestRankingRemoteAlertSende
 import org.osgi.test.cases.dmt.tc2.tbc.Activators.HighestRankingRemoteAlertSenderImpl;
 import org.osgi.test.cases.dmt.tc2.tbc.Activators.RemoteAlertSenderImpl;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -73,6 +75,7 @@ public class SendNotification implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
 		prepare();
 		if (DmtConstants.SUPPORTS_ASYNCHRONOUS_NOTIFICATION) {
@@ -101,8 +104,9 @@ public class SendNotification implements TestInterface {
 			AlertItem[] items) throws DmtException {
 		if (notificationService == null) {
 			BundleContext bc = tbc.getContext();
-			ServiceReference sr = bc.getServiceReference(NotificationService.class.getName());
-			notificationService = (NotificationService) bc.getService(sr);
+			ServiceReference<NotificationService> sr = bc
+					.getServiceReference(NotificationService.class);
+			notificationService = bc.getService(sr);
 		}
 		notificationService.sendNotification(principal, code, correlator, items);
 	}
@@ -116,7 +120,7 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification001() {
 		try {
-			tbc.log("#testSendNotification001");
+			DefaultTestBundleControl.log("#testSendNotification001");
 
 			String mark = "mark";
 			DmtData data = new DmtData("test");
@@ -140,23 +144,23 @@ public class SendNotification implements TestInterface {
 
 			sendNotification(DmtConstants.PRINCIPAL,code,correlator,items);
 
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the correlator sent by sendNotification was the expected",
 					correlator, RemoteAlertSenderImpl.correlatorFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the principal sent by sendNotification was the expected",
 					DmtConstants.PRINCIPAL, RemoteAlertSenderImpl.serverIdFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the number of AlertItems sent by sendNotification was the expected",
 					items.length, RemoteAlertSenderImpl.itemsFound.length);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the AlertItems sent by sendNotification were the expected",
 					items[0].toString(),
 					RemoteAlertSenderImpl.itemsFound[0].toString());
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the AlertItems sent by sendNotification were the expected",
 					items[1].toString(),
 					RemoteAlertSenderImpl.itemsFound[1].toString());
@@ -181,7 +185,7 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification002() {
 		try {
-			tbc.log("#testSendNotification002");
+			DefaultTestBundleControl.log("#testSendNotification002");
 
 			int code = 10;
 			String correlator = "newCorrelator";
@@ -190,16 +194,16 @@ public class SendNotification implements TestInterface {
 			RemoteAlertSenderImpl.resetAlert();
 			sendNotification(null,code,correlator,items);
 
-			tbc.assertNull(
+			TestCase.assertNull(
 					"Asserts that if the DmtAdmin is connected to only one protocol adapter, the principal name can be omitted",
 					RemoteAlertSenderImpl.serverIdFound);
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the correlator sent by sendNotification was the expected",
 					correlator, RemoteAlertSenderImpl.correlatorFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the number of AlertItems sent by sendNotification was the expected",
 					items.length, RemoteAlertSenderImpl.itemsFound.length);
 
@@ -216,7 +220,7 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification003() {
 		try {
-			tbc.log("#testSendNotification003");
+			DefaultTestBundleControl.log("#testSendNotification003");
 
 			String mark = "mark";
 			DmtData data = new DmtData("test");
@@ -228,19 +232,19 @@ public class SendNotification implements TestInterface {
 			RemoteAlertSenderImpl.resetAlert();
 			sendNotification(DmtConstants.PRINCIPAL,code,null,items);
 
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
-			tbc.assertNull(
+			TestCase.assertNull(
 					"Asserts that the correlator sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.correlatorFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the principal sent by sendNotification was the expected",
 					DmtConstants.PRINCIPAL, RemoteAlertSenderImpl.serverIdFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the number of AlertItems sent by sendNotification was the expected",
 					items.length, RemoteAlertSenderImpl.itemsFound.length);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the AlertItems sent by sendNotification were the expected",
 					items[0].toString(),
 					RemoteAlertSenderImpl.itemsFound[0].toString());
@@ -258,7 +262,7 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification004() {
 		try {
-			tbc.log("#testSendNotification004");
+			DefaultTestBundleControl.log("#testSendNotification004");
 
 			int code = 0;
 			String correlator = "newCorrelator";
@@ -266,16 +270,16 @@ public class SendNotification implements TestInterface {
 
 			sendNotification(DmtConstants.PRINCIPAL,code,correlator,null);
 
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the correlator sent by sendNotification was the expected",
 					correlator, RemoteAlertSenderImpl.correlatorFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the principal sent by sendNotification was the expected",
 					DmtConstants.PRINCIPAL, RemoteAlertSenderImpl.serverIdFound);
-			tbc.assertNull(
+			TestCase.assertNull(
 					"Asserts that the number of AlertItems sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.itemsFound);
 
@@ -293,14 +297,14 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification005() {
 		try {
-			tbc.log("#testSendNotification005");
+			DefaultTestBundleControl.log("#testSendNotification005");
 
 			RemoteAlertSenderImpl.resetAlert();
 			sendNotification(DmtConstants.PRINCIPAL_3,0,null,null);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtException.ALERT_NOT_ROUTED is thrown when the alert can not be routed to the server",DmtException.ALERT_NOT_ROUTED,e.getCode());
+			TestCase.assertEquals("Asserts that DmtException.ALERT_NOT_ROUTED is thrown when the alert can not be routed to the server",DmtException.ALERT_NOT_ROUTED,e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
 
@@ -315,15 +319,15 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification006() {
 		try {
-			tbc.log("#testSendNotification006");
+			DefaultTestBundleControl.log("#testSendNotification006");
 
 			RemoteAlertSenderImpl.resetAlert();
 			sendNotification(DmtConstants.PRINCIPAL,
 					RemoteAlertSenderImpl.CODE_EXCEPTION, null, null);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that any exception thrown on the RemoteAlertSender is propagated wrapped in a DmtException with the code REMOTE_ERROR",
 					DmtException.REMOTE_ERROR, e.getCode());
 		} catch (Exception e) {
@@ -342,7 +346,7 @@ public class SendNotification implements TestInterface {
 	private void testSendNotification007() {
 		HighestRankingRemoteAlertSenderActivator highestRankingRemoteAlertSenderActivator = null;
 		try {
-			tbc.log("#testSendNotification007");
+			DefaultTestBundleControl.log("#testSendNotification007");
 			tbc.setPermissions(new PermissionInfo[] {
 					new PermissionInfo(ServicePermission.class.getName(), "*",
 							ServicePermission.REGISTER),
@@ -359,7 +363,7 @@ public class SendNotification implements TestInterface {
 
 			sendNotification(DmtConstants.PRINCIPAL, codeExpected, null, null);
 
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that if multiple Remote Alert Sender services register for the same service,"
 							+ " then the service with the highest value for the service.ranking property must be used.",
 					codeExpected, HighestRankingRemoteAlertSenderImpl.codeFound);
@@ -370,7 +374,7 @@ public class SendNotification implements TestInterface {
 			try {
 				highestRankingRemoteAlertSenderActivator.stop(tbc.getContext());
 			} catch (Exception e1) {
-				tbc.log("#Failed uninstalling the HighestRankingRemoteAlertSender");
+				DefaultTestBundleControl.log("#Failed uninstalling the HighestRankingRemoteAlertSender");
 			}
 			prepare();
 		}
@@ -385,7 +389,7 @@ public class SendNotification implements TestInterface {
 	private void testSendNotification008() {
 		DefaultRemoteAlertSenderActivator defaultRemoteAlertSenderActivator = null;
 		try {
-			tbc.log("#testSendNotification008");
+			DefaultTestBundleControl.log("#testSendNotification008");
 			tbc.setPermissions(new PermissionInfo[] {
 					new PermissionInfo(ServicePermission.class.getName(), "*",
 							ServicePermission.REGISTER),
@@ -401,7 +405,7 @@ public class SendNotification implements TestInterface {
 			int codeExpected = 11;
 			sendNotification(null, codeExpected, null, null);
 
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that if 'servers' property is not registered, the Remote Alert Sender service is treated as the default sender.",
 					codeExpected, DefaultRemoteAlertSenderImpl.codeFound);
 		} catch (Exception e) {
@@ -411,7 +415,7 @@ public class SendNotification implements TestInterface {
 			try {
 				defaultRemoteAlertSenderActivator.stop(tbc.getContext());
 			} catch (Exception e) {
-				tbc.log("#Failed stopping the default remote alert sender");
+				DefaultTestBundleControl.log("#Failed stopping the default remote alert sender");
 			}
 			prepare();
 		}
@@ -425,13 +429,13 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification009() {
 		try {
-			tbc.log("#testSendNotification009");
+			DefaultTestBundleControl.log("#testSendNotification009");
 			tbc.setPermissions(new PermissionInfo[0]);
 
 			sendNotification(DmtConstants.PRINCIPAL, 1, "", new AlertItem[0]);
-			tbc.failException("", SecurityException.class);
+			DefaultTestBundleControl.failException("", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("SecurityException correctly thrown");
+			DefaultTestBundleControl.pass("SecurityException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
@@ -448,7 +452,7 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification010() {
 		try {
-			tbc.log("#testSendNotification010");
+			DefaultTestBundleControl.log("#testSendNotification010");
 
 			int code = 11;
 			String correlator = "correlator2";
@@ -458,17 +462,17 @@ public class SendNotification implements TestInterface {
 			RemoteAlertSenderImpl.resetAlert();
 			sendNotification(DmtConstants.PRINCIPAL_2,code,correlator,items);
 			
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the RemoteAlertSender can have more than one principal",
 					DmtConstants.PRINCIPAL_2,
 					RemoteAlertSenderImpl.serverIdFound);
-			tbc.assertTrue(
+			TestCase.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the correlator sent by sendNotification was the expected",
 					correlator, RemoteAlertSenderImpl.correlatorFound);
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserts that the number of AlertItems sent by sendNotification was the expected",
 					items.length, RemoteAlertSenderImpl.itemsFound.length);
 
@@ -486,13 +490,13 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotification011() {
 		try {
-			tbc.log("#testSendNotification011");
+			DefaultTestBundleControl.log("#testSendNotification011");
 			tbc.setPermissions(new PermissionInfo[0]);
 
 			sendNotification(null, 1, "", new AlertItem[0]);
-			tbc.failException("", SecurityException.class);
+			DefaultTestBundleControl.failException("", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("SecurityException correctly thrown");
+			DefaultTestBundleControl.pass("SecurityException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
@@ -508,11 +512,12 @@ public class SendNotification implements TestInterface {
 	 */
 	private void testSendNotificationFeatureNotSupported001() {
 		try {
-			tbc.log("#testSendNotificationFeatureNotSupported001");
+			DefaultTestBundleControl
+					.log("#testSendNotificationFeatureNotSupported001");
 			sendNotification(null, 0, null, null);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.pass("DmtException.FEATURE_NOT_SUPPORTED correctly thrown because the management "
+			DefaultTestBundleControl.pass("DmtException.FEATURE_NOT_SUPPORTED correctly thrown because the management "
 					+ "protocol doesn't support asynchronous notifications");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);

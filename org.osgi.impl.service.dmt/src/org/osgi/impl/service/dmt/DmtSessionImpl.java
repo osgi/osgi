@@ -33,9 +33,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.dmt.dispatcher.Plugin;
 import org.osgi.impl.service.dmt.dispatcher.Segment;
@@ -66,14 +67,14 @@ public class DmtSessionImpl implements DmtSession {
 	private static final int SHOULD_BE_LEAF = 2; // implies SHOULD_EXIST
 	private static final int SHOULD_BE_INTERIOR = 3; // implies SHOULD_EXIST
 
-	private static final Class[] PERMISSION_CONSTRUCTOR_SIG = new Class[] {
+	private static final Class< ? >[]	PERMISSION_CONSTRUCTOR_SIG	= new Class[] {
 			String.class, String.class };
 
-	private static Hashtable acls;
+	private static Hashtable<Node,Acl>	acls;
 
 	// Stores the ACL table at the start of each transaction in an atomic
 	// session. Can be static because atomic session cannot run in parallel.
-	private static Hashtable savedAcls;
+	private static Hashtable<Node,Acl>	savedAcls;
 
 	static {
 		init_acls();
@@ -89,12 +90,13 @@ public class DmtSessionImpl implements DmtSession {
 	private final int sessionId;
 
 	private EventDispatcher eventStore;
-	private Vector dataPlugins;
+	private List<PluginSessionWrapper>	dataPlugins;
 	private int state;
 
+	@SuppressWarnings("unused")
 	private Bundle initiatingBundle;
 	
-	private Hashtable validatedNodes;
+	private Hashtable<String,Node>		validatedNodes;
 
 	// Session creation is done in two phases:
 	// - DmtAdmin creates a new DmtSessionImpl instance (this should indicate
@@ -139,7 +141,7 @@ public class DmtSessionImpl implements DmtSession {
 
 		eventStore = new EventDispatcher(context, sessionId, initiatingBundle);
 
-		dataPlugins = new Vector();
+		dataPlugins = new Vector<>();
 		state = STATE_CLOSED;
 	}
 
@@ -152,7 +154,7 @@ public class DmtSessionImpl implements DmtSession {
 
 		if (lockMode == LOCK_TYPE_ATOMIC)
 			// shallow copy is enough, Nodes and Acls are immutable
-			savedAcls = (Hashtable) acls.clone();
+			savedAcls = new Hashtable<>(acls);
 
 		state = STATE_OPEN;
 
@@ -206,22 +208,27 @@ public class DmtSessionImpl implements DmtSession {
 	 * also after the session has been closed.
 	 */
 
+	@Override
 	public synchronized int getState() {
 		return state;
 	}
 
+	@Override
 	public String getPrincipal() {
 		return principal;
 	}
 
+	@Override
 	public int getSessionId() {
 		return sessionId;
 	}
 
+	@Override
 	public String getRootUri() {
 		return subtreeNode.getUri();
 	}
 
+	@Override
 	public int getLockType() {
 		return lockMode;
 	}
@@ -229,6 +236,7 @@ public class DmtSessionImpl implements DmtSession {
 	/* These methods are only meaningful in the context of an open session. */
 
 	// no other API methods can be called while this method is executed
+	@Override
 	public synchronized void close() throws DmtException {
 		checkSession();
 
@@ -261,12 +269,13 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	private void closePlugins() throws DmtException {
-		Vector closeExceptions = new Vector();
+		Vector<Exception> closeExceptions = new Vector<>();
 		// this block requires synchronization
-		ListIterator i = dataPlugins.listIterator(dataPlugins.size());
+		ListIterator<PluginSessionWrapper> i = dataPlugins
+				.listIterator(dataPlugins.size());
 		while (i.hasPrevious()) {
 			try {
-				((PluginSessionWrapper) i.previous()).close();
+				i.previous().close();
 			} catch (Exception e) {
 				closeExceptions.add(e);
 			}
@@ -279,6 +288,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// no other API methods can be called while this method is executed
+	@Override
 	public synchronized void commit() throws DmtException {
 		checkSession();
 
@@ -291,18 +301,19 @@ public class DmtSessionImpl implements DmtSession {
 
 		commitPlugins();
 
-		savedAcls = (Hashtable) acls.clone();
+		savedAcls = new Hashtable<>(acls);
 
 		state = STATE_OPEN;
 	}
 
 	// precondition: lockMode == LOCK_TYPE_ATOMIC
 	private void commitPlugins() throws DmtException {
-		Vector commitExceptions = new Vector();
-		ListIterator i = dataPlugins.listIterator(dataPlugins.size());
+		Vector<Exception> commitExceptions = new Vector<>();
+		ListIterator<PluginSessionWrapper> i = dataPlugins
+				.listIterator(dataPlugins.size());
 		// this block requires synchronization
 		while (i.hasPrevious()) {
-			PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) i
+			PluginSessionWrapper wrappedPlugin = i
 					.previous();
 			try {
 				// checks transaction support before calling commit on the
@@ -324,6 +335,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// no other API methods can be called while this method is executed
+	@Override
 	public synchronized void rollback() throws DmtException {
 		checkSession();
 
@@ -334,7 +346,7 @@ public class DmtSessionImpl implements DmtSession {
 		// changed back to OPEN if this method finishes without error
 		state = STATE_INVALID;
 
-		acls = (Hashtable) savedAcls.clone();
+		acls = new Hashtable<>(savedAcls);
 
 		rollbackPlugins();
 
@@ -345,14 +357,15 @@ public class DmtSessionImpl implements DmtSession {
 	private void rollbackPlugins() throws DmtException {
 		eventStore.clear();
 
-		Vector rollbackExceptions = new Vector();
+		Vector<Exception> rollbackExceptions = new Vector<>();
 		// this block requires synchronization
-		ListIterator i = dataPlugins.listIterator(dataPlugins.size());
+		ListIterator<PluginSessionWrapper> i = dataPlugins
+				.listIterator(dataPlugins.size());
 		while (i.hasPrevious()) {
 			try {
 				// checks transaction support before calling rollback on the
 				// plugin
-				((PluginSessionWrapper) i.previous()).rollback();
+				i.previous().rollback();
 			} catch (Exception e) {
 				rollbackExceptions.add(e);
 			}
@@ -364,11 +377,13 @@ public class DmtSessionImpl implements DmtSession {
 					rollbackExceptions, false);
 	}
 
+	@Override
 	public synchronized void execute(String nodeUri, String data)
 			throws DmtException {
 		internalExecute(nodeUri, null, data);
 	}
 
+	@Override
 	public synchronized void execute(String nodeUri, String correlator,
 			String data) throws DmtException {
 		internalExecute(nodeUri, correlator, data);
@@ -393,20 +408,22 @@ public class DmtSessionImpl implements DmtSession {
 
 		checkOperation(node, Acl.EXEC, MetaNode.CMD_EXECUTE);
 
-		Plugin dispatcherPlugin = context.getPluginDispatcher()
+		Plugin<ExecPlugin> dispatcherPlugin = context.getPluginDispatcher()
 				.getExecPluginFor(node.getPath());
 		// plugins are not responsible for their mountpoints subtrees --> command must fail
 		if (dispatcherPlugin == null || isBelowMountPoint(nodeUri, dispatcherPlugin))
 			throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
 					"No exec plugin registered for given node.");
 
-		final ExecPlugin plugin = (ExecPlugin) context.getBundleContext()
+		final ExecPlugin plugin = context.getBundleContext()
 				.getService(dispatcherPlugin.getReference());
 		final DmtSession session = this;
 
 		try {
-			AccessController.doPrivileged(new PrivilegedExceptionAction() {
-				public Object run() throws DmtException {
+			AccessController
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+				@Override
+						public Void run() throws DmtException {
 					plugin.execute(session, node.getPath(), correlator, data);
 					return null;
 				}
@@ -417,13 +434,13 @@ public class DmtSessionImpl implements DmtSession {
 	}
 	
 	// checks if the given nodePath is on one of the MountPoints of the given plugin
-	private boolean isBelowMountPoint(String nodeUri, Plugin plugin) {
+	private boolean isBelowMountPoint(String nodeUri, Plugin< ? > plugin) {
 		if ( plugin == null || plugin.getMountPoints().size() == 0 )
 			return false;
 		// must only have one rootUri, if MPs are specified
-		Iterator it = plugin.getMountPoints().iterator();
+		Iterator<String> it = plugin.getMountPoints().iterator();
 		while (it.hasNext()) {
-			String mp = (String) it.next();
+			String mp = it.next();
 			if ( nodeUri.startsWith(mp))
 				return true;
 		}
@@ -452,9 +469,10 @@ public class DmtSessionImpl implements DmtSession {
 
 		// if it is directly matched in the responsible plugins dataRootURI,
 		// then it can't be a structural node
-		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(
+		Plugin<DataPlugin> plugin = context.getPluginDispatcher()
+				.getDataPluginFor(
 				nodePath.getPath());
-		for (Segment segment : plugin.getOwns()) {
+		for (Segment<DataPlugin> segment : plugin.getOwns()) {
 			if (nodePath.getUri().equals(segment.getUri().toString()))
 				return false;
 		}
@@ -493,6 +511,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	// requires DmtPermission with GET action, no ACL check done because there
 	// are no ACLs stored for non-existing nodes (in theory)
+	@Override
 	public synchronized boolean isNodeUri(String nodeUri) {
 		checkSession();
 		try {
@@ -509,6 +528,7 @@ public class DmtSessionImpl implements DmtSession {
 		return true;
 	}
 
+	@Override
 	public synchronized boolean isLeafNode(String nodeUri) throws DmtException {
 		checkSession();
 		if (isScaffoldNode(nodeUri))
@@ -520,17 +540,19 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized Acl getNodeAcl(String nodeUri) throws DmtException {
 		checkSession();
 		// here we have to check the node existence, because the ACL is 
 		// maintained by the DmtAdmin, not by the plugin
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
-		Acl acl = (Acl) acls.get(node);
+		Acl acl = acls.get(node);
 		return acl == null ? null : acl;
 	}
 
 	// GET property op
+	@Override
 	public synchronized Acl getEffectiveNodeAcl(String nodeUri)
 			throws DmtException {
 		checkSession();
@@ -542,6 +564,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// REPLACE property op
+	@Override
 	public synchronized void setNodeAcl(String nodeUri, Acl acl)
 			throws DmtException {
 		checkWriteSession();
@@ -577,6 +600,7 @@ public class DmtSessionImpl implements DmtSession {
 		enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
 	}
 
+	@Override
 	public synchronized MetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		checkSession();
@@ -610,11 +634,12 @@ public class DmtSessionImpl implements DmtSession {
 	private boolean isSharedMountPoint( Node node ) {
 		String uri = node.getUri();
 		String mpUri = uri.substring(0, uri.lastIndexOf("/") + 1) + "#";
-		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(node.getParent().getPath());
+		Plugin<DataPlugin> plugin = context.getPluginDispatcher()
+				.getDataPluginFor(node.getParent().getPath());
 		if ( plugin != null ) {
-			Iterator it = plugin.getMountPoints().iterator();
+			Iterator<String> it = plugin.getMountPoints().iterator();
 			while (it.hasNext()) {
-				String mp = (String) it.next();
+				String mp = it.next();
 				if ( mp.equals(mpUri))
 					return true;
 			}
@@ -632,6 +657,7 @@ public class DmtSessionImpl implements DmtSession {
 		return scope;
 	}
 
+	@Override
 	public synchronized DmtData getNodeValue(String nodeUri)
 			throws DmtException {
 		checkSession();
@@ -680,6 +706,7 @@ public class DmtSessionImpl implements DmtSession {
 		}
 	}
 
+	@Override
 	public synchronized String[] getChildNodeNames(String nodeUri)
 			throws DmtException {
 		checkSession();
@@ -756,11 +783,12 @@ public class DmtSessionImpl implements DmtSession {
 		// Segment segment =
 		// context.getPluginDispatcher().root.getSegmentFor(node.getPath(), 1);
 		Vector<String> v = new Vector<String>();
-		Segment segment = context.getPluginDispatcher().findSegment(
+		Segment<DataPlugin> segment = context.getPluginDispatcher()
+				.findSegment(
 				node.getPath());
 		if (segment != null) {
-			List<Segment> childSegments = segment.getChildren();
-			for (Segment child : childSegments)
+			List<Segment<DataPlugin>> childSegments = segment.getChildren();
+			for (Segment<DataPlugin> child : childSegments)
 				v.add(child.getName());
 		}
 		String[] structuralChildNodes = v.toArray(new String[v
@@ -796,6 +824,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized String getNodeTitle(String nodeUri) throws DmtException {
 		checkSession();
 		Node node = makeAbsoluteUri(nodeUri);
@@ -813,6 +842,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized int getNodeVersion(String nodeUri) throws DmtException {
 		checkSession();
 //		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
@@ -825,6 +855,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized Date getNodeTimestamp(String nodeUri)
 			throws DmtException {
 		checkSession();
@@ -842,6 +873,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized int getNodeSize(String nodeUri) throws DmtException {
 		checkSession();
 		Node node = makeAbsoluteUri(nodeUri);
@@ -854,6 +886,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// GET property op
+	@Override
 	public synchronized String getNodeType(String nodeUri) throws DmtException {
 		checkSession();
 		Node node = makeAbsoluteUri(nodeUri);
@@ -871,6 +904,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// REPLACE property op
+	@Override
 	public synchronized void setNodeTitle(String nodeUri, String title)
 			throws DmtException {
 		checkWriteSession();
@@ -907,6 +941,7 @@ public class DmtSessionImpl implements DmtSession {
 			enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
 	}
 
+	@Override
 	public synchronized void setNodeValue(String nodeUri, DmtData data)
 			throws DmtException {
 		if (isScaffoldNode(nodeUri)) {
@@ -919,6 +954,7 @@ public class DmtSessionImpl implements DmtSession {
 		commonSetNodeValue(nodeUri, data);
 	}
 
+	@Override
 	public synchronized void setDefaultNodeValue(String nodeUri)
 			throws DmtException {
 		if (isScaffoldNode(nodeUri)) {
@@ -973,6 +1009,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
+	@Override
 	public synchronized void setNodeType(String nodeUri, String type)
 			throws DmtException {
 		checkWriteSession();
@@ -1005,6 +1042,7 @@ public class DmtSessionImpl implements DmtSession {
 		enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
 	}
 
+	@Override
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
 		checkWriteSession();
 		if (isScaffoldNode(nodeUri)) {
@@ -1061,6 +1099,7 @@ public class DmtSessionImpl implements DmtSession {
 		enqueueEvent(DmtEvent.DELETED, node, null, acl);
 	}
 
+	@Override
 	public synchronized void createInteriorNode(String nodeUri)
 			throws DmtException {
 		checkWriteSession();
@@ -1069,6 +1108,7 @@ public class DmtSessionImpl implements DmtSession {
 		commonCreateInteriorNode(node, null, true, false);
 	}
 
+	@Override
 	public synchronized void createInteriorNode(String nodeUri, String type)
 			throws DmtException {
 		checkWriteSession();
@@ -1134,6 +1174,7 @@ public class DmtSessionImpl implements DmtSession {
 			enqueueEventWithCurrentAcl(DmtEvent.ADDED, node, null);
 	}
 
+	@Override
 	public synchronized void createLeafNode(String nodeUri) throws DmtException {
 		// not calling createLeafNode/3, because it is wrapped
 		checkWriteSession();
@@ -1141,6 +1182,7 @@ public class DmtSessionImpl implements DmtSession {
 		commonCreateLeafNode(node, null, null, true);
 	}
 
+	@Override
 	public synchronized void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
 		// not calling createLeafNode/3, because it is wrapped
@@ -1149,6 +1191,7 @@ public class DmtSessionImpl implements DmtSession {
 		commonCreateLeafNode(node, value, null, true);
 	}
 
+	@Override
 	public synchronized void createLeafNode(String nodeUri, DmtData value,
 			String mimeType) throws DmtException {
 		checkWriteSession();
@@ -1204,6 +1247,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	// Tree may be left in an inconsistent state if there is an error when only
 	// part of the tree has been copied.
+	@Override
 	public synchronized void copy(String nodeUri, String newNodeUri,
 			boolean recursive) throws DmtException {
 		checkWriteSession();
@@ -1231,7 +1275,8 @@ public class DmtSessionImpl implements DmtSession {
 
 		// if (context.getPluginDispatcher()
 		// .handledBySameDataPlugin(node, newNode)) {
-		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(
+		Plugin<DataPlugin> plugin = context.getPluginDispatcher()
+				.getDataPluginFor(
 				Uri.toPath(nodeUri));
 		if ((plugin.getMountPoints() == null || plugin.getMountPoints().size() == 0)) {
 
@@ -1277,6 +1322,7 @@ public class DmtSessionImpl implements DmtSession {
 		enqueueEvent(DmtEvent.COPIED, node, newNode, mergedAcl);
 	}
 
+	@Override
 	public synchronized void renameNode(String nodeUri, String newNodeName)
 			throws DmtException {
 		checkWriteSession();
@@ -1385,8 +1431,8 @@ public class DmtSessionImpl implements DmtSession {
 			for (int i = 0; i < permissions.length; i++) {
 				PermissionInfo info = permissions[i];
 
-				Class permissionClass = Class.forName(info.getType());
-				Constructor constructor = permissionClass
+				Class< ? > permissionClass = Class.forName(info.getType());
+				Constructor< ? > constructor = permissionClass
 						.getConstructor(PERMISSION_CONSTRUCTOR_SIG);
 				Permission permission = (Permission) constructor
 						.newInstance(new Object[] { info.getName(),
@@ -1646,9 +1692,9 @@ public class DmtSessionImpl implements DmtSession {
 
 		// Look through the open plugin sessions, and find the session with the
 		// lowest root that handles the given node.
-		Iterator i = dataPlugins.iterator();
+		Iterator<PluginSessionWrapper> i = dataPlugins.iterator();
 		while (i.hasNext()) {
-			PluginSessionWrapper plugin = (PluginSessionWrapper) i.next();
+			PluginSessionWrapper plugin = i.next();
 			Node pluginRoot = plugin.getSessionRoot();
 			if (pluginRoot.isAncestorOf(node)
 					&& (wrappedPluginRoot == null || wrappedPluginRoot
@@ -1666,7 +1712,7 @@ public class DmtSessionImpl implements DmtSession {
 
 		// SD: path must be absolute
 		// get the reference of the responsible plugin from the new dispatcher
-		Plugin dispatcherPlugin = context.getPluginDispatcher()
+		Plugin<DataPlugin> dispatcherPlugin = context.getPluginDispatcher()
 				.getDataPluginFor(node.getPath());
 		Node root = getLongestRootForPlugin(dispatcherPlugin, node);
 
@@ -1688,7 +1734,7 @@ public class DmtSessionImpl implements DmtSession {
 		// with a longer path, attempting to open session with
 		// correct lock type.
 
-		DataPlugin plugin = (DataPlugin) context.getBundleContext().getService(
+		DataPlugin plugin = context.getBundleContext().getService(
 				dispatcherPlugin.getReference());
 		ReadableDataSession pluginSession = null;
 		int pluginSessionType = lockMode;
@@ -1720,12 +1766,12 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// SD: changed to return the longest root, instead of the first one found
-	private Node getLongestRootForPlugin(Plugin plugin, Node node) {
+	private <P> Node getLongestRootForPlugin(Plugin<P> plugin, Node node) {
 		// Node[] roots = plugin.getDataRoots();
-		List<Segment> segments = plugin.getOwns();
+		List<Segment<P>> segments = plugin.getOwns();
 
 		Node longestRoot = null;
-		for (Segment segment : segments) {
+		for (Segment<P> segment : segments) {
 			Node root = new Node(Uri.toPath(segment.getUri().toString()));
 			if (root.isAncestorOf(node)) {
 				Node n = root.isAncestorOf(subtreeNode) ? subtreeNode : root;
@@ -1748,9 +1794,10 @@ public class DmtSessionImpl implements DmtSession {
 
 		ReadableDataSession pluginSession;
 		try {
-			pluginSession = (ReadableDataSession) AccessController
-					.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run() throws DmtException {
+			pluginSession = AccessController.doPrivileged(
+					new PrivilegedExceptionAction<ReadableDataSession>() {
+						@Override
+						public ReadableDataSession run() throws DmtException {
 							switch (pluginSessionType) {
 							case LOCK_TYPE_EXCLUSIVE:
 								return plugin.openReadWriteSession(rootPath,
@@ -1994,8 +2041,9 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	// remove null entries from the returned array (if it is non-null)
-	private static List normalizeChildNodeNames(String[] pluginChildNodes) {
-		List processedChildNodes = new Vector();
+	private static List<String> normalizeChildNodeNames(
+			String[] pluginChildNodes) {
+		List<String> processedChildNodes = new Vector<>();
 
 		if (pluginChildNodes != null)
 			for (int i = 0; i < pluginChildNodes.length; i++)
@@ -2009,13 +2057,13 @@ public class DmtSessionImpl implements DmtSession {
 	// If 'newNode' is 'null', the ACL entries are removed (moved to nowhere).
 	private static void moveAclEntries(Node node, Node newNode) {
 		synchronized (acls) {
-			Hashtable newEntries = null;
+			Hashtable<Node,Acl> newEntries = null;
 			if (newNode != null)
-				newEntries = new Hashtable();
-			Iterator i = acls.entrySet().iterator();
+				newEntries = new Hashtable<>();
+			Iterator<Entry<Node,Acl>> i = acls.entrySet().iterator();
 			while (i.hasNext()) {
-				Map.Entry entry = (Map.Entry) i.next();
-				Node relativeNode = node.getRelativeNode((Node) entry.getKey());
+				Entry<Node,Acl> entry = i.next();
+				Node relativeNode = node.getRelativeNode(entry.getKey());
 				if (relativeNode != null) {
 					if (newNode != null)
 						newEntries.put(
@@ -2032,12 +2080,12 @@ public class DmtSessionImpl implements DmtSession {
 	private static Acl getEffectiveNodeAclNoCheck(Node node) {
 		Acl acl;
 		synchronized (acls) {
-			acl = (Acl) acls.get(node);
+			acl = acls.get(node);
 			// must finish whithout NullPointerException, because root ACL must
 			// not be empty
 			while (acl == null || isEmptyAcl(acl)) {
 				node = node.getParent();
-				acl = (Acl) acls.get(node);
+				acl = acls.get(node);
 			}
 		}
 		return acl;
@@ -2126,10 +2174,11 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	static void init_acls() {
-		acls = new Hashtable();
+		acls = new Hashtable<>();
 		acls.put(Node.ROOT_NODE, new Acl("Add=*&Get=*&Replace=*"));
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer info = new StringBuffer();
 		info.append("DmtSessionImpl(");
@@ -2155,9 +2204,9 @@ public class DmtSessionImpl implements DmtSession {
 		return info.append(')').toString();
 	}
 
-	private Hashtable getValidatedNodeCache() {
+	private Hashtable<String,Node> getValidatedNodeCache() {
 		if (validatedNodes == null)
-			validatedNodes = new Hashtable();
+			validatedNodes = new Hashtable<>();
 		return validatedNodes;
 	}
 

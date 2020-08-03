@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtEvent;
@@ -44,19 +43,22 @@ public class DmtEventImpl implements DmtEvent {
         this.principals = principals;
     }
     
-    public int getType() {
+    @Override
+	public int getType() {
         return coreEvent.getType();
     }
     
-    public int getSessionId() {
+    @Override
+	public int getSessionId() {
         return coreEvent.getSessionId();
     }
 
-    public String[] getNodes() {
+    @Override
+	public String[] getNodes() {
     	if ( nodeUris == null ) {
             List<Node> nodes = coreEvent.getNodes();
             if ( nodes != null ) {
-            	List<String> uris = new ArrayList();
+				List<String> uris = new ArrayList<>();
         		SecurityManager sm = System.getSecurityManager();
             	for (int i = 0; i < nodes.size(); i++) {
             		if ( sm != null ) {
@@ -75,11 +77,12 @@ public class DmtEventImpl implements DmtEvent {
         return nodeUris;
     }
     
-    public String[] getNewNodes() {
+    @Override
+	public String[] getNewNodes() {
     	if ( newNodeUris == null ) {
             List<Node> newNodes = coreEvent.getNewNodes();
             if ( newNodes != null ) {
-            	List<String> uris = new ArrayList();
+				List<String> uris = new ArrayList<>();
         		SecurityManager sm = System.getSecurityManager();
             	for (int i = 0; i < newNodes.size(); i++) {
             		if ( sm != null ) {
@@ -98,7 +101,8 @@ public class DmtEventImpl implements DmtEvent {
         return newNodeUris;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "DmtEventImpl(" + principals + ", " + coreEvent + ")";
     }
     
@@ -111,7 +115,8 @@ public class DmtEventImpl implements DmtEvent {
      * @param principals
      * @return
      */
-    private static String[] filterNodesByAcls(List<Node> nodes, List<Acl> acls,
+	@SuppressWarnings("unused")
+	private static String[] filterNodesByAcls(List<Node> nodes, List<Acl> acls,
             Collection<String> principals) {
 
     	// for internal events the acl list can be empty
@@ -131,10 +136,12 @@ public class DmtEventImpl implements DmtEvent {
         return filteredNodes.toArray(new String[] {});
     }
 
+	@Override
 	public String[] getPropertyNames() {
 		return coreEvent.getPropertyNames();
 	}
 
+	@Override
 	public Object getProperty(String key) {
 		return coreEvent.getProperty(key);
 	}

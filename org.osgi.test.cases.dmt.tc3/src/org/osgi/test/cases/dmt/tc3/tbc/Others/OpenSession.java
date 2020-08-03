@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -71,16 +74,16 @@ public class OpenSession {
 	public void testOpenSession001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testOpenSession001");
+			DefaultTestBundleControl.log("#testOpenSession001");
 
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.INTERIOR_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 			
-			tbc.assertEquals("Asserts that a openReadOnlySession is called when the the first reference is made within a DmtSession" +
+			TestCase.assertEquals("Asserts that a openReadOnlySession is called when the the first reference is made within a DmtSession" +
                     " a node which is handled by this plugin using the LOCK_TYPE_SHARED",
                     TestDataPlugin.SESSION_OPENED,"openReadOnlySession");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";
@@ -96,16 +99,16 @@ public class OpenSession {
     public void testOpenSession002() {
         DmtSession session = null;
         try {
-            tbc.log("#testOpenSession002");
+            DefaultTestBundleControl.log("#testOpenSession002");
 
             session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.INTERIOR_NODE,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
             
-            tbc.assertEquals("Asserts that a openReadWriteSession is called when the the first reference is made within a DmtSession" +
+            TestCase.assertEquals("Asserts that a openReadWriteSession is called when the the first reference is made within a DmtSession" +
                     " a node which is handled by this plugin using the LOCK_TYPE_EXCLUSIVE",
                     TestDataPlugin.SESSION_OPENED,"openReadWriteSession");
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";
@@ -120,16 +123,16 @@ public class OpenSession {
     public void testOpenSession003() {
         DmtSession session = null;
         try {
-            tbc.log("#testOpenSession003");
+            DefaultTestBundleControl.log("#testOpenSession003");
 
             session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.INTERIOR_NODE,
                     DmtSession.LOCK_TYPE_ATOMIC);
             
-            tbc.assertEquals("Asserts that a openAtomicSession is called when the the first reference is made within a DmtSession" +
+            TestCase.assertEquals("Asserts that a openAtomicSession is called when the the first reference is made within a DmtSession" +
                     " a node which is handled by this plugin using the LOCK_TYPE_ATOMIC",
                     TestDataPlugin.SESSION_OPENED,"openAtomicSession");
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";

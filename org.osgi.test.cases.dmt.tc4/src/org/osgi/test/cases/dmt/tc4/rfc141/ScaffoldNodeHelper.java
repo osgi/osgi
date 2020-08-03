@@ -1,12 +1,11 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.DataPlugin;
-
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -17,13 +16,15 @@ public abstract class ScaffoldNodeHelper extends DefaultTestBundleControl{
 	DmtSession session;
 	GenericDataPlugin dataPlugin;
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println( "tearing down");
@@ -38,10 +39,11 @@ public abstract class ScaffoldNodeHelper extends DefaultTestBundleControl{
 		String mountRoot = "./A/B";
 
 		Node n3 = new Node(null, "B", "node B");
+		@SuppressWarnings("unused")
 		Node n4 = new Node(n3, "C", "node C");
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, n3);
 		
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {mountRoot});
 		
 		registerService(DataPlugin.class.getName(), dataPlugin, props );

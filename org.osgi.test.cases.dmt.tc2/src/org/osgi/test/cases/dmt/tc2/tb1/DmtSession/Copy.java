@@ -53,6 +53,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -67,6 +70,7 @@ public class Copy implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
         testCopy001();
@@ -112,14 +116,14 @@ public class Copy implements TestInterface {
 	private void testCopy001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy001");
+			DefaultTestBundleControl.log("#testCopy001");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(DmtConstants.OSGi_ROOT,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -140,14 +144,14 @@ public class Copy implements TestInterface {
 	private void testCopy002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy002");
+			DefaultTestBundleControl.log("#testCopy002");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INEXISTENT_NODE,
 					TestExecPluginActivator.ROOT + "/other", true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
@@ -166,14 +170,14 @@ public class Copy implements TestInterface {
 	private void testCopy003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy003");
+			DefaultTestBundleControl.log("#testCopy003");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INTERIOR_NODE2, false);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -192,7 +196,7 @@ public class Copy implements TestInterface {
 	private void testCopy004() {
         DmtSession session = null;
         try {
-            tbc.log("#testCopy004");
+            DefaultTestBundleControl.log("#testCopy004");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_EXCLUSIVE);
             
@@ -204,7 +208,7 @@ public class Copy implements TestInterface {
             
             session.copy(TestExecPluginActivator.INTERIOR_NODE,
                 TestExecPluginActivator.INEXISTENT_NODE, false);
-            tbc.pass("A node could be copied with the right permission");
+            DefaultTestBundleControl.pass("A node could be copied with the right permission");
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
         } finally {
@@ -225,7 +229,7 @@ public class Copy implements TestInterface {
 
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy005");
+			DefaultTestBundleControl.log("#testCopy005");
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET | Acl.ADD );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
             
@@ -238,7 +242,7 @@ public class Copy implements TestInterface {
 
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, false);
-			tbc
+			DefaultTestBundleControl
 					.pass("This method asserts that the method is called if it has the right Acl");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -259,14 +263,14 @@ public class Copy implements TestInterface {
 	private void testCopy006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy006");
+			DefaultTestBundleControl.log("#testCopy006");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.copy(TestExecPluginActivator.INTERIOR_NODE_NAME,
 					TestExecPluginActivator.INEXISTENT_NODE_NAME, false);
 
-			tbc.pass("A relative URI can be used with Copy.");
+			DefaultTestBundleControl.pass("A relative URI can be used with Copy.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -283,16 +287,16 @@ public class Copy implements TestInterface {
 	private void testCopy007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy007");
+			DefaultTestBundleControl.log("#testCopy007");
 			session = tbc.getDmtAdmin().getSession(
 				TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_SHARED);
 
 			session.copy(TestExecPluginActivator.INTERIOR_NODE_NAME,
 				TestExecPluginActivator.INEXISTENT_NODE_NAME, false);
 			
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
@@ -310,7 +314,7 @@ public class Copy implements TestInterface {
 	private void testCopy008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy008");
+			DefaultTestBundleControl.log("#testCopy008");
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.EXEC );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
 					.getName(), DmtConstants.PRINCIPAL, "*"));
@@ -320,9 +324,9 @@ public class Copy implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is PERMISSION_DENIED",
 					DmtException.PERMISSION_DENIED, e.getCode());
 		} catch (Exception e) {
@@ -346,7 +350,7 @@ public class Copy implements TestInterface {
 		
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy009");
+			DefaultTestBundleControl.log("#testCopy009");
 
 			tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.GET);
 			//The copied node allows the Get operation			
@@ -360,9 +364,9 @@ public class Copy implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is PERMISSION_DENIED",
 					DmtException.PERMISSION_DENIED, e.getCode());
 		} catch (Exception e) {
@@ -385,7 +389,7 @@ public class Copy implements TestInterface {
 	private void testCopy010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy010");
+			DefaultTestBundleControl.log("#testCopy010");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.setPermissions(new PermissionInfo(
@@ -393,9 +397,9 @@ public class Copy implements TestInterface {
 					DmtPermission.ADD));
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("#", SecurityException.class);
+			DefaultTestBundleControl.failException("#", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
+			DefaultTestBundleControl.pass("The Exception was SecurityException");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
@@ -414,7 +418,7 @@ public class Copy implements TestInterface {
 	private void testCopy011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy011");
+			DefaultTestBundleControl.log("#testCopy011");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			//The copied node allows Get
@@ -423,9 +427,9 @@ public class Copy implements TestInterface {
 					DmtPermission.GET));
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("#", SecurityException.class);
+			DefaultTestBundleControl.failException("#", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
+			DefaultTestBundleControl.pass("The Exception was SecurityException");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
@@ -442,13 +446,13 @@ public class Copy implements TestInterface {
 	private void testCopy012() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy012");
+			DefaultTestBundleControl.log("#testCopy012");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,null, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
@@ -467,12 +471,12 @@ public class Copy implements TestInterface {
 	private void testCopy013() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy013");
+			DefaultTestBundleControl.log("#testCopy013");
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INTERIOR_NODE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,"", true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -491,13 +495,13 @@ public class Copy implements TestInterface {
 	private void testCopy014() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy014");
+			DefaultTestBundleControl.log("#testCopy014");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE + "/", true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
@@ -515,13 +519,13 @@ public class Copy implements TestInterface {
 	private void testCopy015() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy015");
+			DefaultTestBundleControl.log("#testCopy015");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE + "\\", true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
@@ -540,13 +544,13 @@ public class Copy implements TestInterface {
 	private void testCopy016() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy016");
+			DefaultTestBundleControl.log("#testCopy016");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.ROOT + "/./"+ TestExecPluginActivator.INEXISTENT_NODE_NAME, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
@@ -564,14 +568,14 @@ public class Copy implements TestInterface {
 	private void testCopy017() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy017");
+			DefaultTestBundleControl.log("#testCopy017");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.ROOT + "/../"+ TestExecPluginActivator.INEXISTENT_NODE_NAME, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 			
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
@@ -589,7 +593,7 @@ public class Copy implements TestInterface {
 	private void testCopy018() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy018");
+			DefaultTestBundleControl.log("#testCopy018");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -604,7 +608,7 @@ public class Copy implements TestInterface {
 //			}
 			
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is URI_TOO_LONG",
 					DmtException.URI_TOO_LONG, e.getCode());
 		} catch (Exception e) {
@@ -622,7 +626,7 @@ public class Copy implements TestInterface {
 	private void testCopy019() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy019");
+			DefaultTestBundleControl.log("#testCopy019");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
@@ -636,7 +640,7 @@ public class Copy implements TestInterface {
 //        		"DmtException.URI_TOO_LONG will not be tested in this case");
 //			}
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is URI_TOO_LONG",
 					DmtException.URI_TOO_LONG, e.getCode());
 		} catch (Exception e) {
@@ -655,16 +659,16 @@ public class Copy implements TestInterface {
 	private void testCopy020() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy020");
+			DefaultTestBundleControl.log("#testCopy020");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.copy(TestReadOnlyPluginActivator.INTERIOR_NODE,
 			    TestReadOnlyPluginActivator.INEXISTENT_NODE, true);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+			TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
 					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -682,16 +686,16 @@ public class Copy implements TestInterface {
 	private void testCopy021() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy021");
+			DefaultTestBundleControl.log("#testCopy021");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.copy(TestNonAtomicPluginActivator.INTERIOR_NODE,
 			    TestNonAtomicPluginActivator.INEXISTENT_NODE, true);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+			TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
 					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -709,7 +713,7 @@ public class Copy implements TestInterface {
 	private void testCopy022() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy022");
+			DefaultTestBundleControl.log("#testCopy022");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
@@ -726,7 +730,7 @@ public class Copy implements TestInterface {
             
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.pass("Copy method could called when the caller has DmtPermission for the " +
+			DefaultTestBundleControl.pass("Copy method could called when the caller has DmtPermission for the " +
 					"target node with the Replace action and the node has a title ");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -748,7 +752,7 @@ public class Copy implements TestInterface {
 	private void testCopy023() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy023");
+			DefaultTestBundleControl.log("#testCopy023");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
@@ -763,9 +767,9 @@ public class Copy implements TestInterface {
             
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,
 					TestExecPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("#", SecurityException.class);
+			DefaultTestBundleControl.failException("#", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
+			DefaultTestBundleControl.pass("The Exception was SecurityException");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
@@ -787,14 +791,14 @@ public class Copy implements TestInterface {
 	private void testCopy024() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy024");
+			DefaultTestBundleControl.log("#testCopy024");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestReadOnlyPluginActivator.LEAF_NODE,
 					TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -816,14 +820,14 @@ public class Copy implements TestInterface {
 	private void testCopy025() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy025");
+			DefaultTestBundleControl.log("#testCopy025");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestNonAtomicPluginActivator.LEAF_NODE,
 					TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -845,14 +849,14 @@ public class Copy implements TestInterface {
 	private void testCopy026() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy026");
+			DefaultTestBundleControl.log("#testCopy026");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestReadOnlyPluginActivator.INTERIOR_NODE,
 					TestReadOnlyPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -874,14 +878,14 @@ public class Copy implements TestInterface {
 	private void testCopy027() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy027");
+			DefaultTestBundleControl.log("#testCopy027");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.copy(TestNonAtomicPluginActivator.INTERIOR_NODE,
 					TestNonAtomicPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -901,15 +905,15 @@ public class Copy implements TestInterface {
 	private void testCopy028() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy028");
+			DefaultTestBundleControl.log("#testCopy028");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.copy("",
 					TestExecPluginActivator.INEXISTENT_NODE, false);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_FAILED",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {

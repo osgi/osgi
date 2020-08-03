@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>close</code> method, 
@@ -64,36 +67,36 @@ public class Close {
 	public void testClose001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testClose001");
+			DefaultTestBundleControl.log("#testClose001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			TestDataPlugin.setCloseThrowsException(true);
 			session.close();
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that COMMAND_FAILED is thrown if an underlying plugin failed to close:", 
+			TestCase.assertEquals("Asserts that COMMAND_FAILED is thrown if an underlying plugin failed to close:", 
 				DmtException.COMMAND_FAILED, e.getCode());
 		
 			if (e.getCause() instanceof DmtException) {
 				DmtException exception = (DmtException)e.getCause();
-				tbc
+				TestCase
 						.assertNull(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct subtree",exception.getURI());
-				tbc
+				TestCase
 						.assertEquals(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
 								DmtException.CONCURRENT_ACCESS, exception.getCode());
-				tbc
+				TestCase
 						.assertTrue(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 								exception.getMessage().indexOf(
 								    TestDataPlugin.CLOSE) > -1);
 			}	else {
-				tbc.failExpectedOtherException(DmtException.class,e.getCause());
+				DmtTestControl.failExpectedOtherException(DmtException.class,e.getCause());
 			}		
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);	
+			DmtTestControl.failUnexpectedException(e);	
 		} finally {
 		    TestDataPlugin.setCloseThrowsException(false);
 		}
@@ -106,37 +109,37 @@ public class Close {
 	public void testClose002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testClose002");
+			DefaultTestBundleControl.log("#testClose002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			TestDataPlugin.setCommitThrowsException(true);
 			session.close();
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that TRANSACTION_ERROR is thrown if an underlying plugin failed to commit:", 
+			TestCase.assertEquals("Asserts that TRANSACTION_ERROR is thrown if an underlying plugin failed to commit:", 
 					DmtException.TRANSACTION_ERROR, e.getCode());
 			
 			if (e.getCause() instanceof DmtException) {
 				DmtException exception = (DmtException)e.getCause();
-				tbc
+				TestCase
 						.assertNull(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct subtree",exception.getURI());
-				tbc
+				TestCase
 						.assertEquals(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
 								DmtException.COMMAND_FAILED, exception.getCode());
-				tbc
+				TestCase
 						.assertTrue(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 								exception.getMessage().indexOf(
 								    TestDataPlugin.COMMIT) > -1);
 				
 			} else {
-				tbc.failExpectedOtherException(DmtException.class, e.getCause());
+				DmtTestControl.failExpectedOtherException(DmtException.class, e.getCause());
 			}			
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 		    TestDataPlugin.setCommitThrowsException(false);
 		}

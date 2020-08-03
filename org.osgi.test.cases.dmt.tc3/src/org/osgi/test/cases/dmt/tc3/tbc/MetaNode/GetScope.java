@@ -42,6 +42,9 @@ package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>getScope</code> method of MetaNode, 
@@ -68,7 +71,7 @@ public class GetScope {
 	public void testGetScope001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetScope001");
+			DefaultTestBundleControl.log("#testGetScope001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -76,10 +79,10 @@ public class GetScope {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertEquals("Asserts getScope method", MetaNode.DYNAMIC,
+			TestCase.assertEquals("Asserts getScope method", MetaNode.DYNAMIC,
 					metanode.getScope());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -93,16 +96,16 @@ public class GetScope {
     public void testGetScope002() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetScope002");
+            DefaultTestBundleControl.log("#testGetScope002");
             session = tbc.getDmtAdmin().getSession(
                     TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.deleteNode(TestMetaNodeDataPluginActivator.PARENT_OF_NODE_THAT_CANNOT_BE_DELETED);
-            tbc.pass("Asserts that a non-deletable node can disappear in a recursive DELETE operation issued on one of its parents.");
+            DefaultTestBundleControl.pass("Asserts that a non-deletable node can disappear in a recursive DELETE operation issued on one of its parents.");
             
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }

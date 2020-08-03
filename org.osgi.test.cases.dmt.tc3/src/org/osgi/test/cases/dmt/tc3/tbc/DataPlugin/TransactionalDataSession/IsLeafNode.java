@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -68,14 +71,14 @@ public class IsLeafNode {
 	public void testIsLeafNode001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsLeafNode001");
+			DefaultTestBundleControl.log("#testIsLeafNode001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
 					+" to the correct plugin",session.isLeafNode(TestDataPluginActivator.LEAF_NODE));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -90,14 +93,14 @@ public class IsLeafNode {
 	public void testIsLeafNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsLeafNode002");
+			DefaultTestBundleControl.log("#testIsLeafNode002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
 					+" to the correct plugin",!session.isLeafNode(TestDataPluginActivator.INTERIOR_NODE));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}

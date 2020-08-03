@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -31,30 +32,32 @@ import org.osgi.test.support.OSGiTestCase;
 
 public abstract class DmtAdminTestCase extends OSGiTestCase {
 
-	protected ServiceReference		dmtAdminRef;
+	protected ServiceReference<DmtAdmin>	dmtAdminRef;
 
 	protected DmtAdmin				dmtAdmin;
 
 	protected DmtSession			session;
 
-	protected LinkedList			registrationList		= new LinkedList();
+	protected LinkedList<ServiceRegistration< ? >>	registrationList		= new LinkedList<>();
 
 	protected static BundleContext	context;
 
-	private final Map				listenerRegistrationMap	= new HashMap();
+	private final Map<DmtEventListener,ServiceRegistration< ? >>	listenerRegistrationMap	= new HashMap<>();
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		context = getContext();
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
 
 	public void getDmtAdmin() {
-		dmtAdminRef = getContext().getServiceReference(DmtAdmin.class.getName());
-		dmtAdmin = (DmtAdmin) getContext().getService(dmtAdminRef);
+		dmtAdminRef = getContext().getServiceReference(DmtAdmin.class);
+		dmtAdmin = getContext().getService(dmtAdminRef);
 	}
 
 	protected void closeDmtSession() throws DmtException {
@@ -69,7 +72,8 @@ public abstract class DmtAdminTestCase extends OSGiTestCase {
 
 	protected void unregisterPlugins() {
 		while (!registrationList.isEmpty()) {
-			ServiceRegistration registration = (ServiceRegistration) registrationList.removeLast();
+			ServiceRegistration< ? > registration = registrationList
+					.removeLast();
 			registration.unregister();
 		}
 	}
@@ -233,123 +237,148 @@ public abstract class DmtAdminTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected ServiceRegistration registerDataPlugin(DataPlugin dataPlugin, String dataRootUri) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerDataPlugin(
+			DataPlugin dataPlugin, String dataRootUri) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUri);
 		return registerDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerDataPlugin(DataPlugin dataPlugin, String[] dataRootUris) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerDataPlugin(
+			DataPlugin dataPlugin, String[] dataRootUris) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUris);
 		return registerDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerDataPlugin(DataPlugin dataPlugin, Dictionary serviceProps) {
-		ServiceRegistration registration = getContext().registerService(DataPlugin.class.getName(), dataPlugin, serviceProps);
+	protected ServiceRegistration<DataPlugin> registerDataPlugin(
+			DataPlugin dataPlugin,
+			Dictionary<String,Object> serviceProps) {
+		ServiceRegistration<DataPlugin> registration = getContext()
+				.registerService(DataPlugin.class, dataPlugin, serviceProps);
 		registrationList.add(registration);
 		return registration;
 	}
 
-	protected ServiceRegistration registerMountingDataPlugin(DataPlugin dataPlugin, String dataRootUri, String[] mountPoints) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerMountingDataPlugin(
+			DataPlugin dataPlugin, String dataRootUri, String[] mountPoints) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUri);
 		serviceProps.put(DataPlugin.MOUNT_POINTS, mountPoints);
 		return registerDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountDataPlugin(DataPlugin dataPlugin, String dataRootUri) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerMountDataPlugin(
+			DataPlugin dataPlugin, String dataRootUri) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUri);
 		return registerMountDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountDataPlugin(DataPlugin dataPlugin, String[] dataRootUris) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerMountDataPlugin(
+			DataPlugin dataPlugin, String[] dataRootUris) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUris);
 		return registerMountDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountDataPlugin(DataPlugin dataPlugin, String dataRootUri, String[] mountPoints) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerMountDataPlugin(
+			DataPlugin dataPlugin, String dataRootUri, String[] mountPoints) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUri);
 		serviceProps.put(DataPlugin.MOUNT_POINTS, mountPoints);
 		return registerMountDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountDataPluginWithServicePIDs(DataPlugin dataPlugin, String dataRootUri, String[] servicePIDs) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<DataPlugin> registerMountDataPluginWithServicePIDs(
+			DataPlugin dataPlugin, String dataRootUri, String[] servicePIDs) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(Constants.SERVICE_PID, servicePIDs);
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, dataRootUri);
 		return registerMountDataPlugin(dataPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountDataPlugin(DataPlugin dataPlugin, Dictionary serviceProps) {
-		String[] objectClasses = new String[] {DataPlugin.class.getName()};
-		ServiceRegistration registration = getContext().registerService(objectClasses, dataPlugin, serviceProps);
+	protected ServiceRegistration<DataPlugin> registerMountDataPlugin(
+			DataPlugin dataPlugin,
+			Dictionary<String,Object> serviceProps) {
+		ServiceRegistration<DataPlugin> registration = getContext()
+				.registerService(DataPlugin.class, dataPlugin, serviceProps);
 		registrationList.add(registration);
 		return registration;
 	}
 
-	protected ServiceRegistration registerExecPlugin(ExecPlugin execPlugin, String dataRootUri) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerExecPlugin(ExecPlugin execPlugin,
+			String dataRootUri) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, dataRootUri);
 		return registerExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerExecPlugin(ExecPlugin execPlugin, String[] execRootUris) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerExecPlugin(ExecPlugin execPlugin,
+			String[] execRootUris) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, execRootUris);
 		return registerExecPlugin(execPlugin, execRootUris);
 	}
 
-	protected ServiceRegistration registerExecPlugin(ExecPlugin execPlugin, Dictionary serviceProps) {
-		ServiceRegistration registration = getContext().registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
+	protected ServiceRegistration<ExecPlugin> registerExecPlugin(
+			ExecPlugin execPlugin,
+			Dictionary<String,Object> serviceProps) {
+		ServiceRegistration<ExecPlugin> registration = getContext()
+				.registerService(ExecPlugin.class, execPlugin, serviceProps);
 		registrationList.add(registration);
 		return registration;
 	}
 
-	protected ServiceRegistration registerMountingExecPlugin(ExecPlugin execPlugin, String dataRootUri, String[] mountPoints) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration<ExecPlugin> registerMountingExecPlugin(
+			ExecPlugin execPlugin, String dataRootUri, String[] mountPoints) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, dataRootUri);
 		serviceProps.put(ExecPlugin.MOUNT_POINTS, mountPoints);
 		return registerExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountExecPlugin(ExecPlugin execPlugin, String dataRootUri) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerMountExecPlugin(
+			ExecPlugin execPlugin, String dataRootUri) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, dataRootUri);
 		return registerMountExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountExecPlugin(ExecPlugin execPlugin, String[] execRootUris) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerMountExecPlugin(
+			ExecPlugin execPlugin, String[] execRootUris) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, execRootUris);
 		return registerMountExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountExecPlugin(ExecPlugin execPlugin, String dataRootUri, String[] mountPoints) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerMountExecPlugin(
+			ExecPlugin execPlugin, String dataRootUri, String[] mountPoints) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, dataRootUri);
 		serviceProps.put(ExecPlugin.MOUNT_POINTS, mountPoints);
 		return registerMountExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountExecPluginWithServicePIDs(ExecPlugin execPlugin, String execRootUris, String[] servicePIDs) {
-		Hashtable serviceProps = new Hashtable();
+	protected ServiceRegistration< ? > registerMountExecPluginWithServicePIDs(
+			ExecPlugin execPlugin, String execRootUris, String[] servicePIDs) {
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(Constants.SERVICE_PID, servicePIDs);
 		serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, execRootUris);
 		return registerMountExecPlugin(execPlugin, serviceProps);
 	}
 
-	protected ServiceRegistration registerMountExecPlugin(ExecPlugin execPlugin, Dictionary serviceProps) {
+	protected ServiceRegistration< ? > registerMountExecPlugin(
+			ExecPlugin execPlugin,
+			Dictionary<String,Object> serviceProps) {
 		String[] objectClasses = new String[] {ExecPlugin.class.getName(), MountPlugin.class.getName()};
-		ServiceRegistration registration = getContext().registerService(objectClasses, execPlugin, serviceProps);
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(objectClasses, execPlugin, serviceProps);
 		registrationList.add(registration);
 		return registration;
 	}
 
-	protected void unregister(ServiceRegistration registration) {
+	protected void unregister(ServiceRegistration< ? > registration) {
 		registrationList.remove(registration);
 		registration.unregister();
 	}
@@ -359,24 +388,29 @@ public abstract class DmtAdminTestCase extends OSGiTestCase {
 	}
 
 	protected void addDmtEventListener(String principal, int type, String uri, DmtEventListener listener) {
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DmtEventListener.FILTER_PRINCIPAL, new String[] {principal});
 		serviceProps.put(DmtEventListener.FILTER_EVENT, Integer.valueOf(type));
 		serviceProps.put(DmtEventListener.FILTER_SUBTREE, new String[] {uri});
-		ServiceRegistration registration = getContext().registerService(DmtEventListener.class.getName(), listener, serviceProps);
+		ServiceRegistration<DmtEventListener> registration = getContext()
+				.registerService(DmtEventListener.class, listener,
+						serviceProps);
 		listenerRegistrationMap.put(listener, registration);
 	}
 
 	protected void addDmtEventListener(int type, String uri, DmtEventListener listener) {
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DmtEventListener.FILTER_EVENT, Integer.valueOf(type));
 		serviceProps.put(DmtEventListener.FILTER_SUBTREE, new String[] {uri});
-		ServiceRegistration registration = getContext().registerService(DmtEventListener.class.getName(), listener, serviceProps);
+		ServiceRegistration<DmtEventListener> registration = getContext()
+				.registerService(DmtEventListener.class, listener,
+						serviceProps);
 		listenerRegistrationMap.put(listener, registration);
 	}
 
 	protected void removeDmtEventListener(DmtEventListener listener) {
-		ServiceRegistration registration = (ServiceRegistration) listenerRegistrationMap.get(listener);
+		ServiceRegistration< ? > registration = listenerRegistrationMap
+				.get(listener);
 		if (registration != null) {
 			registration.unregister();
 		}

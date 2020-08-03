@@ -36,14 +36,14 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
-import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
-
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 
 
@@ -53,26 +53,28 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
  */
 public class HighestRankingRemoteAlertSenderActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<RemoteAlertSender>	servReg;
 	
 	private HighestRankingRemoteAlertSenderImpl testHighestRankingRemoteAlertSenderImpl;
 
 	public HighestRankingRemoteAlertSenderActivator() {
 	}
 	
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testHighestRankingRemoteAlertSenderImpl = new HighestRankingRemoteAlertSenderImpl();
 		
-		Hashtable ht = new Hashtable();
+		Dictionary<String,Object> ht = new Hashtable<>();
 		ht.put("principals", new String[] { DmtConstants.PRINCIPAL });
 		ht.put(Constants.SERVICE_RANKING, Integer.valueOf(RemoteAlertSenderActivator.RANKING + 1));
 			
-		String[] ifs = new String[] { RemoteAlertSender.class.getName() };
-		servReg = bc.registerService(ifs, testHighestRankingRemoteAlertSenderImpl, ht);
+		servReg = bc.registerService(RemoteAlertSender.class,
+				testHighestRankingRemoteAlertSenderImpl, ht);
 		System.out.println("HighestRankingRemoteAlertSender activated.");
 	}
 
+	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		// unregistering the service
 		servReg.unregister();

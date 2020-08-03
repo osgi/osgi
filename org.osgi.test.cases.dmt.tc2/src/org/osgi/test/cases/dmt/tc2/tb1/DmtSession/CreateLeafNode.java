@@ -52,6 +52,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -67,6 +70,7 @@ public class CreateLeafNode implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
         testCreateLeafNode001();
@@ -126,15 +130,15 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode001");
+			DefaultTestBundleControl.log("#testCreateLeafNode001");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -154,7 +158,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode002");
+			DefaultTestBundleControl.log("#testCreateLeafNode002");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -162,9 +166,9 @@ public class CreateLeafNode implements TestInterface {
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE,
 					value);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -183,16 +187,16 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode003");
+			DefaultTestBundleControl.log("#testCreateLeafNode003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE,
 					value, DmtConstants.MIMETYPE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -211,7 +215,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode004");
+			DefaultTestBundleControl.log("#testCreateLeafNode004");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -223,7 +227,7 @@ public class CreateLeafNode implements TestInterface {
 			session
 					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -242,7 +246,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode005");
+			DefaultTestBundleControl.log("#testCreateLeafNode005");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -254,7 +258,7 @@ public class CreateLeafNode implements TestInterface {
 			session.createLeafNode(
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE, value);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -274,7 +278,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode006");
+			DefaultTestBundleControl.log("#testCreateLeafNode006");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -286,7 +290,7 @@ public class CreateLeafNode implements TestInterface {
 			session.createLeafNode(
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE, value, DmtConstants.MIMETYPE);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -306,7 +310,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode007");
+			DefaultTestBundleControl.log("#testCreateLeafNode007");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
@@ -323,7 +327,7 @@ public class CreateLeafNode implements TestInterface {
 			session
 					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -344,7 +348,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode008");
+			DefaultTestBundleControl.log("#testCreateLeafNode008");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
@@ -361,7 +365,7 @@ public class CreateLeafNode implements TestInterface {
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE,
 					value);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -381,7 +385,7 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode009() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode009");
+			DefaultTestBundleControl.log("#testCreateLeafNode009");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -400,7 +404,7 @@ public class CreateLeafNode implements TestInterface {
 			session.createLeafNode(
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE, value, DmtConstants.MIMETYPE);
 
-			tbc.pass("createLeafNode was successfully executed");
+			DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -419,13 +423,13 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode010");
+			DefaultTestBundleControl.log("#testCreateLeafNode010");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME);
 
-			tbc.pass("A relative URI can be used with CreateLeafNode.");
+			DefaultTestBundleControl.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -441,14 +445,14 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode011");
+			DefaultTestBundleControl.log("#testCreateLeafNode011");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME,
 					value);
 
-			tbc.pass("A relative URI can be used with CreateLeafNode.");
+			DefaultTestBundleControl.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -464,14 +468,14 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode012() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode012");
+			DefaultTestBundleControl.log("#testCreateLeafNode012");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME,
 					value, DmtConstants.MIMETYPE);
 
-			tbc.pass("A relative URI can be used with CreateLeafNode.");
+			DefaultTestBundleControl.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -488,14 +492,14 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode013() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode013");
+			DefaultTestBundleControl.log("#testCreateLeafNode013");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -510,14 +514,14 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode014() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode014");
+			DefaultTestBundleControl.log("#testCreateLeafNode014");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,value);
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -531,14 +535,14 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode015() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode015");
+			DefaultTestBundleControl.log("#testCreateLeafNode015");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,value,DmtConstants.MIMETYPE);
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -552,13 +556,13 @@ public class CreateLeafNode implements TestInterface {
 	 */
 	private void testCreateLeafNode016() {
 		DmtSession session = null;
-		tbc.log("#testCreateLeafNode016");
+		DefaultTestBundleControl.log("#testCreateLeafNode016");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test");
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -576,13 +580,13 @@ public class CreateLeafNode implements TestInterface {
 	 */
 	private void testCreateLeafNode017() {
 		DmtSession session = null;
-		tbc.log("#testCreateLeafNode017");
+		DefaultTestBundleControl.log("#testCreateLeafNode017");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test",value);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -599,13 +603,13 @@ public class CreateLeafNode implements TestInterface {
 	 */
 	private void testCreateLeafNode018() {
 		DmtSession session = null;
-		tbc.log("#testCreateLeafNode018");
+		DefaultTestBundleControl.log("#testCreateLeafNode018");
 		try {
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test",value,DmtConstants.MIMETYPE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -624,7 +628,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode019() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode019");
+            DefaultTestBundleControl.log("#testCreateLeafNode019");
 
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -632,7 +636,7 @@ public class CreateLeafNode implements TestInterface {
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_LEAF_NODE, null);
 
-            tbc.pass("createLeafNode was successfully executed");
+            DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
@@ -650,7 +654,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode020() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode020");
+            DefaultTestBundleControl.log("#testCreateLeafNode020");
 
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -658,7 +662,7 @@ public class CreateLeafNode implements TestInterface {
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_LEAF_NODE, null,DmtConstants.MIMETYPE);
 
-            tbc.pass("createLeafNode was successfully executed");
+            DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
@@ -676,7 +680,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode021() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode021");
+            DefaultTestBundleControl.log("#testCreateLeafNode021");
 
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -684,7 +688,7 @@ public class CreateLeafNode implements TestInterface {
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_LEAF_NODE, value,null);
 
-            tbc.pass("createLeafNode was successfully executed");
+            DefaultTestBundleControl.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
@@ -703,7 +707,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode022() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode022");
+            DefaultTestBundleControl.log("#testCreateLeafNode022");
             TestExecPlugin.resetCount();
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -712,7 +716,7 @@ public class CreateLeafNode implements TestInterface {
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES);
 
            
-            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+            TestCase.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
@@ -731,7 +735,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode023() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode023");
+            DefaultTestBundleControl.log("#testCreateLeafNode023");
             TestExecPlugin.resetCount();
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -740,7 +744,7 @@ public class CreateLeafNode implements TestInterface {
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value);
 
            
-            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+            TestCase.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
@@ -759,7 +763,7 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode024() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode024");
+            DefaultTestBundleControl.log("#testCreateLeafNode024");
             TestExecPlugin.resetCount();
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -768,7 +772,7 @@ public class CreateLeafNode implements TestInterface {
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value,null);
 
            
-            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+            TestCase.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
@@ -787,16 +791,16 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode025() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode025");
+            DefaultTestBundleControl.log("#testCreateLeafNode025");
             TestExecPlugin.setExceptionAtCreateInteriorNode(true);
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES);
-            tbc.failException("", DmtIllegalStateException.class);
+            DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
         } catch (DmtIllegalStateException e) {
-            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+            DefaultTestBundleControl.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
@@ -814,16 +818,16 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode026() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode026");
+            DefaultTestBundleControl.log("#testCreateLeafNode026");
             TestExecPlugin.setExceptionAtCreateInteriorNode(true);
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value);
-            tbc.failException("", DmtIllegalStateException.class);
+            DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
         } catch (DmtIllegalStateException e) {
-            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+            DefaultTestBundleControl.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
@@ -841,16 +845,16 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode027() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode027");
+            DefaultTestBundleControl.log("#testCreateLeafNode027");
             TestExecPlugin.setExceptionAtCreateInteriorNode(true);
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value,null);
-            tbc.failException("", DmtIllegalStateException.class);
+            DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
         } catch (DmtIllegalStateException e) {
-            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+            DefaultTestBundleControl.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
@@ -868,14 +872,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode028() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode028");
+            DefaultTestBundleControl.log("#testCreateLeafNode028");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -892,14 +896,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode029() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode029");
+            DefaultTestBundleControl.log("#testCreateLeafNode029");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,value);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -916,14 +920,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode030() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode030");
+            DefaultTestBundleControl.log("#testCreateLeafNode030");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,value, DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -941,14 +945,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode031() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode031");
+            DefaultTestBundleControl.log("#testCreateLeafNode031");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -965,14 +969,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode032() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode032");
+            DefaultTestBundleControl.log("#testCreateLeafNode032");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,value);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -989,14 +993,14 @@ public class CreateLeafNode implements TestInterface {
     private void testCreateLeafNode033() {
         DmtSession session = null;
         try {
-            tbc.log("#testCreateLeafNode033");
+            DefaultTestBundleControl.log("#testCreateLeafNode033");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,value, DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -1013,13 +1017,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode034() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode034");
+        DefaultTestBundleControl.log("#testCreateLeafNode034");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,value, DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1036,13 +1040,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode035() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode035");
+        DefaultTestBundleControl.log("#testCreateLeafNode035");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,value);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1059,13 +1063,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode036() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode036");
+        DefaultTestBundleControl.log("#testCreateLeafNode036");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1086,13 +1090,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode037() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode037");
+        DefaultTestBundleControl.log("#testCreateLeafNode037");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,value, DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1110,13 +1114,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode038() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode038");
+        DefaultTestBundleControl.log("#testCreateLeafNode038");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,value);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1134,13 +1138,13 @@ public class CreateLeafNode implements TestInterface {
      */
     private void testCreateLeafNode039() {
         DmtSession session = null;
-        tbc.log("#testCreateLeafNode039");
+        DefaultTestBundleControl.log("#testCreateLeafNode039");
         try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
@@ -1160,15 +1164,15 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode040() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode040");
+			DefaultTestBundleControl.log("#testCreateLeafNode040");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode("");
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -1187,15 +1191,15 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode041() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode041");
+			DefaultTestBundleControl.log("#testCreateLeafNode041");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode("",value);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
@@ -1214,15 +1218,15 @@ public class CreateLeafNode implements TestInterface {
 	private void testCreateLeafNode042() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode042");
+			DefaultTestBundleControl.log("#testCreateLeafNode042");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.createLeafNode("",value,DmtConstants.MIMETYPE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {

@@ -43,6 +43,9 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>getFormat</code> method of MetaNode, 
@@ -69,7 +72,7 @@ public class GetFormat {
 	public void testGetFormat001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetFormat001");
+			DefaultTestBundleControl.log("#testGetFormat001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -77,10 +80,10 @@ public class GetFormat {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertEquals("Asserts getFormat method", DmtData.FORMAT_NODE,
+			TestCase.assertEquals("Asserts getFormat method", DmtData.FORMAT_NODE,
 					metanode.getFormat());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

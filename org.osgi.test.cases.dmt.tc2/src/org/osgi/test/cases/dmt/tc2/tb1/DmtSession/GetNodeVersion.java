@@ -49,6 +49,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -63,6 +66,7 @@ public class GetNodeVersion implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
         if (DmtConstants.SUPPORTS_NODE_VERSION) {
@@ -87,15 +91,15 @@ public class GetNodeVersion implements TestInterface {
 	private void testGetNodeVersion001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeVersion001");
+			DefaultTestBundleControl.log("#testGetNodeVersion001");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.getNodeVersion(TestExecPluginActivator.INEXISTENT_NODE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException's code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
@@ -115,7 +119,7 @@ public class GetNodeVersion implements TestInterface {
 	private void testGetNodeVersion002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeVersion002");
+			DefaultTestBundleControl.log("#testGetNodeVersion002");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 
@@ -125,7 +129,7 @@ public class GetNodeVersion implements TestInterface {
 
 			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
 			
-			tbc.pass("getNodeVersion correctly executed");
+			DefaultTestBundleControl.pass("getNodeVersion correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -144,7 +148,7 @@ public class GetNodeVersion implements TestInterface {
 	private void testGetNodeVersion003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeVersion003");
+			DefaultTestBundleControl.log("#testGetNodeVersion003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -154,7 +158,7 @@ public class GetNodeVersion implements TestInterface {
 			
 			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
 			
-			tbc.pass("getNodeVersion correctly executed");
+			DefaultTestBundleControl.pass("getNodeVersion correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -172,14 +176,14 @@ public class GetNodeVersion implements TestInterface {
 	private void testGetNodeVersion004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeVersion004");
+			DefaultTestBundleControl.log("#testGetNodeVersion004");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getNodeVersion(TestExecPluginActivator.LEAF_RELATIVE);
 
-			tbc.pass("A relative URI can be used with getNodeVersion.");
+			DefaultTestBundleControl.pass("A relative URI can be used with getNodeVersion.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -196,14 +200,14 @@ public class GetNodeVersion implements TestInterface {
 	private void testGetNodeVersion005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeVersion005");
+			DefaultTestBundleControl.log("#testGetNodeVersion005");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getNodeVersion("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root " +
 				"URI the session was opened with");
 			
 		} catch (Exception e) {
@@ -221,15 +225,15 @@ public class GetNodeVersion implements TestInterface {
     private void testGetNodeVersionFeatureNotSupported001() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetNodeVersionFeatureNotSupported001");
+            DefaultTestBundleControl.log("#testGetNodeVersionFeatureNotSupported001");
 
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.getNodeVersion(TestExecPluginActivator.INTERIOR_NODE);
 
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException's code is FEATURE_NOT_SUPPORTED",
                     DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
         } catch (Exception e) {

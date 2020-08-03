@@ -17,8 +17,6 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.Uri;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,7 +25,7 @@ import java.io.ObjectOutputStream;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.osgi.service.cm.Configuration;
@@ -39,24 +37,30 @@ import org.osgi.util.tracker.ServiceTracker;
 class ConfigIdHandler {
     private static final String ID_MAP_KEY = "IDmap";
     
-    private ServiceTracker configTracker;
-    private ServiceTracker logTracker;
-    private Hashtable idMap;
+	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>	configTracker;
+	private ServiceTracker<LogService,LogService>					logTracker;
+	private Hashtable<String,String>								idMap;
     
-    ConfigIdHandler(ServiceTracker configTracker, ServiceTracker logTracker) {
+	ConfigIdHandler(
+			ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configTracker,
+			ServiceTracker<LogService,LogService> logTracker) {
         this.configTracker = configTracker;
         this.logTracker = logTracker;
-        idMap = new Hashtable();
+		idMap = new Hashtable<>();
     }
     
-    void updated(Dictionary properties) throws ConfigurationException {
+	@SuppressWarnings({
+			"rawtypes", "unchecked"
+	})
+	void updated(Dictionary<String, ? > properties)
+			throws ConfigurationException {
         if (properties == null) {
-            idMap = new Hashtable();
+			idMap = new Hashtable<>();
             return;
         }
         byte[] bytes = (byte[]) properties.get(ID_MAP_KEY);
         if (bytes == null) {
-            idMap = new Hashtable();
+			idMap = new Hashtable<>();
             return;
         }
         ObjectInputStream stream;
@@ -70,7 +74,7 @@ class ConfigIdHandler {
     }
     
     void update() throws IOException {
-        ConfigurationAdmin ca = (ConfigurationAdmin) configTracker.getService();
+        ConfigurationAdmin ca = configTracker.getService();
         if(ca == null) {
             log(LogService.LOG_WARNING, "Cannot find Configuration Admin " +
                     "service, not persisting ID mapping.", null);
@@ -86,21 +90,21 @@ class ConfigIdHandler {
         byte[] bytes = stream.toByteArray();
         stream.close();
         
-        Hashtable properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
         properties.put(ID_MAP_KEY, bytes);
         config.update(properties);
     }
 
     String findMappedPidByNodeName(String nodeName) {
-        return (String) idMap.get(nodeName);
+        return idMap.get(nodeName);
     }
     
     String getNodeNameForPid(String pid) {
-        Iterator i = idMap.entrySet().iterator();
+		Iterator<Entry<String,String>> i = idMap.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+			Entry<String,String> entry = i.next();
             if(pid.equals(entry.getValue()))
-                return (String) entry.getKey(); 
+                return entry.getKey(); 
         }
 		// Uri.mangle has been removed in DmtAdmin spec 2.0
 		// TestCase needs update
@@ -123,11 +127,11 @@ class ConfigIdHandler {
         return true;
     }
 
-    void cleanupMap(Set pids) throws IOException {
+	void cleanupMap(Set<String> pids) throws IOException {
         boolean dirty = false;
-        Iterator i = idMap.entrySet().iterator();
+		Iterator<Entry<String,String>> i = idMap.entrySet().iterator();
         while (i.hasNext())
-            if(!pids.contains(((Map.Entry) i.next()).getValue())) {
+			if (!pids.contains(i.next().getValue())) {
                 i.remove();
                 dirty = true;
             }
@@ -136,7 +140,7 @@ class ConfigIdHandler {
     }
     
     private boolean log(int severity, String message, Throwable throwable) {
-        LogService logService = (LogService) logTracker.getService();
+        LogService logService = logTracker.getService();
         
         if (logService != null)
             logService.log(severity, message, throwable);

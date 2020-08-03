@@ -64,6 +64,7 @@ public class HighestRankingRemoteAlertSenderImpl implements
 		
 	}
 
+	@Override
 	public void sendAlert(String serverId, int code, String correlator,
 			AlertItem[] items) throws Exception {
 		//Any exception thrown on this method will be propagated to the original sender of the event, wrapped in a DmtException with the code REMOTE_ERROR. 

@@ -49,8 +49,6 @@ package org.osgi.test.cases.dmt.tc3.tbc;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.Uri;
-
 import org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin.ConfigPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
@@ -79,7 +77,6 @@ import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData.MetaData;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData.TestPluginMetaDataActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.DmtSessionConstraints;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.OpenSession;
-import org.osgi.test.cases.dmt.tc3.tbc.Others.OverlappingPlugins;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.UseCases;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.FatalExceptionDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.NewDataPluginActivator;
@@ -87,8 +84,6 @@ import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingExecPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingSubtreeDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.ToBeOverlappedDataPluginActivator;
-import org.osgi.test.cases.dmt.tc3.tbc.TreeStructure.Configuration;
-import org.osgi.test.cases.dmt.tc3.tbc.TreeStructure.Log;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
@@ -103,12 +98,16 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	private static TestMetaNodeDataPluginActivator			testMetaNodeDataPluginActivator;
 
+	@SuppressWarnings("unused")
 	private static OverlappingDataPluginActivator			overlappingDataPluginActivator;
 
+	@SuppressWarnings("unused")
 	private static OverlappingExecPluginActivator			overlappingExecPluginActivator;
 
+	@SuppressWarnings("unused")
 	private static OverlappingSubtreeDataPluginActivator	overlappingSubtreeDataPluginActivator;
 
+	@SuppressWarnings("unused")
 	private static ToBeOverlappedDataPluginActivator		toBeOverlappedDataPluginActivator;
 
 	private static NewDataPluginActivator					newDataPluginActivator;
@@ -121,6 +120,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	private static ConfigPluginActivator					configPluginActivator;
 
+	@Override
 	public void setUp() {
 		if (!inited) {
 			inited = true;
@@ -527,7 +527,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 				+ " [Message: " + exception.getMessage() + "]");
 	}
 
-	public static void failExpectedOtherException(Class expected,
+	public static void failExpectedOtherException(
+			Class< ? extends Throwable> expected,
 			Throwable found) {
 		fail("Expected " + expected.getName() + " but was "
 				+ found.getClass().getName());

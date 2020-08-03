@@ -36,16 +36,22 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.security.DmtPrincipalPermission;
-
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.*;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -60,6 +66,7 @@ public class SetDefaultNodeValue implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
 	    //DmtException.METADATA_MISMATCH is tested in org.osgi.test.cases.dmt.plugins.tbc.MetaNode.MetaData.MetaData.java
 	    //DmtException.INVALID_URI,URI_TOO_LONG,PERMISSION_DENIED are tested in org.osgi.test.cases.dmt.main.tb1.DmtSession.TestExceptions.java
@@ -91,12 +98,12 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue001");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestExecPluginActivator.INEXISTENT_NODE);
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
@@ -115,10 +122,10 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue002");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.pass("Asserts that no Exception is thrown if nodeUri is an interior node and DmtSession.setDefaultNodeValue(String) is called");
+			DefaultTestBundleControl.pass("Asserts that no Exception is thrown if nodeUri is an interior node and DmtSession.setDefaultNodeValue(String) is called");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);		
 		} finally {
@@ -136,13 +143,13 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue003");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue003");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_ATOMIC);
 			session.setDefaultNodeValue(TestExecPluginActivator.LEAF_NODE);
-			tbc.pass("setDefaultNodeValue correctly executed");
+			DefaultTestBundleControl.pass("setDefaultNodeValue correctly executed");
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -160,14 +167,14 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue004");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue004");
             tbc.setPermissions(new PermissionInfo[] {
                     new PermissionInfo(DmtPermission.class.getName(), DmtConstants.OSGi_ROOT, DmtPermission.GET),
                     new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE)});
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.setDefaultNodeValue(TestExecPluginActivator.LEAF_NODE);
-			tbc.pass("setDefaultNodeValue correctly executed");
+			DefaultTestBundleControl.pass("setDefaultNodeValue correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -184,14 +191,14 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue005");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue005");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.setDefaultNodeValue(TestExecPluginActivator.LEAF_RELATIVE);
 
-			tbc.pass("A relative URI can be used with setDefaultNodeValue.");
+			DefaultTestBundleControl.pass("A relative URI can be used with setDefaultNodeValue.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -207,13 +214,13 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue006");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue006");
 			session = tbc.getDmtAdmin().getSession(
 				TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_SHARED);
 			session.setDefaultNodeValue(TestExecPluginActivator.LEAF_NODE);
-			tbc.failException("", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException correctly thrown");
+			DefaultTestBundleControl.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
@@ -230,12 +237,12 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue007");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue007");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestReadOnlyPluginActivator.LEAF_NODE);
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -255,12 +262,12 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue008");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue008");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestNonAtomicPluginActivator.LEAF_NODE);
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -278,14 +285,14 @@ public class SetDefaultNodeValue implements TestInterface {
     private void testSetDefaultNodeValue009() {
         DmtSession session = null;
         try {
-            tbc.log("#testRenameNode009");
+			DefaultTestBundleControl.log("#testRenameNode009");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.setDefaultNodeValue(TestReadOnlyPluginActivator.LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -302,14 +309,14 @@ public class SetDefaultNodeValue implements TestInterface {
     private void testSetDefaultNodeValue010() {
         DmtSession session = null;
         try {
-            tbc.log("#testRenameNode010");
+			DefaultTestBundleControl.log("#testRenameNode010");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             session.setDefaultNodeValue(TestNonAtomicPluginActivator.LEAF_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
         } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+            TestCase.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
         	tbc.failExpectedOtherException(DmtException.class, e);
@@ -327,14 +334,14 @@ public class SetDefaultNodeValue implements TestInterface {
 	private void testSetDefaultNodeValue011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue011");
+			DefaultTestBundleControl.log("#testSetDefaultNodeValue011");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.setDefaultNodeValue("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root " +
 				"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

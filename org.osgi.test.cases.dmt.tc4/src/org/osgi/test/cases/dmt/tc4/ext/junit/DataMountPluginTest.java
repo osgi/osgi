@@ -1,7 +1,9 @@
 
 package org.osgi.test.cases.dmt.tc4.ext.junit;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
@@ -15,11 +17,13 @@ import org.osgi.test.cases.dmt.tc4.ext.util.TestNode;
 
 public class DataMountPluginTest extends DmtAdminTestCase {
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		getDmtAdmin();
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		unregisterPlugins();
 		closeDmtSession();
@@ -30,12 +34,13 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		setInteriorNode(mountingPlugin, "./A1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, Integer.valueOf(0));
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			session.close();
@@ -48,13 +53,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		setInteriorNode(mountingPlugin, "./A1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertInteriorNode("./A1");
 			session.close();
@@ -72,13 +78,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 		setInteriorNode(mountingPlugin, "./A2");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1", "./A2"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertInteriorNode("./A1");
 			assertInteriorNode("./A2");
@@ -97,13 +104,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 		setInteriorNode(mountingPlugin, "./A2");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1", "./A2"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"B1"});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			assertNodeNotFound("./A2");
@@ -124,13 +132,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 		setLeafNode(mountingPlugin, "./A1/B1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"B1", null});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			assertNodeNotFound("./A1/B1");
@@ -148,13 +157,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 		setLeafNode(mountingPlugin, "./A1/B1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"B1", "/"});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			assertNodeNotFound("./A1/B1");
@@ -173,13 +183,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 		setLeafNode(mountingPlugin, "./A1/B1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"B1", "./B2"});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			assertNodeNotFound("./A1/B1");
@@ -198,13 +209,14 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1/B1");
 		setLeafNode(mountingPlugin, "./A1/B1/C1");
 
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1"});
 		serviceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"B1", "B2", "B1/C1"});
 
-		ServiceRegistration registration = null;
+		ServiceRegistration<DataPlugin> registration = null;
 		try {
-			registration = context.registerService(DataPlugin.class.getName(), mountingPlugin, serviceProps);
+			registration = context.registerService(DataPlugin.class,
+					mountingPlugin, serviceProps);
 			session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			assertNodeNotFound("./A1");
 			assertNodeNotFound("./A1/B1");
@@ -219,7 +231,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testTheNodeUnderMountPointNodeIsNotFound() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNodeNotFound("./A1/B1");
@@ -231,11 +246,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testTheNodeUnderMountedPluginsMountPointNodeIsNotFound() throws DmtException {
 		TestDataPlugin mountingPluginA = new TestDataPlugin();
 		mountingPluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistrationA = registerMountingDataPlugin(mountingPluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistrationA = registerMountingDataPlugin(
+				mountingPluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPluginB = new TestDataPlugin();
 		mountedPluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration mountedPluginRegistrationB = registerDataPlugin(mountedPluginB, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistrationB = registerDataPlugin(
+				mountedPluginB, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNodeNotFound("./A1/B1/C1");
@@ -248,7 +267,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testGetChildNodeNamesToParentOfMountPointWithNoMountedPlugin0() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals(0, session.getChildNodeNames("./A1").length);
@@ -261,7 +283,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
 		mountingPlugin.setNode("./A1/B0", TestNode.newInteriorNode("./A1/B0:Title", "./A1/B0:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		String[] childNodeNames = session.getChildNodeNames("./A1");
@@ -275,11 +300,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testGetChildNodeNamesToParentOfMountPointWithMountedPlugin0() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		String[] childNodeNames = session.getChildNodeNames("./A1");
@@ -295,11 +324,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
 		mountingPlugin.setNode("./A1/B0", TestNode.newInteriorNode("./A1/B0:Title", "./A1/B0:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		String[] childNodeNames = session.getChildNodeNames("./A1");
@@ -315,15 +348,20 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
 		mountingPlugin.setNode("./A1/B0", TestNode.newInteriorNode("./A1/B0:Title", "./A1/B0:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1", "B2"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1", "B2"
+				});
 
 		TestDataPlugin mountedPlugin1 = new TestDataPlugin();
 		mountedPlugin1.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration1 = registerDataPlugin(mountedPlugin1, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration1 = registerDataPlugin(
+				mountedPlugin1, "./A1/B1");
 
 		TestDataPlugin mountedPlugin2 = new TestDataPlugin();
 		mountedPlugin2.setNode("./A1/B2", TestNode.newLeafNode("./A1/B2:Title", "./A1/B2:Type", new DmtData("./A1/B2:Value")));
-		ServiceRegistration mountedPluginRegistration2 = registerDataPlugin(mountedPlugin2, "./A1/B2");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration2 = registerDataPlugin(
+				mountedPlugin2, "./A1/B2");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		String[] childNodeNames = session.getChildNodeNames("./A1");
@@ -339,11 +377,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern01() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -360,11 +402,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern02() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
@@ -381,11 +427,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern03() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -402,11 +452,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern04() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
@@ -423,11 +477,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern05() throws DmtException {
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -444,11 +502,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern06() throws DmtException {
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
@@ -465,11 +527,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern07() throws DmtException {
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -486,11 +552,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern08() throws DmtException {
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
@@ -509,7 +579,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		try {
 			assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -523,7 +596,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern10() throws DmtException {
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -532,7 +608,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		try {
 			assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -549,7 +626,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		try {
 			assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
@@ -563,7 +641,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2PluginsRegisterUnregisterOrderPattern12() throws DmtException {
 		TestDataPlugin mountedPlugin = new TestDataPlugin();
 		mountedPlugin.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration mountedPluginRegistration = registerDataPlugin(mountedPlugin, "./A1/B1");
+		ServiceRegistration<DataPlugin> mountedPluginRegistration = registerDataPlugin(
+				mountedPlugin, "./A1/B1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -573,7 +652,10 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 
 		TestDataPlugin mountingPlugin = new TestDataPlugin();
 		mountingPlugin.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration mountingPluginRegistration = registerMountingDataPlugin(mountingPlugin, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> mountingPluginRegistration = registerMountingDataPlugin(
+				mountingPlugin, "./A1", new String[] {
+						"B1"
+				});
 
 		try {
 			assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -588,15 +670,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern01() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -618,15 +707,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern02() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -647,15 +743,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern03() throws DmtException {
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -677,15 +780,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern04() throws DmtException {
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -707,15 +817,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern05() throws DmtException {
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -737,15 +854,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test3PluginsRegisterUnregisterOrderPattern06() throws DmtException {
 		TestDataPlugin pluginC = new TestDataPlugin();
 		pluginC.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC = registerDataPlugin(pluginC, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				pluginC, "./A1/B1/C1");
 
 		TestDataPlugin pluginB = new TestDataPlugin();
 		pluginB.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB = registerMountingDataPlugin(pluginB, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB = registerMountingDataPlugin(
+				pluginB, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 
@@ -767,11 +891,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2MountPoints1MountedPluginsRegisterUnregisterOrderPattrn01() throws DmtException {
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration registrationB1 = registerDataPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerDataPlugin(
+				pluginB1, "./A1/B1");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1", "B2"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -791,11 +919,15 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2MountPoints1MountedPluginsRegisterUnregisterOrderPattrn02() throws DmtException {
 		TestDataPlugin pluginB2 = new TestDataPlugin();
 		pluginB2.setNode("./A1/B2", TestNode.newLeafNode("./A1/B2:Title", "./A1/B2:Type", new DmtData("./A1/B2:Value")));
-		ServiceRegistration registrationB2 = registerDataPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration<DataPlugin> registrationB2 = registerDataPlugin(
+				pluginB2, "./A1/B2");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1", "B2"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -815,15 +947,20 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void test2MountPoints2MountedPlugins() throws DmtException {
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration registrationB1 = registerDataPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerDataPlugin(
+				pluginB1, "./A1/B1");
 
 		TestDataPlugin pluginB2 = new TestDataPlugin();
 		pluginB2.setNode("./A1/B2", TestNode.newLeafNode("./A1/B2:Title", "./A1/B2:Type", new DmtData("./A1/B2:Value")));
-		ServiceRegistration registrationB2 = registerDataPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration<DataPlugin> registrationB2 = registerDataPlugin(
+				pluginB2, "./A1/B2");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1", "B2"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -846,19 +983,25 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern01() throws DmtException {
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration registrationB1 = registerDataPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerDataPlugin(
+				pluginB1, "./A1/B1");
 
 		TestDataPlugin pluginB2 = new TestDataPlugin();
 		pluginB2.setNode("./A1/B2", TestNode.newLeafNode("./A1/B2:Title", "./A1/B2:Type", new DmtData("./A1/B2:Value")));
-		ServiceRegistration registrationB2 = registerDataPlugin(pluginB2, "./A1/B2");
+		ServiceRegistration<DataPlugin> registrationB2 = registerDataPlugin(
+				pluginB2, "./A1/B2");
 
 		TestDataPlugin pluginB3 = new TestDataPlugin();
 		pluginB3.setNode("./A1/B3", TestNode.newLeafNode("./A1/B3:Title", "./A1/B3:Type", new DmtData("./A1/B3:Value")));
-		ServiceRegistration registrationB3 = registerDataPlugin(pluginB3, "./A1/B3");
+		ServiceRegistration<DataPlugin> registrationB3 = registerDataPlugin(
+				pluginB3, "./A1/B3");
 
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1", "B2"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1", "B2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals(null, session.getNodeTitle("./A1"));
@@ -890,15 +1033,22 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern02() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
 		unregister(registrationB1);
 
@@ -917,21 +1067,31 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern03() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
 		unregister(registrationB1);
 
 		TestDataPlugin newPluginB1 = new TestDataPlugin();
 		newPluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:NewTitle", "./A1/B1:NewType"));
-		ServiceRegistration newRegistrationB1 = registerMountingDataPlugin(newPluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountingDataPlugin(
+				newPluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -953,21 +1113,31 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern04() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
 		unregister(registrationB1);
 
 		TestDataPlugin newPluginB1 = new TestDataPlugin();
 		newPluginB1.setNode("./A1/B1", TestNode.newLeafNode("./A1/B1:Title", "./A1/B1:Type", new DmtData("./A1/B1:Value")));
-		ServiceRegistration newRegistrationB1 = registerMountingDataPlugin(newPluginB1, "./A1/B1", new String[] {"C2"});
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountingDataPlugin(
+				newPluginB1, "./A1/B1", new String[] {
+						"C2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -986,21 +1156,31 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern05() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
 		unregister(registrationB1);
 
 		TestDataPlugin newPluginB1 = new TestDataPlugin();
 		newPluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:NewTitle", "./A1/B1:NewType"));
-		ServiceRegistration newRegistrationB1 = registerMountingDataPlugin(newPluginB1, "./A1/B1", new String[] {"C1", "C2"});
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountingDataPlugin(
+				newPluginB1, "./A1/B1", new String[] {
+						"C1", "C2"
+				});
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertEquals("./A1:Title", session.getNodeTitle("./A1"));
@@ -1023,19 +1203,29 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testMountAlgorithmPattern06() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin newPluginB1 = new TestDataPlugin();
 		newPluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:NewTitle", "./A1/B1:NewType"));
-		ServiceRegistration newRegistrationB1 = registerMountingDataPlugin(newPluginB1, "./A1/B1", new String[] {"C1", "C2"});
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountingDataPlugin(
+				newPluginB1, "./A1/B1", new String[] {
+						"C1", "C2"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
 		unregister(registrationB1);
 
@@ -1060,17 +1250,24 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testDataPluginModified01() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
-		Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
 		modifiedServiceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1/B1"});
 		modifiedServiceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"C1"});
 		registrationB1.setProperties(modifiedServiceProps);
@@ -1095,17 +1292,24 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testDataPluginModified02() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
-		Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
 		modifiedServiceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1/B1"});
 		modifiedServiceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"C2"});
 		registrationB1.setProperties(modifiedServiceProps);
@@ -1127,17 +1331,24 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 	public void testDataPluginModified03() throws DmtException {
 		TestDataPlugin pluginA = new TestDataPlugin();
 		pluginA.setNode("./A1", TestNode.newInteriorNode("./A1:Title", "./A1:Type"));
-		ServiceRegistration registrationA = registerMountingDataPlugin(pluginA, "./A1", new String[] {"B1"});
+		ServiceRegistration<DataPlugin> registrationA = registerMountingDataPlugin(
+				pluginA, "./A1", new String[] {
+						"B1"
+				});
 
 		TestDataPlugin pluginB1 = new TestDataPlugin();
 		pluginB1.setNode("./A1/B1", TestNode.newInteriorNode("./A1/B1:Title", "./A1/B1:Type"));
-		ServiceRegistration registrationB1 = registerMountingDataPlugin(pluginB1, "./A1/B1", new String[] {"C1"});
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountingDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
 
 		TestDataPlugin pluginC1 = new TestDataPlugin();
 		pluginC1.setNode("./A1/B1/C1", TestNode.newLeafNode("./A1/B1/C1:Title", "./A1/B1/C1:Type", new DmtData("./A1/B1/C1:Value")));
-		ServiceRegistration registrationC1 = registerDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerDataPlugin(
+				pluginC1, "./A1/B1/C1");
 
-		Hashtable modifiedServiceProps = new Hashtable();
+		Dictionary<String,Object> modifiedServiceProps = new Hashtable<>();
 		modifiedServiceProps.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A1/B1"});
 		modifiedServiceProps.put(DataPlugin.MOUNT_POINTS, new String[] {"C1", "C2"});
 		registrationB1.setProperties(modifiedServiceProps);

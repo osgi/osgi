@@ -82,7 +82,8 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
     }
  
 
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         switch(operation) {
         case CMD_DELETE:  return canDelete;
         case CMD_ADD:     return canAdd;
@@ -93,46 +94,57 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
         return false;
     }       	
 
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
 		return isLeaf;
 	}
 
+	@Override
 	public int getScope() {
 		return scope;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		return maxOccurrence;
 	}
 
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		return isZeroOccurrenceAllowed;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		return defaultValue;
 	}
 
+	@Override
 	public double getMax() {
 		return max;
 	}
 
+	@Override
 	public double getMin() {
 		return min;
 	}
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return validNames;
     }
     
+	@Override
 	public DmtData[] getValidValues() {
 		return validValues;
 	}
 
+	@Override
 	public int getFormat() {
 		return format;
 	}
@@ -145,6 +157,7 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
 		return null;
 	}
 
+	@Override
 	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
@@ -252,6 +265,7 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
 	}
 
 
+	@Override
 	public boolean isValidValue(DmtData value) {
 	    if (validValues==null)
 	        return true;
@@ -264,6 +278,7 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
 		return false;
 	}
 
+	@Override
 	public boolean isValidName(String name) {
 	    if (validNames==null)
 	        return true;
@@ -277,16 +292,19 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
 	}
 
 
+	@Override
 	public String[] getExtensionPropertyKeys() {
 		return null;
 	}
 
 
+	@Override
 	public Object getExtensionProperty(String key) {
 		return null;
 	}
 
 
+	@Override
 	public String[] getRawFormatNames() {
 		return null;
 	}

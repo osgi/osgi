@@ -41,6 +41,9 @@ import org.osgi.service.dmt.MetaNode;
 
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -105,17 +108,17 @@ public class Configuration {
 	public void testConfiguration001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration001");
+			DefaultTestBundleControl.log("#testConfiguration001");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			MetaNode metaNode = session.getMetaNode(DmtConstants.OSGi_CFG);
-			tbc.assertEquals("Asserts that $/Configuration node is permanent",MetaNode.PERMANENT, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertEquals("Asserts that $/Configuration node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration node is permanent",MetaNode.PERMANENT, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertEquals("Asserts that $/Configuration node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 			
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -129,20 +132,20 @@ public class Configuration {
 	public void testConfiguration002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration002");
+			DefaultTestBundleControl.log("#testConfiguration002");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			MetaNode metaNode = session.getMetaNode(CFG_PID);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertEquals("Asserts that $/Configuration/<pid> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -156,20 +159,20 @@ public class Configuration {
 	public void testConfiguration003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration003");
+			DefaultTestBundleControl.log("#testConfiguration003");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createLeafNode(CFG_PID_LOCATION, defaultDataString);
 			MetaNode metaNode = session.getMetaNode(CFG_PID_LOCATION);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Location node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Location node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Location node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Location node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Location node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Location node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Location node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Location node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Location node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Location node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -183,21 +186,21 @@ public class Configuration {
 	public void testConfiguration004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration004");
+			DefaultTestBundleControl.log("#testConfiguration004");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createLeafNode(CFG_PID_PID,defaultDataString);
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_PID);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Pid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Pid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Pid node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Pid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Pid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Pid node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -211,21 +214,21 @@ public class Configuration {
 	public void testConfiguration005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration005");
+			DefaultTestBundleControl.log("#testConfiguration005");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createLeafNode(CFG_PID_FACTORYPID,defaultDataString);
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_FACTORYPID);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/FactoryPid node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/FactoryPid node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -239,19 +242,19 @@ public class Configuration {
 	public void testConfiguration006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration006");
+			DefaultTestBundleControl.log("#testConfiguration006");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys node is automatic",MetaNode.AUTOMATIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys node is automatic",MetaNode.AUTOMATIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -264,22 +267,22 @@ public class Configuration {
 	public void testConfiguration007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration007");
+			DefaultTestBundleControl.log("#testConfiguration007");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -293,7 +296,7 @@ public class Configuration {
 	public void testConfiguration008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration008");
+			DefaultTestBundleControl.log("#testConfiguration008");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
@@ -301,14 +304,14 @@ public class Configuration {
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Type node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Type node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -322,7 +325,7 @@ public class Configuration {
 	public void testConfiguration009() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration009");
+			DefaultTestBundleControl.log("#testConfiguration009");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
@@ -330,14 +333,14 @@ public class Configuration {
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_CARDINALITY);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Cardinality node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Cardinality node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -351,7 +354,7 @@ public class Configuration {
 	public void testConfiguration010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration010");
+			DefaultTestBundleControl.log("#testConfiguration010");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
@@ -361,15 +364,15 @@ public class Configuration {
 			
 			int formatsAllowed = DmtData.FORMAT_STRING | DmtData.FORMAT_BINARY | DmtData.FORMAT_INTEGER | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_FLOAT;
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node format is a chr node", formatsAllowed ,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Value node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node format is a chr node", formatsAllowed ,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Value node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -384,7 +387,7 @@ public class Configuration {
 	public void testConfiguration011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration011");
+			DefaultTestBundleControl.log("#testConfiguration011");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
@@ -392,14 +395,14 @@ public class Configuration {
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUES);
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node format is an interior node", DmtData.FORMAT_NODE ,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node format is an interior node", DmtData.FORMAT_NODE ,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -413,7 +416,7 @@ public class Configuration {
 	public void testConfiguration012() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testConfiguration012");
+			DefaultTestBundleControl.log("#testConfiguration012");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
@@ -423,16 +426,16 @@ public class Configuration {
 			
 			int formatsAllowed = DmtData.FORMAT_STRING | DmtData.FORMAT_INTEGER | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_FLOAT;
 			
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be gotten", metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be added", metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node format is a chr, int, bool, float", formatsAllowed ,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values/<n> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			TestCase.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
+			TestCase.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node format is a chr, int, bool, float", formatsAllowed ,metaNode.getFormat());
+			TestCase.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values/<n> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}

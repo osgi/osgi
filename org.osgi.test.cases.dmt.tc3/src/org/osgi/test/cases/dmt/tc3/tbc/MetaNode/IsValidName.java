@@ -39,6 +39,9 @@ package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>isValidName</code> method of MetaNode, 
@@ -66,7 +69,7 @@ public class IsValidName {
 	public void testIsValidName001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsValidName001");
+			DefaultTestBundleControl.log("#testIsValidName001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -74,10 +77,10 @@ public class IsValidName {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertTrue("Asserts isValidName method",
+			TestCase.assertTrue("Asserts isValidName method",
 					metanode.isValidName(TestMetaNode.DEFAULT_VALID_NAMES[0]));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -93,7 +96,7 @@ public class IsValidName {
 	public void testIsValidName002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsValidName002");
+			DefaultTestBundleControl.log("#testIsValidName002");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -101,10 +104,10 @@ public class IsValidName {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertTrue("Asserts isValidName method",
+			TestCase.assertTrue("Asserts isValidName method",
 					!metanode.isValidName("invalid"));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

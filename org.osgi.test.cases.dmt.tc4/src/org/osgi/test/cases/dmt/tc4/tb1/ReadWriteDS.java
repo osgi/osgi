@@ -19,95 +19,115 @@ public class ReadWriteDS implements ReadWriteDataSession {
 	}
 	
 
+	@Override
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 				"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 				"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void createLeafNode(String[] nodePath, DmtData value, String mimeType)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 				"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void deleteNode(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 				"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 				"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
 		findNode(nodePath).setTitle(title);
 	}
 
+	@Override
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED, 
 		"Operation is not allowed - static tree");
 	}
 
+	@Override
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		findNode(nodePath).setNodeValue(data);
 	}
 
+	@Override
 	public void close() throws DmtException {
 		framework.close();
 		System.out.println("[Framework Data Session] Closing a Read-Write Session");
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getChildNodeNames();
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getMetaNode();
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeSize();
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getTimestamp();
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getTitle();
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeType();
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeValue();
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getVersion();
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		return findNode(nodePath).isLeaf();
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		return ( findNode(nodePath) == null ) ? false : true;
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		findNode(nodePath).nodeChanged();
 	}

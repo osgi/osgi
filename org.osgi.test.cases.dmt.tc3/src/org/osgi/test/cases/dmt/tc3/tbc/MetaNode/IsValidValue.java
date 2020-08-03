@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>isValidValue</code> method of MetaNode, 
@@ -68,7 +71,7 @@ public class IsValidValue {
 	public void testIsValidValue001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsValidValue001");
+			DefaultTestBundleControl.log("#testIsValidValue001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -76,10 +79,10 @@ public class IsValidValue {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertTrue("Asserts isValidValue method",
+			TestCase.assertTrue("Asserts isValidValue method",
 					metanode.isValidValue(TestMetaNode.DEFAULT_VALID_VALUES[0]));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -94,7 +97,7 @@ public class IsValidValue {
 	public void testIsValidValue002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsValidValue001");
+			DefaultTestBundleControl.log("#testIsValidValue001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -102,10 +105,10 @@ public class IsValidValue {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertTrue("Asserts isValidValue method",
+			TestCase.assertTrue("Asserts isValidValue method",
 					!metanode.isValidValue(new DmtData("invalid")));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

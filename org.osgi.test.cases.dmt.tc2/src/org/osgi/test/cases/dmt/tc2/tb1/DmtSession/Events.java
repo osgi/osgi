@@ -44,6 +44,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Activators.EventHandlerImpl;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the events of Dmt, according to MEG specification
@@ -57,6 +60,7 @@ public class Events implements TestInterface  {
 	public Events(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
+	@Override
 	public void run() {
         prepare();
 	    testEvents001();
@@ -77,7 +81,7 @@ public class Events implements TestInterface  {
 	private void testEvents001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testEvents001");
+			DefaultTestBundleControl.log("#testEvents001");
 			// waits events sent by previous test methods before doing this test
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
@@ -92,16 +96,16 @@ public class Events implements TestInterface  {
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE,true);
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.RENAMED_NODE_NAME);
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.assertEquals("Asserts that if the session is atomic, no event is sent before commit.",0,EventHandlerImpl.getEventCount());
+			TestCase.assertEquals("Asserts that if the session is atomic, no event is sent before commit.",0,EventHandlerImpl.getEventCount());
 			session.commit();
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
-			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
+			TestCase.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
+			TestCase.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
 			// RFC-141: There is no pre-defined order of events anymore (see https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1794)
 //			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
-			tbc.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
+			TestCase.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
 //			tbc.assertTrue("Asserts that the order of the sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
 			
 		} catch (Exception e) {
@@ -120,7 +124,7 @@ public class Events implements TestInterface  {
 	private void testEvents002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testEvents002");
+			DefaultTestBundleControl.log("#testEvents002");
 			//Reset previous events
 			EventHandlerImpl.reset();
 			
@@ -134,12 +138,12 @@ public class Events implements TestInterface  {
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
-			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
-			tbc.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
-            tbc.assertTrue("Asserts that the events are sent immediately in an exclusive session, following no order (as an atomic session).",
+			TestCase.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
+			TestCase.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
+			TestCase.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
+            TestCase.assertTrue("Asserts that the events are sent immediately in an exclusive session, following no order (as an atomic session).",
                 EventHandlerImpl.isOrderedExclusive());
-			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
+			TestCase.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {

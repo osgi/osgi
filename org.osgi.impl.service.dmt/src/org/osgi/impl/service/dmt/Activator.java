@@ -28,12 +28,14 @@ public class Activator implements BundleActivator {
 //	LogPluginActivator logPluginActivator = new LogPluginActivator();
 //	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		dmtAdminActivator.start(context);
 //		logPluginActivator.start(context);
 //		configurationPluginActivator.start(context);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 //		configurationPluginActivator.stop(context);
 //		logPluginActivator.stop(context);

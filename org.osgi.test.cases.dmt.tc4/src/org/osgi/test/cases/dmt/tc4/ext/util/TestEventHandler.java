@@ -8,13 +8,14 @@ import org.osgi.service.event.EventHandler;
 
 public class TestEventHandler implements EventHandler {
 
-    private final List eventList;
+	private final List<Event> eventList;
 
     public TestEventHandler() {
-        this.eventList = new ArrayList();
+		this.eventList = new ArrayList<>();
     }
 
-    public void handleEvent(Event event) {
+    @Override
+	public void handleEvent(Event event) {
         synchronized (eventList) {
             eventList.add(event);
             eventList.notifyAll();
@@ -32,7 +33,7 @@ public class TestEventHandler implements EventHandler {
             if (eventList.size() <= index) {
                 eventList.wait(1000);
             }
-            return (Event) eventList.get(index);
+            return eventList.get(index);
         }
     }
 }

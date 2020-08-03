@@ -36,13 +36,13 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPlugin;
-
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 
@@ -52,7 +52,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
  */
 public class TestNonAtomicPluginActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	private DmtTestControl tbc;
 
@@ -72,16 +72,18 @@ public class TestNonAtomicPluginActivator implements BundleActivator {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testNonAtomicPlugin = new TestNonAtomicPlugin(tbc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		servReg = bc.registerService(ifs, testNonAtomicPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, testNonAtomicPlugin,
+				props);
 		System.out.println("TestReadOnlyPlugin activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

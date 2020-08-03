@@ -34,7 +34,8 @@ public class DmtAdminDelegate implements DmtAdmin {
     
 
     private DmtAdminCore dmtAdmin;
-    private Context context;
+	@SuppressWarnings("unused")
+	private Context			context;
     private Bundle initiatingBundle;
     
     private boolean active; 
@@ -47,18 +48,21 @@ public class DmtAdminDelegate implements DmtAdmin {
         active = true;
     }
     
-    public DmtSession getSession(String subtreeUri) throws DmtException {
+    @Override
+	public DmtSession getSession(String subtreeUri) throws DmtException {
         checkState();
         return dmtAdmin.getSession(subtreeUri, initiatingBundle);
     }
 
-    public DmtSession getSession(String subtreeUri, int lockMode)
+    @Override
+	public DmtSession getSession(String subtreeUri, int lockMode)
             throws DmtException {
         checkState();
         return dmtAdmin.getSession(subtreeUri, lockMode, initiatingBundle);
     }
 
-    public DmtSession getSession(String principal, String subtreeUri,
+    @Override
+	public DmtSession getSession(String principal, String subtreeUri,
             int lockMode) throws DmtException {
         checkState();
         return dmtAdmin.getSession(principal, subtreeUri, lockMode, initiatingBundle);

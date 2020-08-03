@@ -50,6 +50,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -64,6 +67,7 @@ public class GetChildNodeNames implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testGetChildNodeNames001();
@@ -88,16 +92,16 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames001");
+			DefaultTestBundleControl.log("#testGetChildNodeNames001");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
 			session.getChildNodeNames(TestExecPluginActivator.INEXISTENT_NODE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
+			TestCase.assertEquals("Asserts DmtException.getCode",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -114,7 +118,7 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames002");
+			DefaultTestBundleControl.log("#testGetChildNodeNames002");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -122,7 +126,7 @@ public class GetChildNodeNames implements TestInterface {
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_SHARED);
 
 			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.pass("getChildNodeNames correctly executed");
+			DefaultTestBundleControl.pass("getChildNodeNames correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -141,7 +145,7 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames003");
+			DefaultTestBundleControl.log("#testGetChildNodeNames003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -151,7 +155,7 @@ public class GetChildNodeNames implements TestInterface {
 			
 			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
 			
-			tbc.pass("getChildNodeNames correctly executed");
+			DefaultTestBundleControl.pass("getChildNodeNames correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 			
@@ -170,7 +174,7 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames004");
+			DefaultTestBundleControl.log("#testGetChildNodeNames004");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -180,7 +184,7 @@ public class GetChildNodeNames implements TestInterface {
 			
 			String[] childs = session.getChildNodeNames(TestExecPluginActivator.ROOT);
 			
-			tbc.assertTrue("Asserting if an empty array was returned by DmtAdmin.", childs == null ? false : (childs.length == 0)); 
+			TestCase.assertTrue("Asserting if an empty array was returned by DmtAdmin.", childs == null ? false : (childs.length == 0)); 
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -201,7 +205,7 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames005");
+			DefaultTestBundleControl.log("#testGetChildNodeNames005");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -211,7 +215,7 @@ public class GetChildNodeNames implements TestInterface {
 			
 			String[] childs = session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES);
 			
-			tbc.assertTrue("Asserting if an array with two elements was returned.", (childs.length == 2));
+			TestCase.assertTrue("Asserting if an array with two elements was returned.", (childs.length == 2));
 			
 			
 			boolean hasNull = false;
@@ -222,7 +226,7 @@ public class GetChildNodeNames implements TestInterface {
 				}
 			}
 			
-			tbc.assertTrue("Asserting if no null entries exists as elements in the returned array.", !hasNull);
+			TestCase.assertTrue("Asserting if no null entries exists as elements in the returned array.", !hasNull);
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -242,13 +246,13 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames006");
+			DefaultTestBundleControl.log("#testGetChildNodeNames006");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
-			tbc.pass("A relative URI can be used with getChildNodeNames.");
+			DefaultTestBundleControl.pass("A relative URI can be used with getChildNodeNames.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -266,15 +270,15 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames007");
+			DefaultTestBundleControl.log("#testGetChildNodeNames007");
 
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 			session.getChildNodeNames(TestExecPluginActivator.LEAF_NODE);
 
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
+			TestCase.assertEquals("Asserts DmtException.getCode",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
@@ -291,13 +295,13 @@ public class GetChildNodeNames implements TestInterface {
 	private void testGetChildNodeNames008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames008");
+			DefaultTestBundleControl.log("#testGetChildNodeNames008");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getChildNodeNames("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root" +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root" +
 					" URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

@@ -39,6 +39,9 @@ package org.osgi.test.cases.dmt.tc2.tbc.Uri;
 import org.osgi.service.dmt.Uri;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 
 /**
@@ -69,11 +72,11 @@ public class ToUri {
 	private void testToUri001() {
 
 		try {
-			tbc.log("#testToUri001");
+			DefaultTestBundleControl.log("#testToUri001");
 			Uri.toUri(null);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
@@ -88,11 +91,11 @@ public class ToUri {
 	private void testToUri002() {
 
 		try {
-			tbc.log("#testToUri002");
+			DefaultTestBundleControl.log("#testToUri002");
 			Uri.toUri(new String[] { ".", "Test",null, "Dmt" });
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
@@ -107,8 +110,8 @@ public class ToUri {
 	private void testToUri003() {
 
 		try {
-			tbc.log("#testToUri003");
-			tbc.assertTrue("Asserts that Uri.toUri(String[]) returns an empty URI (\"\") if " +
+			DefaultTestBundleControl.log("#testToUri003");
+			TestCase.assertTrue("Asserts that Uri.toUri(String[]) returns an empty URI (\"\") if " +
 					"the specified path is an empty array",Uri.toUri(new String[0]).equals(""));
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -123,13 +126,13 @@ public class ToUri {
 
 	private void testToUri004() {
 		try {
-			tbc.log("#testToUri004");
+			DefaultTestBundleControl.log("#testToUri004");
 			for (int i = 0; i < DmtTestControl.URIS_TOO_LONG.length; i++) {
 				try {
 					Uri.toUri(DmtTestControl.toPath(DmtTestControl.URIS_TOO_LONG[i]));
-					tbc.failException("", IllegalArgumentException.class);
+					DefaultTestBundleControl.failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
-					tbc.pass("IllegalArgumentException correctly thrown when calling Uri.toUri(" + DmtTestControl.URIS_TOO_LONG[i] + ")");
+					DefaultTestBundleControl.pass("IllegalArgumentException correctly thrown when calling Uri.toUri(" + DmtTestControl.URIS_TOO_LONG[i] + ")");
 				}
 			}
 			

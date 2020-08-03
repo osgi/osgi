@@ -59,21 +59,26 @@ public class TestMetaNodeDataPlugin implements DataPlugin, ExecPlugin, ReadWrite
 	public TestMetaNodeDataPlugin(DmtTestControl tbc) {
 	    this.tbc=tbc;
     }
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
+	@Override
 	public void close() throws DmtException {
 
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
         String nodeName = tbc.mangleUri(nodeUri);
         if (nodeName.equals(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE) ||
@@ -89,34 +94,42 @@ public class TestMetaNodeDataPlugin implements DataPlugin, ExecPlugin, ReadWrite
         
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 		return 0;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
         String nodeName = tbc.mangleUri(nodeUri);
         if (nodeName.equals(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE) ||
@@ -146,6 +159,7 @@ public class TestMetaNodeDataPlugin implements DataPlugin, ExecPlugin, ReadWrite
 
 	}
 	
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
         String nodeName = tbc.mangleUri(nodeUri);
         if (nodeName.equals(TestMetaNodeDataPluginActivator.LEAF_NODE)){
@@ -155,36 +169,46 @@ public class TestMetaNodeDataPlugin implements DataPlugin, ExecPlugin, ReadWrite
         }
 	}
 
+	@Override
 	public void nodeChanged(String[] nodeUri) throws DmtException {
 
 	}
     
-    public void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException {
+    @Override
+	public void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException {
     }
     
-    public void copy(String[] nodePath, String[] newNodePath, boolean recursive) throws DmtException {
+    @Override
+	public void copy(String[] nodePath, String[] newNodePath, boolean recursive) throws DmtException {
     }
     
-    public void createInteriorNode(String[] nodePath, String type) throws DmtException {
+    @Override
+	public void createInteriorNode(String[] nodePath, String type) throws DmtException {
     }
     
-    public void createLeafNode(String[] nodePath, DmtData value, String mimeType) throws DmtException {
+    @Override
+	public void createLeafNode(String[] nodePath, DmtData value, String mimeType) throws DmtException {
          DmtConstants.TEMPORARY = mimeType;
     }
     
-    public void deleteNode(String[] nodePath) throws DmtException {
+    @Override
+	public void deleteNode(String[] nodePath) throws DmtException {
     }
     
-    public void renameNode(String[] nodePath, String newName) throws DmtException {
+    @Override
+	public void renameNode(String[] nodePath, String newName) throws DmtException {
     }
     
-    public void setNodeTitle(String[] nodePath, String title) throws DmtException {
+    @Override
+	public void setNodeTitle(String[] nodePath, String title) throws DmtException {
     }
     
-    public void setNodeType(String[] nodePath, String type) throws DmtException {
+    @Override
+	public void setNodeType(String[] nodePath, String type) throws DmtException {
     }
     
-    public void setNodeValue(String[] nodePath, DmtData data) throws DmtException {
+    @Override
+	public void setNodeValue(String[] nodePath, DmtData data) throws DmtException {
        
     }
 	public static void setRootNodeAllowsAddOperation(

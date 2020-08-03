@@ -45,7 +45,8 @@ class SessionWrapper extends DmtSessionImpl {
         invalidateTask = null;
     }
     
-    void open() throws DmtException {
+    @Override
+	void open() throws DmtException {
         try {
             super.open();
         } catch(PluginUnregisteredException e) {
@@ -68,14 +69,16 @@ class SessionWrapper extends DmtSessionImpl {
     	invalidateSession(rollback, timeout, null);
     }
     
-    protected synchronized void invalidateSession(boolean rollback, 
+    @Override
+	protected synchronized void invalidateSession(boolean rollback, 
             boolean timeout, Exception fatalException) {
         // timer is stopped for good if the session is invalidated
         removeTimer(); 
         super.invalidateSession(rollback, timeout, fatalException);
     }
     
-    public void close() throws DmtException {
+    @Override
+	public void close() throws DmtException {
         removeTimer(); // timer is stopped for good if session is closed
         try {
             super.close();
@@ -84,7 +87,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
     
-    public void execute(String nodeUri, String data) throws DmtException {
+    @Override
+	public void execute(String nodeUri, String data) throws DmtException {
         stopTimer();
         try {
             super.execute(nodeUri, data);
@@ -100,7 +104,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void execute(String nodeUri, String correlator, String data)
+    @Override
+	public void execute(String nodeUri, String correlator, String data)
             throws DmtException {
         stopTimer();
         try {
@@ -117,7 +122,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public Acl getNodeAcl(String nodeUri) throws DmtException {
+    @Override
+	public Acl getNodeAcl(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeAcl(nodeUri);
@@ -133,7 +139,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public Acl getEffectiveNodeAcl(String nodeUri) throws DmtException {
+    @Override
+	public Acl getEffectiveNodeAcl(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getEffectiveNodeAcl(nodeUri);
@@ -149,7 +156,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setNodeAcl(String nodeUri, Acl acl) throws DmtException {
+    @Override
+	public void setNodeAcl(String nodeUri, Acl acl) throws DmtException {
         stopTimer();
         try {
             super.setNodeAcl(nodeUri, acl);
@@ -165,7 +173,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void rollback() throws DmtException {
+    @Override
+	public void rollback() throws DmtException {
         stopTimer();
         try {
             super.rollback();
@@ -183,7 +192,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void commit() throws DmtException {
+    @Override
+	public void commit() throws DmtException {
         stopTimer();
         try {
             super.commit();
@@ -201,7 +211,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setNodeTitle(String nodeUri, String title) throws DmtException {
+    @Override
+	public void setNodeTitle(String nodeUri, String title) throws DmtException {
         stopTimer();
         try {
             super.setNodeTitle(nodeUri, title);
@@ -217,7 +228,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
+    @Override
+	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
         stopTimer();
         try {
             super.setNodeValue(nodeUri, data);
@@ -233,7 +245,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setDefaultNodeValue(String nodeUri) throws DmtException {
+    @Override
+	public void setDefaultNodeValue(String nodeUri) throws DmtException {
         stopTimer();
         try {
             super.setDefaultNodeValue(nodeUri);
@@ -249,7 +262,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setNodeType(String nodeUri, String type) throws DmtException {
+    @Override
+	public void setNodeType(String nodeUri, String type) throws DmtException {
         stopTimer();
         try {
             super.setNodeType(nodeUri, type);
@@ -265,7 +279,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void deleteNode(String nodeUri) throws DmtException {
+    @Override
+	public void deleteNode(String nodeUri) throws DmtException {
         stopTimer();
         try {
             super.deleteNode(nodeUri);
@@ -281,7 +296,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void createInteriorNode(String nodeUri) throws DmtException {
+    @Override
+	public void createInteriorNode(String nodeUri) throws DmtException {
         stopTimer();
         try {
             super.createInteriorNode(nodeUri);
@@ -297,7 +313,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void createInteriorNode(String nodeUri, String type)
+    @Override
+	public void createInteriorNode(String nodeUri, String type)
             throws DmtException {
         stopTimer();
         try {
@@ -314,7 +331,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void createLeafNode(String nodeUri) throws DmtException {
+    @Override
+	public void createLeafNode(String nodeUri) throws DmtException {
         stopTimer();
         try {
             super.createLeafNode(nodeUri);
@@ -330,7 +348,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void createLeafNode(String nodeUri, DmtData value)
+    @Override
+	public void createLeafNode(String nodeUri, DmtData value)
             throws DmtException {
         stopTimer();
         try {
@@ -347,7 +366,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void createLeafNode(String nodeUri, DmtData value, String mimeType)
+    @Override
+	public void createLeafNode(String nodeUri, DmtData value, String mimeType)
             throws DmtException {
         stopTimer();
         try {
@@ -364,7 +384,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void copy(String nodeUri, String newNodeUri, boolean recursive)
+    @Override
+	public void copy(String nodeUri, String newNodeUri, boolean recursive)
             throws DmtException {
         stopTimer();
         try {
@@ -381,7 +402,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void renameNode(String nodeUri, String newName) throws DmtException {
+    @Override
+	public void renameNode(String nodeUri, String newName) throws DmtException {
         stopTimer();
         try {
             super.renameNode(nodeUri, newName);
@@ -397,7 +419,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public boolean isNodeUri(String nodeUri) {
+    @Override
+	public boolean isNodeUri(String nodeUri) {
         stopTimer();
         try {
             return super.isNodeUri(nodeUri);
@@ -409,7 +432,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
     
-    public boolean isLeafNode(String nodeUri) throws DmtException {
+    @Override
+	public boolean isLeafNode(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.isLeafNode(nodeUri);
@@ -425,7 +449,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public DmtData getNodeValue(String nodeUri) throws DmtException {
+    @Override
+	public DmtData getNodeValue(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeValue(nodeUri);
@@ -441,7 +466,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public String getNodeTitle(String nodeUri) throws DmtException {
+    @Override
+	public String getNodeTitle(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeTitle(nodeUri);
@@ -457,7 +483,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public String getNodeType(String nodeUri) throws DmtException {
+    @Override
+	public String getNodeType(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeType(nodeUri);
@@ -473,7 +500,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public int getNodeVersion(String nodeUri) throws DmtException {
+    @Override
+	public int getNodeVersion(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeVersion(nodeUri);
@@ -489,7 +517,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public Date getNodeTimestamp(String nodeUri) throws DmtException {
+    @Override
+	public Date getNodeTimestamp(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeTimestamp(nodeUri);
@@ -505,7 +534,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public int getNodeSize(String nodeUri) throws DmtException {
+    @Override
+	public int getNodeSize(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getNodeSize(nodeUri);
@@ -521,7 +551,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public String[] getChildNodeNames(String nodeUri) throws DmtException {
+    @Override
+	public String[] getChildNodeNames(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getChildNodeNames(nodeUri);
@@ -537,7 +568,8 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public MetaNode getMetaNode(String nodeUri) throws DmtException {
+    @Override
+	public MetaNode getMetaNode(String nodeUri) throws DmtException {
         stopTimer();
         try {
             return super.getMetaNode(nodeUri);
@@ -584,7 +616,11 @@ class SessionWrapper extends DmtSessionImpl {
     }
     
     private class InvalidateTask extends TimerTask {
-        public void run() {
+		InvalidateTask() {
+			super();
+		}
+        @Override
+		public void run() {
             invalidateSession(true, true);
         }
     }
