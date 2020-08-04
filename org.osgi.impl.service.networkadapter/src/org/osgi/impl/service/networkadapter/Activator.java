@@ -17,7 +17,7 @@
 package org.osgi.impl.service.networkadapter;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -39,7 +39,7 @@ public class Activator implements BundleActivator {
     /**
      * ServiceRegistration of TestStep.
      */
-    private ServiceRegistration testStepReg = null;
+	private ServiceRegistration<TestStep>	testStepReg	= null;
 
     /**
      * Getter method of BundleContext.
@@ -56,7 +56,9 @@ public class Activator implements BundleActivator {
      * @param BundleContext
      * @throws Exception If an exception is thrown during the start process.
      */
-    public void start(BundleContext context) throws Exception {
+    @Override
+	public void start(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 
         Activator.context = context;
 
@@ -64,9 +66,9 @@ public class Activator implements BundleActivator {
         NetworkIfTracker.getInstance().open();
 
         TestStep testStep = new TestStepImpl();
-        Dictionary prop = new Properties();
+		Dictionary<String,Object> prop = new Hashtable<>();
         prop.put(Constants.SERVICE_PID, "org.osgi.impl.service.networkadapter");
-        testStepReg = context.registerService(TestStep.class.getName(), testStep, prop);
+		testStepReg = context.registerService(TestStep.class, testStep, prop);
     }
 
     /**
@@ -75,7 +77,9 @@ public class Activator implements BundleActivator {
      * @param BundleContext
      * @throws Exception If an exception is thrown during the start process.
      */
-    public void stop(BundleContext context) throws Exception {
+    @Override
+	public void stop(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 
         if (testStepReg != null) {
             testStepReg.unregister();

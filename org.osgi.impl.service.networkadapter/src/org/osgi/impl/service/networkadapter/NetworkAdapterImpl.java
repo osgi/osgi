@@ -48,47 +48,58 @@ public class NetworkAdapterImpl implements NetworkAdapter {
         this.mtu = mtu;
     }
 
-    public String getNetworkAdapterType() {
+    @Override
+	public String getNetworkAdapterType() {
         return (String)getProperty(NETWORKADAPTER_TYPE);
     }
 
-    public String getDisplayName() {
+    @Override
+	public String getDisplayName() {
         return (String)getProperty(NETWORKADAPTER_DISPLAYNAME);
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return (String)getProperty(NETWORKADAPTER_NAME);
     }
 
-    public byte[] getHardwareAddress() {
+    @Override
+	public byte[] getHardwareAddress() {
         return (byte[])getProperty(NETWORKADAPTER_HARDWAREADDRESS);
     }
 
-    public int getMTU() throws SocketException {
+    @Override
+	public int getMTU() throws SocketException {
         return mtu;
     }
 
-    public boolean isLoopback() throws SocketException {
+    @Override
+	public boolean isLoopback() throws SocketException {
         return ((Boolean)getProperty(NETWORKADAPTER_IS_LOOPBACK)).booleanValue();
     }
 
-    public boolean isPointToPoint() throws SocketException {
+    @Override
+	public boolean isPointToPoint() throws SocketException {
         return ((Boolean)getProperty(NETWORKADAPTER_IS_POINTTOPOINT)).booleanValue();
     }
 
-    public boolean isUp() throws SocketException {
+    @Override
+	public boolean isUp() throws SocketException {
         return ((Boolean)getProperty(NETWORKADAPTER_IS_UP)).booleanValue();
     }
 
-    public boolean isVirtual() {
+    @Override
+	public boolean isVirtual() {
         return ((Boolean)getProperty(NETWORKADAPTER_IS_VIRTUAL)).booleanValue();
     }
 
-    public boolean supportsMulticast() throws SocketException {
+    @Override
+	public boolean supportsMulticast() throws SocketException {
         return ((Boolean)getProperty(NETWORKADAPTER_SUPPORTS_MULTICAST)).booleanValue();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 
         StringBuffer sb = new StringBuffer();
         sb.append("NetworkAdapter[");
@@ -112,7 +123,8 @@ public class NetworkAdapterImpl implements NetworkAdapter {
      */
     private Object getProperty(String key) {
 
-        Dictionary prop = NetworkIfManager.getInstance().getNetworkAdapterProp(id);
+		Dictionary<String,Object> prop = NetworkIfManager.getInstance()
+				.getNetworkAdapterProp(id);
         return prop.get(key);
     }
 }

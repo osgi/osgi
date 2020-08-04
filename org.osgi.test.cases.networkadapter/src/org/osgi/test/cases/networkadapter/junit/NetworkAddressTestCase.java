@@ -30,11 +30,13 @@ import org.osgi.test.support.step.TestStepProxy;
 public class NetworkAddressTestCase extends DefaultTestBundleControl {
     private NetworkTestProxy testProxy;
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         this.testProxy.close();
     }
 
@@ -56,7 +58,7 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
-            ServiceReference ref = addressListener.get(0);
+            ServiceReference< ? > ref = addressListener.get(0);
             Object type = ref.getProperty(NetworkAddress.NETWORKADAPTER_TYPE);
             Object version = ref.getProperty(NetworkAddress.IPADDRESS_VERSION);
             Object scope = ref.getProperty(NetworkAddress.IPADDRESS_SCOPE);

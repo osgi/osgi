@@ -29,11 +29,13 @@ import org.osgi.test.support.step.TestStepProxy;
 public class NetworkIfTestCase extends DefaultTestBundleControl {
     private NetworkTestProxy	testProxy;
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         this.testProxy.close();
     }
 
@@ -60,7 +62,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Zero NetworkAddress service registered event is expected.", 0, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference adapterRef = adapterListener.get(0);
+            ServiceReference< ? > adapterRef = adapterListener.get(0);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE) instanceof String);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME) instanceof String);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME) instanceof String);
@@ -244,7 +246,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Only one NetworkAddress service registered event is expected.", 1, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference adapterRef = adapterListener.get(0);
+            ServiceReference< ? > adapterRef = adapterListener.get(0);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE) instanceof String);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME) instanceof String);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME) instanceof String);
@@ -256,7 +258,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST) instanceof Boolean);
             assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE) instanceof String[]);
 
-            ServiceReference addressRef = addressListener.get(0);
+            ServiceReference< ? > addressRef = addressListener.get(0);
             assertTrue("The following service property is not correct: " + NetworkAddress.NETWORKADAPTER_TYPE, addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE) instanceof String);
             assertEquals("The following service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, version, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals("The following service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, scope, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
@@ -314,7 +316,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Only one NetworkAddress service registered event is expected.", 1, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference addressRef = addressListener.get(0);
+            ServiceReference< ? > addressRef = addressListener.get(0);
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, NetworkAddress.IPADDRESS_VERSION_6, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, NetworkAddress.IPADDRESS_SCOPE_UNIQUE_LOCAL, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
 
@@ -364,7 +366,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference addressRef = addressListener.get(0);
+            ServiceReference< ? > addressRef = addressListener.get(0);
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, NetworkAddress.IPADDRESS_VERSION_4, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, NetworkAddress.IPADDRESS_SCOPE_PRIVATE_USE, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
 
@@ -414,7 +416,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference addressRef = addressListener.get(0);
+            ServiceReference< ? > addressRef = addressListener.get(0);
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, NetworkAddress.IPADDRESS_VERSION_4, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, NetworkAddress.IPADDRESS_SCOPE_GLOBAL, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
 
@@ -464,7 +466,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
             // Confirmation of the service property.
-            ServiceReference addressRef = addressListener.get(0);
+            ServiceReference< ? > addressRef = addressListener.get(0);
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, NetworkAddress.IPADDRESS_VERSION_6, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, NetworkAddress.IPADDRESS_SCOPE_UNIQUE_LOCAL, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
 

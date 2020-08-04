@@ -18,9 +18,10 @@ package org.osgi.impl.service.networkadapter;
 
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -46,7 +47,7 @@ class NetworkIfTracker {
      * Key: NetworkAddress ID
      * Value: NetworkAdapter ID
      */
-    private Map idMap = new HashMap();
+	private Map<String,String>		idMap		= new HashMap<>();
 
     /**
      * Constructor.
@@ -70,6 +71,7 @@ class NetworkIfTracker {
      * When network information had a change by starting monitoring, added/modified/removed method is called back.<br>
      */
     void open() {
+		// empty
     }
 
     /**
@@ -107,7 +109,7 @@ class NetworkIfTracker {
 
         NetworkAdapter networkAdapter = new NetworkAdapterImpl(networkAdapterId, networkIfData.getMTU());
 
-        Dictionary prop = new Properties();
+		Dictionary<String,Object> prop = new Hashtable<>();
         prop.put(Constants.SERVICE_PID, networkAdapterPID);
         prop.put(NetworkAdapter.NETWORKADAPTER_TYPE, networkAdapterType);
         if (networkIfData.getDisplayName() != null) {
@@ -134,7 +136,8 @@ class NetworkIfTracker {
         }
         NetworkIfManager.getInstance().putNetworkAdapterProp(networkAdapterId, prop);
 
-        ServiceRegistration reg = Activator.getContext().registerService(NetworkAdapter.class.getName(), networkAdapter, prop);
+		ServiceRegistration<NetworkAdapter> reg = Activator.getContext()
+				.registerService(NetworkAdapter.class, networkAdapter, prop);
         NetworkIfManager.getInstance().putNetworkAdapterReg(networkAdapterId, reg);
     }
 
@@ -151,7 +154,8 @@ class NetworkIfTracker {
     synchronized void addNetworkAddress(String networkAdapterId, String networkAddressId, String addressVersion, String addressScope, String address, int length) {
 
         // Gets existing NetworkAdapter service.
-        ServiceRegistration reg = NetworkIfManager.getInstance().getNetworkAdapterReg(networkAdapterId);
+		ServiceRegistration<NetworkAdapter> reg = NetworkIfManager.getInstance()
+				.getNetworkAdapterReg(networkAdapterId);
 
         // Registers new NetworkAddress service.
         String networkAdapterPID = (String) reg.getReference().getProperty(Constants.SERVICE_PID);
@@ -175,7 +179,8 @@ class NetworkIfTracker {
      */
     synchronized void modifiedNetworkAddress(String networkAddressId, String addressVersion, String addressScope, String address, int length) {
 
-        Dictionary prop = NetworkIfManager.getInstance().getNetworkAddressProp(networkAddressId);
+		Dictionary<String,Object> prop = NetworkIfManager.getInstance()
+				.getNetworkAddressProp(networkAddressId);
         if (prop == null) {
             throw new IllegalArgumentException("Not NetworkAddress.");
         }
@@ -185,7 +190,8 @@ class NetworkIfTracker {
         prop.put(NetworkAddress.IPADDRESS_SCOPE, addressScope);
         prop.put(NetworkAddress.SUBNETMASK_LENGTH, Integer.valueOf(length));
 
-        ServiceRegistration reg = NetworkIfManager.getInstance().getNetworkAddressReg(networkAddressId);
+		ServiceRegistration<NetworkAddress> reg = NetworkIfManager.getInstance()
+				.getNetworkAddressReg(networkAddressId);
         reg.setProperties(prop);
     }
 
@@ -198,20 +204,24 @@ class NetworkIfTracker {
      */
     synchronized void removedNetworkAdapter(String networkAdapterId) {
 
-        ServiceRegistration reg = NetworkIfManager.getInstance().removeNetworkAdapterReg(networkAdapterId);
+		ServiceRegistration<NetworkAdapter> reg = NetworkIfManager.getInstance()
+				.removeNetworkAdapterReg(networkAdapterId);
         if (reg != null) {
             reg.unregister();
         }
 
-        for (Iterator iterator = idMap.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            String targetNetworkAdapterId = (String)entry.getValue();
+		for (Iterator<Entry<String,String>> iterator = idMap.entrySet()
+				.iterator(); iterator.hasNext();) {
+			Entry<String,String> entry = iterator.next();
+            String targetNetworkAdapterId = entry.getValue();
 
             if (targetNetworkAdapterId.equals(networkAdapterId)) {
-                String targetNetworkAddressId = (String)entry.getKey();
-                reg = NetworkIfManager.getInstance().removeNetworkAddressReg(targetNetworkAddressId);
-                if (reg != null) {
-                    reg.unregister();
+                String targetNetworkAddressId = entry.getKey();
+				ServiceRegistration<NetworkAddress> removeNetworkAddressReg = NetworkIfManager
+						.getInstance()
+						.removeNetworkAddressReg(targetNetworkAddressId);
+				if (removeNetworkAddressReg != null) {
+					removeNetworkAddressReg.unregister();
                 }
                 NetworkIfManager.getInstance().removeNetworkAddressProp(targetNetworkAddressId);
 
@@ -227,7 +237,8 @@ class NetworkIfTracker {
      */
     synchronized void removedNetworkAddress(String networkAddressId) {
 
-        ServiceRegistration reg = NetworkIfManager.getInstance().removeNetworkAddressReg(networkAddressId);
+		ServiceRegistration<NetworkAddress> reg = NetworkIfManager.getInstance()
+				.removeNetworkAddressReg(networkAddressId);
         if (reg != null) {
             reg.unregister();
         }
@@ -240,7 +251,7 @@ class NetworkIfTracker {
 
     private void addNetworkAddress(String networkAdapterPID, String networkAdapterType, String networkAddressId, String addressVersion, String addressScope, String address, int length) {
 
-        Dictionary prop = new Properties();
+		Dictionary<String,Object> prop = new Hashtable<>();
         prop.put(NetworkAddress.NETWORKADAPTER_TYPE, networkAdapterType);
         prop.put(NetworkAddress.IPADDRESS_VERSION, addressVersion);
         prop.put(NetworkAddress.IPADDRESS_SCOPE, addressScope);
@@ -251,7 +262,8 @@ class NetworkIfTracker {
 
         NetworkAddress networkAddress = new NetworkAddressImpl(networkAddressId);
 
-        ServiceRegistration reg = Activator.getContext().registerService(NetworkAddress.class.getName(), networkAddress, prop);
+		ServiceRegistration<NetworkAddress> reg = Activator.getContext()
+				.registerService(NetworkAddress.class, networkAddress, prop);
         NetworkIfManager.getInstance().putNetworkAddressReg(networkAddressId, reg);
     }
 }
