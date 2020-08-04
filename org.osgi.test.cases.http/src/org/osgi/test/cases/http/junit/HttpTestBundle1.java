@@ -37,14 +37,14 @@ import org.osgi.util.tracker.ServiceTracker;
 public class HttpTestBundle1 extends DefaultTestBundleControl {
 	// Http service
 	HttpService			_http;
-	ServiceTracker	_httpST;
+	ServiceTracker<HttpService,HttpService>	_httpST;
 	int					_httpPort;
 	
 	protected void setUp() throws Exception {
-		_httpST = new ServiceTracker(getContext(), HttpService.class.getName(),
+		_httpST = new ServiceTracker<>(getContext(), HttpService.class,
 				null);
 		_httpST.open();
-		_http = (HttpService) _httpST.waitForService(OSGiTestCaseProperties
+		_http = _httpST.waitForService(OSGiTestCaseProperties
 				.getTimeout() * OSGiTestCaseProperties.getScaling());
 		assertNotNull(_http);
 		_httpPort = guessHttpPort();
@@ -1311,6 +1311,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl {
 		// BUGBUG need to complete test case!!
 	}
 
+	@SuppressWarnings("resource")
 	private int guessHttpPort() {
 		// Try to find the HTTP port.
 		String p;
@@ -1339,9 +1340,9 @@ public class HttpTestBundle1 extends DefaultTestBundleControl {
 										public java.net.URL getResource(
 												final String name) {
 											// Map a resource name to a URL.
-											return (URL) AccessController
-													.doPrivileged(new PrivilegedAction() {
-														public Object run() {
+											return AccessController
+													.doPrivileged(new PrivilegedAction<URL>() {
+														public URL run() {
 															return getClass()
 																	.getResource(
 																			name);

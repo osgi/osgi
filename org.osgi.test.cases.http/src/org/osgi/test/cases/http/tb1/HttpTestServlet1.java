@@ -8,11 +8,18 @@
  */
 package org.osgi.test.cases.http.tb1;
 
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private static final String	pagePart1	= "<html><head><title>OSGi - HTTP Service test case</title></head>";
 	private static final String	pagePart2	= "<body><h1>5 Uninstallation of source bundle</h1></body></html>";
 

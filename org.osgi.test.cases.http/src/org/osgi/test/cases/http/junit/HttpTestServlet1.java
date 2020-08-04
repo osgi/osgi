@@ -8,16 +8,29 @@
  */
 package org.osgi.test.cases.http.junit;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long				serialVersionUID	= 1L;
 	private static final String	pagePart1	= "<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>";
 	private static final String	pagePart2	= "</body></html>";
-	private static Hashtable	testCaseMap	= new Hashtable();
+	private static Hashtable<String,String>	testCaseMap			= new Hashtable<>();
 	static {
 		testCaseMap.put("1", "1 Registration of simple servlet</h1>");
 		testCaseMap.put("2", "2 Unregistration of simple servlet</h1>");
@@ -194,9 +207,9 @@ public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
 													ServletOutputStream out = response
 															.getOutputStream(); // binary
 													// output
-													InputStream in = (InputStream) AccessController
-															.doPrivileged(new PrivilegedAction() {
-																public Object run() {
+													InputStream in = AccessController
+															.doPrivileged(new PrivilegedAction<InputStream>() {
+																public InputStream run() {
 																	return getClass()
 																			.getResourceAsStream(
 																					"www/car.jpg");
@@ -327,8 +340,9 @@ public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
 	}
 
 	private String[] getSortedParameterNames(HttpServletRequest request) {
-		Vector names = new Vector();
-		for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+		Vector<String> names = new Vector<>();
+		for (Enumeration< ? > e = request.getParameterNames(); e
+				.hasMoreElements();) {
 			String p = (String) e.nextElement();
 			if (!p.equals("TestCase"))
 				names.addElement(p);
