@@ -24,6 +24,7 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
@@ -40,9 +41,10 @@ public class FrameworkPluginActivator implements BundleActivator {
 	static String[] PLUGIN_ROOT_PATH = new String[] { ".","RMT","Framework" };
 	static int PLUGIN_ROOT_PATH_LENGTH = PLUGIN_ROOT_PATH.length;
 	static String PLUGIN_ROOT_URI = "./Framework";
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
     private FrameworkPlugin     frameworkPlugin;
 
+	@Override
 	public void start(BundleContext bc) throws BundleException {
 		if(RMTConstants.RMT_ROOT!=null){
 			PLUGIN_ROOT_URI = RMTConstants.RMT_ROOT+"/Framework";
@@ -51,11 +53,12 @@ public class FrameworkPluginActivator implements BundleActivator {
 			PLUGIN_ROOT_PATH_LENGTH = count;
 		}
  		frameworkPlugin = new FrameworkPlugin(bc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, PLUGIN_ROOT_URI);
-		servReg = bc.registerService(DataPlugin.class.getName(), frameworkPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, frameworkPlugin, props);
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws BundleException {
 		servReg.unregister();
 		frameworkPlugin.removeBundleListener();

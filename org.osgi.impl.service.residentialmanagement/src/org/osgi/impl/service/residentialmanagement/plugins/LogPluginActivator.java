@@ -24,7 +24,9 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -37,16 +39,18 @@ public class LogPluginActivator implements BundleActivator {
 	private static String PLUGIN_ROOT_URI = "./Log";    
     private LogPlugin logPlugin;
 
+	@Override
 	public void start(BundleContext bc) throws BundleException {
 		if(RMTConstants.RMT_ROOT!=null){
 			PLUGIN_ROOT_URI = RMTConstants.RMT_ROOT+"/Log";
 		}
 		logPlugin = new LogPlugin(bc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, PLUGIN_ROOT_URI);
 		bc.registerService(DataPlugin.class.getName(), logPlugin, props);
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws BundleException {
 		logPlugin.removeListener();
 	}

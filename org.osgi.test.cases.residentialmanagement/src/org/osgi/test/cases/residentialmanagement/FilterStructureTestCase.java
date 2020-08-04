@@ -41,8 +41,10 @@ import org.osgi.service.log.LogService;
  */
 public class FilterStructureTestCase extends RMTTestBase {
 
+	@SuppressWarnings("unused")
 	private LogService log;
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		log = getService(LogService.class);

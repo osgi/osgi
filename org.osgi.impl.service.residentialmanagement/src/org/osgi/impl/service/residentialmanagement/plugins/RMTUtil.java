@@ -16,7 +16,7 @@ public class RMTUtil {
 	}
 	
 	protected static String[] pathToArrayUri(String path) {
-		Vector vector = new Vector();
+		Vector<String> vector = new Vector<>();
 		while (path.indexOf("/") != -1) {
 			String start_path = path.substring(0, path.indexOf("/"));
 			vector.add(start_path);
@@ -24,8 +24,8 @@ public class RMTUtil {
 		}
 		String[] arrayPath = new String[vector.size()];
 		int i = 0;
-		for (Iterator it = vector.iterator(); it.hasNext(); i++) {
-			arrayPath[i] = (String) it.next();
+		for (Iterator<String> it = vector.iterator(); it.hasNext(); i++) {
+			arrayPath[i] = it.next();
 		}
 		return arrayPath;
 	}

@@ -34,6 +34,7 @@ import org.osgi.test.cases.residentialmanagement.sharedpackage.SharedPackage;
 
 public class Activator implements BundleActivator {
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Update bundle is going to start.");
 		Object service = new SPImpl();
@@ -41,6 +42,7 @@ public class Activator implements BundleActivator {
 		context.registerService(clazz, service, null);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Update bundle is going to stop.");
 	}

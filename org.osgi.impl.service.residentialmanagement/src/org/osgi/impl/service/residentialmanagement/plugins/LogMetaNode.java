@@ -105,7 +105,8 @@ public class LogMetaNode implements MetaNode {
 
     
     
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         switch(operation) {
         case CMD_DELETE:  return canDelete;
         case CMD_ADD:     return canAdd;
@@ -116,62 +117,77 @@ public class LogMetaNode implements MetaNode {
         return false;
     }
 
+	@Override
 	public boolean isLeaf() {
 		return leaf;
 	}
 
-    public int getScope() {
+    @Override
+	public int getScope() {
         return scope;        
     }
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		return maxOccurrence;
 	}
 
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		return zeroOccurrenceAllowed;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		return defaultData;
 	}
 
+	@Override
 	public double getMax() {
 		return Double.MAX_VALUE;
 	}
 
+	@Override
 	public double getMin() {
 		return Double.MIN_VALUE;
 	}
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
+	@Override
 	public DmtData[] getValidValues() {
 		return validValues;
 	}
 
+	@Override
 	public int getFormat() {
 		return formats;
 	}
 
+	@Override
 	public String[] getRawFormatNames() {
         return null;
     }
 
-    public String[] getMimeTypes() {
+    @Override
+	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
     
-    public boolean isValidName(String name) {
+    @Override
+	public boolean isValidName(String name) {
         return true;
     }
     
-    public boolean isValidValue(DmtData value) {
+    @Override
+	public boolean isValidValue(DmtData value) {
         if((formats & value.getFormat()) == 0)
             return false;
         
@@ -179,11 +195,13 @@ public class LogMetaNode implements MetaNode {
             Arrays.asList(validValues).contains(value);
     }
     
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
         return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
         if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
             return Boolean.valueOf(false);
         

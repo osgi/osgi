@@ -39,25 +39,28 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
 public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 		TransactionalDataSession {
 	
-	private Vector operations = null;
+	private Vector<Operation> operations = null;
 
 	FiltersReadWriteSession(FiltersPlugin plugin, BundleContext context,
 			FiltersReadOnlySession session) {
 		super(plugin, context);
-		operations = new Vector();
+		operations = new Vector<>();
 	}
 	
+	@Override
 	public void close() throws DmtException {
-		for(Iterator it = searches.keySet().iterator();it.hasNext();){
-			Filters filters = (Filters)searches.get((String)it.next());
+		for (Iterator<String> it = searches.keySet().iterator(); it
+				.hasNext();) {
+			Filters filters = searches.get(it.next());
 			filters.clearResult();
 		}
 	}
 
+	@Override
 	public void commit() throws DmtException {
-		Iterator i = operations.iterator();
+		Iterator<Operation> i = operations.iterator();
 		while (i.hasNext()) {
-			Operation operation = (Operation) i.next();
+			Operation operation = i.next();
 			if (operation.getOperation() == Operation.ADD_OBJECT) {
 				String[] path = operation.getObjectName();
 				if (path.length == 2)
@@ -66,17 +69,17 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 				String[] path = operation.getObjectName();				
 				if (path.length == 3) {
 					if (path[2].equals(RMTConstants.TARGET)) {
-						Filters fs = (Filters) searches.get(path[1]);
+						Filters fs = searches.get(path[1]);
 						if (fs != null)
 							fs.setTarget(operation.getData().getString());
 					}
 					if (path[2].equals(RMTConstants.FILTER)) {
-						Filters fs = (Filters) searches.get(path[1]);
+						Filters fs = searches.get(path[1]);
 						if (fs != null)
 							fs.setFilter(operation.getData().getString());
 					}
 					if (path[2].equals(RMTConstants.LIMIT)) {
-						Filters fs = (Filters) searches.get(path[1]);
+						Filters fs = searches.get(path[1]);
 						if (fs != null)
 							fs.setLimit(operation.getData().getInt());
 					}
@@ -90,10 +93,12 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 		rollback();
 	}
 
+	@Override
 	public void rollback() throws DmtException {
 		operations.clear();
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
 		if (type != null)
@@ -112,6 +117,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 				"There is no appropriate node for the given path.");
 	}
 
+	@Override
 	public void deleteNode(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath,rootLength);
 		if (path.length == 2) {
@@ -125,6 +131,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 				"There is no appropriate node for the given path.");
 	}
 
+	@Override
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath,rootLength);
@@ -152,6 +159,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 				"The given path indicates an unmodifiable node.");
 	}
 	
+	@Override
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
 		if (type == null)
 			return;
@@ -160,12 +168,14 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 					"Cannot set type property of interior nodes.");
 	}
 
+	@Override
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Cannot copy Filters MO.");
 	}
 
+	@Override
 	public void createLeafNode(String[] nodePath, DmtData value, String mimeType)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
@@ -173,6 +183,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 
 	}
 
+	@Override
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
@@ -180,6 +191,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,

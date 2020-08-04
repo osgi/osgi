@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -54,21 +55,21 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
 class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		TransactionalDataSession {
 
-	private Hashtable bundlesTableTmp = null;
-	private Hashtable bundlesTableSnap = null;
-	private Vector operations = null;
+	private Hashtable<String,BundleSubTree>	bundlesTableTmp				= null;
+	private Hashtable<String,BundleSubTree>	bundlesTableSnap			= null;
+	private Vector<Operation>				operations					= null;
 
-	private Vector uninstallBundles = null;
-	private Vector updateBundles = null;
-	private Vector startBundles = null;
-	private Vector stopBundles = null;
-	private Vector resolveBundles = null;
-	private Vector stopAndRefreshBundles = null;
-	private Vector bundleStartLevelCue = null;
+	private Vector<BundleSubTree>			uninstallBundles			= null;
+	private Vector<BundleSubTree>			updateBundles				= null;
+	private Vector<BundleSubTree>			startBundles				= null;
+	private Vector<BundleSubTree>			stopBundles					= null;
+	private Vector<BundleSubTree>			resolveBundles				= null;
+	private Vector<BundleSubTree>			stopAndRefreshBundles		= null;
+	private Vector<BundleSubTree>			bundleStartLevelCue			= null;
 	private BundleSubTree frameworkBs = null;
-	private Hashtable restoreBundlesForUninstall = null;
-	private Hashtable restoreBundlesForUpdate = null;
-	private Hashtable restoreBundles = null;
+	private Hashtable<BundleSubTree,String>	restoreBundlesForUninstall	= null;
+	private Hashtable<String,String>		restoreBundlesForUpdate		= null;
+	private Hashtable<String,String>		restoreBundles				= null;
 	private long			timeOut						= Long.parseLong(RMTConstants
 																.getProperty(
 			RMTConstants.TIMEOUT_FOR_SETSTARTLEVEL, "10000"));
@@ -80,28 +81,29 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			FrameworkReadOnlySession session) {
 		super(plugin, context);
 		this.bundlesTable = session.bundlesTable;
-		operations = new Vector();
-		bundlesTableTmp = new Hashtable();
-		bundlesTableSnap = new Hashtable();
-		operations = new Vector();
-		uninstallBundles = new Vector();
-		updateBundles = new Vector();
-		startBundles = new Vector();
-		stopBundles = new Vector();
-		resolveBundles = new Vector();
-		stopAndRefreshBundles = new Vector();
-		bundleStartLevelCue = new Vector();
-		restoreBundlesForUninstall = new Hashtable();
-		restoreBundlesForUpdate = new Hashtable();
-		restoreBundles = new Hashtable();
+		operations = new Vector<>();
+		bundlesTableTmp = new Hashtable<>();
+		bundlesTableSnap = new Hashtable<>();
+		operations = new Vector<>();
+		uninstallBundles = new Vector<>();
+		updateBundles = new Vector<>();
+		startBundles = new Vector<>();
+		stopBundles = new Vector<>();
+		resolveBundles = new Vector<>();
+		stopAndRefreshBundles = new Vector<>();
+		bundleStartLevelCue = new Vector<>();
+		restoreBundlesForUninstall = new Hashtable<>();
+		restoreBundlesForUpdate = new Hashtable<>();
+		restoreBundles = new Hashtable<>();
 		frameworkBs = null;
 	}
 
+	@Override
 	public void commit() throws DmtException {
-		this.bundlesTableSnap = (Hashtable) this.bundlesTable.clone();
-		Iterator i = operations.iterator();
+		this.bundlesTableSnap = new Hashtable<>(this.bundlesTable);
+		Iterator<Operation> i = operations.iterator();
 		while (i.hasNext()) {
-			Operation operation = (Operation) i.next();
+			Operation operation = i.next();
 			try {
 				if (operation.getOperation() == Operation.ADD_OBJECT) {
 					String[] path = operation.getObjectname();
@@ -112,7 +114,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				} else if (operation.getOperation() == Operation.SET_VALUE) {
 					String[] nodepath = operation.getObjectname();
 					if (nodepath[nodepath.length - 1].equals(RMTConstants.URL)) {
-						BundleSubTree bs = (BundleSubTree) this.bundlesTable
+						BundleSubTree bs = this.bundlesTable
 								.get(nodepath[nodepath.length - 2]);
 						bs.setURL(operation.getData().getString());
 						if (nodepath[nodepath.length - 2]
@@ -123,12 +125,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						}
 					} else if (nodepath[nodepath.length - 1]
 							.equals(RMTConstants.AUTOSTART)) {
-						BundleSubTree bs = (BundleSubTree) this.bundlesTable
+						BundleSubTree bs = this.bundlesTable
 								.get(nodepath[nodepath.length - 2]);
 						bs.setAutoStart(operation.getData().getBoolean());
 					} else if (nodepath[nodepath.length - 1]
 							.equals(RMTConstants.REQUESTEDSTATE)) {
-						BundleSubTree bs = (BundleSubTree) this.bundlesTable
+						BundleSubTree bs = this.bundlesTable
 								.get(nodepath[nodepath.length - 2]);
 						String requestedState = operation.getData().getString();
 						bs.setRequestedState(requestedState);
@@ -150,7 +152,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					} else if (nodepath[nodepath.length - 1]
 							.equals(RMTConstants.BUNDLESTARTLEVEL)
 							&& nodepath.length == 4) {
-						BundleSubTree bs = (BundleSubTree) this.bundlesTable
+						BundleSubTree bs = this.bundlesTable
 								.get(nodepath[nodepath.length - 2]);
 						int bundleStartLevel = operation.getData().getInt();
 						bs.setStartLevel(bundleStartLevel);
@@ -181,7 +183,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					}
 				}
 			} catch (Exception e) {
-				bundlesTable = (Hashtable) this.bundlesTableSnap.clone();
+				bundlesTable = new Hashtable<>(this.bundlesTableSnap);
 				rollback();
 				throw new DmtException(operation.getObjectname(),
 						DmtException.COMMAND_FAILED,
@@ -190,9 +192,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// Operation of uninstall and update
-		Iterator stopunit = this.uninstallBundles.iterator();
+		Iterator<BundleSubTree> stopunit = this.uninstallBundles.iterator();
 		while (stopunit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) stopunit.next();
+			BundleSubTree bs = stopunit.next();
 			String location = null;
 			try {
 				location = bs.getLocation();
@@ -208,9 +210,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						"The operation of stop encountered problems.");
 			}
 		}
-		Iterator stopupit = this.updateBundles.iterator();
+		Iterator<BundleSubTree> stopupit = this.updateBundles.iterator();
 		while (stopupit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) stopupit.next();
+			BundleSubTree bs = stopupit.next();
 			String location = null;
 			try {
 				location = bs.getLocation();
@@ -226,13 +228,13 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						"The operation of stop encountered problems.");
 			}
 		}
-		Iterator uninstallit = this.uninstallBundles.iterator();
+		Iterator<BundleSubTree> uninstallit = this.uninstallBundles.iterator();
 		while (uninstallit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) uninstallit.next();
+			BundleSubTree bs = uninstallit.next();
 			String location = null;
 			try {
 				location = bs.getLocation();
-				String state = (String) this.restoreBundles.get(location);
+				String state = this.restoreBundles.get(location);
 				bs.getBundleObj().uninstall();
 				this.restoreBundlesForUninstall.put(bs, state);
 				this.restoreBundles.remove(location);
@@ -245,15 +247,15 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						"The operation of uninstall encountered problems.");
 			}
 		}
-		Iterator updateit = this.updateBundles.iterator();
+		Iterator<BundleSubTree> updateit = this.updateBundles.iterator();
 		while (updateit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) updateit.next();
+			BundleSubTree bs = updateit.next();
 			String urlStr = bs.getURL();
 			URL url;
 			String location = null;
 			try {
 				location = bs.getLocation();
-				String state = (String) this.restoreBundles.get(location);
+				String state = this.restoreBundles.get(location);
 				url = new URL(urlStr);
 				InputStream is;
 				is = url.openStream();
@@ -279,10 +281,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// Operation of bundle installation
-		for (Enumeration keys = this.bundlesTableTmp.keys(); keys
+		for (Enumeration<String> keys = this.bundlesTableTmp.keys(); keys
 				.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(key);
+			String key = keys.nextElement();
+			BundleSubTree bs = this.bundlesTable.get(key);
 			String urlStr = bs.getURL();
 			if (urlStr.equals("")) {
 				throw new DmtException(key, DmtException.COMMAND_FAILED,
@@ -322,21 +324,21 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// refreshing installed bundles, uninstalled bundles and updated bundles
-		Vector bundles = new Vector();
-		Iterator refreshupi = this.updateBundles.iterator();
+		Vector<Bundle> bundles = new Vector<>();
+		Iterator<BundleSubTree> refreshupi = this.updateBundles.iterator();
 		while (refreshupi.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) refreshupi.next();
+			BundleSubTree bs = refreshupi.next();
 			bundles.add(bs.getBundleObj());
 		}
-		for (Enumeration keys = this.bundlesTableTmp.keys(); keys
+		for (Enumeration<String> keys = this.bundlesTableTmp.keys(); keys
 				.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(key);
+			String key = keys.nextElement();
+			BundleSubTree bs = this.bundlesTable.get(key);
 			bundles.add(bs.getBundleObj());
 		}
-		Iterator refreshuni = this.uninstallBundles.iterator();
+		Iterator<BundleSubTree> refreshuni = this.uninstallBundles.iterator();
 		while (refreshuni.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) refreshuni.next();
+			BundleSubTree bs = refreshuni.next();
 			bundles.add(bs.getBundleObj());
 		}
 		Bundle sysBundle = context.getBundle(0);
@@ -345,9 +347,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
         fw.refreshBundles(bundles);
 
 		// setting bundle's StartLevel
-		Iterator startLevelit = this.bundleStartLevelCue.iterator();
+		Iterator<BundleSubTree> startLevelit = this.bundleStartLevelCue
+				.iterator();
 		while (startLevelit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) startLevelit.next();
+			BundleSubTree bs = startLevelit.next();
 			int startLevel = bs.getStartLevelTmp();
 			BundleStartLevel sl = bs.getBundleObj().adapt(
 					BundleStartLevel.class);
@@ -369,9 +372,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// starting bundles
-		Iterator startit = this.startBundles.iterator();
+		Iterator<BundleSubTree> startit = this.startBundles.iterator();
 		while (startit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) startit.next();
+			BundleSubTree bs = startit.next();
 			boolean auto = bs.getAutoStart();
 			String location = null;
 			try {
@@ -394,9 +397,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// stopping bundles
-		Iterator stopit = this.stopBundles.iterator();
+		Iterator<BundleSubTree> stopit = this.stopBundles.iterator();
 		while (stopit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) stopit.next();
+			BundleSubTree bs = stopit.next();
 			String location = null;
 			try {
 				location = bs.getLocation();
@@ -415,10 +418,11 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 
 		// resolving bundles
-		Iterator resolveit = this.resolveBundles.iterator();
-		Vector resolveBundles = new Vector();
+		Iterator<BundleSubTree> resolveit = this.resolveBundles.iterator();
+		@SuppressWarnings("hiding")
+		Vector<Bundle> resolveBundles = new Vector<>();
 		while (resolveit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) resolveit.next();
+			BundleSubTree bs = resolveit.next();
 			String location = bs.getLocation();
 			String state = bs.getState();
 			resolveBundles.add(bs.getBundleObj());
@@ -428,10 +432,11 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		fw.resolveBundles(resolveBundles);
 
 		// stopping and refreshing bundles
-		Iterator stopandrefit = this.stopAndRefreshBundles.iterator();
-		Vector refreshBundles = new Vector();
+		Iterator<BundleSubTree> stopandrefit = this.stopAndRefreshBundles
+				.iterator();
+		Vector<Bundle> refreshBundles = new Vector<>();
 		while (stopandrefit.hasNext()) {
-			BundleSubTree bs = (BundleSubTree) stopandrefit.next();
+			BundleSubTree bs = stopandrefit.next();
 			String location = null;
 			try {
 				location = bs.getLocation();
@@ -460,6 +465,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	}
 
 	class FrameworkUpdateThread extends Thread {
+		@SuppressWarnings("hiding")
 		private int	waitTime	= Integer
 										.parseInt(RMTConstants
 												.getProperty(
@@ -468,16 +474,18 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		FrameworkUpdateThread() {
 		}
 
+		@Override
 		public void run() {
 			try {
 				wait(waitTime);
 			} catch (InterruptedException e1) {
+				// ignore
 			}
 			Framework framework = (Framework) context.getBundle(0);
 			try {
 				framework.update();
 			} catch (BundleException e) {
-				BundleSubTree bs = (BundleSubTree) bundlesTable
+				BundleSubTree bs = bundlesTable
 						.get(Constants.SYSTEM_BUNDLE_LOCATION);
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
@@ -487,6 +495,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	class FrameworkListenerForStartLevel implements FrameworkListener{
 		public boolean flag = false;
+		@Override
 		public void frameworkEvent(FrameworkEvent event) {
 			if(event.getType()==FrameworkEvent.STARTLEVEL_CHANGED)
 				flag = true;
@@ -494,13 +503,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	}
 	
 	protected void restore() {
-		Vector refreshBundles = new Vector();
+		Vector<Bundle> refreshBundles = new Vector<>();
 		Bundle sysBundle = context.getBundle(0);
 		FrameworkWiring fw = sysBundle
 				.adapt(FrameworkWiring.class);
-		for (Enumeration keys = this.restoreBundlesForUninstall.keys(); keys
+		for (Enumeration<BundleSubTree> keys = this.restoreBundlesForUninstall
+				.keys(); keys
 				.hasMoreElements();) {
-			BundleSubTree bs = (BundleSubTree) keys.nextElement();
+			BundleSubTree bs = keys.nextElement();
 			String urlStr = bs.getURL();
 			if (urlStr != null) {
 				try {
@@ -513,15 +523,17 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							this.restoreBundlesForUninstall.get(bs));
 					bs = null;
 				} catch (Exception e) {
+					// ignore
 				}
 			} else if (urlStr == null) {
 				bs = null;
 			}
 		}
-		for (Enumeration keys = this.restoreBundlesForUpdate.keys(); keys
+		for (Enumeration<String> keys = this.restoreBundlesForUpdate
+				.keys(); keys
 				.hasMoreElements();) {
-			String location = (String) keys.nextElement();
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableSnap
+			String location = keys.nextElement();
+			BundleSubTree bs = this.bundlesTableSnap
 					.get(location);
 			String urlStr = bs.getURL();
 			if (urlStr != null) {
@@ -534,20 +546,21 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							this.restoreBundlesForUpdate.get(location));
 					bs = null;
 				} catch (Exception e) {
+					// ignore
 				}
 			}
 		}
         fw.refreshBundles(refreshBundles);
-		refreshBundles = new Vector();
+		refreshBundles = new Vector<>();
 
-		for (Enumeration keys = this.restoreBundles.keys(); keys
+		for (Enumeration<String> keys = this.restoreBundles.keys(); keys
 				.hasMoreElements();) {
 			try {
-				String location = (String) keys.nextElement();
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				String location = keys.nextElement();
+				BundleSubTree bs = this.bundlesTable
 						.get(location);
 				String afterState = bs.getState();
-				String beforeState = (String) this.restoreBundles.get(location);
+				String beforeState = this.restoreBundles.get(location);
 				if (afterState.equals(beforeState))
 					continue;
 				if (beforeState.equals(RMTConstants.UNINSTALLED)) {
@@ -558,7 +571,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
                         fw.refreshBundles(refreshBundles);
 				} else if (beforeState.equals(RMTConstants.RESOLVED)) {
 					if (bs.getState().equals(RMTConstants.INSTALLED)) {
-						Vector resolveBundles = new Vector();
+						@SuppressWarnings("hiding")
+						Vector<Bundle> resolveBundles = new Vector<>();
 						resolveBundles.add(bs.getBundleObj());
 						fw.resolveBundles(resolveBundles);
 					} else {
@@ -572,28 +586,31 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						bs.getBundleObj().start(Bundle.START_TRANSIENT);
 				}
 			} catch (Exception e) {
+				// ignore
 			}
 		}
 	}
 
+	@Override
 	public void rollback() throws DmtException {
-		operations = new Vector();
-		bundlesTableTmp = new Hashtable();
-		bundlesTableSnap = new Hashtable();
-		operations = new Vector();
-		uninstallBundles = new Vector();
-		updateBundles = new Vector();
-		startBundles = new Vector();
-		stopBundles = new Vector();
-		resolveBundles = new Vector();
-		stopAndRefreshBundles = new Vector();
-		bundleStartLevelCue = new Vector();
-		restoreBundlesForUninstall = new Hashtable();
-		restoreBundlesForUpdate = new Hashtable();
-		restoreBundles = new Hashtable();
+		operations = new Vector<>();
+		bundlesTableTmp = new Hashtable<>();
+		bundlesTableSnap = new Hashtable<>();
+		operations = new Vector<>();
+		uninstallBundles = new Vector<>();
+		updateBundles = new Vector<>();
+		startBundles = new Vector<>();
+		stopBundles = new Vector<>();
+		resolveBundles = new Vector<>();
+		stopAndRefreshBundles = new Vector<>();
+		bundleStartLevelCue = new Vector<>();
+		restoreBundlesForUninstall = new Hashtable<>();
+		restoreBundlesForUpdate = new Hashtable<>();
+		restoreBundles = new Hashtable<>();
 		frameworkBs = null;
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
 		if (type != null)
@@ -615,6 +632,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				"There is no appropriate node for the given path.");
 	}
 
+	@Override
 	public void createLeafNode(String[] nodePath, DmtData data, String mimeType)
 			throws DmtException {
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
@@ -622,6 +640,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	}
 
+	@Override
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		String[] path = shapedPath(nodePath);
@@ -657,12 +676,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				"The given path indicates an interior node or a node which does not exist.");
 	}
 
+	@Override
 	public void deleteNode(String[] nodePath) throws DmtException {
 		// NOT supported operation in Framework MO.
 		throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
 				"The specified node can not be deleted.");
 	}
 
+	@Override
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
 		// NOT supported operation in Framework MO.
 		// do nothing, meta-data guarantees that type is "text/plain"
@@ -673,6 +694,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					"Cannot set type property of interior nodes.");
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
 		// NOT supported operation in Framework MO.
@@ -680,6 +702,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				"Title property is not supported.");
 	}
 
+	@Override
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
 		// NOT supported operation in Framework MO.
@@ -687,6 +710,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				"Cannot rename any node in the framework MO.");
 	}
 
+	@Override
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
 		// NOT supported operation in Framework MO.

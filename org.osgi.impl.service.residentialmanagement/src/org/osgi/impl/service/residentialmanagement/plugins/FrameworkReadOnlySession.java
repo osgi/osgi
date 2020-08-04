@@ -71,7 +71,7 @@ import org.osgi.service.dmt.spi.ReadableDataSession;
 class FrameworkReadOnlySession implements ReadableDataSession,
 		SynchronousBundleListener {
 	protected BundleContext context;
-	protected Hashtable bundlesTable = new Hashtable();
+	protected Hashtable<String,BundleSubTree>	bundlesTable			= new Hashtable<>();
 	protected Properties properties = null;
 	protected boolean managedFlag = false;
 	protected int signersInstanceId = 1;
@@ -98,14 +98,17 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// do nothing - the version and timestamp properties are not supported
 	}
 
+	@Override
 	public void close() throws DmtException {
 		// no cleanup needs to be done when closing read-only session
 	}
 	
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -122,7 +125,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (path[1].equals(RMTConstants.PROPERTY)) {
 				String[] children = new String[properties.size()];
 				int i = 0;
-				for (Enumeration keys = properties.keys(); keys
+				for (Enumeration<Object> keys = properties.keys(); keys
 						.hasMoreElements(); i++) {
 					children[i] = (String) keys.nextElement();
 				}
@@ -132,9 +135,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (path[1].equals(RMTConstants.BUNDLE)) {
 				String[] children = new String[bundlesTable.size()];
 				int i = 0;
-				for (Enumeration keys = bundlesTable.keys(); keys
+				for (Enumeration<String> keys = bundlesTable.keys(); keys
 						.hasMoreElements(); i++) {
-					children[i] = (String) keys.nextElement();
+					children[i] = keys.nextElement();
 				}
 				return children;
 			}
@@ -142,7 +145,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 3 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				Node node = bs.getLocatonNode();
 				return node.getChildNodeNames();
@@ -152,7 +155,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (path[3].equals(RMTConstants.BUNDLETYPE)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
 					if (bs.getBundleType() != null) {
 						String[] type = new String[1];
@@ -165,34 +168,34 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 			if (path[3].equals(RMTConstants.HEADERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
-					Dictionary headers = bs.getHeaders();
+					Dictionary<String,String> headers = bs.getHeaders();
 					String[] children = new String[headers.size()];
-					Enumeration keys = headers.keys();
+					Enumeration<String> keys = headers.keys();
 					for (int i = 0; keys.hasMoreElements(); i++) {
-						children[i] = (String) keys.nextElement();
+						children[i] = keys.nextElement();
 					}
 					return children;
 				}
 			}
 			if (path[3].equals(RMTConstants.ENTRIES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
 					return setListNodeNameForVector(bs.getEntries());
 				}
 			}
 			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
 					return setListNodeNameForVector(bs.getSigners());
 				}
 			}
 			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
 					return setListNodeNameForMap(bs.getWires());
 				}
@@ -202,9 +205,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		if (path.length == 5) {
 			if (path[3].equals(RMTConstants.ENTRIES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
-					Vector entries = bs.getEntries();
+					Vector<EntrySubtree> entries = bs.getEntries();
 					try {
 						entries.get(Integer.parseInt(path[4]));
 						String[] children = new String[3];
@@ -220,9 +223,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
-					Vector signers = bs.getSigners();
+					Vector<SignersSubtree> signers = bs.getSigners();
 					try {
 						signers.get(Integer.parseInt(path[4]));
 						String[] children = new String[3];
@@ -238,10 +241,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
-					Map wires = bs.getWires();
-					Vector list = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> list = wires.get(path[4]);
 					String[] children = new String[list.size()];
 					for (int i = 0; i < list.size(); i++) {
 						children[i] = Integer.toString(i);
@@ -254,13 +257,13 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		if (path.length == 6) {
 			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
-					Vector signers = bs.getSigners();
+					Vector<SignersSubtree> signers = bs.getSigners();
 					try {
-						SignersSubtree ss = (SignersSubtree) signers
+						SignersSubtree ss = signers
 								.get(Integer.parseInt(path[4]));
-						Vector chainList = ss.getCertifitateChainList();
+						Vector<String> chainList = ss.getCertifitateChainList();
 						String[] children = new String[chainList.size()];
 						for (int i = 0; i < chainList.size(); i++) {
 							children[i] = Integer.toString(i);
@@ -277,10 +280,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTable
+					BundleSubTree bs = this.bundlesTable
 							.get(path[2]);
 					if (bs.getWires() != null) {
-						Vector vec = (Vector) bs.getWires()
+						Vector<WiresSubtree> vec = bs.getWires()
 								.get(path[4]);
 						if (vec != null) {
 							try {
@@ -308,10 +311,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 7 && path[3].equals(RMTConstants.WIRES)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				if (bs.getWires() != null) {
-					Vector vec = (Vector) bs.getWires().get(path[4]);
+					Vector<WiresSubtree> vec = bs.getWires().get(path[4]);
 					if (vec != null) {
 						try {
 							vec.get(Integer.parseInt(path[5]));
@@ -339,13 +342,13 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 8 && path[3].equals(RMTConstants.WIRES)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				if (bs.getWires() != null) {
-					Vector vec = (Vector) bs.getWires().get(path[4]);
+					Vector<WiresSubtree> vec = bs.getWires().get(path[4]);
 					if (vec != null) {
 						try {
-							WiresSubtree ws = (WiresSubtree) vec.get(Integer
+							WiresSubtree ws = vec.get(Integer
 									.parseInt(path[5]));
 							if (path[6].equals(RMTConstants.REQUIREMENT)
 									&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
@@ -375,6 +378,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		"The specified node does not exist in the framework object.");
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -839,25 +843,30 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				"No such node defined in the Framework.");
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		return getNodeValue(nodePath).getSize();
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Version property is not supported.");
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property is not supported.");
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property is not supported.");
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 		if (path.length == 1)
@@ -909,6 +918,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				"The specified node does not exist in the framework object.");
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
 
@@ -935,7 +945,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				Node node = bs.getLocatonNode();
 				if (node.findNode(new String[] { path[3] }) != null)
@@ -945,19 +955,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 5 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				if (path[3].equals(RMTConstants.BUNDLETYPE)) {
 					if (bs.getBundleType() != null)
 						return true;
 				}
 				if (path[3].equals(RMTConstants.HEADERS)) {
-					Dictionary headers = bs.getHeaders();
+					Dictionary<String,String> headers = bs.getHeaders();
 					if (headers.get(path[4]) != null)
 						return true;
 				}
 				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector entries = bs.getEntries();
+					Vector<EntrySubtree> entries = bs.getEntries();
 					try {
 						entries.get(Integer.parseInt(path[4]));
 						return true;
@@ -966,7 +976,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector signers = bs.getSigners();
+					Vector<SignersSubtree> signers = bs.getSigners();
 					try {
 						signers.get(Integer.parseInt(path[4]));
 						return true;
@@ -975,7 +985,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
 					if (wires.get(path[4]) != null)
 						return true;
 				}
@@ -984,10 +994,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 6 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector entries = bs.getEntries();
+					Vector<EntrySubtree> entries = bs.getEntries();
 					try {
 						entries.get(Integer.parseInt(path[4]));
 						if (path[5].equals(RMTConstants.PATH) || path[5].equals(RMTConstants.CONTENT)
@@ -998,7 +1008,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector signers = bs.getSigners();
+					Vector<SignersSubtree> signers = bs.getSigners();
 					try {
 						signers.get(Integer.parseInt(path[4]));
 						if (path[5].equals(RMTConstants.ISTRUSTED)
@@ -1010,8 +1020,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> vec = wires.get(path[4]);
 					if (vec != null) {
 						try {
 							vec.get(Integer.parseInt(path[5]));
@@ -1026,14 +1036,14 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 7 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				BundleSubTree bs = this.bundlesTable
 						.get(path[2]);
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector signers = bs.getSigners();
+					Vector<SignersSubtree> signers = bs.getSigners();
 					try {
-						SignersSubtree ss = (SignersSubtree) signers
+						SignersSubtree ss = signers
 								.get(Integer.parseInt(path[4]));
-						Vector list = ss.getCertifitateChainList();
+						Vector<String> list = ss.getCertifitateChainList();
 						list.get(Integer.parseInt(path[6]));
 						return true;
 					} catch (ArrayIndexOutOfBoundsException ae) {
@@ -1041,8 +1051,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> vec = wires.get(path[4]);
 					if (vec != null) {
 						try {
 							vec.get(Integer.parseInt(path[5]));
@@ -1062,10 +1072,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 8 && path[1].equals(RMTConstants.BUNDLE)) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (path[3].equals(RMTConstants.WIRES)) {
-				Map wires = bs.getWires();
-				Vector vec = (Vector) wires.get(path[4]);
+				Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+				Vector<WiresSubtree> vec = wires.get(path[4]);
 				if (vec != null) {
 					try {
 						vec.get(Integer.parseInt(path[5]));
@@ -1083,35 +1093,35 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 9 && path[1].equals(RMTConstants.BUNDLE)) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (path[3].equals(RMTConstants.WIRES)) {
-				Map wires = bs.getWires();
-				Vector vec = (Vector) wires.get(path[4]);
+				Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+				Vector<WiresSubtree> vec = wires.get(path[4]);
 				WiresSubtree ws;
 				if (vec != null) {
 					try {
-						ws = (WiresSubtree) vec.get(Integer.parseInt(path[5]));
+						ws = vec.get(Integer.parseInt(path[5]));
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						return false;
 					}
 					if (path[6].equals(RMTConstants.REQUIREMENT)
 							&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-						Map rd = ws.getRequirementDirective();
+						Map<String,String> rd = ws.getRequirementDirective();
 						return !rd.isEmpty();
 					}
 					if (path[6].equals(RMTConstants.REQUIREMENT)
 							&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-						Map ra = ws.getRequirementAttribute();
+						Map<String,Object> ra = ws.getRequirementAttribute();
 						return !ra.isEmpty();
 					}
 					if (path[6].equals(RMTConstants.CAPABILITY)
 							&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-						Map cd = ws.getCapabilityDirective();
+						Map<String,String> cd = ws.getCapabilityDirective();
 						return !cd.isEmpty();
 					}
 					if (path[6].equals(RMTConstants.CAPABILITY)
 							&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
-						Map ca = ws.getCapabilityAttribute();
+						Map<String,Object> ca = ws.getCapabilityAttribute();
 						return !ca.isEmpty();
 					}
 				}
@@ -1121,6 +1131,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return false;
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -1185,6 +1196,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return false;
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 		if (path.length == 1)
@@ -1194,7 +1206,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 2) {
 			Bundle sysBundle = context.getBundle(0);
-			FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
+			FrameworkStartLevel fs = sysBundle
 					.adapt(FrameworkStartLevel.class);
 			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)) {
 				int st = fs.getStartLevel();
@@ -1215,7 +1227,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 4) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.URL))
@@ -1248,15 +1260,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 5) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.BUNDLETYPE) && path[4].equals("0")) {
 					return new DmtData(bs.getBundleType());
 				}
 				if (path[3].equals(RMTConstants.HEADERS)) {
-					Dictionary dic = bs.getHeaders();
-					String value = (String) dic.get(path[4]);
+					Dictionary<String,String> dic = bs.getHeaders();
+					String value = dic.get(path[4]);
 					if (value != null)
 						return new DmtData(value);
 				}
@@ -1264,12 +1276,12 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 6) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector vec = bs.getEntries();
-					EntrySubtree es = (EntrySubtree) vec.get(Integer
+					Vector<EntrySubtree> vec = bs.getEntries();
+					EntrySubtree es = vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.PATH))
 						return new DmtData(es.getPath());
@@ -1279,8 +1291,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						return new DmtData(es.getInstanceId());
 				}
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = bs.getSigners();
-					SignersSubtree ss = (SignersSubtree) vec.get(Integer
+					Vector<SignersSubtree> vec = bs.getSigners();
+					SignersSubtree ss = vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.ISTRUSTED))
 						return new DmtData(ss.isTrusted());
@@ -1291,27 +1303,27 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 7) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = bs.getSigners();
-					SignersSubtree ss = (SignersSubtree) vec.get(Integer
+					Vector<SignersSubtree> vec = bs.getSigners();
+					SignersSubtree ss = vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.CERTIFICATECHAIN)) {
-						Vector cvec = ss.getCertifitateChainList();
-						String name = (String) cvec.get(Integer
+						Vector<String> cvec = ss.getCertifitateChainList();
+						String name = cvec.get(Integer
 								.parseInt(path[6]));
 						return new DmtData(name);
 					}
 				}
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> vec = wires.get(path[4]);
 					WiresSubtree ws;
 					if (vec != null) {
 						try {
-							ws = (WiresSubtree) vec.get(Integer
+							ws = vec.get(Integer
 									.parseInt(path[5]));
 						} catch (ArrayIndexOutOfBoundsException ae) {
 							throw new DmtException(nodePath,
@@ -1332,16 +1344,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 8) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> vec = wires.get(path[4]);
 					WiresSubtree ws;
 					if (vec != null) {
 						try {
-							ws = (WiresSubtree) vec.get(Integer
+							ws = vec.get(Integer
 									.parseInt(path[5]));
 						} catch (ArrayIndexOutOfBoundsException ae) {
 							throw new DmtException(nodePath,
@@ -1357,16 +1369,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 9) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
+			BundleSubTree bs = this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
+					Map<String,Vector<WiresSubtree>> wires = bs.getWires();
+					Vector<WiresSubtree> vec = wires.get(path[4]);
 					WiresSubtree ws;
 					if (vec != null) {
 						try {
-							ws = (WiresSubtree) vec.get(Integer
+							ws = vec.get(Integer
 									.parseInt(path[5]));
 						} catch (ArrayIndexOutOfBoundsException ae) {
 							throw new DmtException(nodePath,
@@ -1376,13 +1388,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 						if (path[6].equals(RMTConstants.REQUIREMENT)) {
 							if (path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-								Map rd = ws.getRequirementDirective();
+								Map<String,String> rd = ws
+										.getRequirementDirective();
 								if (!rd.isEmpty())
 									return new DmtData(rd.get(path[8])
 											.toString());
 							}
 							if (path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-								Map ra = ws.getRequirementAttribute();
+								Map<String,Object> ra = ws
+										.getRequirementAttribute();
 								if (!ra.isEmpty())
 									return new DmtData(ra.get(path[8])
 											.toString());
@@ -1390,21 +1404,23 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						}
 						if (path[6].equals(RMTConstants.CAPABILITY)) {
 							if (path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-								Map cd = ws.getCapabilityDirective();
+								Map<String,String> cd = ws
+										.getCapabilityDirective();
 								if (!cd.isEmpty())
 									return new DmtData(cd.get(path[8])
 											.toString());
 							}
 							if (path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
-								Map ca = ws.getCapabilityAttribute();
+								Map<String,Object> ca = ws
+										.getCapabilityAttribute();
 								if (!ca.isEmpty()) {
 									Object obj = ca.get(path[8]);
 									if (obj instanceof Collection) {
-										ArrayList list = new ArrayList(
-												(Collection) obj);
+										List<Object> list = new ArrayList<>(
+												(Collection< ? >) obj);
 										return new DmtData(list.toString());
 									} else if (obj instanceof Object[]) {
-										ArrayList list = new ArrayList(
+										List<Object> list = new ArrayList<>(
 												Arrays.asList((Object[]) obj));
 										return new DmtData(list.toString());
 									}
@@ -1431,16 +1447,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return newPath;
 	}
 	
-	private String[] setListNodeNameForMap(Map map){
+	private String[] setListNodeNameForMap(Map<String, ? > map) {
 		String[] children = new String[map.size()];
-		Iterator it = map.keySet().iterator();
+		Iterator<String> it = map.keySet().iterator();
 		for (int i = 0; it.hasNext(); i++) {
-			children[i] = (String) it.next();
+			children[i] = it.next();
 		}
 		return children;
 	}
 	
-	private String[] setListNodeNameForVector(Vector vec){
+	private String[] setListNodeNameForVector(Vector< ? > vec) {
 		String[] children = new String[vec.size()];
 		for (int i = 0; i < vec.size(); i++) {
 			children[i] = Integer.toString(i);
@@ -1448,6 +1464,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return children;
 	}
 
+	@Override
 	public void bundleChanged(BundleEvent event) {
 		synchronized (this.bundlesTable){
 			if (!this.managedFlag) {
@@ -1468,7 +1485,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					this.bundlesTable.put(location, bs);
 					return;
 				}
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(bundle
+				BundleSubTree bs = this.bundlesTable.get(bundle
 						.getLocation());
 				if (!bs.getCreateFlag()) {
 					bs.createNodes(bundle);
@@ -1476,7 +1493,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			} else if (event.getType() == BundleEvent.RESOLVED
 					|| event.getType() == BundleEvent.STARTED) {
 				String location = Uri.encode(bundle.getLocation());
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(location);
+				BundleSubTree bs = this.bundlesTable.get(location);
 				bs.createWires();
 			} else if (event.getType() == BundleEvent.UNINSTALLED) {
 				String location = Uri.encode(bundle.getLocation());
@@ -1487,56 +1504,56 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 	public void managedWires() {
 		if (!this.bundlesTable.isEmpty()) {
-			for (Enumeration keys = this.bundlesTable.keys(); keys
+			for (Enumeration<String> keys = this.bundlesTable.keys(); keys
 					.hasMoreElements();) {
-				String location = (String) keys.nextElement();
-				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+				String location = keys.nextElement();
+				BundleSubTree bs = this.bundlesTable
 						.get(location);
 				bs.createWires();
 			}
 		}
 	}
 
-	protected Map managedWires(Bundle bundle) {
+	protected Map<String,Vector<WiresSubtree>> managedWires(Bundle bundle) {
 		packageWiresInstanceId = 1;
 		hostWiresInstanceId = 1;
 		bundleWiresInstanceId = 1;
 		serviceWiresInstanceId = 1;
 
-		Map wires = new HashMap();
+		Map<String,Vector<WiresSubtree>> wires = new HashMap<>();
 
-		Vector packageList = new Vector();
-		Vector hostList = new Vector();
-		Vector bundleList = new Vector();
-		Vector serviceList = new Vector();
+		Vector<WiresSubtree> packageList = new Vector<>();
+		Vector<WiresSubtree> hostList = new Vector<>();
+		Vector<WiresSubtree> bundleList = new Vector<>();
+		Vector<WiresSubtree> serviceList = new Vector<>();
 
-		BundleWiring wiring = (BundleWiring) bundle.adapt(BundleWiring.class);
+		BundleWiring wiring = bundle.adapt(BundleWiring.class);
 
-		List packageRequiredWireList = wiring
+		List<BundleWire> packageRequiredWireList = wiring
 				.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE);
 		packageList.addAll(createWiresSubtree(packageRequiredWireList,
 				BundleRevision.PACKAGE_NAMESPACE));
-		List packageProvidedWireList = wiring
+		List<BundleWire> packageProvidedWireList = wiring
 				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		packageList.addAll(createWiresSubtree(packageProvidedWireList,
 				BundleRevision.PACKAGE_NAMESPACE));
 		wires.put(BundleRevision.PACKAGE_NAMESPACE, packageList);
 
-		List hostRequiredWireList = wiring
+		List<BundleWire> hostRequiredWireList = wiring
 				.getRequiredWires(BundleRevision.HOST_NAMESPACE);
 		hostList.addAll(createWiresSubtree(hostRequiredWireList,
 				BundleRevision.HOST_NAMESPACE));
-		List hostProvidedWireList = wiring
+		List<BundleWire> hostProvidedWireList = wiring
 				.getProvidedWires(BundleRevision.HOST_NAMESPACE);
 		hostList.addAll(createWiresSubtree(hostProvidedWireList,
 				BundleRevision.HOST_NAMESPACE));
 		wires.put(BundleRevision.HOST_NAMESPACE, hostList);
 
-		List bundleRequiredWireList = wiring
+		List<BundleWire> bundleRequiredWireList = wiring
 				.getRequiredWires(BundleRevision.BUNDLE_NAMESPACE);
 		bundleList.addAll(createWiresSubtree(bundleRequiredWireList,
 				BundleRevision.BUNDLE_NAMESPACE));
-		List bundleProvidedWireList = wiring
+		List<BundleWire> bundleProvidedWireList = wiring
 				.getProvidedWires(BundleRevision.BUNDLE_NAMESPACE);
 		bundleList.addAll(createWiresSubtree(bundleProvidedWireList,
 				BundleRevision.BUNDLE_NAMESPACE));
@@ -1548,20 +1565,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return wires;
 	}
 
-	private Vector createServiceWiresSubtree(Bundle bundle) {
+	private Vector<WiresSubtree> createServiceWiresSubtree(Bundle bundle) {
 		int id = serviceWiresInstanceId;
-		Vector list = new Vector();
+		Vector<WiresSubtree> list = new Vector<>();
 		try {
-			ServiceReference[] references = context.getAllServiceReferences(
+			ServiceReference< ? >[] references = context
+					.getAllServiceReferences(
 					null, null);
 			for (int i = 0; i < references.length; i++) {
 				String registerBundleLocation = references[i].getBundle()
 						.getLocation();
 				String thisBundleLocation = bundle.getLocation();
-				Map capabilityDirective = new HashMap();
-				Map requirementDirective = new HashMap();
-				Map capabilityAttribute = new HashMap();
-				Map requirementAttribute = new HashMap();
+				Map<String,String> capabilityDirective = new HashMap<>();
+				Map<String,String> requirementDirective = new HashMap<>();
+				Map<String,Object> capabilityAttribute = new HashMap<>();
+				Map<String,Object> requirementAttribute = new HashMap<>();
 				capabilityAttribute.put(RMTConstants.SERVICE_NAMESPACE, references[i]
 						.getProperty(Constants.SERVICE_ID).toString());
 				String[] keys = references[i].getPropertyKeys();
@@ -1604,14 +1622,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				}
 			}
 		} catch (InvalidSyntaxException e) {
+			// ignore
 		}
 		return list;
 	}
 
-	private Vector createWiresSubtree(List list, String nameSpace) {
+	private Vector<WiresSubtree> createWiresSubtree(List<BundleWire> list,
+			String nameSpace) {
 
 		int id = 0;
-		Vector vec = new Vector();
+		Vector<WiresSubtree> vec = new Vector<>();
 
 		if (nameSpace.equals(BundleRevision.PACKAGE_NAMESPACE)) {
 			id = packageWiresInstanceId;
@@ -1622,9 +1642,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		if (nameSpace.equals(BundleRevision.BUNDLE_NAMESPACE)) {
 			id = bundleWiresInstanceId;
 		}
-		Iterator it = list.iterator();
-		for (int i = 0; it.hasNext(); i++) {
-			BundleWire wire = (BundleWire) it.next();
+		for (Iterator<BundleWire> it = list.iterator(); it.hasNext();) {
+			BundleWire wire = it.next();
 			BundleCapability capability = wire.getCapability();
 			BundleRequirement requirement = wire.getRequirement();
 			String providerLocation = wire.getProviderWiring().getBundle()
@@ -1644,10 +1663,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		String requirer = null;
 		String provider = null;
 		int instanceId = 0;
-		Map requirementDirectives = null;
-		Map capabilityDirectives = null;
-		Map requirementAttributes = null;
-		Map capabilityAttributes = null;
+		Map<String,String>	requirementDirectives	= null;
+		Map<String,String>	capabilityDirectives	= null;
+		Map<String,Object>	requirementAttributes	= null;
+		Map<String,Object>	capabilityAttributes	= null;
 		String filter = "";
 
 		WiresSubtree(String nameSpace, String require, String provider, int id,
@@ -1663,8 +1682,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		WiresSubtree(String nameSpace, String require, String provider, int id,
-				Map requirementDirectives, Map requirementAttributes,
-				Map capabilityDirectives, Map capabilityAttributes,
+				Map<String,String> requirementDirectives,
+				Map<String,Object> requirementAttributes,
+				Map<String,String> capabilityDirectives,
+				Map<String,Object> capabilityAttributes,
 				String filter) {
 			this.nameSpace = nameSpace;
 			this.requirer = require;
@@ -1697,19 +1718,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			return this.filter;
 		}
 
-		protected Map getRequirementDirective() {
+		protected Map<String,String> getRequirementDirective() {
 			return this.requirementDirectives;
 		}
 
-		protected Map getRequirementAttribute() {
+		protected Map<String,Object> getRequirementAttribute() {
 			return this.requirementAttributes;
 		}
 
-		protected Map getCapabilityDirective() {
+		protected Map<String,String> getCapabilityDirective() {
 			return this.capabilityDirectives;
 		}
 
-		protected Map getCapabilityAttribute() {
+		protected Map<String,Object> getCapabilityAttribute() {
 			return this.capabilityAttributes;
 		}
 	}
@@ -1722,9 +1743,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		int type = -1;
 		String message = "";
 		String requestedState = "";
-		Vector entries = null;
-		Vector signers = null;
-		Map wires = null;
+		Vector<EntrySubtree>	entries				= null;
+		Vector<SignersSubtree>	signers				= null;
+		Map<String,Vector<WiresSubtree>>	wires				= null;
 		Node locationNode = null;
 		int bundleStartLevelTmp = 0;
 		boolean createFlag = false;
@@ -1771,7 +1792,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			this.signers = managedSigners(this.bundle);
 		}
 
-		protected void createNodes(Bundle bundle) {
+		protected void createNodes(@SuppressWarnings("hiding") Bundle bundle) {
 			this.bundle = bundle;
 			this.createFlag = true;
 			locationNode.addNode(new Node(RMTConstants.BUNDLEID, null, false));
@@ -1854,7 +1875,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		protected String getBundleType() {
-			BundleRevision rev = (BundleRevision) this.bundle
+			BundleRevision rev = this.bundle
 					.adapt(BundleRevision.class);
 			int bundleType = rev.getTypes();
 			if (bundleType == 1)
@@ -1863,7 +1884,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				return null;
 		}
 
-		protected Dictionary getHeaders() {
+		protected Dictionary<String,String> getHeaders() {
 			if (this.bundle == null)
 				return null;
 			else
@@ -1903,7 +1924,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		protected int getStartLevel() {
-			BundleStartLevel sl = (BundleStartLevel) this.bundle
+			BundleStartLevel sl = this.bundle
 					.adapt(BundleStartLevel.class);
 			return sl.getStartLevel();
 		}
@@ -1914,7 +1935,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		protected void setStartLevel(int stl) {
 			this.bundleStartLevelTmp = stl;
-			BundleStartLevel sl = (BundleStartLevel) this.bundle
+			BundleStartLevel sl = this.bundle
 					.adapt(BundleStartLevel.class);
 			sl.setStartLevel(stl);
 		}
@@ -1924,15 +1945,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			return Integer.parseInt(Long.toString(bundleId));
 		}
 
-		protected Vector getEntries() {
+		protected Vector<EntrySubtree> getEntries() {
 			return entries;
 		}
 
-		protected Vector getSigners() {
+		protected Vector<SignersSubtree> getSigners() {
 			return signers;
 		}
 
-		protected Map getWires() {
+		protected Map<String,Vector<WiresSubtree>> getWires() {
 			return wires;
 		}
 	}
@@ -1942,7 +1963,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		static final String LEAF = "leaf";
 		private String name;
 		private String type;
-		private Vector children = new Vector();
+		private Vector<Node>	children	= new Vector<>();
 
 		Node(String name, Node[] children, boolean nodeType) {
 			this.name = name;
@@ -1951,7 +1972,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					this.children.add(children[i]);
 				}
 			} else
-				this.children = new Vector();
+				this.children = new Vector<>();
 			if (nodeType)
 				type = INTERIOR;
 			else
@@ -1960,15 +1981,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		protected Node findNode(String[] path) {
 			for (int i = 0; i < children.size(); i++) {
-				if ((((Node) children.get(i)).getName()).equals(path[0])) {
+				if ((children.get(i).getName()).equals(path[0])) {
 					if (path.length == 1) {
-						return (Node) children.get(i);
+						return children.get(i);
 					} else {
 						String[] nextpath = new String[path.length - 1];
 						for (int x = 1; x < path.length; x++) {
 							nextpath[x - 1] = path[x];
 						}
-						return ((Node) children.get(i)).findNode(nextpath);
+						return children.get(i).findNode(nextpath);
 					}
 				}
 			}
@@ -1990,15 +2011,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		protected Node[] getChildren() {
 			Node[] nodes = new Node[children.size()];
 			for (int i = 0; i < children.size(); i++) {
-				nodes[i] = ((Node) children.get(i));
+				nodes[i] = (children.get(i));
 			}
 			return nodes;
 		}
 
 		protected String[] getChildNodeNames() {
+			@SuppressWarnings("hiding")
 			String[] name = new String[children.size()];
 			for (int i = 0; i < children.size(); i++) {
-				Node node = ((Node) children.get(i));
+				Node node = (children.get(i));
 				name[i] = node.getName();
 			}
 			return name;
@@ -2009,19 +2031,22 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 	}
 
-	protected Vector managedSigners(Bundle bundle) {
-		Map signersAll = bundle.getSignerCertificates(Bundle.SIGNERS_ALL);
-		Map signersTrusted = bundle
+	protected Vector<SignersSubtree> managedSigners(Bundle bundle) {
+		Map<X509Certificate,List<X509Certificate>> signersAll = bundle
+				.getSignerCertificates(Bundle.SIGNERS_ALL);
+		Map<X509Certificate,List<X509Certificate>> signersTrusted = bundle
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		Vector certList = new Vector();
-		Iterator it = signersAll.keySet().iterator();
-		for (int i = 0; it.hasNext(); i++) {
-			Vector certChainList = new Vector();
-			X509Certificate cert = (X509Certificate) it.next();
-			List certificateChane = (List) signersAll.get(cert);
-			for (Iterator itCert = certificateChane.iterator(); itCert
+		Vector<SignersSubtree> certList = new Vector<>();
+
+		for (Iterator<X509Certificate> it = signersAll.keySet().iterator(); it
+				.hasNext();) {
+			Vector<String> certChainList = new Vector<>();
+			X509Certificate cert = it.next();
+			List<X509Certificate> certificateChane = signersAll.get(cert);
+			for (Iterator<X509Certificate> itCert = certificateChane
+					.iterator(); itCert
 					.hasNext();) {
-				X509Certificate certs = (X509Certificate) itCert.next();
+				X509Certificate certs = itCert.next();
 				certChainList.add(certs.getSubjectDN().getName());
 			}
 			if (signersTrusted.get(cert) != null) {
@@ -2042,9 +2067,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 	protected class SignersSubtree {
 		boolean trust = false;
 		int id = 0;
-		Vector certChainList = null;
+		Vector<String>	certChainList	= null;
 
-		SignersSubtree(boolean trust, int id, Vector certChainList) {
+		SignersSubtree(boolean trust, int id, Vector<String> certChainList) {
 			this.certChainList = certChainList;
 			this.id = id;
 			this.trust = trust;
@@ -2058,20 +2083,22 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			return trust;
 		}
 
-		protected Vector getCertifitateChainList() {
+		protected Vector<String> getCertifitateChainList() {
 			return certChainList;
 		}
 	}
 
-	protected Vector managedEntries(Vector entries, Bundle bundle, String p) {
+	protected Vector<EntrySubtree> managedEntries(Vector<EntrySubtree> entries,
+			Bundle bundle,
+			String p) {
 		if (entries == null) {
-			entries = new Vector();
+			entries = new Vector<>();
 		}
-		Vector entryPathes = new Vector();
+		Vector<String> entryPathes = new Vector<>();
 		bundleEntry(entryPathes, bundle, p);
-		Iterator ite = entryPathes.iterator();
+		Iterator<String> ite = entryPathes.iterator();
 		while (ite.hasNext()) {
-			String path = (String) ite.next();
+			String path = ite.next();
 			try {
 				BufferedInputStream bis = new BufferedInputStream(bundle
 						.getEntry(Uri.decode(path)).openStream());
@@ -2092,10 +2119,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return entries;
 	}
 
-	private void bundleEntry(Vector entry, Bundle bundle, String p) {
-		Enumeration pathes = bundle.getEntryPaths(p);
+	private void bundleEntry(Vector<String> entry, Bundle bundle, String p) {
+		Enumeration<String> pathes = bundle.getEntryPaths(p);
 		while (pathes.hasMoreElements()) {
-			String path = (String) pathes.nextElement();
+			String path = pathes.nextElement();
 			if (path.endsWith("/"))
 				bundleEntry(entry, bundle, path);
 			else {

@@ -45,6 +45,7 @@ public class LogStructureTestCase extends RMTTestBase {
 
 	private LogService log;
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		log = getService(LogService.class);

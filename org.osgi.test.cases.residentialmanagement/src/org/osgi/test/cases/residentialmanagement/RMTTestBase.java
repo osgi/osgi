@@ -66,6 +66,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		DELAY = delay;
 	}
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		loggerAdminReference = getContext()
@@ -85,6 +86,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	}
 
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println("tearing down");

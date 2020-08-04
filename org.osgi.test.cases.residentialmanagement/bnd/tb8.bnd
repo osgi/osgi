@@ -9,3 +9,4 @@ Require-Bundle:			${p}.tb1.jar
 Bundle-Category:		osgi, test
 
 -privatepackage =		${p}.tb8
+-fixupmessages.host: "Host * for this fragment"

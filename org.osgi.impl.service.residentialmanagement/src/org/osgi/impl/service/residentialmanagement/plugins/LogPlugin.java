@@ -48,19 +48,22 @@ public class LogPlugin implements DataPlugin {
     	readonly.removeListener();
 	}
     
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         return readonly;
     }
 
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
     	readwrite.setKeepLogEntry();
     	//readwrite.setLogEntry();
         return readwrite;
     }
 
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
     	readwrite.setKeepLogEntry();   	
     	//readwrite.setLogEntry();
