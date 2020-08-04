@@ -10,25 +10,35 @@
 package org.osgi.impl.service.useradmin;
 
 import java.util.Hashtable;
-import org.osgi.framework.*;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.useradmin.UserAdmin;
 
-public class Activator implements BundleActivator, ServiceFactory {
+public class Activator implements BundleActivator, ServiceFactory<UserAdmin> {
 	protected BundleContext			bc;
-	protected ServiceRegistration	uasr	= null;
+	protected ServiceRegistration<UserAdmin>	uasr	= null;
 	protected UserAdminImpl			ua;
 	protected LogTracker			log;
 
 	/*
 	 * BundleActivator implementation.
 	 */
-	public void start(BundleContext bc) throws BundleException {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext bc)
+			throws BundleException {
 		try {
 			this.bc = bc;
 			log = new LogTracker(bc);
 			ua = new UserAdminImpl(this);
-			uasr = bc.registerService(UserAdmin.class.getName(), this,
-					new Hashtable());
+			uasr = (ServiceRegistration<UserAdmin>) bc.registerService(
+					UserAdmin.class.getName(), this,
+					new Hashtable<>());
 		}
 		catch (Exception e) {
 			log.error("Error starting UserAdmin service", e);
@@ -36,7 +46,9 @@ public class Activator implements BundleActivator, ServiceFactory {
 		}
 	}
 
-	public void stop(BundleContext bc) throws BundleException {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext bc)
+			throws BundleException {
 		// Kill the UserAdmin. Needed to invalidate objects handed out.
 		ua.die();
 	}
@@ -44,12 +56,15 @@ public class Activator implements BundleActivator, ServiceFactory {
 	/*
 	 * ServiceFactory implementation.
 	 */
-	public Object getService(Bundle b, ServiceRegistration sr) {
+	@Override
+	public UserAdmin getService(Bundle b, ServiceRegistration<UserAdmin> sr) {
 		uasr = sr;
 		return ua;
 	}
 
-	public void ungetService(Bundle b, ServiceRegistration sr, Object service) {
+	@Override
+	public void ungetService(Bundle b, ServiceRegistration<UserAdmin> sr,
+			UserAdmin service) {
 		// Ignore
 	}
 }

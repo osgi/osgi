@@ -46,6 +46,7 @@ public class RoleImpl implements Role {
 	 * Gets the name of this role. Implementation of
 	 * {@link org.osgi.service.useradmin.Role#getName}.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -54,6 +55,7 @@ public class RoleImpl implements Role {
 	 * Gets the type of this role. Implementation of
 	 * {@link org.osgi.service.useradmin.Role#getType}.
 	 */
+	@Override
 	public int getType() {
 		return type;
 	}
@@ -62,7 +64,8 @@ public class RoleImpl implements Role {
 	 * Gets the properties of this role. Implementation of
 	 * {@link org.osgi.service.useradmin.Role#getProperties}.
 	 */
-	public Dictionary getProperties() {
+	@Override
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 
@@ -91,5 +94,6 @@ public class RoleImpl implements Role {
 	 * Removes references to the specified role.
 	 */
 	protected void removeReferenceTo(RoleImpl role) {
+		// empty
 	}
 }

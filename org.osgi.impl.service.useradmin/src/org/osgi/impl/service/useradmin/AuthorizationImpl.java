@@ -38,12 +38,12 @@ public class AuthorizationImpl implements Authorization {
 	 * Cache holding the roles checked for implication sofar. Must be recomputed
 	 * if the UserAdmin database is changed.
 	 */
-	private Hashtable		/* Role */cache	= new Hashtable();
+	private Hashtable<Role,Boolean>	cache	= new Hashtable<>();
 	/**
 	 * The working set of roles, i.e., the roles that we currently are working
 	 * on. Used for loop detection.
 	 */
-	private Vector			/* Role */working	= new Vector();
+	private Vector<Role>			working	= new Vector<>();
 	/**
 	 * The UserAdmin will set the first element of this array to false when it
 	 * is going away. All references to the UserAdmin from Authorization objects
@@ -64,6 +64,7 @@ public class AuthorizationImpl implements Authorization {
 	 * Implementation of
 	 * {@link org.osgi.service.useradmin.Authorization#getName}.
 	 */
+	@Override
 	public String getName() {
 		// Invalidate this object if the UserAdmin has disappeared.
 		if (!alive[0])
@@ -76,6 +77,7 @@ public class AuthorizationImpl implements Authorization {
 	 * Implementation of
 	 * {@link org.osgi.service.useradmin.Authorization#hasRole}.
 	 */
+	@Override
 	public boolean hasRole(String name) {
 		// Invalidate this object if the UserAdmin has disappeared.
 		if (!alive[0])
@@ -93,6 +95,7 @@ public class AuthorizationImpl implements Authorization {
 	 * Gets the roles implied by this Authorization context. Implementation of
 	 * {@link org.osgi.service.useradmin.Authorization#getRoles}.
 	 */
+	@Override
 	public String[] getRoles() {
 		// Invalidate this object if the UserAdmin has disappeared.
 		if (!alive[0])
@@ -112,10 +115,10 @@ public class AuthorizationImpl implements Authorization {
 				((RoleImpl) roles[i]).impliedBy(this);
 			}
 			// Now check the updated cache
-			Vector v = new Vector();
-			for (Enumeration en = cache.keys(); en.hasMoreElements();) {
-				Role role = (Role) en.nextElement();
-				if (((Boolean) cache.get(role)).booleanValue()) {
+			Vector<String> v = new Vector<>();
+			for (Enumeration<Role> en = cache.keys(); en.hasMoreElements();) {
+				Role role = en.nextElement();
+				if (cache.get(role).booleanValue()) {
 					String name = role.getName();
 					if (!name.equals(Role.USER_ANYONE))
 						v.addElement(role.getName());
@@ -129,7 +132,7 @@ public class AuthorizationImpl implements Authorization {
 
 	/* -------- Protected and private methods -------- */
 	protected Boolean cachedHaveRole(Role role) {
-		return (Boolean) cache.get(role);
+		return cache.get(role);
 	}
 
 	protected void workingOnRole(Role role) {
@@ -154,7 +157,7 @@ public class AuthorizationImpl implements Authorization {
 
 	private void invalidateCache() {
 		ua_version = ua.version;
-		cache = new Hashtable();
-		working = new Vector();
+		cache = new Hashtable<>();
+		working = new Vector<>();
 	}
 }

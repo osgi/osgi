@@ -23,26 +23,26 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class UserAdminControl extends DefaultTestBundleControl {
 	private UserAdmin	useradmin;
-	private List		rolesToKeep;
+	private List<Role>	rolesToKeep;
 
 	protected void setUp() throws Exception {
-		useradmin = (UserAdmin) getService(UserAdmin.class);
+		useradmin = getService(UserAdmin.class);
 		rolesToKeep = asList(useradmin.getRoles(null));
 	}
 
 	protected void tearDown() throws Exception {
-		List roles = new ArrayList(asList(useradmin.getRoles(null)));
+		List<Role> roles = new ArrayList<>(asList(useradmin.getRoles(null)));
 		roles.removeAll(rolesToKeep);
-		for (Iterator iter = roles.iterator(); iter.hasNext();) {
-			Role role = (Role) iter.next();
+		for (Iterator<Role> iter = roles.iterator(); iter.hasNext();) {
+			Role role = iter.next();
 			useradmin.removeRole(role.getName());
 		}
 		ungetService(useradmin);
 	}
 
-	private List asList(Role[] roles) {
+	private List<Role> asList(Role[] roles) {
 		if (roles == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		return Arrays.asList(roles);
 	}
@@ -136,7 +136,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 
 	public void testRoleChangeProperties() throws Exception {
 		Role role = useradmin.createRole("r1", Role.USER);
-		Dictionary p = role.getProperties();
+		Dictionary<String,Object> p = role.getProperties();
 		p.put("testKey", "testValue");
 		assertEquals("property not set", "testValue", (String) role
 				.getProperties().get("testKey"));
@@ -144,14 +144,17 @@ public class UserAdminControl extends DefaultTestBundleControl {
 
 	public void testRolePutProperties() throws Exception {
 		Role role = useradmin.createRole("r1", Role.USER);
-		Dictionary p = role.getProperties();
+		@SuppressWarnings({
+				"rawtypes", "unchecked"
+		})
+		Dictionary<Object,Object> p = (Dictionary) role.getProperties();
 		p.put("testKey", "testValue");
 		p.put("key", new byte[] {0, 0, 0});
 		try {
 			p.put(Integer.valueOf(1), "123");
 			fail("expected IllegalArgumentException");
 		}
-		catch (IllegalArgumentException e) {
+		catch (ClassCastException | IllegalArgumentException e) {
 			// expected
 		}
 	}
@@ -163,7 +166,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 
 	public void testUserChangeCredentials() throws Exception {
 		User user = (User) useradmin.createRole("u1", Role.USER);
-		Dictionary cred = user.getCredentials();
+		Dictionary<String,Object> cred = user.getCredentials();
 		cred.put("testKey", "testValue");
 		assertEquals("incorrect value", "testValue", (String) user
 				.getCredentials().get("testKey"));
@@ -171,14 +174,17 @@ public class UserAdminControl extends DefaultTestBundleControl {
 
 	public void testUserPutCredentials() throws Exception {
 		User user = (User) useradmin.createRole("u1", Role.USER);
-		Dictionary p = user.getCredentials();
+		@SuppressWarnings({
+				"rawtypes", "unchecked"
+		})
+		Dictionary<Object,Object> p = (Dictionary) user.getCredentials();
 		p.put("testKey", "testValue");
 		p.put("key", new byte[] {0, 0, 0});
 		try {
 			p.put(Integer.valueOf(1), "123");
 			fail("expected IllegalArgumentException");
 		}
-		catch (IllegalArgumentException e) {
+		catch (ClassCastException | IllegalArgumentException e) {
 			// expected
 		}
 	}
@@ -379,15 +385,16 @@ public class UserAdminControl extends DefaultTestBundleControl {
 		UserAdminEventCollector uaec = new UserAdminEventCollector(
 				UserAdminEvent.ROLE_CREATED | UserAdminEvent.ROLE_CHANGED
 						| UserAdminEvent.ROLE_REMOVED);
-		ServiceRegistration sr = getContext().registerService(
-				UserAdminListener.class.getName(), uaec, null);
+		ServiceRegistration<UserAdminListener> sr = getContext()
+				.registerService(UserAdminListener.class, uaec, null);
 		try {
 			/* Create a new role */
 			useradmin.createRole("user1", Role.USER);
-			List events = uaec.getList(1, 1000 * OSGiTestCaseProperties
+			List<UserAdminEvent> events = uaec.getList(1,
+					1000 * OSGiTestCaseProperties
 					.getScaling());
 			assertEquals("missing event", 1, events.size());
-			UserAdminEvent event = (UserAdminEvent) events.get(0);
+			UserAdminEvent event = events.get(0);
 			assertEquals("wrong event type", UserAdminEvent.ROLE_CREATED, event
 					.getType());
 			assertEquals("wrong event role", "user1", roleToString(event
@@ -399,7 +406,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 			events = uaec
 					.getList(1, 1000 * OSGiTestCaseProperties.getScaling());
 			assertEquals("missing event", 1, events.size());
-			event = (UserAdminEvent) events.get(0);
+			event = events.get(0);
 			assertEquals("wrong event type", UserAdminEvent.ROLE_CHANGED, event
 					.getType());
 			assertEquals("wrong event role", "user1", roleToString(event
@@ -410,7 +417,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 			events = uaec
 					.getList(1, 1000 * OSGiTestCaseProperties.getScaling());
 			assertEquals("missing event", 1, events.size());
-			event = (UserAdminEvent) events.get(0);
+			event = events.get(0);
 			assertEquals("wrong event type", UserAdminEvent.ROLE_REMOVED, event
 					.getType());
 			assertEquals("wrong event role", "user1", roleToString(event

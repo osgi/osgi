@@ -23,19 +23,19 @@ public class GroupImpl extends UserImpl implements Group {
 	/**
 	 * The basic members of this group.
 	 */
-	protected Vector	/* String (role name) */basic_members;
+	protected Vector<String>	basic_members;
 	/**
 	 * The required members of this group.
 	 */
-	protected Vector	/* String (role name) */required_members;
+	protected Vector<String>	required_members;
 
 	/**
 	 * Provide a constructor to be used by extending classes.
 	 */
 	protected GroupImpl(UserAdminImpl ua, String name, int type) {
 		super(ua, name, type);
-		basic_members = new Vector();
-		required_members = new Vector();
+		basic_members = new Vector<>();
+		required_members = new Vector<>();
 	}
 
 	/**
@@ -49,10 +49,12 @@ public class GroupImpl extends UserImpl implements Group {
 	 * Adds a basic member to this Group. Implementation of
 	 * {@link org.osgi.service.useradmin.Group#addMember}.
 	 */
+	@Override
 	public boolean addMember(Role role) {
 		ua.checkPermission(ua.adminPermission);
 		if (!(role instanceof RoleImpl) || ((RoleImpl) role).ua != ua)
 			throw new IllegalArgumentException("Bad role");
+		@SuppressWarnings("hiding")
 		String name = role.getName();
 		if (basic_members.contains(name) || required_members.contains(name))
 			return false;
@@ -65,10 +67,12 @@ public class GroupImpl extends UserImpl implements Group {
 	 * Adds a required member to this Group. Implementation of
 	 * {@link org.osgi.service.useradmin.Group#addRequiredMember}.
 	 */
+	@Override
 	public boolean addRequiredMember(Role role) {
 		ua.checkPermission(ua.adminPermission);
 		if (!(role instanceof RoleImpl) || ((RoleImpl) role).ua != ua)
 			throw new IllegalArgumentException("Bad role");
+		@SuppressWarnings("hiding")
 		String name = role.getName();
 		if (basic_members.contains(name) || required_members.contains(name))
 			return false;
@@ -81,11 +85,13 @@ public class GroupImpl extends UserImpl implements Group {
 	 * Removes a member from this Group. Implementation of
 	 * {@link org.osgi.service.useradmin.Group#removeMember}.
 	 */
+	@Override
 	public boolean removeMember(Role role) {
 		ua.checkPermission(ua.adminPermission);
 		if (role == null || !(role instanceof RoleImpl)
 				|| ((RoleImpl) role).ua != ua)
 			throw new IllegalArgumentException("Bad role");
+		@SuppressWarnings("hiding")
 		String name = role.getName();
 		synchronized (this) {
 			boolean removed = basic_members.remove(name)
@@ -100,13 +106,14 @@ public class GroupImpl extends UserImpl implements Group {
 	 * Gets the basic members of Group. Implementation of
 	 * {@link org.osgi.service.useradmin.Group#getMembers}.
 	 */
+	@Override
 	public Role[] getMembers() {
 		Role[] rs = new Role[basic_members.size()];
 		if (rs.length == 0)
 			return null;
-		Enumeration en = basic_members.elements();
+		Enumeration<String> en = basic_members.elements();
 		for (int i = 0; en.hasMoreElements(); i++) {
-			rs[i] = ua.getRole((String) en.nextElement());
+			rs[i] = ua.getRole(en.nextElement());
 		}
 		return rs;
 	}
@@ -115,13 +122,14 @@ public class GroupImpl extends UserImpl implements Group {
 	 * Gets the required members members of Group. Implementation of
 	 * {@link org.osgi.service.useradmin.Group#getRequiredMembers}.
 	 */
+	@Override
 	public Role[] getRequiredMembers() {
 		Role[] rs = new Role[required_members.size()];
 		if (rs.length == 0)
 			return null;
-		Enumeration en = required_members.elements();
+		Enumeration<String> en = required_members.elements();
 		for (int i = 0; en.hasMoreElements(); i++) {
-			rs[i] = ua.getRole((String) en.nextElement());
+			rs[i] = ua.getRole(en.nextElement());
 		}
 		return rs;
 	}
@@ -132,6 +140,7 @@ public class GroupImpl extends UserImpl implements Group {
 	 * 
 	 * @overrides Role#impliedBy
 	 */
+	@Override
 	protected boolean impliedBy(AuthorizationImpl auth) {
 		Boolean b = auth.cachedHaveRole(this);
 		if (b != null)
@@ -145,19 +154,19 @@ public class GroupImpl extends UserImpl implements Group {
 		auth.workingOnRole(this);
 		synchronized (this) {
 			// First check that all required roles are implied.
-			for (Enumeration en = required_members.elements(); en
+			for (Enumeration<String> en = required_members.elements(); en
 					.hasMoreElements();) {
 				RoleImpl role = (RoleImpl) ua
-						.getRole((String) en.nextElement());
+						.getRole(en.nextElement());
 				if (!role.impliedBy(auth)) {
 					return auth.cacheHaveRole(this, false);
 				}
 			}
 			// Next check that at least one basic role is implied.
-			for (Enumeration en = basic_members.elements(); en
+			for (Enumeration<String> en = basic_members.elements(); en
 					.hasMoreElements();) {
 				RoleImpl role = (RoleImpl) ua
-						.getRole((String) en.nextElement());
+						.getRole(en.nextElement());
 				if (role.impliedBy(auth)) {
 					return auth.cacheHaveRole(this, true);
 				}
@@ -172,6 +181,7 @@ public class GroupImpl extends UserImpl implements Group {
 	 * 
 	 * @overrides Role#removeReferenceTo
 	 */
+	@Override
 	protected void removeReferenceTo(RoleImpl role) {
 		basic_members.remove(role.getName());
 		required_members.remove(role.getName());

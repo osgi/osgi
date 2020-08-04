@@ -9,7 +9,9 @@
 package org.osgi.impl.service.useradmin;
 
 import java.util.Vector;
-import org.osgi.service.useradmin.*;
+
+import org.osgi.service.useradmin.UserAdminEvent;
+import org.osgi.service.useradmin.UserAdminListener;
 
 /**
  * The class manages the event queue to asynchronously deliver UserAdminEvents
@@ -21,7 +23,7 @@ import org.osgi.service.useradmin.*;
  */
 public class EventQueue extends Thread {
 	/** event queue */
-	protected Vector			queue;
+	protected Vector<Object[]>	queue;
 	/** if false the thread must terminate */
 	private volatile boolean	running;
 
@@ -32,7 +34,7 @@ public class EventQueue extends Thread {
 	 */
 	EventQueue() {
 		running = true;
-		queue = new Vector(10, 10);
+		queue = new Vector<>(10, 10);
 		setDaemon(true); /* Mark thread as daemon thread */
 		start(); /* Start thread */
 	}
@@ -51,6 +53,7 @@ public class EventQueue extends Thread {
 	 * the queue and dispatches them.
 	 *  
 	 */
+	@Override
 	public void run() {
 		while (running) {
 			try {
@@ -58,6 +61,7 @@ public class EventQueue extends Thread {
 				deliverEvent((Object[]) item[0], (UserAdminEvent) item[1]);
 			}
 			catch (Throwable t) {
+				// ignored
 			}
 		}
 	}
@@ -82,13 +86,14 @@ public class EventQueue extends Thread {
 				wait();
 			}
 			catch (InterruptedException e) {
+				// ignored
 			}
 		}
 		if (!running) /* if we are stopping */
 		{
 			throw new InterruptedException(); /* throw an exception */
 		}
-		Object[] item = (Object[]) queue.elementAt(0);
+		Object[] item = queue.elementAt(0);
 		queue.removeElementAt(0);
 		return (item);
 	}
