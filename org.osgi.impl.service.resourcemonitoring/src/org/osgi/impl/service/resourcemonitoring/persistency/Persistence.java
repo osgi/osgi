@@ -2,7 +2,6 @@
 package org.osgi.impl.service.resourcemonitoring.persistency;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 
 /**
  *

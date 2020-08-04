@@ -12,19 +12,19 @@ public class JSONList extends JSONObject {
 	/**
 	 * Map < String, JSONObject > elements.
 	 */
-	private final Map	elements;
+	private final Map<String,JSONObject> elements;
 
 	/**
 	 * 
 	 */
 	public JSONList() {
-		elements = new Hashtable();
+		elements = new Hashtable<>();
 	}
 
 	/**
 	 * @return Map < String, JSONObject > of elements.
 	 */
-	public Map getElements() {
+	public Map<String,JSONObject> getElements() {
 		return elements;
 	}
 

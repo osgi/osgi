@@ -10,13 +10,13 @@ public class ResourceContextInfo {
 
 	private final String	name;
 	// private final List<Long> bundleIds;
-	private final List		bundleIds;
+	private final List<Long>	bundleIds;
 
 	/**
 	 * @param pName
 	 * @param pBundleIds list of Long of bundleIds
 	 */
-	public ResourceContextInfo(String pName, List pBundleIds) {
+	public ResourceContextInfo(String pName, List<Long> pBundleIds) {
 		name = pName;
 		bundleIds = pBundleIds;
 	}
@@ -31,7 +31,7 @@ public class ResourceContextInfo {
 	/**
 	 * @return list of Long of bundleIds.
 	 */
-	public List getBundleIds() {
+	public List<Long> getBundleIds() {
 		return bundleIds;
 	}
 

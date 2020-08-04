@@ -45,6 +45,7 @@ public class Activator implements BundleActivator {
 	 */
 	private FakeResourceMonitorFactory	flashFactory;
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		memoryFactory = new FakeResourceMonitorFactory(context,
 				ResourceMonitoringService.RES_TYPE_MEMORY, 1000, 1000, 250000,
@@ -77,6 +78,7 @@ public class Activator implements BundleActivator {
 
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		memoryFactory.stop();
 		memoryFactory = null;

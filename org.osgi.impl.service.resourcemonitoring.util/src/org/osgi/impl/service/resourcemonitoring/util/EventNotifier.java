@@ -15,7 +15,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceEvent;
 import org.osgi.service.resourcemonitoring.ResourceListener;
-import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -25,7 +24,8 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author mpcy8647
  * 
  */
-public class EventNotifier implements ServiceTrackerCustomizer {
+public class EventNotifier implements
+		ServiceTrackerCustomizer<ResourceListener<Long>,ResourceListener<Long>> {
 
 	/**
 	 * context of the bundle.
@@ -35,7 +35,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Tracks {@link ResourceListener} services.
 	 */
-	private final ServiceTracker	serviceTracker;
+	private final ServiceTracker<ResourceListener<Long>,ResourceListener<Long>>	serviceTracker;
 
 	/**
 	 * Used to filter {@link ResourceListener}
@@ -51,13 +51,13 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * Each {@link ResourceListener} of this list will receive a
 	 * {@link ResourceEvent} for each call to
 	 */
-	private final List				resourceListeners;
+	private final List<ResourceListener<Long>>									resourceListeners;
 
 	/**
 	 * Map of <ResourceListener, ResourceEvent> Keep track of the last sent
 	 * notifications for each {@link ResourceListener}.
 	 */
-	private final Map				lastNotifications;
+	private final Map<ResourceListener<Long>,ResourceEvent<Long>>				lastNotifications;
 
 	/**
 	 * Create a new EventNotifier.
@@ -75,8 +75,8 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 		resourceType = pResourceType;
 		resourceContext = pResourceContext;
 
-		resourceListeners = new ArrayList/* <ResourceListener> */();
-		lastNotifications = new Hashtable/* <ResourceListener, ResourceEvent> */();
+		resourceListeners = new ArrayList<>();
+		lastNotifications = new Hashtable<>();
 
 		// set filter for ServiceTracker
 		Filter serviceTrackerFilter = null;
@@ -94,7 +94,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 		}
 
 		// create ServiceTracker tracking ResourceListener
-		serviceTracker = new ServiceTracker(bundleContext,
+		serviceTracker = new ServiceTracker<>(bundleContext,
 				serviceTrackerFilter, this);
 	}
 
@@ -118,18 +118,18 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @param value new resource usage value
 	 */
-	public void notify(final Comparable value) {
-		List/* <ResourceListener> */currentResourceListeners = getResourceListeners();
+	public void notify(final Long value) {
+		List<ResourceListener<Long>> currentResourceListeners = getResourceListeners();
 
 		// iterate over the list of ResourceListeners related to this
 		// EventNotifier
-		for (Iterator/* <ResourceListener> */it = currentResourceListeners
+		for (Iterator<ResourceListener<Long>> it = currentResourceListeners
 				.iterator(); it.hasNext();) {
-			ResourceListener listener = (ResourceListener) it.next();
-			ResourceEvent event = createResourceEvent(listener, value,
+			ResourceListener<Long> listener = it.next();
+			ResourceEvent<Long> event = createResourceEvent(listener, value,
 					resourceContext);
 
-			ResourceEvent lastNotification = (ResourceEvent) lastNotifications
+			ResourceEvent<Long> lastNotification = lastNotifications
 					.get(listener);
 
 			if ((lastNotification != null)
@@ -142,7 +142,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 				// if the current event is null => then generate a NORMAL event
 				// type
 				if (event == null) {
-					event = new ResourceEvent(ResourceEvent.NORMAL,
+					event = new ResourceEvent<>(ResourceEvent.NORMAL,
 							resourceContext,
 							lastNotification.isUpperThreshold(), value);
 				} else {
@@ -182,10 +182,12 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * @param reference reference of the new available {@link ResourceListener}
 	 * @return listener service object.
 	 */
-	public Object addingService(ServiceReference reference) {
+	@Override
+	public ResourceListener<Long> addingService(
+			ServiceReference<ResourceListener<Long>> reference) {
 		System.out.println("add a ResourceListener");
 
-		ResourceListener listener = (ResourceListener) bundleContext.getService(reference);
+		ResourceListener<Long> listener = bundleContext.getService(reference);
 
 		addResourceListener(listener);
 
@@ -195,7 +197,10 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Nothing to do.
 	 */
-	public void modifiedService(ServiceReference reference, Object service) {
+	@Override
+	public void modifiedService(
+			ServiceReference<ResourceListener<Long>> reference,
+			ResourceListener<Long> service) {
 		// TODO Auto-generated method stub
 
 	}
@@ -207,8 +212,11 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * @param reference reference
 	 * @param service service
 	 */
-	public void removedService(ServiceReference reference, Object service) {
-		ResourceListener listener = (ResourceListener) service;
+	@Override
+	public void removedService(
+			ServiceReference<ResourceListener<Long>> reference,
+			ResourceListener<Long> service) {
+		ResourceListener<Long> listener = service;
 		removeResourceListener(listener);
 	}
 
@@ -227,7 +235,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @param resourceListener resource listener to be added
 	 */
-	private void addResourceListener(ResourceListener resourceListener) {
+	private void addResourceListener(ResourceListener<Long> resourceListener) {
 		synchronized (resourceListeners) {
 			resourceListeners.add(resourceListener);
 		}
@@ -238,7 +246,8 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @param resourceListener resourceListener to be removed
 	 */
-	private void removeResourceListener(ResourceListener resourceListener) {
+	private void removeResourceListener(
+			ResourceListener<Long> resourceListener) {
 		synchronized (resourceListeners) {
 			resourceListeners.remove(resourceListener);
 		}
@@ -249,10 +258,8 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @return a duplicated list of tracked ResourceListeners.
 	 */
-	private List/* <ResourceListener> */getResourceListeners() {
-		List/* <ResourceListener> */duplicated = new ArrayList/*
-															 * <ResourceListener>
-															 */();
+	private List<ResourceListener<Long>> getResourceListeners() {
+		List<ResourceListener<Long>> duplicated = new ArrayList<>();
 
 		synchronized (resourceListeners) {
 			duplicated.addAll(resourceListeners);
@@ -267,42 +274,48 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @return event or null if this listener MUST not be notified
 	 */
-	private static ResourceEvent createResourceEvent(ResourceListener listener, Comparable value, ResourceContext resourceContext) {
+	private static ResourceEvent<Long> createResourceEvent(
+			ResourceListener<Long> listener, Long value,
+			ResourceContext resourceContext) {
 
-		ResourceEvent event = null;
+		ResourceEvent<Long> event = null;
 
-		Comparable upperErrorThreshold = listener.getUpperErrorThreshold();
+		Comparable<Long> upperErrorThreshold = listener
+				.getUpperErrorThreshold();
 		if ((upperErrorThreshold != null)
 				&& (compare(upperErrorThreshold, value, -1) || compare(
 						upperErrorThreshold, value, 0))) {
-			event = new ResourceEvent(ResourceEvent.ERROR, resourceContext,
+			event = new ResourceEvent<>(ResourceEvent.ERROR, resourceContext,
 					true, value);
 			return event;
 		}
 
-		Comparable upperWarningThreshold = listener.getUpperWarningThreshold();
+		Comparable<Long> upperWarningThreshold = listener
+				.getUpperWarningThreshold();
 		if ((upperWarningThreshold != null)
 				&& (compare(upperWarningThreshold, value, -1) || compare(
 						upperWarningThreshold, value, 0))) {
-			event = new ResourceEvent(ResourceEvent.WARNING, resourceContext,
+			event = new ResourceEvent<>(ResourceEvent.WARNING, resourceContext,
 					true, value);
 			return event;
 		}
 
-		Comparable lowerErrorThreshold = listener.getLowerErrorThreshold();
+		Comparable<Long> lowerErrorThreshold = listener
+				.getLowerErrorThreshold();
 		if ((lowerErrorThreshold != null)
 				&& (compare(lowerErrorThreshold, value, 1) || compare(
 						lowerErrorThreshold, value, 0))) {
-			event = new ResourceEvent(ResourceEvent.ERROR, resourceContext,
+			event = new ResourceEvent<>(ResourceEvent.ERROR, resourceContext,
 					false, value);
 			return event;
 		}
 
-		Comparable lowerWarningThreshold = listener.getLowerWarningThreshold();
+		Comparable<Long> lowerWarningThreshold = listener
+				.getLowerWarningThreshold();
 		if ((lowerWarningThreshold != null)
 				&& (compare(lowerWarningThreshold, value, 1) || compare(
 						lowerWarningThreshold, value, 0))) {
-			event = new ResourceEvent(ResourceEvent.WARNING, resourceContext,
+			event = new ResourceEvent<>(ResourceEvent.WARNING, resourceContext,
 					false, value);
 			return event;
 		}
@@ -319,7 +332,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * @return true if the result of the comparison between comparable and value
 	 *         is equal to expected
 	 */
-	private static boolean compare(Comparable comparable, Comparable value,
+	private static boolean compare(Comparable<Long> comparable, Long value,
 			int expected) {
 
 		try {

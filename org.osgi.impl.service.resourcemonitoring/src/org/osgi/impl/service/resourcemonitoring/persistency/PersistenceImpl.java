@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemonitoring.persistency.json.JSONArray;
 import org.osgi.impl.service.resourcemonitoring.persistency.json.JSONList;
@@ -34,6 +35,7 @@ public class PersistenceImpl implements Persistence {
 	/**
 	 * Persist the provided list of resource context as a JSON file.
 	 */
+	@Override
 	public void persist(BundleContext context,
 			ResourceContextInfo[] resourceContextInfos) {
 		StringBuffer sb = new StringBuffer();
@@ -67,6 +69,7 @@ public class PersistenceImpl implements Persistence {
 
 	}
 
+	@Override
 	public ResourceContextInfo[] load(BundleContext context) {
 		// open context.json file
 		String json = null;
@@ -80,12 +83,12 @@ public class PersistenceImpl implements Persistence {
 
 			JSONObject jsonObject = JSONObject.parseJsonObject(json);
 			JSONArray array = (JSONArray) jsonObject;
-			List/* <JSONObject> */resourceContextsAsJsonList = array
+			List<JSONObject> resourceContextsAsJsonList = array
 					.getElements();
 			resourceContexts = new ResourceContextInfo[resourceContextsAsJsonList
 					.size()];
 			int i = 0;
-			for (Iterator/* <JSONObject> */it = resourceContextsAsJsonList
+			for (Iterator<JSONObject> it = resourceContextsAsJsonList
 					.iterator(); it.hasNext();) {
 				// each element is a Resource Context as a JSON list
 				JSONList resourceContextJsonList = (JSONList) it.next();
@@ -96,12 +99,12 @@ public class PersistenceImpl implements Persistence {
 						.getValue();
 
 				// retrieve list of bundles associated to the context
-				List/* <Long> */bundles = new ArrayList/* <Long> */();
+				List<Long> bundles = new ArrayList<>();
 				JSONArray bundleIdsJsonArray = (JSONArray) resourceContextJsonList
 						.getElements().get(
 								RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER);
 				if (bundleIdsJsonArray != null) {
-					for (Iterator/* <JSONObject> */bundleIdsIt = bundleIdsJsonArray
+					for (Iterator<JSONObject> bundleIdsIt = bundleIdsJsonArray
 							.getElements().iterator(); bundleIdsIt.hasNext();) {
 						JSONLong bundleIdJsonLong = (JSONLong) bundleIdsIt
 								.next();
@@ -127,8 +130,7 @@ public class PersistenceImpl implements Persistence {
 		if (!file.exists()) {
 			return null;
 		}
-		try {
-			FileInputStream fis = new FileInputStream(file);
+		try (FileInputStream fis = new FileInputStream(file)) {
 			byte[] fileContent = new byte[(int) file.length()];
 			fis.read(fileContent);
 			json = new String(fileContent);
@@ -164,15 +166,15 @@ public class PersistenceImpl implements Persistence {
 		sb.append("\"");
 		sb.append(RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER);
 		sb.append("\":[");
-		List bundleIds = resourceContextInfo.getBundleIds();
+		List<Long> bundleIds = resourceContextInfo.getBundleIds();
 		boolean notFirst = false;
-		for (Iterator it = bundleIds.iterator(); it.hasNext();) {
+		for (Iterator<Long> it = bundleIds.iterator(); it.hasNext();) {
 			if (notFirst) {
 				sb.append(",");
 			} else {
 				notFirst = true;
 			}
-			Long bundleId = (Long) it.next();
+			Long bundleId = it.next();
 			sb.append(bundleId);
 		}
 		sb.append("]");

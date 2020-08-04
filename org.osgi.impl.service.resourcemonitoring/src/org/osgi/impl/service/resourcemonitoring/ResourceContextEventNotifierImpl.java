@@ -4,6 +4,7 @@ package org.osgi.impl.service.resourcemonitoring;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
@@ -15,29 +16,32 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  *
  */
 public class ResourceContextEventNotifierImpl implements
-		ResourceContextEventNotifier, ServiceTrackerCustomizer {
+		ResourceContextEventNotifier,
+		ServiceTrackerCustomizer<ResourceContextListener,ResourceContextListener> {
 
 	private BundleContext	context;
-	private ServiceTracker	serviceTracker;
+	private ServiceTracker<ResourceContextListener,ResourceContextListener>					serviceTracker;
 
 	// private final Map<ResourceContextListener,
 	// ServiceReference<ResourceContextListener>> listeners;
-	private final Map		listeners;
+	private final Map<ResourceContextListener,ServiceReference<ResourceContextListener>>	listeners;
 
 	/**
 	 * 
 	 */
 	public ResourceContextEventNotifierImpl() {
-		listeners = new Hashtable();
+		listeners = new Hashtable<>();
 	}
 
+	@Override
 	public void start(BundleContext pcontext) {
 		this.context = pcontext;
-		serviceTracker = new ServiceTracker(this.context,
-				ResourceContextListener.class.getName(), this);
+		serviceTracker = new ServiceTracker<>(this.context,
+				ResourceContextListener.class, this);
 		serviceTracker.open();
 	}
 
+	@Override
 	public void stop(BundleContext pcontext) {
 		serviceTracker.close();
 		serviceTracker = null;
@@ -45,13 +49,14 @@ public class ResourceContextEventNotifierImpl implements
 		listeners.clear();
 	}
 
+	@Override
 	public void notify(ResourceContextEvent event) {
 		synchronized (listeners) {
-			for (Iterator it = listeners.keySet()
+			for (Iterator<ResourceContextListener> it = listeners.keySet()
 					.iterator(); it.hasNext();) {
-				ResourceContextListener currentRcl = (ResourceContextListener) it
+				ResourceContextListener currentRcl = it
 						.next();
-				ServiceReference currentSr = (ServiceReference) listeners
+				ServiceReference<ResourceContextListener> currentSr = listeners
 						.get(currentRcl);
 
 				String[] resourceContextFilter = getResourceContextFilter(currentSr);
@@ -70,8 +75,10 @@ public class ResourceContextEventNotifierImpl implements
 		}
 	}
 
-	public Object addingService(ServiceReference reference) {
-		ResourceContextListener rcl = (ResourceContextListener) context.getService(reference);
+	@Override
+	public ResourceContextListener addingService(
+			ServiceReference<ResourceContextListener> reference) {
+		ResourceContextListener rcl = context.getService(reference);
 
 		synchronized (listeners) {
 			listeners.put(rcl, reference);
@@ -80,20 +87,27 @@ public class ResourceContextEventNotifierImpl implements
 		return rcl;
 	}
 
-	public void modifiedService(ServiceReference reference, Object service) {
+	@Override
+	public void modifiedService(
+			ServiceReference<ResourceContextListener> reference,
+			ResourceContextListener service) {
 		synchronized (listeners) {
 			listeners.put(service, reference);
 		}
 	}
 
-	public void removedService(ServiceReference reference, Object service) {
+	@Override
+	public void removedService(
+			ServiceReference<ResourceContextListener> reference,
+			ResourceContextListener service) {
 		synchronized (listeners) {
 			listeners.remove(service);
 		}
 
 	}
 
-	private static String[] getResourceContextFilter(ServiceReference serviceReference) {
+	private static String[] getResourceContextFilter(
+			ServiceReference<ResourceContextListener> serviceReference) {
 		String[] filter = null;
 		Object propertyValue = serviceReference.getProperty(ResourceContextListener.RESOURCE_CONTEXT);
 		try {

@@ -32,7 +32,7 @@ public class Activator implements BundleActivator {
 	/**
 	 * service registration for {@link ResourceMonitoringService}.
 	 */
-	private ServiceRegistration				resourceMonitoringServiceSr;
+	private ServiceRegistration<ResourceMonitoringService>	resourceMonitoringServiceSr;
 
 	/**
 	 * bundle context.
@@ -44,6 +44,7 @@ public class Activator implements BundleActivator {
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Start org.osgi.impl.service.resourcemonitoring.Activator");
 
@@ -63,6 +64,7 @@ public class Activator implements BundleActivator {
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		stopResourceMonitoringServiceImpl();
 
@@ -86,7 +88,7 @@ public class Activator implements BundleActivator {
 		resourceMonitoringServiceImpl.start(bundleContext);
 
 		resourceMonitoringServiceSr = bundleContext
-				.registerService(ResourceMonitoringService.class.getName(),
+				.registerService(ResourceMonitoringService.class,
 						resourceMonitoringServiceImpl, null);
 	}
 

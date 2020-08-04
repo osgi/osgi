@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -25,7 +26,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  *
  */
 public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
-		ServiceTrackerCustomizer {
+		ServiceTrackerCustomizer<ResourceMonitorFactory<Object>,ResourceMonitorFactory<Object>> {
 
 	private ResourceContextLock					lock;
 
@@ -33,13 +34,13 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * Map containing Resource Context object. Keys are the name of the
 	 * ResourceContext. Map<String, ResourceContext> resourceContexts.
 	 */
-	private final Map							resourceContexts;
+	private final Map<String,ResourceContext>										resourceContexts;
 
 	/**
 	 * list of available factories. Map<String, ResourceMonitorFactory>
 	 * resourceMonitorFactories.
 	 */
-	private final Map							resourceMonitorFactories;
+	private final Map<String,ResourceMonitorFactory<Object>>						resourceMonitorFactories;
 
 	/**
 	 * Notifier for ResourceContext events
@@ -54,7 +55,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	/**
 	 * Service tracker (for ResourceMonitorFactory)
 	 */
-	private ServiceTracker						serviceTracker;
+	private ServiceTracker<ResourceMonitorFactory<Object>,ResourceMonitorFactory<Object>>	serviceTracker;
 
 	/**
 	 * Bundle context
@@ -88,11 +89,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		bundleManager = pBundleManager;
 		eventNotifier = pEventNotifier;
 
-		resourceContexts = new Hashtable/* <String, ResourceContext> */();
-		resourceMonitorFactories = new Hashtable/*
-												 * <String,
-												 * ResourceMonitorFactory>
-												 */();
+		resourceContexts = new Hashtable<>();
+		resourceMonitorFactories = new Hashtable<>();
 
 	}
 
@@ -105,10 +103,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 
 			ResourceContext newly = createContext(persistedResourceContext
 					.getName());
-			for (Iterator/* <Long> */it = persistedResourceContext
+			for (Iterator<Long> it = persistedResourceContext
 					.getBundleIds()
 					.iterator(); it.hasNext();) {
-				long bundleId = ((Long) it.next()).longValue();
+				long bundleId = it.next().longValue();
 				try {
 					newly.addBundle(bundleId);
 				} catch (ResourceContextException e) {
@@ -135,7 +133,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		resourceMonitorFactories.clear();
 		setDefaultResourceContexts();
 
-		serviceTracker = new ServiceTracker(context,
+		serviceTracker = new ServiceTracker<>(
+				context,
 				ResourceMonitorFactory.class.getName(), this);
 		serviceTracker.open();
 	}
@@ -150,15 +149,17 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		persistenceManager.persist();
 	}
 
+	@Override
 	public ResourceContext[] listContext() {
 		ResourceContext[] rcArray = new ResourceContext[0];
 		synchronized (resourceContexts) {
-			rcArray = (ResourceContext[]) resourceContexts.values().toArray(
+			rcArray = resourceContexts.values().toArray(
 					rcArray);
 		}
 		return rcArray;
 	}
 
+	@Override
 	public ResourceContext createContext(String name, ResourceContext template)
 			throws IllegalArgumentException {
 
@@ -180,7 +181,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		// create ResourceMonitor based on those associated with the provided
 		// template
 		if (template != null) {
-			ResourceMonitor[] templateMonitors = null;
+			ResourceMonitor< ? >[] templateMonitors = null;
 			try {
 				templateMonitors = template.getMonitors();
 			} catch (ResourceContextException e) {
@@ -188,9 +189,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 			}
 			if (templateMonitors != null) {
 				for (int i = 0; i < templateMonitors.length; i++) {
-					ResourceMonitor resourceMonitor = templateMonitors[i];
+					ResourceMonitor< ? > resourceMonitor = templateMonitors[i];
 
-					ResourceMonitorFactory factory = getFactory(resourceMonitor
+					ResourceMonitorFactory<Object> factory = getFactory(
+							resourceMonitor
 							.getResourceType());
 
 					if (factory != null) {
@@ -231,24 +233,27 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 
 	}
 
+	@Override
 	public ResourceContext getContext(String name) {
 		ResourceContext resourceContext;
 		synchronized (resourceContexts) {
-			resourceContext = (ResourceContext) resourceContexts.get(name);
+			resourceContext = resourceContexts.get(name);
 		}
 		return resourceContext;
 	}
 
+	@Override
 	public ResourceContext getContext(long bundleId) {
 		ResourceContext resourceContext = bundleManager
 				.getResourceContext(bundleId);
 		return resourceContext;
 	}
 
+	@Override
 	public String[] getSupportedTypes() {
 		String[] supportedTypes = new String[0];
 		synchronized (resourceMonitorFactories) {
-			supportedTypes = (String[]) resourceMonitorFactories.keySet()
+			supportedTypes = resourceMonitorFactories.keySet()
 					.toArray(
 							supportedTypes);
 		}
@@ -262,8 +267,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * @param reference service reference of the new factory
 	 * @return the ResourceMonitorFactory object
 	 */
-	public Object addingService(ServiceReference reference) {
-		ResourceMonitorFactory factory = (ResourceMonitorFactory) context.getService(reference);
+	@Override
+	public ResourceMonitorFactory<Object> addingService(
+			ServiceReference<ResourceMonitorFactory<Object>> reference) {
+		ResourceMonitorFactory<Object> factory = context.getService(reference);
 		if (factory != null) {
 			synchronized (resourceMonitorFactories) {
 				resourceMonitorFactories.put(factory.getType(), factory);
@@ -276,7 +283,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * This method is called when a ResourceMonitorFactory service is modified.
 	 * Nothing to do.
 	 */
-	public void modifiedService(ServiceReference reference, Object service) {
+	@Override
+	public void modifiedService(
+			ServiceReference<ResourceMonitorFactory<Object>> reference,
+			ResourceMonitorFactory<Object> service) {
 		// nothing to do.
 	}
 
@@ -284,8 +294,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * This method is called by the ServiceTracker to report a
 	 * ResourceMonitorFactory is being unavailable.
 	 */
-	public void removedService(ServiceReference reference, Object service) {
-		ResourceMonitorFactory factory = (ResourceMonitorFactory) service;
+	@Override
+	public void removedService(
+			ServiceReference<ResourceMonitorFactory<Object>> reference,
+			ResourceMonitorFactory<Object> service) {
+		ResourceMonitorFactory<Object> factory = service;
 		synchronized (resourceMonitorFactories) {
 			resourceMonitorFactories.remove(factory.getType());
 		}
@@ -298,10 +311,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * 
 	 * @return factories
 	 */
-	public ResourceMonitorFactory getResourceMonitorFactory(String factoryType) {
-		ResourceMonitorFactory factory = null;
+	public ResourceMonitorFactory<Object> getResourceMonitorFactory(
+			String factoryType) {
+		ResourceMonitorFactory<Object> factory = null;
 		synchronized (resourceMonitorFactories) {
-			factory = (ResourceMonitorFactory) resourceMonitorFactories
+			factory = resourceMonitorFactories
 					.get(factoryType);
 		}
 		return factory;
@@ -367,8 +381,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * @param resourceType type of resource
 	 * @return the ResourceMonitorFactory or null
 	 */
-	private ResourceMonitorFactory getFactory(String resourceType) {
-		ResourceMonitorFactory factory = null;
+	private ResourceMonitorFactory<Object> getFactory(String resourceType) {
+		ResourceMonitorFactory<Object> factory = null;
 
 		StringBuffer filter = new StringBuffer();
 		filter.append("(");
@@ -377,13 +391,18 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		filter.append(resourceType);
 		filter.append(")");
 		try {
-			Collection srs = context
+			@SuppressWarnings({
+					"unchecked", "rawtypes"
+			})
+			Collection<ServiceReference<ResourceMonitorFactory<Object>>> srs = (Collection) context
 					.getServiceReferences(ResourceMonitorFactory.class,
 							filter.toString());
 
 			if ((srs != null) && (!srs.isEmpty())) {
-				ServiceReference sr = (ServiceReference) srs.iterator().next();
-				factory = (ResourceMonitorFactory) context.getService(sr);
+				ServiceReference<ResourceMonitorFactory<Object>> sr = srs
+						.iterator()
+						.next();
+				factory = context.getService(sr);
 			}
 		} catch (InvalidSyntaxException e) {
 			// not expected

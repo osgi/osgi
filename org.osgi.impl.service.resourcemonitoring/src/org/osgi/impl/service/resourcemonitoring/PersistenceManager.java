@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
@@ -39,7 +40,7 @@ public class PersistenceManager implements BundleListener {
 	 * This map < Long, String > contains bundles which has not been resolved
 	 * during the restoring phase.
 	 */
-	private final Map						unresolvedBundles;
+	private final Map<Long,String>			unresolvedBundles;
 
 	/**
 	 * {@link ResourceMonitoringService} instance.
@@ -56,13 +57,14 @@ public class PersistenceManager implements BundleListener {
 			ResourceMonitoringService resourceMonitoringService) {
 		this.bundleContext = pBbundleContext;
 		persistence = new PersistenceImpl();
-		unresolvedBundles = new Hashtable();
+		unresolvedBundles = new Hashtable<>();
 		this.resourceMonitoringService = resourceMonitoringService;
 	}
 
 	/**
 	 * This method is called whenever a bundle changes its states.
 	 */
+	@Override
 	public void bundleChanged(BundleEvent event) {
 		if (event.getType() == BundleEvent.INSTALLED) {
 			// a new bundle has been installed
@@ -70,7 +72,7 @@ public class PersistenceManager implements BundleListener {
 			// for this new bundle
 			long bundleId = event.getBundle().getBundleId();
 			Long bundleIdLong = Long.valueOf(bundleId);
-			String resourceContextName = (String) unresolvedBundles
+			String resourceContextName = unresolvedBundles
 					.get(bundleIdLong);
 			if (resourceContextName != null) {
 				// retrieves the ResourceContext based on resourceContextName
@@ -114,9 +116,9 @@ public class PersistenceManager implements BundleListener {
 
 			// try to associate bundle
 			// List<Long> bundleIds = rci.getBundleIds();
-			List bundleIds = rci.getBundleIds();
-			for (Iterator it = bundleIds.iterator(); it.hasNext();) {
-				Long bundleId = (Long) it.next();
+			List<Long> bundleIds = rci.getBundleIds();
+			for (Iterator<Long> it = bundleIds.iterator(); it.hasNext();) {
+				Long bundleId = it.next();
 				try {
 					resourceContext.addBundle(bundleId.longValue());
 				} catch (ResourceContextException e) {
@@ -154,7 +156,7 @@ public class PersistenceManager implements BundleListener {
 
 			long[] bundleIds = resourceContext.getBundleIds();
 			// List<Long> bundleIdsSet = new ArrayList<Long>();
-			List bundleIdsSet = new ArrayList();
+			List<Long> bundleIdsSet = new ArrayList<>();
 			// add all associated bundle into bundleIds
 			for (int j = 0; j < bundleIds.length; j++) {
 				bundleIdsSet.add(Long.valueOf(Long.toString(bundleIds[j])));
@@ -164,10 +166,10 @@ public class PersistenceManager implements BundleListener {
 			// for (Iterator<Long> it = unresolvedBundles.keySet().iterator();
 			// it.hasNext();) {
 
-			for (Iterator it = unresolvedBundles.keySet().iterator(); it
+			for (Iterator<Long> it = unresolvedBundles.keySet().iterator(); it
 					.hasNext();) {
-				Long bundleId = (Long) it.next();
-				String contextName = (String) unresolvedBundles.get(bundleId);
+				Long bundleId = it.next();
+				String contextName = unresolvedBundles.get(bundleId);
 				if (contextName.equals(currentContextName)) {
 					// add the current bundleId into bundleIdsSet
 					bundleIdsSet.add(bundleId);

@@ -33,7 +33,8 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
  * 
  * @author $Id$
  */
-public class FakeResourceMonitorFactory implements ResourceMonitorFactory, ResourceContextListener {
+public class FakeResourceMonitorFactory
+		implements ResourceMonitorFactory<Object>, ResourceContextListener {
 
 	/**
 	 * type of {@link ResourceMonitor} this factory is able to create
@@ -49,7 +50,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory, Resou
 	 * Register the factory as a ResourceContextListener to be informed when a ResourceContext is deleted.
 	 * ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration	serviceRegistration;
+	private ServiceRegistration< ? >	serviceRegistration;
 
 	/**
 	 * Create, and register this FakeResourceMonitorFactory as a service in the OSGi services registry.
@@ -63,7 +64,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory, Resou
 
 		// register this factory as a ResourceContextListener.
 		// Dictionary<String, Object> properties.
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY, factoryType);
 		serviceRegistration = this.bundleContext.registerService(new String[] { ResourceContextListener.class.getName(),
 				ResourceMonitorFactory.class.getName() }, this, properties);
@@ -85,7 +86,8 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory, Resou
 
 	}
 
-	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException {
+	public ResourceMonitor<Object> createResourceMonitor(
+			ResourceContext resourceContext) throws ResourceMonitorException {
 		// TODO Auto-generated method stub
 		return null;
 	}

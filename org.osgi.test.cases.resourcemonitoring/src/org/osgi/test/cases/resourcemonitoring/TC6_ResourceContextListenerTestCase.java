@@ -63,18 +63,18 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * events
 	 */
-	private List						events;
+	private List<ResourceContextEvent>						events;
 
 	/**
 	 * service registration of the listener
 	 */
-	private ServiceRegistration			listenerServiceRegistration;
+	private ServiceRegistration<ResourceContextListener>	listenerServiceRegistration;
 
 	/**
 	 * 
 	 */
 	public TC6_ResourceContextListenerTestCase() {
-		events = new ArrayList();
+		events = new ArrayList<>();
 	}
 
 	/**
@@ -85,9 +85,9 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		ServiceReference sr = getContext()
-				.getServiceReference(ResourceMonitoringService.class.getName());
-		resourceMonitoringService = (ResourceMonitoringService) getContext()
+		ServiceReference<ResourceMonitoringService> sr = getContext()
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = getContext()
 				.getService(sr);
 		events.clear();
 	}
@@ -116,24 +116,24 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		assertEquals("Events list mismatch.", 4, events.size());
 
 		// first event is a RESOURCE_CONTEXT_CREATED
-		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
+		ResourceContextEvent event = events.get(0);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 
 		// second event is a BUNDLE_ADDED event
-		event = (ResourceContextEvent) events.get(1);
+		event = events.get(1);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
 
 		// third event is a BUNDLE_REMOVED event
-		event = (ResourceContextEvent) events.get(2);
+		event = events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
 
 		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
-		event = (ResourceContextEvent) events.get(3);
+		event = events.get(3);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 	}
@@ -161,24 +161,24 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		// checks received events => four events (related to context1) MUST have been received.
 		assertEquals("Events list mismatch.", 4, events.size());
 		// first event is a RESOURCE_CONTEXT_CREATED for context1
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events.get(0);
+		ResourceContextEvent createdEvent = events.get(0);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, createdEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, createdEvent.getContext().getName());
 
 		// second event is a BUNDLE_ADDED event (bundle1 was added to context1)
-		ResourceContextEvent addedEvent = (ResourceContextEvent) events.get(1);
+		ResourceContextEvent addedEvent = events.get(1);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, addedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, addedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, addedEvent.getBundleId());
 
 		// third event is a BUNDLE_REMOVED event (bundle1 was removed from context1)
-		ResourceContextEvent removedEvent = (ResourceContextEvent) events.get(2);
+		ResourceContextEvent removedEvent = events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, removedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, removedEvent.getBundleId());
 
 		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event (context1 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events.get(3);
+		ResourceContextEvent deletedEvent = events.get(3);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, deletedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, deletedEvent.getContext().getName());
 	}
@@ -208,24 +208,24 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		// checks received events => four events MUST have been received.
 		assertEquals("Events list mismatch.", 4, events.size());
 		// first event is a RESOURCE_CONTEXT_CREATED for context2
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events.get(0);
+		ResourceContextEvent createdEvent = events.get(0);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, createdEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, createdEvent.getContext().getName());
 
 		// second event is a BUNDLE_ADDED event (bundle2 was added to context2)
-		ResourceContextEvent addedEvent = (ResourceContextEvent) events.get(1);
+		ResourceContextEvent addedEvent = events.get(1);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, addedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, addedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID2, addedEvent.getBundleId());
 
 		// third event is a BUNDLE_REMOVED event (bundle2 was removed from context2)
-		ResourceContextEvent removedEvent = (ResourceContextEvent) events.get(2);
+		ResourceContextEvent removedEvent = events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, removedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID2, removedEvent.getBundleId());
 
 		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event (context2 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events.get(3);
+		ResourceContextEvent deletedEvent = events.get(3);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, deletedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, deletedEvent.getContext().getName());
 	}
@@ -270,14 +270,14 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 *            to be used as properties for this listerner service.
 	 */
 	private void registerListener(String[] resourceContexts) {
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		if (resourceContexts != null) {
 			if (resourceContexts.length >= 1) {
 				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts);
 			}
 		}
 		listenerServiceRegistration = getContext().registerService(
-				ResourceContextListener.class.getName(), this, properties);
+				ResourceContextListener.class, this, properties);
 	}
 
 	/**

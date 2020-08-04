@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContext;
@@ -19,7 +20,8 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 /**
  *
  */
-public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
+public class FakeResourceMonitorFactory
+		implements ResourceMonitorFactory<Long>,
 		ResourceContextListener {
 
 	/**
@@ -53,13 +55,13 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 	/**
 	 * fake monitors Map<ResourceContext, FakeMonitor>
 	 */
-	private final Map			fakeMonitors;
+	private final Map<ResourceContext,FakeMonitor>	fakeMonitors;
 
 	/**
 	 * register the factory as a ResourceContextListener to be informed when a
 	 * ResourceContext is deleted. ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration	serviceRegistration;
+	private ServiceRegistration< ? >	serviceRegistration;
 
 	private final Lock			semaphore;
 
@@ -86,11 +88,11 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 		initialValue = pInitialValue;
 
 		semaphore = new Lock();
-		fakeMonitors = new Hashtable();
+		fakeMonitors = new Hashtable<>();
 
 		// register this factory as a ResourceContextListener.
 		// Dictionary<String, Object> properties.
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
 				factoryType);
 		serviceRegistration = bundleContext
@@ -108,7 +110,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 
 		// all existing monitors must be deleted
 		// List duplicatedMonitors = new ArrayList<FakeMonitor>();
-		List duplicatedMonitors = new ArrayList();
+		List<FakeMonitor> duplicatedMonitors = new ArrayList<>();
 
 		try {
 			semaphore.acquire();
@@ -120,9 +122,9 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 
 		semaphore.release();
 
-		for (Iterator it = duplicatedMonitors.iterator(); it
+		for (Iterator<FakeMonitor> it = duplicatedMonitors.iterator(); it
 				.hasNext();) {
-			FakeMonitor tobeDeleted = (FakeMonitor) it.next();
+			FakeMonitor tobeDeleted = it.next();
 			try {
 				tobeDeleted.delete();
 			} catch (ResourceMonitorException e) {
@@ -132,13 +134,16 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 
 	}
 
+	@Override
 	public String getType() {
 		return factoryType;
 	}
 
-	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext)
+	@Override
+	public ResourceMonitor<Long> createResourceMonitor(
+			ResourceContext resourceContext)
 			throws ResourceMonitorException {
-		ResourceMonitor resourceMonitor = null;
+		ResourceMonitor<Long> resourceMonitor = null;
 		try {
 			semaphore.acquire();
 		} catch (InterruptedException e) {
@@ -168,6 +173,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 	 * This method is called when a {@link ResourceContext} has been deleted. We
 	 * have to delete the {@link ResourceMonitor} if it was previously created.
 	 */
+	@Override
 	public void notify(ResourceContextEvent event) {
 		if (event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED) {
 			// find out if this factory created a ResourceMonitor for this
@@ -180,7 +186,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 				return;
 			}
 
-			ResourceMonitor resourceMonitor = (ResourceMonitor) fakeMonitors
+			ResourceMonitor<Long> resourceMonitor = fakeMonitors
 					.get(resourceContext);
 
 			semaphore.release();
@@ -200,7 +206,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 	/**
 	 * @param resourceMonitor
 	 */
-	public void removeResourceMonitor(ResourceMonitor resourceMonitor) {
+	public void removeResourceMonitor(ResourceMonitor<Long> resourceMonitor) {
 		try {
 			semaphore.acquire();
 		} catch (InterruptedException e) {
