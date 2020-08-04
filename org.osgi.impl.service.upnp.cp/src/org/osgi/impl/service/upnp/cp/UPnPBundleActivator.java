@@ -9,6 +9,7 @@ public class UPnPBundleActivator implements BundleActivator {
 
 	// This method is called when UPnP Bundle starts,so that the Bundle can
 	// perform Bundle specific operations.
+	@Override
 	public void start(BundleContext bc) {
 		try {
 			controller = new UPnPControllerImpl();
@@ -25,6 +26,7 @@ public class UPnPBundleActivator implements BundleActivator {
 	}
 
 	// This method is called when UPnPCP Bundle stops.
+	@Override
 	public void stop(BundleContext bc) {
 		try {
 			controller.stop();

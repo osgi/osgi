@@ -1,17 +1,17 @@
 package org.osgi.impl.service.upnp.cp.description;
 
-import java.util.Vector;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 public class Element {
 	private String	name;
 	private String	value;
-	private Vector	element;
-	private Vector	attributes;
+	private Vector<Element>		element;
+	private Vector<Attribute>	attributes;
 
 	Element() {
-		element = new Vector();
-		attributes = new Vector();
+		element = new Vector<>();
+		attributes = new Vector<>();
 	}
 
 	// This constructor creates the Element object using the name and the value
@@ -51,12 +51,12 @@ public class Element {
 	}
 
 	// This method returns all the child elements of the current element.
-	public Vector getAllElements() {
+	public Vector<Element> getAllElements() {
 		return element;
 	}
 
 	// This method adds the child element to the current element.
-	void addOneMoreElement(Element elem, Vector allAtts) {
+	void addOneMoreElement(Element elem, Vector<Attribute> allAtts) {
 		elem.setAttributes(allAtts);
 		element.addElement(elem);
 	}
@@ -80,12 +80,12 @@ public class Element {
 	}
 
 	// This method returns all the attributes of the element.
-	public Vector getAttributes() {
+	public Vector<Attribute> getAttributes() {
 		return attributes;
 	}
 
 	// This method sets the attributes for the current element.
-	void setAttributes(Vector atts) {
+	void setAttributes(Vector<Attribute> atts) {
 		attributes = atts;
 	}
 

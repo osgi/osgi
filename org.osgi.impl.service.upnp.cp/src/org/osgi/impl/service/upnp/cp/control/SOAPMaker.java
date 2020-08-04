@@ -10,9 +10,10 @@ public class SOAPMaker extends SOAPConstants {
 	// the Control request.
 	public String createControlRequest(String method, String path,
 			String hostport, String serviceType, String actionName,
-			Dictionary arguments) {
+			Dictionary<String,Object> arguments) {
 		synchronized (controlLock) {
 			StringBuffer soapBuf = new StringBuffer();
+			@SuppressWarnings("unused")
 			String soap;
 			soapBuf.append(startEnvelope);
 			soapBuf.append(rn);
@@ -21,8 +22,9 @@ public class SOAPMaker extends SOAPConstants {
 			soapBuf.append("<u:" + actionName + " xmlns:u=" + saUrn
 					+ serviceType + "\">");
 			soapBuf.append(rn);
-			for (Enumeration e = arguments.keys(); e.hasMoreElements();) {
-				String argName = (String) e.nextElement();
+			for (Enumeration<String> e = arguments.keys(); e
+					.hasMoreElements();) {
+				String argName = e.nextElement();
 				soapBuf.append("<" + argName + ">"
 						+ arguments.get(argName) + "</" + argName
 						+ ">");

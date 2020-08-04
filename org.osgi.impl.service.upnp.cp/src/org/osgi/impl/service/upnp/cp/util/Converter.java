@@ -1,13 +1,17 @@
 package org.osgi.impl.service.upnp.cp.util;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 public class Converter {
-	public Dictionary java2upnp(Dictionary inparms, Hashtable Input_dict)
+	public Dictionary<String,Object> java2upnp(
+			Dictionary<String,Object> inparms,
+			Hashtable<String,Object> Input_dict)
 			throws Exception {
-		for (Enumeration e = inparms.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			Object value = (Object) inparms.get(key);
+		for (Enumeration<String> e = inparms.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
+			Object value = inparms.get(key);
 			String type = (String) Input_dict.get(key);
 			inparms.remove(key);
 			if (type.equals(SoapTypeConstants.SOAP_TYPE_UI1)
@@ -105,10 +109,12 @@ public class Converter {
 		return inparms;
 	}
 
-	public Dictionary upnp2java(Dictionary outparms, Hashtable stat_dt)
+	public Dictionary<String,Object> upnp2java(
+			Dictionary<String,Object> outparms,
+			Hashtable<String,Object> stat_dt)
 			throws Exception {
-		for (Enumeration e = outparms.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
+		for (Enumeration<String> e = outparms.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
 			String value = (String) outparms.get(key);
 			String type = (String) stat_dt.get(key);
 			outparms.remove(key);

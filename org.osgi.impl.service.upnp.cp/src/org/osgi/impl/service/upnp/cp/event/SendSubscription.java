@@ -19,6 +19,7 @@ public class SendSubscription extends GenaSocket implements Runnable {
 
 	// This method forms the subscription message and sends it to the given host
 	// name.
+	@Override
 	public void run() {
 		try {
 			formSubscriptionMessage();

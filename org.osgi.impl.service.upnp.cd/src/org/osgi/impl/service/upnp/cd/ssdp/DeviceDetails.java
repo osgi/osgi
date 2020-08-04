@@ -9,7 +9,7 @@ public class DeviceDetails {
 	private String		location;
 	private String		server;
 	private long		sentPacketsTime;
-	private Hashtable	services	= new Hashtable(5);
+	private Hashtable<String,String>	services	= new Hashtable<>(5);
 	private boolean		root		= false;
 
 	// This methods sets root flag as true
@@ -84,7 +84,7 @@ public class DeviceDetails {
 	}
 
 	// This methods returns the all services.
-	Hashtable getServices() {
+	Hashtable<String,String> getServices() {
 		return services;
 	}
 

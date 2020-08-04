@@ -3,6 +3,7 @@ package org.osgi.impl.service.upnp.cp.basedriver;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.upnp.cp.description.RootDevice;
@@ -17,9 +18,9 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	public RootDevice		deviceinfo;
 	public Control			control;
 	public EventService		eventservice;
-	private Hashtable		devices;
+	private Hashtable<String,UPnPDeviceImpl>			devices;
 	private BundleContext	bc;
-	private Hashtable		servicerefs;
+	private Hashtable<String,ServiceRegistration<UPnPDevice>>	servicerefs;
 	private String			parentUDN;
 
 	// This constructor creates the UPnPBaseDriver object based on the
@@ -27,8 +28,8 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	public UPnPBaseDriver(UPnPController controller, BundleContext bc) {
 		this.controller = controller;
 		this.bc = bc;
-		devices = new Hashtable(10);
-		servicerefs = new Hashtable(10);
+		devices = new Hashtable<>(10);
+		servicerefs = new Hashtable<>(10);
 	}
 
 	// This method starts the base driver. And registers with controller for
@@ -43,12 +44,14 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	// getting notifications.
 	public void stop() {
 		controller.unRegisterDeviceListener(this);
-		for (Enumeration enumeration = devices.elements(); enumeration.hasMoreElements();) {
-			UPnPDeviceImpl dev = (UPnPDeviceImpl) enumeration.nextElement();
+		for (Enumeration<UPnPDeviceImpl> enumeration = devices
+				.elements(); enumeration.hasMoreElements();) {
+			UPnPDeviceImpl dev = enumeration.nextElement();
 			dev.unsubscribe();
 		}
-		for (Enumeration enumeration = servicerefs.elements(); enumeration.hasMoreElements();) {
-			ServiceRegistration sreg = (ServiceRegistration) enumeration.nextElement();
+		for (Enumeration<ServiceRegistration<UPnPDevice>> enumeration = servicerefs
+				.elements(); enumeration.hasMoreElements();) {
+			ServiceRegistration<UPnPDevice> sreg = enumeration.nextElement();
 			if (sreg != null) {
 				try {
 					sreg.unregister();
@@ -65,12 +68,13 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	// This method is called whenever a new CD is came to the network.
 	// addDevice method gets the properties of the new CD and then registers
 	// the service in the osgi framework.
-	synchronized public void addDevice(String uuid, RootDevice deviceinfo) {
+	@Override
+	synchronized public void addDevice(String uuid,
+			@SuppressWarnings("hiding") RootDevice deviceinfo) {
 		if (devices.get(uuid) != null) {
 			return;
 		}
 		this.deviceinfo = deviceinfo;
-		String names = "org.osgi.service.upnp.UPnPDevice";
 		String[] childrenUDN = null;
         Dictionary<String, Object> props = new Hashtable<String, Object>();
 		RootDevice devinfo = deviceinfo.getDevice();
@@ -100,7 +104,9 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 			try {
 				upnpdevice = new UPnPDeviceImpl(this, devinfo, props, bc);
 				System.out.println("REGISTERING UPnP DEVICE");
-				ServiceRegistration sr = bc.registerService(names, upnpdevice,
+				ServiceRegistration<UPnPDevice> sr = bc.registerService(
+						UPnPDevice.class,
+						upnpdevice,
 						props);
 				servicerefs.put(udn, sr);
 			}
@@ -145,8 +151,8 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 					upnpdevice = new UPnPDeviceImpl(this, sembdevices[i],
 							props, bc);
 					System.out.println("REGISTERING Embedded UPnP DEVICE");
-					ServiceRegistration sr = bc.registerService(
-							"org.osgi.service.upnp.UPnPDevice", upnpdevice,
+					ServiceRegistration<UPnPDevice> sr = bc.registerService(
+							UPnPDevice.class, upnpdevice,
 							props);
 					servicerefs.put(euuid, sr);
 				}
@@ -213,15 +219,17 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 
 	// This method is called whenever a device is removed from the network to
 	// remove the device from the osgi framework.
+	@Override
 	synchronized public void removeDevice(String uuid) {
 		try {
 			if (servicerefs.get(uuid) != null) {
-				ServiceRegistration sreg = (ServiceRegistration) servicerefs
+				ServiceRegistration<UPnPDevice> sreg = servicerefs
 						.get(uuid);
 				if (sreg != null) {
-					UPnPDevice rootdev = (UPnPDevice) devices.get(uuid);
+					UPnPDevice rootdev = devices.get(uuid);
 					if (rootdev != null) {
-						Dictionary props = rootdev.getDescriptions("en");
+						Dictionary<String,Object> props = rootdev
+								.getDescriptions("en");
 						String[] childUDN = (String[]) props
 								.get(UPnPDevice.CHILDREN_UDN);
 						if (childUDN != null) {
@@ -231,7 +239,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 								}
 							}
 						}
-						UPnPDeviceImpl dev = (UPnPDeviceImpl) devices.get(uuid);
+						UPnPDeviceImpl dev = devices.get(uuid);
 						dev.unsubscribe();
 						System.out.println("UNREGISTERING UPnP DEVICE");
 						sreg.unregister();

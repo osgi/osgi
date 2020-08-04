@@ -1,24 +1,31 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.net.Socket;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 // This Thread class sends events (notifications) for a state change of a variable 
 // to all its subscribers. creats an xml format of the statevariables and send it to 
 // all the callback URLs.
 class SendEvents extends Thread {
-	private Hashtable			stateVariables;
+	private Hashtable<String,Object>	stateVariables;
 	private String				callback;
 	private Subscription		sc;
 	private URL					eventUrl;
 	private String				message;
 	private DataOutputStream	dos;
+	@SuppressWarnings("unused")
 	private BufferedInputStream	in;
 	private String				host;
 	private int					port;
 
-	public SendEvents(Hashtable stateVariables, Subscription sc) {
+	public SendEvents(Hashtable<String,Object> stateVariables,
+			Subscription sc) {
 		this.stateVariables = stateVariables;
 		this.callback = sc.getCallbackURL();
 		this.sc = sc;
@@ -28,6 +35,7 @@ class SendEvents extends Thread {
 	// xml format and
 	// if mulitiple callbacks are mentioned, sends the output to all the
 	// callbacks.
+	@Override
 	public void run() {
 		String xml = convertXml(stateVariables);
 		StringTokenizer st = new StringTokenizer(callback, "'<','>'");
@@ -44,7 +52,8 @@ class SendEvents extends Thread {
 	// This method does the notification part . This method will be called for
 	// each and every subscribers . This method sends all the subscriptin
 	// messages using tcp/ip socket.
-	boolean notifySubscribers(String callback, Subscription subscription,
+	boolean notifySubscribers(@SuppressWarnings("hiding") String callback,
+			Subscription subscription,
 			String xml) {
 		String xmlDescription = xml;
 		Socket eventSocket;
@@ -120,11 +129,13 @@ class SendEvents extends Thread {
 
 	// This method is used to convert the given statevariables to an appropriate
 	// xml format
-	String convertXml(Hashtable stateVariables) {
+	String convertXml(
+			@SuppressWarnings("hiding") Hashtable<String,Object> stateVariables) {
 		String xml = "<e:propertyset xmlns:e=\"urn:schemas-upnp-org:event-1-0\">\r\n";
-		for (Enumeration enumeration = stateVariables.keys(); enumeration.hasMoreElements();) {
-			String key = (String) enumeration.nextElement();
-			Object val = (Object) stateVariables.get(key);
+		for (Enumeration<String> enumeration = stateVariables
+				.keys(); enumeration.hasMoreElements();) {
+			String key = enumeration.nextElement();
+			Object val = stateVariables.get(key);
 			xml = xml + "  <e:property>\r\n" + "    <" + key + ">"
 					+ val.toString() + "</" + key + ">\r\n"
 					+ "  </e:property>\r\n";

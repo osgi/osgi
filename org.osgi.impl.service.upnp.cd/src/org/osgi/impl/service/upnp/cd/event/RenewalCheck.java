@@ -8,10 +8,11 @@ import java.util.Hashtable;
 // method.
 public class RenewalCheck extends ErrorCheck {
 	private DataOutputStream	dos;
-	private Hashtable			headers;
+	private Hashtable<String,String>	headers;
 
 	// constructor for intializing variables
-	public RenewalCheck(DataOutputStream dos, Hashtable headers) {
+	public RenewalCheck(DataOutputStream dos,
+			Hashtable<String,String> headers) {
 		this.dos = dos;
 		this.headers = headers;
 	}
@@ -28,9 +29,9 @@ public class RenewalCheck extends ErrorCheck {
 			writeData(result);
 			return;
 		}
-		String timeout = (String) headers.get("timeout");
-		String sid = (String) headers.get("sid");
-		Subscription subscription = (Subscription) EventRegistry
+		String timeout = headers.get("timeout");
+		String sid = headers.get("sid");
+		Subscription subscription = EventRegistry
 				.getSubscriber(sid);
 		setTime(timeout, subscription);
 		String message = formSubscription_Okay_Message(headers, subscription);

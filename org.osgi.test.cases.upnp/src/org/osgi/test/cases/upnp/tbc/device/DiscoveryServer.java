@@ -18,13 +18,13 @@ import org.osgi.test.support.sleep.Sleep;
 public class DiscoveryServer {
 	private final MulticastSocket	msocket;
 	private final InetAddress		address;
-	private final List				senders;
+	private final List<DiscoveryClient>	senders;
 
 	public DiscoveryServer() throws Exception {
 		msocket = new MulticastSocket(UPnPConstants.UPnPMCPort);
 		address = InetAddress.getByName(UPnPConstants.UPnPMCAddress);
 		msocket.joinGroup(address);
-		senders = new ArrayList();
+		senders = new ArrayList<>();
 	}
 
 	public void registerSender(DiscoveryClient client) {

@@ -20,16 +20,18 @@ public class SubscriptionAlive extends Thread {
 	// notifies event registry to check wehther the servicelistener related with
 	// this subscription can
 	// be unsubscribed from the framework or not.
+	@Override
 	public void run() {
 		while (active) {
 			long curTime = System.currentTimeMillis();
-			Enumeration subscriberIds = EventRegistry.getSubscriberIds();
+			Enumeration<String> subscriberIds = EventRegistry
+					.getSubscriberIds();
 			for (; subscriberIds.hasMoreElements();) {
-				String subscriberId = (String) subscriberIds.nextElement();
-				Subscription sc = (Subscription) EventRegistry
+				String subscriberId = subscriberIds.nextElement();
+				Subscription sc = EventRegistry
 						.getSubscriber(subscriberId);
 				if (!sc.getInfinite()) {
-					long val = (long) sc.getExpirytime();
+					long val = sc.getExpirytime();
 					if (curTime - val >= 0) {
 						String serviceId = sc.getServiceId();
 						EventRegistry.removeSubscriber(subscriberId);

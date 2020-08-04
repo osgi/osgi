@@ -26,7 +26,7 @@ public class SSDPComponent implements SSDPConstants {
 	private String					msearchResponse;
 	private MulticastSocket			multicastsock;
 	private InetAddress				ssdpinet;
-	public Hashtable				allDeviceDetails;
+	public Hashtable<String,DeviceDetails>	allDeviceDetails;
 	private byte					ttl	= 4;
 	private String					notifyByeMessage;
 	public EventAccessForExporter	eventregistry;
@@ -42,17 +42,17 @@ public class SSDPComponent implements SSDPConstants {
 		eventregistry = evRegistry;
 		server = new String(SOAPConstants.osNameVersion
 				+ " UPNP/1.0 SAMSUNG-UPnP-STACK/1.0");
-		allDeviceDetails = new Hashtable(10);
+		allDeviceDetails = new Hashtable<>(10);
 		HttpService httpService = null;
 		try {
-			ServiceReference sr = bc
-					.getServiceReference("org.osgi.service.http.HttpService");
+			ServiceReference<HttpService> sr = bc
+					.getServiceReference(HttpService.class);
 			if (bc.getProperty("org.osgi.service.http.port") != null)
 				baseURL = genaIP.substring(0, genaIP.indexOf(":") + 1)
 						+ bc.getProperty("org.osgi.service.http.port");
 			else
 				baseURL = genaIP.substring(0, genaIP.indexOf(":") + 1) + "8080";
-			httpService = (HttpService) bc.getService(sr);
+			httpService = bc.getService(sr);
 			//Creating SSDP multicast socket
 			multicastsock = new MulticastSocket(HOST_PORT);
 			ssdpinet = InetAddress.getByName(HOST_IP);
@@ -95,16 +95,17 @@ public class SSDPComponent implements SSDPConstants {
 	// devices. It calls
 	// sendNotifyBye() method by passing the required details.
 	void readDevicesForNotifyBye() {
-		for (Enumeration enumeration = allDeviceDetails.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = allDeviceDetails
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			sendDeviceForNotifyBye(devDet.getUUID());
 		}
 	}
 
 	// This method calls sendNotifyBye() method by passing the required details.
 	public void sendDeviceForNotifyBye(String uuid) {
-		DeviceDetails devDet = (DeviceDetails) allDeviceDetails.get(uuid);
+		DeviceDetails devDet = allDeviceDetails.get(uuid);
 		if (devDet != null) {
 			if (devDet.isRoot()) {
 				sendNotifyBye("root", uuid, devDet.getDevType(), null);
@@ -112,9 +113,10 @@ public class SSDPComponent implements SSDPConstants {
 			else {
 				sendNotifyBye("embdev", uuid, devDet.getDevType(), null);
 			}
-			Hashtable services = devDet.getServices();
-			for (Enumeration e = services.elements(); e.hasMoreElements();) {
-				String serType = (String) e.nextElement();
+			Hashtable<String,String> services = devDet.getServices();
+			for (Enumeration<String> e = services.elements(); e
+					.hasMoreElements();) {
+				String serType = e.nextElement();
 				sendNotifyBye("service", uuid, null, serType);
 			}
 			allDeviceDetails.remove(uuid);

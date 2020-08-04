@@ -2,6 +2,7 @@ package org.osgi.impl.service.upnp.cp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -25,8 +26,8 @@ import org.osgi.service.upnp.UPnPDevice;
 
 public class UPnPControllerImpl implements UPnPController {
 	private String				IP;
-	private Hashtable			devices;
-	private Vector				deviceListeners;
+	private Hashtable<String,RootDevice>	devices;
+	private Vector<UPnPDeviceListener>		deviceListeners;
 	private SSDPComponent		ssdpcomp;
 	private Description			description;
 	private Document			document;
@@ -38,10 +39,10 @@ public class UPnPControllerImpl implements UPnPController {
 	private BundleContext		bc;
 
 	// This method starts the upnp controller.It start all layers functionality.
-	public void start(BundleContext bc) {
+	public void start(@SuppressWarnings("hiding") BundleContext bc) {
 		this.bc = bc;
-		devices = new Hashtable(10);
-		deviceListeners = new Vector(10, 10);
+		devices = new Hashtable<>(10);
+		deviceListeners = new Vector<>(10, 10);
 		IP = bc.getProperty("org.osgi.service.http.hostname");
 		try {
 			if (IP == null) {
@@ -80,13 +81,14 @@ public class UPnPControllerImpl implements UPnPController {
 	}
 
 	// This method is called when the device is added to the network.
+	@Override
 	synchronized public void addDevice(String uuid, String descurl) {
 		RootDevice deviceinfo = null;
 		try {
-			ServiceReference[] regDevices = bc.getServiceReferences(
-					"org.osgi.service.upnp.UPnPDevice", "(" + UPnPDevice.UDN
+			Collection<ServiceReference<UPnPDevice>> regDevices = bc
+					.getServiceReferences(UPnPDevice.class, "(" + UPnPDevice.UDN
 							+ "=" + uuid + ")");
-			if (regDevices == null) {
+			if (regDevices.isEmpty()) {
 				description = new Description(bc);
 				document = description.getDocument(descurl);
 				if (document != null) {
@@ -94,9 +96,10 @@ public class UPnPControllerImpl implements UPnPController {
 					if (deviceinfo != null) {
 						RootDevice devinfo = deviceinfo.getDevice();
 						if ((devinfo != null) && (devinfo.getUDN() != null)) {
-							for (Enumeration e = deviceListeners.elements(); e
+							for (Enumeration<UPnPDeviceListener> e = deviceListeners
+									.elements(); e
 									.hasMoreElements();) {
-								UPnPDeviceListener devlistener = (UPnPDeviceListener) e
+								UPnPDeviceListener devlistener = e
 										.nextElement();
 								devlistener.addDevice(uuid, deviceinfo);
 							}
@@ -115,36 +118,43 @@ public class UPnPControllerImpl implements UPnPController {
 	}
 
 	// This method is got called when the device is removed from the network
+	@Override
 	synchronized public void removeDevice(String uuid) {
 		devices.remove(uuid);
-		for (Enumeration e = deviceListeners.elements(); e.hasMoreElements();) {
-			UPnPDeviceListener devlistener = (UPnPDeviceListener) e
+		for (Enumeration<UPnPDeviceListener> e = deviceListeners.elements(); e
+				.hasMoreElements();) {
+			UPnPDeviceListener devlistener = e
 					.nextElement();
 			devlistener.removeDevice(uuid);
 		}
 	}
 
 	// This method returns the product details
+	@Override
 	public String getProduct() {
 		return "SAMSUNG-UPnP-STACK/1.0";
 	}
 
 	// This method returns the control object.
+	@Override
 	public Control getControl() {
 		return control;
 	}
 
 	// This method returns the event service object.
+	@Override
 	public EventService getEventService() {
 		return eventservice;
 	}
 
 	// This method registers the device listener
+	@Override
 	public void registerDeviceListener(UPnPDeviceListener devlistener) {
 		deviceListeners.add(devlistener);
 	}
 
 	// This method unregisters from the device listener.
+	@Override
 	public void unRegisterDeviceListener(UPnPDeviceListener devlistener) {
 		deviceListeners.remove(devlistener);
 	}

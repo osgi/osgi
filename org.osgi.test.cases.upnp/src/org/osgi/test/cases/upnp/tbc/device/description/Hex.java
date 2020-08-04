@@ -23,7 +23,7 @@ public final class Hex {
 	public static final String encode(byte[] buff) {
 		String enc = "";
 		for (int i = 0; i < buff.length; i++) {
-			enc = enc + Integer.toHexString((int) buff[i])
+			enc = enc + Integer.toHexString(buff[i])
 					+ (i == buff.length - 1 ? new String() : "-");
 		}
 		return enc;
@@ -39,7 +39,7 @@ public final class Hex {
 	 *            <code>\r</code> line breaks they are ignored
 	 */
 	public static final byte[] decode(String input) throws Exception {
-		Vector out = new Vector();
+		Vector<String> out = new Vector<>();
 		int n = input.indexOf('\n');
 		int r = input.indexOf('\r');
 		while ((input != null) && ((n != -1) || (r != -1))) {
@@ -61,7 +61,7 @@ public final class Hex {
 		if ((out.size() > 0)) {
 			for (int i = 0; i < buff.length; i++) {
 				try {
-					buff[i] = Byte.parseByte(((String) out.elementAt(i)), 16);
+					buff[i] = Byte.parseByte((out.elementAt(i)), 16);
 				}
 				catch (Exception e) {
 					throw new Exception("Usupported format");

@@ -1,18 +1,18 @@
 package org.osgi.impl.service.upnp.cd.control;
 
-import java.util.*;
+import java.util.Hashtable;
 
 // This class contains the error codes, their errorDescription and Description
 // which are relevent to control layer. The error codes are mapped to errorDescription 
 // and Description which can be retreived through the provided methods.
 public class SOAPErrorCodes {
 	// This table maps the error codes to their description.
-	private static Hashtable	errorMap;
+	private static Hashtable<String,String[]> errorMap;
 
 	// This is the constructor which initializes the error table and populates
 	// it.
 	public SOAPErrorCodes() {
-		errorMap = new Hashtable();
+		errorMap = new Hashtable<>();
 		errorMap.put("401", new String[] {"Invalid Action",
 				"No action by that name at this service."});
 		errorMap
@@ -35,7 +35,7 @@ public class SOAPErrorCodes {
 
 	// This method takes the error code and returns the description.
 	static String getDesc(String code) {
-		String[] str = (String[]) errorMap.get(code);
+		String[] str = errorMap.get(code);
 		if (str == null) {
 			return null;
 		}
@@ -44,7 +44,7 @@ public class SOAPErrorCodes {
 
 	// This method takes the error code and returns the error description.
 	static String getErrorDesc(String code) {
-		String[] str = (String[]) errorMap.get(code);
+		String[] str = errorMap.get(code);
 		if (str == null) {
 			return null;
 		}

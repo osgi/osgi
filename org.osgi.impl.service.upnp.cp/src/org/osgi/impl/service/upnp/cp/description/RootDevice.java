@@ -1,6 +1,7 @@
 package org.osgi.impl.service.upnp.cp.description;
 
 import java.net.URL;
+
 import org.osgi.framework.BundleContext;
 
 public class RootDevice {
@@ -21,7 +22,9 @@ public class RootDevice {
 	private String			upc;
 	private String			presentationURL	= "";
 	private RootDevice		devices[];
+	@SuppressWarnings("unused")
 	private RootDevice		rdev;
+	@SuppressWarnings("unused")
 	private RootDevice		device;
 	private Icon			icons[];
 	private ServiceInfo		serviceList[];
@@ -224,7 +227,6 @@ public class RootDevice {
 		serviceList = sl;
 		servi1 = new ServiceInfo[serviceList.length];
 		final Description desc = new Description(bc1);
-		String urlBase6 = "";
 		String ub = rootdev.getURLBase();
 		// Sets the urlBase if the urlBase is not specified.
 		if (ub == null || ub.trim().length() == 0) {

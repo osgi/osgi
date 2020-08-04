@@ -1,6 +1,8 @@
 package org.osgi.test.cases.upnp.tbc.parser;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * 
@@ -11,12 +13,12 @@ import java.util.*;
  */
 public class XMLTag {
 	private String		name;
-	private Hashtable	attributes;
-	private Vector		content;
+	private Hashtable<String,String>	attributes;
+	private Vector<Object>	content;
 
 	public XMLTag(String name) {
 		this.name = name;
-		content = new Vector();
+		content = new Vector<>();
 	}
 
 	void appendChar(char ch) {
@@ -48,7 +50,7 @@ public class XMLTag {
 		content.addElement(tag);
 	}
 
-	void setHash(Hashtable hash) {
+	void setHash(Hashtable<String,String> hash) {
 		attributes = hash;
 	}
 
@@ -56,11 +58,11 @@ public class XMLTag {
 		return name;
 	}
 
-	public Dictionary getAttributes() {
+	public Dictionary<String,String> getAttributes() {
 		return attributes;
 	}
 
-	public Vector getContent() {
+	public Vector<Object> getContent() {
 		return content;
 	}
 

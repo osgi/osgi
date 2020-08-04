@@ -4,6 +4,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.upnp.cp.description.Icon;
 import org.osgi.impl.service.upnp.cp.description.RootDevice;
@@ -15,7 +16,7 @@ import org.osgi.service.upnp.UPnPService;
 public class UPnPDeviceImpl implements UPnPDevice {
 	private UPnPBaseDriver	basedriver;
 	private RootDevice		deviceinfo;
-	private Hashtable		services;
+	private Hashtable<String,UPnPServiceImpl>	services;
     private Dictionary<String, Object> props;
 	private UPnPIconImpl[]  icons;
 	private String			devid;
@@ -33,7 +34,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 		this.bc = bc;
 		devid = deviceinfo.getUDN();
 		devtype = deviceinfo.getDeviceType();
-		services = new Hashtable(10);
+		services = new Hashtable<>(10);
 		extractDeviceInfo();
 	}
 
@@ -65,41 +66,47 @@ public class UPnPDeviceImpl implements UPnPDevice {
 
 	// This method returns the UPnPService object based on the given name of the
 	// service.
+	@Override
 	public UPnPService getService(String s) {
 		checkState();
 		if (services.get(s) != null) {
-			return (UPnPService) services.get(s);
+			return services.get(s);
 		}
 		return null;
 	}
 
 	// This method returns all UPnPServices
+	@Override
 	public UPnPService[] getServices() {
 		checkState();
 		UPnPService[] upnpservs = new UPnPService[services.size()];
 		int i = 0;
-		for (Enumeration e = services.elements(); e.hasMoreElements(); i++) {
-			upnpservs[i] = (UPnPService) e.nextElement();
+		for (Enumeration<UPnPServiceImpl> e = services.elements(); e
+				.hasMoreElements(); i++) {
+			upnpservs[i] = e.nextElement();
 		}
 		return upnpservs;
 	}
 
 	// This method returns the upnp icons based on the given name.
+	@Override
 	public UPnPIcon[] getIcons(String s) {
 		checkState();
 		return icons;
 	}
 
 	// This method returns all the device properties based on the given locale
-	public Dictionary getDescriptions(String locale1) {
+	@Override
+	public Dictionary<String,Object> getDescriptions(String locale1) {
 		return props;
 	}
 
 	// This method invokes the unsubscribe method from all the UPnP services.
 	public void unsubscribe() {
-		for (Enumeration enumeration = services.elements(); enumeration.hasMoreElements();) {
+		for (Enumeration<UPnPServiceImpl> enumeration = services
+				.elements(); enumeration.hasMoreElements();) {
 			try {
-				UPnPServiceImpl serv = (UPnPServiceImpl) enumeration.nextElement();
+				UPnPServiceImpl serv = enumeration.nextElement();
 				serv.unsubscribe();
 				serv.closeTracker();
 			}
@@ -126,9 +133,10 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	}
 
 	private void releaseServices() {
-		Iterator servicesIter = this.services.values().iterator();
+		Iterator<UPnPServiceImpl> servicesIter = this.services.values()
+				.iterator();
 		for (int i = 0, servicesCount = this.services.size(); i < servicesCount; i++) {
-			((UPnPServiceImpl) servicesIter.next()).release();
+			servicesIter.next().release();
 		}
 	}
 

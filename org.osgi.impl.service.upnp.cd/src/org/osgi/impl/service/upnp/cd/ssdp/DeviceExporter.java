@@ -1,10 +1,23 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPIcon;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 // This class used for making descriptions of device and making device details for NOITFY. 
 // When new device exports it sends NOTIFY messages and adds information to exported databases. 
@@ -17,7 +30,8 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	private MulticastSocket	multicastsock;
 	private InetAddress		ssdpinet;
 	private String			notifyMessage;
-	private Hashtable		notifyDevices;
+	private Hashtable<String,DeviceDetails>	notifyDevices;
+	@SuppressWarnings("unused")
 	private String			deviceForBye;
 	private byte			ttl	= 4;
 
@@ -32,7 +46,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 		this.device = device;
 		this.exporter = exporter;
 		this.bc = bc;
-		notifyDevices = new Hashtable(3);
+		notifyDevices = new Hashtable<>(3);
 		try {
 			multicastsock = new MulticastSocket(HOST_PORT);
 			ssdpinet = InetAddress.getByName(HOST_IP);
@@ -44,6 +58,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	}
 
 	// This method invokes by thread pool thred service
+	@Override
 	public void run() {
 		if (device != null) {
 			if (makeDescriptions()) {
@@ -61,7 +76,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	// This method makes all necessary descriptions for exported device.
 	// UPnP specification does not encourage more than 2 levels.
 	boolean makeDescriptions() {
-		Dictionary props = device.getDescriptions("en");
+		Dictionary<String,Object> props = device.getDescriptions("en");
 		String[] childUDN1 = null;
 		String des = null;
 		String rootUDN = null;
@@ -114,21 +129,24 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 			Thread.sleep(3000);//giving time for ebedded device registraion
 		}
 		catch (Exception e) {
+			// ignored
 		}
 		String des3 = null;
 		des3 = "<deviceList>\r\n";
 		for (int i = 0; i < childUDN1.length; i++) {
 			try {
-				ServiceReference[] sref = bc.getServiceReferences(
-						"org.osgi.service.upnp.UPnPDevice", "("
+				Collection<ServiceReference<UPnPDevice>> sref = bc
+						.getServiceReferences(UPnPDevice.class, "("
 								+ UPnPDevice.UDN + "=" + childUDN1[i] + ")");
-				if (sref != null) {
-					UPnPDevice embDevice1 = (UPnPDevice) bc.getService(sref[0]);
+				if (!sref.isEmpty()) {
+					UPnPDevice embDevice1 = bc
+							.getService(sref.iterator().next());
 					String tdes = makeDeviceDescription(embDevice1, "emb",
 							location, server);
 					if (tdes != null) {
 						des3 = des3 + tdes;
-						Dictionary embprops1 = embDevice1.getDescriptions("en");
+						Dictionary<String,Object> embprops1 = embDevice1
+								.getDescriptions("en");
 						String[] childUDN2 = (String[]) embprops1
 								.get("UPnP.device.childrenUDN");
 						if (childUDN2 != null) {
@@ -156,9 +174,10 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 
 	// This method reads root device and embedded devices for NOTIFY.
 	void addDeviceForSsdp() {
-		for (Enumeration enumeration = notifyDevices.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = notifyDevices
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			sendDeviceForNotify(devDet);
 		}
 		System.out
@@ -168,7 +187,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	// This method makes perticuler device desription.
 	String makeDeviceDescription(UPnPDevice dev, String type, String location,
 			String server) {
-		Dictionary props = dev.getDescriptions("en");
+		Dictionary<String,Object> props = dev.getDescriptions("en");
 		String des = "<device>\r\n";
 		String udn = (String) props.get("UPnP.device.UDN");
 		DeviceDetails devDet = new DeviceDetails();
@@ -317,7 +336,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	// This method makes all actions descriptions of perticuler service.
 	String makeActionsDescription(UPnPService service, UPnPAction[] actions) {
 		String actionDes = "<actionList>\r\n";
-		Vector variables = new Vector(5, 5);
+		Vector<UPnPStateVariable> variables = new Vector<>(5, 5);
 		for (int i = 0; i < actions.length; i++) {
 			String retval = actions[i].getReturnArgumentName();
 			String[] inargs = actions[i].getInputArgumentNames();
@@ -379,10 +398,11 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	}
 
 	// This method makes all state variables descriptions of perticuler service.
-	String makeStatevarDescription(Vector stVars) {
+	String makeStatevarDescription(Vector<UPnPStateVariable> stVars) {
 		String varsDes = "<serviceStateTable>\r\n";
-		for (Enumeration enumeration = stVars.elements(); enumeration.hasMoreElements();) {
-			UPnPStateVariable var = (UPnPStateVariable) enumeration.nextElement();
+		for (Enumeration<UPnPStateVariable> enumeration = stVars
+				.elements(); enumeration.hasMoreElements();) {
+			UPnPStateVariable var = enumeration.nextElement();
 			if (var.sendsEvents()) {
 				varsDes = varsDes + "<stateVariable sendEvents=\"yes\">\r\n";
 			}
@@ -403,7 +423,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 				varsDes = varsDes + "</allowedValueList>\r\n";
 			}
 			else {
-				Class cs = var.getJavaDataType();
+				Class< ? > cs = var.getJavaDataType();
 				String type = cs.getName();
 				Number max = var.getMaximum();
 				Number min = var.getMinimum();
@@ -515,10 +535,12 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 			sendNotify("embdev", uuid, devDet.getDevType(), null, devDet
 					.getLocation(), devDet.getServer());
 		}
-		Hashtable services = devDet.getServices();
-		for (Enumeration e = services.elements(); e.hasMoreElements();) {
-			String serType = (String) e.nextElement();
-			String serVer = (String) services.get(serType);
+		Hashtable<String,String> services = devDet.getServices();
+		for (Enumeration<String> e = services.elements(); e
+				.hasMoreElements();) {
+			String serType = e.nextElement();
+			@SuppressWarnings("unused")
+			String serVer = services.get(serType);
 			sendNotify("service", uuid, null, serType, devDet.getLocation(),
 					devDet.getServer());
 		}
@@ -578,6 +600,7 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 					multicastsock.send(packet);
 				}
 				catch (IOException e) {
+					// ignored
 				}
 			}
 		}

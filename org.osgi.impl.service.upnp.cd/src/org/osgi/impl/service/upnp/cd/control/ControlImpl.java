@@ -2,13 +2,16 @@ package org.osgi.impl.service.upnp.cd.control;
 
 import java.io.DataOutputStream;
 import java.util.Dictionary;
+
 import org.osgi.impl.service.upnp.cd.ssdp.UPnPExporter;
-import org.osgi.service.upnp.*;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPService;
 
 // This class contains the implementation of Control interface defined in the api package.
 public class ControlImpl {
 	// This is a mapping of the control Url and the Action objects
-	private SOAPMaker		maker;
+	SOAPMaker				maker;
+	@SuppressWarnings("unused")
 	private SOAPErrorCodes	errorCodes;
 	private SOAPParser		parser;
 
@@ -21,19 +24,20 @@ public class ControlImpl {
 	// This method will be called by the HttpServer to send the control/query
 	// request,
 	// which is coming from the CP side.
-	public synchronized void sendHttpRequest(Dictionary headers, String xml,
+	public synchronized void sendHttpRequest(Dictionary<String,String> headers,
+			String xml,
 			DataOutputStream dos) {
+		@SuppressWarnings("unused")
 		boolean invalidReq = false;
-		String httpError = null;
 		boolean man = false;
 		String result = null;
 		try {
-			String controlUrl = (String) headers.get("post");
+			String controlUrl = headers.get("post");
 			if (controlUrl.startsWith("/")) {
 				controlUrl = controlUrl.substring(1);
 			}
 			if (controlUrl == null) {
-				controlUrl = (String) headers.get("m-post");
+				controlUrl = headers.get("m-post");
 				man = true;
 			}
 			if (controlUrl == null) {
@@ -44,7 +48,7 @@ public class ControlImpl {
 				writedata(SOAPConstants.http + SOAPConstants.ERROR_412, dos);
 				return;
 			}
-			String cType = (String) headers.get("content-type");
+			String cType = headers.get("content-type");
 			if (cType == null) {
 				writedata(SOAPConstants.http + SOAPConstants.ERROR_412, dos);
 				return;
@@ -61,10 +65,10 @@ public class ControlImpl {
 			}
 			String soapAction;
 			if (!man) {
-				soapAction = (String) headers.get("soapaction");
+				soapAction = headers.get("soapaction");
 			}
 			else {
-				String manH = (String) headers.get("man");
+				String manH = headers.get("man");
 				int indexSemi = manH.indexOf(";");
 				if (indexSemi == -1) {
 					invalidReq = true;
@@ -78,7 +82,7 @@ public class ControlImpl {
 					return;
 				}
 				String ns = manH.substring(indexSemi + 5);
-				soapAction = (String) headers.get(ns + "-soapaction");
+				soapAction = headers.get(ns + "-soapaction");
 			}
 			if (!soapAction.startsWith("\"") || !soapAction.endsWith("\"")) {
 				writedata(SOAPConstants.http + SOAPConstants.ERROR_400, dos);
@@ -97,7 +101,8 @@ public class ControlImpl {
 			else {
 				ParsedRequest req = parser.controlReqParse(xml);
 				String actionName = req.getActionName();
-				Dictionary params = req.getArguments(upnpservice, actionName);
+				Dictionary<String,Object> params = req.getArguments(upnpservice,
+						actionName);
 				UPnPAction upnpaction = upnpservice.getAction(actionName);
 				if (upnpaction == null) {
 					result = maker.createResponseError("404");
@@ -120,12 +125,13 @@ public class ControlImpl {
 
 	public class InvokeDeviceCallback extends Thread {
 		UPnPAction			action;
-		Dictionary			parameters;
+		Dictionary<String,Object>	parameters;
 		SOAPMaker			soapmaker;
 		DataOutputStream	dos;
 		ParsedRequest		request;
 
-		public InvokeDeviceCallback(UPnPAction action, Dictionary params,
+		public InvokeDeviceCallback(UPnPAction action,
+				Dictionary<String,Object> params,
 				SOAPMaker maker, DataOutputStream dos, ParsedRequest request) {
 			this.action = action;
 			this.parameters = params;
@@ -134,10 +140,12 @@ public class ControlImpl {
 			this.request = request;
 		}
 
+		@Override
 		public void run() {
 			try {
-				Dictionary outParams = action.invoke(parameters);
-				Dictionary ConvertedParams = request.getParams(action,
+				Dictionary<String,Object> outParams = action.invoke(parameters);
+				Dictionary<String,Object> ConvertedParams = request
+						.getParams(action,
 						outParams);
 				String result = maker.createControlResponseOK(action.getName(),
 						request.getServiceType(), ConvertedParams);

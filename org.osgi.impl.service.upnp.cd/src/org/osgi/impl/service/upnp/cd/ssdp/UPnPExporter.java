@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
@@ -23,17 +25,18 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 // This class used for listening UPnPDevice registration and unregiration. It 
 // maintains the all databses related to exporting devices and gives serviceinformation all 
 // other layers. It gives description and icon resources for http requests. 
-public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
+public class UPnPExporter implements
+		ServiceTrackerCustomizer<UPnPDevice,UPnPDevice>, HttpContext {
 	private SSDPComponent	ssdpcomp;
-	private ServiceTracker	tracker;
+	private ServiceTracker<UPnPDevice,UPnPDevice>	tracker;
 	private BundleContext	bc;
 	private HttpService		httpService;
-	private Hashtable		resources;
-	private Hashtable		iconsTable;
-	private Hashtable		createdFiles;
+	private Hashtable<String,String>				resources;
+	private Hashtable<String,UPnPIcon>				iconsTable;
+	private Hashtable<String,File>					createdFiles;
 	private File			storeDir;
-	public static Hashtable	eventTable;
-	public static Hashtable	controlTable;
+	public static Hashtable<String,UPnPService>		eventTable;
+	public static Hashtable<String,UPnPService>		controlTable;
 
 	// This constructor constructs the UPnPExporter.
 	UPnPExporter(SSDPComponent comp, BundleContext bc, HttpService httpService) {
@@ -41,24 +44,24 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 		this.bc = bc;
 		this.httpService = httpService;
 		ssdpcomp = comp;
-		resources = new Hashtable(10);
-		eventTable = new Hashtable(10);
-		controlTable = new Hashtable(10);
-		iconsTable = new Hashtable(10);
-		createdFiles = new Hashtable(10);
+		resources = new Hashtable<>(10);
+		eventTable = new Hashtable<>(10);
+		controlTable = new Hashtable<>(10);
+		iconsTable = new Hashtable<>(10);
+		createdFiles = new Hashtable<>(10);
 	}
 
 	// This method starts the exporting devices functionality.
 	public void startExporter() {
 		//System.out.println("starting the exporter");
-		ServiceReference[] regExpdevices = null;
 		Filter filter = null;
 		try {
 			httpService.registerResources("/samsungcd", "/samsungcd", this);
 			filter = bc.createFilter("(&(objectclass="
 					+ UPnPDevice.class.getName() + ")(UPnP.export=*))");
 			//System.out.println(filter);
-			tracker = new ServiceTracker(bc, filter, this);
+			tracker = new ServiceTracker<UPnPDevice,UPnPDevice>(bc, filter,
+					this);
 			tracker.open();
 		}
 		catch (Exception e) {
@@ -89,7 +92,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 	// This methods returns a event table entry.
 	synchronized public static UPnPService getEventEntry(String subUrl) {
 		if (subUrl != null) {
-			return (UPnPService) eventTable.get(subUrl);
+			return eventTable.get(subUrl);
 		}
 		return null;
 	}
@@ -97,15 +100,16 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 	// This methods returns a control table entry.
 	synchronized public static UPnPService getControlEntry(String subUrl) {
 		if (subUrl != null) {
-			return (UPnPService) controlTable.get(subUrl);
+			return controlTable.get(subUrl);
 		}
 		return null;
 	}
 
 	// This methods removes a event table entry.
 	synchronized void removeEventEntry(String uuid) {
-		for (Enumeration enumeration = eventTable.keys(); enumeration.hasMoreElements();) {
-			String key1 = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = eventTable.keys(); enumeration
+				.hasMoreElements();) {
+			String key1 = enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				eventTable.remove(key1);
 				ssdpcomp.eventregistry.removeServiceId(key1);
@@ -115,8 +119,9 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a control table entry.
 	synchronized void removeControlEntry(String uuid) {
-		for (Enumeration enumeration = controlTable.keys(); enumeration.hasMoreElements();) {
-			String key1 = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = controlTable.keys(); enumeration
+				.hasMoreElements();) {
+			String key1 = enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				controlTable.remove(key1);
 			}
@@ -132,8 +137,9 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a resources table entry.
 	synchronized void removeResource(String uuid) {
-		for (Enumeration enumeration = resources.keys(); enumeration.hasMoreElements();) {
-			String key1 = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = resources.keys(); enumeration
+				.hasMoreElements();) {
+			String key1 = enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				resources.remove(key1);
 			}
@@ -149,8 +155,9 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a icon table entry.
 	synchronized void removeIconEntry(String uuid) {
-		for (Enumeration enumeration = iconsTable.keys(); enumeration.hasMoreElements();) {
-			String key1 = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = iconsTable.keys(); enumeration
+				.hasMoreElements();) {
+			String key1 = enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				iconsTable.remove(key1);
 			}
@@ -158,16 +165,17 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 	}
 
 	// This methods returns URL of requested resource.
+	@Override
 	public URL getResource(String name) {
 		if (name != null) {
 			if (name.startsWith("/samsungcd/")) {
 				name = name.substring(name.indexOf("/samsungcd/") + 11);
-				String xmlfile = (String) resources.get(name);
+				String xmlfile = resources.get(name);
 				if (xmlfile != null) {
 					return getURL(name, xmlfile, null);
 				}
 				else {
-					UPnPIcon icon = (UPnPIcon) iconsTable.get(name);
+					UPnPIcon icon = iconsTable.get(name);
 					if (icon != null) {
 						try {
 							InputStream in = icon.getInputStream();
@@ -208,6 +216,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 				return resXmlFile.toURL();
 			}
 			catch (Exception e) {
+				// ignored
 			}
 		}
 		else
@@ -227,6 +236,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 					}
 				}
 				catch (Exception e1) {
+					// ignored
 				}
 			}
 		return null;
@@ -234,6 +244,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods returns the mime type for http request.
 	// It checks request is for xml file or icon
+	@Override
 	public String getMimeType(String name) {
 		if (name != null) {
 			if (name.startsWith("/samsungcd/")) {
@@ -243,7 +254,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 				}
 				else
 					if (iconsTable.get(name) != null) {
-						UPnPIcon icon = (UPnPIcon) iconsTable.get(name);
+						UPnPIcon icon = iconsTable.get(name);
 						return icon.getMimeType();
 					}
 			}
@@ -253,6 +264,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods is checks security for response.
 	// It return true cos currently not checking any security.
+	@Override
 	public boolean handleSecurity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		return true;
@@ -260,9 +272,10 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This method called by service tracker when ever it tracks the new
 	// UPnPDevice Service added
-	public Object addingService(ServiceReference sr) {
+	@Override
+	public UPnPDevice addingService(ServiceReference<UPnPDevice> sr) {
 		System.out.println("adding service upnp exported device");
-		UPnPDevice device = (UPnPDevice) bc.getService(sr);
+		UPnPDevice device = bc.getService(sr);
 		if (sr.getProperty("UPnP.device.parentUDN") == null) {
 			exportDevice(device);
 		}
@@ -271,14 +284,19 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This method called by service tracker when ever it tracks the new
 	// UPnPDevice Service removed
-	public void removedService(ServiceReference sr, Object obj) {
+	@Override
+	public void removedService(ServiceReference<UPnPDevice> sr,
+			UPnPDevice obj) {
 		String udn = (String) sr.getProperty("UPnP.device.UDN");
 		removeDevice(udn);
 	}
 
 	// This method called by service tracker when ever the new UPnPDevice
 	// Service modified
-	public void modifiedService(ServiceReference sr, Object obj) {
+	@Override
+	public void modifiedService(ServiceReference<UPnPDevice> sr,
+			UPnPDevice obj) {
+		// empty
 	}
 
 	// This method removes all databases information and sends NOTIFY BYE
@@ -289,14 +307,16 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 		removeControlEntry(udn);
 		removeResource(udn);
 		removeIconEntry(udn);
-		for (Enumeration enumeration = createdFiles.keys(); enumeration.hasMoreElements();) {
-			String key1 = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = createdFiles.keys(); enumeration
+				.hasMoreElements();) {
+			String key1 = enumeration.nextElement();
 			if (key1.indexOf(udn) != -1) {
 				try {
-					File storedFile = (File) createdFiles.get(key1);
+					File storedFile = createdFiles.get(key1);
 					storedFile.delete();
 				}
 				catch (Exception e) {
+					// ignored
 				}
 			}
 		}
@@ -310,13 +330,15 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 		controlTable = null;
 		iconsTable = null;
 		try {
-			for (Enumeration enumeration = createdFiles.keys(); enumeration.hasMoreElements();) {
-				String key1 = (String) enumeration.nextElement();
+			for (Enumeration<String> enumeration = createdFiles
+					.keys(); enumeration.hasMoreElements();) {
+				String key1 = enumeration.nextElement();
 				try {
-					File storedFile = (File) createdFiles.get(key1);
+					File storedFile = createdFiles.get(key1);
 					storedFile.delete();
 				}
 				catch (Exception e) {
+					// ignored
 				}
 			}
 			if (storeDir != null)

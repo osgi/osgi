@@ -21,7 +21,7 @@ public class SOAPMaker extends SOAPConstants {
 	// the
 	// Control response when the control request is successful.
 	public String createControlResponseOK(String actionName,
-			String serviceType, java.util.Dictionary arguments) {
+			String serviceType, java.util.Dictionary<String,Object> arguments) {
 		synchronized (controlLock) {
 			StringBuffer soapBuf = new StringBuffer();
 			String soap;
@@ -33,8 +33,9 @@ public class SOAPMaker extends SOAPConstants {
 					+ "urn:schemas-upnp-org:service:" + serviceType + "\">");
 			soapBuf.append(rn);
 			if (arguments != null) {
-				for (Enumeration e = arguments.keys(); e.hasMoreElements();) {
-					String argName = (String) e.nextElement();
+				for (Enumeration<String> e = arguments.keys(); e
+						.hasMoreElements();) {
+					String argName = e.nextElement();
 					soapBuf.append("<" + argName + ">"
 							+ (String) arguments.get(argName) + "</" + argName
 							+ ">");

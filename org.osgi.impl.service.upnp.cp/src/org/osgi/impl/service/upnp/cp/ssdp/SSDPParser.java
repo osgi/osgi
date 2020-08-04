@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 public class SSDPParser implements SSDPConstants, Runnable {
 	private SSDPComponent	ssdpcomp;
 	private String			data;
+	@SuppressWarnings("unused")
 	private DatagramSocket	datasoc;
 
 	// This constructor constructs the SSDPParser
@@ -28,6 +29,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	}
 
 	// This method invoke by thread pool
+	@Override
 	public void run() {
 		if (data != null) {
 			parseData(data);
@@ -35,7 +37,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	}
 
 	// This method parses the data.
-	synchronized void parseData(String data) {
+	synchronized void parseData(@SuppressWarnings("hiding") String data) {
 		StringTokenizer stn = new StringTokenizer(data, RN);
 		StringTokenizer stn1 = new StringTokenizer(data, RN);
 		int count = stn1.countTokens();
@@ -55,7 +57,8 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	}
 
 	// This method parses notify messages
-	void parseNotify(String data, String[] tokensArray) {
+	void parseNotify(@SuppressWarnings("hiding") String data,
+			String[] tokensArray) {
 		String ch = null;
 		String loc = null;
 		String nt = null;
@@ -118,7 +121,8 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	}
 
 	// This method parses M-SEARCH responses messages
-	void parseMsearchResponse(String data, String[] tokensArray) {
+	void parseMsearchResponse(@SuppressWarnings("hiding") String data,
+			String[] tokensArray) {
 		String ch = getHeaderValue(CACHE, tokensArray);
 		if (ch.indexOf(MAXAGE) != -1) {
 			ch = ch.substring(ch.indexOf("=") + 1);
@@ -127,6 +131,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		else {
 			ch = null;
 		}
+		@SuppressWarnings("unused")
 		String date1 = getHeaderValue(DATE1, tokensArray);
 		String ext = getHeaderValue(EXT, tokensArray);
 		String loc = getHeaderValue(LOC, tokensArray);
@@ -152,7 +157,6 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		String s = null;
 		String s1 = null;
 		String s2 = null;
-		String s3 = null;
 		for (int i = 0; i < tokensArray.length; i++) {
 			s = header.toUpperCase();
 			s1 = tokensArray[i].toUpperCase();

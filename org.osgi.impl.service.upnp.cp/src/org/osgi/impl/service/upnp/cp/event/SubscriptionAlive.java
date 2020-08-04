@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 public class SubscriptionAlive extends Thread {
 	private boolean				active	= true;
+	@SuppressWarnings("unused")
 	private EventServiceImpl	esi;
 
 	// Constructor used for storing refereneces
@@ -15,16 +16,18 @@ public class SubscriptionAlive extends Thread {
 	// run method of the thread which keeps on polling all the sessions for
 	// checking invalid
 	// sessions.Sleeps for a particular time, then again checks.
+	@Override
 	public void run() {
 		while (active) {
 			long curTime = System.currentTimeMillis();
-			Enumeration timeouts = EventServiceImpl.subscriberList.keys();
+			Enumeration<String> timeouts = EventServiceImpl.subscriberList
+					.keys();
 			for (; timeouts.hasMoreElements();) {
-				String key = (String) timeouts.nextElement();
-				Subscription sc = (Subscription) EventServiceImpl.subscriberList
+				String key = timeouts.nextElement();
+				Subscription sc = EventServiceImpl.subscriberList
 						.get(key);
 				if (!sc.getInfinite()) {
-					long val = (long) sc.getExpirytime();
+					long val = sc.getExpirytime();
 					if (curTime - val >= 0) {
 						EventServiceImpl.subscriberList.remove(key);
 					}

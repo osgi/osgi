@@ -15,17 +15,18 @@ public class SubscriptionRenew extends Thread {
 	// run method of the thread which keeps on polling all the sessions for
 	// checking invalid
 	// sessions.Sleeps for a particular time, then again checks.
+	@Override
 	public void run() {
 		while (active) {
 			long curTime = System.currentTimeMillis();
-			Enumeration subscriptionIds = EventServiceImpl.subscriberList
+			Enumeration<String> subscriptionIds = EventServiceImpl.subscriberList
 					.keys();
 			for (; subscriptionIds.hasMoreElements();) {
-				String subscriptionId = (String) subscriptionIds.nextElement();
-				Subscription sc = (Subscription) EventServiceImpl.subscriberList
+				String subscriptionId = subscriptionIds.nextElement();
+				Subscription sc = EventServiceImpl.subscriberList
 						.get(subscriptionId);
 				if (!(sc.getInfinite() || sc.waiting())) {
-					long val = (long) sc.getExpirytime();
+					long val = sc.getExpirytime();
 					if ((val - curTime) <= 5000) {
 						System.out.println("renew subscription"
 								+ subscriptionId);

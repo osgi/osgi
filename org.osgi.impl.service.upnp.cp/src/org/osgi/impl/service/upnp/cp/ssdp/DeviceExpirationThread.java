@@ -13,13 +13,14 @@ public class DeviceExpirationThread extends Thread {
 	}
 
 	// This method contineously checks all devices expiration times
+	@Override
 	public void run() {
 		while (flag) {
 			try {
-				Enumeration enumeration = ssdpcomp.devExpTimes.keys();
+				Enumeration<String> enumeration = ssdpcomp.devExpTimes.keys();
 				while (enumeration.hasMoreElements()) {
-					String uuid = (String) enumeration.nextElement();
-					Long expTime = (Long) ssdpcomp.devExpTimes.get(uuid);
+					String uuid = enumeration.nextElement();
+					Long expTime = ssdpcomp.devExpTimes.get(uuid);
 					if (expTime.longValue() <= System.currentTimeMillis()) {
 						ssdpcomp.removeDevice(uuid);
 					}
@@ -28,6 +29,7 @@ public class DeviceExpirationThread extends Thread {
 				// all time - pkr
 			}
 			catch (Exception e) {
+				// ignored
 			}
 		}
 	}

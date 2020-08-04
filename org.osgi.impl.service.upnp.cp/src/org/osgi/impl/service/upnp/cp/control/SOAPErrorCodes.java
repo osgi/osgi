@@ -3,12 +3,12 @@ package org.osgi.impl.service.upnp.cp.control;
 import java.util.Hashtable;
 
 public class SOAPErrorCodes {
-	private static Hashtable	errorMap;
+	private static Hashtable<String,String[]> errorMap;
 
 	// This is the constructor which initializes the error table and populates
 	// it.
 	public SOAPErrorCodes() {
-		errorMap = new Hashtable();
+		errorMap = new Hashtable<>();
 		errorMap.put("401", new String[] {"Invalid Action",
 				"No action by that name at this service."});
 		errorMap
@@ -31,7 +31,7 @@ public class SOAPErrorCodes {
 
 	// This method takes the error code and returns the description.
 	static String getDesc(String code) {
-		String[] str = (String[]) errorMap.get(code);
+		String[] str = errorMap.get(code);
 		if (str == null) {
 			return null;
 		}
@@ -40,7 +40,7 @@ public class SOAPErrorCodes {
 
 	// This method takes the error code and returns the error description.
 	static String getErrorDesc(String code) {
-		String[] str = (String[]) errorMap.get(code);
+		String[] str = errorMap.get(code);
 		if (str == null) {
 			return null;
 		}

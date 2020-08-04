@@ -1,11 +1,17 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.util.*;
-import org.osgi.service.upnp.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.osgi.service.upnp.UPnPEventListener;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 // This class is a upnp event listener which will be registered with the framework when ever
 // a subscription for a particular event url comes and is not available in the event registry
 public class GenaEventListener implements UPnPEventListener {
+	@SuppressWarnings("unused")
 	private String				subscriptionId;
 	public static final String	UPNP_FILTER	= "upnp.filter";
 	private UPnPService			upnpservice;
@@ -21,22 +27,26 @@ public class GenaEventListener implements UPnPEventListener {
 	// send the new changed evented statevariables list to all the subscribers
 	// who are
 	// subscribed for this .
+	@Override
 	public void notifyUPnPEvent(String deviceId, String serviceId,
-			Dictionary events) {
+			Dictionary<String,Object> events) {
 		if (upnpservice != null) {
-			Hashtable eventedVariables = checkSendEvents((Hashtable) events,
+			Hashtable<String,Object> eventedVariables = checkSendEvents(
+					events,
 					upnpservice);
 			String eventsuburl = deviceId + serviceId;
 			String tmpEventUrl = "";
 			eventsuburl = eventsuburl.replace(':', '-');
-			for (Enumeration enumeration = EventRegistry.getSubscriberIds(); enumeration
+			for (Enumeration<String> enumeration = EventRegistry
+					.getSubscriberIds(); enumeration
 					.hasMoreElements();) {
-				String element = (String) enumeration.nextElement();
-				Subscription subscription = (Subscription) EventRegistry
+				String element = enumeration.nextElement();
+				Subscription subscription = EventRegistry
 						.getSubscriber(element);
 				String eventURL = subscription.getPublisherPath();
 				tmpEventUrl = eventURL.substring(eventURL.indexOf("uuid"));
 				if (tmpEventUrl.equals(eventsuburl)) {
+					@SuppressWarnings("unused")
 					String callbackURL = subscription.getCallbackURL();
 					new SendEvents(eventedVariables, subscription).start();
 				}
@@ -45,11 +55,14 @@ public class GenaEventListener implements UPnPEventListener {
 	}
 
 	// this method checks whether statevariables can be evented or not.
-	Hashtable checkSendEvents(Hashtable statevariables, UPnPService upnpservice) {
-		Hashtable eventedVariables = new Hashtable();
+	Hashtable<String,Object> checkSendEvents(
+			Dictionary<String,Object> statevariables,
+			@SuppressWarnings("hiding") UPnPService upnpservice) {
+		Hashtable<String,Object> eventedVariables = new Hashtable<>();
 		UPnPStateVariable[] variables = upnpservice.getStateVariables();
-		for (Enumeration enumeration = statevariables.keys(); enumeration.hasMoreElements();) {
-			String variablename = (String) enumeration.nextElement();
+		for (Enumeration<String> enumeration = statevariables
+				.keys(); enumeration.hasMoreElements();) {
+			String variablename = enumeration.nextElement();
 			for (int i = 0; i < variables.length; i++) {
 				if (variables[i].getName().equals(variablename)) {
 					if (variables[i].sendsEvents()) {

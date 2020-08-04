@@ -19,13 +19,13 @@ public class UPnPExportedDevice implements UPnPDevice {
 	static final String				SERVICE_ID		= "urn:prosyst-com:serviceId:TesterDevice";
 	static final String				SERVICE_TYPE	= "urn:schemas-prosyst-com:service:Tester";
 	static final String				SERVICE_VER		= "1";
-	private final Hashtable		props;
-	private Dictionary			defaultProperties;
+	private final Hashtable<String,Object>	props;
+	private Dictionary<String,Object>		defaultProperties;
 	private final UPnPService[]	service;
 
 	public UPnPExportedDevice(UPnPService[] service) {
 		// put properties
-		this.props = new Hashtable(13);
+		this.props = new Hashtable<>(13);
 		props.put(UPnPDevice.UDN, "uuid:TesterType-" + UPnPConstants.LOCAL_HOST);
 		props.put(UPnPDevice.TYPE,
 				"urn:schemas-prosyst-com:device:UPnPTesterType:1");
@@ -142,13 +142,13 @@ public class UPnPExportedDevice implements UPnPDevice {
 				outBoolean,
                                                         inBoolean, inString, inNumber, inInt, inChar, inFloat, levski};
     // init action Print
-    Hashtable nameVar = new Hashtable(6);
+	Hashtable<String,Object> nameVar = new Hashtable<>(6);
     nameVar.put(testMsg.getName(), testMsg);
 		UPnPAction msgAct = new TestAction("testMsg", null,
 				new String[] {TESTMSG_SV}, null, nameVar, null);
     nameVar.put(testingSV.getName(), testingSV);
     nameVar.put(levski.getName(), levski);
-    Hashtable resp = new Hashtable();
+	Hashtable<String,Object> resp = new Hashtable<>();
 		UPnPAction printAct = new TestAction("testPrint", null,
 				new String[] {TESTMSG_SV}, new String[] {"blabla"}, nameVar,
 				null);
@@ -175,7 +175,7 @@ public class UPnPExportedDevice implements UPnPDevice {
     nameVar.put(outStr.getName(), outStr);
     nameVar.put(outBoolean.getName(), outBoolean);
 
-    resp = new Hashtable();
+	resp = new Hashtable<>();
 
     resp.put(UPnPConstants.N_OUT_STRING, UPnPConstants.V_OUT_STRING);
     resp.put(UPnPConstants.N_OUT_STR, UPnPConstants.V_OUT_STR);
@@ -213,7 +213,7 @@ public class UPnPExportedDevice implements UPnPDevice {
 		return upnpTester;
 	}
 
-	public Dictionary getDescriptions(String locale) {
+	public Dictionary<String,Object> getDescriptions(String locale) {
 		return props;
 	}
 

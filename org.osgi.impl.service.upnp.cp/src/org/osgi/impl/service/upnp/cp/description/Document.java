@@ -1,22 +1,24 @@
 package org.osgi.impl.service.upnp.cp.description;
 
-import java.net.*;
-import java.io.*;
-import java.util.Vector;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.StringTokenizer;
+import java.util.Vector;
+
 import org.osgi.framework.BundleContext;
 
 public class Document {
 	private int				xmlPtr		= 0;
 	private int				ctr			= 0;
 	private boolean			flag		= true;
-	private Vector			allElements;
 	private String			rootE		= "";
 	private String			ended		= "";
 	private String			otherDec	= "";
 	private String			elemVal		= "";
+	@SuppressWarnings("unused")
 	private String			selement	= "";
-	private Vector			element;
+	private Vector<String[]>	element;
 	private File			fil;
 	public BundleContext	bcc1;
 	public RootDevice		rootDevice;
@@ -27,8 +29,7 @@ public class Document {
 	// arguments.
 	public Document(String url, boolean file, BundleContext bc) {
 		bcc1 = bc;
-		allElements = new Vector();
-		element = new Vector();
+		element = new Vector<>();
 		rootElement = new Element();
 		rootDevice = new RootDevice(bc);
 		String xmlFile = "";
@@ -200,16 +201,16 @@ public class Document {
 	// This method creates the Device object and loads all the details from the
 	// xml file.
 	void distributeDevice() throws Exception {
-		Vector v = rootElement.getAttributes();
-		for (int rootatt = 0; rootatt < v.size(); rootatt++) {
-			Attribute att = (Attribute) v.elementAt(rootatt);
+		Vector<Attribute> attrs = rootElement.getAttributes();
+		for (int rootatt = 0; rootatt < attrs.size(); rootatt++) {
+			Attribute att = attrs.elementAt(rootatt);
 			if (att.getName().trim().equals("xmlns")) {
 				rootDevice.setRootAttribute(att.getName(), att.getValue());
 			}
 		}
 		//sets the major value.
-		v = getElementsByTagName("major");
-		Element el = (Element) v.elementAt(0);
+		Vector<Element> elements = getElementsByTagName("major");
+		Element el = elements.elementAt(0);
 		try {
 			rootDevice.setMajor(Integer.parseInt(el.getValue().trim()));
 		}
@@ -217,8 +218,8 @@ public class Document {
 			System.out.println(e.getMessage());
 		}
 		//sets the minor value.
-		v = getElementsByTagName("minor");
-		el = (Element) v.elementAt(0);
+		elements = getElementsByTagName("minor");
+		el = elements.elementAt(0);
 		try {
 			rootDevice.setMinor(Integer.parseInt(el.getValue()));
 		}
@@ -226,19 +227,19 @@ public class Document {
 			System.out.println(e.getMessage());
 		}
 		//sets the urlBase.
-		v = getElementsByTagName("URLBase");
-		if (v.size() > 0) {
-			el = (Element) v.elementAt(0);
+		elements = getElementsByTagName("URLBase");
+		if (elements.size() > 0) {
+			el = elements.elementAt(0);
 			rootDevice.setURLBase(el.getValue());
 		}
 		//sets the device object.
-		v = getElementsByTagName("device");
-		el = (Element) v.elementAt(0);
-		v = el.getAllElements();
+		elements = getElementsByTagName("device");
+		el = elements.elementAt(0);
+		elements = el.getAllElements();
 		try {
 			// sets all the device properties.
-			for (int ii = 0; ii < v.size(); ii++) {
-				Element elm = (Element) v.elementAt(ii);
+			for (int ii = 0; ii < elements.size(); ii++) {
+				Element elm = elements.elementAt(ii);
 				String ename = elm.getName().trim();
 				String eval = elm.getValue().trim();
 				if (ename.equals("deviceType")) {
@@ -290,8 +291,9 @@ public class Document {
 														else
 															if (ename
 																	.equals("iconList")) {
-																Vector v1 = getElementsByTagName("iconList");
-																Element elment = (Element) v1
+																Vector<Element> v1 = getElementsByTagName(
+																		"iconList");
+																Element elment = v1
 																		.elementAt(0);
 																v1 = elment
 																		.getAllElements();
@@ -306,13 +308,13 @@ public class Document {
 																// icons.
 																for (int iconctr = 0; iconctr < v1
 																		.size(); iconctr++) {
-																	elment = (Element) v1
+																	elment = v1
 																			.elementAt(iconctr);
-																	Vector vvec = elment
+																	Vector<Element> vvec = elment
 																			.getAllElements();
 																	for (int j = 0; j < vvec
 																			.size(); j++) {
-																		Element elmt = (Element) vvec
+																		Element elmt = vvec
 																				.elementAt(j);
 																		String enam = elmt
 																				.getName();
@@ -362,8 +364,9 @@ public class Document {
 															else
 																if (ename
 																		.equals("serviceList")) {
-																	Vector v1 = getElementsByTagName("serviceList");
-																	Element elment = (Element) v1
+																	Vector<Element> v1 = getElementsByTagName(
+																			"serviceList");
+																	Element elment = v1
 																			.elementAt(0);
 																	v1 = elment
 																			.getAllElements();
@@ -374,13 +377,13 @@ public class Document {
 																	}
 																	for (int servctr = 0; servctr < v1
 																			.size(); servctr++) {
-																		elment = (Element) v1
+																		elment = v1
 																				.elementAt(servctr);
-																		Vector allservs = elment
+																		Vector<Element> allservs = elment
 																				.getAllElements();
 																		for (int sctr = 0; sctr < allservs
 																				.size(); sctr++) {
-																			Element elmt = (Element) allservs
+																			Element elmt = allservs
 																					.elementAt(sctr);
 																			String enam = elmt
 																					.getName();
@@ -425,12 +428,13 @@ public class Document {
 																else
 																	if (ename
 																			.equals("deviceList")) {
-																		Vector dlist = getElementsByTagName("deviceList");
+																		Vector<Element> dlist = getElementsByTagName(
+																				"deviceList");
 																		if (dlist
 																				.size() > 0) {
-																			Element el1 = (Element) dlist
+																			Element el1 = dlist
 																					.elementAt(0);
-																			Vector embdevices = el1
+																			Vector<Element> embdevices = el1
 																					.getAllElements();
 																			RootDevice eDevices[] = new RootDevice[embdevices
 																					.size()];
@@ -448,7 +452,7 @@ public class Document {
 																				eDevices[edevctr]
 																						.setURLBase(rootDevice
 																								.getURLBase());
-																				Element el2 = (Element) embdevices
+																				Element el2 = embdevices
 																						.elementAt(edevctr);
 																				addEmbeddedDevice(
 																						el2,
@@ -473,11 +477,11 @@ public class Document {
 
 	// This method adds the embedded devices to the device object.
 	void addEmbeddedDevice(Element el, RootDevice dev) throws Exception {
-		Vector v = el.getAllElements();
+		Vector<Element> v = el.getAllElements();
 		try {
 			//sets all the properties for the device.
 			for (int ii = 0; ii < v.size(); ii++) {
-				Element elm = (Element) v.elementAt(ii);
+				Element elm = v.elementAt(ii);
 				String ename = elm.getName().trim();
 				String eval = elm.getValue().trim();
 				if (ename.equals("deviceType")) {
@@ -529,8 +533,9 @@ public class Document {
 														else
 															if (ename
 																	.equals("iconList")) {
-																Vector v1 = getElementsByTagName("iconList");
-																Element elment = (Element) v1
+																Vector<Element> v1 = getElementsByTagName(
+																		"iconList");
+																Element elment = v1
 																		.elementAt(ctr);
 																v1 = elment
 																		.getAllElements();
@@ -541,13 +546,13 @@ public class Document {
 																}
 																for (int ictr = 0; ictr < v1
 																		.size(); ictr++) {
-																	elment = (Element) v1
+																	elment = v1
 																			.elementAt(ictr);
-																	Vector allIcons = elment
+																	Vector<Element> allIcons = elment
 																			.getAllElements();
 																	for (int iconctr = 0; iconctr < allIcons
 																			.size(); iconctr++) {
-																		Element elmt = (Element) allIcons
+																		Element elmt = allIcons
 																				.elementAt(iconctr);
 																		String enam = elmt
 																				.getName();
@@ -598,8 +603,9 @@ public class Document {
 															else
 																if (ename
 																		.equals("serviceList")) {
-																	Vector v1 = getElementsByTagName("serviceList");
-																	Element elment = (Element) v1
+																	Vector<Element> v1 = getElementsByTagName(
+																			"serviceList");
+																	Element elment = v1
 																			.elementAt(ctr + 1);
 																	v1 = elment
 																			.getAllElements();
@@ -610,13 +616,13 @@ public class Document {
 																	}
 																	for (int sctr = 0; sctr < v1
 																			.size(); sctr++) {
-																		elment = (Element) v1
+																		elment = v1
 																				.elementAt(sctr);
-																		Vector vvec = elment
+																		Vector<Element> vvec = elment
 																				.getAllElements();
 																		for (int servicctr = 0; servicctr < vvec
 																				.size(); servicctr++) {
-																			Element elmt = (Element) vvec
+																			Element elmt = vvec
 																					.elementAt(servicctr);
 																			String enam = elmt
 																					.getName();
@@ -661,11 +667,12 @@ public class Document {
 																else
 																	if (ename
 																			.equals("deviceList")) {
-																		Vector v1 = getElementsByTagName("deviceList");
+																		Vector<Element> v1 = getElementsByTagName(
+																				"deviceList");
 																		Element ee1 = null;
-																		ee1 = (Element) v1
+																		ee1 = v1
 																				.elementAt(++ctr);
-																		Vector v2 = ee1
+																		Vector<Element> v2 = ee1
 																				.getAllElements();
 																		RootDevice eDev[] = new RootDevice[v2
 																				.size()];
@@ -675,7 +682,7 @@ public class Document {
 																		}
 																		for (int edctr = 0; edctr < v2
 																				.size(); edctr++) {
-																			Element ee2 = (Element) v2
+																			Element ee2 = v2
 																					.elementAt(edctr);
 																			eDev[edctr] = new RootDevice(
 																					rootDevice,
@@ -704,19 +711,19 @@ public class Document {
 	// details from the xml file.
 	void distributeService() throws Exception {
 		sdesc = new ServiceInfo();
-		Vector v = rootElement.getAttributes();
+		Vector<Attribute> attrs = rootElement.getAttributes();
 		// identifies the root attributes.
-		for (int ii = 0; ii < v.size(); ii++) {
-			Attribute att = (Attribute) v.elementAt(ii);
+		for (int ii = 0; ii < attrs.size(); ii++) {
+			Attribute att = attrs.elementAt(ii);
 			if (att.getName().trim().equals("xmlns")) {
 				sdesc.setServiceAttribute(att.getName(), att.getValue());
 			}
 		}
-		v = getElementsByTagName("major");
-		Element el = (Element) v.elementAt(0);
+		Vector<Element> v = getElementsByTagName("major");
+		Element el = v.elementAt(0);
 		sdesc.setMajor(Integer.parseInt(el.getValue()));
 		v = getElementsByTagName("minor");
-		el = (Element) v.elementAt(0);
+		el = v.elementAt(0);
 		try {
 			sdesc.setMinor(Integer.parseInt(el.getValue()));
 		}
@@ -724,27 +731,27 @@ public class Document {
 			System.out.println("Minor value should be int");
 		}
 		// checks for all the actions.
-		Vector v3 = getElementsByTagName("action");
+		Vector<Element> v3 = getElementsByTagName("action");
 		Action aarr[] = new Action[v3.size()];
 		for (int j = 0; j < v3.size(); j++) {
 			aarr[j] = new Action();
-			Element el3 = (Element) v3.elementAt(j);
-			Vector v4 = el3.getAllElements();
+			Element el3 = v3.elementAt(j);
+			Vector<Element> v4 = el3.getAllElements();
 			for (int k = 0; k < v4.size(); k++) {
-				Element el4 = (Element) v4.elementAt(k);
+				Element el4 = v4.elementAt(k);
 				if (el4.getName().equals("name")) {
 					aarr[j].setName(el4.getValue());
 				}
 				else
 					if (el4.getName().equals("argumentList")) {
-						Vector v5 = el4.getAllElements();
+						Vector<Element> v5 = el4.getAllElements();
 						ArgumentList args[] = new ArgumentList[v5.size()];
 						for (int argument = 0; argument < v5.size(); argument++) {
 							args[argument] = new ArgumentList();
-							Element el5 = (Element) v5.elementAt(argument);
-							Vector v6 = el5.getAllElements();
+							Element el5 = v5.elementAt(argument);
+							Vector<Element> v6 = el5.getAllElements();
 							for (int argList = 0; argList < v6.size(); argList++) {
-								Element el6 = (Element) v6.elementAt(argList);
+								Element el6 = v6.elementAt(argList);
 								String ena = el6.getName();
 								String eva = el6.getValue();
 								if (ena.equals("name")) {
@@ -772,21 +779,21 @@ public class Document {
 		}
 		sdesc.setActions(aarr);
 		// checks for all the state variables.
-		Vector v2 = getElementsByTagName("stateVariable");
+		Vector<Element> v2 = getElementsByTagName("stateVariable");
 		StateVariable sv[] = new StateVariable[v2.size()];
 		for (int j = 0; j < v2.size(); j++) {
 			sv[j] = new StateVariable();
-			Element el2 = (Element) v2.elementAt(j);
-			Vector v4 = el2.getAllElements();
-			Vector attsendEvents = el2.getAttributes();
+			Element el2 = v2.elementAt(j);
+			Vector<Element> v4 = el2.getAllElements();
+			Vector<Attribute> attsendEvents = el2.getAttributes();
 			for (int se = 0; se < attsendEvents.size(); se++) {
-				Attribute attr = (Attribute) attsendEvents.elementAt(se);
+				Attribute attr = attsendEvents.elementAt(se);
 				if (attr.getName().trim().equals("sendEvents")) {
 					sv[j].sendEvents(attr.getValue());
 				}
 			}
 			for (int se = 0; se < v4.size(); se++) {
-				Element el3 = (Element) v4.elementAt(se);
+				Element el3 = v4.elementAt(se);
 				String ena = el3.getName();
 				String eva = el3.getValue();
 				//System.out.println(ena + eva);
@@ -803,10 +810,10 @@ public class Document {
 						}
 						else
 							if (ena.equals("allowedValueList")) {
-								Vector v6 = new Vector();
-								Vector v5 = el3.getAllElements();
+								Vector<String> v6 = new Vector<>();
+								Vector<Element> v5 = el3.getAllElements();
 								for (int k1 = 0; k1 < v5.size(); k1++) {
-									Element el4 = (Element) v5.elementAt(k1);
+									Element el4 = v5.elementAt(k1);
 									if (el4.getName().equals("allowedValue")) {
 										String allowedVal = el4.getValue();
 										v6.addElement(allowedVal);
@@ -816,7 +823,8 @@ public class Document {
 							}
 							else
 								if (ena.equals("allowedValueRange")) {
-									Vector v5 = el3.getAllElements();
+									@SuppressWarnings("unused")
+									Vector<Element> v5 = el3.getAllElements();
 									/*
 									 * for(int k1=0;k1 <v5.size();k1++){ Element
 									 * el4 = (Element) v5.elementAt(k1); String
@@ -847,7 +855,7 @@ public class Document {
 	}
 
 	// This method adds the attributes for the element.
-	void attachAttribs(String aval, Vector attributes) {
+	void attachAttribs(String aval, Vector<Attribute> attributes) {
 		int ptr = aval.indexOf('=');
 		Attribute attr = new Attribute(aval.substring(0, ptr), aval.substring(
 				ptr + 2, aval.length()));
@@ -858,12 +866,12 @@ public class Document {
 	// xml document.
 	void distribute() throws Exception {
 		try {
-			Vector dict = new Vector();
-			Vector attributes = new Vector();
+			Vector<Element> dict = new Vector<>();
+			Vector<Attribute> attributes = new Vector<>();
 			StringTokenizer st1;
 			String strValue = "";
 			String atts = "";
-			String obj[] = (String[]) element.elementAt(0);
+			String obj[] = element.elementAt(0);
 			String strVal = "";
 			strVal = obj[0];
 			atts = obj[1];
@@ -910,8 +918,8 @@ public class Document {
 			for (int i = 1; i < element.size(); i++) {
 				disFlag = true;
 				strValue = "";
-				attributes = new Vector();
-				obj = (String[]) element.elementAt(i);
+				attributes = new Vector<>();
+				obj = element.elementAt(i);
 				strVal = obj[0];
 				atts = obj[1];
 				if (atts.length() > 1) {
@@ -949,7 +957,7 @@ public class Document {
 				while (st1.hasMoreTokens()) {
 					strValue = strValue + "" + st1.nextToken();
 				}
-				Element prevE = (Element) dict.elementAt(dict.size() - 1);
+				Element prevE = dict.elementAt(dict.size() - 1);
 				if (strVal.charAt(strVal.length() - 1) == '/') {
 					Element elem = new Element(strVal);
 					prevE.addOneMoreElement(elem, attributes);
@@ -1022,8 +1030,12 @@ public class Document {
 	// This method reads the starting element of the xml Element.
 	String readStartElement(String cont) {
 		char value = cont.charAt(xmlPtr);
+		@SuppressWarnings("hiding")
 		String selement = "";
 		String attr = "";
+		@SuppressWarnings({
+				"hiding", "unused"
+		})
 		boolean flag = false;
 		boolean att = false;
 		String comt = "";
@@ -1080,6 +1092,7 @@ public class Document {
 				}
 			}
 			else {
+				@SuppressWarnings("unused")
 				String tmpString = readElementValue(cont);
 				flag = true;
 			}
@@ -1134,7 +1147,7 @@ public class Document {
 		move(cont);
 		elemVal = elemen;
 		int siz = element.size() - 1;
-		String sa[] = (String[]) element.elementAt(siz);
+		String sa[] = element.elementAt(siz);
 		String sval = sa[0];
 		if (sval.equals(ended)) {
 			String sar[] = new String[2];
@@ -1197,16 +1210,16 @@ public class Document {
 
 	// This method returns all the Elements of the xml file which matches the
 	// given tag name
-	public Vector getElementsByTagName(String tag) {
-		Vector elements = new Vector();
+	public Vector<Element> getElementsByTagName(String tag) {
+		Vector<Element> elements = new Vector<>();
 		if (rootElement.getName().equals(tag)) {
 			elements.addElement(rootElement);
 		}
 		else {
 			if (rootElement.hasMoreElements()) {
-				Vector v = rootElement.getAllElements();
+				Vector<Element> v = rootElement.getAllElements();
 				for (int size = 0; size < v.size(); size++) {
-					Element ele = (Element) v.elementAt(size);
+					Element ele = v.elementAt(size);
 					String snam = ele.getName();
 					if (snam.charAt(snam.length() - 1) == '/') {
 						snam = snam.substring(0, snam.length() - 1);
@@ -1224,11 +1237,11 @@ public class Document {
 	// This method checks for the matching tag name in the loop. And which ever
 	// tag matches it adds
 	// it to the vector object.
-	void checkElement(Element elmnt, Vector elements, String tag) {
+	void checkElement(Element elmnt, Vector<Element> elements, String tag) {
 		if (elmnt.hasMoreElements()) {
-			Vector vele = elmnt.getAllElements();
+			Vector<Element> vele = elmnt.getAllElements();
 			for (int size = 0; size < vele.size(); size++) {
-				Element el = (Element) vele.elementAt(size);
+				Element el = vele.elementAt(size);
 				String snam = el.getName();
 				if (snam.charAt(snam.length() - 1) == '/') {
 					snam = snam.substring(0, snam.length() - 1);

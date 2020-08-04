@@ -1,6 +1,9 @@
 package org.osgi.test.cases.upnp.tbc.parser;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * 
@@ -9,7 +12,12 @@ import java.util.*;
  * @version
  * @since
  */
-class LStack extends Vector {
+class LStack extends Vector<Object> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Object peek() {
 		return elementAt(0);
 	}
@@ -73,7 +81,7 @@ public class XMLParser {
 								"Closing tag can't has attributes and be selfclosed.Tag Name: "
 										+ name);
 					}
-					if (stack.isEmpty() || !name.equals((String) stack.peek())) {
+					if (stack.isEmpty() || !name.equals(stack.peek())) {
 						throw new XMLException(
 								"Closed not last opened tag.Tag Name: " + name);
 					}
@@ -127,7 +135,8 @@ public class XMLParser {
 							char nch = xml.charAt(position);
 							if (nch == ' ') {
 								position++;
-								Hashtable hash = readAttributes(xml);
+								Hashtable<String,String> hash = readAttributes(
+										xml);
 								if (hash == null) {
 									throw new XMLException(
 											"Error parsing attributes.Tag Name: "
@@ -193,7 +202,7 @@ public class XMLParser {
 
 	private void cleanUP(XMLTag tag) {
 		tag.cleanUP();
-		Vector cont = tag.getContent();
+		Vector<Object> cont = tag.getContent();
 		for (int i = 0; i < cont.size(); i++) {
 			Object cur = cont.elementAt(i);
 			if (cur instanceof XMLTag) {
@@ -225,8 +234,9 @@ public class XMLParser {
 		return name.toString();
 	}
 
-	private Hashtable readAttributes(StringBuffer sb) throws XMLException {
-		Hashtable hash = new Hashtable();
+	private Hashtable<String,String> readAttributes(StringBuffer sb)
+			throws XMLException {
+		Hashtable<String,String> hash = new Hashtable<>();
 		StringBuffer nameAtt = new StringBuffer();
 		StringBuffer valueAtt = new StringBuffer();
 		char ch;
@@ -340,15 +350,15 @@ public class XMLParser {
 		}
 		StringBuffer result = new StringBuffer();
 		result.append(sb + "<" + tag.getName());
-		Dictionary attrlist = tag.getAttributes();
+		Dictionary<String,String> attrlist = tag.getAttributes();
 		if (attrlist != null) {
-			Enumeration enumeration = attrlist.keys();
+			Enumeration<String> enumeration = attrlist.keys();
 			while (enumeration.hasMoreElements()) {
-				String next = (String) enumeration.nextElement();
+				String next = enumeration.nextElement();
 				result.append(" " + next + "=\"" + attrlist.get(next) + "\"");
 			}
 		}
-		Vector vec = tag.getContent();
+		Vector<Object> vec = tag.getContent();
 		if (vec.isEmpty()) {
 			result.append("/>\r\n");
 			return result.toString();

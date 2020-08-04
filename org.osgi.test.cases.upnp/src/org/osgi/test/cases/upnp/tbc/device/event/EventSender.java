@@ -32,7 +32,7 @@ public class EventSender implements Runnable {
 
 	public void run() {
 		DefaultTestBundleControl.log("Sending the initial event");
-		Hashtable hash = new Hashtable();
+		Hashtable<String,Object> hash = new Hashtable<>();
 		hash.put(UPnPConstants.N_INT, UPnPConstants.V_INT);
 		hash.put(UPnPConstants.N_UI4, UPnPConstants.V_UI4);
 		Double duble = Double.valueOf(UPnPConstants.V_NUMBER);
@@ -177,13 +177,13 @@ public class EventSender implements Runnable {
 		}
 	}
 
-	private void genEvent(Dictionary dict) throws IOException {
+	private void genEvent(Dictionary<String,Object> dict) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		sb.append(UPnPConstants.PROPSET_ST);
 		sb.append(UPnPConstants.CRLF);
-		Enumeration enumeration = dict.keys();
+		Enumeration<String> enumeration = dict.keys();
 		while (enumeration.hasMoreElements()) {
-			String key = (String) enumeration.nextElement();
+			String key = enumeration.nextElement();
 			sb.append(UPnPConstants.PROP_ST);
 			sb.append(UPnPConstants.CRLF);
 			sb.append(UPnPConstants.LB);
@@ -242,6 +242,7 @@ public class EventSender implements Runnable {
 		PrintStream ps = new PrintStream(sock.getOutputStream());
 		ps.print(head);
 		ps.write(body.getBytes());
+		@SuppressWarnings("unused")
 		String ret = br.readLine();
 		//    System.out.println("CLIENT: RE: " + ret);
 		ps.close();

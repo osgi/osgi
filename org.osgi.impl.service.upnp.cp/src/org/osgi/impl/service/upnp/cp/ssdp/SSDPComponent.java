@@ -14,25 +14,21 @@ public class SSDPComponent implements SSDPConstants {
 	private SSDPMulticastListener	multicastListener;
 	private SSDPUnicastListener		unicastListener;
 	private DeviceExpirationThread	deviceExpirationThread;
+	@SuppressWarnings("unused")
 	private String					server;
-	private String					notifyMessage;
-	private String					notifyByeMessage;
 	private StringBuffer			msearchRequest;
-	private String					msearchResponse;
 	private MulticastSocket			multicastsock;
-	private String					uuid;
-	private long					sentPacketsTime;
 	private InetAddress				ssdpinet;
-	private Hashtable				ssdpdevices;
-	public Hashtable				devExpTimes;
+	private Hashtable<String,String>	ssdpdevices;
+	public Hashtable<String,Long>		devExpTimes;
 	private UPnPController			controller;
 
 	// This constructor construct the SDDPcomponent. It initializez all required
 	// information for discovery layer.
 	public SSDPComponent(UPnPController contrl) throws UPnPException {
 		server = new String(SOAPConstants.osNameVersion + OSVERSION);
-		ssdpdevices = new Hashtable(10, 10);
-		devExpTimes = new Hashtable(10, 10);
+		ssdpdevices = new Hashtable<>(10, 10);
+		devExpTimes = new Hashtable<>(10, 10);
 		controller = contrl;
 		//Creating SSDP multicast socket
 		try {

@@ -7,7 +7,7 @@ public class StateVariable {
 	private String	name;
 	private String	dataType;
 	private String	defaultValue;
-	private Vector	allowedValueList;
+	private Vector<String>	allowedValueList;
 	private Number	maximum;
 	private Number	minimum;
 	private Number	step;
@@ -33,7 +33,7 @@ public class StateVariable {
 	}
 
 	// This method returns the allowed values of the service.
-	public Vector getAllowedValueList() {
+	public Vector<String> getAllowedValueList() {
 		return allowedValueList;
 	}
 
@@ -68,7 +68,7 @@ public class StateVariable {
 	}
 
 	// This method sets the allowed values of the variable.
-	public void setAllowedValueList(Vector allowedVals) {
+	public void setAllowedValueList(Vector<String> allowedVals) {
 		allowedValueList = allowedVals;
 	}
 

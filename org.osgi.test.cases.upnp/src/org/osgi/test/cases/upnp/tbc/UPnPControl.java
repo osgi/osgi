@@ -52,7 +52,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		UPnPDevice dev = listener.getUPnPDevice();
 		assertNotNull("UPnPDevice is NULL", dev);
 		String udn = (String) dev.getDescriptions(null).get(UPnPDevice.UDN);
-		Dictionary dict = dev.getDescriptions(null);
+		Dictionary<String,Object> dict = dev.getDescriptions(null);
 		String test = (String) dict.get(UPnPDevice.UPC);
 		log("UPnPDevice UPC: " + test);
 		assertEquals("SERVER: " + udn + UPnPConstants.DD + " UPC not matched",
@@ -162,7 +162,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		UPnPDevice dev = listener.getUPnPDevice();
 		assertNotNull("UPnPDevice is NULL", dev);
 		UPnPService cs = dev.getService(UPnPConstants.SCONT_ID);
-		Hashtable hash = new Hashtable();
+		Hashtable<String,Object> hash = new Hashtable<>();
 		hash.put(UPnPConstants.N_IN_OUT, UPnPConstants.V_IN_OUT);
 		UPnPAction act = cs.getAction(UPnPConstants.ACT_PF);
 		log("Invoking an action Post Fail");
@@ -208,7 +208,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		act = cs.getAction(UPnPConstants.ACT_POS);
 		log("Invoking an action Post Out Success");
 		try {
-			Dictionary dict = act.invoke(hash);
+			Dictionary<String,Object> dict = act.invoke(hash);
 			checkRet(dict);
 		}
 		catch (Exception exc) {
@@ -217,7 +217,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		act = cs.getAction(UPnPConstants.ACT_MPOS);
 		log("Invoking an action MPost Out Success");
 		try {
-			Dictionary dict = act.invoke(hash);
+			Dictionary<String,Object> dict = act.invoke(hash);
 			checkRet(dict);
 		}
 		catch (Exception exc) {
@@ -245,7 +245,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		catch (Exception exc) {
 			log("Exception is thrown OK");
 		}
-		hash = new Hashtable(9, 1f);
+		hash = new Hashtable<>(9, 1f);
 		hash.put(UPnPConstants.N_IN_INT, Integer.valueOf(UPnPConstants.V_IN_INT));
 		hash.put(UPnPConstants.N_IN_UI4, Long.valueOf(UPnPConstants.V_IN_UI4));
 		hash.put(UPnPConstants.N_IN_FLOAT, fl);
@@ -258,7 +258,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		hash.put(UPnPConstants.N_IN_HEX, UPnPConstants.V_IN_HEX.getBytes());
 		log("Invoking an action Post In Success");
 		try {
-			Dictionary dict = act.invoke(hash);
+			Dictionary<String,Object> dict = act.invoke(hash);
 			if (dict != null) {
 				String res = (String) dict.get(UPnPConstants.N_OUT_OUT);
 				assertEquals("SERVER: " + UPnPConstants.ACT_PIS
@@ -270,7 +270,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 			fail("SERVER: " + UPnPConstants.ACT_PIS
 					+ " Invoke Failed: Threre was an exception", exc);
 		}
-		hash = new Hashtable(9, 1f);
+		hash = new Hashtable<>(9, 1f);
 		hash.put(UPnPConstants.N_IN_INT, Integer.valueOf(UPnPConstants.V_IN_INT));
 		hash.put(UPnPConstants.N_IN_UI4, Long.valueOf(UPnPConstants.V_IN_UI4));
 		hash.put(UPnPConstants.N_IN_FLOAT, fl);
@@ -284,7 +284,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		act = cs.getAction(UPnPConstants.ACT_MPIS);
 		log("Invoking an action MPost In Success");
 		try {
-			Dictionary dict = act.invoke(hash);
+			Dictionary<String,Object> dict = act.invoke(hash);
 			if (dict != null) {
 				String res = (String) dict.get(UPnPConstants.N_OUT_OUT);
 				assertEquals("SERVER: " + UPnPConstants.ACT_MPIS
@@ -302,7 +302,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		assertNotNull("UPnPDevice is NULL", dev);
 		final String udn = (String) dev.getDescriptions(null).get(
 				UPnPDevice.UDN);
-		Hashtable hash = new Hashtable();
+		Hashtable<String,Object> hash = new Hashtable<>();
 		log("Device gets service " + UPnPConstants.SEV_ID);
 		UPnPService es = dev.getService(UPnPConstants.SEV_ID);
 		final String currentServ = es.getId();
@@ -312,7 +312,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		hash.put(UPnPEventListener.UPNP_FILTER, filter);
 		hash.put("upnptest", "true");
 		log("Register UPnPEventListener to listen for events");
-		final List vector = new ArrayList();
+		final List<Dictionary<String,Object>> vector = new ArrayList<>();
 		UPnPEventListener el = new UPnPEventListener() {
 			private int	ender;
 			{
@@ -321,7 +321,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 				}
 			}
 
-			public void notifyUPnPEvent(String did, String sid, Dictionary vals) {
+			public void notifyUPnPEvent(String did, String sid,
+					Dictionary<String,Object> vals) {
 				log("SERVER: Received Event for UDN: " + did + " & SID: " + sid
 						+ ".\r\nDictionary: " + vals);
 				if (!did.equals(udn) || !sid.equals(currentServ)) {
@@ -339,8 +340,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 				}
 			}
 		};
-		ServiceRegistration sr = getContext().registerService(
-				UPnPEventListener.class.getName(), el, hash);
+		ServiceRegistration<UPnPEventListener> sr = getContext()
+				.registerService(UPnPEventListener.class, el, hash);
 		try {
 			synchronized (el) {
 				for (int tries = 0; (tries < 10) && (vector.size() < 10); tries++) {
@@ -352,7 +353,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 						.size());
 				int evSize = vector.size();
 				for (int i = 0; i < evSize; i++) {
-					Dictionary dict = (Dictionary) vector.get(i);
+					Dictionary<String,Object> dict = vector.get(i);
 					testEvent(dict, dict.size());
 				}
 			}
@@ -368,8 +369,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 		assertNotNull("UPnPDevice is NULL", dev);
 		String udn = (String) dev.getDescriptions(null).get(UPnPDevice.UDN);
 		UPnPExportedDevice ex_device = UPnPExportedDevice.newUPnPTestervice();
-		ServiceRegistration sr = getContext().registerService(
-				UPnPDevice.class.getName(), ex_device,
+		ServiceRegistration<UPnPDevice> sr = getContext().registerService(
+				UPnPDevice.class, ex_device,
 				ex_device.getDescriptions(null));
 		try {
 			Sleep.sleep(4000 * OSGiTestCaseProperties.getScaling());
@@ -379,8 +380,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 		}
 		try {
 			log("Start export test");
-			Hashtable tagHash = new Hashtable();
-			Hashtable servsHash = new Hashtable();
+			Hashtable<String,Object> tagHash = new Hashtable<>();
+			Hashtable<String,Object> servsHash = new Hashtable<>();
 			log("Prepare to start my Control Point");
 			ControlPoint cp = new ControlPoint();
 			cp.start();
@@ -403,26 +404,27 @@ public class UPnPControl extends DefaultTestBundleControl {
 			if (!rootTag.hasOnlyTags()) {
 				fail("Root tag has something else except tags");
 			}
-			Vector content = rootTag.getContent();
+			Vector<Object> content = rootTag.getContent();
 			int len = content.size();
 			for (int i = 0; i < len; i++) {
 				XMLTag tag = (XMLTag) content.elementAt(i);
 				if (tag.getName().equalsIgnoreCase("device")) {
-					Vector elem = tag.getContent();
+					Vector<Object> elem = tag.getContent();
 					for (int j = 0; j < elem.size(); j++) {
 						XMLTag tagDev = (XMLTag) elem.elementAt(j);
-						Vector vv = tagDev.getContent();
+						Vector<Object> vv = tagDev.getContent();
 						if (tagDev.getName().equalsIgnoreCase("serviceList")) {
-							Vector servs = tagDev.getContent();
+							Vector<Object> servs = tagDev.getContent();
 							for (int k = 0; k < servs.size(); k++) {
 								XMLTag tagServ = (XMLTag) servs.elementAt(k);
 								if (tagServ.getName().equalsIgnoreCase(
 										"service")) {
-									Vector sss = tagServ.getContent();
+									Vector<Object> sss = tagServ.getContent();
 									for (int p = 0; p < sss.size(); p++) {
 										XMLTag tagSSS = (XMLTag) sss
 												.elementAt(p);
-										Vector sps = tagSSS.getContent();
+										Vector<Object> sps = tagSSS
+												.getContent();
 										if (tagSSS.hasOnlyText()
 												&& sps.size() > 0) {
 											servsHash.put(tagSSS.getName(), sps
@@ -451,7 +453,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 			log("Get SCPD xml from discovery message");
 			String xml = cp.getXML(url);
 			String action = null;
-			Hashtable names = parseSCPD_XML(xml); // action names
+			Hashtable<String,Vector<String>> names = parseSCPD_XML(xml); // action
+																			// names
 			if (names.containsKey("testALL")) {
 				action = "testALL";
 			}
@@ -465,7 +468,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 			URL contrlURL = new URL(controlURL);
 			String host = contrlURL.getHost();
 			int port = contrlURL.getPort();
-			String[] args = changeType((Vector) names.get(action));
+			String[] args = changeType(names.get(action));
 			log("Control Server is created and started");
 			ControlServer cps = new ControlServer(host, port);
 			String[] values = new String[] {UPnPConstants.V_OUT_STRING,
@@ -614,7 +617,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		return true;
 	}
 
-	private void checkRet(Dictionary dict) {
+	private void checkRet(Dictionary<String,Object> dict) {
 		assertNotNull(dict);
 		String st = new String((byte[]) dict.get(UPnPConstants.N_OUT_HEX));
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_HEX
@@ -648,7 +651,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 				UPnPConstants.V_OUT_BOOLEAN), bool);
 	}
 
-	private void testEvent(Dictionary dict, int si) {
+	private void testEvent(Dictionary<String,Object> dict, int si) {
 		assertNotNull(dict);
 		switch (si) {
 			case 9 : {
@@ -707,7 +710,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		}
 	}
 
-	private void testProps(String udn, Dictionary dic) {
+	private void testProps(String udn, Dictionary<String,Object> dic) {
 		assertNotNull(dic);
 		String test = dic.get("friendlyName").toString();
 		log("Exported device FRIENDLY_NAME: " + test);
@@ -745,41 +748,43 @@ public class UPnPControl extends DefaultTestBundleControl {
 				UPnPConstants.E_UPC, test);
 	}
 
-	private Hashtable parseSCPD_XML(String str) throws Exception {
-		Hashtable hash = new Hashtable();
+	private Hashtable<String,Vector<String>> parseSCPD_XML(String str)
+			throws Exception {
+		Hashtable<String,Vector<String>> hash = new Hashtable<>();
 		// System.out.println("SCPD: " + str);
 		XMLParser parser = new XMLParser(str);
 		XMLTag rootTag = parser.getRootXMLTag();
 		if (!rootTag.hasOnlyTags()) {
 			fail("SCPD XML:Root tag has something else except tags");
 		}
-		Vector content = rootTag.getContent();
+		Vector<Object> content = rootTag.getContent();
 		int len = content.size();
 		for (int i = 0; i < len; i++) {
 			XMLTag tag = (XMLTag) content.elementAt(i);
 			if (tag.getName().equalsIgnoreCase("actionList")) {
-				Vector acts = tag.getContent();
+				Vector<Object> acts = tag.getContent();
 				for (int j = 0; j < acts.size(); j++) {
 					XMLTag act = (XMLTag) acts.elementAt(j);
 					if (act.getName().equalsIgnoreCase("action")) {
-						Vector names = act.getContent();
-						Vector argsNames = null;
+						Vector<Object> names = act.getContent();
+						Vector<String> argsNames = null;
 						for (int k = 0; k < names.size(); k++) {
 							XMLTag name = (XMLTag) names.elementAt(k);
 							if (name.getName().equalsIgnoreCase("name")) {
-								argsNames = new Vector();
+								argsNames = new Vector<>();
 								hash.put(name.getContent().elementAt(0)
 										.toString(), argsNames);
 							}
 							else
 								if (name.getName().equalsIgnoreCase(
 										"argumentList")) {
-									Vector args = name.getContent();
+									Vector<Object> args = name.getContent();
 									for (int p = 0; p < args.size(); p++) {
 										XMLTag arg = (XMLTag) args.elementAt(p);
 										if (arg.getName().equalsIgnoreCase(
 												"argument")) {
-											Vector argsName = arg.getContent();
+											Vector<Object> argsName = arg
+													.getContent();
 											String argname = null;
 											for (int y = 0; y < argsName.size(); y++) {
 												XMLTag xxx = (XMLTag) argsName
@@ -821,7 +826,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		return hash;
 	}
 
-	private String[] changeType(Vector args) {
+	private String[] changeType(Vector<String> args) {
 		String[] names = new String[6];
 		for (int i = 0; i < args.size(); i++) {
 			names[i] = args.elementAt(i).toString();
@@ -830,7 +835,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		http = (HttpService) getService(HttpService.class);
+		http = getService(HttpService.class);
 		log("Register Service Listener to listen for service changes");
 		listener = new ServicesListener(getContext(), desiredCount);
 		listener.open();
