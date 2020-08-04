@@ -30,6 +30,7 @@ public class Activator implements BundleActivator {
 
 	private Component	component;
 
+	@Override
 	public void start(final BundleContext context) throws Exception {
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, 8888);
@@ -38,6 +39,7 @@ public class Activator implements BundleActivator {
 		component.start();
 	}
 
+	@Override
 	public void stop(final BundleContext context) throws Exception {
 		component.stop();
 		component = null;

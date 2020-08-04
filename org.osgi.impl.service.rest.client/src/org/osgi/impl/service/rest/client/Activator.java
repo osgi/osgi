@@ -28,6 +28,7 @@ public class Activator implements BundleActivator {
 	 * 
 	 * @author Jan S. Rellermeyer, IBM Research
 	 */
+	@Override
 	public void start(final BundleContext context) throws Exception {
 		final Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(RestClientFactoryImpl.MSG_FORMAT, RestClientFactoryImpl.MSG_FORMAT_JSON);
@@ -37,6 +38,7 @@ public class Activator implements BundleActivator {
 		context.registerService(RestClientFactory.class, new RestClientFactoryImpl(true), props);
 	}
 
+	@Override
 	public void stop(final BundleContext context) throws Exception {
 		// nop
 	}
