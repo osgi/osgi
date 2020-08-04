@@ -25,14 +25,17 @@ public class ParameterValueImpl implements ParameterValue {
 		value = Utils.getDmtValueAsString(node);
 	}
 
+	@Override
 	public String getPath() {
 		return parameterName;
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}
 
+	@Override
 	public int getType() {
 		try {
 			return Utils.getTR069Type(node.getDmtValue(), node.getMimeTypes());

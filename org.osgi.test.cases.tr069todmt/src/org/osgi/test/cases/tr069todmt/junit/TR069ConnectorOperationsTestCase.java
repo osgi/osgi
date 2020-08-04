@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -554,6 +555,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		session = dmtAdmin.getSession(ROOT);
 		connector = factory.create(session);
 
+		@SuppressWarnings("unused")
 		Collection<ParameterInfo> infos = null;
 		// invocation on a parameter with nextLevel = true
 		try {

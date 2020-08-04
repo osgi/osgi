@@ -12,6 +12,7 @@ public class MappingTable extends Hashtable<String, Object> {
 
 	private static final long	serialVersionUID	= 1L;
 
+	@Override
 	public synchronized Object remove(Object key) {
 		/* remove the whole subtree */
 		String nodeToRemove = ((String) key).concat(Uri.PATH_SEPARATOR);

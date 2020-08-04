@@ -1,16 +1,17 @@
 
 package org.osgi.impl.service.tr069todmt;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -28,6 +29,7 @@ public class PersistenceManager {
 
 	private static final Comparator<String>	LIST_NAMES_COMPARATOR	= new Comparator<String>() {
 
+																		@Override
 																		public int compare(String s1, String s2) {
 																			try {
 																				int i1 = Integer.parseInt(s1);
@@ -287,7 +289,7 @@ public class PersistenceManager {
 					currentNode = getRenamedUri(currentNode, alias);
 				} else if (Utils.INSTANCE_ID_PATTERN.matcher(path[i]).matches()) {
 					try {
-						instanceNumber = Long.parseLong(path[i]);
+						instanceNumber = Long.valueOf(path[i]);
 						String parentUri = currentNode.length() == path[i].length() ? "" : currentNode.substring(0, currentNode.length() - path[i].length() - 1);
 						String[] children = getChildNodeNames(session, parentUri, true);
 						int j = 0;
@@ -504,6 +506,7 @@ public class PersistenceManager {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void load() throws Exception {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(
 				factory.context.getDataFile(TEMP_TREE_FILE)

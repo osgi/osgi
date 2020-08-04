@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
+
 import org.osgi.impl.service.tr069todmt.encode.Base64;
 import org.osgi.impl.service.tr069todmt.encode.HexBinary;
 import org.osgi.service.dmt.DmtConstants;
@@ -46,8 +47,8 @@ public class TR069ConnectorImpl implements TR069Connector {
 		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_DATE_TIME), "dateTime");
 	}
 
-	private DmtSession							session;
-	private TR069ConnectorFactoryImpl			factory;
+	DmtSession					session;
+	TR069ConnectorFactoryImpl	factory;
 
 	/**
 	 * @param session
@@ -58,6 +59,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		this.factory = factory;
 	}
 
+	@Override
 	public void setParameterValue(String parameterPath, String value, int type) throws TR069Exception {
 		try {
 			checkParameterPath(parameterPath);
@@ -177,7 +179,8 @@ public class TR069ConnectorImpl implements TR069Connector {
 					StringBuffer error = new StringBuffer("Error converting ");
 					error.append(value).append(" in ");
 					for (int i = 0; i < formats.length; i++) {
-						error.append(DMT_FORMAT_NAMES.get(formats[i]));
+						error.append(DMT_FORMAT_NAMES
+								.get(Integer.valueOf(formats[i])));
 						if (i < formats.length - 1) {
 							error.append(", ");
 						}
@@ -404,6 +407,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public ParameterValue getParameterValue(final String parameterPath) throws TR069Exception {
 		checkParameterPath(parameterPath);
 		if (parameterPath.endsWith(Utils.NUMBER_OF_ENTRIES)) {
@@ -412,6 +416,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 
 				private String	uri	= toURI(dotIndex == -1 ? "" : parameterPath.substring(0, dotIndex), true);
 
+				@Override
 				public String getValue() {
 					try {
 						String[] children = factory.persistenceManager.getChildNodeNames(session, uri, true);
@@ -424,10 +429,12 @@ public class TR069ConnectorImpl implements TR069Connector {
 					}
 				}
 
+				@Override
 				public int getType() {
 					return TR069_UNSIGNED_INT;
 				}
 
+				@Override
 				public String getPath() {
 					return parameterPath;
 				}
@@ -440,14 +447,17 @@ public class TR069ConnectorImpl implements TR069Connector {
 
 			return new ParameterValue() {
 
+				@Override
 				public String getValue() {
 					return alias != null ? alias : name;
 				}
 
+				@Override
 				public int getType() {
 					return TR069_STRING;
 				}
 
+				@Override
 				public String getPath() {
 					// TODO parameterPath or parent path should be returned
 					// here?!?
@@ -459,6 +469,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public Collection<ParameterInfo> getParameterNames(String objectOrTablePath, boolean nextLevel) throws TR069Exception {
 		checkPath(objectOrTablePath);
 		ArrayList<ParameterInfo> result = new ArrayList<ParameterInfo>();
@@ -534,6 +545,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public String addObject(String path) throws TR069Exception {
 		try {
 			checkPath(path);
@@ -586,6 +598,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public void deleteObject(String objectPath) throws TR069Exception {
 		try {
 			checkPath(objectPath);
@@ -613,6 +626,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public String toPath(String uri) throws TR069Exception {
 		if (Uri.isValidUri(uri)) {
 			StringBuffer path = new StringBuffer();
@@ -673,6 +687,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public String toURI(String path, boolean create) throws TR069Exception {
 		checkPath(path);
 		StringBuffer uri = new StringBuffer();
@@ -878,6 +893,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 		}
 	}
 
+	@Override
 	public void close() {
 		/* Closing the connector must not close the corresponding DmtSession */
 	}

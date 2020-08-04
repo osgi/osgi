@@ -28,10 +28,12 @@ public class ParameterInfoImpl implements ParameterInfo {
 		this.node = node;
 	}
 
+	@Override
 	public String getPath() {
 		return parameterName;
 	}
 
+	@Override
 	public boolean isWriteable() {
 		if (isParameter()) {
 			return node.can(MetaNode.CMD_REPLACE);
@@ -45,14 +47,17 @@ public class ParameterInfoImpl implements ParameterInfo {
 		return false;
 	}
 
+	@Override
 	public boolean isParameter() {
 		return node.isLeaf();
 	}
 
+	@Override
 	public ParameterValue getParameterValue() throws TR069Exception {
 		return connector.getParameterValue(getPath());
 	}
 
+	@Override
 	public String toString() {
 		return parameterName;
 	}

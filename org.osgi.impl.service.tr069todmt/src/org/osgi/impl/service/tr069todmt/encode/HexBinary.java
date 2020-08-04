@@ -38,6 +38,7 @@ public final class HexBinary {
 		return toHexString(value);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof HexBinary) {
 			return Arrays.equals(((HexBinary) obj).value, value);
@@ -48,6 +49,7 @@ public final class HexBinary {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return 11; // any arbitrary constant is fine here
 	}
