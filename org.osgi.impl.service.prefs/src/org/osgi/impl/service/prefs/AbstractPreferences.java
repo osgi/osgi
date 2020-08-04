@@ -107,6 +107,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void put(String key, String value) {
 		if (key == null || value == null)
 			throw new NullPointerException();
@@ -137,6 +138,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws NullPointerException if key is <tt>null</tt>. (A<tt>null</tt>
 	 *         default <i>is </i> permitted.)
 	 */
+	@Override
 	public String get(String key, String def) {
 		synchronized (lock) {
 			if (removed)
@@ -158,6 +160,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void remove(String key) {
 		synchronized (lock) {
 			if (removed)
@@ -181,6 +184,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void clear() throws BackingStoreException {
 		synchronized (lock) {
 			String[] keys = keys();
@@ -204,6 +208,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putInt(String key, int value) {
 		put(key, Integer.toString(value));
 	}
@@ -230,6 +235,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public int getInt(String key, int def) {
 		int result = def;
 		try {
@@ -258,6 +264,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putLong(String key, long value) {
 		put(key, Long.toString(value));
 	}
@@ -284,6 +291,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public long getLong(String key, long def) {
 		long result = def;
 		try {
@@ -312,6 +320,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putBoolean(String key, boolean value) {
 		put(key, String.valueOf(value));
 	}
@@ -341,6 +350,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public boolean getBoolean(String key, boolean def) {
 		boolean result = def;
 		String value = get(key, null);
@@ -371,6 +381,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putFloat(String key, float value) {
 		put(key, Float.toString(value));
 	}
@@ -398,6 +409,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>.
 	 */
+	@Override
 	public float getFloat(String key, float def) {
 		float result = def;
 		try {
@@ -428,6 +440,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putDouble(String key, double value) {
 		put(key, Double.toString(value));
 	}
@@ -455,6 +468,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 *         removed with the {@link #removeNode()}method.
 	 * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>.
 	 */
+	@Override
 	public double getDouble(String key, double def) {
 		double result = def;
 		try {
@@ -479,6 +493,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void putByteArray(String key, byte[] value) {
 		put(key, Base64.byteArrayToBase64(value));
 	}
@@ -498,6 +513,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public byte[] getByteArray(String key, byte[] def) {
 		byte[] result = def;
 		try {
@@ -527,6 +543,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public String[] keys() throws BackingStoreException {
 		synchronized (lock) {
 			if (removed)
@@ -550,6 +567,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public String[] childrenNames() throws BackingStoreException {
 		synchronized (lock) {
 			if (removed)
@@ -571,6 +589,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public Preferences parent() {
 		synchronized (lock) {
 			if (removed)
@@ -606,6 +625,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public Preferences node(String path) {
 		synchronized (lock) {
 			if (removed)
@@ -660,6 +680,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 *         removed with the {@link #removeNode()}method and
 	 *         <tt>pathname</tt> is not the empty string (<tt>""</tt>).
 	 */
+	@Override
 	public boolean nodeExists(String path) throws BackingStoreException {
 		synchronized (lock) {
 			if (path.equals(""))
@@ -713,6 +734,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * @throws IllegalStateException if this node (or an ancestor) has already
 	 *         been removed with the {@link #removeNode()}method.
 	 */
+	@Override
 	public void removeNode() throws BackingStoreException {
 		Object parentLock = (this == root) ? lock : parent.lock;	// RFC 60
 		synchronized (parentLock) {
@@ -742,6 +764,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * 
 	 * @return this preference node's name, relative to its parent.
 	 */
+	@Override
 	public String name() {
 		return name;
 	}
@@ -758,6 +781,7 @@ public abstract class AbstractPreferences implements Preferences {
 	 * 
 	 * @return this preference node's absolute path name.
 	 */
+	@Override
 	public String absolutePath() {
 		return absolutePath;
 	}
@@ -896,11 +920,13 @@ public abstract class AbstractPreferences implements Preferences {
 	 *        preference node.
 	 * @return The named child node.
 	 */
-	protected abstract AbstractPreferences childSpi(String name);
+	protected abstract AbstractPreferences childSpi(
+			@SuppressWarnings("hiding") String name);
 
 	/**
 	 * Returns the absolute path name of this preferences node.
 	 */
+	@Override
 	public String toString() {
 		return ("Preference Node: " + absolutePath());
 	}

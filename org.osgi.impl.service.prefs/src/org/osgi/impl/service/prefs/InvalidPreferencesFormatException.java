@@ -14,6 +14,10 @@ package org.osgi.impl.service.prefs;
  */
 public class InvalidPreferencesFormatException extends Exception {
 	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	/**
 	 * The line number at which a format error was detected, or -1 if unknown or
 	 * inapplicable.
 	 */

@@ -7,8 +7,17 @@
  */
 package org.osgi.impl.service.prefs;
 
-import java.io.*;
-import org.osgi.service.prefs.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * @author $Id$
@@ -101,7 +110,7 @@ class TextFileSupport {
 	}
 
 	private static int importPrefs(BufferedReader br, Preferences prefs)
-			throws IOException, InvalidPreferencesFormatException {
+			throws IOException {
 		int nextChar;
 		for (;;) {
 			nextChar = br.read();

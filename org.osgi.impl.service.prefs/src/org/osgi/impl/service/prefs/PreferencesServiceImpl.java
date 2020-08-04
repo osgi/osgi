@@ -8,10 +8,15 @@
 package org.osgi.impl.service.prefs;
 
 import java.io.File;
-import java.security.*;
-import java.util.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
-import org.osgi.service.prefs.*;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+import org.osgi.service.prefs.PreferencesService;
 
 /**
  * @author $Id$
@@ -21,21 +26,22 @@ public class PreferencesServiceImpl implements PreferencesService {
 	private File				prefsRootDir;
 	private File				usersRootDir;
 	private AbstractPreferences			systemPreferences		= null;
-	private Hashtable			userPreferencesTable	= null;
+	private Hashtable<String,Preferences>	userPreferencesTable	= null;
 
 	PreferencesServiceImpl(BundleContext bundleContext, long bundleId) {
 		prefsRootDir = bundleContext.getDataFile(Long.toString(bundleId));
 		checkDirectory(prefsRootDir);
 		usersRootDir = new File(prefsRootDir, "users");
 		checkDirectory(usersRootDir);
-		userPreferencesTable = new Hashtable(INIT_HASHTABLE_SIZE);
+		userPreferencesTable = new Hashtable<>(INIT_HASHTABLE_SIZE);
 	}
 
 	private void checkDirectory(final File dir) {
 		//j2security
-		Boolean success = (Boolean) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
+		Boolean success = AccessController
+				.doPrivileged(new PrivilegedAction<Boolean>() {
+					@Override
+					public Boolean run() {
 						if (!dir.exists() && !dir.mkdir()) {
 							return Boolean.FALSE;
 						}
@@ -55,6 +61,7 @@ public class PreferencesServiceImpl implements PreferencesService {
 		//endblock
 	}
 
+	@Override
 	public synchronized Preferences getSystemPreferences() {
 		if ((systemPreferences == null) || (systemPreferences.isRemoved())) {
 			File file = new File(prefsRootDir, "system.prefs");
@@ -64,6 +71,7 @@ public class PreferencesServiceImpl implements PreferencesService {
 		return systemPreferences;
 	}
 
+	@Override
 	public synchronized Preferences getUserPreferences(String user) {
 		AbstractPreferences userPreferences = (AbstractPreferences) userPreferencesTable
 				.get(user);
@@ -76,11 +84,12 @@ public class PreferencesServiceImpl implements PreferencesService {
 		return userPreferences;
 	}
 	
+	@Override
 	public synchronized String[] getUsers() {
-		Enumeration enumeration = userPreferencesTable.keys();
+		Enumeration<String> enumeration = userPreferencesTable.keys();
 		String[] result = new String[userPreferencesTable.size()];
 		for (int i = 0; enumeration.hasMoreElements(); i++) {
-			result[i] = (String) enumeration.nextElement();
+			result[i] = enumeration.nextElement();
 		}
 		return result;
 	}
@@ -93,9 +102,9 @@ public class PreferencesServiceImpl implements PreferencesService {
 			if (systemPreferences != null) {
 				systemPreferences.flush();
 			}
-			Enumeration elements = userPreferencesTable.elements();
+			Enumeration<Preferences> elements = userPreferencesTable.elements();
 			while (elements.hasMoreElements()) {
-				Preferences userRoot = (Preferences) elements.nextElement();
+				Preferences userRoot = elements.nextElement();
 				userRoot.flush();
 			}
 		}
