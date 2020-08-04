@@ -16,7 +16,8 @@
 
 package org.osgi.impl.service.serial;
 
-import java.util.Properties;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import org.osgi.service.device.Constants;
@@ -57,7 +58,7 @@ public class TestStepImpl implements TestStep {
 	 */
 	private String addSerialDevice(String[] parameters) {
 		String comportName = Integer.toString(index);
-		Properties props = new Properties();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(SerialDevice.SERIAL_COMPORT, comportName);
 		props.put(Constants.DEVICE_CATEGORY, new String[] {SerialDevice.DEVICE_CATEGORY});
 		String id = SerialDeviceManager.getInstance().addSerialDevice(props);
@@ -96,6 +97,7 @@ public class TestStepImpl implements TestStep {
 		eventManager.sendEvent(parameters[0]);
 	}
 
+	@Override
 	public String execute(String stepId, String userPrompt) {
 		String command = stepId;
 		userPrompt = userPrompt.substring(userPrompt.indexOf(SEPARATOR_COMMA));

@@ -17,7 +17,8 @@
 package org.osgi.impl.service.serial;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -28,24 +29,28 @@ public class Activator implements BundleActivator {
 
 	private static BundleContext	context		= null;
 
-	private ServiceRegistration		testStepReg	= null;
+	private ServiceRegistration<TestStep>	testStepReg	= null;
 
 	public static BundleContext getContext() {
 		return context;
 	}
 
-	public void start(BundleContext context) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 		Activator.context = context;
 
 		SerialEventManager eventManager = new SerialEventManager(context);
 
 		TestStep testStep = new TestStepImpl(eventManager);
-		Dictionary props = new Properties();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(Constants.SERVICE_PID, "org.osgi.service.serial");
-		testStepReg = context.registerService(TestStep.class.getName(), testStep, props);
+		testStepReg = context.registerService(TestStep.class, testStep, props);
 	}
 
-	public void stop(BundleContext context) throws Exception {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 		if (testStepReg != null) {
 			testStepReg.unregister();
 		}
