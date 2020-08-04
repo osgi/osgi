@@ -28,18 +28,19 @@ import javax.naming.RefAddr;
  */
 public class CTObjectFactory implements javax.naming.spi.ObjectFactory {
 	
-	private Hashtable env = new Hashtable();
+	private Hashtable<String,Object> env = new Hashtable<>();
 	
 	public CTObjectFactory() {
 		
 	}
 	
-	public CTObjectFactory(Hashtable env) {
+	public CTObjectFactory(Hashtable<String,Object> env) {
 		this.env = env;
 	}
 
+	@Override
 	public Object getObjectInstance(Object obj, Name name, Context context,
-			Hashtable table) throws Exception {
+			Hashtable< ? , ? > table) throws Exception {
 			
 		if (obj instanceof CTReference) {
 			RefAddr value = ((CTReference) obj).get("value"); 
@@ -55,7 +56,7 @@ public class CTObjectFactory implements javax.naming.spi.ObjectFactory {
 		return null;
 	}
 	
-	public Hashtable getEnvironment() {
+	public Hashtable< ? , ? > getEnvironment() {
 		return env;
 	}
 

@@ -38,16 +38,18 @@ class ServiceInvocationHandler implements InvocationHandler {
 	private Object m_osgiService;
 
 	/* service tracker for the backing service */
-	protected ServiceTracker m_serviceTracker;
+	protected ServiceTracker< ? , ? >	m_serviceTracker;
 	
 	/* ServiceReference for the backing service */
-	private ServiceReference m_serviceReference;
+	private ServiceReference< ? >		m_serviceReference;
 
 	/* the URL information used to rebind the backing service if necessary */
 	private final OSGiURLParser m_urlParser;
 	
 	
-	ServiceInvocationHandler(BundleContext callerBundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+	ServiceInvocationHandler(BundleContext callerBundleContext,
+			ServiceReference< ? > serviceReference, OSGiURLParser urlParser,
+			Object osgiService) {
 		m_callerBundleContext = callerBundleContext;
 		// initialize backing service 
 		m_osgiService = osgiService;
@@ -56,17 +58,20 @@ class ServiceInvocationHandler implements InvocationHandler {
 		
 		// open a tracker for just this service
 		m_serviceTracker = 
-			new ServiceTracker(m_callerBundleContext, m_serviceReference, null);
+				new ServiceTracker<>(m_callerBundleContext, m_serviceReference,
+						null);
 		m_serviceTracker.open();
 	}
 	
 	
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		return SecurityUtils.invokePrivilegedAction(new ServiceInvokeAction(method, args));
 	}
 
 
-	private Object handleMethodInvocation(Method method, Object[] args) throws Throwable {
+	Object handleMethodInvocation(Method method, Object[] args)
+			throws Throwable {
 		if (isServiceAvailable()) {
 			return invokeMethodOnService(method, args);
 		} else {
@@ -105,6 +110,7 @@ class ServiceInvocationHandler implements InvocationHandler {
 	
 	
 	
+	@Override
 	protected void finalize() throws Throwable {
 		close();
 	}
@@ -117,21 +123,21 @@ class ServiceInvocationHandler implements InvocationHandler {
 	protected boolean obtainService() {
 		m_serviceTracker.close();
 		try {
-			ServiceReference[] serviceReferences = 
+			ServiceReference< ? >[] serviceReferences =
 				m_callerBundleContext.getServiceReferences(m_urlParser.getServiceInterface(),
 							                               m_urlParser.getFilter());
 			if (serviceReferences != null) {
-				final ServiceReference[] sortedServiceReferences = 
+				final ServiceReference< ? >[] sortedServiceReferences =
 					ServiceUtils.sortServiceReferences(serviceReferences);
 				
 				// reset the tracker
 				return resetBackingService(sortedServiceReferences[0]);
 			 } else {
 				 // attempt to locate service using service name property
-				 ServiceReference[] serviceReferencesByName = 
+					ServiceReference< ? >[] serviceReferencesByName =
 					ServiceUtils.getServiceReferencesByServiceName(m_callerBundleContext, m_urlParser);
 				if (serviceReferencesByName != null) {
-					ServiceReference[] sortedServiceReferences = 
+					ServiceReference< ? >[] sortedServiceReferences =
 						ServiceUtils.sortServiceReferences(serviceReferencesByName);
 					// reset the tracker
 					return resetBackingService(sortedServiceReferences[0]);
@@ -149,9 +155,11 @@ class ServiceInvocationHandler implements InvocationHandler {
    }
 
 
-	private boolean resetBackingService(ServiceReference serviceReference) {
+	private boolean resetBackingService(
+			ServiceReference< ? > serviceReference) {
 		m_serviceTracker = 
-			new ServiceTracker(m_callerBundleContext, serviceReference, null);
+				new ServiceTracker<>(m_callerBundleContext, serviceReference,
+						null);
 		m_serviceTracker.open();
 		
 		// reset the service
@@ -170,6 +178,7 @@ class ServiceInvocationHandler implements InvocationHandler {
 			super(method, args);
 		}
 
+		@Override
 		public Object invokeMethod(Method method, Object[] args) throws Throwable {
 			return handleMethodInvocation(method, args);
 		}

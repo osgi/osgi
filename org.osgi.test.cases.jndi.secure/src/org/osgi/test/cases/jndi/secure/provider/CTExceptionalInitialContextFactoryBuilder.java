@@ -29,7 +29,9 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 public class CTExceptionalInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder {
 
-	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
+	@Override
+	public InitialContextFactory createInitialContextFactory(
+			Hashtable< ? , ? > env) throws NamingException {
 		throw new NamingException("Verifying that exception handling is implemented properly for initialContextFactoryBuilder implementations");
 	}
 

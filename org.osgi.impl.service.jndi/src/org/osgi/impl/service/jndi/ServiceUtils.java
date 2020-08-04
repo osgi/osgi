@@ -19,6 +19,7 @@ package org.osgi.impl.service.jndi;
 
 import java.util.Arrays;
 import java.util.Comparator;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -47,8 +48,10 @@ class ServiceUtils {
 	 * @return sorted array of ServiceReferences, or a zero-length array if no
 	 *         matching services were found
 	 */
-	static ServiceReference[] sortServiceReferences(ServiceTracker serviceTracker) {
-		final ServiceReference[] serviceReferences = serviceTracker
+	@SuppressWarnings("unchecked")
+	static <T> ServiceReference<T>[] sortServiceTrackerReferences(
+			ServiceTracker<T,T> serviceTracker) {
+		final ServiceReference<T>[] serviceReferences = serviceTracker
 				.getServiceReferences();
 		if (serviceReferences == null) {
 			return new ServiceReference[0];
@@ -70,16 +73,9 @@ class ServiceUtils {
 	 * @return the array of ServiceReferences passed into this method, but sorted 
 	 *         according to OSGi service ranking.  
 	 */
-	static ServiceReference[] sortServiceReferences(
-			final ServiceReference[] serviceReferences) {
-		Arrays.sort(serviceReferences, new Comparator() {
-			public int compare(Object objectOne, Object objectTwo) {
-				ServiceReference serviceReferenceOne = (ServiceReference) objectOne;
-				ServiceReference serviceReferenceTwo = (ServiceReference) objectTwo;
-				return serviceReferenceTwo.compareTo(serviceReferenceOne);
-			}
-		});
-
+	static <SR extends ServiceReference< ? >> SR[] sortServiceReferences(
+			final SR[] serviceReferences) {
+		Arrays.sort(serviceReferences, Comparator.reverseOrder());
 		return serviceReferences;
 	}
 
@@ -93,12 +89,13 @@ class ServiceUtils {
 	 * @return an array of ServiceReferences that match the given request
 	 * @throws InvalidSyntaxException on filter parsing error
 	 */
-	static ServiceReference[] getServiceReferencesByServiceName(BundleContext bundleContext, OSGiURLParser urlParser)
+	static ServiceReference< ? >[] getServiceReferencesByServiceName(
+			BundleContext bundleContext, OSGiURLParser urlParser)
 			throws InvalidSyntaxException {
 		final String serviceNameFilter = "("
 				+ JNDIConstants.JNDI_SERVICENAME + "="
 				+ urlParser.getServiceInterface() + ")";
-		ServiceReference[] serviceReferencesByName = 
+		ServiceReference< ? >[] serviceReferencesByName = 
                 bundleContext.getServiceReferences((String) null, serviceNameFilter);
 		return serviceReferencesByName;
 	}

@@ -36,9 +36,11 @@ class JNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 			new OSGiInitialContextFactoryBuilder(bundleContext, bundleContext);
 	}
 
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
+	@Override
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map<String, ? > environment) throws NamingException {
 		synchronized (m_objectFactoryBuilder) {
-			Hashtable jndiEnvironment = new Hashtable();
+			Hashtable<String,Object> jndiEnvironment = new Hashtable<>();
 			if (environment != null) {
 				jndiEnvironment.putAll(environment);
 			}
@@ -56,9 +58,12 @@ class JNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 		}
 	}
 
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws NamingException {
+	@Override
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map<String, ? > environment, Attributes attributes)
+			throws NamingException {
 		synchronized (m_objectFactoryBuilder) {
-			Hashtable jndiEnvironment = new Hashtable();
+			Hashtable<String,Object> jndiEnvironment = new Hashtable<>();
 			if (environment != null) {
 				jndiEnvironment.putAll(environment);
 			}
@@ -77,6 +82,7 @@ class JNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 		}
 	}
 	
+	@Override
 	public void close() {
 		synchronized (m_objectFactoryBuilder) {
 			m_objectFactoryBuilder.close();

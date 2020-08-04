@@ -18,6 +18,7 @@
 
 package org.osgi.test.cases.jndi.objectFactory1;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.naming.spi.ObjectFactory;
@@ -32,11 +33,12 @@ import org.osgi.test.cases.jndi.provider.CTObjectFactory;
  */
 public class ObjectFactory1Activator implements BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};
 		
 		CTObjectFactory of = new CTObjectFactory();
@@ -44,6 +46,7 @@ public class ObjectFactory1Activator implements BundleActivator {
 		
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();

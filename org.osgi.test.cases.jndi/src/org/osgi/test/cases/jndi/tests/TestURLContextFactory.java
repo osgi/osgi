@@ -43,7 +43,7 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 		// Setup the standard context that we'll be using the URL to access so
 		// that we have something to lookup
 		String testString = "test string";
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = new InitialContext(env);
 		Context urlCtx = new InitialContext();
@@ -73,7 +73,7 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 		// Setup the standard context that we'll be using the URL to access so
 		// that we have something to lookup
 		String testString = "test string";
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = new InitialContext(env);
 		Context urlCtx = new InitialContext();

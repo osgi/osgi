@@ -18,6 +18,7 @@
 package org.osgi.impl.service.jndi;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.Name;
@@ -35,20 +36,22 @@ import org.osgi.service.jndi.JNDIProviderAdmin;
 
 class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 
-	private static final String JNDI_PROVIDER_ADMIN_INTERFACE = 
+	static final String	JNDI_PROVIDER_ADMIN_INTERFACE	=
 		JNDIProviderAdmin.class.getName();
 	
-	private static final String NAMING_MANAGER_CLASSNAME = 
+	static final String	NAMING_MANAGER_CLASSNAME		=
 		NamingManager.class.getName();
 	
-	private static final String DIRECTORY_MANAGER_CLASSNAME = 
+	static final String	DIRECTORY_MANAGER_CLASSNAME		=
 		DirectoryManager.class.getName();
 	
 
 	public TraditionalObjectFactoryBuilder() {
 	}
 	
-	public ObjectFactory createObjectFactory(Object obj, Hashtable environment) throws NamingException {
+	@Override
+	public ObjectFactory createObjectFactory(Object obj,
+			Hashtable< ? , ? > environment) throws NamingException {
 		// if the call came from NamingManager
 		BundleContext clientBundleContext = 
 			BuilderUtils.getBundleContext(environment, NAMING_MANAGER_CLASSNAME);
@@ -70,14 +73,20 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 			m_clientBundleContext = clientBundleContext;
 		}
 		
-		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+		@Override
+		public Object getObjectInstance(Object refInfo, Name name,
+				Context context, Hashtable< ? , ? > environment)
+				throws Exception {
 			ProviderAdminAction providerAdminAction = 
 				new NamingManagerAction(refInfo, name, context, environment);
 			return resolveObjectWithProviderAdmin(providerAdminAction);
 		}
 		
 
-		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) throws Exception {
+		@Override
+		public Object getObjectInstance(Object refInfo, Name name,
+				Context context, Hashtable< ? , ? > environment,
+				Attributes attributes) throws Exception {
 			ProviderAdminAction providerAdminAction = 
 				new DirectoryManagerAction(refInfo, name, context, environment, attributes);
 			return resolveObjectWithProviderAdmin(providerAdminAction);
@@ -95,7 +104,7 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 			if(m_clientBundleContext == null) {
 				throw new NamingException("Error in obtaining client's BundleContext");
 			} else {
-				ServiceReference serviceReference = 
+				ServiceReference< ? > serviceReference = 
 					m_clientBundleContext.getServiceReference(JNDI_PROVIDER_ADMIN_INTERFACE);
 				if(serviceReference == null) {
 					throw new NamingException("JNDIProviderAdmin service not available, cannot resolve object at this time");
@@ -137,15 +146,18 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 		protected final Object m_refInfo;
 		protected final Name m_name;
 		protected final Context m_context;
-		protected final Hashtable m_environment;
+		protected final Map<String, ? >	m_environment;
 		
-		NamingManagerAction(Object refInfo, Name name, Context context, Hashtable environment) {
+		@SuppressWarnings("unchecked")
+		NamingManagerAction(Object refInfo, Name name, Context context,
+				Hashtable< ? , ? > environment) {
 			m_refInfo = refInfo;
 			m_name = name;
 			m_context = context;
-			m_environment = environment;
+			m_environment = (Map<String, ? >) environment;
 		}
 		
+		@Override
 		public Object runProviderAdminAction(JNDIProviderAdmin providerAdmin) throws Exception {
 			return providerAdmin.getObjectInstance(m_refInfo, m_name, m_context, m_environment);
 		}
@@ -160,11 +172,13 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 	private static class DirectoryManagerAction extends NamingManagerAction {
 		private final Attributes m_attributes;
 		
-		DirectoryManagerAction(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) {
+		DirectoryManagerAction(Object refInfo, Name name, Context context,
+				Hashtable< ? , ? > environment, Attributes attributes) {
 			super(refInfo, name, context, environment);
 			m_attributes = attributes;
 		}
 
+		@Override
 		public Object runProviderAdminAction(JNDIProviderAdmin providerAdmin) throws Exception {
 			return providerAdmin.getObjectInstance(m_refInfo, m_name, m_context, m_environment, m_attributes);
 		}

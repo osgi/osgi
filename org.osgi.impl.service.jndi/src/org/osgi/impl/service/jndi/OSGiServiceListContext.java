@@ -44,14 +44,16 @@ class OSGiServiceListContext extends NotSupportedContext {
 	
 	private final BundleContext m_bundleContext;
 	
-	private final ServiceReference[] m_serviceReferences;
+	private final ServiceReference< ? >[]	m_serviceReferences;
 	
 	private final OSGiURLParser m_urlParser;
 	
 	/* map of service ids (Long) to ServiceReferences */
-	private final Map m_mapOfServices = new HashMap(); 
+	private final Map<Long,ServiceReference< ? >>	m_mapOfServices	= new HashMap<>();
 	
-	OSGiServiceListContext(BundleContext bundleContext, ServiceReference[] serviceReferences, OSGiURLParser urlParser) {
+	OSGiServiceListContext(BundleContext bundleContext,
+			ServiceReference< ? >[] serviceReferences,
+			OSGiURLParser urlParser) {
 		super("This operation is not supported in an osgi:servicelist context");
 		m_bundleContext = bundleContext;
 		m_serviceReferences = serviceReferences;
@@ -60,12 +62,15 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 	
 
+	@Override
 	public void close() throws NamingException {
 		// this operation is a no-op
 	}
 
 
-	public NamingEnumeration list(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(String name)
+			throws NamingException {
 		if(name.equals("")) {
 			return new ListNamingEnumeration(m_bundleContext, 
 					                                     m_serviceReferences, m_urlParser.getServiceInterface());
@@ -75,7 +80,9 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 
 
-	public NamingEnumeration listBindings(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(String name)
+			throws NamingException {
 		if(name.equals("")) {
 			return new ListBindingsNamingEnumeration(m_bundleContext, 
 					                                 m_serviceReferences, 
@@ -86,13 +93,15 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 
 
+	@Override
 	public Object lookup(String name) throws NamingException {
 		Long serviceId = Long.valueOf(name);
 		if(serviceId == null) {
 			throw new NameNotFoundException("Service with the name = " + name + " does not exist in this context");
 		} else {
 			if(m_mapOfServices.containsKey(serviceId)) {
-				ServiceReference serviceReference = (ServiceReference)m_mapOfServices.get(serviceId);
+				ServiceReference< ? > serviceReference = m_mapOfServices
+						.get(serviceId);
 				// create a proxy for this service, and return the proxy to handle
 				// service dynamics
 				ServiceProxyInfo proxyInfo = 
@@ -111,7 +120,9 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 	
 	
-	private static ServiceProxyInfo createNoRetryProxiedService(BundleContext bundleContext, OSGiURLParser urlParser, final ServiceReference serviceReference) {
+	static ServiceProxyInfo createNoRetryProxiedService(
+			BundleContext bundleContext, OSGiURLParser urlParser,
+			final ServiceReference< ? > serviceReference) {
 		return ReflectionUtils.getProxyForSingleService(bundleContext, 
 				                                        urlParser, 
 				                                        serviceReference,
@@ -124,7 +135,9 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * @param mapOfServices
 	 * @param serviceReferences
 	 */
-	private static void buildMapOfServices(Map mapOfServices, ServiceReference[] serviceReferences) {
+	private static void buildMapOfServices(
+			Map<Long,ServiceReference< ? >> mapOfServices,
+			ServiceReference< ? >[] serviceReferences) {
 		for(int i = 0; i < serviceReferences.length; i++) {
 			Long serviceId = (Long)serviceReferences[i].getProperty("service.id");
 			mapOfServices.put(serviceId, serviceReferences[i]);
@@ -140,9 +153,12 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * 
 	 * @author $Id$
 	 */
-	private static class ListNamingEnumeration extends ServiceBasedNamingEnumeration {
+	private static class ListNamingEnumeration
+			extends ServiceBasedNamingEnumeration<NameClassPair> {
 
-		ListNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, String interfaceName) {
+		ListNamingEnumeration(BundleContext bundleContext,
+				ServiceReference< ? >[] serviceReferences,
+				String interfaceName) {
 			super(bundleContext, serviceReferences, interfaceName);
 			
 			// create the NameClassPair structure
@@ -178,18 +194,21 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * 
 	 * @author $Id$
 	 */
-	private static class ListBindingsNamingEnumeration extends ServiceBasedNamingEnumeration {
+	private static class ListBindingsNamingEnumeration
+			extends ServiceBasedNamingEnumeration<Binding> {
 		
-		private final List m_listOfHandlers = new LinkedList();
+		private final List<InvocationHandler> m_listOfHandlers = new LinkedList<>();
 		
-		ListBindingsNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, OSGiURLParser urlParser) {
+		ListBindingsNamingEnumeration(BundleContext bundleContext,
+				ServiceReference< ? >[] serviceReferences,
+				OSGiURLParser urlParser) {
 			super(bundleContext, serviceReferences, urlParser.getServiceInterface());
 			
 			// setup a Binding object for each ServiceReference
 			m_nameClassPairs = new Binding[m_serviceReferences.length];
 			for(int i = 0; i < m_serviceReferences.length; i++) {
 				Long serviceId = (Long)m_serviceReferences[i].getProperty(Constants.SERVICE_ID);
-				final ServiceReference serviceReference = m_serviceReferences[i];
+				final ServiceReference< ? > serviceReference = m_serviceReferences[i];
 				ServiceProxyInfo proxyInfo = 
 					createNoRetryProxiedService(bundleContext, urlParser, serviceReference);
 				m_listOfHandlers.add(proxyInfo.getHandler());
@@ -200,6 +219,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 			}
 		}
 
+		@Override
 		public void close() throws NamingException {
 			super.close();
 			
@@ -207,7 +227,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 				m_bundleContext.ungetService(m_serviceReferences[i]);
 			}
 			
-			Iterator iterator = m_listOfHandlers.iterator();
+			Iterator<InvocationHandler> iterator = m_listOfHandlers.iterator();
 			while(iterator.hasNext()) {
 				NoRetryServiceInvocationHandler handler = 
 					(NoRetryServiceInvocationHandler)iterator.next();
@@ -218,11 +238,14 @@ class OSGiServiceListContext extends NotSupportedContext {
 	
 	
 	private static class NoRetryServiceInvocationHandler extends ServiceInvocationHandler {
-		NoRetryServiceInvocationHandler(BundleContext callerBundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+		NoRetryServiceInvocationHandler(BundleContext callerBundleContext,
+				ServiceReference< ? > serviceReference, OSGiURLParser urlParser,
+				Object osgiService) {
 			super(callerBundleContext, serviceReference, urlParser, osgiService);
 		}
 
 
+		@Override
 		protected boolean obtainService() {
 			m_serviceTracker.close();
 			// always return false, since servicelist proxies must not rebind to a service
@@ -231,7 +254,14 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 	
 	private static class NoRetryInvocationHandlerFactory implements InvocationHandlerFactory {
-		public InvocationHandler create(BundleContext bundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+		NoRetryInvocationHandlerFactory() {
+			super();
+		}
+
+		@Override
+		public InvocationHandler create(BundleContext bundleContext,
+				ServiceReference< ? > serviceReference, OSGiURLParser urlParser,
+				Object osgiService) {
 			return new NoRetryServiceInvocationHandler(bundleContext, serviceReference, urlParser, osgiService);
 		}
 		

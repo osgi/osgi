@@ -17,6 +17,7 @@
 
 package org.osgi.test.cases.jndi.initialDirContextFactoryBuilder1;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.naming.spi.InitialContextFactoryBuilder;
@@ -32,11 +33,12 @@ import org.osgi.test.cases.jndi.provider.CTInitialDirContextFactoryBuilder;
 public class InitialDirContextFactoryBuilder1Activator implements
 		BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] interfaces = {InitialContextFactoryBuilder.class.getName()};
 		
 		CTInitialDirContextFactoryBuilder ctfb = new CTInitialDirContextFactoryBuilder();
@@ -45,6 +47,7 @@ public class InitialDirContextFactoryBuilder1Activator implements
 		
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();

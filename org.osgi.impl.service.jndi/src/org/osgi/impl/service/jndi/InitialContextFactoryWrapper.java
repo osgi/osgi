@@ -15,11 +15,12 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.util.Hashtable;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
-import java.util.Hashtable;
 
 /**
  * A Wrapper implementation of InitialContextFactory, used to support URL
@@ -35,7 +36,9 @@ class InitialContextFactoryWrapper implements InitialContextFactory {
 		m_factoryManager = factoryManager;
 	}
 
-	public Context getInitialContext(Hashtable environment) throws NamingException {
+	@Override
+	public Context getInitialContext(Hashtable< ? , ? > environment)
+			throws NamingException {
 		final Context contextToReturn = 
 			m_initialContextFactory.getInitialContext(environment);
 

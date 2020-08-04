@@ -17,6 +17,7 @@
 
 package org.osgi.test.cases.jndi.exceptionalInitialContextFactoryBuilder1;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.naming.spi.InitialContextFactoryBuilder;
@@ -34,13 +35,14 @@ import org.osgi.test.cases.jndi.provider.CTInitialContextFactoryBuilder;
 public class ExceptionalInitialContextFactoryBuilder1Activator implements
 		BundleActivator {
 
-	private ServiceRegistration sr1;
-	private ServiceRegistration sr2;
+	private ServiceRegistration< ? >	sr1;
+	private ServiceRegistration< ? >	sr2;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props1 = new Hashtable();
-		Hashtable props2 = new Hashtable();
+		Dictionary<String,Object> props1 = new Hashtable<>();
+		Dictionary<String,Object> props2 = new Hashtable<>();
 		String[] interfaces ={InitialContextFactoryBuilder.class.getName()};
 		
 
@@ -54,6 +56,7 @@ public class ExceptionalInitialContextFactoryBuilder1Activator implements
 		sr2 = context.registerService(interfaces, ctfb2, props2);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();

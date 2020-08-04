@@ -17,6 +17,7 @@
 
 package org.osgi.test.cases.jndi.initialContextFactory3;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.naming.spi.InitialContextFactory;
@@ -31,18 +32,19 @@ import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
  * @author $Id$
  */
 public class InitialContextFactory3Activator implements BundleActivator {
-	private ServiceRegistration sr1;
+	private ServiceRegistration< ? > sr1;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
 		props.put("osgi.jndi.serviceName", "CTInitialContextFactory"); 
 		props.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 		
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		
 		env.put("test2", "test2");
 		
@@ -51,6 +53,7 @@ public class InitialContextFactory3Activator implements BundleActivator {
 		sr1 = context.registerService(interfaces, ctf, props);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();

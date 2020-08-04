@@ -39,38 +39,46 @@ class SecurityAwareJNDIContextManagerImpl implements CloseableJNDIContextManager
 	private static final Logger logger = 
 		Logger.getLogger(SecurityAwareJNDIContextManagerImpl.class.getName());
 	
-	private final CloseableJNDIContextManager m_contextManager;
+	final CloseableJNDIContextManager	m_contextManager;
 	
 	public SecurityAwareJNDIContextManagerImpl(CloseableJNDIContextManager contextManager) {
 		m_contextManager = contextManager;
 	}
 	
 	
+	@Override
 	public Context newInitialContext() throws NamingException {
-		return (Context)invokePrivilegedAction(new NewInitialContextAction());
+		return invokePrivilegedAction(new NewInitialContextAction());
 	}
 	
 
-	public Context newInitialContext(Map environment) throws NamingException {
-		return (Context)invokePrivilegedAction(new NewInitialContextWithEnvironmentAction(environment));
+	@Override
+	public Context newInitialContext(Map<String, ? > environment)
+			throws NamingException {
+		return invokePrivilegedAction(new NewInitialContextWithEnvironmentAction(environment));
 	}
 
 	
+	@Override
 	public DirContext newInitialDirContext() throws NamingException {
-		return (DirContext)invokePrivilegedAction(new NewInitialDirContextAction());
+		return invokePrivilegedAction(new NewInitialDirContextAction());
 	}
 
 	
-	public DirContext newInitialDirContext(Map environment) throws NamingException {
-		return (DirContext)invokePrivilegedAction(new NewInitialDirContextWithEnvironmentAction(environment));
+	@Override
+	public DirContext newInitialDirContext(Map<String, ? > environment)
+			throws NamingException {
+		return invokePrivilegedAction(new NewInitialDirContextWithEnvironmentAction(environment));
 	}
 	
+	@Override
 	public void close() {
 		invokePrivilegedActionWithoutReturn(new CloseJNDIContextManagerAction());
 	}
 	
 
-	private static Object invokePrivilegedAction(final PrivilegedExceptionAction action) throws NamingException {
+	private static <O> O invokePrivilegedAction(
+			final PrivilegedExceptionAction<O> action) throws NamingException {
 		try {
 			return SecurityUtils.invokePrivilegedAction(action);
 		} catch (Exception exception) {
@@ -87,7 +95,8 @@ class SecurityAwareJNDIContextManagerImpl implements CloseableJNDIContextManager
 		}
 	}
 	
-	private static void invokePrivilegedActionWithoutReturn(final PrivilegedExceptionAction action) {
+	private static void invokePrivilegedActionWithoutReturn(
+			final PrivilegedExceptionAction< ? > action) {
 		try {
 			SecurityUtils.invokePrivilegedActionNoReturn(action);
 		}
@@ -106,46 +115,70 @@ class SecurityAwareJNDIContextManagerImpl implements CloseableJNDIContextManager
 	
 	
 	// actions for each of the operations supported by the JNDIContextManager service
-	private class NewInitialContextAction implements PrivilegedExceptionAction {
-		public Object run() throws Exception {
+	private class NewInitialContextAction
+			implements PrivilegedExceptionAction<Context> {
+		NewInitialContextAction() {
+			super();
+		}
+
+		@Override
+		public Context run() throws Exception {
 			return m_contextManager.newInitialContext();
 		}
 	}
 	
-	private class NewInitialContextWithEnvironmentAction implements PrivilegedExceptionAction {
+	private class NewInitialContextWithEnvironmentAction
+			implements PrivilegedExceptionAction<Context> {
 
-		private final Map m_environment;
+		private final Map<String, ? > m_environment;
 		
-		public NewInitialContextWithEnvironmentAction(Map environment) {
+		public NewInitialContextWithEnvironmentAction(
+				Map<String, ? > environment) {
 			m_environment = environment;
 		}
 		
-		public Object run() throws Exception {
+		@Override
+		public Context run() throws Exception {
 			return m_contextManager.newInitialContext(m_environment);
 		}
 	}
 	
 	
-	private class NewInitialDirContextAction implements PrivilegedExceptionAction {
-		public Object run() throws Exception {
+	private class NewInitialDirContextAction
+			implements PrivilegedExceptionAction<DirContext> {
+		NewInitialDirContextAction() {
+			super();
+		}
+
+		@Override
+		public DirContext run() throws Exception {
 			return m_contextManager.newInitialDirContext();
 		}
 	}
 	
-	private class NewInitialDirContextWithEnvironmentAction implements PrivilegedExceptionAction {
-		private final Map m_environment;
+	private class NewInitialDirContextWithEnvironmentAction
+			implements PrivilegedExceptionAction<DirContext> {
+		private final Map<String, ? > m_environment;
 		
-		public NewInitialDirContextWithEnvironmentAction(Map environment) {
+		public NewInitialDirContextWithEnvironmentAction(
+				Map<String, ? > environment) {
 			m_environment = environment;
 		}
 		
-		public Object run() throws Exception {
+		@Override
+		public DirContext run() throws Exception {
 			return m_contextManager.newInitialDirContext(m_environment);
 		}
 	}
 	
-	private class CloseJNDIContextManagerAction implements PrivilegedExceptionAction {
-		public Object run() throws Exception {
+	private class CloseJNDIContextManagerAction
+			implements PrivilegedExceptionAction<Void> {
+		CloseJNDIContextManagerAction() {
+			super();
+		}
+
+		@Override
+		public Void run() throws Exception {
 			m_contextManager.close();
 			return null;
 		}

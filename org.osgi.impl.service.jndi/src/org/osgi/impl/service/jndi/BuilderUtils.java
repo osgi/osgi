@@ -34,7 +34,7 @@ import org.osgi.service.jndi.JNDIConstants;
  */
 class BuilderUtils {
 	
-	private static Logger logger = Logger.getLogger(BuilderUtils.class.getName());
+	static Logger logger = Logger.getLogger(BuilderUtils.class.getName());
 	
 	/* private constructor, static utility class */
 	private BuilderUtils() {}
@@ -71,7 +71,8 @@ class BuilderUtils {
 	 * @return the BundleContext associated with the JNDI client, or 
 	 *         null if no BundleContext could be found.  
 	 */
-	static BundleContext getBundleContext(Hashtable environment, String namingClassType) {
+	static BundleContext getBundleContext(Hashtable< ? , ? > environment,
+			String namingClassType) {
 		// iterate over the existing strategies to attempt to find a BundleContext
 		// for the calling Bundle
 		for(int i = 0; i < getBundleContextStrategies.length; i++) {
@@ -104,7 +105,8 @@ class BuilderUtils {
 		 * @return the caller's BundleContext, or
 		 *         null if none found. 
 		 */
-		public BundleContext getBundleContext(Hashtable environment, String namingClassType);
+		public BundleContext getBundleContext(Hashtable< ? , ? > environment,
+				String namingClassType);
 	}
 	
 	/**
@@ -113,7 +115,12 @@ class BuilderUtils {
 	 *
 	 */
 	private static class EnvironmentPropertyStrategyImpl implements GetBundleContextStrategy {
-		public BundleContext getBundleContext(Hashtable environment, String namingClassType) {
+		EnvironmentPropertyStrategyImpl() {
+			super();
+		}
+		@Override
+		public BundleContext getBundleContext(Hashtable< ? , ? > environment,
+				String namingClassType) {
 			if((environment != null) && (environment.containsKey(JNDIConstants.BUNDLE_CONTEXT))) {
 				Object result = 
 					environment.get(JNDIConstants.BUNDLE_CONTEXT);
@@ -133,12 +140,20 @@ class BuilderUtils {
 	 *
 	 */
 	private static class ThreadContextStrategyImpl implements GetBundleContextStrategy {
-		public BundleContext getBundleContext(Hashtable environment, String namingClassType) {
+		ThreadContextStrategyImpl() {
+			super();
+		}
+		@Override
+		public BundleContext getBundleContext(Hashtable< ? , ? > environment,
+				String namingClassType) {
 			ClassLoader threadContextClassloader = null;
 			try {
 				// this code must run in a doPrivileged() block
-				threadContextClassloader = (ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
-						public Object run() throws Exception {
+				threadContextClassloader = SecurityUtils
+						.invokePrivilegedAction(
+								new PrivilegedExceptionAction<ClassLoader>() {
+						@Override
+									public ClassLoader run() throws Exception {
 							return Thread.currentThread().getContextClassLoader();
 						}
 						
@@ -165,14 +180,21 @@ class BuilderUtils {
 	 * 
 	 */
 	private static class CallStackStrategyImpl implements GetBundleContextStrategy {
-		public BundleContext getBundleContext(Hashtable environment, String namingClassType) {
-			Class[] callStack = null;
+		CallStackStrategyImpl() {
+			super();
+		}
+		@Override
+		public BundleContext getBundleContext(Hashtable< ? , ? > environment,
+				String namingClassType) {
+			Class< ? >[] callStack = null;
 			try {
 				// creation of SecurityManager must take place in a doPrivileged() block,
 				// since JNDI clients should not have to include this permission in 
 				// order to use JNDI services.  
-				callStack = (Class[])SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
-						public Object run() throws Exception {
+				callStack = SecurityUtils.invokePrivilegedAction(
+						new PrivilegedExceptionAction<Class< ? >[]>() {
+							@Override
+							public Class< ? >[] run() throws Exception {
 							return new CallStackSecurityManager().getClientCallStack();
 						}
 						
@@ -194,12 +216,16 @@ class BuilderUtils {
 			// the next stack frame should include the caller of the InitialContext constructor
 			if ((indexOfConstructor >= 0)
 					&& ((indexOfConstructor + 1) < callStack.length)) {
-				final Class clientClass = callStack[indexOfConstructor + 1];
+				final Class< ? > clientClass = callStack[indexOfConstructor
+						+ 1];
 				ClassLoader clientClassLoader = null;
 				try {
 					clientClassLoader = 
-						(ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
-							public Object run() throws Exception {
+							SecurityUtils.invokePrivilegedAction(
+									new PrivilegedExceptionAction<ClassLoader>() {
+							@Override
+										public ClassLoader run()
+												throws Exception {
 								return clientClass.getClassLoader();
 							}
 						});
@@ -217,7 +243,11 @@ class BuilderUtils {
 		}
 		
 		private static class CallStackSecurityManager extends SecurityManager {
-			public Class[] getClientCallStack() {
+			CallStackSecurityManager() {
+				super();
+			}
+
+			public Class< ? >[] getClientCallStack() {
 				return getClassContext();
 			}
 		}
@@ -235,7 +265,8 @@ class BuilderUtils {
 	 * @return BundleContext associated with this ClassLoader, or 
 	 *         null if no BundleContext was associated with this ClassLoaer
 	 */
-	private static BundleContext getBundleContextFromClassLoader(ClassLoader classLoader) {
+	static BundleContext getBundleContextFromClassLoader(
+			ClassLoader classLoader) {
 		BundleReference bundleRef = (BundleReference) classLoader;
 		if (bundleRef.getBundle() != null) {
 		    return bundleRef.getBundle().getBundleContext();

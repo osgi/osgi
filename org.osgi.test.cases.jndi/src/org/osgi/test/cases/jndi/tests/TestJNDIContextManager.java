@@ -19,12 +19,12 @@ package org.osgi.test.cases.jndi.tests;
 
 import java.util.Hashtable;
 
-import javax.naming.spi.InitialContextFactory;
 import javax.naming.Context;
 import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
+import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
@@ -47,9 +47,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 	public void testLookupOfJREProvidedContexts() throws Exception {
 		// No provider bundle needed.  The JRE is the provider
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Create environment to grab built in LDAP provider
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
 		// Grab the context
 		Context ctx = null;		
@@ -57,7 +57,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			ctx = ctxManager.newInitialContext(env);
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
-			Hashtable ctxEnv = ctx.getEnvironment();
+			Hashtable< ? , ? > ctxEnv = ctx.getEnvironment();
 			assertEquals((String)env.get(Context.INITIAL_CONTEXT_FACTORY), (String)ctxEnv.get(Context.INITIAL_CONTEXT_FACTORY));
 		} finally {
 			if (ctx != null) {
@@ -71,9 +71,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -102,9 +102,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		DirContext ctx = null;
 		try {
@@ -137,7 +137,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
 		Context ctx = null;
@@ -166,7 +166,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		DirContext ctx = null;
 		try {
@@ -199,9 +199,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBuilderBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -230,9 +230,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialDirContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		DirContext ctx = null;
 		try {
@@ -265,7 +265,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBuilderBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
 		Context ctx = null;
@@ -294,7 +294,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialDirContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		DirContext ctx = null;
 		try {
@@ -327,7 +327,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// install the required bundles
 		Bundle factoryBundle = installBundle("initialContextFactoryWithProperties.jar");
 		// Grab the jNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService (JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService (JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
 		Context ctx = null;
@@ -354,9 +354,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 	
 	public void testLookupWithNoMatchingContext() throws Exception {
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup the environment for grabbing the specific initialContextFactory
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Try to grab a context from the specified initialContextFactory. This
 		// should throw an exception.
@@ -382,7 +382,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install a bundle that registers a service we know we can grab
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Try to grab a context.  There's none installed so we should get back one capable
 		// of only performing URL lookups.
 		Context ctx = null;
@@ -404,7 +404,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install the test bundle
 		Bundle factoryBuilderBundle = installBundle("exceptionalInitialContextFactoryBuilder1.jar");
 		// Grab the JNDIContextmanager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
 		Context ctx = null;
@@ -433,9 +433,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install a bundle for grabbing a context
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup the environment
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -445,6 +445,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			ctx.bind("testObject", new Object());
 			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
 			uninstallBundle(factoryBundle);
+			@SuppressWarnings("unused")
 			Object obj = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			// This is what we're expecting to receive.
@@ -467,9 +468,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install a bundle for grabbing a context
 		Bundle factoryBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup the environment
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -479,6 +480,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			ctx.bind("testObject", new Object());
 			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
 			uninstallBundle(factoryBundle);
+			@SuppressWarnings("unused")
 			Object obj = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			// This is what we're expecting to receive.
@@ -501,9 +503,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install a bundle for grabbing a context
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup the environment
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab a context
 		Context ctx = null;
@@ -514,6 +516,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			ctx.bind("testObject", new Object());
 			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
 			uninstallBundle(factoryBundle);
+			@SuppressWarnings("unused")
 			Object obj = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			// do nothing here
@@ -523,6 +526,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		Bundle builderBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// See if the rebinding occurs as it should
 		try {
+			@SuppressWarnings("unused")
 			Object obj = ctx.lookup("testObject");
 		} finally {
 			if (ctx != null) {
@@ -537,9 +541,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install a bundle for grabbing a context
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup the environment
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab a context
 		Context ctx = null;
@@ -549,6 +553,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 			ungetService(ctxManager);
+			@SuppressWarnings("unused")
 			Object obj = ctx.lookup("testObject");
 		} catch (OperationNotSupportedException ex) {
 			pass("javax.naming.OperationNotSupportedException caught in testUngetContextManager: SUCCESS");
@@ -567,7 +572,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Install the necessary bundles
 		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
 		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Use the default context to grab one of the factories and make sure
 		// it's the right one
 		Context ctx = null;
@@ -576,7 +581,8 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
 			InitialContextFactory ctf = (InitialContextFactory) ctx.lookup("osgi:service/javax.naming.spi.InitialContextFactory");
 			// Let's grab a context instance and check the environment
-			Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
+			Hashtable< ? , ? > ctxEnv = ctf.getInitialContext(null)
+					.getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {
 				fail("The right context was not returned");
 			}
@@ -594,13 +600,13 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		//Install the necessary bundles
 		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
 		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		Context ctx = null;
 		try {
 			ctx = ctxManager.newInitialContext();
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
-			Hashtable ctxEnv = ctx.getEnvironment();
+			Hashtable< ? , ? > ctxEnv = ctx.getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {
 				fail("The right context was not returned");
 			}

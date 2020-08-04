@@ -94,7 +94,9 @@ class ReflectionUtils {
 	 * @param serviceReference the ServiceReference for the service to proxy
 	 * @return a ServiceProxyInfo instance, which includes the proxy or underlying service.
 	 */
-	static ServiceProxyInfo getProxyForSingleService(BundleContext bundleContext, OSGiURLParser urlParser, ServiceReference serviceReference) {
+	static ServiceProxyInfo getProxyForSingleService(
+			BundleContext bundleContext, OSGiURLParser urlParser,
+			ServiceReference< ? > serviceReference) {
 		return getProxyForSingleService(bundleContext, 
 				                        urlParser,
 				                        serviceReference,
@@ -115,13 +117,18 @@ class ReflectionUtils {
 	 *                       associated with this service proxy
 	 * @return a ServiceProxyInfo instance, which includes the proxy or underlying service.
 	 */
-	static ServiceProxyInfo getProxyForSingleService(BundleContext bundleContext, OSGiURLParser urlParser, ServiceReference serviceReference, InvocationHandlerFactory handlerFactory) {
+	static ServiceProxyInfo getProxyForSingleService(
+			BundleContext bundleContext, OSGiURLParser urlParser,
+			ServiceReference< ? > serviceReference,
+			InvocationHandlerFactory handlerFactory) {
 		final Object requestedService = 
 			bundleContext.getService(serviceReference);
 		ClassLoader tempLoader = null;
 		try {
-			tempLoader = (ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
-				public Object run() throws Exception {
+			tempLoader = SecurityUtils.invokePrivilegedAction( 
+					new PrivilegedExceptionAction<ClassLoader>() {
+				@Override
+						public ClassLoader run() throws Exception {
 					return requestedService.getClass().getClassLoader();
 				}
 			});
@@ -132,7 +139,8 @@ class ReflectionUtils {
 		} 
 			
 		try {
-			Class clazz = Class.forName(urlParser.getServiceInterface(), true, tempLoader);
+			Class< ? > clazz = Class.forName(urlParser.getServiceInterface(),
+					true, tempLoader);
 			if (clazz.isInterface()) {
 				InvocationHandler handler = 
 					handlerFactory.create(bundleContext, serviceReference, urlParser, requestedService);
@@ -147,8 +155,8 @@ class ReflectionUtils {
 			}
 		}
 		catch (ClassNotFoundException classNotFoundException) {
-			tempLoader = requestedService.getClass().getClassLoader();
-			final Class[] interfaces = getInterfaces(serviceReference, bundleContext, tempLoader);
+			final Class< ? >[] interfaces = getInterfaces(serviceReference,
+					bundleContext, tempLoader);
 			if (interfaces.length > 0) {
 				InvocationHandler handler = 
 					handlerFactory.create(bundleContext, serviceReference, 
@@ -168,24 +176,27 @@ class ReflectionUtils {
 	}
 	
 	
-	private static boolean isAssignable(ServiceReference serviceReference, BundleContext bundleContext, Class clazz) {
+	private static boolean isAssignable(ServiceReference< ? > serviceReference,
+			BundleContext bundleContext, Class< ? > clazz) {
 		return serviceReference.isAssignableTo(bundleContext.getBundle(), clazz.getName());
 	}
 
 
 
-	private static boolean isInterfacePublic(Class clazz) {
+	private static boolean isInterfacePublic(Class< ? > clazz) {
 		return Modifier.isPublic(clazz.getModifiers());
 	}
 
 
 
-	private static Class[] getInterfaces(ServiceReference serviceReference, BundleContext bundleContext, ClassLoader classLoader) {
+	private static Class< ? >[] getInterfaces(
+			ServiceReference< ? > serviceReference,
+			BundleContext bundleContext, ClassLoader classLoader) {
 		String[] objectClassValues = (String [])serviceReference.getProperty(Constants.OBJECTCLASS);
-		List listOfClasses = new LinkedList();
+		List<Class< ? >> listOfClasses = new LinkedList<>();
 		for(int i = 0; i < objectClassValues.length; i++) {
 			try {
-				Class clazz = 
+				Class< ? > clazz =
 					Class.forName(objectClassValues[i], true, classLoader);
 				if(clazz.isInterface()) {
 					if (isInterfacePublic(clazz)) {
@@ -204,20 +215,19 @@ class ReflectionUtils {
 			
 		}
 		
-		if(listOfClasses.isEmpty()) {
-			return new Class[0];
-		} else {
-			Class[] interfacesToReturn = new Class[listOfClasses.size()];
-			for(int i = 0; i < listOfClasses.size(); i++) {
-				interfacesToReturn[i] = (Class)listOfClasses.get(i);
-			}
-			
-			return interfacesToReturn;
-		}
+		Class< ? >[] interfacesToReturn = listOfClasses.toArray(new Class[0]);
+		return interfacesToReturn;
 	}
 	
 	private static class RetryInvocationHandlerFactory implements InvocationHandlerFactory {
-		public InvocationHandler create(BundleContext bundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+		RetryInvocationHandlerFactory() {
+			super();
+		}
+
+		@Override
+		public InvocationHandler create(BundleContext bundleContext,
+				ServiceReference< ? > serviceReference, OSGiURLParser urlParser,
+				Object osgiService) {
 			return new ServiceInvocationHandler(bundleContext, 
 					                            serviceReference, 
 					                            urlParser, 

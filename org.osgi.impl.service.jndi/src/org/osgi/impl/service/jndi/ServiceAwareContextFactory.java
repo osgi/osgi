@@ -33,7 +33,8 @@ import javax.naming.spi.InitialContextFactory;
 
 public class ServiceAwareContextFactory {
 	
-	private static Logger logger = Logger.getLogger(ServiceAwareContextFactory.class.getName());
+	static Logger logger = Logger
+			.getLogger(ServiceAwareContextFactory.class.getName());
 	
 	/* private constructor to disallow creation of this class */
 	private ServiceAwareContextFactory() {}
@@ -64,6 +65,7 @@ public class ServiceAwareContextFactory {
 			m_isOpen = true;
 		}
 		
+		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			synchronized (this) {
 				synchronized (m_manager) {
@@ -110,9 +112,10 @@ public class ServiceAwareContextFactory {
 			}
 		}
 
-		private Object obtainNewFactoryAndInvoke(Method method, Object[] args) throws NamingException, Throwable, NoInitialContextException {
+		Object obtainNewFactoryAndInvoke(Method method, Object[] args)
+				throws NamingException, Throwable, NoInitialContextException {
 			// make copy of existing context's environment
-			Hashtable newContextEnvironment = new Hashtable();
+			Hashtable<Object,Object> newContextEnvironment = new Hashtable<>();
 			if (m_context.getEnvironment() != null) {
 				newContextEnvironment.putAll(m_context
 						.getEnvironment());
@@ -158,7 +161,8 @@ public class ServiceAwareContextFactory {
 			}
 		}
 	
-		private class ObtainFactoryAndInvokeAction implements PrivilegedExceptionAction {
+		private class ObtainFactoryAndInvokeAction
+				implements PrivilegedExceptionAction<Object> {
 
 			private final Method m_method;
 			private final Object[] m_args;
@@ -168,6 +172,7 @@ public class ServiceAwareContextFactory {
 				m_args = args;
 			}
 			
+			@Override
 			public Object run() throws Exception {
 				try {
 					return obtainNewFactoryAndInvoke(m_method, m_args);

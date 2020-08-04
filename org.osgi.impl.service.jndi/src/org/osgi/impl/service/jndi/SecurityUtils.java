@@ -41,7 +41,8 @@ class SecurityUtils {
 	 * @return the resulting Object of the operation
 	 * @throws Exception the exception thrown (if any) by the action itself
 	 */
-	static Object invokePrivilegedAction(final PrivilegedExceptionAction action) throws Exception {
+	static <O> O invokePrivilegedAction(
+			final PrivilegedExceptionAction<O> action) throws Exception {
 		try {
 			return AccessController.doPrivileged(action);
 		}
@@ -56,7 +57,8 @@ class SecurityUtils {
 	 * @param action the PrivilegedExceptionAction to execute
 	 * @throws Exception the exception thrown (if any) by the action itself
 	 */
-	static void invokePrivilegedActionNoReturn(final PrivilegedExceptionAction action) throws Exception {
+	static void invokePrivilegedActionNoReturn(
+			final PrivilegedExceptionAction< ? > action) throws Exception {
 		try {
 			AccessController.doPrivileged(action);
 		}

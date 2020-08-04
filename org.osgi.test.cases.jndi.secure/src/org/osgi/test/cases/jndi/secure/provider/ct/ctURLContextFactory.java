@@ -18,6 +18,7 @@
 package org.osgi.test.cases.jndi.secure.provider.ct;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.Name;
@@ -28,8 +29,9 @@ import javax.naming.spi.ObjectFactory;
  */
 public class ctURLContextFactory implements ObjectFactory {
 
+	@Override
 	public Object getObjectInstance(Object obj, Name name, Context context,
-			Hashtable table) throws Exception {
+			Hashtable< ? , ? > table) throws Exception {
 		if (obj == null) {
 			return new ctURLContext();
 		} else if (obj instanceof java.lang.String) {
@@ -37,7 +39,8 @@ public class ctURLContextFactory implements ObjectFactory {
 			if (!query.startsWith("ct://")) {
 				return null;
 			}
-			ctURLContext ctx = new ctURLContext(table);
+			@SuppressWarnings("unchecked")
+			ctURLContext ctx = new ctURLContext((Map<String,Object>) table);
 			return ctx.lookup(query);
 		} else {
 			return null;

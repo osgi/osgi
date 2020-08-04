@@ -22,6 +22,7 @@ package org.osgi.test.cases.jndi.service;
  */
 public class ExampleServiceImpl implements ExampleService {
 	
+	@Override
 	public void testMethod() {
 		return;
 	}

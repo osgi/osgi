@@ -51,7 +51,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Create an appropriate context, create a referenceable object, then try to resolve the referenceable object
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try { 
@@ -75,7 +75,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle contextFactoryBundle = installBundle("initialDirContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("dirObjectFactory1.jar");
 		// Create an appropriate context, create a referenceable object, then try to resolve the referenceable object
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		DirContext ctx = null;
 		try {
@@ -103,7 +103,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Create an appropriate context, store a reference, then attempt to
 		// correctly lookup the reference.
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try {
@@ -129,7 +129,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
 		// Create an appropriate context, store a reference, then attempt to
 		// correctly lookup the reference
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		DirContext ctx = null;
 		try {
@@ -206,7 +206,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Create an appropriate context, store a reference, then attempt to
 		// correctly lookup the reference.
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try {
@@ -232,7 +232,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
 		// Create an appropriate context, store a reference, then attempt to
 		// correctly lookup the reference.
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		DirContext ctx = null;
 		try {
@@ -310,7 +310,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Install the bundle that has the test provider implementations
 		Bundle testBundle = installBundle("objectFactory1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Uninstall the bundle now so the provider implementations are
 		// unregistered
@@ -337,7 +337,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Install the bundle that has the test provider implementations
 		Bundle testBundle = installBundle("objectFactoryBuilder1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Uninstall the bundle now so the provider implementations are
 		// unregistered

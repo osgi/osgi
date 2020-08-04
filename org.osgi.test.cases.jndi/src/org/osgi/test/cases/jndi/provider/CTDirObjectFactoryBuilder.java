@@ -28,11 +28,15 @@ import javax.naming.spi.ObjectFactoryBuilder;
  */
 public class CTDirObjectFactoryBuilder implements ObjectFactoryBuilder {
 	
-	public ObjectFactory createObjectFactory(Object obj, Hashtable environment)
+	@SuppressWarnings("unchecked")
+	@Override
+	public ObjectFactory createObjectFactory(Object obj,
+			Hashtable< ? , ? > environment)
 			throws NamingException {
 		if (obj instanceof CTReference || obj instanceof String) {
 			if (environment != null) {
-				return new CTDirObjectFactory(environment);
+				return new CTDirObjectFactory(
+						(Hashtable<String,Object>) environment);
 			} else {
 				return new CTDirObjectFactory();
 			}

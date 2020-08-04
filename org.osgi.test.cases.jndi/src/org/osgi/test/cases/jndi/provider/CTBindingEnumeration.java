@@ -19,6 +19,7 @@ package org.osgi.test.cases.jndi.provider;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,25 +30,28 @@ import javax.naming.NamingException;
 /**
  * @author $Id$
  */
-public class CTBindingEnumeration implements NamingEnumeration {
+public class CTBindingEnumeration implements NamingEnumeration<Binding> {
 	
-	private ArrayList bindings = new ArrayList();
+	private List<Binding> bindings = new ArrayList<>();
 
-	public CTBindingEnumeration(Map bindingMap) {
-		Set bindingKeys = bindingMap.keySet();
-		Iterator iter = bindingKeys.iterator();
+	public CTBindingEnumeration(Map<String,Object> bindingMap) {
+		Set<String> bindingKeys = bindingMap.keySet();
+		Iterator<String> iter = bindingKeys.iterator();
 		
 		while (iter.hasNext()) {
-			Binding binding = new Binding(iter.next().toString(), bindingMap.get(iter.next().toString()));
+			String name = iter.next();
+			Binding binding = new Binding(name, bindingMap.get(name));
 			bindings.add(binding);
 		}
 		
 	}
 
+	@Override
 	public void close() throws NamingException {
 		bindings.clear();
 	}
 
+	@Override
 	public boolean hasMore() throws NamingException {
 		if(!(bindings.isEmpty())) {
 			return true;
@@ -56,12 +60,14 @@ public class CTBindingEnumeration implements NamingEnumeration {
 		}
 	}
 
-	public Object next() throws NamingException {
-		Object next = bindings.get(0);
+	@Override
+	public Binding next() throws NamingException {
+		Binding next = bindings.get(0);
 		bindings.remove(0);
 		return next;
 	}
 
+	@Override
 	public boolean hasMoreElements() {
 		if(!(bindings.isEmpty())) {
 			return true;
@@ -70,8 +76,9 @@ public class CTBindingEnumeration implements NamingEnumeration {
 		}
 	}
 
-	public Object nextElement() {
-		Object next = bindings.get(0);
+	@Override
+	public Binding nextElement() {
+		Binding next = bindings.get(0);
 		bindings.remove(0);
 		return next;
 	}

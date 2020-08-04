@@ -19,6 +19,7 @@ package org.osgi.test.cases.jndi.secure.provider;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,27 +30,30 @@ import javax.naming.NamingException;
 /**
  * @author $Id$
  */
-public class CTNameClassPairEnumeration implements NamingEnumeration {
+public class CTNameClassPairEnumeration
+		implements NamingEnumeration<NameClassPair> {
 
 	
-	private ArrayList nameClassPair = new ArrayList();
+	private List<NameClassPair> nameClassPair = new ArrayList<>();
 
-	public CTNameClassPairEnumeration(Map bindingMap) {
-		Set bindingKeys = bindingMap.keySet();
-		Iterator iter = bindingKeys.iterator();
+	public CTNameClassPairEnumeration(Map<String,Object> bindingMap) {
+		Set<String> bindingKeys = bindingMap.keySet();
+		Iterator<String> iter = bindingKeys.iterator();
 		
 		while (iter.hasNext()) {
-			String name = iter.next().toString();
+			String name = iter.next();
 			String className = bindingMap.get(name).getClass().getName();
 			nameClassPair.add(new NameClassPair(name, className));
 		}
 		
 	}
 
+	@Override
 	public void close() throws NamingException {
 		nameClassPair.clear();
 	}
 
+	@Override
 	public boolean hasMore() throws NamingException {
 		if(!(nameClassPair.isEmpty())) {
 			return true;
@@ -58,12 +62,14 @@ public class CTNameClassPairEnumeration implements NamingEnumeration {
 		}
 	}
 
-	public Object next() throws NamingException {
-		Object next = nameClassPair.get(0);
+	@Override
+	public NameClassPair next() throws NamingException {
+		NameClassPair next = nameClassPair.get(0);
 		nameClassPair.remove(0);
 		return next;
 	}
 
+	@Override
 	public boolean hasMoreElements() {
 		if(!(nameClassPair.isEmpty())) {
 			return true;
@@ -72,8 +78,9 @@ public class CTNameClassPairEnumeration implements NamingEnumeration {
 		}
 	}
 
-	public Object nextElement() {
-		Object next = nameClassPair.get(0);
+	@Override
+	public NameClassPair nextElement() {
+		NameClassPair next = nameClassPair.get(0);
 		nameClassPair.remove(0);
 		return next;
 	}

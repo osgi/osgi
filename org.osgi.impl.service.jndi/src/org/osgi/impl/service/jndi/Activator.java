@@ -15,6 +15,7 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,7 +51,7 @@ public class Activator implements BundleActivator {
 	private static Logger logger = Logger.getLogger(Activator.class.getName());
 
 	private BundleContext						m_bundleContext					= null;
-	private final List                          m_listOfServiceRegistrations = new LinkedList();
+	private final List<ServiceRegistration< ? >>	m_listOfServiceRegistrations	= new LinkedList<>();
 
 	private CloseableJNDIProviderAdmin	m_jndiProviderAdminService;
 	private JNDIContextManagerServiceFactoryImpl m_jndiContextAdminServiceFactory;
@@ -63,6 +64,7 @@ public class Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		logger.info("Initializing JNDI Factory Manager Bundle");
 		
@@ -98,6 +100,7 @@ public class Activator implements BundleActivator {
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Shutting down JNDI Factory Manager Bundle");
 		
@@ -108,10 +111,11 @@ public class Activator implements BundleActivator {
 		m_jndiProviderAdminService.close();
 
 		// unregister all the JNDI services registered by this Activator
-		Iterator iterator = m_listOfServiceRegistrations.iterator();
+		Iterator<ServiceRegistration< ? >> iterator = m_listOfServiceRegistrations
+				.iterator();
 		while(iterator.hasNext()) {
-			ServiceRegistration serviceRegistration = 
-				(ServiceRegistration)iterator.next();
+			ServiceRegistration< ? > serviceRegistration =
+				iterator.next();
 			serviceRegistration.unregister();
 		}
 	}
@@ -180,10 +184,10 @@ public class Activator implements BundleActivator {
 	 * 
 	 */
 	private void registerOSGiURLContextFactory() {
-		Hashtable serviceProperties = new Hashtable();
+		Dictionary<String,Object> serviceProperties = new Hashtable<>();
 		serviceProperties.put(JNDIConstants.JNDI_URLSCHEME, OSGI_URL_SCHEME);
 
-		ServiceRegistration serviceRegistration = 
+		ServiceRegistration< ? > serviceRegistration = 
 			m_bundleContext.registerService(ObjectFactory.class.getName(), 
 										    new OSGiURLContextFactoryServiceFactory(), 
 										    serviceProperties);
@@ -198,8 +202,8 @@ public class Activator implements BundleActivator {
 	 * 
 	 */
 	private void registerDefaultRuntimeBuilder() {
-		ServiceRegistration serviceRegistration = 
-			m_bundleContext.registerService(InitialContextFactoryBuilder.class.getName(), 
+		ServiceRegistration<InitialContextFactoryBuilder> serviceRegistration = m_bundleContext
+				.registerService(InitialContextFactoryBuilder.class,
 					                        new DefaultRuntimeInitialContextFactoryBuilder(), 
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);
@@ -209,7 +213,7 @@ public class Activator implements BundleActivator {
 	private void registerJNDIContextManager() {
 		m_jndiContextAdminServiceFactory = 
 			new JNDIContextManagerServiceFactoryImpl(m_bundleContext);
-		ServiceRegistration serviceRegistration = 
+		ServiceRegistration< ? > serviceRegistration =
 			m_bundleContext.registerService(JNDIContextManager.class.getName(),
 											m_jndiContextAdminServiceFactory,
 					                        null);
@@ -222,8 +226,8 @@ public class Activator implements BundleActivator {
 			new SecurityAwareJNDIProviderAdminImpl(new JNDIProviderAdminImpl(m_bundleContext));
 		
 		
-		ServiceRegistration serviceRegistration =  
-			m_bundleContext.registerService(JNDIProviderAdmin.class.getName(),
+		ServiceRegistration<JNDIProviderAdmin> serviceRegistration = m_bundleContext
+				.registerService(JNDIProviderAdmin.class,
 					                        m_jndiProviderAdminService,
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);

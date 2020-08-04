@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.naming.Binding;
 import javax.naming.CompositeName;
 import javax.naming.Context;
 import javax.naming.Name;
+import javax.naming.NameClassPair;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -37,8 +39,8 @@ import javax.naming.spi.NamingManager;
  */
 public class CTContext implements Context {
 	
-	protected static Map storage = new HashMap();
-	private Map env 	= new HashMap();
+	protected static Map<String,Object>	storage		= new HashMap<>();
+	private Map<String,Object>			env			= new HashMap<>();
 	private static int invokeCount = 0;
 	protected boolean closed = false;
 	
@@ -48,11 +50,12 @@ public class CTContext implements Context {
 		invokeCount++;
 	}
 	
-	public CTContext(Map env) throws NamingException {
+	public CTContext(Map<String,Object> env) throws NamingException {
 		this.env = env;
 		invokeCount++;
 	}
 
+	@Override
 	public Object addToEnvironment(String propName, Object propVal)
 			throws NamingException {
 		if (closed) {
@@ -63,10 +66,12 @@ public class CTContext implements Context {
 		return previousValue;
 	}
 
+	@Override
 	public void bind(String name, Object obj) throws NamingException {
 		bind(new CompositeName(name), obj);
 	}
 
+	@Override
 	public void bind(Name name, Object obj) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
@@ -84,6 +89,7 @@ public class CTContext implements Context {
 		storage.put(name.toString(), obj);
 	}
 
+	@Override
 	public void close() throws NamingException {
 		storage.clear();
 		env.clear();
@@ -91,51 +97,65 @@ public class CTContext implements Context {
 		closed = true;
 	}
 
+	@Override
 	public String composeName(String first, String second) throws NamingException {
 		return composeName(new CompositeName(first), new CompositeName(second)).toString();
 	}
 
+	@Override
 	public Name composeName(Name first, Name second) throws NamingException {
 		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
+	@Override
 	public Context createSubcontext(String name) throws NamingException {
 		return createSubcontext(new CompositeName(name));
 	}
 
+	@Override
 	public Context createSubcontext(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Subcontexts are not supported");
 	}
 
+	@Override
 	public void destroySubcontext(String name) throws NamingException {
 		destroySubcontext(new CompositeName(name));
 	}
 
+	@Override
 	public void destroySubcontext(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Subcontexts are not supported");
 	}
 
-	public Hashtable getEnvironment() throws NamingException {
-		return new Hashtable(env);
+	@Override
+	public Hashtable< ? , ? > getEnvironment() throws NamingException {
+		return new Hashtable<>(env);
 	}
 
+	@Override
 	public String getNameInNamespace() throws NamingException {
 		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
+	@Override
 	public NameParser getNameParser(String name) throws NamingException {
 		return getNameParser(new CompositeName(name));
 	}
 
+	@Override
 	public NameParser getNameParser(Name name) throws NamingException {
 		return parser;
 	}
 
-	public NamingEnumeration list(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(String name)
+			throws NamingException {
 		return list(new CompositeName(name));
 	}
 
-	public NamingEnumeration list(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(Name name)
+			throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
 		}
@@ -143,11 +163,15 @@ public class CTContext implements Context {
 		return nameClassPairs;
 	}
 
-	public NamingEnumeration listBindings(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(String name)
+			throws NamingException {
 		return listBindings(new CompositeName(name));
 	}
 
-	public NamingEnumeration listBindings(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(Name name)
+			throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
 		}
@@ -155,10 +179,12 @@ public class CTContext implements Context {
 		return bindings;
 	}
 
+	@Override
 	public Object lookup(String name) throws NamingException {
 		return lookup(new CompositeName(name));
 	}
 
+	@Override
 	public Object lookup(Name name) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
@@ -182,22 +208,27 @@ public class CTContext implements Context {
 		}	
 	}
 
+	@Override
 	public Object lookupLink(String name) throws NamingException {
 		return lookupLink(new CompositeName(name));
 	}
 
+	@Override
 	public Object lookupLink(Name name) throws NamingException {
 		return lookup(name);
 	}
 
+	@Override
 	public void rebind(String name, Object obj) throws NamingException {
 		rebind(new CompositeName(name), obj);
 	}
 
+	@Override
 	public void rebind(Name name, Object obj) throws NamingException {
 		bind(name,obj);
 	}
 
+	@Override
 	public Object removeFromEnvironment(String propName) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
@@ -207,10 +238,12 @@ public class CTContext implements Context {
 		return previousValue;
 	}
 
+	@Override
 	public void rename(String old, String current) throws NamingException {
 		rename(new CompositeName(old), new CompositeName(current));
 	}
 
+	@Override
 	public void rename(Name old, Name current) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
@@ -224,10 +257,12 @@ public class CTContext implements Context {
 		}
 	}
 
+	@Override
 	public void unbind(String name) throws NamingException {
 		unbind(new CompositeName(name));		
 	}
 
+	@Override
 	public void unbind(Name name) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");

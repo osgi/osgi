@@ -151,12 +151,14 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			// Verify we received a context
 			assertNotNull("The context should not be null", serviceListContext);
 			// Check that the services we were expecting were found using the listBindings method
-			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
+			ServiceReference< ? >[] expectedServices = serviceBundle
+					.getRegisteredServices();
 			for (int i=0; i < expectedServices.length; i++) {
-				NamingEnumeration retrievedServices = serviceListContext.listBindings("");
+				NamingEnumeration<Binding> retrievedServices = serviceListContext
+						.listBindings("");
 				boolean found = false;
 				while (retrievedServices.hasMoreElements()) {
-					Binding serviceBinding = (Binding) retrievedServices.nextElement();
+					Binding serviceBinding = retrievedServices.nextElement();
 					String bindingName = serviceBinding.getName();
 					if (bindingName.equals(expectedServices[i].getProperty("service.id").toString())) {
 						found = true;
@@ -192,12 +194,14 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			// Verify we received the context
 			assertNotNull("The context should not be null", serviceListContext);
 			// Check that the service we were expecting were found using the list method
-			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
+			ServiceReference< ? >[] expectedServices = serviceBundle
+					.getRegisteredServices();
 			for (int i=0; i < expectedServices.length; i++) {
-				NamingEnumeration retrievedServices = serviceListContext.list("");
+				NamingEnumeration<NameClassPair> retrievedServices = serviceListContext
+						.list("");
 				boolean found = false;
 				while (retrievedServices.hasMoreElements()) {
-					NameClassPair servicePair = (NameClassPair) retrievedServices.nextElement();
+					NameClassPair servicePair = retrievedServices.nextElement();
 					String pairName = servicePair.getName();
 					if (pairName.equals(expectedServices[i].getProperty("service.id").toString())) {
 						found = true;
@@ -233,8 +237,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			// Verify we received the context
 			assertNotNull("The context should not be null", serviceListContext);
 			// Get the service.id for the registered service we expect to get from serviceListContext
-			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
-			ServiceReference exampleServiceReference = expectedServices[0];
+			ServiceReference< ? >[] expectedServices = serviceBundle
+					.getRegisteredServices();
+			ServiceReference< ? > exampleServiceReference = expectedServices[0];
 			// Lookup the service in the returned serviceListContext
 			service = (ExampleService) serviceListContext.lookup(((Long)exampleServiceReference.getProperty("service.id")).toString());
 			// Remove the service that is being proxied

@@ -41,7 +41,9 @@ class DefaultRuntimeInitialContextFactoryBuilder implements
 	private static final Logger	logger	= 
 		Logger.getLogger(DefaultRuntimeInitialContextFactoryBuilder.class.getName());
 
-	public InitialContextFactory createInitialContextFactory(Hashtable environment) throws NamingException {
+	@Override
+	public InitialContextFactory createInitialContextFactory(
+			Hashtable< ? , ? > environment) throws NamingException {
 
 		if (environment.get(Context.INITIAL_CONTEXT_FACTORY) != null) {
 			final String initialContextFactoryName = 
@@ -49,7 +51,7 @@ class DefaultRuntimeInitialContextFactoryBuilder implements
 
 			// attempt to load this provider from the system classpath
 			try {
-				Class clazz = 
+				Class< ? > clazz = 
 					getClass().getClassLoader().loadClass(initialContextFactoryName);
 				return (InitialContextFactory) clazz.getConstructor()
 						.newInstance();
