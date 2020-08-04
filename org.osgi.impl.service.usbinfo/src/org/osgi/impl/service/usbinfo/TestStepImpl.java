@@ -17,8 +17,8 @@ package org.osgi.impl.service.usbinfo;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.osgi.service.usbinfo.USBInfoDevice;
@@ -47,12 +47,12 @@ public class TestStepImpl implements TestStep {
      */
     private String registerNewDevice(String[] parameters) {
 
-        Dictionary prop = new Properties();
+		Dictionary<String,Object> prop = new Hashtable<>();
 
         // Device Access Category
-        List category = new ArrayList();
+		List<String> category = new ArrayList<>();
         category.add(USBInfoDevice.DEVICE_CATEGORY);
-        prop.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, (String[])category.toArray(new String[0]));
+        prop.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, category.toArray(new String[0]));
 
         // Service properties from USB Specification
         // Device Descriptor and Service Property
@@ -80,6 +80,7 @@ public class TestStepImpl implements TestStep {
         USBTracker.getInstance().removeUsb(parameters[0]);
     }
 
+	@Override
 	public String execute(String stepId, String userPrompt) {
 		String command = stepId;
 		userPrompt = userPrompt.substring(userPrompt.indexOf(SEPARATOR_COMMA));

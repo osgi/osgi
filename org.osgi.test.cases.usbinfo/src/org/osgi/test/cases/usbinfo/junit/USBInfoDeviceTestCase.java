@@ -42,7 +42,8 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
     public void testRegisterDevice01() {
         String[] ids = null;
         try {
-            TestServiceListener listener = new TestServiceListener(ServiceEvent.REGISTERED);
+			TestServiceListener<USBInfoDevice> listener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
             getContext().addServiceListener(listener, "(objectClass=org.osgi.service.usbinfo.USBInfoDevice)");
 
             String command = "registerDevice";
@@ -52,7 +53,7 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(listener);
 
             assertEquals("Only one USBInfoDevice service event is expected.", 1, listener.size());
-            ServiceReference ref = listener.get(0);
+			ServiceReference<USBInfoDevice> ref = listener.get(0);
             String[] category = (String[]) ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY);
             boolean categoryFlag = false;
             for (int i = 0; i < category.length; i++) {
@@ -184,7 +185,8 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
         String[] ids = null;
         String[] ids2 = null;
         try {
-            TestServiceListener listener = new TestServiceListener(ServiceEvent.REGISTERED);
+			TestServiceListener<USBInfoDevice> listener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
             getContext().addServiceListener(listener, "(objectClass=org.osgi.service.usbinfo.USBInfoDevice)");
 
             String command = "registerDevice";
@@ -197,7 +199,7 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(listener);
 
             assertEquals("Two USBInfoDevice service events are expected.", 2, listener.size());
-            ServiceReference ref = listener.get(0);
+			ServiceReference<USBInfoDevice> ref = listener.get(0);
             String[] category = (String[]) ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY);
             boolean categoryFlag = false;
             for (int i = 0; i < category.length; i++) {
@@ -266,7 +268,8 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
             String message = "[TEST-UD01] Connect a device.";
             ids = testProxy.executeTestStep(command, message, new String[]{});
 
-            TestServiceListener listener = new TestServiceListener(ServiceEvent.UNREGISTERING);
+			TestServiceListener<USBInfoDevice> listener = new TestServiceListener<>(
+					ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(listener, "(objectClass=org.osgi.service.usbinfo.USBInfoDevice)");
 
             command = "unregisterDevice";
@@ -300,7 +303,8 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
             message = "Connect the second device.";
             ids2 = testProxy.executeTestStep(command, message, new String[]{});
 
-            TestServiceListener listener = new TestServiceListener(ServiceEvent.UNREGISTERING);
+			TestServiceListener<USBInfoDevice> listener = new TestServiceListener<>(
+					ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(listener, "(objectClass=org.osgi.service.usbinfo.USBInfoDevice)");
 
             command = "unregisterDevice";
@@ -338,7 +342,8 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
             message = "Connect the second device.";
             ids2 = testProxy.executeTestStep(command, message, new String[]{});
 
-            TestServiceListener listener = new TestServiceListener(ServiceEvent.UNREGISTERING);
+			TestServiceListener<USBInfoDevice> listener = new TestServiceListener<>(
+					ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(listener, "(objectClass=org.osgi.service.usbinfo.USBInfoDevice)");
 
             command = "unregisterDevice";

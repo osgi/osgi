@@ -18,13 +18,14 @@ package org.osgi.test.cases.usbinfo.util;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
-public class TestServiceListener implements ServiceListener {
+public class TestServiceListener<T> implements ServiceListener {
 
-	private List	list	= new LinkedList();
+	private List<ServiceReference<T>>	list	= new LinkedList<>();
 	private int		type;
 
 	public TestServiceListener(int type) {
@@ -33,7 +34,9 @@ public class TestServiceListener implements ServiceListener {
 
 	public void serviceChanged(ServiceEvent event) {
 		if (event.getType() == type) {
-			ServiceReference ref = event.getServiceReference();
+			@SuppressWarnings("unchecked")
+			ServiceReference<T> ref = (ServiceReference<T>) event
+					.getServiceReference();
 			list.add(ref);
 
 			System.out.println("Callback: " + ref);
@@ -48,7 +51,7 @@ public class TestServiceListener implements ServiceListener {
 		list.clear();
 	}
 
-	public ServiceReference get(int index) {
-		return (ServiceReference) list.get(index);
+	public ServiceReference<T> get(int index) {
+		return list.get(index);
 	}
 }

@@ -29,7 +29,7 @@ class USBTracker {
 
 	private static USBTracker	instance	= new USBTracker();
 
-	private Map					usbMap		= new HashMap();
+	private Map<String,ServiceRegistration< ? >>	usbMap		= new HashMap<>();
 
 	private USBTracker() {
 	}
@@ -39,20 +39,22 @@ class USBTracker {
 	}
 
 	void open() {
+		// empty
 	}
 
 	void close() {
 		usbMap.clear();
 	}
 
-	synchronized String addUsb(Dictionary props) {
+	synchronized String addUsb(Dictionary<String,Object> props) {
 
 		Device device = new USBInfoDeviceImpl();
 		String[] clazzes = new String[] {
 				Device.class.getName(),
 				USBInfoDevice.class.getName()
 		};
-		ServiceRegistration reg = Activator.getContext().registerService(clazzes, device, props);
+		ServiceRegistration< ? > reg = Activator.getContext()
+				.registerService(clazzes, device, props);
 		String id = ((Long) reg.getReference().getProperty(Constants.SERVICE_ID)).toString();
 
 		usbMap.put(id, reg);
@@ -62,7 +64,7 @@ class USBTracker {
 
 	synchronized void removeUsb(String id) {
 
-		ServiceRegistration reg = (ServiceRegistration) usbMap.remove(id);
+		ServiceRegistration< ? > reg = usbMap.remove(id);
 		reg.unregister();
 	}
 }
