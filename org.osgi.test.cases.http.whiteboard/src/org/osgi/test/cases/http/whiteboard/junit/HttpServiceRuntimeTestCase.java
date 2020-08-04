@@ -70,6 +70,7 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 			return;
 		}
 
+		@SuppressWarnings("unchecked")
 		Collection<Long> httpServiceIds = (Collection<Long>) srA.getProperty(HttpServiceRuntimeConstants.HTTP_SERVICE_ID);
 
 		assertNotNull(httpServiceIds);
@@ -576,6 +577,7 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 		for (Capability capability : capabilities) {
 			Map<String, Object> attributes = capability.getAttributes();
+			@SuppressWarnings("unchecked")
 			List<String> objectClasses = (List<String>) attributes.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
 
 			if ((objectClasses != null) && objectClasses.contains(HttpServiceRuntime.class.getName())) {
@@ -595,6 +597,7 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(found);
 	}
 
+	@SuppressWarnings("unchecked")
 	private Collection<String> getEndPoints(ServiceReference<HttpServiceRuntime> srA) {
 		Object value = srA.getProperty(HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT);
 

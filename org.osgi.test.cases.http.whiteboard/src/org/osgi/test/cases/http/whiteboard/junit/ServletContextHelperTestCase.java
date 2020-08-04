@@ -164,6 +164,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		FindHook findHook = new FindHook() {
 
+			@Override
 			public void find(
 					BundleContext bundleContext, String name, String filter,
 					boolean allServices, Collection<ServiceReference<?>> references) {
@@ -497,13 +498,23 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContextDTO servletContextDTO = getServletContextDTOByName("foobar");
 
@@ -537,13 +548,23 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContextDTO servletContextDTO = getServletContextDTOByName("foobar");
 
@@ -578,13 +599,23 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContextDTO servletContextDTO = getServletContextDTOByName("foo");
 
@@ -615,13 +646,23 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContextDTO servletContextDTO = getServletContextDTOByName("foo");
 
@@ -1062,7 +1103,12 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContext servletContext = sc1.get();
 
@@ -1158,7 +1204,12 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletContext servletContext = sc1.get();
 
@@ -1434,10 +1485,12 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		PrototypeServiceFactory<ServletContextListener> factory = new PrototypeServiceFactory<ServletContextListener>() {
 
+			@Override
 			public ServletContextListener getService(Bundle bundle, ServiceRegistration<ServletContextListener> registration) {
 				return new MockSCL(scs.push(new AtomicReference<ServletContext>()));
 			}
 
+			@Override
 			public void ungetService(Bundle bundle, ServiceRegistration<ServletContextListener> registration, ServletContextListener service) {
 			}
 

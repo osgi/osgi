@@ -13,9 +13,11 @@ public class MockSCL implements ServletContextListener {
 		this.sc = Objects.requireNonNull(sc);
 	}
 
+	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		sc.set(event.getServletContext());
 	}

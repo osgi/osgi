@@ -79,6 +79,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		Servlet servlet = new HttpServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
@@ -107,6 +112,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		Servlet servlet = new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -140,6 +150,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		Servlet servlet = new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -175,6 +190,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		Servlet servlet = new HttpServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
@@ -207,6 +227,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		Servlet servlet = new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -244,6 +269,10 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		class TestServlet extends HttpServlet {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			private final String content;
 
 			public TestServlet(String content) {
@@ -277,6 +306,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			public AServlet(String content) {
 				this.content = content;
@@ -342,6 +376,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 		}
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -361,6 +400,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			public AServlet(String content) {
 				this.content = content;
@@ -420,7 +464,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "blah");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
 
@@ -431,7 +480,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "true");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		requestInfoDTO = calculateRequestInfoDTO("/b");
 
@@ -442,7 +496,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "false");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/c");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		requestInfoDTO = calculateRequestInfoDTO("/c");
 
@@ -453,7 +512,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, 234l);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/d");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		requestInfoDTO = calculateRequestInfoDTO("/d");
 
@@ -463,7 +527,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/e");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		requestInfoDTO = calculateRequestInfoDTO("/e");
 
@@ -478,14 +547,20 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			final ExecutorService	executor	= Executors.newCachedThreadPool();
 
+			@Override
 			protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 				doGetAsync(req.startAsync());
 			}
 
 			private void doGetAsync(final AsyncContext asyncContext) {
 				executor.submit(new Callable<Void>() {
+					@Override
 					public Void call() throws Exception {
 						try {
 							invoked.set(true);
@@ -540,7 +615,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "400");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
-		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new HttpServlet() {}, properties);
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties);
 		serviceRegistrations.add(srA);
 
 		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "a");
@@ -553,7 +633,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, new String[] {"400", ServletException.class.getName()});
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
-		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new HttpServlet() {}, properties);
+		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties);
 		serviceRegistrations.add(srB);
 
 		errorPageDTO = getErrorPageDTOByName(DEFAULT, "a");
@@ -588,6 +673,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
@@ -596,6 +686,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -637,6 +732,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN, "a");
@@ -645,6 +745,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -713,6 +818,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
@@ -721,6 +831,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -760,9 +875,19 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		class AException extends ServletException {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 		}
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -772,6 +897,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -810,6 +940,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.getWriter().write(getServletName());
@@ -835,6 +970,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -872,6 +1012,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void destroy() {
@@ -911,6 +1056,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void init(ServletConfig config) throws ServletException {
 				invoked.set(true);
@@ -921,6 +1071,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -958,6 +1113,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void destroy() {
@@ -1006,6 +1166,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void destroy() {
 				invokedDestroy.set(true);
@@ -1029,9 +1194,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		PrototypeServiceFactory<Servlet> factory = new PrototypeServiceFactory<Servlet>() {
 
+			@Override
 			public void ungetService(Bundle bundle, ServiceRegistration<Servlet> registration, Servlet service) {
 			}
 
+			@Override
 			public Servlet getService(Bundle bundle, ServiceRegistration<Servlet> registration) {
 				invokedGetService.set(true);
 				return new AServlet();
@@ -1066,7 +1233,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
-		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;}, properties));
 
 		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "a");
 		assertNull(servletDTO);
@@ -1082,6 +1254,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServlet extends HttpServlet {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
@@ -1090,6 +1267,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		}
 
 		class BServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -1136,14 +1318,24 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
 				"myname");
 		serviceRegistrations.add(context.registerService(Servlet.class,
-				new HttpServlet() {}, properties));
+				new HttpServlet() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;}, properties));
 		before = this.waitForRegistration(before);
 
 		properties = new Hashtable<>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
 				"/mypattern");
 		serviceRegistrations.add(context.registerService(Servlet.class,
-				new HttpServlet() {}, properties));
+				new HttpServlet() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;}, properties));
 		before = this.waitForRegistration(before);
 
 		properties = new Hashtable<>();
@@ -1151,7 +1343,12 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
 				"404");
 		serviceRegistrations.add(context.registerService(Servlet.class,
-				new HttpServlet() {}, properties));
+				new HttpServlet() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;}, properties));
 		before = this.waitForRegistration(before);
 
 		// two servlets and one error page should be registered now
@@ -1179,6 +1376,11 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE, 1024L);
 
 		final Servlet uploadServlet = new HttpServlet() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void doPost(HttpServletRequest req,
 					HttpServletResponse resp)

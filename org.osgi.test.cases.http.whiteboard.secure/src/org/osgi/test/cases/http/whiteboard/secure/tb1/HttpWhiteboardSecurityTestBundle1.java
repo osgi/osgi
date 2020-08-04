@@ -28,6 +28,7 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 
 	private ServiceRegistration<ServletContextHelper>	registration;
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
@@ -41,6 +42,7 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 		setupUploadServlet(context, "/postlocation", "/upload/test/location");
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 	}
@@ -67,6 +69,11 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 
 		final Servlet initServlet = new HttpServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void init(ServletConfig config) throws ServletException {
 				super.init(config);
@@ -92,6 +99,11 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE, 1024L);
 
 		final Servlet uploadServlet = new HttpServlet() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void doPost(HttpServletRequest req,
 					HttpServletResponse resp)

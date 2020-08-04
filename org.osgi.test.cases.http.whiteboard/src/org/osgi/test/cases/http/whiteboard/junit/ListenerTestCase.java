@@ -81,10 +81,12 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServletContextListener implements ServletContextListener {
 
+			@Override
 			public void contextDestroyed(ServletContextEvent event) {
 				invokedDestroy.set(true);
 			}
 
+			@Override
 			public void contextInitialized(ServletContextEvent event) {
 				invokedInit.set(true);
 			}
@@ -117,14 +119,17 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServletContextAttributeListener implements ServletContextAttributeListener {
 
+			@Override
 			public void attributeAdded(ServletContextAttributeEvent arg0) {
 				invokedAdded.set(true);
 			}
 
+			@Override
 			public void attributeRemoved(ServletContextAttributeEvent arg0) {
 				invokedRemoved.set(true);
 			}
 
+			@Override
 			public void attributeReplaced(ServletContextAttributeEvent arg0) {
 				invokedReplaced.set(true);
 			}
@@ -140,6 +145,11 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(listenerDTO);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -185,10 +195,12 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServletRequestListener implements ServletRequestListener {
 
+			@Override
 			public void requestDestroyed(ServletRequestEvent arg0) {
 				invokedDestroy.set(true);
 			}
 
+			@Override
 			public void requestInitialized(ServletRequestEvent arg0) {
 				invokedInit.set(true);
 			}
@@ -220,14 +232,17 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AServletRequestAttributeListener implements ServletRequestAttributeListener {
 
+			@Override
 			public void attributeAdded(ServletRequestAttributeEvent arg0) {
 				invokedAdded.set(true);
 			}
 
+			@Override
 			public void attributeRemoved(ServletRequestAttributeEvent arg0) {
 				invokedRemoved.set(true);
 			}
 
+			@Override
 			public void attributeReplaced(ServletRequestAttributeEvent arg0) {
 				invokedReplaced.set(true);
 			}
@@ -243,6 +258,11 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(listenerDTO);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -276,10 +296,12 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AHttpSessionListener implements HttpSessionListener {
 
+			@Override
 			public void sessionCreated(HttpSessionEvent arg0) {
 				invokedCreate.set(true);
 			}
 
+			@Override
 			public void sessionDestroyed(HttpSessionEvent arg0) {
 				invokedDestroy.set(true);
 			}
@@ -296,6 +318,11 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(listenerDTO);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -325,14 +352,17 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AHttpSessionAttributeListener implements HttpSessionAttributeListener {
 
+			@Override
 			public void attributeAdded(HttpSessionBindingEvent arg0) {
 				invokedAdded.set(true);
 			}
 
+			@Override
 			public void attributeRemoved(HttpSessionBindingEvent arg0) {
 				invokedRemoved.set(true);
 			}
 
+			@Override
 			public void attributeReplaced(HttpSessionBindingEvent arg0) {
 				invokedReplaced.set(true);
 			}
@@ -348,6 +378,11 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(listenerDTO);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -375,6 +410,7 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		class AHttpSessionIdListener implements HttpSessionIdListener {
 
+			@Override
 			public void sessionIdChanged(HttpSessionEvent event, String previousId) {
 				invoked.set(true);
 			}
@@ -390,6 +426,11 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(listenerDTO);
 
 		class AServlet extends HttpServlet {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

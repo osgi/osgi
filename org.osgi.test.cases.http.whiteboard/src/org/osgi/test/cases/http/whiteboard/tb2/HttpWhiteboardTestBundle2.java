@@ -15,6 +15,7 @@ import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 
 public class HttpWhiteboardTestBundle2 implements BundleActivator {
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=sc1)");
@@ -26,6 +27,7 @@ public class HttpWhiteboardTestBundle2 implements BundleActivator {
 						new MockSCL(new AtomicReference<ServletContext>()), properties));
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
 			serviceRegistration.unregister();

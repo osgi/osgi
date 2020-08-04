@@ -17,10 +17,12 @@ import org.osgi.framework.BundleContext;
 
 public class HttpWhiteboardSecurityTestBundle2 implements BundleActivator {
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		setupUploadServlet(context, "/post");
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 	}
 
@@ -33,6 +35,11 @@ public class HttpWhiteboardSecurityTestBundle2 implements BundleActivator {
 		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE, 1024L);
 
 		final Servlet uploadServlet = new HttpServlet() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void doPost(HttpServletRequest req,
 					HttpServletResponse resp)
