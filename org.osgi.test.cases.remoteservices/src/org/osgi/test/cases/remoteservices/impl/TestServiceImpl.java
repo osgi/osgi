@@ -29,6 +29,7 @@ public class TestServiceImpl implements A, B, C {
 	/**
 	 * @see org.osgi.test.cases.remoteservices.common.A#getA()
 	 */
+	@Override
 	public String getA() {
 		return "A";
 	}
@@ -36,6 +37,7 @@ public class TestServiceImpl implements A, B, C {
 	/**
 	 * @see org.osgi.test.cases.remoteservices.common.B#getB()
 	 */
+	@Override
 	public String getB() {
 		return "B";
 	}
@@ -43,6 +45,7 @@ public class TestServiceImpl implements A, B, C {
 	/**
 	 * @see org.osgi.test.cases.remoteservices.common.C#getC()
 	 */
+	@Override
 	public String getC() {
 		return "C";
 	}

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 
 /**
@@ -28,6 +29,7 @@ public class TestEventHandler implements EventHandler {
 	/**
 	 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
 	 */
+	@Override
 	public void handleEvent(Event event) {
 		// System.out
 		// .println("########################### TestEventHandler::handleEvent "
@@ -73,7 +75,7 @@ public class TestEventHandler implements EventHandler {
 	}
 
 	public static RemoteServiceAdminEvent verifyBasicRsaEventProperties(
-			ServiceReference rsaRef, Event event) {
+			ServiceReference<RemoteServiceAdmin> rsaRef, Event event) {
 		assertEquals("122.7: bundle has to refer to RSA bundle",
 				rsaRef.getBundle(), event.getProperty("bundle"));
 		assertEquals(

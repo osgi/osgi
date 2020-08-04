@@ -29,6 +29,7 @@ public class AsyncTypesImpl implements AsyncTypes {
 	private final Executor		executor	= Executors
 			.newSingleThreadExecutor();
 
+	@Override
 	public Future<String> getFuture(final int millis) {
 		FutureTask<String> task = new FutureTask<>(new Runnable() {
 			@Override
@@ -49,6 +50,7 @@ public class AsyncTypesImpl implements AsyncTypes {
 		}
 	}
 
+	@Override
 	public Promise<String> getPromise(final int millis) {
 		final Deferred<String> d = new Deferred<>();
 

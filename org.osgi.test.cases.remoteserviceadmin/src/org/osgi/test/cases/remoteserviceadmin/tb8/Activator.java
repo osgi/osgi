@@ -67,7 +67,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	private ServiceRegistration<ModifiableService> registration;
 	private BundleContext bctx;
 	private Map<String, Object> endpointProperties;
-	private ServiceReference rsaRef;
+	private ServiceReference<RemoteServiceAdmin>	rsaRef;
 	private RemoteServiceAdmin rsa;
 	private Collection<ExportRegistration> exportRegistrations;
 	private TestRemoteServiceAdminListener remoteServiceAdminListener;
@@ -90,6 +90,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		return dictionary;
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.bctx = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -129,7 +130,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		tracker.close();
 
 		assertNotNull(rsaRef);
-		rsa = (RemoteServiceAdmin) bctx.getService(rsaRef);
+		rsa = bctx.getService(rsaRef);
 		assertNotNull(rsa);
 
 		//
@@ -137,8 +138,8 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		// notification
 		//
 		remoteServiceAdminListener = new TestRemoteServiceAdminListener(timeout);
-		ServiceRegistration sr = bctx.registerService(
-				RemoteServiceAdminListener.class.getName(),
+		ServiceRegistration<RemoteServiceAdminListener> sr = bctx
+				.registerService(RemoteServiceAdminListener.class,
 				remoteServiceAdminListener, null);
 		assertNotNull(sr);
 
@@ -189,6 +190,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
+				@SuppressWarnings("unused")
 				String topic = event.getTopic();
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(
@@ -204,15 +206,18 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		stoptest();
 	}
 
+	@Override
 	public String getB() {
 		return "this is B";
 	}
 
+	@Override
 	public void addServiceProperty() {
 		// System.out
 		// .println("TestBundle8: ------------------------- ADD SERVICE PROPERTY AND REQUEST UPDATE(Endpoint) FOR ALL ExportRegistrations ---------------- ");
@@ -261,6 +266,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
+				@SuppressWarnings("unused")
 				String topic = event.getTopic();
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.EXPORT_UPDATE,
@@ -270,6 +276,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 	}
 
+	@Override
 	public void changeRequiredServiceProperty() {
 		// not needed here...
 	}

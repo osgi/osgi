@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.concurrent.Semaphore;
@@ -58,7 +59,7 @@ public class Activator implements BundleActivator, A {
 	 */
     private static final String FREE_PORT = "@@FREE_PORT@@";
 
-	ServiceRegistration            registration;
+	ServiceRegistration<A>			registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
 	Collection<ExportRegistration> exportRegistrations;
@@ -69,6 +70,7 @@ public class Activator implements BundleActivator, A {
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -78,7 +80,7 @@ public class Activator implements BundleActivator, A {
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 
-		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		registration = context.registerService(A.class, this, dictionary);
 
 		test();
 	}
@@ -86,6 +88,7 @@ public class Activator implements BundleActivator, A {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		teststop();
@@ -94,6 +97,7 @@ public class Activator implements BundleActivator, A {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.secure.common.A#getA()
 	 */
+	@Override
 	public String getA() {
 		return "this is A";
 	}
@@ -112,7 +116,9 @@ public class Activator implements BundleActivator, A {
 		// notification
 		//
 		remoteServiceAdminListener = new TestRemoteServiceAdminListener();
-		ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+		ServiceRegistration<RemoteServiceAdminListener> sr = context
+				.registerService(RemoteServiceAdminListener.class,
+						remoteServiceAdminListener, null);
 		assertNotNull(sr);
 
 		//
@@ -268,8 +274,9 @@ public class Activator implements BundleActivator, A {
      */
     private void processFreePortProperties(Map<String, Object> properties) {
         String freePort = getFreePort();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = properties.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
             if (entry.getValue().toString().trim().equals(FREE_PORT)) {
                 entry.setValue(freePort);
             }
@@ -334,6 +341,7 @@ public class Activator implements BundleActivator, A {
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
 		 */
+		@Override
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
 			sem.release();

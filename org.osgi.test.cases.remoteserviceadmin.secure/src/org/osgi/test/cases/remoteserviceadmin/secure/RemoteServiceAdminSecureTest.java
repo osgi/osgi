@@ -41,6 +41,7 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.secure.MultiFrameworkTestCase#getConfiguration()
 	 */
+	@Override
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
@@ -98,10 +99,10 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		Sleep.sleep(2000); // wait 2 s
 
 		// //////////////DEBUG REMOVE
-		ServiceReference rsaRef = getContext()
-				.getServiceReference(RemoteServiceAdmin.class.getName());
+		ServiceReference<RemoteServiceAdmin> rsaRef = getContext()
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext()
+		RemoteServiceAdmin rsa = getContext()
 				.getService(rsaRef);
 		assertNotNull(rsa);
 		System.out.println("##############  " + rsa.getImportedEndpoints());

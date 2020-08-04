@@ -60,6 +60,7 @@ public class CapabilityTest extends DefaultTestBundleControl {
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
 				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				@SuppressWarnings("unchecked")
 				List<String> configs = (List<String>) attributes
 						.get("protocols");
 				assertNotNull(configs);
@@ -83,6 +84,7 @@ public class CapabilityTest extends DefaultTestBundleControl {
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
 				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				@SuppressWarnings("unchecked")
 				List<String> configs = (List<String>) attributes.get("configs");
 				assertNotNull(configs);
 				assertTrue(configs.size() > 0);
@@ -105,6 +107,7 @@ public class CapabilityTest extends DefaultTestBundleControl {
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
 				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				@SuppressWarnings("unchecked")
 				List<String> configs = (List<String>) attributes.get("policy");
 				assertNotNull(configs);
 				assertTrue(configs.size() > 0);

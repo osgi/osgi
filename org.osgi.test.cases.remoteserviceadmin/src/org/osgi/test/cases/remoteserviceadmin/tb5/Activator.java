@@ -30,12 +30,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator {
 	BundleContext                  context;
-	ServiceTracker tracker;
+	ServiceTracker<A,A>	tracker;
 	long timeout;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -46,6 +47,7 @@ public class Activator implements BundleActivator {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		teststop();
 	}
@@ -57,10 +59,10 @@ public class Activator implements BundleActivator {
 	 * @throws Exception
 	 */
 	public void test() throws Exception {
-		tracker = new ServiceTracker(context, A.class.getName(), null);
+		tracker = new ServiceTracker<>(context, A.class, null);
 		tracker.open();
 
-		A service = (A) Tracker.waitForService(tracker, timeout);
+		A service = Tracker.waitForService(tracker, timeout);
 		assertNotNull("no service A found", service);
 
 		// call the service

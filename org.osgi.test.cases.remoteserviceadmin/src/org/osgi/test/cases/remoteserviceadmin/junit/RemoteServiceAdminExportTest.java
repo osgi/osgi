@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.concurrent.Semaphore;
@@ -65,12 +66,13 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 	private RemoteServiceAdmin remoteServiceAdmin;
 
-	private long timeout;
+	long						timeout;
 
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
 
 		super.setUp();
 
@@ -88,7 +90,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
 
 		super.tearDown();
 		ungetAllServices();
@@ -129,7 +132,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -169,7 +175,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -210,7 +219,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -251,7 +263,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -291,7 +306,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -436,7 +454,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -485,7 +506,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.8.1 verify that export notification was sent to EventHandler
 			//
-			ServiceReference sref = getServiceReference(remoteServiceAdmin);
+			ServiceReference< ? > sref = getServiceReference(
+					remoteServiceAdmin);
 
 			Event event = eventHandler.getNextEventForTopic(
 					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
@@ -554,13 +576,17 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
 		try {
 			// lookup RemoteServiceAdmin service
-			ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+			ServiceReference< ? > rsaRef = getContext()
+					.getServiceReference(RemoteServiceAdmin.class.getName());
 			assertNotNull(rsaRef);
 			RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
 			assertNotNull(rsa);
@@ -703,10 +729,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportConfigurationType() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(
+		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
-		ServiceReference dpref = dprefs[0];
+		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
 
@@ -718,7 +744,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -839,10 +868,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testForceExportFailure() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(
+		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
-		ServiceReference dpref = dprefs[0];
+		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
 		System.out.println("DSP supported config types:");
@@ -858,7 +887,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -996,10 +1028,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportConfigOverride() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(
+		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
-		ServiceReference dpref = dprefs[0];
+		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
 		System.out.println("DSP supported config types:");
@@ -1016,7 +1048,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -1036,7 +1071,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			assertNull(exportreg.getException());
 			ExportReference exportref = exportreg.getExportReference();
 			assertNotNull(exportref);
-			ServiceReference serviceref = exportref.getExportedService();
+			ServiceReference< ? > serviceref = exportref.getExportedService();
 			assertNotNull(serviceref);
 			EndpointDescription endpointDescription = exportref.getExportedEndpoint();
 			assertNotNull(endpointDescription);
@@ -1059,10 +1094,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportEmptyConfig() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(
+		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
-		ServiceReference dpref = dprefs[0];
+		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
 		System.out.println("DSP supported config types:");
@@ -1078,7 +1113,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		TestService service = new TestService();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
 
@@ -1091,7 +1129,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			assertNull(exportreg.getException());
 			ExportReference exportref = exportreg.getExportReference();
 			assertNotNull(exportref);
-			ServiceReference serviceref = exportref.getExportedService();
+			ServiceReference< ? > serviceref = exportref.getExportedService();
 			assertNotNull(serviceref);
 			EndpointDescription endpointDescription = exportref.getExportedEndpoint();
 			assertNotNull(endpointDescription);
@@ -1109,6 +1147,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * @param property
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private String[] getConfigTypes(Object property) {
 		if (property instanceof String) {
 			return new String[]{(String) property};
@@ -1127,8 +1166,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
      */
     private void processFreePortProperties(Map<String, Object> properties) {
         String freePort = getFreePort();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = properties.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
             if (entry.getValue().toString().trim().equals(FREE_PORT)) {
                 entry.setValue(freePort);
             }
@@ -1188,6 +1228,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		/**
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
 		 */
+		@Override
 		public String getA() {
 			return "this is A";
 		}
@@ -1195,6 +1236,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		/**
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 		 */
+		@Override
 		public String getB() {
 			return "this is B";
 		}
@@ -1212,6 +1254,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		private final LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
 		private final Semaphore sem = new Semaphore(0);
 
+		@Override
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
 			sem.release();

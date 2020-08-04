@@ -36,6 +36,7 @@ public class AsyncJava8TypesImpl implements AsyncJava8Types {
 		}
 	}
 
+	@Override
 	public CompletableFuture<String> getCompletableFuture(final int millis) {
 		return CompletableFuture.runAsync(new Runnable() {
 			@Override
@@ -50,6 +51,7 @@ public class AsyncJava8TypesImpl implements AsyncJava8Types {
 		});
 	}
 
+	@Override
 	public CompletionStage<String> getCompletionStage(int millis) {
 		return getCompletableFuture(millis);
 	}

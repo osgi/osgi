@@ -99,6 +99,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = getLongProperty("rsa.ct.timeout", 30000L);
@@ -107,6 +108,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteservices.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
+	@Override
 	public Map getConfiguration() {
 		Map configuration = new HashMap();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");

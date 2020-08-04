@@ -55,12 +55,13 @@ public class Activator implements BundleActivator {
 	RemoteServiceAdmin             rsa;
 	long timeout;
 
-	ServiceReference rsaRef;
+	ServiceReference<RemoteServiceAdmin>	rsaRef;
 	ImportRegistration importReg;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -71,6 +72,7 @@ public class Activator implements BundleActivator {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		teststop();
 	}
@@ -78,9 +80,9 @@ public class Activator implements BundleActivator {
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service 
 		rsaRef = context
-				.getServiceReference(RemoteServiceAdmin.class.getName());
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
+		rsa = context.getService(rsaRef);
 		assertNotNull(rsa);
 		
 		//
@@ -88,7 +90,9 @@ public class Activator implements BundleActivator {
 		// notification
 		//
 		TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
-		ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+		ServiceRegistration<RemoteServiceAdminListener> sr = context
+				.registerService(RemoteServiceAdminListener.class,
+						remoteServiceAdminListener, null);
 		assertNotNull(sr);
 
 		try {
@@ -109,7 +113,7 @@ public class Activator implements BundleActivator {
 
 			ImportReference importRef = importReg.getImportReference();
 			assertNotNull(importRef);
-			ServiceReference sref = importRef.getImportedService();
+			ServiceReference< ? > sref = importRef.getImportedService();
 			assertNotNull(sref);
 			assertEquals("has been overridden", sref.getProperty("mykey"));
 			assertNotNull("122.4.2: the service.imported property has to be set", sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
@@ -161,9 +165,9 @@ public class Activator implements BundleActivator {
 			// invoke the service
 			//
 			// no version
-			ServiceReference ref = context.getServiceReference(A.class.getName());
+			ServiceReference<A> ref = context.getServiceReference(A.class);
 			assertNotNull(ref);
-			serviceA = (A) context.getService(ref);
+			serviceA = context.getService(ref);
 			try {
 				assertNotNull(serviceA);
 				assertEquals("this is A", serviceA.getA());
@@ -184,8 +188,8 @@ public class Activator implements BundleActivator {
 	private void teststop() throws Exception {
 
 		TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
-		ServiceRegistration sr = context.registerService(
-				RemoteServiceAdminListener.class.getName(),
+		ServiceRegistration<RemoteServiceAdminListener> sr = context
+				.registerService(RemoteServiceAdminListener.class,
 				remoteServiceAdminListener, null);
 		assertNotNull(sr);
 		try {
@@ -224,6 +228,7 @@ public class Activator implements BundleActivator {
 	 *         by the exporting bundle in the child framework
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unchecked")
 	private EndpointDescription reconstructEndpoint() throws IOException {
 		String propstr = context.getProperty("RSA_TCK.EndpointDescription_0");
 		
@@ -255,6 +260,7 @@ public class Activator implements BundleActivator {
 	 * @param property Object
 	 * @return List<String> of content of the property
 	 */
+	@SuppressWarnings("unchecked")
 	private List<String> getPropertyAsList(Object property) throws Exception {
 		if (property instanceof List) {
 			return (List<String>) property;
@@ -287,6 +293,7 @@ public class Activator implements BundleActivator {
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
 		 */
+		@Override
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
 			sem.release();

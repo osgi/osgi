@@ -23,7 +23,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.ExportReference;
 import org.osgi.service.remoteserviceadmin.ImportReference;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
@@ -36,13 +35,13 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
  * @version 1.0.0
  */
 public class Activator implements BundleActivator {
-	ServiceRegistration            registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		test();
@@ -51,6 +50,7 @@ public class Activator implements BundleActivator {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 	}
 
@@ -77,9 +77,10 @@ public class Activator implements BundleActivator {
 		}
 		// //////////////DEBUG REMOVE END
 
-		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
+		ServiceReference<RemoteServiceAdmin> rsaRef = context
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
+		rsa = context.getService(rsaRef);
 		assertNotNull(rsa);
 		try {
 			Collection<ExportReference> coll = rsa.getExportedServices();
