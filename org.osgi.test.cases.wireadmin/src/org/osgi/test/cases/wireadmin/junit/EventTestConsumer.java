@@ -19,6 +19,7 @@ public class EventTestConsumer implements Consumer {
 		this.crash = crash;
 	}
 
+	@Override
 	public synchronized void producersConnected(Wire[] wires) {
 		if (crash && !pcCrashed) {
 			pcCrashed = true;
@@ -26,6 +27,7 @@ public class EventTestConsumer implements Consumer {
 		}
 	}
 
+	@Override
 	public synchronized void updated(Wire wire, Object data) {
 		if (crash && !updatedCrashed) {
 			updatedCrashed = true;

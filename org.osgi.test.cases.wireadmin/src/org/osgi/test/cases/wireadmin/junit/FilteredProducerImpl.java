@@ -12,10 +12,12 @@ public class FilteredProducerImpl implements Producer {
 	 *
 	 * @return value out of range to indicate the wrong call
 	 */
+	@Override
 	public Object polled(Wire w) {
 		return Integer.valueOf(100);
 	}
 
+	@Override
 	public void consumersConnected(Wire[] wires) {
 		if (wires != null)
 			this.wire = wires[0];
