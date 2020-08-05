@@ -18,6 +18,7 @@ jobs:
   JDK8_Linux:
     name: JDK8 ubuntu-latest
     runs-on: ubuntu-latest
+    if: (github.repository == 'osgi/osgi')
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
