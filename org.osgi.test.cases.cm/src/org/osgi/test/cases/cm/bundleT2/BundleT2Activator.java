@@ -1,11 +1,7 @@
 package org.osgi.test.cases.cm.bundleT2;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -15,7 +11,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
-import org.osgi.test.cases.cm.shared.Constants;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
 
@@ -43,56 +38,54 @@ public class BundleT2Activator implements BundleActivator {
 		this.context = context;
 		final String pid1 = Util.createPid("pid1");
 		final String fpid1 = Util.createPid("factoryPid1");
-		final String clazz = ManagedService.class.getName();
-		final String msfClazz = ManagedServiceFactory.class.getName();
-
 
 		String filter1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync2-1)";
-		registerService(context, pid1, clazz, filter1);
+		registerService(context, pid1, ManagedService.class, filter1);
 
 		String filterF1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=syncF2-1)";
-		registerService(context, fpid1, msfClazz, filterF1);
+		registerService(context, fpid1, ManagedServiceFactory.class, filterF1);
 
 	}
 
-	private ServiceRegistration registerService(BundleContext context,
-			final String pid, final String clazz, String filterUpdated)
+	private <S> ServiceRegistration<S> registerService(BundleContext context,
+			final String pid, final Class<S> clazz, String filterUpdated)
 			throws InvalidSyntaxException, Exception {
 		return this.registerService(context, pid, clazz, filterUpdated, null);
 	}
 
-	private ServiceRegistration registerService(BundleContext context,
-			final String pid, final String clazz, String filterUpdated,
+	private <S> ServiceRegistration<S> registerService(BundleContext context,
+			final String pid, final Class<S> clazz, String filterUpdated,
 			String filterDeleted) throws InvalidSyntaxException, Exception {
 		Synchronizer syncUpdated = null;
 		try {
-			syncUpdated = (Synchronizer) Util.getService(context,
-					Synchronizer.class.getName(), filterUpdated);
+			syncUpdated = Util.getService(context,
+					Synchronizer.class, filterUpdated);
 		} catch (IllegalStateException ise) {
 			return null;
 		}
 
+		@SuppressWarnings("unused")
 		Synchronizer syncDeleted = null;
 		if (filterDeleted != null) {
 			try {
-				syncDeleted = (Synchronizer) Util.getService(context,
-						Synchronizer.class.getName(), filterDeleted);
+				syncDeleted = Util.getService(context,
+						Synchronizer.class, filterDeleted);
 
 			} catch (IllegalStateException ise) {
 				return null;
 			}
 		}
 		final Object service;
-		if (clazz.equals(ManagedService.class.getName())) {
+		if (clazz == ManagedService.class) {
 			service = new ManagedServiceImpl(syncUpdated);
 		} else {
 			service = new ManagedServiceFactoryImpl(syncUpdated);
 		}
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register " + clazz + ": pid=\n\t" + pid);
 
@@ -100,8 +93,9 @@ public class BundleT2Activator implements BundleActivator {
 		props.put(org.osgi.framework.Constants.SERVICE_RANKING, "1");
 
 		try {
-			ServiceRegistration sr = this.context.registerService(clazz,
-					service, props);
+			@SuppressWarnings("unchecked")
+			ServiceRegistration<S> sr = this.context.registerService(clazz,
+					(S) service, props);
 			log("Succeed in registering service:clazz=" + clazz + ":pid=" + pid);
 			return sr;
 		} catch (Exception e) {
@@ -131,7 +125,8 @@ public class BundleT2Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(Dictionary props) throws ConfigurationException {
+		public void updated(Dictionary<String, ? > props)
+				throws ConfigurationException {
 			// this.props = props;
 			if (props != null) {
 				String pid = (String) props
@@ -162,7 +157,7 @@ public class BundleT2Activator implements BundleActivator {
 			// this.syncDeleted = syncDeleted;
 		}
 
-		public void updated(String pid, Dictionary props)
+		public void updated(String pid, Dictionary<String, ? > props)
 				throws ConfigurationException {
 			// this.props = props;
 			if (props != null) {

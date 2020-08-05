@@ -41,11 +41,11 @@ public class Target1Activator implements BundleActivator {
 		String filter = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync1)";
-		Synchronizer sync = (Synchronizer) Util.getService(context,
-				Synchronizer.class.getName(), filter);
+		Synchronizer sync = Util.getService(context,
+				Synchronizer.class, filter);
 
 		Object service = new ManagedServiceImpl(sync);
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 
 		final String pid1 = Util.createPid("bundlePid1");
 		final String pid2 = Util.createPid("bundlePid2");
@@ -65,13 +65,13 @@ public class Target1Activator implements BundleActivator {
 				value = new String[] { pid1, pid2 };
 				msg = "array";
 			} else if (mode.equals(Constants.MODE_LIST)) {
-				List pids = new ArrayList(2);
+				List<String> pids = new ArrayList<>(2);
 				pids.add(pid1);
 				pids.add(pid2);
 				value = pids;
 				msg = "list";
 			} else if (mode.equals(Constants.MODE_SET)) {
-				Set pids = new HashSet(2);
+				Set<String> pids = new HashSet<>(2);
 				pids.add(pid1);
 				pids.add(pid2);
 				value = pids;
@@ -116,7 +116,8 @@ public class Target1Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(Dictionary props) throws ConfigurationException {
+		public void updated(Dictionary<String, ? > props)
+				throws ConfigurationException {
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);

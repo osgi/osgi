@@ -24,7 +24,8 @@
  */
 package org.osgi.test.cases.cm.junit;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * This class represents a method call.
@@ -38,10 +39,10 @@ import java.lang.reflect.*;
  */
 public class MethodCall {
 	private String					name;
-	private Class					clazz;
-	private Class[]					paramClasses;
+	private Class< ? >					clazz;
+	private Class< ? >[]				paramClasses;
 	private Object[]				paramObjects;
-	private static final Class[]	NO_CLASSES	= new Class[0];
+	private static final Class< ? >[]	NO_CLASSES	= new Class[0];
 	private static final Object[]	NO_OBJECTS	= new Object[0];
 
 	/**
@@ -49,7 +50,7 @@ public class MethodCall {
 	 * 
 	 * @param name the name of the method
 	 */
-	public MethodCall(Class clazz, String name) {
+	public MethodCall(Class< ? > clazz, String name) {
 		this.name = name;
 		this.clazz = clazz;
 		this.paramClasses = NO_CLASSES;
@@ -63,7 +64,7 @@ public class MethodCall {
 	 * @param paramClass the type of the paramater
 	 * @param paramObject the parameter
 	 */
-	public MethodCall(Class clazz, String name, Class paramClass,
+	public MethodCall(Class< ? > clazz, String name, Class< ? > paramClass,
 			Object paramObject) {
 		this(clazz, name);
 		this.paramClasses = new Class[] {paramClass};
@@ -77,7 +78,7 @@ public class MethodCall {
 	 * @param paramClasses an array containing the paramatertypes.
 	 * @param paramObjects an array containing the parameters
 	 */
-	public MethodCall(Class clazz, String name, Class[] paramClasses,
+	public MethodCall(Class< ? > clazz, String name, Class< ? >[] paramClasses,
 			Object[] paramObjects) {
 		this(clazz, name);
 		this.paramClasses = paramClasses;
@@ -105,7 +106,7 @@ public class MethodCall {
 	public Object invoke(Object o) throws Throwable {
 		Object returnObject = null;
 		try {
-			Class useClass = clazz;
+			Class< ? > useClass = clazz;
 			if (useClass == null)
 				useClass = o.getClass();
 			Method m = useClass.getDeclaredMethod(name, paramClasses);

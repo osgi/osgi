@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
@@ -28,8 +27,8 @@ public class BundleT5Activator implements BundleActivator {
 		final String filter = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=syncT5-1)";
-		final Synchronizer sync = (Synchronizer) Util.getService(context,
-				Synchronizer.class.getName(), filter);
+		final Synchronizer sync = Util.getService(context,
+				Synchronizer.class, filter);
 
 		registerService(context, Util.createPid("pid_targeted1"), sync);
 		registerService(context, Util.createPid("pid|targeted2"), sync);
@@ -41,7 +40,7 @@ public class BundleT5Activator implements BundleActivator {
 			final Synchronizer sync) throws Exception {
 
 		final Object service = new ManagedServiceImpl(sync);
-		final Dictionary props = new Hashtable();
+		final Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register ManagedService. pid:\n\t"
 				+pid);
@@ -64,7 +63,7 @@ public class BundleT5Activator implements BundleActivator {
 			final Synchronizer sync) throws Exception {
 
 		final Object service = new ManagedServiceFactoryImpl(sync);
-		final Dictionary props = new Hashtable();
+		final Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register ManagedServiceFactory. pid:\n\t"
 				+pid);
@@ -101,7 +100,8 @@ public class BundleT5Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(final Dictionary props) throws ConfigurationException {
+		public void updated(final Dictionary<String, ? > props)
+				throws ConfigurationException {
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);
@@ -122,7 +122,8 @@ public class BundleT5Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(final String pid, final Dictionary props) 
+		public void updated(final String pid,
+				final Dictionary<String, ? > props)
 		throws ConfigurationException {
 			log("ManagedServicFactorye#updated() is called back. pid: " + pid);
 			sync.signal(props);
@@ -130,7 +131,7 @@ public class BundleT5Activator implements BundleActivator {
 
 		public void deleted(final String pid) {
 			log("ManagedServicFactorye#deleted() is called back. pid: " + pid);
-			final Dictionary props = new Hashtable();
+			final Dictionary<String,Object> props = new Hashtable<>();
 			props.put("test", pid);
 			props.put("_deleted_", Boolean.TRUE);
 			sync.signal(props);

@@ -28,14 +28,15 @@ public class Target2Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		log("going to start.");
 		final String clazz = ManagedService.class.getName();
 
 		String filter = "(" + Constants.SERVICEPROP_KEY_SYNCID + "=sync2)";
-		Synchronizer sync = (Synchronizer) Util.getService(context,
-				Synchronizer.class.getName(), filter);
-		Dictionary props = new Hashtable();
+		Synchronizer sync = Util.getService(context,
+				Synchronizer.class, filter);
+		Dictionary<String,Object> props = new Hashtable<>();
 
 		final String pid1 = Util.createPid("bundlePid1");
 		// final String pid2 = Util.createPid("targetB2Pid");
@@ -66,6 +67,7 @@ public class Target2Activator implements BundleActivator {
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		log("going to stop.");
 	}
@@ -79,7 +81,9 @@ public class Target2Activator implements BundleActivator {
 			this.id = id;
 		}
 
-		public void updated(Dictionary props) throws ConfigurationException {
+		@Override
+		public void updated(Dictionary<String, ? > props)
+				throws ConfigurationException {
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);

@@ -183,8 +183,9 @@ public class SynchronizerImpl implements Synchronizer {
 		}
 	}
 
-	public synchronized void signal(Dictionary<String,Object> p) {
-		this.props = p;
+	@SuppressWarnings("unchecked")
+	public synchronized void signal(Dictionary<String, ? > p) {
+		this.props = (Dictionary<String,Object>) p;
 		if (DEBUG)
 			System.out.println(header + ":signal(props=" + p + ")");
 		this.signal();

@@ -33,6 +33,7 @@ public class BundleT4Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		log("going to start. BundleT4");
 		this.context = context;
@@ -40,26 +41,29 @@ public class BundleT4Activator implements BundleActivator {
 		final String pid2 = Util.createPid("pid2");
 		final String pid3 = Util.createPid("pid3");
 
-		final String clazz = ManagedService.class.getName();
-
 		String filter1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync4-1)";
-		registerService(context, new String[] { pid2, pid1 }, clazz, filter1);
+		registerService(context, new String[] {
+				pid2, pid1
+		}, ManagedService.class, filter1);
 		String filter2 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync4-2)";
-		registerService(context, new String[] { pid2, pid3 }, clazz, filter2);
+		registerService(context, new String[] {
+				pid2, pid3
+		}, ManagedService.class, filter2);
 	}
 
-	private void registerService(BundleContext context, final String[] pids,
-			final String clazz, String filter) throws InvalidSyntaxException,
+	@SuppressWarnings("unchecked")
+	private <S> void registerService(BundleContext context, final String[] pids,
+			final Class<S> clazz, String filter) throws InvalidSyntaxException,
 			Exception {
-		Synchronizer sync1 = (Synchronizer) Util.getService(context,
-				Synchronizer.class.getName(), filter);
+		Synchronizer sync1 = Util.getService(context,
+				Synchronizer.class, filter);
 
 		Object service = new ManagedServiceImpl(sync1);
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register ManagedService. pid:\n\t"
 				+ getStringOfArray(pids));
@@ -68,11 +72,11 @@ public class BundleT4Activator implements BundleActivator {
 				.getProperty("org.osgi.test.cases.cm.bundleT4.mode");
 		Object value = pids;
 		if (mode != null) {
-			Collection tmp = null;
+			Collection<String> tmp = null;
 			if (mode.equals("Vector")) {
-				tmp = new Vector();
+				tmp = new Vector<>();
 			} else if (mode.equals("List")) {
-				tmp = new ArrayList(pids.length);
+				tmp = new ArrayList<>(pids.length);
 			} else if (!mode.equals("Array")) {
 				String errmsg = "Fail to register service: " + clazz + ":pid="
 						+ getStringOfArray(pids)
@@ -93,7 +97,7 @@ public class BundleT4Activator implements BundleActivator {
 		props.put(org.osgi.framework.Constants.SERVICE_PID, value);
 
 		try {
-			this.context.registerService(clazz, service, props);
+			this.context.registerService(clazz, (S) service, props);
 			log("Succeed in registering service:clazz=" + clazz + ":pid="
 					+ getStringOfArray(pids));
 
@@ -124,6 +128,7 @@ public class BundleT4Activator implements BundleActivator {
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		log("going to stop. BundleT4");
 
@@ -137,7 +142,9 @@ public class BundleT4Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(Dictionary props) throws ConfigurationException {
+		@Override
+		public void updated(Dictionary<String, ? > props)
+				throws ConfigurationException {
 			// this.props = props;
 			if (props != null) {
 				String pid = (String) props
