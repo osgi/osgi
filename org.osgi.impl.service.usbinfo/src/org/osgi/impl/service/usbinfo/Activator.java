@@ -17,7 +17,8 @@
 package org.osgi.impl.service.usbinfo;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -28,25 +29,29 @@ public class Activator implements BundleActivator {
 
 	private static BundleContext	context		= null;
 
-	private ServiceRegistration		testStepReg	= null;
+	private ServiceRegistration<TestStep>	testStepReg	= null;
 
 	public static BundleContext getContext() {
 		return context;
 	}
 
-	public void start(BundleContext context) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 
 		Activator.context = context;
 
 		USBTracker.getInstance().open();
 
 		TestStep testStep = new TestStepImpl();
-		Dictionary prop = new Properties();
+		Dictionary<String,Object> prop = new Hashtable<>();
 		prop.put(Constants.SERVICE_PID, "org.osgi.service.usbinfo");
-		testStepReg = context.registerService(TestStep.class.getName(), testStep, prop);
+		testStepReg = context.registerService(TestStep.class, testStep, prop);
 	}
 
-	public void stop(BundleContext context) throws Exception {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext context)
+			throws Exception {
 
 		if (testStepReg != null) {
 			testStepReg.unregister();

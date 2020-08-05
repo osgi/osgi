@@ -34,10 +34,12 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -58,10 +60,18 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ProvisioningTests extends DefaultTestBundleControl {
 	File							dir;			// Working dir for copying bundles
-	ServiceTracker					provisioning;	// Tracks provisioning service
+	ServiceTracker<ProvisioningService,ProvisioningService>	provisioning;	// Tracks
+																			// provisioning
+																			// service
 	final boolean					debug = true;	// For debug info
-	ServiceTracker					bundles;		// Tracks started Ip bundles
-	ServiceRegistration				registration;	// director: spid-test: stream handler
+	ServiceTracker<Bundle,Bundle>							bundles;		// Tracks
+																			// started
+																			// Ip
+																			// bundles
+	ServiceRegistration<URLStreamHandlerService>			registration;	// director:
+																			// spid-test:
+																			// stream
+																			// handler
 	String							query; 			// Query part from spid-test: url
 	final String		httpServer;
 
@@ -78,12 +88,12 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * service registry with test.case property.
 	 */
 	protected void setUp() throws InvalidSyntaxException {
-		provisioning = new ServiceTracker(getContext(),
-				ProvisioningService.class.getName(), null);
+		provisioning = new ServiceTracker<>(getContext(),
+				ProvisioningService.class, null);
 		provisioning.open();
 		dir = getContext().getDataFile("work");
 		dir.mkdir();
-		bundles = new ServiceTracker(getContext(), getContext().createFilter(
+		bundles = new ServiceTracker<>(getContext(), getContext().createFilter(
 				"(test.case=org.osgi.test.cases.provisioning)"),
 			null );
 		bundles.open();
@@ -124,13 +134,13 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 				}
 			}
 		}
-		ServiceReference refs[] = bundles.getServiceReferences();
+		ServiceReference<Bundle> refs[] = bundles.getServiceReferences();
 		assertTrue( "Bundles should have been uninstalled",  refs==null || refs.length==0);
 
 		//
 		// Reset the provisioning service
 		//
-		Hashtable	information = new Hashtable();
+		Hashtable<String,Object> information = new Hashtable<>();
 		information.put( "provisioning.spid", "SPID:test%21" );
 		information.put( "provisioning.rsh.secret", RSHTest.secret );
 		getProvisioningService().setInformation( information );
@@ -241,7 +251,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 		assertNull( "Bundle may not be loaded", get("rsh.ipa") );
 
-		Dictionary d= new Hashtable();
+		Dictionary<String,Object> d = new Hashtable<>();
 		d.put( "provisioning.spid", spid );
 		d.put( "provisioning.rsh.secret", secret );
 		getProvisioningService().addInformation( d );
@@ -262,11 +272,11 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * Check if RSH is available
 	 */
 	boolean rshAvailable() throws InvalidSyntaxException {
-		ServiceReference refs[] = getContext().getServiceReferences(
-			URLStreamHandlerService.class.getName(),
+		Collection<ServiceReference<URLStreamHandlerService>> refs = getContext()
+				.getServiceReferences(URLStreamHandlerService.class,
 			"(" + URLConstants.URL_HANDLER_PROTOCOL + "=rsh)" );
 		String webserver = getHttpServer();
-		if ( refs == null || refs.length==0
+		if (refs == null || refs.isEmpty()
 			|| ! webserver.startsWith("http:")) {
 			log( "[No rsh protocol available]" );
 			return false;
@@ -350,7 +360,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 	public void testDictionary() throws Exception {
 		ProvisioningService		ps = getProvisioningService();
-		Dictionary				d= ps.getInformation();
+		Dictionary<String,Object> d = ps.getInformation();
 
 		assertNotNull( "Must have upate count", get("provisioning.update.count") );
 		assertTrue( "Must be Integer", get("provisioning.update.count") instanceof Integer );
@@ -373,7 +383,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 		int count = getCount();
 
-		d = new Hashtable();
+		d = new Hashtable<>();
 		d.put( "some.key.1", "some.value.1" );
 		d.put( "some.key.2", "some.value.2" );
 		ps.setInformation( d );
@@ -381,7 +391,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		d = ps.getInformation();
 		assertEquals( "May only be 2 keys + update count in dict", 3, d.size() );
 
-		d = new Hashtable();
+		d = new Hashtable<>();
 		d.put( "some.key.1", "some.value.11" );	// overwrite
 		d.put( "some.key.3", "some.value.3" );	// new
 		ps.addInformation( d );
@@ -403,7 +413,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		assertEquals( "Nr 3", "some.value.3", get("some.key.3"));
 		assertEquals( "Nr 4", "some.value.4", get("some.key.4"));
 
-		d = new Hashtable();
+		d = new Hashtable<>();
 		ps.setInformation( d );
 		assertNull( "nr 1 must be null", get("some.key.1") );
 		assertNull( "nr 2 must be null", get("some.key.2") );
@@ -412,7 +422,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 		assertEquals( "Update count must be 4 higher", count+4, getCount() );
 
-		d = new Hashtable();
+		d = new Hashtable<>();
 		Object [] invalidTypes = { Integer.valueOf(0), Byte.valueOf((byte)0), Character.valueOf((char)0), new Object[1],
 			new int[0], new byte[][] { {0},{0} }, new char[0], new short[0],
 			Short.valueOf((short)0) };
@@ -450,15 +460,15 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 	public void testPersistence() throws Exception {
 		ProvisioningService	ps = getProvisioningService();
-		Dictionary			dict = new Hashtable();
+		Dictionary<String,Object> dict = new Hashtable<>();
 		String				time = System.currentTimeMillis()+"";
 
 		dict.put( "persistence.test", time  );
 		ps.setInformation( dict );
 		int			count = getCount();
 
-		ServiceReference ref = getContext().getServiceReference(
-				ProvisioningService.class.getName());
+		ServiceReference<ProvisioningService> ref = getContext()
+				.getServiceReference(ProvisioningService.class);
 		assertNotNull( "There must be a service ref for the provisioning service", ref );
 		Bundle bundle = ref.getBundle();
 		bundle.stop();
@@ -689,7 +699,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	void doURL() throws Exception {
 		Bundle test0 = waitForBundle();
 
-		ServiceReference refs[] = bundles.getServiceReferences();
+		ServiceReference<Bundle> refs[] = bundles.getServiceReferences();
 		assertTrue( "There should be only 1 bundle started", refs!= null && refs.length==1 );
 
 		assertNotNull( "We should have installed test-0-prov.jar", test0 );
@@ -785,7 +795,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 */
 	Bundle waitForBundle() {
 		try {
-			Bundle bundle = (Bundle) Tracker.waitForService(bundles,
+			Bundle bundle = Tracker.waitForService(bundles,
 					Activator.TIMEOUT1);
 			return bundle;
 		} catch( InterruptedException e ) {
@@ -890,7 +900,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 */
 	void loadFromURL( URL url, String ipaFile ) {
 		ProvisioningService		provisioningService = getProvisioningService();
-		Hashtable				map = new Hashtable();
+		Hashtable<String,Object> map = new Hashtable<>();
 		map.put( ProvisioningService.PROVISIONING_REFERENCE, url.toString() );
 		provisioningService.addInformation( map );
 		if (ipaFile != null )
@@ -928,7 +938,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * depending on the webserver setting.
 	 */
 
-	ServiceRegistration installStreamHandler() {
+	ServiceRegistration<URLStreamHandlerService> installStreamHandler() {
 		URLStreamHandlerService		magic = new AbstractURLStreamHandlerService() {
 			URLConnection ucon;
 			public URLConnection openConnection(URL u) throws java.io.IOException{
@@ -963,11 +973,11 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 				}
 			}
 		};
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(URLConstants.URL_HANDLER_PROTOCOL,new String[]{"director","spid-test"});
 		properties.put(Constants.SERVICE_RANKING,Integer.valueOf(100));
 		return getContext().registerService(
-			URLStreamHandlerService.class.getName(),
+				URLStreamHandlerService.class,
 			magic,
 			properties );
 	}

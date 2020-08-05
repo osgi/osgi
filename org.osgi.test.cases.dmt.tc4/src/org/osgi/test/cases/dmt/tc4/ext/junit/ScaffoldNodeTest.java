@@ -9,18 +9,21 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataPlugin;
 
 public class ScaffoldNodeTest extends DmtAdminTestCase {
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         super.setUp();
         getDmtAdmin();
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         unregisterPlugins();
         closeDmtSession();
         super.tearDown();
@@ -104,7 +107,8 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testScaffoldNodePattern01() throws DmtException {
         TestDataPlugin dataPlugin = new TestDataPlugin();
         setInteriorNode(dataPlugin, "./A/B");
-        ServiceRegistration registration = registerDataPlugin(dataPlugin, "./A/B");
+		ServiceRegistration<DataPlugin> registration = registerDataPlugin(
+				dataPlugin, "./A/B");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A");
@@ -122,11 +126,13 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testScaffoldNodePattern02() throws DmtException {
         TestDataPlugin dataPluginB = new TestDataPlugin();
         setInteriorNode(dataPluginB, "./A/B");
-        ServiceRegistration registrationB = registerDataPlugin(dataPluginB, "./A/B");
+		ServiceRegistration<DataPlugin> registrationB = registerDataPlugin(
+				dataPluginB, "./A/B");
 
         TestDataPlugin dataPluginC = new TestDataPlugin();
         setInteriorNode(dataPluginC, "./A/C");
-        ServiceRegistration registrationC = registerDataPlugin(dataPluginC, "./A/C");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				dataPluginC, "./A/C");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A");
@@ -154,15 +160,18 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testScaffoldNodePattern03() throws DmtException {
         TestDataPlugin dataPluginB = new TestDataPlugin();
         setInteriorNode(dataPluginB, "./A/B");
-        ServiceRegistration registrationB = registerDataPlugin(dataPluginB, "./A/B");
+		ServiceRegistration<DataPlugin> registrationB = registerDataPlugin(
+				dataPluginB, "./A/B");
 
         TestDataPlugin dataPluginC = new TestDataPlugin();
         setInteriorNode(dataPluginC, "./A/C");
-        ServiceRegistration registrationC = registerDataPlugin(dataPluginC, "./A/C");
+		ServiceRegistration<DataPlugin> registrationC = registerDataPlugin(
+				dataPluginC, "./A/C");
 
         TestDataPlugin dataPluginY = new TestDataPlugin();
         setInteriorNode(dataPluginY, "./A/X/Y");
-        ServiceRegistration registrationY = registerDataPlugin(dataPluginY, "./A/X/Y");
+		ServiceRegistration<DataPlugin> registrationY = registerDataPlugin(
+				dataPluginY, "./A/X/Y");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A");
@@ -206,11 +215,13 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testWriteCommandToScaffoldNodeIsNotAllowedOnExclusiveLockType() throws DmtException {
         TestDataPlugin dataPluginB = new TestDataPlugin();
         setInteriorNode(dataPluginB, "./A/B");
-        ServiceRegistration registrationB = registerDataPlugin(dataPluginB, "./A/B");
+		ServiceRegistration<DataPlugin> registrationB = registerDataPlugin(
+				dataPluginB, "./A/B");
 
         TestDataPlugin dataPluginD = new TestDataPlugin();
         setInteriorNode(dataPluginD, "./C/D");
-        ServiceRegistration registrationD = registerDataPlugin(dataPluginD, "./C/D");
+		ServiceRegistration<DataPlugin> registrationD = registerDataPlugin(
+				dataPluginD, "./C/D");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         try {
@@ -294,11 +305,13 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testWriteCommandToScaffoldNodeIsNotAllowedOnAtomicLockType() throws DmtException {
         TestDataPlugin dataPluginB = new TestDataPlugin();
         setInteriorNode(dataPluginB, "./A/B");
-        ServiceRegistration registrationB = registerDataPlugin(dataPluginB, "./A/B");
+		ServiceRegistration<DataPlugin> registrationB = registerDataPlugin(
+				dataPluginB, "./A/B");
 
         TestDataPlugin dataPluginD = new TestDataPlugin();
         setInteriorNode(dataPluginD, "./C/D");
-        ServiceRegistration registrationD = registerDataPlugin(dataPluginD, "./C/D");
+		ServiceRegistration<DataPlugin> registrationD = registerDataPlugin(
+				dataPluginD, "./C/D");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
         try {
@@ -382,7 +395,10 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
     public void testScaffoldNodeFromParentPluginToChildPlugin() throws Exception {
         TestDataMountPlugin plugin1 = new TestDataMountPlugin();
         setInteriorNode(plugin1, "./A");
-        ServiceRegistration registration1 = registerMountDataPlugin(plugin1, "./A", new String[] { "B/C" });
+		ServiceRegistration<DataPlugin> registration1 = registerMountDataPlugin(
+				plugin1, "./A", new String[] {
+						"B/C"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {
@@ -398,7 +414,10 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
 
         TestDataMountPlugin plugin2 = new TestDataMountPlugin();
         setInteriorNode(plugin2, "./A/B/C");
-        ServiceRegistration registration2 = registerMountDataPlugin(plugin2, "./A/B/C", new String[] { "D/E" });
+		ServiceRegistration<DataPlugin> registration2 = registerMountDataPlugin(
+				plugin2, "./A/B/C", new String[] {
+						"D/E"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {
@@ -414,7 +433,8 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
 
         TestDataMountPlugin plugin3 = new TestDataMountPlugin();
         setInteriorNode(plugin3, "./A/B/C/D/E");
-        ServiceRegistration registration3 = registerMountDataPlugin(plugin3, "./A/B/C/D/E");
+		ServiceRegistration<DataPlugin> registration3 = registerMountDataPlugin(
+				plugin3, "./A/B/C/D/E");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {

@@ -56,7 +56,8 @@ public abstract class DmtTestControl extends DefaultTestBundleControl {
 		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
 	}
 	
-	public static void failExpectedOtherException(Class expected,
+	public static void failExpectedOtherException(
+			Class< ? extends Throwable> expected,
 			Exception found) {
 		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
 	}

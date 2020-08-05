@@ -18,31 +18,36 @@
 
 package org.osgi.test.cases.jmx.useradmin.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServer;
 
-import org.osgi.framework.ServiceReference;
-import org.osgi.test.support.OSGiTestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.test.junit5.service.ServiceExtension;
 
 
-public class MBeanServerTestCase extends OSGiTestCase {
+@ExtendWith(BundleContextExtension.class)
+@ExtendWith(ServiceExtension.class)
+public class MBeanServerTestCase {
 
-	private ServiceReference ref;
-	private MBeanServer mBeanServer;
-
-	protected void setUp() {
+	@BeforeEach
+	protected void setUp(@InjectBundleContext BundleContext context) {
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		getContext().registerService(
-                MBeanServer.class.getCanonicalName(),
+		context.registerService(MBeanServer.class,
                 mBeanServer, null);
 	}
 	
-	public void testMBeanServerExistence() {
-		ref = getContext()
-				.getServiceReference(MBeanServer.class.getCanonicalName());
-		assertNotNull("No MBeanServer service available", ref);
-		mBeanServer = (MBeanServer) getContext().getService(ref);
-		assertNotNull(mBeanServer);
+	@Test
+	public void testMBeanServerExistence(
+			@InjectService MBeanServer mBeanServer) {
+		assertThat(mBeanServer).isNotNull();
 	}
 }

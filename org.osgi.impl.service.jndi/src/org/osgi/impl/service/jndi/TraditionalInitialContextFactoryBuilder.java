@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,19 +38,21 @@ import org.osgi.service.jndi.JNDIContextManager;
 
 class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBuilder {
 
-	private static final String JNDI_CONTEXT_MANAGER_CLASS = 
+	static final String	JNDI_CONTEXT_MANAGER_CLASS		=
 		JNDIContextManager.class.getName();
 	
-	private static final String INITIAL_CONTEXT_CLASSNAME = 
+	static final String	INITIAL_CONTEXT_CLASSNAME		=
 		InitialContext.class.getName();
 	
-	private static final String INITIAL_DIR_CONTEXT_CLASSNAME = 
+	static final String	INITIAL_DIR_CONTEXT_CLASSNAME	=
 		InitialDirContext.class.getName();
 	
 	public TraditionalInitialContextFactoryBuilder() {
 	}
 	
-	public InitialContextFactory createInitialContextFactory(Hashtable environment) throws NamingException {
+	@Override
+	public InitialContextFactory createInitialContextFactory(
+			Hashtable< ? , ? > environment) throws NamingException {
 		return new TraditionalInitialContextFactory();
 	}
 	
@@ -67,7 +70,13 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 	 */
 	private static class TraditionalInitialContextFactory implements InitialContextFactory {
 
-		public Context getInitialContext(Hashtable environment) throws NamingException {
+		TraditionalInitialContextFactory() {
+			super();
+		}
+
+		@Override
+		public Context getInitialContext(Hashtable< ? , ? > environment)
+				throws NamingException {
 			// try to find BundleContext, assuming a call to the InitialContext constructor
 			BundleContext clientBundleContext = 
 				BuilderUtils.getBundleContext(environment, INITIAL_CONTEXT_CLASSNAME);
@@ -82,7 +91,7 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 			if(clientBundleContext == null) {
 				throw new NoInitialContextException("Client's BundleContext could not be located");
 			} else {
-				ServiceReference serviceRef = 
+				ServiceReference< ? > serviceRef =
 					clientBundleContext.getServiceReference(JNDI_CONTEXT_MANAGER_CLASS);
 				
 				// if service not available, throw exception back to caller
@@ -96,7 +105,10 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 					} else {
 						// install a dynamic proxy to trap calls to Context.close()
 						try {
-							final Context newInitialContext = contextManager.newInitialContext(environment);
+							@SuppressWarnings("unchecked")
+							final Context newInitialContext = contextManager
+									.newInitialContext(
+											(Map<String, ? >) environment);
 							final TraditionalContextInvocationHandler handler = 
 								new TraditionalContextInvocationHandler(serviceRef, newInitialContext, clientBundleContext);
 							// create the correct proxy
@@ -121,17 +133,20 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 	
 	private static class TraditionalContextInvocationHandler implements InvocationHandler {
 
-		private final ServiceReference m_referenceToContextManager;
+		private final ServiceReference< ? >	m_referenceToContextManager;
 		private final Context m_context;
 		private final BundleContext m_bundleContext;
 		
-		TraditionalContextInvocationHandler(ServiceReference refToContextManager, Context context, BundleContext bundleContext) {
+		TraditionalContextInvocationHandler(
+				ServiceReference< ? > refToContextManager, Context context,
+				BundleContext bundleContext) {
 			m_referenceToContextManager = refToContextManager;
 			m_context = context;
 			m_bundleContext = bundleContext;
 			
 		}
 		
+		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			if(method.getName().equals("close")) {
 				// clean up reference to JNDIContextManager

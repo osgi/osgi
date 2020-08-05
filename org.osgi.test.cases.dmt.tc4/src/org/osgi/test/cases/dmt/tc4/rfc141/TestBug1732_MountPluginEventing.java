@@ -24,15 +24,17 @@ public class TestBug1732_MountPluginEventing extends
 
 	DmtAdmin dmtAdmin;
 	DmtSession session;
-	ServiceRegistration pluginRegistration;
+	ServiceRegistration< ? >	pluginRegistration;
 
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println("tearing down");
@@ -70,7 +72,7 @@ public class TestBug1732_MountPluginEventing extends
 		String[] newNodes = new String[] { "X1", "Y1"};
 
 		GenericDataPlugin plugin = preparePlugin( "./A" );
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		if ( withNewNodes )
 			props.put( EventConstants.EVENT_TOPIC, new String[] {
 				DmtConstants.EVENT_TOPIC_COPIED,
@@ -87,8 +89,8 @@ public class TestBug1732_MountPluginEventing extends
 
 		assertNull(plugin.lastReceivedEvent);
 
-		MountPoint mountPoint = (MountPoint) plugin.lastAddedMountPoints.get(0);
-		Hashtable additionalProperties = new Hashtable();
+		MountPoint mountPoint = plugin.lastAddedMountPoints.get(0);
+		Dictionary<String,Object> additionalProperties = new Hashtable<>();
 		additionalProperties.put( "testKey1", "testValue1" );
 		additionalProperties.put( "testKey2", "testValue2" );
 
@@ -138,7 +140,7 @@ public class TestBug1732_MountPluginEventing extends
 		GenericDataPlugin mountingPlugin = new GenericDataPlugin(
 				"MountingPlugin", mountRoot, n);
 
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] dataRootURIs = new String[] {mountRoot};
 
 		props.put(DataPlugin.DATA_ROOT_URIS, dataRootURIs);

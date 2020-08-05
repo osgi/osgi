@@ -17,6 +17,7 @@ import org.osgi.service.wireadmin.Wire;
 import org.osgi.service.wireadmin.WireAdmin;
 import org.osgi.service.wireadmin.WireConstants;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Contains some helper methods for registering/unregistering producers
@@ -36,17 +37,17 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public class Helper {
 	final BundleContext						context;
-	private final Hashtable					consumers;
-	private final Hashtable					producers;
+	private final Hashtable<String,ServiceRegistration<Consumer>>	consumers;
+	private final Hashtable<String,ServiceRegistration<Producer>>	producers;
 	final WireAdminControl					wac;
-	private volatile ServiceRegistration	regConsumerEvents	= null;
-	private volatile ServiceRegistration	regProducerEvents	= null;
+	private volatile ServiceRegistration<Consumer>					regConsumerEvents	= null;
+	private volatile ServiceRegistration<Producer>					regProducerEvents	= null;
 
 	public Helper(BundleContext context, WireAdminControl wac) {
 		this.context = context;
 		this.wac = wac;
-		consumers = new Hashtable();
-		producers = new Hashtable();
+		consumers = new Hashtable<>();
+		producers = new Hashtable<>();
 	}
 
 	public void registerConsumer(String consumerPID, Object[] flavors) {
@@ -55,44 +56,45 @@ public class Helper {
 	}
 
 	public void registerConsumer(Consumer consumer, String consumerPID,
-			Object[] flavors, Map properties) {
-		Hashtable p = new Hashtable();
+			Object[] flavors, Map<String,Object> properties) {
+		Hashtable<String,Object> p = new Hashtable<>();
 		if (properties != null) {
 			p.putAll(properties);
 		}
 		p.put(Constants.SERVICE_PID, consumerPID);
 		p.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS, flavors);
-		ServiceRegistration regConsumer = context.registerService(
-				Consumer.class.getName(), consumer, p);
+		ServiceRegistration<Consumer> regConsumer = context
+				.registerService(Consumer.class, consumer, p);
 		assertNull("consumer already registered", consumers.put(
 				consumerPID, regConsumer));
 	}
 
-	public void registerProducer(String producerPID, Class[] flavors) {
+	public void registerProducer(String producerPID, Class< ? >[] flavors) {
 		registerProducer(new ProducerImpl(wac, producerPID), producerPID,
 				flavors, null);
 	}
 
 	public void registerProducer(Producer producer, String producerPID,
-			Class[] flavors, Map properties) {
-		Hashtable p = new Hashtable();
+			Class< ? >[] flavors, Map<String,Object> properties) {
+		Hashtable<String,Object> p = new Hashtable<>();
 		if (properties != null) {
 			p.putAll(properties);
 		}
 		p.put(Constants.SERVICE_PID, producerPID);
 		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, flavors);
-		ServiceRegistration regProducer = context.registerService(
-				Producer.class.getName(), producer, p);
+		ServiceRegistration<Producer> regProducer = context
+				.registerService(Producer.class, producer, p);
 		assertNull("producer already registered", producers.put(
 				producerPID, regProducer));
 	}
 
-	public void modifyProducer(String producerPID, Map properties) {
-		ServiceRegistration regProducer = (ServiceRegistration) producers
+	public void modifyProducer(String producerPID,
+			Map<String,Object> properties) {
+		ServiceRegistration<Producer> regProducer = producers
 				.get(producerPID);
 		assertNotNull("modifying non-existant producer", regProducer);
-		ServiceReference ref = regProducer.getReference();
-		Hashtable p = new Hashtable();
+		ServiceReference<Producer> ref = regProducer.getReference();
+		Hashtable<String,Object> p = new Hashtable<>();
 		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, ref
 				.getProperty(WireConstants.WIREADMIN_PRODUCER_FLAVORS));
 		p.putAll(properties);
@@ -101,7 +103,7 @@ public class Helper {
 	}
 
 	public void unregisterConsumer(String consumerPID) {
-		ServiceRegistration regConsumer = (ServiceRegistration) consumers
+		ServiceRegistration<Consumer> regConsumer = consumers
 				.remove(consumerPID);
 		if (regConsumer != null) {
 			regConsumer.unregister();
@@ -110,7 +112,7 @@ public class Helper {
 	}
 
 	public void unregisterProducer(String producerPID) {
-		ServiceRegistration regProducer = (ServiceRegistration) producers
+		ServiceRegistration<Producer> regProducer = producers
 				.remove(producerPID);
 		if (regProducer != null) {
 			regProducer.unregister();
@@ -119,13 +121,13 @@ public class Helper {
 	}
 
 	public void unregisterAll() {
-		Enumeration services = getConsumers();
+		Enumeration<String> services = getConsumers();
 		while (services.hasMoreElements()) {
-			unregisterConsumer((String) services.nextElement());
+			unregisterConsumer(services.nextElement());
 		}
 		services = getProducers();
 		while (services.hasMoreElements()) {
-			unregisterProducer((String) services.nextElement());
+			unregisterProducer(services.nextElement());
 		}
 	}
 
@@ -144,29 +146,29 @@ public class Helper {
 		}
 	}
 
-	public Enumeration getConsumers() {
+	public Enumeration<String> getConsumers() {
 		return consumers.keys();
 	}
 
-	public Enumeration getProducers() {
+	public Enumeration<String> getProducers() {
 		return producers.keys();
 	}
 
 	protected void registerEventConsumer(boolean crash) {
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS,
 				new Class[] {String.class});
 		h.put(Constants.SERVICE_PID, "consumer.event.test.pid");
-		regConsumerEvents = context.registerService(Consumer.class.getName(),
+		regConsumerEvents = context.registerService(Consumer.class,
 				new EventTestConsumer(crash), h);
 	}
 
 	protected void registerEventProducer(boolean crash) {
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS,
 				new Class[] {String.class});
 		h.put(Constants.SERVICE_PID, "producer.event.test.pid");
-		regProducerEvents = context.registerService(Producer.class.getName(),
+		regProducerEvents = context.registerService(Producer.class,
 				new EventTestProducer(crash), h);
 	}
 
@@ -178,9 +180,10 @@ public class Helper {
 		regProducerEvents.unregister();
 	}
 
-	public Wire createWire(WireAdmin wa, String from, String to, Map map) {
-		WireAdminControl.log("Wire from " + from + " to " + to + " : " + map);
-		Hashtable props = new Hashtable();
+	public Wire createWire(WireAdmin wa, String from, String to,
+			Map<String,Object> map) {
+		DefaultTestBundleControl.log("Wire from " + from + " to " + to + " : " + map);
+		Hashtable<String,Object> props = new Hashtable<>();
 		if (map != null) {
 			props.putAll(map);
 		}
@@ -189,8 +192,8 @@ public class Helper {
 		return wire;
 	}
 
-	public Wire updateWire(WireAdmin wa, Wire wire, Map map) {
-		Hashtable props = new Hashtable();
+	public Wire updateWire(WireAdmin wa, Wire wire, Map<String,Object> map) {
+		Hashtable<String,Object> props = new Hashtable<>();
 		if (map != null) {
 			props.putAll(map);
 		}

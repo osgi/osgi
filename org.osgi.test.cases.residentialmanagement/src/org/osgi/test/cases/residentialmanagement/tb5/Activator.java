@@ -34,14 +34,16 @@ import org.osgi.test.cases.residentialmanagement.util.Service2;
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
 public class Activator implements BundleActivator {
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Bundle using Service2 is going to start.");
-		ServiceReference serviceRef = context
-				.getServiceReference(Service2.class.getName());
-		Service2 service = (Service2) context.getService(serviceRef);
+		ServiceReference<Service2> serviceRef = context
+				.getServiceReference(Service2.class);
+		Service2 service = context.getService(serviceRef);
 		service.testMessage2();
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Bundle using Service2 is going to stop.");
 	}

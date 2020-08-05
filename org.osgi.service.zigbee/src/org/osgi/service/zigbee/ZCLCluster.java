@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee;
 
 import java.util.Map;
+
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.util.promise.Promise;
 
@@ -74,7 +75,7 @@ public interface ZCLCluster {
 	 *         {@link ZCLException} with status code
 	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}.
 	 */
-	Promise /* <ZCLAttribute> */ getAttribute(int attributeId);
+	Promise<ZCLAttribute> getAttribute(int attributeId);
 
 	/**
 	 * Retrieves a {@link ZCLAttribute} object for a manufacturer specific
@@ -98,7 +99,7 @@ public interface ZCLCluster {
 	 *         with a {@link ZCLException} with status code
 	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}
 	 */
-	Promise /* <ZCLAttribute> */ getAttribute(int attributeId, int code);
+	Promise<ZCLAttribute> getAttribute(int attributeId, int code);
 
 	/**
 	 * Returns an array of {@link ZCLAttribute} objects representing all this
@@ -113,7 +114,7 @@ public interface ZCLCluster {
 	 *         {@link ZCLAttribute} objects.
 	 *
 	 */
-	Promise /* <ZCLAttribute[]> */ getAttributes();
+	Promise<ZCLAttribute[]> getAttributes();
 
 	/**
 	 * Returns an array of {@link ZCLAttribute} objects representing all the
@@ -134,7 +135,7 @@ public interface ZCLCluster {
 	 *         resolution may be longer the first time one of the ZCLCluster
 	 *         methods to get one or all attributes is successfully called.
 	 */
-	Promise /* <ZCLAttribute[]> */ getAttributes(int code);
+	Promise<ZCLAttribute[]> getAttributes(int code);
 
 	/**
 	 * Reads a list of attributes by issuing a ZCL Read Attributes command. The
@@ -186,7 +187,8 @@ public interface ZCLCluster {
 	 *         {@code NullPointerException}.
 	 * 
 	 */
-	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
+	Promise<Map<Integer,ZCLReadStatusRecord>> readAttributes(
+			ZCLAttributeInfo[] attributes);
 
 	/**
 	 * Writes a set of attributes on the cluster using the ZCL <em>Write
@@ -230,7 +232,8 @@ public interface ZCLCluster {
 	 *         standard, or even if there are mix of attributes with different
 	 *         manufacturer specific code.
 	 */
-	Promise /* <Map<Integer, Short>> */ writeAttributes(boolean undivided, Map attributesAndValues);
+	Promise<Map<Integer,Integer>> writeAttributes(boolean undivided,
+			Map< ? extends ZCLAttributeInfo, ? > attributesAndValues);
 
 	/**
 	 * Returns an array of all the commandIds of the ZCLCluster.
@@ -248,7 +251,7 @@ public interface ZCLCluster {
 	 *         {@code short[]} containing the command identifiers supported by
 	 *         the cluster.
 	 */
-	Promise /* <short[]> */ getCommandIds();
+	Promise<short[]> getCommandIds();
 
 	/**
 	 * Invokes a command on this cluster with a {@link ZCLFrame}. The returned
@@ -262,7 +265,7 @@ public interface ZCLCluster {
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
-	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame);
+	Promise<ZCLFrame> invoke(ZCLFrame frame);
 
 	/**
 	 * Invokes a command on this cluster. This method is to be used by
@@ -278,6 +281,6 @@ public interface ZCLCluster {
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
-	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame, String exportedServicePID);
+	Promise<ZCLFrame> invoke(ZCLFrame frame, String exportedServicePID);
 
 }

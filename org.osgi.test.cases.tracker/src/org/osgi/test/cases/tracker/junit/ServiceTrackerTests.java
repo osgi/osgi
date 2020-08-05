@@ -54,8 +54,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Bundle tb = installBundle("tb1.jar");
 
 		// Creates ServiceTracker object with ServiceReference to testservice1
-		ServiceReference<TestService1> sr = (ServiceReference<TestService1>) getContext()
-				.getServiceReference(TestService1.NAME);
+		ServiceReference<TestService1> sr = getContext()
+				.getServiceReference(TestService1.class);
 		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
 				getContext(), sr, null);
 		st.open();
@@ -175,8 +175,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Bundle tb = installBundle("tb1.jar");
 
 		// Creates ServiceTracker object with ServiceReference to testservice1
-		ServiceReference<TestService1> sr = (ServiceReference<TestService1>) getContext()
-				.getServiceReference(TestService1.NAME);
+		ServiceReference<TestService1> sr = getContext()
+				.getServiceReference(TestService1.class);
 		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
 				getContext(), sr, null);
 		st.open();
@@ -581,8 +581,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"The number of Services being tracked by ServiceTracker 1 is: 1",
 					1, st.size());
 
-			ServiceReference<TestService1> sr = (ServiceReference<TestService1>) context
-					.getServiceReference(TestService1.NAME);
+			ServiceReference<TestService1> sr = context
+					.getServiceReference(TestService1.class);
 			st.remove(sr);
 			// Call ServiceTracker.getServiceReferences()
 			// Should find tb1, tb3
@@ -663,8 +663,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				ts1Props.put("compatible", Float.valueOf(1.0f));
 				ts1Props.put("description", "TestService 1 in tbc");
 
-				ServiceRegistration<TestService1> tsr1 = (ServiceRegistration<TestService1>) context
-						.registerService(TestService1.NAME, new TestService1() {
+				ServiceRegistration<TestService1> tsr1 = context
+						.registerService(TestService1.class, new TestService1() {
 							// empty
 						}, ts1Props);
 
@@ -702,8 +702,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testTrackingCount() throws Exception {
 		BundleContext context = getContext();
-		ServiceTracker<TestService3, TestService3> st = new ServiceTracker<TestService3, TestService3>(
-				context, TestService3.NAME, null);
+		ServiceTracker<TestService3,TestService3> st = new ServiceTracker<>(
+				context, TestService3.class, null);
 		assertEquals("ServiceTracker.getTrackingCount() == -1", -1, st
 				.getTrackingCount());
 		st.open();
@@ -712,8 +712,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals("ServiceTracker.getTrackingCount() == 0", 0, st
 					.getTrackingCount());
 
-			ServiceRegistration<TestService3> sr = (ServiceRegistration<TestService3>) context
-					.registerService(TestService3.NAME, new TestService3() {
+			ServiceRegistration<TestService3> sr = context
+					.registerService(TestService3.class, new TestService3() {
 						// empty
 					}, null);
 			// Should be 1
@@ -737,8 +737,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
-				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceRegistration<Runnable> reg = getContext()
+				.registerService(Runnable.class, runIt, props);
 		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
@@ -824,8 +824,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.FALSE);
-		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
-				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceRegistration<Runnable> reg = getContext()
+				.registerService(Runnable.class, runIt, props);
 		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
@@ -911,9 +911,9 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
+		ServiceRegistration<Runnable> reg = getContext()
 				.registerService(
-				Runnable.class.getName(), runIt, props);
+				Runnable.class, runIt, props);
 		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
@@ -990,13 +990,13 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		props.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
-		ServiceRegistration<Runnable> reg1 = (ServiceRegistration<Runnable>) getContext()
+		ServiceRegistration<Runnable> reg1 = getContext()
 				.registerService(
-				Runnable.class.getName(), runIt, props);
+				Runnable.class, runIt, props);
 		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
-		ServiceRegistration<Runnable> reg2 = (ServiceRegistration<Runnable>) getContext()
+		ServiceRegistration<Runnable> reg2 = getContext()
 				.registerService(
-				Runnable.class.getName(), runIt, props);
+				Runnable.class, runIt, props);
 		ServiceTracker<Runnable, Runnable> testTracker = null;
 		try {
 			try {
@@ -1093,14 +1093,14 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
     public void testAllServiceTracker01() throws Exception {
     	Bundle tb1;
         Bundle tb5;
-    	ServiceTracker serviceTracker;
+		ServiceTracker<TestService1,TestService1> serviceTracker;
 
         tb1 = installBundle("tb1.jar");
         tb5 = installBundle("tb5.jar");
 
-    	serviceTracker = new ServiceTracker(
+		serviceTracker = new ServiceTracker<>(
     			getContext(),
-                TestService1.NAME,
+				TestService1.class,
     			null);
     	serviceTracker.open(true);
 

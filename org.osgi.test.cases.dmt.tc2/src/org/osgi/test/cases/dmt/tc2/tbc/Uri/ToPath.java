@@ -39,6 +39,9 @@ package org.osgi.test.cases.dmt.tc2.tbc.Uri;
 import org.osgi.service.dmt.Uri;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 
 /**
@@ -67,11 +70,11 @@ public class ToPath {
 	private void testToPath001() {
 
 		try {
-			tbc.log("#testToPath001");
+			DefaultTestBundleControl.log("#testToPath001");
 			Uri.toPath(null);
-			tbc.failException("", NullPointerException.class);
+			DefaultTestBundleControl.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			DefaultTestBundleControl.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
@@ -86,9 +89,9 @@ public class ToPath {
 	private void testToPath002() {
 
 		try {
-			tbc.log("#testToPath002");
+			DefaultTestBundleControl.log("#testToPath002");
 			String[] array = Uri.toPath("./Test/Dmt");
-			tbc.assertTrue("Asserts that Uri.toPath(String) splits the specified URI " +
+			TestCase.assertTrue("Asserts that Uri.toPath(String) splits the specified URI " +
 					"along the path separator '/' charaters and return an array of URI segments.",array.length==3 
 					&& array[0].equals(".")&& array[1].equals("Test")&& array[2].equals("Dmt"));
 			
@@ -106,16 +109,16 @@ public class ToPath {
 	private void testToPath003() {
 
 		try {
-			tbc.log("#testToPath003");
+			DefaultTestBundleControl.log("#testToPath003");
             //It is from 1 because 0 is 'null' and null throws NullPointerException in this method
 			for (int i = 1; i < DmtTestControl.INVALID_URIS.length; i++) {
 				String uri = null;
 				try {
 					uri = DmtTestControl.INVALID_URIS[i].toString();
 					Uri.toPath(uri);
-					tbc.failException("", IllegalArgumentException.class);
+					DefaultTestBundleControl.failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
-					tbc.pass("IllegalArgumentException correctly thrown when calling Uri.toPath(" + uri + ")");
+					DefaultTestBundleControl.pass("IllegalArgumentException correctly thrown when calling Uri.toPath(" + uri + ")");
 				}
 			}
 		} catch (Exception e) {

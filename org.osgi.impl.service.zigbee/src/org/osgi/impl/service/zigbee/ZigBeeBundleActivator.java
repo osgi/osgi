@@ -38,6 +38,7 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 * 
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext bc) {
 		try {
 			Logger.d(TAG, "Instantiate the ZigBeeBaseDriver.");
@@ -55,6 +56,7 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 * 
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext bc) {
 		try {
 			Logger.d(TAG, "Stop the ZigBeeBaseDriver instance.");

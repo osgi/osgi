@@ -47,10 +47,11 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession, Mou
 	
 	boolean forceFatalExceptionOnNextGetNodeSize; 
 
+	@SuppressWarnings("unused")
 	private String pluginID;
 	private Node pluginRootNode;
 	
-	private Set mountPoints;
+	private Set<MountPoint>		mountPoints;
 	
 
 	/**
@@ -77,10 +78,10 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession, Mou
 			if ( absPath.length == level+1 )
 				return start;
 			
-			Iterator iterator = start.getChildren().iterator();
+			Iterator<Node> iterator = start.getChildren().iterator();
 			while (iterator.hasNext()) {
 				// check next segment of the path with the nodes children
-				Node found = findNode((Node)iterator.next(), absPath, level + 1);
+				Node found = findNode(iterator.next(), absPath, level + 1);
 				if ( found != null )
 					return found;
 			}
@@ -323,7 +324,8 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession, Mou
 	 * @param newNodes
 	 * @param props
 	 */
-	void postInternalEvent( String topic, String[] nodes, String[] newNodes, Dictionary props ) {
+	void postInternalEvent(String topic, String[] nodes, String[] newNodes,
+			Dictionary<String,Object> props) {
 		for ( MountPoint mp : getMountPoints() )
 			mp.postEvent(topic, nodes, newNodes, props);
 	}

@@ -28,7 +28,9 @@ import javax.naming.spi.InitialContextFactory;
  */
 public class CTInitialContextFactoryBuilder implements javax.naming.spi.InitialContextFactoryBuilder {
 
-	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
+	@Override
+	public InitialContextFactory createInitialContextFactory(
+			Hashtable< ? , ? > env) throws NamingException {
 		String contextFactory =  (String) env.get(Context.INITIAL_CONTEXT_FACTORY);
 		if (contextFactory != null) {
 			if (contextFactory.equals(CTInitialContextFactory.class.getName())) {

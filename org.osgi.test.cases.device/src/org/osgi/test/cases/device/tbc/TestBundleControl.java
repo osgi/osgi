@@ -4,6 +4,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.device.DriverLocator;
+import org.osgi.service.device.DriverSelector;
 import org.osgi.test.cases.device.tbc.locators.BasicTestLocator;
 import org.osgi.test.cases.device.tbc.locators.DefaultSelectionLocator;
 import org.osgi.test.cases.device.tbc.locators.DriverLoadingLocator1;
@@ -38,12 +39,11 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	public static final int		MESSAGE_ERROR		= 1;
 	private volatile boolean	noDriverFoundCalled	= false;
 	private int					timeout				= 100;
-	private ServiceRegistration	tbcReg;
+	private ServiceRegistration<TestBundleControl>	tbcReg;
 
 	protected void setUp() {
 		tbcReg = getContext().registerService(
-				TestBundleControl.class
-				.getName(), this, null);
+				TestBundleControl.class, this, null);
 	}
 
 	protected void tearDown() {
@@ -128,9 +128,9 @@ public class TestBundleControl extends DefaultTestBundleControl {
 
 
 			log(subtest, "registering a locator service");
-			ServiceRegistration reg = getContext()
-					.registerService(DriverLocator.class
-					.getName(), new EmptyLocator(this), null);
+			ServiceRegistration<DriverLocator> reg = getContext()
+					.registerService(DriverLocator.class,
+							new EmptyLocator(this), null);
 			log(
 					subtest,
 					"uninstalling driver 7. This should invoke the findDrivers method for the standalone device");
@@ -178,8 +178,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		Bundle deviceBundle = null;
 		String subtest = "basic test";
 		log(subtest, "registering services");
-		ServiceRegistration locatorSR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator", new BasicTestLocator(
+		ServiceRegistration<DriverLocator> locatorSR = getContext()
+				.registerService(DriverLocator.class, new BasicTestLocator(
 						this), null);
 		for (int i = 0; i < 5; i++) {
 			setNoDriverFoundCalled(false);
@@ -252,22 +252,22 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		String subtest = "driver loading test";
 		log(subtest, "registering locators and selector");
 		// registering locators
-		ServiceRegistration locator1SR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator",
+		ServiceRegistration<DriverLocator> locator1SR = getContext()
+				.registerService(DriverLocator.class,
 				new DriverLoadingLocator1(this), null);
-		ServiceRegistration locator2SR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator",
+		ServiceRegistration<DriverLocator> locator2SR = getContext()
+				.registerService(DriverLocator.class,
 				new DriverLoadingLocator2(this), null);
-		ServiceRegistration locator3SR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator",
+		ServiceRegistration<DriverLocator> locator3SR = getContext()
+				.registerService(DriverLocator.class,
 				new DriverLoadingLocator3(this), null);
 		// registering selector
-		ServiceRegistration selector = getContext().registerService(
-				"org.osgi.service.device.DriverSelector",
+		ServiceRegistration<DriverSelector> selector = getContext()
+				.registerService(DriverSelector.class,
 				new DriverLoadingTestSelector1(this), null);
 		// registering one selector more - this should be ignored
-		ServiceRegistration uselessSelector = getContext().registerService(
-				"org.osgi.service.device.DriverSelector",
+		ServiceRegistration<DriverSelector> uselessSelector = getContext()
+				.registerService(DriverSelector.class,
 				new DriverLoadingTestSelector2(this), null);
 		// install the bundle representing the device
 		Bundle deviceBundle = null;
@@ -310,8 +310,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 */
 	public void testDefaultSelection() {
 		String subtest = "default selection test";
-		ServiceRegistration locatorSR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator",
+		ServiceRegistration<DriverLocator> locatorSR = getContext()
+				.registerService(DriverLocator.class,
 				new DefaultSelectionLocator(this), null);
 		Bundle deviceBundle = null;
 		try {
@@ -349,8 +349,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 */
 	public void testRedirection() {
 		String subtest = "redirection test";
-		ServiceRegistration locator1SR = getContext().registerService(
-				"org.osgi.service.device.DriverLocator",
+		ServiceRegistration<DriverLocator> locator1SR = getContext()
+				.registerService(DriverLocator.class,
 				new RedirectionLocator1(this), null);
 		Bundle deviceBundle = null;
 		try {

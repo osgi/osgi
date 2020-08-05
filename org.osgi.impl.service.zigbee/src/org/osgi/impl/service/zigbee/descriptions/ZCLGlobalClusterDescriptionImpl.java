@@ -48,26 +48,32 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 		this.domain = domain;
 	}
 
+	@Override
 	public String getClusterDescription() {
 		return description;
 	}
 
+	@Override
 	public int getClusterId() {
 		return id;
 	}
 
+	@Override
 	public String getClusterName() {
 		return name;
 	}
 
+	@Override
 	public String getClusterFunctionalDomain() {
 		return domain;
 	}
 
+	@Override
 	public ZCLClusterDescription getClientClusterDescription() {
 		return client;
 	}
 
+	@Override
 	public ZCLClusterDescription getServerClusterDescription() {
 		return server;
 	}
@@ -80,6 +86,7 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 		this.client = description;
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.getClass().getName() + "[id: " + id + ", name: " + name + ", desc: " + description + ", domain: "
 				+ domain + ", client: " + client + ", server: " + server + "]";

@@ -64,7 +64,6 @@ import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -112,7 +111,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public final static String[]				URIS_TOO_LONG;
 
 	static {
-		Vector uriTooLong = new Vector();
+		Vector<String> uriTooLong = new Vector<>();
 		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
 //		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
 //			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
@@ -139,22 +138,23 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			TestExecPluginActivator.INTERIOR_NODE + "/../"
 					+ TestExecPluginActivator.INTERIOR_NODE_NAME};
 
+	@Override
 	public void setUp() {
 		if (!inited) {
 			inited = true;
 			try {
-				dmtAdmin = (DmtAdmin) getContext().getService(
+				dmtAdmin = getContext().getService(
 						getContext().getServiceReference(
-								DmtAdmin.class.getName()));
+								DmtAdmin.class));
 			}
 			catch (NullPointerException e) {
 				log("There is no DmtAdmin service in the service registry, tests will not be executed correctly");
 			}
 
 			try {
-				permissionAdmin = (PermissionAdmin) getContext().getService(
+				permissionAdmin = getContext().getService(
 						getContext().getServiceReference(
-								PermissionAdmin.class.getName()));
+								PermissionAdmin.class));
 			}
 			catch (NullPointerException e) {
 				log("There is no PermissionAdmin service in the service registry, tests will not be executed correctly");
@@ -184,10 +184,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		catch (Exception e) {
 			log("TestControl: Failed installing tb1 bundle");
 		}
-		ServiceReference tb1SvrReference = getContext().getServiceReference(
-				TB1Service.class.getName());
+		ServiceReference<TB1Service> tb1SvrReference = getContext()
+				.getServiceReference(TB1Service.class);
 		LOCATION = tb1SvrReference.getBundle().getLocation();
-		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
+		tb1Service = getContext().getService(tb1SvrReference);
 		testClasses = tb1Service.getTestClasses(this);
 
 	}
@@ -240,8 +240,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			perm = defaults;
 		}
 	  if (System.getSecurityManager() != null) {
-		    AccessController.doPrivileged(new PrivilegedAction() {
-	        public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				@Override
+				public Void run() {
 	          getPermissionAdmin().setPermissions(LOCATION, perm);
 	          return null;
 	        }
@@ -265,8 +266,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(PropertyPermission.class.getName(), "*",
 						"read"), permission};
 		if (System.getSecurityManager() != null) {
-			AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				@Override
+				public Void run() {
 					getPermissionAdmin().setPermissions(LOCATION, perm);
 					return null;
 				}
@@ -591,6 +593,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 */
 	public static String getExcedingSegmentsUri(String nodeUri) {
 		// Gets the number of segments
+		@SuppressWarnings("unused")
 		int rootPluginSegments = uriTotalSegments(nodeUri);
 		// The segments to be appended are equal to the maximum number of
 		// segments plus one.
@@ -727,7 +730,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 				+ " [Message: " + exception.getMessage() + "]", exception);
 	}
 
-	public void failExpectedOtherException(Class expected, Throwable found) {
+	public void failExpectedOtherException(Class< ? extends Throwable> expected,
+			Throwable found) {
 		fail("Expected " + expected.getName() + " but was "
 				+ found.getClass().getName(), found);
 	}

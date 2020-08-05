@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.security.MessageDigest;
-import java.util.Hashtable;
-import java.security.SecureRandom;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Hashtable;
+
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -79,7 +80,8 @@ public class RshServer extends Thread {
 	 * Encode the plainText returning the cipher text. Note that the macVal will
 	 * get updated with the calculated MAC.
 	 */
-	byte[] encodeStream(byte plainText[], byte rshSecret[], byte clientFG[],
+	byte[] encodeStream(byte plainText[],
+			@SuppressWarnings("hiding") byte rshSecret[], byte clientFG[],
 			byte serverFG[], byte macVal[]) {
 		byte m1[], m2[], ka[];
 		try {
@@ -145,6 +147,7 @@ public class RshServer extends Thread {
 	 * The thread that accepts connections. Before processing a connection, it
 	 * will start up another RshServer to processes the next connection.
 	 */
+	@Override
 	public void run() {
 		OutputStream os = null;
 		Socket s = null;
@@ -161,8 +164,9 @@ public class RshServer extends Thread {
 				return;
 			}
 			String file = req.substring(0, qIndex);
-			Hashtable args = parseArgs(req.substring(qIndex + 1));
-			String base64ClientFG = (String) args.get("clientfg");
+			Hashtable<String,String> args = parseArgs(
+					req.substring(qIndex + 1));
+			String base64ClientFG = args.get("clientfg");
 			if (base64ClientFG == null) {
 				doError(os, "Missing clientFG");
 				return;
@@ -197,6 +201,7 @@ public class RshServer extends Thread {
 					doError(os, e.toString());
 				}
 				catch (IOException ee) {
+					// ignore
 				}
 			e.printStackTrace();
 		}
@@ -206,6 +211,7 @@ public class RshServer extends Thread {
 					s.close();
 			}
 			catch (Exception e) {
+				// ignore
 			}
 		}
 	}
@@ -250,10 +256,10 @@ public class RshServer extends Thread {
 	 * @param string the query string of a request.
 	 * @return Hashtable the table of key value pairs from the query string.
 	 */
-	Hashtable parseArgs(String string) {
+	Hashtable<String,String> parseArgs(String string) {
 		int andIndex;
 		int start = 0;
-		Hashtable table = new Hashtable();
+		Hashtable<String,String> table = new Hashtable<>();
 		do {
 			String pair;
 			andIndex = string.indexOf('&', start);

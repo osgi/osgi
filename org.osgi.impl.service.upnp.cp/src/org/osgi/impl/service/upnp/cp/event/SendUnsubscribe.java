@@ -12,6 +12,7 @@ public class SendUnsubscribe extends GenaSocket implements Runnable {
 
 	// This method creates the unsubscribe message and sends the message to the
 	// subscription host.
+	@Override
 	public void run() {
 		formUnsubscribeMessage();
 		try {

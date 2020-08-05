@@ -84,8 +84,8 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		TabularData data = pMBean.listPackages();
 		assertTabularDataStructure(data, "PACKAGES_TYPE", new String [] {"Name", "Version", "ExportingBundles"},
 											 new String[] {"Name", "Version", "ExportingBundles", "ImportingBundles", "RemovalPending"});
-		Collection values = data.values();
-		Iterator iter = values.iterator();
+		Collection< ? > values = data.values();
+		Iterator< ? > iter = values.iterator();
 		boolean found = false;
 		while (iter.hasNext()) {
 			CompositeData item = (CompositeData) iter.next();

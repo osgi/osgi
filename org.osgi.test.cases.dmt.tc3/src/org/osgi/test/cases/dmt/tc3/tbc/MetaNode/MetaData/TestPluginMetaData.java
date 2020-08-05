@@ -100,19 +100,23 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 
-    public void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException {
+    @Override
+	public void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException {
 
     }
 
@@ -120,10 +124,12 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 
 
 	
+	@Override
 	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
 			DmtConstants.TEMPORARY = SETNODETITLE; 
 	}
 
+	@Override
 	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
 		DmtConstants.TEMPORARY = SETNODEVALUE; 
 	}
@@ -132,10 +138,12 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 			DmtConstants.TEMPORARY = SETDEFAULTNODEVALUE; 
 	}
 
+	@Override
 	public void setNodeType(String[] nodeUri, String type) throws DmtException {
 			DmtConstants.TEMPORARY = SETNODETYPE; 
 	}
 
+	@Override
 	public void deleteNode(String[] nodeUri) throws DmtException {
 			DmtConstants.TEMPORARY = DELETENODE; 
 	}
@@ -144,6 +152,7 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 			DmtConstants.TEMPORARY = CREATEINTERIORNODE_1; 
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodeUri, String type)
 			throws DmtException {
 			DmtConstants.TEMPORARY = CREATEINTERIORNODE_2; 
@@ -157,23 +166,28 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 			DmtConstants.TEMPORARY = CREATELEAFNODE_2;
 	}
 
+	@Override
 	public void createLeafNode(String[] nodeUri, DmtData value, String mimeType)
 			throws DmtException {
 			DmtConstants.TEMPORARY = CREATELEAFNODE_3; 
 	}
 
+	@Override
 	public void copy(String[] nodeUri, String[] newNodeUri, boolean recursive)
 			throws DmtException {
 			DmtConstants.TEMPORARY = COPY; 
 	}
 
+	@Override
 	public void renameNode(String[] nodeUri, String newName) throws DmtException {
 			DmtConstants.TEMPORARY = RENAMENODE;
 	}
 
+	@Override
 	public void close() throws DmtException {
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestPluginMetaDataActivator.INEXISTENT_NODE) 
@@ -186,38 +200,47 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 		}
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 			return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 			return GETNODETITLE;
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 			return GETNODETYPE;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 			return GETNODEVERSION_VALUE;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 			return GETNODETIMESTAMP_VALUE;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 			return GETNODESIZE_VALUE;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 			return new String[] { GETCHILDNODENAMES, "newNode" };
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
         return TestPluginMetaDataActivator.metaNodeDefault;
 	}
 	
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestPluginMetaDataActivator.LEAF_NODE) || 
@@ -230,6 +253,7 @@ public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteData
 	}
 
 
+	@Override
 	public void nodeChanged(String[] nodeUri) throws DmtException {
 		
 	}

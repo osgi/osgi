@@ -40,8 +40,8 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator, ServiceListener {
 	BundleContext                  context;
-	ServiceTracker tracker;
-	BundleTracker  bundleTracker;
+	ServiceTracker<A,A>		tracker;
+	BundleTracker<Bundle>	bundleTracker;
 	Semaphore sem = new Semaphore(0);
 	Semaphore servicesem = new Semaphore(0);
 	long timeout;
@@ -50,6 +50,7 @@ public class Activator implements BundleActivator, ServiceListener {
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -62,6 +63,7 @@ public class Activator implements BundleActivator, ServiceListener {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		teststop();
 	}
@@ -69,6 +71,7 @@ public class Activator implements BundleActivator, ServiceListener {
 	/**
 	 * @see org.osgi.framework.ServiceListener#serviceChanged(org.osgi.framework.ServiceEvent)
 	 */
+	@Override
 	public void serviceChanged(ServiceEvent event) {
 		if (event.getType() == ServiceEvent.UNREGISTERING) {
 			System.out.println("service " + event.getServiceReference() + " is unregistered");
@@ -88,10 +91,10 @@ public class Activator implements BundleActivator, ServiceListener {
 
 		context.addServiceListener(this, filter.toString());
 
-		tracker = new ServiceTracker(context, filter, null);
+		tracker = new ServiceTracker<>(context, filter, null);
 		tracker.open();
 
-		A service = (A) Tracker.waitForService(tracker, timeout);
+		A service = Tracker.waitForService(tracker, timeout);
 		assertNotNull("no service A found", service);
 
 		// call the service
@@ -99,18 +102,25 @@ public class Activator implements BundleActivator, ServiceListener {
 
 		tracker.close();
 
-		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, new BundleTrackerCustomizer() {
+		bundleTracker = new BundleTracker<>(context, Bundle.ACTIVE,
+				new BundleTrackerCustomizer<Bundle>() {
 
-			public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+					@Override
+					public void removedBundle(Bundle bundle, BundleEvent event,
+							Bundle object) {
 				System.out.println("bundle " + bundle.getSymbolicName() + " was stopped");
 
 				sem.release();
 			}
 
-			public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+					@Override
+					public void modifiedBundle(Bundle bundle, BundleEvent event,
+							Bundle object) {
 			}
 
-			public Object addingBundle(Bundle bundle, BundleEvent event) {
+					@Override
+					public Bundle addingBundle(Bundle bundle,
+							BundleEvent event) {
 				if (bundle.getSymbolicName().equals("org.osgi.test.cases.remoteserviceadmin.testbundle")) {
 					return bundle;
 				}

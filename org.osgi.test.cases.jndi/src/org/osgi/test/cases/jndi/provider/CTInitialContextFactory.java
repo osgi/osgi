@@ -30,9 +30,9 @@ import javax.naming.NamingException;
 public class CTInitialContextFactory implements
 		javax.naming.spi.InitialContextFactory {
 	
-	private Hashtable env;
+	private Hashtable<String,Object> env;
 	
-	public CTInitialContextFactory(Hashtable env) {
+	public CTInitialContextFactory(Hashtable<String,Object> env) {
 		this.env = env;
 	}
 	
@@ -40,10 +40,14 @@ public class CTInitialContextFactory implements
 		
 	}
 
-	public Context getInitialContext(Hashtable environment) throws NamingException {
-		Map envMap = new HashMap();
+	@SuppressWarnings("unchecked")
+	@Override
+	public Context getInitialContext(Hashtable< ? , ? > environment)
+			throws NamingException {
+		Map<String,Object> envMap = new HashMap<>();
 		if (environment != null) {
-			envMap.putAll(environment);
+			envMap.putAll(
+					(Map< ? extends String, ? extends Object>) environment);
 		}
 		
 		if (env != null) {

@@ -1,9 +1,13 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.*;
-import org.osgi.impl.service.upnp.cp.description.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.impl.service.upnp.cp.description.Action;
+import org.osgi.impl.service.upnp.cp.description.ArgumentList;
 import org.osgi.impl.service.upnp.cp.util.Converter;
-import org.osgi.service.upnp.*;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 public class UPnPActionImpl implements UPnPAction {
 	private UPnPBaseDriver	basedriver;
@@ -71,11 +75,13 @@ public class UPnPActionImpl implements UPnPAction {
 	}
 
 	// This method returns the name of the action.
+	@Override
 	public String getName() {
 		return name;
 	}
 
 	// This method returns the argument name of the action.
+	@Override
 	public String getReturnArgumentName() {
 		if (outputargs.length > 1) {
 			return outputargs[0];
@@ -84,16 +90,19 @@ public class UPnPActionImpl implements UPnPAction {
 	}
 
 	// This method returns the input argument names of the action.
+	@Override
 	public String[] getInputArgumentNames() {
 		return inputargs;
 	}
 
 	// This method returns the output argument names of the action.
+	@Override
 	public String[] getOutputArgumentNames() {
 		return outputargs;
 	}
 
 	// This method returns the UPnPStateVariable of the action.
+	@Override
 	public UPnPStateVariable getStateVariable(String argName) {
 		for (int i = 0; i < args.length; i++) {
 			String argname = args[i].getName();
@@ -105,14 +114,14 @@ public class UPnPActionImpl implements UPnPAction {
 		return null;
 	}
 
-	private Hashtable getReturnSVDataType() {
-		Hashtable stat_dt = new Hashtable();
+	private Hashtable<String,Object> getReturnSVDataType() {
+		Hashtable<String,Object> stat_dt = new Hashtable<>();
 		for (int i = 0; i < outputargs.length; i++) {
 			for (int j = 0; j < args.length; j++) {
 				String argname = args[j].getName();
 				if (outputargs[i].equals(argname)) {
 					String stName = args[j].getRelatedStateVariable();
-					UPnPStateVariable USV = (UPnPStateVariable) upnpservice
+					UPnPStateVariable USV = upnpservice
 							.getStateVariable(stName);
 					stat_dt.put(argname, USV.getUPnPDataType());
 				}
@@ -121,14 +130,14 @@ public class UPnPActionImpl implements UPnPAction {
 		return stat_dt;
 	}
 
-	private Hashtable getInputSVDataType() {
-		Hashtable Input_dict = new Hashtable();
+	private Hashtable<String,Object> getInputSVDataType() {
+		Hashtable<String,Object> Input_dict = new Hashtable<>();
 		for (int i = 0; i < inputargs.length; i++) {
 			for (int j = 0; j < args.length; j++) {
 				String argname = args[j].getName();
 				if (inputargs[i].equals(argname)) {
 					String stName = args[j].getRelatedStateVariable();
-					UPnPStateVariable USV = (UPnPStateVariable) upnpservice
+					UPnPStateVariable USV = upnpservice
 							.getStateVariable(stName);
 					Input_dict.put(argname, USV.getUPnPDataType());
 				}
@@ -138,17 +147,21 @@ public class UPnPActionImpl implements UPnPAction {
 	}
 
 	// This method invokes the action.
-	public Dictionary invoke(Dictionary dict) throws Exception {
+	@Override
+	public Dictionary<String,Object> invoke(Dictionary<String,Object> dict)
+			throws Exception {
 		UPnPBaseDriver baseDriverLocal = this.basedriver;
 		if (null == baseDriverLocal) {
 			throw new IllegalStateException(
 					"UPnP device has been removed from the network.");
 		}
 		Converter convert = new Converter();
-		Hashtable stat_dt = getReturnSVDataType();
-		Hashtable Input_dict = getInputSVDataType();
-		Dictionary inparms = convert.java2upnp(dict, Input_dict);
-		Dictionary outparms = baseDriverLocal.control.sendControlRequest(controlurl,
+		Hashtable<String,Object> stat_dt = getReturnSVDataType();
+		Hashtable<String,Object> Input_dict = getInputSVDataType();
+		Dictionary<String,Object> inparms = convert
+				.java2upnp(dict, Input_dict);
+		Dictionary<String,Object> outparms = baseDriverLocal.control
+				.sendControlRequest(controlurl,
 				host, servicetype, name, inparms, true);
 		return convert.upnp2java(outparms, stat_dt);
 	}

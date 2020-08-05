@@ -18,12 +18,14 @@ public class DeviceRenewalThread extends Thread {
 	// This methos checks contineously check the device created time. If the
 	// created time expires
 	// expires it will renewal device.
+	@Override
 	public void run() {
 		while (flag) {
 			try {
-				for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
+				for (Enumeration<DeviceDetails> enumeration = ssdpcomp.allDeviceDetails
+						.elements(); enumeration
 						.hasMoreElements();) {
-					DeviceDetails device = (DeviceDetails) enumeration.nextElement();
+					DeviceDetails device = enumeration.nextElement();
 					if (device.getTime() <= System.currentTimeMillis()) {
 						System.out.println("send renew notify message");
 						exporter.sendDeviceForNotify(device);
@@ -33,6 +35,7 @@ public class DeviceRenewalThread extends Thread {
 				// all time - pkr
 			}
 			catch (Exception e) {
+				// ignored
 			}
 		}
 	}

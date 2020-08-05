@@ -1,6 +1,8 @@
 package org.osgi.impl.service.upnp.cp.ssdp;
 
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 
 // This class listenes on unicast channel for M-SEARCH responses
 public class SSDPUnicastListener extends Thread {
@@ -20,6 +22,7 @@ public class SSDPUnicastListener extends Thread {
 	}
 
 	// This method continously listens on unicast channel.
+	@Override
 	public void run() {
 		while (flag) {
 			byte data[] = new byte[1025];
@@ -39,6 +42,7 @@ public class SSDPUnicastListener extends Thread {
 				}
 			}
 			catch (Exception e) {
+				// ignored
 			}
 		}
 	}

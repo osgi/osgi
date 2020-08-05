@@ -16,6 +16,7 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
@@ -28,11 +29,13 @@ import org.osgi.test.support.step.TestStepProxy;
 public class NetworkAdapterTestCase extends DefaultTestBundleControl {
     private NetworkTestProxy testProxy;
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         this.testProxy.close();
     }
 
@@ -51,7 +54,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -119,7 +122,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -183,7 +186,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -246,7 +249,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -309,7 +312,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -370,7 +373,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
@@ -431,7 +434,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
             getContext().removeServiceListener(adapterListener);
 
-            ServiceReference ref = adapterListener.get(0);
+			ServiceReference< ? > ref = adapterListener.get(0);
             Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
             Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
             Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);

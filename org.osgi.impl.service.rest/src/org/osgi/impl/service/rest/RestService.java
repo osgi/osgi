@@ -127,6 +127,7 @@ public class RestService extends Application {
 			this.router = router;
 		}
 
+		@Override
 		public Class<? extends ServerResource> addingService(
 				final ServiceReference<RestApiExtension> reference) {
 			final String uri_path = (String) reference
@@ -146,6 +147,7 @@ public class RestService extends Application {
 			return null;
 		}
 
+		@Override
 		public void modifiedService(
 				final ServiceReference<RestApiExtension> reference,
 				final Class<? extends ServerResource> service) {
@@ -153,6 +155,7 @@ public class RestService extends Application {
 			addingService(reference);
 		}
 
+		@Override
 		public void removedService(
 				final ServiceReference<RestApiExtension> reference,
 				final Class<? extends ServerResource> service) {

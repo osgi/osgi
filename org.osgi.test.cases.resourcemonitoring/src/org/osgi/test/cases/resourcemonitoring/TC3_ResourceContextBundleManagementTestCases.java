@@ -42,10 +42,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		ServiceReference resourceMonitoringServiceSr = getContext()
-				.getServiceReference(ResourceMonitoringService.class.getName());
+		ServiceReference<ResourceMonitoringService> resourceMonitoringServiceSr = getContext()
+				.getServiceReference(ResourceMonitoringService.class);
 		if (resourceMonitoringServiceSr != null) {
-			resourceMonitoringService = (ResourceMonitoringService) getContext()
+			resourceMonitoringService = getContext()
 					.getService(resourceMonitoringServiceSr);
 		}
 		resourceContextListener = new ResourceContextListenerTestImpl();

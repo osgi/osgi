@@ -16,6 +16,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class HttpWhiteboardTestBundle1 implements BundleActivator {
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		Dictionary<String, Object> properties;
 
@@ -225,6 +226,7 @@ public class HttpWhiteboardTestBundle1 implements BundleActivator {
 				context.registerService(Object.class, new Object(), properties));
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
 			serviceRegistration.unregister();

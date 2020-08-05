@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
@@ -22,6 +23,7 @@ import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.Meter;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -33,13 +35,13 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 	private static final String[]	MILLIS_ARRAY				= new String[] {MILLIS};
 	private static final BigDecimal	CURRENT_MEASUREMENT			= new BigDecimal(1);
 	private static final LevelData	CURRENT_MEASUREMENT_LEVEL	= new LevelData(Long.MIN_VALUE, null, CURRENT_MEASUREMENT, MILLIS);
-	private static final Map		PROPERTY_METADATA;
-	private static final Map		OPERATION_METADATA			= null;
+	private static final Map<String,Object>	PROPERTY_METADATA;
+	private static final Map<String,Object>	OPERATION_METADATA			= null;
 
 	private final long				startTime;
 
 	static {
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(
 				PropertyMetadata.ACCESS,
 				Integer.valueOf(PropertyMetadata.ACCESS_READABLE |
@@ -59,7 +61,7 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 				null, // enumValues
 				new LevelData(Long.MIN_VALUE, null, new BigDecimal(0), MILLIS), // minValue
 				null); // maxValue
-		PROPERTY_METADATA = new HashMap();
+		PROPERTY_METADATA = new HashMap<>();
 		PROPERTY_METADATA.put(PROPERTY_CURRENT, currentPropMetadata);
 		PROPERTY_METADATA.put(PROPERTY_TOTAL, totalPropMetadata);
 	}
@@ -72,7 +74,9 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 	 * @param eventAdminTracker The event admin tracker used for event
 	 *        notifications.
 	 */
-	public SimulatedMeter(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
+	public SimulatedMeter(Dictionary<String,Object> functionProps,
+			BundleContext bc,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.startTime = System.currentTimeMillis();
 		super.register(
@@ -80,15 +84,19 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 				addPropertyNames(functionProps), bc);
 	}
 
+	@Override
 	public LevelData getCurrent() {
 		return new LevelData(System.currentTimeMillis(), null, CURRENT_MEASUREMENT, MILLIS);
 	}
 
+	@Override
 	public LevelData getTotal() {
 		long currentTime = System.currentTimeMillis();
-		return new LevelData(currentTime, null, new BigDecimal(currentTime - this.startTime), MILLIS);
+		return new LevelData(currentTime, null,
+				new BigDecimal(currentTime - this.startTime + 2L), MILLIS);
 	}
 
+	@Override
 	public void publishEvent(String propName) {
 		if (PROPERTY_CURRENT.equals(propName)) {
 			super.postEvent(propName, getCurrent());
@@ -100,7 +108,8 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 			}
 	}
 
-	private static Dictionary addPropertyNames(Dictionary functionProps) {
+	private static Dictionary<String,Object> addPropertyNames(
+			Dictionary<String,Object> functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
 				new String[] {PROPERTY_CURRENT, PROPERTY_TOTAL});

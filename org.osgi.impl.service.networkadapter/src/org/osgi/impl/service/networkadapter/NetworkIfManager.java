@@ -20,8 +20,11 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.networkadapter.NetworkAdapter;
+import org.osgi.service.networkadapter.NetworkAddress;
 
 /**
  * The class which manages ServiceRegistration and the service property.
@@ -41,7 +44,7 @@ class NetworkIfManager {
      * Key: NetworkAdapter ID
      * Value: service property
      */
-    private Map networkAdapterPropMap = new HashMap();
+	private Map<String,Dictionary<String,Object>>			networkAdapterPropMap	= new HashMap<>();
 
     /**
      * Map which manages the ServiceRegistration of the NetworkAdapter service.
@@ -49,7 +52,7 @@ class NetworkIfManager {
      * Key: NetworkAdapter ID
      * Value: ServiceRegistration
      */
-    private Map networkAdapterRegMap = new HashMap();
+	private Map<String,ServiceRegistration<NetworkAdapter>>	networkAdapterRegMap	= new HashMap<>();
 
     /**
      * Map which manages the service property of the NetworkAddress service.
@@ -57,7 +60,7 @@ class NetworkIfManager {
      * Key: NetworkAddress ID
      * Value: service property
      */
-    private Map networkAddressPropMap = new HashMap();
+	private Map<String,Dictionary<String,Object>>			networkAddressPropMap	= new HashMap<>();
 
     /**
      * Map which manages the ServiceRegistration of the NetworkAddress service.
@@ -65,7 +68,7 @@ class NetworkIfManager {
      * Key: NetworkAddress ID
      * Value: ServiceRegistration
      */
-    private Map networkAddressRegMap = new HashMap();
+	private Map<String,ServiceRegistration<NetworkAddress>>	networkAddressRegMap	= new HashMap<>();
 
     /**
      * Constructor.
@@ -90,71 +93,85 @@ class NetworkIfManager {
     synchronized void close() {
 
         // Unregisters all services.
-        for (Iterator iterator = networkAddressRegMap.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            ServiceRegistration reg = (ServiceRegistration)entry.getValue();
+		for (Iterator<Entry<String,ServiceRegistration<NetworkAddress>>> iterator = networkAddressRegMap
+				.entrySet()
+				.iterator(); iterator.hasNext();) {
+			Entry<String,ServiceRegistration<NetworkAddress>> entry = iterator
+					.next();
+			ServiceRegistration<NetworkAddress> reg = entry.getValue();
             reg.unregister();
         }
         networkAddressRegMap.clear();
         networkAddressPropMap.clear();
 
-        for (Iterator iterator = networkAdapterRegMap.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            ServiceRegistration reg = (ServiceRegistration)entry.getValue();
+		for (Iterator<Entry<String,ServiceRegistration<NetworkAdapter>>> iterator = networkAdapterRegMap
+				.entrySet()
+				.iterator(); iterator.hasNext();) {
+			Entry<String,ServiceRegistration<NetworkAdapter>> entry = iterator
+					.next();
+			ServiceRegistration<NetworkAdapter> reg = entry.getValue();
             reg.unregister();
         }
         networkAdapterRegMap.clear();
         networkAdapterPropMap.clear();
     }
 
-    synchronized void putNetworkAdapterProp(String id, Dictionary prop) {
+	synchronized void putNetworkAdapterProp(String id,
+			Dictionary<String,Object> prop) {
         networkAdapterPropMap.put(id, prop);
     }
 
-    synchronized Dictionary getNetworkAdapterProp(String id) {
-        return (Dictionary)networkAdapterPropMap.get(id);
+	synchronized Dictionary<String,Object> getNetworkAdapterProp(String id) {
+        return networkAdapterPropMap.get(id);
     }
 
-    synchronized Dictionary removeNetworkAdapterProp(String id) {
-        return (Dictionary)networkAdapterPropMap.remove(id);
+	synchronized Dictionary<String,Object> removeNetworkAdapterProp(String id) {
+        return networkAdapterPropMap.remove(id);
     }
 
 
-    synchronized void putNetworkAddressProp(String id, Dictionary prop) {
+	synchronized void putNetworkAddressProp(String id,
+			Dictionary<String,Object> prop) {
         networkAddressPropMap.put(id, prop);
     }
 
-    synchronized Dictionary getNetworkAddressProp(String id) {
-        return (Dictionary)networkAddressPropMap.get(id);
+	synchronized Dictionary<String,Object> getNetworkAddressProp(String id) {
+        return networkAddressPropMap.get(id);
     }
 
-    synchronized Dictionary removeNetworkAddressProp(String id) {
-        return (Dictionary)networkAddressPropMap.remove(id);
+	synchronized Dictionary<String,Object> removeNetworkAddressProp(String id) {
+        return networkAddressPropMap.remove(id);
     }
 
 
-    synchronized void putNetworkAdapterReg(String id, ServiceRegistration reg) {
+	synchronized void putNetworkAdapterReg(String id,
+			ServiceRegistration<NetworkAdapter> reg) {
         networkAdapterRegMap.put(id, reg);
     }
 
-    synchronized ServiceRegistration getNetworkAdapterReg(String id) {
-        return (ServiceRegistration)networkAdapterRegMap.get(id);
+	synchronized ServiceRegistration<NetworkAdapter> getNetworkAdapterReg(
+			String id) {
+        return networkAdapterRegMap.get(id);
     }
 
-    synchronized ServiceRegistration removeNetworkAdapterReg(String id) {
-        return (ServiceRegistration)networkAdapterRegMap.remove(id);
+	synchronized ServiceRegistration<NetworkAdapter> removeNetworkAdapterReg(
+			String id) {
+        return networkAdapterRegMap.remove(id);
     }
 
 
-    synchronized void putNetworkAddressReg(String id, ServiceRegistration reg) {
+	synchronized void putNetworkAddressReg(String id,
+			ServiceRegistration<NetworkAddress> reg) {
         networkAddressRegMap.put(id, reg);
     }
 
-    synchronized ServiceRegistration getNetworkAddressReg(String id) {
-        return (ServiceRegistration)networkAddressRegMap.get(id);
+	synchronized ServiceRegistration<NetworkAddress> getNetworkAddressReg(
+			String id) {
+        return networkAddressRegMap.get(id);
     }
 
-    synchronized ServiceRegistration removeNetworkAddressReg(String id) {
-        return (ServiceRegistration)networkAddressRegMap.remove(id);
+	synchronized ServiceRegistration<NetworkAddress> removeNetworkAddressReg(
+			String id) {
+        return networkAddressRegMap.remove(id);
     }
 }

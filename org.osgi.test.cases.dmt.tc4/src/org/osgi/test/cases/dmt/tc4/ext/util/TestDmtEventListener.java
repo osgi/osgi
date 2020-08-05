@@ -1,20 +1,21 @@
 package org.osgi.test.cases.dmt.tc4.ext.util;
 
-import org.osgi.service.dmt.DmtEvent;
-import org.osgi.service.dmt.DmtEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.DmtEventListener;
+
 public class TestDmtEventListener implements DmtEventListener {
 
-    private final List eventList;
+	private final List<DmtEvent> eventList;
 
     public TestDmtEventListener() {
-        this.eventList = new ArrayList();
+		this.eventList = new ArrayList<>();
     }
 
-    public void changeOccurred(DmtEvent event) {
+    @Override
+	public void changeOccurred(DmtEvent event) {
         synchronized (eventList) {
             eventList.add(event);
             eventList.notifyAll();
@@ -32,7 +33,7 @@ public class TestDmtEventListener implements DmtEventListener {
             while (eventList.size() <= index) {
                 eventList.wait();
             }
-            return (DmtEvent) eventList.get(index);
+            return eventList.get(index);
         }
     }
 }

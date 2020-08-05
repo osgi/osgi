@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
@@ -73,6 +74,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
@@ -136,8 +138,9 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	 */
 	private void processFreePortProperties(Map<String, Object> properties) {
 		String freePort = getFreePort();
-		for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = properties.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
 			if (entry.getValue().toString().trim().equals(FREE_PORT)) {
 				entry.setValue(freePort);
 			}
@@ -163,6 +166,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	/**
 	 * @see junit.framework.TestCase#tearDown()
 	 */
+	@Override
 	protected void tearDown() throws Exception {
 		stopFramework();
 		super.tearDown();
@@ -192,6 +196,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	 * @throws BundleException
 	 * @throws IOException
 	 */
+	@Override
 	public Bundle installBundle(String bundle) throws BundleException, IOException {
 		BundleContext fwkContext = getFramework().getBundleContext();
 		assertNotNull("Framework context is null", fwkContext);
@@ -243,10 +248,14 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		return context.getDataFile("storageroot").getAbsolutePath();
 	}
 
-	private Class loadFrameworkClass(String className)
+	private Class<FrameworkFactory> loadFrameworkClass(String className)
 			throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
-        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
+		@SuppressWarnings("unchecked")
+		Class<FrameworkFactory> clazz = (Class<FrameworkFactory>) (context == null
+				? Class.forName(className)
+				: getContext().getBundle(0).loadClass(className));
+		return clazz;
 	}
 
 	private BundleContext getBundleContextWithoutFail() {
@@ -261,8 +270,9 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 
 	private FrameworkFactory getFrameworkFactory() {
 		try {
-			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.getConstructor().newInstance();
+			Class<FrameworkFactory> clazz = loadFrameworkClass(
+					frameworkFactoryClassName);
+			return clazz.getConstructor().newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}
@@ -286,10 +296,13 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		return (true);
 	}
 
-	private Framework createFramework(Map configuration) {
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
+	private Framework createFramework(Map<String,Object> configuration) {
 		Framework framework = null;
 		try {
-			framework = frameworkFactory.newFramework(configuration);
+			framework = frameworkFactory.newFramework((Map) configuration);
 		}
 		catch (Exception e) {
 			fail("Failed to construct the framework", e);
@@ -353,7 +366,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		
 		Framework f = getFramework();
 		
-		List bundles = new LinkedList();
+		List<Bundle> bundles = new LinkedList<>();
 		
 		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.remoteserviceadmin.secure.bundles", ""), ",");
@@ -368,8 +381,8 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 			bundles.add(b);
 		}
 		
-		for (Iterator it = bundles.iterator(); it.hasNext();) {
-			Bundle b = (Bundle) it.next();
+		for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
+			Bundle b = it.next();
 			
 			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
 				b.start();

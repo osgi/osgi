@@ -34,6 +34,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CompletableFuture;
@@ -99,6 +100,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = getLongProperty("rsa.ct.timeout", 30000L);
@@ -107,8 +109,9 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteservices.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
-	public Map getConfiguration() {
-		Map configuration = new HashMap();
+	@Override
+	public Map<String,String> getConfiguration() {
+		Map<String,String> configuration = new HashMap<>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
@@ -127,7 +130,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testSimpleRegistration() throws Exception {
-		Hashtable properties = registrationTestServiceProperties();
+		Hashtable<String,Object> properties = registrationTestServiceProperties();
 
 		// install server side test service in the sub-framework
 		ServiceRegistration< ? > srTestService = installTestBundleAndRegisterServiceObject(
@@ -140,77 +143,98 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		Sleep.sleep(1000);
 
 		try {
+			{
+				ServiceTracker<A,A> clientTracker = new ServiceTracker<>(
+						getContext(), A.class, null);
+				clientTracker.open();
+
+				// the proxy should appear in this framework
+				A client = Tracker.waitForService(clientTracker, timeout);
+				assertNotNull("no proxy for service A found!", client);
+
+				ServiceReference<A> sr = clientTracker.getServiceReference();
+				System.out.println(sr);
+				assertNotNull(sr);
+				assertNotNull(sr.getProperty("service.imported"));
+				assertNotNull(sr.getProperty("service.id"));
+				assertNotNull(sr.getProperty("endpoint.id"));
+				assertNotNull(sr.getProperty("service.imported.configs"));
+				assertNull("private properties must not be exported",
+						sr.getProperty(".myprop"));
+				assertEquals("property implementation missing from proxy", "1",
+						sr.getProperty("implementation"));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
+
+				// invoke the proxy
+				assertEquals("A", client.getA());
+
+				clientTracker.close();
+
+			}
 			// now check on the hosting framework for the service to become available
-			ServiceTracker clientTracker = new ServiceTracker(getContext(), A.class.getName(), null);
-			clientTracker.open();
-
-			// the proxy should appear in this framework
-			A client = (A) Tracker.waitForService(clientTracker, timeout);
-			assertNotNull("no proxy for service A found!", client);
-
-			ServiceReference sr = clientTracker.getServiceReference();
-			System.out.println(sr);
-			assertNotNull(sr);
-			assertNotNull(sr.getProperty("service.imported"));
-			assertNotNull(sr.getProperty("service.id"));
-			assertNotNull(sr.getProperty("endpoint.id"));
-			assertNotNull(sr.getProperty("service.imported.configs"));
-			assertNull("private properties must not be exported", sr.getProperty(".myprop"));
-			assertEquals("property implementation missing from proxy", "1", sr.getProperty("implementation"));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
-
-			// invoke the proxy
-			assertEquals("A", client.getA());
-
-			clientTracker.close();
-
 			// make sure C was not registered, since it wasn't exported
-			assertNull("service C should not have been found as it was not exported", getContext().getServiceReference(C.class.getName()));
+			assertNull(
+					"service C should not have been found as it was not exported",
+					getContext().getServiceReference(C.class));
 
-			// check for service B
-			clientTracker = new ServiceTracker(getContext(), B.class.getName(), null);
-			clientTracker.open();
+			{
+				// check for service B
+				ServiceTracker<B,B> clientTracker = new ServiceTracker<>(
+						getContext(), B.class, null);
+				clientTracker.open();
 
-			// the proxy should appear in this framework
-			B clientB = (B) Tracker.waitForService(clientTracker, timeout);
-			assertNotNull("no proxy for service B found!", clientB);
+				// the proxy should appear in this framework
+				B clientB = Tracker.waitForService(clientTracker, timeout);
+				assertNotNull("no proxy for service B found!", clientB);
 
-			sr = clientTracker.getServiceReference();
-			System.out.println(sr);
-			assertNotNull(sr);
-			assertNotNull(sr.getProperty("service.imported"));
-			assertNotNull(sr.getProperty("service.id"));
-			assertNotNull(sr.getProperty("endpoint.id"));
-			assertNotNull(sr.getProperty("service.imported.configs"));
-			assertNull("private properties must not be exported", sr.getProperty(".myprop"));
-			assertEquals("property implementation missing from proxy", "1", sr.getProperty("implementation"));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
-			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
+				ServiceReference<B> sr = clientTracker.getServiceReference();
+				System.out.println(sr);
+				assertNotNull(sr);
+				assertNotNull(sr.getProperty("service.imported"));
+				assertNotNull(sr.getProperty("service.id"));
+				assertNotNull(sr.getProperty("endpoint.id"));
+				assertNotNull(sr.getProperty("service.imported.configs"));
+				assertNull("private properties must not be exported",
+						sr.getProperty(".myprop"));
+				assertEquals("property implementation missing from proxy", "1",
+						sr.getProperty("implementation"));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
+				assertNull(sr.getProperty(
+						RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
 
-			// invoke the proxy
-			assertEquals("B", clientB.getB());
+				// invoke the proxy
+				assertEquals("B", clientB.getB());
 
-			clientTracker.close();
+				clientTracker.close();
+			}
 
 		} finally {
 			srTestService.unregister();
 		}
 	}
 
-	private Hashtable registrationTestServiceProperties() throws Exception {
+	private Hashtable<String,Object> registrationTestServiceProperties()
+			throws Exception {
 		// verify that the server framework is exporting the test packages
 		verifyFramework();
 
-		Set supportedConfigTypes = getSupportedConfigTypes();
+		Set<String> supportedConfigTypes = getSupportedConfigTypes();
 
 		// load the external properties file with the config types for the
 		// server side service
-		Hashtable properties = loadServerTCKProperties();
+		Hashtable<String,Object> properties = loadServerTCKProperties();
 
 		// make sure the given config type is in the set of supported config
 		// types
@@ -281,7 +305,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testBasicTypes() throws Exception {
-		@SuppressWarnings("unchecked")
 		Hashtable<String,Object> properties = registrationTestServiceProperties();
 
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
@@ -605,7 +628,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testBasicTimeout() throws Exception {
-		@SuppressWarnings("unchecked")
 		Hashtable<String,Object> properties = registrationTestServiceProperties();
 
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
@@ -716,7 +738,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testAsyncTypes() throws Exception {
-		@SuppressWarnings("unchecked")
 		Hashtable<String,Object> properties = registrationTestServiceProperties();
 
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
@@ -803,7 +824,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 */
 	public void testAsyncJava8Types() throws Exception {
 		try {
-			@SuppressWarnings("unchecked")
 			Hashtable<String,Object> properties = registrationTestServiceProperties();
 
 			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
@@ -895,10 +915,12 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		}
 	}
 
-    private void processFreePortProperties(Hashtable properties) {
+	private void processFreePortProperties(
+			Hashtable<String,Object> properties) {
         String freePort = getFreePort();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = properties.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
             if (entry.getValue().toString().trim().equals(FREE_PORT)) {
                 entry.setValue(freePort);
             }
@@ -921,12 +943,12 @@ public class SimpleTest extends MultiFrameworkTestCase {
     /**
 	 * @return
 	 */
-	private Hashtable loadServerTCKProperties() {
+	private Hashtable<String,Object> loadServerTCKProperties() {
 		String serverconfig = getProperty("org.osgi.test.cases.remoteservices.serverconfig");
 		assertNotNull(
 				"did not find org.osgi.test.cases.remoteservices.serverconfig system property",
 				serverconfig);
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
@@ -939,22 +961,25 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		return properties;
 	}
 
-	private Set getSupportedConfigTypes() throws Exception {
+	private Set<String> getSupportedConfigTypes() throws Exception {
 		// make sure there is a Distribution Provider installed in the framework
 //		Filter filter = getFramework().getBundleContext().createFilter("(&(objectClass=*)(" +
 //				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*))");
 		Filter filter = getFramework().getBundleContext().createFilter("(" +
 				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*)");
-		ServiceTracker dpTracker = new ServiceTracker(getFramework().getBundleContext(), filter, null);
+		ServiceTracker< ? , ? > dpTracker = new ServiceTracker<>(
+				getFramework().getBundleContext(), filter, null);
 		dpTracker.open();
 
 		Object dp = Tracker.waitForService(dpTracker, timeout);
 		assertNotNull("No DistributionProvider found", dp);
-		ServiceReference dpReference = dpTracker.getServiceReference();
+		ServiceReference< ? > dpReference = dpTracker.getServiceReference();
 		assertNotNull(dpReference);
 		assertNotNull(dpReference.getProperty(DistributionProviderConstants.REMOTE_INTENTS_SUPPORTED));
 
-		Set supportedConfigTypes = new HashSet(); // collect all supported config types
+		Set<String> supportedConfigTypes = new HashSet<>(); // collect all
+															// supported config
+															// types
 
 		Object configProperty = dpReference.getProperty(DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED);
 		if (configProperty instanceof String) {
@@ -963,8 +988,9 @@ public class SimpleTest extends MultiFrameworkTestCase {
 				supportedConfigTypes.add(st.nextToken());
 			}
 		} else if (configProperty instanceof Collection) {
-			Collection col = (Collection) configProperty;
-			for (Iterator it=col.iterator(); it.hasNext(); ) {
+			@SuppressWarnings("unchecked")
+			Collection<String> col = (Collection<String>) configProperty;
+			for (Iterator<String> it = col.iterator(); it.hasNext();) {
 				supportedConfigTypes.add(it.next());
 			}
 		} else { // assume String[]

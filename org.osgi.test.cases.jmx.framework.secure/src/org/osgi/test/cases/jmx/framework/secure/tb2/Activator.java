@@ -26,7 +26,7 @@
 package org.osgi.test.cases.jmx.framework.secure.tb2;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -40,9 +40,9 @@ import org.osgi.test.cases.jmx.framework.secure.tb2.impl.HelloSayerImpl;
 
 
 public class Activator implements BundleActivator {
-	private ServiceRegistration helloRegistration;
-	private ServiceRegistration configRegistration;
-	private ServiceRegistration configFactoryRegistration;
+	private ServiceRegistration< ? >	helloRegistration;
+	private ServiceRegistration< ? >	configRegistration;
+	private ServiceRegistration< ? >	configFactoryRegistration;
 	
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello moon, I am started");
@@ -51,21 +51,23 @@ public class Activator implements BundleActivator {
 		ConfiguratorImpl cfg = new ConfiguratorImpl();
 
 		//register as Managed Service
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_value");
-		props.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".1");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_value");
+		props.put(Constants.SERVICE_PID,
+				context.getBundle().getBundleId() + ".1");
 		
 		configRegistration = context.registerService(
-				ManagedService.class.getName(), cfg, (Dictionary) props);
+				ManagedService.class.getName(), cfg, props);
 		
 		//register as Managed Service Factory		
-		Properties propsFactory = new Properties();
-		propsFactory.setProperty("test_key", "test_value");
-		propsFactory.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".factory");
+		Dictionary<String,Object> propsFactory = new Hashtable<>();
+		propsFactory.put("test_key", "test_value");
+		propsFactory.put(Constants.SERVICE_PID,
+				context.getBundle().getBundleId() + ".factory");
 
 		configFactoryRegistration = context.registerService(
 				ManagedServiceFactory.class.getName(), cfg,
-				(Dictionary) propsFactory);
+				propsFactory);
 		
 		helloRegistration = context.registerService(HelloSayer.class.getCanonicalName(), new HelloSayerImpl(), null);
 	}

@@ -127,6 +127,7 @@ public class RshConnection extends URLConnection {
 	/**
 	 * @see java.net.URLConnection#connect()
 	 */
+	@Override
 	public synchronized void connect() throws IOException {
 		if (!connected) {
 			urlConnection.connect();
@@ -142,6 +143,7 @@ public class RshConnection extends URLConnection {
 			(byte) 0x47, (byte) 0x49};
 	ByteArrayInputStream	bais	= null;
 
+	@Override
 	synchronized public InputStream getInputStream() throws IOException {
 		if (bais != null)
 			return bais;
@@ -209,61 +211,73 @@ public class RshConnection extends URLConnection {
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public java.lang.String getHeaderField(java.lang.String s) {
 		return urlConnection.getHeaderField(s);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public java.lang.String getHeaderFieldKey(int i) {
 		return urlConnection.getHeaderFieldKey(i);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public java.lang.String getHeaderField(int i) {
 		return urlConnection.getHeaderField(i);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public java.security.Permission getPermission() throws java.io.IOException {
 		return urlConnection.getPermission();
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public void setUseCaches(boolean b) {
 		urlConnection.setUseCaches(b);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public boolean getUseCaches() {
 		return urlConnection.getUseCaches();
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public void setIfModifiedSince(long l) {
 		urlConnection.setIfModifiedSince(l);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public long getIfModifiedSince() {
 		return urlConnection.getIfModifiedSince();
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public boolean getDefaultUseCaches() {
 		return urlConnection.getDefaultUseCaches();
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public void setDefaultUseCaches(boolean b) {
 		urlConnection.setDefaultUseCaches(b);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public void setRequestProperty(java.lang.String p, java.lang.String v) {
 		urlConnection.setRequestProperty(p, v);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
+	@Override
 	public java.lang.String getRequestProperty(java.lang.String p) {
 		return urlConnection.getRequestProperty(p);
 	}

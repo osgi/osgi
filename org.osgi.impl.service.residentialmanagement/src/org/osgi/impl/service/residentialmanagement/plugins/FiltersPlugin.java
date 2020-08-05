@@ -49,19 +49,25 @@ public class FiltersPlugin implements DataPlugin {
 		return session;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
-			DmtSession session) throws DmtException {
+			@SuppressWarnings("hiding") DmtSession session)
+			throws DmtException {
 		this.session = session;
 		return readwrite;
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
-			DmtSession session) throws DmtException {
+			@SuppressWarnings("hiding") DmtSession session)
+			throws DmtException {
 		return readonly;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
-			DmtSession session) throws DmtException {
+			@SuppressWarnings("hiding") DmtSession session)
+			throws DmtException {
 		this.session = session;
 		return readwrite;
 	}

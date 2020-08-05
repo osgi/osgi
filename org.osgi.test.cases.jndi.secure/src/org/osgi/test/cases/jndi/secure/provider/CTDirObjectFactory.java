@@ -31,22 +31,26 @@ import javax.naming.spi.DirObjectFactory;
 public class CTDirObjectFactory implements DirObjectFactory {
 
 	
-	private Hashtable env = new Hashtable();
+	private Hashtable<String,Object> env = new Hashtable<>();
 	
 	public CTDirObjectFactory() {
 		
 	}
 	
-	public CTDirObjectFactory(Hashtable env) {
+	public CTDirObjectFactory(Hashtable<String,Object> env) {
 		this.env = env;
 	}
 	
 
-	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment) throws Exception {
+	@Override
+	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
+			Hashtable< ? , ? > environment) throws Exception {
 		return getObjectInstance(obj, name, nameCtx, environment, null);
 	}
 	
-	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment, Attributes attrs) throws Exception {
+	@Override
+	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
+			Hashtable< ? , ? > environment, Attributes attrs) throws Exception {
 		if (obj instanceof CTReference) {
 			RefAddr value = ((CTReference) obj).get("value"); 
 			if (value != null) {
@@ -63,7 +67,7 @@ public class CTDirObjectFactory implements DirObjectFactory {
 
 	}
 
-	public Hashtable getEnvironment() {
+	public Hashtable< ? , ? > getEnvironment() {
 		return env;
 	}
 

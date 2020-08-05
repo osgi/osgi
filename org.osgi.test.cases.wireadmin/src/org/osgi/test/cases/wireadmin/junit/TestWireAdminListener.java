@@ -7,6 +7,8 @@ import java.util.List;
 import org.osgi.service.wireadmin.Wire;
 import org.osgi.service.wireadmin.WireAdminEvent;
 import org.osgi.service.wireadmin.WireAdminListener;
+import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Used to test the correct event dispatchment within the wire admin as required
@@ -17,7 +19,7 @@ import org.osgi.service.wireadmin.WireAdminListener;
 public class TestWireAdminListener implements WireAdminListener {
 	private final WireAdminControl	wac;
 	private final boolean	dummy;
-	private final List				valuesReceived	= new ArrayList();
+	private final List<Object>		valuesReceived	= new ArrayList<>();
 	private boolean					called			= false;
 
 	public TestWireAdminListener(WireAdminControl wac, boolean dummy) {
@@ -30,13 +32,14 @@ public class TestWireAdminListener implements WireAdminListener {
 	 * 
 	 * @param event describes the fired event
 	 */
+	@Override
 	public void wireAdminEvent(WireAdminEvent event) {
 		Wire wire = event.getWire();
 		if (wire != null) {
 			// check for right test case
 			if (!wac.getName().equals(
 					wire.getProperties().get("org.osgi.test.wireadmin"))) {
-				WireAdminControl
+				DefaultTestBundleControl
 						.log("received an event from a different test case");
 				return;
 			}
@@ -44,36 +47,37 @@ public class TestWireAdminListener implements WireAdminListener {
 		try {
 			int type = event.getType();
 			if (dummy) {
-				WireAdminControl.log("Dummy received an event! Error");
+				DefaultTestBundleControl.log("Dummy received an event! Error");
 				synchronized (this) {
 					valuesReceived.add(Integer.valueOf(type));
 				}
 				return;
 			}
-			WireAdminControl.log("received event " + getEventName(type));
+			DefaultTestBundleControl.log("received event " + getEventName(type));
 			if (wire != null) {
-				Dictionary dict = event.getWire().getProperties();
+				Dictionary<String,Object> dict = event.getWire()
+						.getProperties();
 				String prop = (String) dict
 						.get("org.osgi.test.wireadmin.property");
 				if ("42".equals(prop)) {
-					WireAdminControl.log("wire is OK");
+					DefaultTestBundleControl.log("wire is OK");
 					synchronized (this) {
 						valuesReceived.add(Integer.valueOf(type));
 					}
 				}
 				else {
-					WireAdminControl.log("wire is other than expected");
+					DefaultTestBundleControl.log("wire is other than expected");
 				}
 			}
 			else {
-				WireAdminControl
+				DefaultTestBundleControl
 						.log("event.getWire() returned null. No specific wire was responsible for the event");
 			}
 
 			if ((event.getType() & (WireAdminEvent.CONSUMER_EXCEPTION | WireAdminEvent.PRODUCER_EXCEPTION)) != 0) {
 				Throwable t = event.getThrowable();
 				if (t == null) {
-					WireAdminControl.log("Throwable not passed! Error");
+					DefaultTestBundleControl.log("Throwable not passed! Error");
 					synchronized (this) {
 						valuesReceived.add("no throwable received");
 					}
@@ -83,10 +87,10 @@ public class TestWireAdminListener implements WireAdminListener {
 						valuesReceived.add(t.getMessage());
 					}
 					if ("testing".equals(t.getMessage())) {
-						WireAdminControl.log("correct Throwable passed! OK");
+						DefaultTestBundleControl.log("correct Throwable passed! OK");
 					}
 					else {
-						WireAdminControl.log("wrong Throwable passed! Error");
+						DefaultTestBundleControl.log("wrong Throwable passed! Error");
 					}
 				}
 			}
@@ -107,19 +111,19 @@ public class TestWireAdminListener implements WireAdminListener {
 				break;
 			}
 			try {
-				WireAdminControl.log("WireAdminListener waiting for call: "
+				DefaultTestBundleControl.log("WireAdminListener waiting for call: "
 						+ waitTime);
 				wait(waitTime);
 			}
 			catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-				WireAdminControl.fail("Unexepected interruption.", e);
+				OSGiTestCase.fail("Unexepected interruption.", e);
 			}
 		}
 	}
 
-	synchronized List resetValuesReceived() {
-		List result = new ArrayList(valuesReceived);
+	synchronized List<Object> resetValuesReceived() {
+		List<Object> result = new ArrayList<>(valuesReceived);
 		valuesReceived.clear();
 		called = false;
 		return result;

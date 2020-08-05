@@ -18,13 +18,6 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashSet;
@@ -36,10 +29,17 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
+import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 class ConfigPlugin implements DataPlugin, ManagedService {
-    private ServiceTracker configTracker;
+	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>	configTracker;
 
     /**
      * Manages the different IDs related to the configuration tables.  Stores 
@@ -52,7 +52,9 @@ class ConfigPlugin implements DataPlugin, ManagedService {
      */
     private ConfigIdHandler idHandler;
 
-    ConfigPlugin(ServiceTracker configTracker, ServiceTracker logTracker) {
+	ConfigPlugin(
+			ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configTracker,
+			ServiceTracker<LogService,LogService> logTracker) {
         this.configTracker = configTracker;
         
         idHandler = new ConfigIdHandler(configTracker, logTracker);
@@ -61,17 +63,20 @@ class ConfigPlugin implements DataPlugin, ManagedService {
     
     //----- DataPlugin methods -----//
 
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         return new ConfigReadOnlySession(this);
     }
 
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         return null; // non-atomic write sessions not supported
     }
 
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         
         if(sessionRoot.length > 
@@ -86,7 +91,8 @@ class ConfigPlugin implements DataPlugin, ManagedService {
 
     //----- ManagedService methods -----//
 
-    public synchronized void updated(Dictionary properties)
+    @Override
+	public synchronized void updated(Dictionary<String, ? > properties)
             throws ConfigurationException {
         idHandler.updated(properties);
     }
@@ -97,7 +103,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
     synchronized Configuration createConfiguration(String nodeName, String pid, 
             String location, String factoryPid) throws ConfigPluginException {
         
-        ConfigurationAdmin ca = (ConfigurationAdmin) configTracker.getService();
+        ConfigurationAdmin ca = configTracker.getService();
         if(ca == null)
             throw new ConfigPluginException(DmtException.COMMAND_FAILED,
                     "Cannot create configuration because Configuration Admin " +
@@ -181,7 +187,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
         if(configs == null)
             return new String[] {};
         
-        Set pids = new HashSet();
+		Set<String> pids = new HashSet<>();
         for (int i = 0; i < configs.length; i++)
             pids.add(configs[i].getPid());
 
@@ -193,9 +199,9 @@ class ConfigPlugin implements DataPlugin, ManagedService {
         }
 
         String[] nodeNames = new String[pids.size()];
-        Iterator iter = pids.iterator();
+		Iterator<String> iter = pids.iterator();
         for(int i = 0; iter.hasNext(); i++)
-            nodeNames[i] = idHandler.getNodeNameForPid((String) iter.next());
+            nodeNames[i] = idHandler.getNodeNameForPid(iter.next());
 
         return nodeNames;
     }
@@ -245,7 +251,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
     
     private Configuration getConfigurationByPid(String pid) 
             throws ConfigPluginException {
-        ConfigurationAdmin ca = (ConfigurationAdmin) configTracker.getService();
+        ConfigurationAdmin ca = configTracker.getService();
         if(ca == null)
             return null;
         
@@ -269,7 +275,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
     }
     
     private Configuration[] getConfigurations() throws ConfigPluginException {
-        ConfigurationAdmin ca = (ConfigurationAdmin) configTracker.getService();
+        ConfigurationAdmin ca = configTracker.getService();
         if(ca == null)
             return null;
         

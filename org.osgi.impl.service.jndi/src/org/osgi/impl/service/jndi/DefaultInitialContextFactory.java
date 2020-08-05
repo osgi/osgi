@@ -37,8 +37,12 @@ import javax.naming.spi.InitialContextFactory;
  * @author $Id$
  */
 class DefaultInitialContextFactory implements InitialContextFactory {
-
-	public Context getInitialContext(Hashtable var0) throws NamingException {
+	DefaultInitialContextFactory() {
+		super();
+	}
+	@Override
+	public Context getInitialContext(Hashtable< ? , ? > var0)
+			throws NamingException {
 		return (Context) Proxy.newProxyInstance(this.getClass().getClassLoader(),
 				                                new Class[] {Context.class}, 
 				                                new DefaultContextInvocationHandler());
@@ -53,7 +57,10 @@ class DefaultInitialContextFactory implements InitialContextFactory {
 	 * @author $Id$
 	 */
 	private static class DefaultContextInvocationHandler implements InvocationHandler {
-
+		DefaultContextInvocationHandler() {
+			super();
+		}
+		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			// special case for close() invocation
 			if(method.getName().equals("close")) {
@@ -62,7 +69,7 @@ class DefaultInitialContextFactory implements InitialContextFactory {
 			
 			// special case for getEnvironment(), return empty Hashtable
 			if(method.getName().equals("getEnvironment")) {
-				return new Hashtable();
+				return new Hashtable<>();
 			}
 			
 			throw new NoInitialContextException("No InitialContext service available to handle this request");

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import org.osgi.impl.service.zigbee.descriptions.ZCLCommandDescriptionImpl;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
@@ -66,11 +67,13 @@ public class ZCLClusterImpl implements ZCLCluster {
 		this.attributes = toZCLAttributes(attributeDescriptions);
 	}
 
+	@Override
 	public int getId() {
 		return global.getClusterId();
 	}
 
-	public Promise getAttribute(int attributeId) {
+	@Override
+	public Promise<ZCLAttribute> getAttribute(int attributeId) {
 
 		ZCLAttribute attribute = this.lookupAttribute(attributeId);
 		if (attribute != null) {
@@ -80,18 +83,22 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "the AttributeId is not valid"));
 	}
 
-	public Promise getAttributes() {
+	@Override
+	public Promise<ZCLAttribute[]> getAttributes() {
 		return Promises.resolved(attributes);
 	}
 
-	public Promise getCommandIds() {
+	@Override
+	public Promise<short[]> getCommandIds() {
 		if (forceFailure) {
 			return Promises.failed(new ZCLException(ZCLException.GENERAL_COMMAND_NOT_SUPPORTED, ""));
 		}
 		return Promises.resolved(this.getCommandIdsArray());
 	}
 
-	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
+	@Override
+	public Promise<Map<Integer,ZCLReadStatusRecord>> readAttributes(
+			ZCLAttributeInfo[] attributesInfoArray) {
 
 		if (attributesInfoArray == null) {
 			return Promises.failed(new NullPointerException("attributes cannot be null"));
@@ -99,7 +106,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			return Promises.failed(new IllegalArgumentException("attributes array cannot be empty"));
 		}
 
-		Map readStatusMap = new HashMap();
+		Map<Integer,ZCLReadStatusRecord> readStatusMap = new HashMap<>();
 
 		ZCLReadStatusRecord[] readStatusRecords = new ZCLReadStatusRecord[attributesInfoArray.length];
 
@@ -148,18 +155,21 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.resolved(readStatusMap);
 	}
 
-	public Promise writeAttributes(boolean undivided, Map attributesIdsAndValues) {
+	@Override
+	public Promise<Map<Integer,Integer>> writeAttributes(boolean undivided,
+			Map< ? extends ZCLAttributeInfo, ? > attributesIdsAndValues) {
 		if (attributesIdsAndValues == null) {
 			return Promises.failed(new NullPointerException("the Map argument cannot be null."));
 		} else if (attributesIdsAndValues.size() == 0) {
-			return Promises.resolved(new HashMap());
+			return Promises.resolved(new HashMap<>());
 		}
 		boolean first = true;
 		boolean manufacturerSpecific = false;
 
-		Set keys = attributesIdsAndValues.keySet();
-		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
-			ZCLAttributeInfo attributeInfo = (ZCLAttributeInfo) iterator.next();
+		Set< ? extends ZCLAttributeInfo> keys = attributesIdsAndValues.keySet();
+		for (Iterator< ? extends ZCLAttributeInfo> iterator = keys
+				.iterator(); iterator.hasNext();) {
+			ZCLAttributeInfo attributeInfo = iterator.next();
 			if (first) {
 				manufacturerSpecific = attributeInfo.isManufacturerSpecific();
 				first = false;
@@ -174,11 +184,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 		 * Create the result map
 		 */
 
-		Map resultMap = new HashMap();
+		Map<Integer,Integer> resultMap = new HashMap<>();
 		keys = attributesIdsAndValues.keySet();
 
-		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
-			ZCLAttributeInfo attributeInfo = (ZCLAttributeInfo) iterator.next();
+		for (Iterator< ? extends ZCLAttributeInfo> iterator = keys
+				.iterator(); iterator.hasNext();) {
+			ZCLAttributeInfo attributeInfo = iterator.next();
 			ZCLAttribute attribute = lookupAttribute(attributeInfo.getId());
 			ZCLAttributeDescription attributeDescription = lookupAttributeDescription(attributeInfo.getId());
 			int status;
@@ -199,7 +210,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.resolved(resultMap);
 	}
 
-	public Promise invoke(ZCLFrame frame) {
+	@Override
+	public Promise<ZCLFrame> invoke(ZCLFrame frame) {
 		if (frame == null) {
 			return Promises.failed(new NullPointerException("frame argument cannot be null"));
 		}
@@ -231,18 +243,16 @@ public class ZCLClusterImpl implements ZCLCluster {
 					"CT configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
 		}
 
+		@SuppressWarnings("unused")
 		byte[] rawResponseCommand = ((ZCLCommandDescriptionImpl) requestCommand).getFrame();
-		if (rawRequestFrame == null) {
-			throw new RuntimeException("CT configuration error. Unable to find a raw frame for commmand id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
-
-		}
 
 		ZCLFrame responseFrame = this.createResponseFrame(frame, responseCommand);
 
 		return Promises.resolved(responseFrame);
 	}
 
-	public Promise invoke(ZCLFrame frame, String exportedServicePID) {
+	@Override
+	public Promise<ZCLFrame> invoke(ZCLFrame frame, String exportedServicePID) {
 		if (frame == null) {
 			return Promises.failed(new NullPointerException("frame argument cannot be null"));
 		}
@@ -254,9 +264,11 @@ public class ZCLClusterImpl implements ZCLCluster {
 			return Promises.failed(new IllegalArgumentException("exportedServicePID argument cannot be an empty string"));
 		}
 
-		return Promises.resolved(new UnsupportedOperationException("This method is still not supported."));
+		return Promises.failed(new UnsupportedOperationException(
+				"This method is still not supported."));
 	}
 
+	@Override
 	public String toString() {
 		String attributesAsAString = null;
 		if (attributes != null) {
@@ -286,7 +298,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 				+ commandIdsAsAString + ", description: " + description + "]";
 	}
 
-	public Promise getAttribute(int attributeId, int code) {
+	@Override
+	public Promise<ZCLAttribute> getAttribute(int attributeId, int code) {
 		if (code == -1) {
 			return getAttribute(attributeId);
 		}
@@ -294,7 +307,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "the AttributeId is not valid"));
 	}
 
-	public Promise getAttributes(int code) {
+	@Override
+	public Promise<ZCLAttribute[]> getAttributes(int code) {
 		if (code == -1) {
 			return getAttributes();
 		}
@@ -320,7 +334,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributeDescriptions An array of ZCLAttributeDescription objects.
 	 * @return The array of corresponding ZCLAttribute objects
 	 */
-	private ZCLAttributeImpl[] toZCLAttributes(ZCLAttributeDescription[] attributeDescriptions) {
+	private ZCLAttributeImpl[] toZCLAttributes(
+			@SuppressWarnings("hiding") ZCLAttributeDescription[] attributeDescriptions) {
 		ZCLAttributeImpl[] a = new ZCLAttributeImpl[attributeDescriptions.length];
 
 		for (int i = 0; i < attributeDescriptions.length; i++) {

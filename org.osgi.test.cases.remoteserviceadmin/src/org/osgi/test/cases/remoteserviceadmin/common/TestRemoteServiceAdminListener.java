@@ -28,6 +28,7 @@ public class TestRemoteServiceAdminListener implements
 	/**
 	 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
 	 */
+	@Override
 	public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 		eventlist.add(event);
 		sem.release();

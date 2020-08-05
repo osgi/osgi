@@ -26,16 +26,18 @@ import org.osgi.framework.ServiceRegistration;
 
 public class InaccessibleBundleContextActivator implements BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("tb", "inaccessibleBundleContext");
 		sr = context.registerService(Object.class.getName(), context, props);
 
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();

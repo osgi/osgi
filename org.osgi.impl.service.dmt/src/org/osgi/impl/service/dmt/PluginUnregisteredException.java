@@ -26,13 +26,18 @@ package org.osgi.impl.service.dmt;
  * isNodeUri cannot throw checked exceptions.
  */
 public class PluginUnregisteredException extends RuntimeException {
-    private String uri;
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	private String				uri;
     
     public PluginUnregisteredException(String[] path) {
         uri = path == null ? null : Node.convertPathToUri(path);
     }
     
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         return "The plugin handling the node '" + uri + "' has been " +
                 "unregistered while in use by a session.";
     }

@@ -3,7 +3,6 @@ package org.osgi.test.cases.jmx.cm.junit;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import javax.management.openmbean.TabularData;
 
@@ -45,8 +44,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationGetBundleLocation() throws Exception {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_get_bundle_location");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_get_bundle_location");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		String bundleLocation = configAdminMBean
@@ -58,8 +57,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationSetBundleLocation() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_set_bundle_location");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_set_bundle_location");
 		configAdminMBean.setBundleLocation(configurationPid, testBundle2
 				.getLocation());
 		configAdminMBean.update(configurationPid, OSGiProperties
@@ -73,8 +72,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationUpdate() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_update");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_update");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getProperties(configurationPid);
@@ -85,8 +84,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationUpdateForLocation() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_update_for_location");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_update_for_location");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getPropertiesForLocation(
@@ -99,9 +98,9 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationGetProperties() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key1", "test_get_properties1");
-		props.setProperty("test_key2", "test_get_properties2");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key1", "test_get_properties1");
+		props.put("test_key2", "test_get_properties2");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getProperties(configurationPid);
@@ -116,9 +115,9 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationGetPropertiesForLocation() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key1", "test_get_properties_for_location1");
-		props.setProperty("test_key2", "test_get_properties_for_location2");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key1", "test_get_properties_for_location1");
+		props.put("test_key2", "test_get_properties_for_location2");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getPropertiesForLocation(
@@ -135,8 +134,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationDelete() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_delete");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_delete");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getProperties(configurationPid);
@@ -148,8 +147,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testConfigurationDeleteForLocation() throws IOException {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_delete_for_location");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_delete_for_location");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getProperties(configurationPid);
@@ -162,8 +161,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testDeleteConfigurationsFilter() throws Exception {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key", "test_delete_for_filter");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key", "test_delete_for_filter");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 		TabularData result = configAdminMBean.getProperties(configurationPid);
@@ -178,7 +177,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String test2factory = testBundle2.getBundleId() + ".factory";
 		Configuration configuration = configAdminService
 				.createFactoryConfiguration(test2factory, null);
-		Dictionary properties = new Properties();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put("test_key", "test_factory_pid");
 		properties.put(Constants.SERVICE_PID, test2factory);
 		configuration.update(properties);
@@ -192,7 +191,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		Configuration configuration = configAdminService
 				.createFactoryConfiguration(test2factory, testBundle2
 						.getLocation());
-		Dictionary properties = new Properties();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put("test_key", "test_factory_pid");
 		properties.put(Constants.SERVICE_PID, test2factory);
 		configuration.update(properties);
@@ -204,8 +203,8 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetConfigurationsFilter() throws Exception {
 		String configurationPid = testBundle2.getBundleId() + ".1";
-		Properties props = new Properties();
-		props.setProperty("test_key_filter", "test_get_cfg_filter");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("test_key_filter", "test_get_cfg_filter");
 		configAdminMBean.updateForLocation(configurationPid, testBundle2
 				.getLocation(), OSGiProperties.tableFrom(props));
 
@@ -267,7 +266,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String testFactoryId = testBundle2.getBundleId() + ".factory";
 
 		// do the test using configuration admin service
-		Dictionary properties = new Properties();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put("test_key", "test_create_factory_configuration_service");
 
 		Configuration test2factoryServiceCfg = configAdminService
@@ -279,7 +278,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 				.getFactoryPid().equals(testFactoryId));
 
 		// do the test using configuration admin mbean
-		properties = new Properties();
+		properties = new Hashtable<>();
 		properties.put("test_key", "test_create_factory_configuration_mbean");
 
 		String test2factoryMBean = configAdminMBean

@@ -36,6 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -45,23 +46,24 @@ import org.osgi.service.dmt.spi.DataPlugin;
 
 public class OverlappingSubtreeDataPluginActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	private OverlappingSubtreeDataPlugin overlappingSubtreeDataPlugin;
 	
 	public static final String ROOT = org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator.INTERIOR_NODE;
 	
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		overlappingSubtreeDataPlugin = new OverlappingSubtreeDataPlugin();
-		Hashtable props = new Hashtable();
-		
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		servReg = bc.registerService(ifs, overlappingSubtreeDataPlugin, props);
+		servReg = bc.registerService(DataPlugin.class,
+				overlappingSubtreeDataPlugin, props);
 		System.out.println("OverlappingSubtreeDataPlugin activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

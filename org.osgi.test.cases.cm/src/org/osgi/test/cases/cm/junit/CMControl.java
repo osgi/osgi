@@ -24,6 +24,8 @@
  */
 package org.osgi.test.cases.cm.junit;
 
+import static org.osgi.test.cases.cm.shared.Util.singletonDictionary;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,7 +74,6 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
-import org.osgi.test.cases.cm.junit.CMControl.SyncEventListener;
 import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
@@ -360,7 +361,6 @@ public class CMControl extends DefaultTestBundleControl {
 		 * A list of all methodcalls that should be made to the deleted
 		 * Configuration object
 		 */
-		@SuppressWarnings("rawtypes")
 		MethodCall[] methods = {
 				new MethodCall(Configuration.class, "delete"),
 				new MethodCall(Configuration.class, "getBundleLocation"),
@@ -372,7 +372,8 @@ public class CMControl extends DefaultTestBundleControl {
 						String.class, "somelocation"),
 				new MethodCall(Configuration.class, "update"),
 				new MethodCall(Configuration.class, "update", Dictionary.class,
-						new Hashtable()) };
+						new Hashtable<>())
+		};
 		/* Make all the methodcalls in the list */
 		for (int i = 0; i < methods.length; i++) {
 			try {
@@ -841,7 +842,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Test the change counter.
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testChangeCount() throws Exception {
 		trace("Testing change count...");
         // create config with pid
@@ -878,11 +878,7 @@ public class CMControl extends DefaultTestBundleControl {
 		try {
 			cl = createConfigurationListener(synchronizer);
 	        // update config with properties
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("x", "x");
-				}
-			});
+			config.update(singletonDictionary("x", "x"));
 	        assertTrue("Sync listener not called.", events.size() == 1);
 
 	        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
@@ -918,7 +914,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Test the change counter for factory configuration
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testChangeCountFactory() throws Exception {
 		trace("Testing change count factory...");
         // create config with pid
@@ -956,11 +951,7 @@ public class CMControl extends DefaultTestBundleControl {
 		try {
 			cl = createConfigurationListener(synchronizer);
 	        // update config with properties
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("x", "x");
-				}
-			});
+			config.update(singletonDictionary("x", "x"));
 	        assertTrue("Sync listener not called.", events.size() == 1);
 
 	        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
@@ -999,7 +990,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Test sync listener.
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testSyncListener() throws Exception {
 		trace("Testing sync listener...");
 
@@ -1033,11 +1023,7 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Create test configuration");
 	        final String pid = "test_sync_config_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
 	        config = this.cm.getConfiguration(pid);
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("y", "y");
-				}
-			});
+			config.update(singletonDictionary("y", "y"));
 	        assertEquals("No event received: " + events, 1, events.size());
 
 	        ConfigurationEvent event = events.get(0);
@@ -1046,11 +1032,7 @@ public class CMControl extends DefaultTestBundleControl {
 						ConfigurationEvent.CM_UPDATED, event.getType());
 
 			// update config
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("x", "x");
-				}
-			});
+			config.update(singletonDictionary("x", "x"));
 	        assertEquals("No event received", 2, events.size());
 	        event = events.get(1);
 			assertEquals("Config event pid match", pid, event.getPid());
@@ -1088,7 +1070,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Test sync listener for factory config.
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testSyncListenerFactory() throws Exception {
 		trace("Testing sync listener...");
 
@@ -1122,11 +1103,7 @@ public class CMControl extends DefaultTestBundleControl {
 	        final String factoryPid = "test_sync_config_factory_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
 	        config = this.cm.createFactoryConfiguration(factoryPid);
 	        final String pid = config.getPid();
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("y", "y");
-				}
-			});
+			config.update(singletonDictionary("y", "y"));
 	        assertEquals("No event received: " + events, 1, events.size());
 
 	        ConfigurationEvent event = events.get(0);
@@ -1136,11 +1113,7 @@ public class CMControl extends DefaultTestBundleControl {
 						ConfigurationEvent.CM_UPDATED, event.getType());
 
 			// update config
-			config.update(new Hashtable<String,Object>() {
-				{
-					put("x", "x");
-				}
-			});
+			config.update(singletonDictionary("x", "x"));
 	        assertEquals("No event received", 2, events.size());
 	        event = events.get(1);
 			assertEquals("Config event pid match", pid, event.getPid());
@@ -1187,7 +1160,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 *
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testTargetedPid() throws Exception {
     	trace("Testing targeted pids...");
 
@@ -1251,17 +1223,15 @@ public class CMControl extends DefaultTestBundleControl {
 				configs.add(c);
 				final String propPreviousKeyT5 = previousKeyT5;
 				final String propPreviousKeyT6 = previousKeyT6;
-				c.update(new Hashtable<String,Object>() {
-		        	{
-		        		put("test", key);
-		        		if ( propPreviousKeyT5 != null ) {
-		        			put("previousT5", propPreviousKeyT5);
-		        		}
-		        		if ( propPreviousKeyT6 != null ) {
-		        			put("previousT6", propPreviousKeyT6);
-		        		}
-		            }
-		        });
+				Dictionary<String,Object> newprops = new Hashtable<>();
+				newprops.put("test", key);
+				if (propPreviousKeyT5 != null) {
+					newprops.put("previousT5", propPreviousKeyT5);
+				}
+				if (propPreviousKeyT6 != null) {
+					newprops.put("previousT6", propPreviousKeyT6);
+				}
+				c.update(newprops);
 
 		        // check T5
 		        final char deliveryMarker = key.charAt(0);
@@ -1340,7 +1310,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 *
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testTargetedFactoryPid() throws Exception {
     	trace("Testing targeted factory pids...");
 
@@ -1379,11 +1348,10 @@ public class CMControl extends DefaultTestBundleControl {
 				trace("Creating factory config " + factoryPid);
 				final Configuration c = this.cm.createFactoryConfiguration(factoryPid, null);
 				configs.add(c);
-				c.update(new Hashtable<String,Object>() {
-					{
-		        	put("test", c.getPid());
-		        	put("factoryPid", factoryPid);
-		        }});
+				Dictionary<String,Object> newprops = new Hashtable<>();
+				newprops.put("test", c.getPid());
+				newprops.put("factoryPid", factoryPid);
+				c.update(newprops);
 
 		        if ( factoryPid.indexOf("Not") != -1 ) {
 		        	assertNoCallback(sync1_1, count1_1);
@@ -1425,7 +1393,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 *
 	 * Enterprise 5.0 - ConfigAdmin 1.5
 	 */
-	@SuppressWarnings("serial")
 	public void testNegativeTargetedPid() throws Exception {
     	trace("Testing targeted pids...");
 
@@ -1458,11 +1425,7 @@ public class CMControl extends DefaultTestBundleControl {
 				trace("Creating config " + pid);
 				final Configuration c = this.cm.getConfiguration(pid, null);
 				configs.add(c);
-				c.update(new Hashtable<String,Object>() {
-		        	{
-		        		put("test", pid);
-		            }
-		        });
+				c.update(singletonDictionary("test", pid));
 
 		        if ( pid.indexOf("|") == -1 ) {
 		        	assertNoCallback(sync1_1, count1_1);
@@ -6419,7 +6382,7 @@ public class CMControl extends DefaultTestBundleControl {
 	// assertNoCallback(sync1_1, count1_1);
 	//
 	// trace("The configuration is being updated ");
-	// Dictionary props = new Hashtable();
+	// Dictionary<String,Object> props = new Hashtable<>();
 	// props.put("StringKey", "stringvalue");
 	// conf.update(props);
 	// trace("Wait for signal.");
@@ -7548,7 +7511,7 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("The configuration is being created");
 			Configuration conf = cm.getConfiguration(pid1, "?RegionA");
 			assertNotNull(conf);
-			// Dictionary props = new Hashtable();
+			// Dictionary<String,Object> props = new Hashtable<>();
 			// props.put("StringKey", "stringvalue");
 			// trace("The configuration is being updated ");
 			// conf.update(props);
@@ -9176,6 +9139,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 		for (final Capability capability : capabilities) {
 			final Map<String, Object> attributes = capability.getAttributes();
+			@SuppressWarnings("unchecked")
 			final List<String> objectClasses = (List<String>) attributes.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
 
 			if ((objectClasses != null) && objectClasses.contains(ConfigurationAdmin.class.getName())) {

@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -72,17 +75,17 @@ public class Execute {
 	public void testExecute001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testExecute001");
+			DefaultTestBundleControl.log("#testExecute001");
 			String data = "data";
 			String correlator = "correlator";
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.ROOT, correlator, data);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
-			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",correlator,DmtConstants.PARAMETER_2);
-			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",data,DmtConstants.PARAMETER_3);
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			TestCase.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",correlator,DmtConstants.PARAMETER_2);
+			TestCase.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",data,DmtConstants.PARAMETER_3);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -96,21 +99,21 @@ public class Execute {
 	public void testExecute002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testExecute002");
+			DefaultTestBundleControl.log("#testExecute002");
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.INTERIOR_NODE_EXCEPTION,"test", "test");
 			
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestExecPluginActivator.INTERIOR_NODE_EXCEPTION, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestExecPluginActivator.INTERIOR_NODE_EXCEPTION, e
 					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.CONCURRENT_ACCESS, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.CONCURRENT_ACCESS, e
 					.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
 					.getMessage().indexOf(TestExecPlugin.EXECUTE)>-1);	
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -125,16 +128,16 @@ public class Execute {
 	public void testExecute003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testExecute003");
+			DefaultTestBundleControl.log("#testExecute003");
 			String data = "data";
 
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.ROOT, data);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
-			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",data,DmtConstants.PARAMETER_3);
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			TestCase.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",data,DmtConstants.PARAMETER_3);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -148,21 +151,21 @@ public class Execute {
 	public void testExecute004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testExecute004");
+			DefaultTestBundleControl.log("#testExecute004");
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.INTERIOR_NODE_EXCEPTION,"test");
 			
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestExecPluginActivator.INTERIOR_NODE_EXCEPTION, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestExecPluginActivator.INTERIOR_NODE_EXCEPTION, e
 					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.CONCURRENT_ACCESS, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.CONCURRENT_ACCESS, e
 					.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
 					.getMessage().indexOf(TestExecPlugin.EXECUTE)>-1);	
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 		}

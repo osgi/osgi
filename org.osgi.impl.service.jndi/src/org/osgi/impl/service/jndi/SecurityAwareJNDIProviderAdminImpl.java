@@ -39,24 +39,30 @@ class SecurityAwareJNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 	private static final Logger logger = 
 		Logger.getLogger(SecurityAwareJNDIProviderAdminImpl.class.getName());
 	
-	private final CloseableJNDIProviderAdmin m_jndiProviderAdmin;
+	final CloseableJNDIProviderAdmin	m_jndiProviderAdmin;
 	
 	public SecurityAwareJNDIProviderAdminImpl(CloseableJNDIProviderAdmin jndiProviderAdmin) {
 		m_jndiProviderAdmin = jndiProviderAdmin;
 	}
 		
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws Exception {
-		PrivilegedExceptionAction action = 
+	@Override
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map<String, ? > environment) throws Exception {
+		PrivilegedExceptionAction< ? > action =
 			new GetObjectInstanceAction(refInfo, name, context, environment);
 		return invokePrivilegedAction(action);
 	}
 
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws Exception {
-		PrivilegedExceptionAction action = 
+	@Override
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map<String, ? > environment, Attributes attributes)
+			throws Exception {
+		PrivilegedExceptionAction< ? > action =
 			new GetObjectInstanceActionWithAttributes(refInfo, name, context, environment, attributes);
 		return invokePrivilegedAction(action);
 	}
 	
+	@Override
 	public void close() {
 		try {
 			SecurityUtils.invokePrivilegedActionNoReturn(new CloseAction());
@@ -68,24 +74,28 @@ class SecurityAwareJNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 		}
 	}
 	
-	private static Object invokePrivilegedAction(final PrivilegedExceptionAction action) throws Exception {
+	private static Object invokePrivilegedAction(
+			final PrivilegedExceptionAction< ? > action) throws Exception {
 		return SecurityUtils.invokePrivilegedAction(action);
 	}
 	
 	
-	private class GetObjectInstanceAction implements PrivilegedExceptionAction {
+	private class GetObjectInstanceAction
+			implements PrivilegedExceptionAction<Object> {
 		protected final Object m_refInfo;
 		protected final Name m_name;
 		protected final Context m_context;
-		protected final Map m_environment;
+		protected final Map<String, ? >	m_environment;
 		
-		GetObjectInstanceAction(Object refInfo, Name name, Context context, Map environment) {
+		GetObjectInstanceAction(Object refInfo, Name name, Context context,
+				Map<String, ? > environment) {
 			m_refInfo = refInfo;
 			m_name = name;
 			m_context = context;
 			m_environment = environment;
 		}
 		
+		@Override
 		public Object run() throws Exception {
 			return m_jndiProviderAdmin.getObjectInstance(m_refInfo, 
 					                                     m_name, 
@@ -98,12 +108,15 @@ class SecurityAwareJNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 	private class GetObjectInstanceActionWithAttributes extends GetObjectInstanceAction {
 		private final Attributes m_attributes;
 		
-		GetObjectInstanceActionWithAttributes(Object refInfo, Name name, Context context, Map environment, Attributes attributes) {
+		GetObjectInstanceActionWithAttributes(Object refInfo, Name name,
+				Context context, Map<String, ? > environment,
+				Attributes attributes) {
 			super(refInfo, name, context, environment);
 			m_attributes = attributes;
 		}
 		
 		
+		@Override
 		public Object run() throws Exception {
 			return m_jndiProviderAdmin.getObjectInstance(m_refInfo, 
 					                                     m_name, 
@@ -115,8 +128,13 @@ class SecurityAwareJNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 	}
 	
 	
-	private class CloseAction implements PrivilegedExceptionAction {
-		public Object run() throws Exception {
+	private class CloseAction implements PrivilegedExceptionAction<Void> {
+		CloseAction() {
+			super();
+		}
+
+		@Override
+		public Void run() throws Exception {
 			m_jndiProviderAdmin.close();
 			return null;
 		}

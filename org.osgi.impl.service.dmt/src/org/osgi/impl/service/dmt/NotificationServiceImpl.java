@@ -19,13 +19,12 @@ package org.osgi.impl.service.dmt;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
-
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.notification.AlertItem;
 import org.osgi.service.dmt.notification.NotificationService;
 import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 import org.osgi.service.dmt.security.AlertPermission;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class NotificationServiceImpl implements NotificationService {
     private Context context;
@@ -34,7 +33,8 @@ public class NotificationServiceImpl implements NotificationService {
         this.context = context;
     }
     
-    public void sendNotification(String principal, int code, String correlator,
+    @Override
+	public void sendNotification(String principal, int code, String correlator,
             AlertItem[] items) throws DmtException {
         
         SecurityManager sm = System.getSecurityManager();
@@ -73,17 +73,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
     
     private RemoteAlertSender getAlertSender(String principal) {
-        ServiceTracker remoteAdapterTracker = 
+		ServiceTracker<RemoteAlertSender,RemoteAlertSender> remoteAdapterTracker =
             context.getTracker(RemoteAlertSender.class);
        
-        ServiceReference[] alertSenderRefs = 
+		ServiceReference<RemoteAlertSender>[] alertSenderRefs =
             remoteAdapterTracker.getServiceReferences(); 
         
         if(alertSenderRefs == null)
             return null;
         
-        ServiceReference bestRef = null;
-        ServiceReference bestDefaultRef = null;
+		ServiceReference<RemoteAlertSender> bestRef = null;
+		ServiceReference<RemoteAlertSender> bestDefaultRef = null;
         
         // find the best adapter that accepts alerts for the given principal and
         // the best "default" adapter that is not associated with principals  
@@ -109,16 +109,17 @@ public class NotificationServiceImpl implements NotificationService {
         
         // return service object for the overall best reference
         // can still be null if service was unregistered in the meantime
-        return (RemoteAlertSender) remoteAdapterTracker.getService(bestRef);
+        return remoteAdapterTracker.getService(bestRef);
     }
     
     // precondition: reference parameter is not null
-    private boolean isDefaultSender(ServiceReference ref) {
+	private boolean isDefaultSender(ServiceReference< ? > ref) {
         return ref.getProperty("principals") == null;
     }
     
     // precondition: parameters are not null
-    private boolean acceptsServerId(ServiceReference ref, String principal) {
+	private boolean acceptsServerId(ServiceReference< ? > ref,
+			String principal) {
         Object param = ref.getProperty("principals");
         if(param == null || !(param instanceof String[]))
             return false;
@@ -131,8 +132,8 @@ public class NotificationServiceImpl implements NotificationService {
         return false;
     }
     
-    private ServiceReference betterRef(ServiceReference ref, 
-                                       ServiceReference best) {
+	private <T> ServiceReference<T> betterRef(ServiceReference<T> ref,
+			ServiceReference<T> best) {
         if(best == null)
             return ref;
        
@@ -145,7 +146,7 @@ public class NotificationServiceImpl implements NotificationService {
         return getId(ref) < getId(best) ? ref : best;
     }
     
-    private int getRanking(ServiceReference ref) {
+	private int getRanking(ServiceReference< ? > ref) {
         Object property = ref.getProperty(Constants.SERVICE_RANKING);
         // a ranking of 0 must be assumed if property is missing or invalid
         if(property == null || !(property instanceof Integer))
@@ -153,7 +154,7 @@ public class NotificationServiceImpl implements NotificationService {
         return ((Integer) property).intValue();
     }
     
-    private long getId(ServiceReference ref) {
+	private long getId(ServiceReference< ? > ref) {
         // this property must be guaranteed to be set by the framework
         return ((Long) ref.getProperty(Constants.SERVICE_ID)).longValue();
     }

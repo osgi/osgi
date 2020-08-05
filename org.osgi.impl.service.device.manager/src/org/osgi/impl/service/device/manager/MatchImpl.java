@@ -17,11 +17,13 @@
 package org.osgi.impl.service.device.manager;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.device.Device;
+import org.osgi.service.device.Driver;
 import org.osgi.service.device.DriverLocator;
 import org.osgi.service.device.Match;
 
@@ -30,7 +32,7 @@ public class MatchImpl implements Match {
 
     private Activator act;
 
-    private ServiceReference dev;
+	private ServiceReference< ? >	dev;
 
     private String id;
 
@@ -38,18 +40,18 @@ public class MatchImpl implements Match {
 
     private int match;
 
-    private Vector /* DriverLocator */dls;
+	private List<DriverLocator>		dls;
 
     private Bundle b;
 
-    MatchImpl(Activator act, ServiceReference dev, String id) {
+	MatchImpl(Activator act, ServiceReference< ? > dev, String id) {
         this.act = act;
         this.dev = dev;
         this.id = id;
         match = act.getCachedMatch(id, dev);
     }
 
-    MatchImpl(Activator act, ServiceReference dev, DriverRef dr) {
+	MatchImpl(Activator act, ServiceReference< ? > dev, DriverRef dr) {
         this.act = act;
         this.dev = dev;
         id = dr.id;
@@ -57,7 +59,7 @@ public class MatchImpl implements Match {
         match = act.getCachedMatch(id, dev);
     }
 
-    boolean equals(String id) {
+	boolean equals(@SuppressWarnings("hiding") String id) {
         return this.id.equals(id);
     }
 
@@ -80,8 +82,8 @@ public class MatchImpl implements Match {
 
     void addDriverLocator(DriverLocator dl) {
         if (dls == null)
-            dls = new Vector();
-        dls.addElement(dl);
+			dls = new Vector<>();
+		dls.add(dl);
     }
 
     Bundle getBundle() {
@@ -100,13 +102,13 @@ public class MatchImpl implements Match {
         }
         if (dls != null) {
             for (int i = 0; i < dls.size(); i++) {
-                if (load1(name, (DriverLocator) dls.elementAt(i)))
+				if (load1(name, dls.get(i)))
                     return true;
             }
         } else {
-            DriverLocator[] locs = act.locators;
-            for (int i = 0; i < locs.length; i++) {
-                if (load1(name, locs[i]))
+			List<DriverLocator> locs = act.locators;
+			for (int i = 0; i < locs.size(); i++) {
+				if (load1(name, locs.get(i)))
                     return true;
             }
         }
@@ -121,10 +123,12 @@ public class MatchImpl implements Match {
             if (b != null)
                 return true;
         } catch (Exception e) {
+			// ignore
         } finally {
             try {
                 is.close();
             } catch (Exception e1) {
+				// ignore
             }
         }
         return false;
@@ -138,11 +142,13 @@ public class MatchImpl implements Match {
         return ref.drv.attach(dev);
     }
 
-    public ServiceReference getDriver() {
+	@Override
+	public ServiceReference<Driver> getDriver() {
         return ref.sr;
     }
 
-    public int getMatchValue() {
+	@Override
+	public int getMatchValue() {
         if (match == UNKNOWN) {
             if (ref != null || b != null) {
                 try {

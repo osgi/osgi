@@ -32,36 +32,40 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 import javax.naming.spi.DirectoryManager;
-import javax.naming.spi.NamingManager;
 
 /**
  * @author $Id$
  */
 public class CTDirContext extends CTContext implements DirContext {
 	
-	protected static Map attributeMap = new HashMap();
+	protected static Map<String,Attributes> attributeMap = new HashMap<>();
 
 	public CTDirContext() throws NamingException {
 		super();
 	}
 	
-	public CTDirContext(Map env) throws NamingException {
+	public CTDirContext(Map<String, ? > env) throws NamingException {
 		super();
 	}
+	@Override
 	public void bind(String name, Object obj, Attributes attrs)	throws NamingException {
 		bind(new CompositeName(name), obj, attrs);
 	}
 
+	@Override
 	public void bind(Name name, Object obj, Attributes attrs) throws NamingException {
 		bind(name, obj);
 		attributeMap.put(name.toString(), attrs);
 	}
 
+	@Override
 	public Object lookup(String name) throws NamingException {
 		return lookup(new CompositeName(name));
 	}
 
+	@Override
 	public Object lookup(Name name) throws NamingException {
 		if (closed) {
 			throw new OperationNotSupportedException("This context has been closed.");
@@ -74,7 +78,7 @@ public class CTDirContext extends CTContext implements DirContext {
 		
 		if (obj instanceof Reference || obj instanceof Referenceable) {		
 			try {
-				return DirectoryManager.getObjectInstance(obj, null, null, null, (Attributes) attributeMap.get(name.toString()));
+				return DirectoryManager.getObjectInstance(obj, null, null, null, attributeMap.get(name.toString()));
 			} catch (Exception ex) {
 				throw new NamingException("Unable to retrieve reference");
 			}
@@ -85,28 +89,34 @@ public class CTDirContext extends CTContext implements DirContext {
 		}	
 	}
 	
+	@Override
 	public DirContext createSubcontext(String name, Attributes attrs) throws NamingException {
 		return createSubcontext(new CompositeName(name), attrs);
 	}
 
+	@Override
 	public DirContext createSubcontext(Name name, Attributes attrs)	throws NamingException {
 		throw new OperationNotSupportedException("Subcontexts are not supported");
 	}
 
+	@Override
 	public Attributes getAttributes(String name) throws NamingException {
 		return getAttributes(new CompositeName(name));
 	}
 
+	@Override
 	public Attributes getAttributes(Name name) throws NamingException {
-			return (Attributes) attributeMap.get(name.toString());
+			return attributeMap.get(name.toString());
 	}
 
+	@Override
 	public Attributes getAttributes(String name, String[] attrIds) throws NamingException {
 		return getAttributes(new CompositeName(name), attrIds);
 	}
 
+	@Override
 	public Attributes getAttributes(Name name, String[] attrIds) throws NamingException {
-		Attributes retrievedAttributes = (Attributes) attributeMap.get(name.toString());
+		Attributes retrievedAttributes = attributeMap.get(name.toString());
 		Attributes selectedAttributes = new BasicAttributes();
 		
 		if (attrIds != null) {
@@ -119,75 +129,101 @@ public class CTDirContext extends CTContext implements DirContext {
 		}
 	}
 
+	@Override
 	public DirContext getSchema(String name) throws NamingException {
 		return getSchema(new CompositeName(name));
 	}
 
+	@Override
 	public DirContext getSchema(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Schema are not supported");
 	}
 
+	@Override
 	public DirContext getSchemaClassDefinition(String name)	throws NamingException {
 		return getSchemaClassDefinition(new CompositeName(name));
 	}
 
+	@Override
 	public DirContext getSchemaClassDefinition(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Schema are not supported");
 	}
 
+	@Override
 	public void modifyAttributes(String var0, ModificationItem[] var1) throws NamingException {
 		throw new OperationNotSupportedException("modifyAttributes is not supported");
 	}
 
+	@Override
 	public void modifyAttributes(Name var0, ModificationItem[] var1) throws NamingException {
 		throw new OperationNotSupportedException("modifyAttributes is not supported");
 	}
 
+	@Override
 	public void modifyAttributes(String var0, int var1, Attributes var2) throws NamingException {
 		throw new OperationNotSupportedException("modifyAttributes is not supported");
 	}
 
+	@Override
 	public void modifyAttributes(Name var0, int var1, Attributes var2) throws NamingException {
 		throw new OperationNotSupportedException("modifyAttributes is not supported");
 	}
 
+	@Override
 	public void rebind(String var0, Object var1, Attributes var2) throws NamingException {
 		throw new OperationNotSupportedException("rebind is not supported");
 	}
 
+	@Override
 	public void rebind(Name var0, Object var1, Attributes var2)	throws NamingException {
 		throw new OperationNotSupportedException("rebind is not supported");
 	}
 
-	public NamingEnumeration search(String var0, Attributes var1)	throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(String var0, Attributes var1)
+			throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(Name var0, Attributes var1) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(Name var0, Attributes var1)
+			throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(String var0, String var1, SearchControls var2) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(String var0, String var1,
+			SearchControls var2) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(String var0, Attributes var1, String[] var2) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(String var0, Attributes var1,
+			String[] var2) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(Name var0, String var1, SearchControls var2) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(Name var0, String var1,
+			SearchControls var2) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(Name var0, Attributes var1, String[] var2) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(Name var0, Attributes var1,
+			String[] var2) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(String var0, String var1,	Object[] var2, SearchControls var3) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(String var0, String var1,
+			Object[] var2, SearchControls var3) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 
-	public NamingEnumeration search(Name var0, String var1, Object[] var2, SearchControls var3) throws NamingException {
+	@Override
+	public NamingEnumeration<SearchResult> search(Name var0, String var1,
+			Object[] var2, SearchControls var3) throws NamingException {
 		throw new OperationNotSupportedException("search is not supported");
 	}
 

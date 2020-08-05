@@ -37,6 +37,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -51,20 +52,22 @@ import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
  */
 public class ToBeOverlappedDataPluginActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	private ToBeOverlappedDataPlugin toBeOverlappedDataPlugin;
 	
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		toBeOverlappedDataPlugin = new ToBeOverlappedDataPlugin();
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { TestExecPluginActivator.ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		servReg = bc.registerService(ifs, toBeOverlappedDataPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, toBeOverlappedDataPlugin,
+				props);
 		System.out.println("ToBeOverlappedDataPlugin activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

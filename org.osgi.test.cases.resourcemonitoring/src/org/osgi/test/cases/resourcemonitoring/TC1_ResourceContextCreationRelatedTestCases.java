@@ -52,9 +52,9 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		ServiceReference serviceReference = getContext()
+		ServiceReference<ResourceMonitoringService> serviceReference = getContext()
 				.getServiceReference(ResourceMonitoringService.class);
-		resourceMonitoringService = (ResourceMonitoringService) getContext()
+		resourceMonitoringService = getContext()
 				.getService(serviceReference);
 
 		resourceContextListener = new ResourceContextListenerTestImpl();
@@ -233,8 +233,8 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 
 		// Checks that context2 has the same ResourceMonitors as context1.
-		ResourceMonitor[] rc1Monitors = resourceContext1.getMonitors();
-		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
+		ResourceMonitor< ? >[] rc1Monitors = resourceContext1.getMonitors();
+		ResourceMonitor< ? >[] rc2Monitors = resourceContext2.getMonitors();
 		assertEquals("ResourceMonitors list mismatch.", rc1Monitors.length, rc2Monitors.length);
 		assertEquals("ResourceType mismatch.", ResourceMonitoringService.RES_TYPE_CPU, rc2Monitors[0].getResourceType());
 	}
@@ -278,7 +278,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// Checks that context2 has no associated bundles.
 		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 		// Checks that context2 has no ResourceMonitor.
-		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
+		ResourceMonitor< ? >[] rc2Monitors = resourceContext2.getMonitors();
 		assertEquals("ResourceMonitors list mismatch.", 0, rc2Monitors.length);
 	}
 
@@ -337,7 +337,11 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// Retrieve all ServiceReference of ResourceMonitorFactory services
 		// through the BundleContext
-		Collection factorySrs = getContext().getServiceReferences(ResourceMonitorFactory.class, null);
+		@SuppressWarnings({
+				"unchecked", "rawtypes"
+		})
+		Collection<ServiceReference<ResourceMonitorFactory< ? >>> factorySrs = (Collection) getContext()
+				.getServiceReferences(ResourceMonitorFactory.class, null);
 
 		// Check that the number of ServiceReference is not null.
 		assertNotNull("The collection of ServiceReference of ResourceMonitorFactory services must not be null.", factorySrs);
@@ -348,9 +352,11 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// Iterate over the ServiceReference collection and retrieve each
 		// ResourceMonitorFactory service.
-		List computedSupportedTypes = new ArrayList();
-		for (Iterator it = factorySrs.iterator(); it.hasNext();) {
-			ResourceMonitorFactory rmf = (ResourceMonitorFactory) getContext().getService((ServiceReference) it.next());
+		List<String> computedSupportedTypes = new ArrayList<>();
+		for (Iterator<ServiceReference<ResourceMonitorFactory< ? >>> it = factorySrs
+				.iterator(); it.hasNext();) {
+			ResourceMonitorFactory< ? > rmf = getContext()
+					.getService(it.next());
 			// add the type in the list
 			computedSupportedTypes.add(rmf.getType());
 		}

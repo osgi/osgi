@@ -15,9 +15,6 @@
  */
 package org.osgi.test.cases.webcontainer.util.validate;
 
-import org.osgi.framework.Version;
-
- 
 /**
  * @version $Rev$ $Date$
  * 
@@ -50,8 +47,6 @@ public class ManifestPackage {
                 }
 
                 int value = version.indexOf(",");
-                Version minVersion;
-                Version maxVersion;
                 if (value > 0) {
                     this.packageVersion = new VersionRange(version);   
                 } else {

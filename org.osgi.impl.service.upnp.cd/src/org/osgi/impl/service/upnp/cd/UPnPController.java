@@ -2,7 +2,6 @@ package org.osgi.impl.service.upnp.cd;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -16,13 +15,15 @@ public class UPnPController implements BundleActivator {
 	private String				devexp;
 	private SSDPComponent		ssdpcomp;
 	private ControlImpl			control;
-	private Hashtable			httpServiceDesc;
 	private GenaServer			server;
 	private SubscriptionAlive	sa;
+	@SuppressWarnings("unused")
 	private BundleContext		bc;
 
 	// This method starts the CD bundle
-	public void start(BundleContext bc) throws Exception {
+	@Override
+	public void start(@SuppressWarnings("hiding") BundleContext bc)
+			throws Exception {
 		//System.out.println("UPnP : starting CD exporter");
 		this.bc = bc;
 		devexp = "2100";
@@ -64,7 +65,9 @@ public class UPnPController implements BundleActivator {
 	}
 
 	// This method stops the bundle
-	public void stop(BundleContext bc) throws Exception {
+	@Override
+	public void stop(@SuppressWarnings("hiding") BundleContext bc)
+			throws Exception {
 		try {
 			if (ssdpcomp != null) {
 				ssdpcomp.killSSDP();

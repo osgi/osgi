@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package org.osgi.service.zigbee;
 
 import java.math.BigInteger;
+import java.util.List;
+
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.util.promise.Promise;
 
@@ -140,7 +142,7 @@ public interface ZigBeeEndpoint {
 	 *         {@link ZDPException} otherwise.
 	 * 
 	 */
-	public Promise /* <ZigBeeSimpleDescriptor> */ getSimpleDescriptor();
+	public Promise<ZigBeeSimpleDescriptor> getSimpleDescriptor();
 
 	/**
 	 * Returns an array of server (input) clusters.
@@ -202,7 +204,7 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate {@link ZigBeeEndpoint} is
 	 *         returned otherwise.
 	 */
-	public Promise /* <Void> */ bind(String servicePid, int clusterId);
+	public Promise<Void> bind(String servicePid, int clusterId);
 
 	/**
 	 * Removes the following entry in the <i>Binding Table</i> of the device if
@@ -226,7 +228,7 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate {@link APSException} is returned
 	 *         otherwise.
 	 */
-	public Promise /* <Void> */ unbind(String servicePid, int clusterId);
+	public Promise<Void> unbind(String servicePid, int clusterId);
 
 	/**
 	 * Notifies that the base driver is unable to export this endpoint. This
@@ -256,6 +258,6 @@ public interface ZigBeeEndpoint {
 	 *         null and the adequate {@link APSException} is returned by
 	 *         {@link Promise#getFailure()} otherwise.
 	 */
-	public Promise/* <List<String>> */ getBoundEndPoints(int clusterId);
+	public Promise<List<String>> getBoundEndPoints(int clusterId);
 
 }

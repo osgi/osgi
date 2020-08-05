@@ -64,22 +64,27 @@ public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
 
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return null;
 	}
 	
 
+	@Override
 	public void close() throws DmtException {
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestNonAtomicPluginActivator.ROOT)
@@ -92,39 +97,48 @@ public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
 		}
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		return new DmtData("");
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 		return 0;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 			return null;
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
 		return null;
 	}
 
 	
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestNonAtomicPluginActivator.LEAF_NODE)) {
@@ -134,6 +148,7 @@ public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
 		}
 	}
 
+	@Override
 	public void nodeChanged(String[] nodeUri) throws DmtException {
 
 	}

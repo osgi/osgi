@@ -1,15 +1,21 @@
 package org.osgi.impl.service.upnp.cd.control;
 
-import java.util.*;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cd.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.osgi.impl.service.upnp.cd.util.SoapTypeConstants;
+import org.osgi.impl.service.upnp.cd.util.SoapTypeConverter;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 // The object of this is created when a soap request is parsed. It contains methods which are called
 // to get the value of the elements.
 public class ParsedRequest {
 	private String		serviceType;
 	private String		actionName;
-	private Dictionary	args;
+	private Dictionary<String,Object>	args;
 	private String		returnValue;
 	private String[]	arglist;
 
@@ -26,7 +32,7 @@ public class ParsedRequest {
 	// This method sets the given argument name and value.
 	public void setArgument(String argName, String argValue) {
 		if (args == null) {
-			args = new Hashtable();
+			args = new Hashtable<>();
 			returnValue = argValue;
 		}
 		args.put(argName, argValue);
@@ -43,37 +49,40 @@ public class ParsedRequest {
 	}
 
 	// This method returns all the arguments
-	public Dictionary getArguments(UPnPService upnpservice, String actionName)
+	public Dictionary<String,Object> getArguments(UPnPService upnpservice,
+			@SuppressWarnings("hiding") String actionName)
 			throws Exception {
-		Hashtable stat_dt = new Hashtable();
+		Hashtable<String,String> stat_dt = new Hashtable<>();
 		UPnPAction upnpaction = upnpservice.getAction(actionName);
 		arglist = upnpaction.getInputArgumentNames();
 		for (int j = 0; j < arglist.length; j++) {
-			UPnPStateVariable USV = (UPnPStateVariable) upnpservice
+			UPnPStateVariable USV = upnpservice
 					.getStateVariable(arglist[j]);
 			stat_dt.put(arglist[j], USV.getUPnPDataType());
 		}
 		return upnp2java_converter(args, stat_dt);
 	}
 
-	public Dictionary getParams(UPnPAction upnpaction, Dictionary params)
+	public Dictionary<String,Object> getParams(UPnPAction upnpaction,
+			Dictionary<String,Object> params)
 			throws Exception {
-		Hashtable stat_dt = new Hashtable();
+		Hashtable<String,Object> stat_dt = new Hashtable<>();
 		arglist = upnpaction.getOutputArgumentNames();
 		for (int j = 0; j < arglist.length; j++) {
-			UPnPStateVariable USV = (UPnPStateVariable) upnpaction
+			UPnPStateVariable USV = upnpaction
 					.getStateVariable(arglist[j]);
 			stat_dt.put(arglist[j], USV.getUPnPDataType());
 		}
 		return java2upnp_converter(params, stat_dt);
 	}
 
-	private Dictionary upnp2java_converter(Dictionary outparms,
-			Hashtable stat_dt) throws Exception {
-		for (Enumeration e = outparms.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
+	private Dictionary<String,Object> upnp2java_converter(
+			Dictionary<String,Object> outparms,
+			Hashtable<String,String> stat_dt) throws Exception {
+		for (Enumeration<String> e = outparms.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
 			String value = (String) outparms.get(key);
-			String type = (String) stat_dt.get(key);
+			String type = stat_dt.get(key);
 			outparms.remove(key);
 			if (type.equals(SoapTypeConstants.SOAP_TYPE_UI1)
 					|| type.equals(SoapTypeConstants.SOAP_TYPE_UI2)
@@ -153,11 +162,12 @@ public class ParsedRequest {
 		return outparms;
 	}
 
-	private Dictionary java2upnp_converter(Dictionary inparms,
-			Hashtable Input_dict) throws Exception {
-		for (Enumeration e = inparms.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			Object value = (Object) inparms.get(key);
+	private Dictionary<String,Object> java2upnp_converter(
+			Dictionary<String,Object> inparms,
+			Hashtable<String,Object> Input_dict) throws Exception {
+		for (Enumeration<String> e = inparms.keys(); e.hasMoreElements();) {
+			String key = e.nextElement();
+			Object value = inparms.get(key);
 			String type = (String) Input_dict.get(key);
 			inparms.remove(key);
 			if (type.equals(SoapTypeConstants.SOAP_TYPE_UI1)

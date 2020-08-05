@@ -2,7 +2,6 @@ Bundle-Description: 					Web Container test handler bundle
 Bundle-SymbolicName: 					${p}.handler
 Bundle-Name:                            ${p}.handler
 Bundle-Version:                         4.2
--privatepackage:                        ${p}.handler
 Export-Package:                         ${p}.handler;version=1.0
 Bundle-Activator:						${p}.handler.ExtenderTestEventHandler
 Import-Package:                         org.osgi.framework, org.osgi.service.event, ${p}.util

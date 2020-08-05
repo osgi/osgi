@@ -62,7 +62,8 @@ public class EventTest extends WebContainerTestBundleControl {
 
         // verify event admin service is installed
         log("verify event admin service is installed.  The tests in this class require event admin service being installed.");
-        ServiceReference sr = getContext().getServiceReference(EventAdmin.class.getName());
+		ServiceReference<EventAdmin> sr = getContext()
+				.getServiceReference(EventAdmin.class);
         assertNotNull("EventAdmin service is not available", sr);
         assertNotNull(getContext().getService(sr));
 
@@ -115,7 +116,7 @@ public class EventTest extends WebContainerTestBundleControl {
         assertEquals(this.b.getBundleId(), eventPrevious.getProperty(EventConstants.BUNDLE_ID));
         assertEquals(this.b, eventPrevious.getProperty(EventConstants.BUNDLE));
         assertEquals(this.b.getVersion(), eventPrevious.getProperty(EventConstants.BUNDLE_VERSION));
-        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
+        assertEquals(this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(startingTime);
         assertNotNull(eventPrevious.getProperty(EXTENDER_BUNDLE));
         assertNotNull(eventPrevious.getProperty(EXTENDER_BUNDLE_ID));
@@ -127,7 +128,7 @@ public class EventTest extends WebContainerTestBundleControl {
         assertEquals(this.b.getBundleId(), eventCurrent.getProperty(EventConstants.BUNDLE_ID));
         assertEquals(this.b, eventCurrent.getProperty(EventConstants.BUNDLE));
         assertEquals(this.b.getVersion(), eventCurrent.getProperty(EventConstants.BUNDLE_VERSION));
-        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
+        assertEquals(this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(startedTime);
         assertNotNull(eventCurrent.getProperty(EXTENDER_BUNDLE));
         assertNotNull(eventCurrent.getProperty(EXTENDER_BUNDLE_ID));
@@ -170,7 +171,8 @@ public class EventTest extends WebContainerTestBundleControl {
      * this test tests a war start failure with correct events emitted.
      * @throws Exception
      */
-    public void testEvent002() throws Exception {
+	@SuppressWarnings("unchecked")
+	public void testEvent002() throws Exception {
         // start the bundle again and try deploy another bundle that cause a failure
         this.b.start();
         // wait a few seconds to make sure events are delivered.
@@ -214,7 +216,7 @@ public class EventTest extends WebContainerTestBundleControl {
             assertEquals(b2.getBundleId(), eventPrevious.getProperty(EventConstants.BUNDLE_ID));
             assertEquals(b2, eventPrevious.getProperty(EventConstants.BUNDLE));
             assertEquals(b2.getVersion(), eventPrevious.getProperty(EventConstants.BUNDLE_VERSION));
-            assertEquals((String)b2.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
+            assertEquals(b2.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
             assertNotNull(startingTime);
             assertNotNull(eventPrevious.getProperty(EXTENDER_BUNDLE));
             assertNotNull(eventPrevious.getProperty(EXTENDER_BUNDLE_ID));
@@ -226,7 +228,7 @@ public class EventTest extends WebContainerTestBundleControl {
             assertEquals(b2.getBundleId(), eventCurrent.getProperty(EventConstants.BUNDLE_ID));
             assertEquals(b2, eventCurrent.getProperty(EventConstants.BUNDLE));
             assertEquals(b2.getVersion(), eventCurrent.getProperty(EventConstants.BUNDLE_VERSION));
-            assertEquals((String)b2.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
+            assertEquals(b2.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
             assertNotNull(failedTime);
             assertNotNull(eventCurrent.getProperty(EXTENDER_BUNDLE));
             assertNotNull(eventCurrent.getProperty(EXTENDER_BUNDLE_ID));

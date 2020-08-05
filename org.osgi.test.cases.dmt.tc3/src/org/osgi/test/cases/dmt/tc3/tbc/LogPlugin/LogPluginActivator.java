@@ -17,14 +17,14 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.LogPlugin;
 
-import org.osgi.service.dmt.spi.DataPlugin;
-
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -33,25 +33,26 @@ public class LogPluginActivator implements BundleActivator {
         new String[] { ".", "OSGi", "Log" };
     static final String PLUGIN_ROOT_URI = "./OSGi/Log";
 
-    private ServiceRegistration servReg;
-	private ServiceTracker      logReaderTracker;
+	private ServiceRegistration<DataPlugin>						servReg;
+	private ServiceTracker<LogReaderService,LogReaderService>	logReaderTracker;
     private LogPlugin           logPlugin;
 
+	@Override
 	public void start(BundleContext bc) throws BundleException {
         System.out.println("Log plugin activated.");
 		// setting up the needed trackers
         logReaderTracker = 
-            new ServiceTracker(bc, LogReaderService.class.getName(), null);
+				new ServiceTracker<>(bc, LogReaderService.class, null);
         logReaderTracker.open();
 
 		// creating the service
 		logPlugin = new LogPlugin(bc, logReaderTracker);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
-		String[] ifs = new String[] {DataPlugin.class.getName()};
-		servReg = bc.registerService(ifs, logPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, logPlugin, props);
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws BundleException {
         // closing the used trackers
 		logReaderTracker.close();

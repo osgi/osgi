@@ -3,7 +3,7 @@ package org.osgi.test.cases.dmt.tc4.rfc141.plugins;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 	
 	private String name;
 	private String value;
@@ -12,7 +12,7 @@ public class Node implements Comparable {
 	
 
 	private Node parent;
-	private TreeSet children;
+	private TreeSet<Node>	children;
 
 	public Node( Node parent, String name, String value ) {
 		this.parent = parent;
@@ -34,11 +34,12 @@ public class Node implements Comparable {
 		return path;
 	}
 	
+	@SuppressWarnings("unused")
 	private Node getChildNode( String name ) {
-		Iterator iterator = getChildren().iterator();
+		Iterator<Node> iterator = getChildren().iterator();
 		Node node = null;
 		while ( iterator.hasNext() ) {
-			Node n = (Node) iterator.next();
+			Node n = iterator.next();
 			if ( name.equals( n.getName() ))
 				node = n;
 		}
@@ -85,13 +86,14 @@ public class Node implements Comparable {
 		this.parent = parent;
 	}
 
-	public TreeSet getChildren() {
+	public TreeSet<Node> getChildren() {
 		if ( children == null )
-			children = new TreeSet();
+			children = new TreeSet<>();
 		return children;
 	}
 
 	
+	@Override
 	public String toString() {
 		return getURI();
 	}
@@ -105,10 +107,11 @@ public class Node implements Comparable {
 		System.out.println( n3.getPath() );
 	}
 
-	public int compareTo(Object o) {
-		if ( o == null || ! (o instanceof Node) )
+	@Override
+	public int compareTo(Node o) {
+		if (o == null)
 			return -1; 
-		return this.getURI().compareTo(((Node)o).getURI());
+		return this.getURI().compareTo(o.getURI());
 	}
 	
 	public String getTitle() {

@@ -45,6 +45,9 @@ import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -59,6 +62,7 @@ public class GetLockType implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testGetLockType001();
@@ -79,10 +83,10 @@ public class GetLockType implements TestInterface {
 	private void testGetLockType001() {
 		DmtSession session = null;
 	    try {
-			tbc.log("#testGetLockType001");
+			DefaultTestBundleControl.log("#testGetLockType001");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
-	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_ATOMIC,
+	        TestCase.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_ATOMIC,
 	                session.getLockType());
 	    } catch (Exception e) {
 	    	tbc.failUnexpectedException(e);
@@ -100,10 +104,10 @@ public class GetLockType implements TestInterface {
 	private void testGetLockType002() {
 		DmtSession session = null;
 	    try {
-			tbc.log("#testGetLockType002");
+			DefaultTestBundleControl.log("#testGetLockType002");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_EXCLUSIVE,
+	        TestCase.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_EXCLUSIVE,
 	                session.getLockType());
 	    } catch (Exception e) {
 	    	tbc.failUnexpectedException(e);
@@ -121,12 +125,12 @@ public class GetLockType implements TestInterface {
 	private void testGetLockType003() {
 		DmtSession session = null;
 	    try {
-			tbc.log("#testGetLockType003");
+			DefaultTestBundleControl.log("#testGetLockType003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
-	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_SHARED,
+	        TestCase.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_SHARED,
 	                session.getLockType());
 	    } catch (Exception e) {
 	    	tbc.failUnexpectedException(e);

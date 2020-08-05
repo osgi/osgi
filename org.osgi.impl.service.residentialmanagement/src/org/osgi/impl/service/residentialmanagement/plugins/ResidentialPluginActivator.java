@@ -37,6 +37,7 @@ public class ResidentialPluginActivator implements BundleActivator {
 
 
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		filters = new FiltersPluginActivator();
 		filters.start(context);
@@ -48,6 +49,7 @@ public class ResidentialPluginActivator implements BundleActivator {
 		framework.start(context);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		framework.stop(context);
 		log.stop(context);

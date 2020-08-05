@@ -18,11 +18,6 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
@@ -31,6 +26,10 @@ import java.util.List;
 import java.util.Vector;
 
 import org.osgi.service.cm.Configuration;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 
 class ConfigReadOnlySession implements ReadableDataSession {
     
@@ -51,15 +50,18 @@ class ConfigReadOnlySession implements ReadableDataSession {
         this.plugin = plugin;
     }
 
-    public void nodeChanged(String[] fullPath) throws DmtException {
+    @Override
+	public void nodeChanged(String[] fullPath) throws DmtException {
         // do nothing - the version and timestamp properties are not supported
     }
 
-    public void close() throws DmtException {
+    @Override
+	public void close() throws DmtException {
         // no cleanup needs to be done when closing read-only session
     }
 
-    public String[] getChildNodeNames(String[] fullPath) throws DmtException {
+    @Override
+	public String[] getChildNodeNames(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         if (path.length == 0)
             return getConfigurationIds(fullPath);
@@ -72,29 +74,29 @@ class ConfigReadOnlySession implements ReadableDataSession {
         }
         
         if (path.length == 1) {
-            List l = new ArrayList();
+			List<String> l = new ArrayList<>();
             l.add(PID);
             l.add(LOCATION);
             l.add(KEYS);
             if(configuration.getFactoryPid() != null)
                 l.add(FACTORY_PID);
-            return (String[]) l.toArray(new String[l.size()]);
+			return l.toArray(new String[0]);
         }
         
-        Dictionary entries = configuration.getProperties();
+		Dictionary<String,Object> entries = configuration.getProperties();
         if(entries == null)
             // this shouldn't happen, empty configs must be ignored at lookup
             return new String[] {};
         
         if(path.length == 2) {
-            List keyList = new ArrayList();
-            Enumeration keys = entries.keys();
+			List<String> keyList = new ArrayList<>();
+			Enumeration<String> keys = entries.keys();
             while (keys.hasMoreElements()) {
-                String key = (String) keys.nextElement();
+                String key = keys.nextElement();
                 if(!isEmptyVector(entries.get(key)))
                     keyList.add(key);
             }
-            return (String[]) keyList.toArray(new String[keyList.size()]);
+			return keyList.toArray(new String[0]);
         }
         
         Object value = entries.get(path[2]);
@@ -130,7 +132,8 @@ class ConfigReadOnlySession implements ReadableDataSession {
         return children;
     }
 
-    public MetaNode getMetaNode(String[] fullPath) throws DmtException {
+    @Override
+	public MetaNode getMetaNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
     
         if (path.length == 0) // ./OSGi/Configuration
@@ -248,26 +251,31 @@ class ConfigReadOnlySession implements ReadableDataSession {
                 "No such node defined in the configuration tree.");
     }
 
-    public int getNodeSize(String[] fullPath) throws DmtException {
+    @Override
+	public int getNodeSize(String[] fullPath) throws DmtException {
         return getNodeValue(fullPath).getSize();
     }
 
-    public int getNodeVersion(String[] fullPath) throws DmtException {
+    @Override
+	public int getNodeVersion(String[] fullPath) throws DmtException {
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Version property not supported.");
     }
 
-    public Date getNodeTimestamp(String[] fullPath) throws DmtException {
+    @Override
+	public Date getNodeTimestamp(String[] fullPath) throws DmtException {
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Timestamp property not supported.");
     }
 
-    public String getNodeTitle(String[] fullPath) throws DmtException {
+    @Override
+	public String getNodeTitle(String[] fullPath) throws DmtException {
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Title property not supported.");
     }
 
-    public String getNodeType(String[] fullPath) throws DmtException {
+    @Override
+	public String getNodeType(String[] fullPath) throws DmtException {
         if(isLeafNode(fullPath))
             return ConfigMetaNode.LEAF_MIME_TYPE;
         
@@ -278,7 +286,8 @@ class ConfigReadOnlySession implements ReadableDataSession {
         return null;
     }
 
-    public boolean isNodeUri(String[] fullPath) {
+    @Override
+	public boolean isNodeUri(String[] fullPath) {
         String[] path = chopPath(fullPath);
 
         if(path.length == 0) // $/Configuration
@@ -310,7 +319,7 @@ class ConfigReadOnlySession implements ReadableDataSession {
         if(!path[1].equals(KEYS))
             return false;
         
-        Dictionary entries = configuration.getProperties();
+		Dictionary<String,Object> entries = configuration.getProperties();
         if(entries == null)
             return false; // no keys set in the configuration table
         
@@ -351,7 +360,8 @@ class ConfigReadOnlySession implements ReadableDataSession {
         }
     }
 
-    public boolean isLeafNode(String[] fullPath) throws DmtException {
+    @Override
+	public boolean isLeafNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
 
         // not checking whether the node still exists - it did exist when 
@@ -362,7 +372,8 @@ class ConfigReadOnlySession implements ReadableDataSession {
             || path.length == 5;
     }
 
-    public DmtData getNodeValue(String[] fullPath) throws DmtException {
+    @Override
+	public DmtData getNodeValue(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         
         // path.length > 1  because only leaf nodes are given
@@ -389,7 +400,7 @@ class ConfigReadOnlySession implements ReadableDataSession {
         }
         
         // path.length > 3
-        Dictionary entries = configuration.getProperties();
+		Dictionary<String,Object> entries = configuration.getProperties();
         if(entries == null)
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                     "The specified key does not exist in the configuration.");
@@ -458,7 +469,7 @@ class ConfigReadOnlySession implements ReadableDataSession {
     }
     
     protected static boolean isEmptyVector(Object value) {
-        return value instanceof Vector && ((Vector)value).size() == 0;
+		return value instanceof Vector && ((Vector< ? >) value).size() == 0;
     }
     
     /**

@@ -11,6 +11,6 @@ import org.osgi.framework.ServiceReference;
  */
 public interface MappingListener {
 	
-	void pluginMappingChanged( String pluginRoot, ServiceReference ref );
+	void pluginMappingChanged(String pluginRoot, ServiceReference< ? > ref);
 
 }

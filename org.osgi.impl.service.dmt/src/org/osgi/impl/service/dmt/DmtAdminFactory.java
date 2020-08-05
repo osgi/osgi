@@ -17,21 +17,23 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
+import org.osgi.service.dmt.DmtAdmin;
 
 /*
  * Service factory class for the Dmt Admin service. Stores each Dmt Admin
  * delegate that is in use, and forwards DMT events to each one, for delivery to
  * the registered event listeners.
  */
-public class DmtAdminFactory implements ServiceFactory {
-    private DmtAdminCore dmtAdmin;
-    private Vector delegates;
+public class DmtAdminFactory implements ServiceFactory<DmtAdmin> {
+	DmtAdminCore					dmtAdmin;
+	private List<DmtAdminDelegate>	delegates;
     private Context context;
     private LocalEventProxy localEventProxy;
 
@@ -44,17 +46,20 @@ public class DmtAdminFactory implements ServiceFactory {
         
         new Thread(localEventProxy).start();
         
-        delegates = new Vector();
+		delegates = new Vector<>();
     }
 
-    public Object getService(Bundle bundle, ServiceRegistration registration) {
+    @Override
+	public DmtAdmin getService(Bundle bundle,
+			ServiceRegistration<DmtAdmin> registration) {
         DmtAdminDelegate delegate = new DmtAdminDelegate(dmtAdmin, context, bundle);
         delegates.add(delegate);
         return delegate;
     }
 
-    public void ungetService(Bundle bundle, ServiceRegistration registration,
-            Object service) {
+    @Override
+	public void ungetService(Bundle bundle,
+			ServiceRegistration<DmtAdmin> registration, DmtAdmin service) {
         DmtAdminDelegate delegate = (DmtAdminDelegate) service;
         delegates.remove(delegate);
         delegate.close();
@@ -67,7 +72,8 @@ public class DmtAdminFactory implements ServiceFactory {
     class LocalEventProxy implements Runnable {
         private boolean running = false;
         
-        public void run() {
+        @Override
+		public void run() {
             running = true;
             
             while(running) {

@@ -39,10 +39,9 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtException;
 
-import org.osgi.service.dmt.DmtIllegalStateException;
-
 import java.util.Vector;
 
+import org.osgi.service.dmt.DmtIllegalStateException;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -295,7 +294,7 @@ public class DmtException extends DmtTestControl {
 	 */
 	public void testDmtException009() {
 		log("#testDmtException009");
-		Vector causes = new Vector();
+		Vector<Exception> causes = new Vector<>();
 		causes.add(0, new DmtIllegalStateException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
 		causes.add(2, new IllegalArgumentException(EXCEPTION_MSG));
@@ -357,7 +356,10 @@ public class DmtException extends DmtTestControl {
 	 */
 	public void testDmtException010() {
 		log("#testDmtException010");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String)null, org.osgi.service.dmt.DmtException.TRANSACTION_ERROR, null, (Vector)null, true);
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+				(String) null,
+				org.osgi.service.dmt.DmtException.TRANSACTION_ERROR, null, null,
+				true);
 		assertNull("Asserts getURI() method", de.getURI());
 		assertEquals("Asserts getMessage() method", "TRANSACTION_ERROR", de
 				.getMessage());
@@ -380,7 +382,7 @@ public class DmtException extends DmtTestControl {
 	 */
 	public void testDmtException011() {
 		log("#testDmtException011");
-		Vector causes = new Vector();
+		Vector<Exception> causes = new Vector<>();
 		causes.add(0, new IllegalArgumentException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
 		causes.add(2, new DmtIllegalStateException(EXCEPTION_MSG));
@@ -441,7 +443,10 @@ public class DmtException extends DmtTestControl {
 	 */
 	public void testDmtException012() {
 		log("#testDmtException012");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String[])null, org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS, null, (Vector)null, true);
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+				(String[]) null,
+				org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS, null,
+				null, true);
 		
 		assertNull("Asserts getURI() method", de.getURI());
 		assertEquals("Asserts getMessage() method", "NODE_ALREADY_EXISTS", de

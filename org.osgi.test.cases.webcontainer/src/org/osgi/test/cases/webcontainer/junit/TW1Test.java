@@ -49,7 +49,8 @@ public class TW1Test extends WebContainerTestBundleControl {
         assertTrue("the ServletContext should be registered", register);
     }
     
-    public void tearDown() throws Exception {
+    @Override
+	public void tearDown() throws Exception {
         super.tearDown();
         
         // verify tw1.war is cleaned uninstalled and page is not servable

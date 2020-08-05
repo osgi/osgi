@@ -2,8 +2,9 @@
 package org.osgi.impl.service.zigbee.event;
 
 import java.util.LinkedList;
-import org.osgi.service.zigbee.ZCLCommandResponseStream;
+
 import org.osgi.service.zigbee.ZCLCommandResponse;
+import org.osgi.service.zigbee.ZCLCommandResponseStream;
 import org.osgi.util.function.Predicate;
 
 public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
@@ -14,13 +15,13 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 
 	private boolean			dequeuing;
 
-	private LinkedList		buffer;
+	private LinkedList<ZCLCommandResponse>			buffer;
 
-	private Predicate		handler;
+	private Predicate< ? super ZCLCommandResponse>	handler;
 
 	public void handleResponse(ZCLCommandResponse response) {
 
-		Predicate handlerToUse;
+		Predicate< ? super ZCLCommandResponse> handlerToUse;
 		synchronized (lock) {
 			if (closed) {
 				// no need to deliver this event
@@ -29,7 +30,7 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 
 			if (this.handler == null) {
 				if (buffer == null) {
-					buffer = new LinkedList();
+					buffer = new LinkedList<>();
 				}
 				buffer.add(response);
 				return;
@@ -68,7 +69,7 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 
 	private void processBuffer() {
 		for (;;) {
-			Predicate handlerToUse;
+			Predicate< ? super ZCLCommandResponse> handlerToUse;
 			ZCLCommandResponse response;
 			synchronized (lock) {
 				if (closed) {
@@ -77,7 +78,7 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 				}
 				if (buffer != null) {
 					dequeuing = true;
-					response = (ZCLCommandResponse) buffer.removeFirst();
+					response = buffer.removeFirst();
 					handlerToUse = handler;
 					if (buffer.isEmpty()) {
 						buffer = null;
@@ -100,6 +101,7 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 		}
 	}
 
+	@Override
 	public void close() {
 		synchronized (lock) {
 			if (closed) {
@@ -114,7 +116,10 @@ public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 		}
 	}
 
-	public void forEach(Predicate handler) throws IllegalStateException {
+	@Override
+	public void forEach(
+			@SuppressWarnings("hiding") Predicate< ? super ZCLCommandResponse> handler)
+			throws IllegalStateException {
 		if (handler == null) {
 			throw new IllegalArgumentException("The handler function must not be null");
 		}

@@ -50,7 +50,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author steffen
  *
  */
-public class DmtAdminCore extends ServiceTracker implements MappingListener {
+public class DmtAdminCore
+		extends ServiceTracker<DmtEventListener,DmtEventListener>
+		implements MappingListener {
 
     private static final int ALL_EVENT_TYPES =
         DmtEvent.ADDED | DmtEvent.COPIED | DmtEvent.DELETED | DmtEvent.RENAMED |
@@ -70,9 +72,10 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 	private static long sessionIdleTimeout = -1;
     
     // all currently registered DmtEventListener refs matching the filter above
-    protected Set dmtEventListenerRefs; 
+	protected Set<ServiceReference<DmtEventListener>>	dmtEventListenerRefs;
 
-    private Context context;
+	@SuppressWarnings("hiding")
+	private Context										context;
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
     
     private List<SessionWrapper> openSessions; // a list of DmtSession refs to open sessions
@@ -84,7 +87,7 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
         this.context = context;
 		this.dmtPermissionAdmin = dmtPermissionAdmin;
 		
-		openSessions = new Vector();
+		openSessions = new Vector<>();
 	}
 
 	public DmtSession getSession(String subtreeUri, Bundle initiatingBundle) throws DmtException {
@@ -103,8 +106,7 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
         
         PermissionInfo[] permissions = null;
         if(principal != null)
-            permissions = (PermissionInfo[]) 
-                dmtPermissionAdmin.getPrincipalPermissions().get(principal);
+            permissions = dmtPermissionAdmin.getPrincipalPermissions().get(principal);
         
         if(subtreeUri == null)
             subtreeUri = ".";
@@ -125,7 +127,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 	/**
 	 * a DmtEventListener was added
 	 */
-	public Object addingService(ServiceReference ref) {
+	@Override
+	public DmtEventListener addingService(
+			ServiceReference<DmtEventListener> ref) {
 		if ( isValidDmtEventListener(ref) )
 			getDmtEventListenerRefs().add(ref);
 		return context.getBundleContext().getService(ref);
@@ -134,7 +138,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 	/**
 	 * a DmtEventListener was modified
 	 */
-	public void modifiedService(ServiceReference ref, Object service) {
+	@Override
+	public void modifiedService(ServiceReference<DmtEventListener> ref,
+			DmtEventListener service) {
 		if ( isValidDmtEventListener(ref) )
 			getDmtEventListenerRefs().add(ref);
 		else
@@ -144,7 +150,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 	/**
 	 * a DmtEventListener was removed
 	 */
-	public void removedService(ServiceReference ref, Object service) {
+	@Override
+	public void removedService(ServiceReference<DmtEventListener> ref,
+			DmtEventListener service) {
 		getDmtEventListenerRefs().remove(ref);
 		context.getBundleContext().ungetService(ref);
 	}
@@ -177,7 +185,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
             
             try {
                 wait(timeLeft);
-            } catch(InterruptedException e) {}
+			} catch (InterruptedException e) {
+				// ignore
+			}
             
             // if wait() terminated because of timeout, then there must still
             // be a conflict (if the code works as it should)
@@ -185,9 +195,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
     }
     
     private boolean conflictsWithOpenSessions(Node subtreeNode, int lockMode) {
-        Iterator i = openSessions.iterator();
+		Iterator<SessionWrapper> i = openSessions.iterator();
         while (i.hasNext()) {
-            DmtSessionImpl openSession = (DmtSessionImpl) i.next();
+            DmtSessionImpl openSession = i.next();
             if(subtreeNode.isOnSameBranch(openSession.getRootNode()) && 
                     (lockMode != DmtSession.LOCK_TYPE_SHARED || 
                      openSession.getLockType() != DmtSession.LOCK_TYPE_SHARED))
@@ -207,9 +217,10 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 
 	long getSessionCreationTimeout() {
 		if ( sessionOpenTimeout == -1) {
-			sessionOpenTimeout = ((Long) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
+			sessionOpenTimeout = AccessController
+					.doPrivileged(new PrivilegedAction<Long>() {
+						@Override
+						public Long run() {
 							String limitString = SESSION_CREATION_TIMEOUT;
 							long limit = MINIMUM_OPEN_TIMEOUT; // min.
 																			// used
@@ -222,20 +233,23 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 									limit = limitLong;
 							}
 							catch (NumberFormatException e) {
+								// ignore
 							}
 
 							return Long.valueOf(limit);
 						}
-					})).longValue();
+					})
+					.longValue();
 		}
 		return sessionOpenTimeout;
 	}
 
 	long getSessionInactivityTimeout() {
 		if ( sessionIdleTimeout == -1) {
-			sessionIdleTimeout = ((Long) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
+			sessionIdleTimeout = AccessController
+					.doPrivileged(new PrivilegedAction<Long>() {
+						@Override
+						public Long run() {
 							String limitString = System
 									.getProperty(SESSION_INACTIVE_TIMEOUT);
 							long limit = MINIMUM_IDLE_TIMEOUT; // min.
@@ -249,19 +263,21 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 									limit = limitLong;
 							}
 							catch (NumberFormatException e) {
+								// ignore
 							}
 
 							return Long.valueOf(limit);
 						}
-					})).longValue();
+					})
+					.longValue();
 		}
 		return sessionIdleTimeout;
 	}
 	
     void dispatchEvent(final DmtEventCore event) {
 
-    	Set<ServiceReference> refs = getDmtEventListenerRefs();
-    	for( ServiceReference ref : refs ) {
+		Set<ServiceReference<DmtEventListener>> refs = getDmtEventListenerRefs();
+		for (ServiceReference<DmtEventListener> ref : refs) {
 
     		// there are only valid refs at this point, so we don't need type-checks anymore
     		int type = ((Integer) ref.getProperty(DmtEventListener.FILTER_EVENT)).intValue();
@@ -282,7 +298,8 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 	    		boolean subtreeMatch = false;
     			Node sessionRoot = new Node( Uri.toPath((String) event.getProperty("session.rooturi")));
     			for (String subtree : subtrees) {
-    				if ( subtree.equals(sessionRoot) || sessionRoot.isAncestorOf(new Node(Uri.toPath(subtree)))) {
+					if (sessionRoot
+							.isAncestorOf(new Node(Uri.toPath(subtree)))) {
     					subtreeMatch = true;
     					break;
     				}
@@ -321,10 +338,11 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
     		}
 
     		// checks are OK, we can deliver the event
-    		final DmtEventListener listener = (DmtEventListener) context.getBundleContext().getService(ref);
+    		final DmtEventListener listener = context.getBundleContext().getService(ref);
             try {
-                AccessController.doPrivileged(new PrivilegedAction() {
-                    public Object run() {
+				AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                    @Override
+					public Void run() {
                         listener.changeOccurred(dmtEvent);
                         return null;
                     }
@@ -344,7 +362,8 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
      * @param nodes ... the node uris to check
      * @return ... true, only if the bundle has GET permission for ALL nodes
      */
-	private boolean hasGetPermission(ServiceReference ref, String[] nodes) {
+	private boolean hasGetPermission(ServiceReference< ? > ref,
+			String[] nodes) {
 		boolean hasPermission = true;
 		if ( nodes != null ) {
 			for (String nodeUri : nodes) {
@@ -360,13 +379,14 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
     
 
 	// lazy getter
-	private Set<ServiceReference> getDmtEventListenerRefs() {
+	private Set<ServiceReference<DmtEventListener>> getDmtEventListenerRefs() {
 		if (dmtEventListenerRefs == null)
-			dmtEventListenerRefs = new HashSet<ServiceReference>();
+			dmtEventListenerRefs = new HashSet<>();
 		return dmtEventListenerRefs;
 	}
 	
-    private boolean isValidDmtEventListener(ServiceReference ref) {
+	private boolean isValidDmtEventListener(
+			ServiceReference<DmtEventListener> ref) {
     	int type = -1;
     	try {
     		type = ((Integer) ref.getProperty(DmtEventListener.FILTER_EVENT)).intValue();
@@ -405,7 +425,9 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
      * Gets a callback from the Dispatcher whenever some mapping has changed.
      * Checks if any session is tainted by this change and invalidates such sessions immediately.
      */
-	public synchronized void pluginMappingChanged(String pluginRoot, ServiceReference ref) {
+	@Override
+	public synchronized void pluginMappingChanged(String pluginRoot,
+			ServiceReference< ? > ref) {
 		if ( pluginRoot == null || pluginRoot.length() == 0 )
 			return;
 		SessionWrapper[] sessions = openSessions.toArray(new SessionWrapper[openSessions.size()]);

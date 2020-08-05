@@ -3,3 +3,5 @@ Bundle-Name: ${p}.classloading.tb18c
 Bundle-SymbolicName: ${p}.classloading.tb18c
 Bundle-Version: 1
 Import-Package: ${p}.classloading.exports.service;version="[1.0.0,2.0.0)"
+
+-fixupmessages.empty: The JAR is empty

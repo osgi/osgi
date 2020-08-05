@@ -131,7 +131,9 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			}
 		} while (System.currentTimeMillis() - start < waitTime);
 		try {
-			ServiceReference[] unitRef = getContext().getServiceReferences(EntityManagerFactoryBuilder.class.getName(), "(osgi.unit.name=noHeaderTestUnit)");
+			ServiceReference< ? >[] unitRef = getContext().getServiceReferences(
+					EntityManagerFactoryBuilder.class.getName(),
+					"(osgi.unit.name=noHeaderTestUnit)");
 			assertNull("There should be no services that match the filter (osgi.unit.name=noHeaderTestUnit)", unitRef);
 		} finally {
 			uninstallBundle(persistenceBundle);
@@ -167,7 +169,9 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			}
 		} while (System.currentTimeMillis() - start < SERVICE_WAIT_TIME);
 		try {
-			ServiceReference[] unitRef = getContext().getServiceReferences(EntityManagerFactoryBuilder.class.getName(), "(osgi.unit.name=absentProviderTestUnit)");
+			ServiceReference< ? >[] unitRef = getContext().getServiceReferences(
+					EntityManagerFactoryBuilder.class.getName(),
+					"(osgi.unit.name=absentProviderTestUnit)");
 			assertNull("There should be no services that match the filter (osgi.unit.name=absentProviderTestUnit)", unitRef);
 		} finally {
 			uninstallBundle(persistenceBundle);
@@ -178,7 +182,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			ServiceReference unitRef = getContext().getServiceReference(EntityManagerFactoryBuilder.class.getName());
+			ServiceReference< ? > unitRef = getContext().getServiceReference(
+					EntityManagerFactoryBuilder.class.getName());
 			String unitName = (String) unitRef.getProperty("osgi.unit.name");
 			String unitVersion = (String) unitRef.getProperty("osgi.unit.version");
 			String providerName = (String) unitRef.getProperty("osgi.unit.provider");
@@ -196,7 +201,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			}
 
 			PersistenceProvider provider = getService(PersistenceProvider.class);
-			ServiceReference providerRef = getServiceReference(provider);
+			ServiceReference< ? > providerRef = getServiceReference(provider);
 			if (providerName == null) {
 				fail("The osgi.unit.provider property is not set.");
 			} else if (!providerName.equals(providerRef.getProperty("javax.persistence.provider"))) {
@@ -209,10 +214,11 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		}
 	}
 
-    public void waitForService(Class cls) {
-        ServiceTracker tracker = new ServiceTracker(getContext(), cls.getName(), null);
+	public <S> void waitForService(Class<S> cls) {
+		ServiceTracker<S,S> tracker = new ServiceTracker<>(getContext(), cls,
+				null);
         tracker.open();
-        Object service = null;
+		S service = null;
 		try {
 			service = Tracker.waitForService(tracker, SERVICE_WAIT_TIME);
 		}

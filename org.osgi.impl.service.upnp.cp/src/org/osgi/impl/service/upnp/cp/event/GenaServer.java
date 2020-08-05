@@ -5,14 +5,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Dictionary;
 
 import org.osgi.impl.service.upnp.cp.control.SOAPConstants;
 
 public class GenaServer extends Thread {
 	private boolean			done	= false;
 	public Socket			client;
-	private Dictionary		dict;
 	public EventServiceImpl	esi;
 	private int				defaultPort;
 	private ServerSocket	serverSock;
@@ -39,6 +37,7 @@ public class GenaServer extends Thread {
 	// each processing, checks the pool,if pool is not empty , relases the
 	// thread else added to the
 	// pool for waiting requests.
+	@Override
 	public void run() {
 		try {
 			Processor pr = null;

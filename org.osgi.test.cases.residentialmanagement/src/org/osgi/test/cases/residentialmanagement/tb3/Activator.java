@@ -24,20 +24,25 @@
  */
 package org.osgi.test.cases.residentialmanagement.tb3;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.residentialmanagement.util.*;
+import org.osgi.test.cases.residentialmanagement.util.Service1;
+import org.osgi.test.cases.residentialmanagement.util.Service2;
+import org.osgi.test.cases.residentialmanagement.util.Service3;
 
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
 public class Activator implements BundleActivator {
-	public ServiceRegistration serviceReg;
-	Hashtable props = new Hashtable();
+	public ServiceRegistration< ? >	serviceReg;
+	Dictionary<String,Object>		props	= new Hashtable<>();
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Bundle Registering Service1 and Service3 is going to start.");
 		props.put("testKey1", "testValue1");
@@ -53,6 +58,7 @@ public class Activator implements BundleActivator {
 		}
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Bundle Registering Service1 and Service3 is going to stop.");
 	}

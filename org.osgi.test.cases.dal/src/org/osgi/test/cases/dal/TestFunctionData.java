@@ -10,15 +10,16 @@
 package org.osgi.test.cases.dal;
 
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 
 final class TestFunctionData extends FunctionData {
 
-	public TestFunctionData(long timestamp, Map metadata) {
+	public TestFunctionData(long timestamp, Map<String,Object> metadata) {
 		super(timestamp, metadata);
 	}
 
-	public TestFunctionData(Map fields) {
+	public TestFunctionData(Map<String,Object> fields) {
 		super(fields);
 	}
 }

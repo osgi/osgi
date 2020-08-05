@@ -1,27 +1,35 @@
 package org.osgi.impl.service.upnp.cd.event;
 
 import java.io.DataOutputStream;
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.upnp.cd.ssdp.UPnPExporter;
-import org.osgi.service.upnp.*;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPEventListener;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 // This class checks for a valid subscription request. If valid, creates a new suscription object,
 // along with a unique sid and sends it back to the subscriber. 
 public class SubscriptionCheck extends ErrorCheck {
 	private DataOutputStream	dos;
-	private Hashtable			headers;
+	private Hashtable<String,String>	headers;
 	//private String result;
 	private UPnPService			upnpservice;
 	private BundleContext		context;
-	private Hashtable			serviceStates;
+	private Hashtable<String,Object>	serviceStates;
 
-	public SubscriptionCheck(DataOutputStream dos, Hashtable headers,
+	public SubscriptionCheck(DataOutputStream dos,
+			Hashtable<String,String> headers,
 			BundleContext context) {
 		this.dos = dos;
 		this.headers = headers;
 		this.context = context;
-		serviceStates = new Hashtable();
+		serviceStates = new Hashtable<>();
 	}
 
 	// This mehod will be called by processor object to process the given
@@ -31,7 +39,7 @@ public class SubscriptionCheck extends ErrorCheck {
 	// back to the subscriber. Intial events will be delivered on a separate
 	// thread.
 	public void subscribe() {
-		String publisherUrl = (String) headers.get("publisherpath");
+		String publisherUrl = headers.get("publisherpath");
 		if (publisherUrl.startsWith("/")) {
 			publisherUrl = publisherUrl.substring(1);
 		}
@@ -60,7 +68,7 @@ public class SubscriptionCheck extends ErrorCheck {
 		}
 		Subscription subscription = createNewSubscription(subscriptionId,
 				publisherUrl);
-		String timeOut = (String) headers.get("timeout");
+		String timeOut = headers.get("timeout");
 		setTime(timeOut, subscription);
 		String message = formSubscription_Okay_Message(headers, subscription);
 		writeData(message);
@@ -82,12 +90,12 @@ public class SubscriptionCheck extends ErrorCheck {
 			catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-			Hashtable description = new Hashtable();
-			ServiceRegistration registration = null;
+			Hashtable<String,Object> description = new Hashtable<>();
+			ServiceRegistration<UPnPEventListener> registration = null;
 			description.put("upnp.filter", filter);
 			try {
 				registration = context.registerService(
-						"org.osgi.service.upnp.UPnPEventListener", listener,
+						UPnPEventListener.class, listener,
 						description);
 			}
 			catch (Exception e) {
@@ -103,8 +111,6 @@ public class SubscriptionCheck extends ErrorCheck {
 	//  the error message back to the subscriber.
 	boolean checkIsAvailable(String eventsuburl) {
 		boolean check_result = false;
-		Hashtable TypePair = new Hashtable();
-		Hashtable VariablePair = new Hashtable();
 		String variableName;
 		Object variableObject;
 		upnpservice = UPnPExporter.getEventEntry(eventsuburl);
@@ -129,8 +135,8 @@ public class SubscriptionCheck extends ErrorCheck {
 	// creates a new subscription object and stores in Event Registry table.
 	Subscription createNewSubscription(String subscriptionId,
 			String publisherPath) {
-		String callback = (String) headers.get("callback");
-		String hostString = (String) headers.get("host");
+		String callback = headers.get("callback");
+		String hostString = headers.get("host");
 		String publisherpath = publisherPath;
 		Subscription subscription = new Subscription(subscriptionId.trim(),
 				publisherpath, 0, null, hostString, callback);
@@ -147,14 +153,15 @@ public class SubscriptionCheck extends ErrorCheck {
 			dos.close();
 		}
 		catch (Exception e) {
+			// ignored
 		}
 	}
 
 	// This method checks for valid callback urls along with notification type
 	// header.
 	public String invalid_CALLBACK() {
-		String nt = (String) headers.get("nt");
-		String callback = (String) headers.get("callback");
+		String nt = headers.get("nt");
+		String callback = headers.get("callback");
 		if (callback == null) {
 			return GenaConstants.GENA_SERVER_VERSION
 					+ GenaConstants.GENA_ERROR_412;

@@ -86,6 +86,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	 * @param event the broadcasted event.
 	 * @see org.osgi.service.cm.ConfigurationListener#configurationEvent(org.osgi.service.cm.ConfigurationEvent)
 	 */
+	@Override
 	public void configurationEvent(ConfigurationEvent event) {
 		if ((event.getPid() != null && event.getPid().endsWith(
 				LISTENER_PID_SUFFIX))

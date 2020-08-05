@@ -51,7 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator, A, B {
 
 
-	ServiceRegistration            registration;
+	ServiceRegistration< ? >								registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
 	Collection<ExportRegistration> exportRegistrations;
@@ -69,6 +69,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
@@ -108,6 +109,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		teststop();
@@ -116,6 +118,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
 	 */
+	@Override
 	public String getA() {
 		return "this is A";
 	}
@@ -123,6 +126,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 	 */
+	@Override
 	public String getB() {
 		return "this is B";
 	}
@@ -139,7 +143,9 @@ public class Activator implements BundleActivator, A, B {
 			//
 			remoteServiceAdminListener = new TestRemoteServiceAdminListener(
 					timeout);
-			ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+			ServiceRegistration<RemoteServiceAdminListener> sr = context
+					.registerService(RemoteServiceAdminListener.class,
+							remoteServiceAdminListener, null);
 			assertNotNull(sr);
 
 

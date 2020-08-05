@@ -33,9 +33,9 @@ public class MessageSYS_EX extends Message {
 	/** MESSAGE_SYS_EX */
 	public static final byte MESSAGE_SYS_EX = (byte) 0xC5;
 
-	private List subTelegrams = new ArrayList();
+	private List<byte[]>		subTelegrams	= new ArrayList<>();
 
-	private int manuf;
+	int							manuf;
 
 	public int getRorg() {
 		return MESSAGE_SYS_EX;
@@ -176,7 +176,7 @@ public class MessageSYS_EX extends Message {
 		return 0;
 	}
 
-	public List getTelegrams() {
+	public List<byte[]> getTelegrams() {
 		return subTelegrams;
 	}
 

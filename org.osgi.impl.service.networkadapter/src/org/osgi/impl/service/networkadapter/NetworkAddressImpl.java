@@ -41,35 +41,43 @@ public class NetworkAddressImpl implements NetworkAddress {
         this.id = id;
     }
 
-    public String getNetworkAdapterType() {
+    @Override
+	public String getNetworkAdapterType() {
        return (String)getProperty(NETWORKADAPTER_TYPE);
     }
 
-    public String getIpAddressVersion() {
+    @Override
+	public String getIpAddressVersion() {
         return (String)getProperty(IPADDRESS_VERSION);
     }
 
-    public String getIpAddressScope() {
+    @Override
+	public String getIpAddressScope() {
         return (String)getProperty(IPADDRESS_SCOPE);
     }
 
-    public String getIpAddress() {
+    @Override
+	public String getIpAddress() {
         return (String)getProperty(IPADDRESS);
     }
 
-    public InetAddress getInetAddress() {
+    @Override
+	public InetAddress getInetAddress() {
         return NetworkIfUtil.getInetAddress(getIpAddress());
     }
 
-    public int getSubnetMaskLength() {
+    @Override
+	public int getSubnetMaskLength() {
         return ((Integer)getProperty(SUBNETMASK_LENGTH)).intValue();
     }
 
-    public String getNetworkAdapterPid() {
+    @Override
+	public String getNetworkAdapterPid() {
         return (String)getProperty(NETWORKADAPTER_PID);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 
         StringBuffer sb = new StringBuffer();
         sb.append("NetworkAddress[");
@@ -97,7 +105,8 @@ public class NetworkAddressImpl implements NetworkAddress {
      */
     private Object getProperty(String key) {
 
-        Dictionary prop = NetworkIfManager.getInstance().getNetworkAddressProp(id);
+		Dictionary<String,Object> prop = NetworkIfManager.getInstance()
+				.getNetworkAddressProp(id);
         return prop.get(key);
     }
 }

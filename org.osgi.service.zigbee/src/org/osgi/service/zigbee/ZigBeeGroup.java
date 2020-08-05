@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public interface ZigBeeGroup {
 	 *         successfully bound. The adequate {@link ZigBeeException} is
 	 *         returned otherwise.
 	 */
-	Promise /* <Void> */ joinGroup(String pid);
+	Promise<Void> joinGroup(String pid);
 
 	/**
 	 * Requests an endpoint to leave this group. This method may be invoked on
@@ -93,7 +93,7 @@ public interface ZigBeeGroup {
 	 *         successfully bound. The adequate {@link ZigBeeException} is
 	 *         returned otherwise.
 	 */
-	Promise /* <Void> */ leaveGroup(String pid);
+	Promise<Void> leaveGroup(String pid);
 
 	/**
 	 * Sends a ZCL frame to the group represented by this service. The returned

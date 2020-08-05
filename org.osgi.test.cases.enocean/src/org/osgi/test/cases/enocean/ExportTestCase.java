@@ -18,6 +18,7 @@ package org.osgi.test.cases.enocean;
 
 import java.util.Hashtable;
 import java.util.Map;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -52,7 +53,8 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
      */
     public void testDeviceExport() throws Exception {
 
-	ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+		ServiceRegistration<EnOceanDevice> sReg = Fixtures
+				.registerDevice(getContext());
 
 	/* Wait for the proper and full registration */
 	String lastServiceEvent = devices.waitForService();
@@ -60,8 +62,9 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 	assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 	/* Get CHIP_ID attributed by the driver from the given service PID. */
-	ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-	EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+	ServiceReference<EnOceanHost> hostRef = getContext()
+			.getServiceReference(EnOceanHost.class);
+	EnOceanHost defaultHost = getContext().getService(hostRef);
 	int dynamicChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 	assertTrue("The created CHIP_ID for an exported device was not created", dynamicChipId != -1);
 
@@ -69,7 +72,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 	 * Now that we have gotten the device registered and all, we are able to
 	 * try and make it send data, via EventAdmin broadcast.
 	 */
-	Map properties = new Hashtable();
+	Map<String,Object> properties = new Hashtable<>();
 	EnOceanMessage msg = new MessageExample1(Fixtures.FLOATVALUE);
 	properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
 	properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);

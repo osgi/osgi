@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,26 +46,32 @@ public class ZigBeeUTCTime
 		return instance;
 	}
 
+	@Override
 	public String getName() {
 		return "UTCTime";
 	}
 
+	@Override
 	public boolean isAnalog() {
 		return true;
 	}
 
-	public Class getJavaDataType() {
+	@Override
+	public Class< ? > getJavaDataType() {
 		return Long.class;
 	}
 
+	@Override
 	public short getId() {
 		return ZigBeeDataTypes.UTC_TIME;
 	}
 
+	@Override
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UTC_TIME, value);
 	}
 
+	@Override
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
 		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UTC_TIME);
 	}

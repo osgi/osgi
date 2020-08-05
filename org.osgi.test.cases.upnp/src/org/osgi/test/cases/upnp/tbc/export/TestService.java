@@ -14,16 +14,16 @@ import org.osgi.service.upnp.UPnPStateVariable;
 public abstract class TestService implements UPnPService {
 	private final UPnPAction[]			actions;
 	private final UPnPStateVariable[]	variables;
-	private final Map					acts;
-	private final Map					vars;
+	private final Map<String,UPnPAction>		acts;
+	private final Map<String,UPnPStateVariable>	vars;
 
 	public TestService(UPnPAction[] actions, UPnPStateVariable[] variables) {
 		if (variables == null || variables.length < 1) {
 			throw new IllegalArgumentException(
 					"UPnPService must have at least one state variable");
 		}
-		acts = new HashMap();
-		vars = new HashMap();
+		acts = new HashMap<>();
+		vars = new HashMap<>();
 		if (actions != null) {
 			for (int i = 0; i < actions.length; i++) {
 				acts.put(actions[i].getName(), actions[i]);
@@ -34,7 +34,7 @@ public abstract class TestService implements UPnPService {
 		}
 		this.actions = ((actions == null) ? null : (UPnPAction[]) actions
 				.clone());
-		this.variables = (UPnPStateVariable[]) variables.clone();
+		this.variables = variables.clone();
 	}
 
 	public abstract String getId();
@@ -45,7 +45,7 @@ public abstract class TestService implements UPnPService {
 
 	public final UPnPAction getAction(String name) {
 		if (acts != null) {
-			return (UPnPAction) acts.get(name);
+			return acts.get(name);
 		}
 		else {
 			if (actions != null) {
@@ -63,16 +63,16 @@ public abstract class TestService implements UPnPService {
 		if (actions == null) {
 			return null;
 		}
-		return (UPnPAction[]) actions.clone();
+		return actions.clone();
 	}
 
 	public final UPnPStateVariable[] getStateVariables() {
-		return (UPnPStateVariable[]) variables.clone();
+		return variables.clone();
 	}
 
 	public final UPnPStateVariable getStateVariable(String name) {
 		if (vars != null) {
-			return (UPnPStateVariable) vars.get(name);
+			return vars.get(name);
 		}
 		else {
 			for (int i = 0; i < variables.length; i++) {

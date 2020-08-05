@@ -46,10 +46,12 @@ class IntegerConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Integer.valueOf(value);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Integer)
 			return value.toString();
@@ -62,10 +64,12 @@ class LongConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Long.valueOf(value);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Long)
 			return value.toString();
@@ -78,10 +82,12 @@ class FloatConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Float.valueOf(value);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Float)
 			return value.toString();
@@ -94,10 +100,12 @@ class DoubleConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Double.valueOf(value);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Double) {
 			return value.toString();
@@ -121,6 +129,7 @@ class Fixed144Converter extends DoubleConverter {
 		super(typeName);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Double) {
 			double doubleValue = ((Double) value).doubleValue();
@@ -150,10 +159,12 @@ class CharacterConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Character.valueOf(value.charAt(0));
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Character)
 			return value.toString();
@@ -166,10 +177,12 @@ class StringConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return value;
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof String)
 			return (String) value;
@@ -202,6 +215,8 @@ class ISO8601Converter extends TypeConverter {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		for (int i = 0; i < formatStrings.length; i++) {
 			Date date = dateFormatters[i].parse(value);
@@ -210,7 +225,8 @@ class ISO8601Converter extends TypeConverter {
 		throw new WrongSoapValueException();
 	}
 
-    @SuppressWarnings("deprecation")
+    @Override
+	@SuppressWarnings("deprecation")
     public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Date) {
 			Date date = (Date) value;
@@ -237,10 +253,12 @@ class BooleanConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		return Boolean.valueOf(value);
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Boolean)
 			return value.toString();
@@ -257,6 +275,7 @@ class BinHexConverter extends TypeConverter {
 		super(typeName);
 	}
 
+	@Override
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
 		StringTokenizer tokenizer = new StringTokenizer(value, "-");
 		int count = tokenizer.countTokens();
@@ -272,6 +291,7 @@ class BinHexConverter extends TypeConverter {
 		return returnBytes;
 	}
 
+	@Override
 	public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof byte[]) {
 			byte[] bytes = (byte[]) value;

@@ -27,6 +27,7 @@ public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
 		this.dataType = dataType;
 	}
 
+	@Override
 	public ZCLDataTypeDescription getDataTypeDescription() {
 		return dataType;
 	}

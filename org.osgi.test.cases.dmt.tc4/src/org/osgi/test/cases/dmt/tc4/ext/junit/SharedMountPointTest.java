@@ -5,6 +5,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.MountPointEvent;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
@@ -12,12 +13,14 @@ import org.osgi.test.cases.dmt.tc4.ext.util.TestMetaNode;
 
 public class SharedMountPointTest extends DmtAdminTestCase {
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         super.setUp();
         getDmtAdmin();
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         unregisterPlugins();
         closeDmtSession();
         super.tearDown();
@@ -26,7 +29,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testMountPointNotIndicatePluginTableOrder01() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"B1"
+				});
 
         MountPointEvent addedEvent = pluginTable.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent.getType());
@@ -34,7 +40,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
         setLeafNode(sharedPluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/#");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertInteriorNode("./A1");
@@ -53,7 +60,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testMountPointNotIndicatePluginTableOrder02() throws Exception {
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
         setLeafNode(sharedPluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/#");
 
         MountPointEvent addedEvent = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent.getType());
@@ -63,7 +71,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A1");
@@ -83,7 +94,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testRootURINotIndicatePluginTableOrder01() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
 
         MountPointEvent addedEvent = pluginTable.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent.getType());
@@ -91,7 +105,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
         setLeafNode(sharedPluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/B1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertInteriorNode("./A1");
@@ -110,7 +125,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testRootURINotIndicatePluginTablOrder02() throws Exception {
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
         setLeafNode(sharedPluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/B1");
 
         MountPointEvent addedEvent = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent.getType());
@@ -118,7 +134,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A1");
@@ -136,13 +155,17 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testRemountEnumeratedPlugins01() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
         MountPointEvent addedEventA1 = pluginTable.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertEquals("./A1", Uri.toUri(addedEventA1.getMountPoint().getMountPath()));
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/#");
         MountPointEvent addedEventB1 = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         String[] mountPathB1 = addedEventB1.getMountPoint().getMountPath();
@@ -169,7 +192,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin newPluginTable = new TestDataMountPlugin();
         setInteriorNode(newPluginTable, "./A1");
-        ServiceRegistration newRegistrationA1 = registerMountDataPlugin(newPluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> newRegistrationA1 = registerMountDataPlugin(
+				newPluginTable, "./A1", new String[] {
+						"#"
+				});
         MountPointEvent addedEventNewA1 = newPluginTable.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventNewA1.getType());
         assertEquals("./A1", Uri.toUri(addedEventNewA1.getMountPoint().getMountPath()));
@@ -194,13 +220,17 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testRemountEnumeratedPlugins02() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
         MountPointEvent addedEventA1 = pluginTable.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertEquals("./A1", Uri.toUri(addedEventA1.getMountPoint().getMountPath()));
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/#");
         MountPointEvent addedEventB1 = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         String[] mountPathB1 = addedEventB1.getMountPoint().getMountPath();
@@ -227,7 +257,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin sharedPluginB2 = new TestDataMountPlugin();
         setInteriorNode(sharedPluginB2, "./A1/B2");
-        ServiceRegistration registrationB2 = registerMountDataPlugin(sharedPluginB2, "./A1/B2");
+		ServiceRegistration<DataPlugin> registrationB2 = registerMountDataPlugin(
+				sharedPluginB2, "./A1/B2");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A1");
@@ -253,10 +284,14 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testMountUnknownEnumeratedPlugins() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration registrationB1 = registerMountDataPlugin(sharedPluginB1, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				sharedPluginB1, "./A1/#");
 
         MountPointEvent addedEventB1 = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
@@ -264,7 +299,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         int mountPonintNumberB1 = assertEnumratedPluginMountPoint(mountPathB1, "./A1");
 
         TestDataMountPlugin sharedPluginB2 = new TestDataMountPlugin();
-        ServiceRegistration registrationB2 = registerMountDataPlugin(sharedPluginB2, "./A1/#");
+		ServiceRegistration<DataPlugin> registrationB2 = registerMountDataPlugin(
+				sharedPluginB2, "./A1/#");
 
         MountPointEvent addedEventB2 = sharedPluginB2.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB2.getType());
@@ -289,17 +325,26 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testMountKnownEnumeratedPlugins() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration registrationB1 = registerMountDataPluginWithServicePIDs(sharedPluginB1, "./A1/#", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPluginWithServicePIDs(
+				sharedPluginB1, "./A1/#", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventB1 = sharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         String[] mountPathB1 = addedEventB1.getMountPoint().getMountPath();
         int mountPonintNumberB1 = assertEnumratedPluginMountPoint(mountPathB1, "./A1");
 
         TestDataMountPlugin sharedPluginB2 = new TestDataMountPlugin();
-        ServiceRegistration registrationB2 = registerMountDataPluginWithServicePIDs(sharedPluginB2, "./A1/#", new String[] { "B2" });
+		ServiceRegistration<DataPlugin> registrationB2 = registerMountDataPluginWithServicePIDs(
+				sharedPluginB2, "./A1/#", new String[] {
+						"B2"
+				});
         MountPointEvent addedEventB2 = sharedPluginB2.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB2.getType());
         String[] mountPathB2 = addedEventB2.getMountPoint().getMountPath();
@@ -313,7 +358,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         ArrayAssert.assertEquivalenceArrays(mountPathB1, removedEventB1.getMountPoint().getMountPath());
 
         TestDataMountPlugin newSharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration newRegistrationB1 = registerMountDataPluginWithServicePIDs(newSharedPluginB1, "./A1/#", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountDataPluginWithServicePIDs(
+				newSharedPluginB1, "./A1/#", new String[] {
+						"B1"
+				});
         MountPointEvent newAddedEventB1 = newSharedPluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, newAddedEventB1.getType());
         String[] newMountPathB1 = newAddedEventB1.getMountPoint().getMountPath();
@@ -327,7 +375,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         ArrayAssert.assertEquivalenceArrays(mountPathB2, removedEventB2.getMountPoint().getMountPath());
 
         TestDataMountPlugin newSharedPluginB2 = new TestDataMountPlugin();
-        ServiceRegistration newRegistrationB2 = registerMountDataPluginWithServicePIDs(newSharedPluginB2, "./A1/#", new String[] { "B2" });
+		ServiceRegistration<DataPlugin> newRegistrationB2 = registerMountDataPluginWithServicePIDs(
+				newSharedPluginB2, "./A1/#", new String[] {
+						"B2"
+				});
         MountPointEvent newAddedEventB2 = newSharedPluginB2.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, newAddedEventB2.getType());
         String[] newMountPathB2 = newAddedEventB2.getMountPoint().getMountPath();
@@ -343,7 +394,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
     public void testGetMetaNodeNotMountSharedPlugins() throws Exception {
         TestDataMountPlugin pluginTable = new TestDataMountPlugin();
         setInteriorNode(pluginTable, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginTable, "./A1", new String[] { "#" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginTable, "./A1", new String[] {
+						"#"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {
@@ -353,7 +407,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         }
 
         TestDataMountPlugin sharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration registrationB1 = registerMountDataPluginWithServicePIDs(sharedPluginB1, "./A1/#", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPluginWithServicePIDs(
+				sharedPluginB1, "./A1/#", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventB1 = sharedPluginB1.getMountPointEvent(0);
         String[] mountPathB1 = addedEventB1.getMountPoint().getMountPath();
         setInteriorNode(sharedPluginB1, mountPathB1);
@@ -366,7 +423,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         }
 
         TestDataMountPlugin sharedPluginB2 = new TestDataMountPlugin();
-        ServiceRegistration registrationB2 = registerMountDataPluginWithServicePIDs(sharedPluginB2, "./A1/#", new String[] { "B2" });
+		ServiceRegistration<DataPlugin> registrationB2 = registerMountDataPluginWithServicePIDs(
+				sharedPluginB2, "./A1/#", new String[] {
+						"B2"
+				});
         MountPointEvent addedEventB2 = sharedPluginB2.getMountPointEvent(0);
         String[] mountPathB2 = addedEventB2.getMountPoint().getMountPath();
         setInteriorNode(sharedPluginB2, mountPathB2);
@@ -390,7 +450,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         }
 
         TestDataMountPlugin newSharedPluginB1 = new TestDataMountPlugin();
-        ServiceRegistration newRegistrationB1 = registerMountDataPluginWithServicePIDs(newSharedPluginB1, "./A1/#", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> newRegistrationB1 = registerMountDataPluginWithServicePIDs(
+				newSharedPluginB1, "./A1/#", new String[] {
+						"B1"
+				});
         setInteriorNode(newSharedPluginB1, mountPathB1);
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
@@ -412,7 +475,10 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         }
 
         TestDataMountPlugin newSharedPluginB2 = new TestDataMountPlugin();
-        ServiceRegistration newRegistrationB2 = registerMountDataPluginWithServicePIDs(newSharedPluginB2, "./A1/#", new String[] { "B2" });
+		ServiceRegistration<DataPlugin> newRegistrationB2 = registerMountDataPluginWithServicePIDs(
+				newSharedPluginB2, "./A1/#", new String[] {
+						"B2"
+				});
         setInteriorNode(newSharedPluginB2, mountPathB2);
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);

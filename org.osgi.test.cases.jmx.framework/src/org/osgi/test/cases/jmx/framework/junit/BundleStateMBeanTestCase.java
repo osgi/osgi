@@ -99,6 +99,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertTrue("tb2 is required by tb1. getRequiringBundles() was not able to detect this dependency.", found);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testGetBundle() throws IOException {
 		CompositeData bundle = bsMBean.getBundle(testBundle1.getBundleId());
 		assertCompositeDataKeys(bundle, "BUNDLE_TYPE", new String[] {"ExportedPackages", "Fragment", "Fragments", "Headers", "Hosts",
@@ -161,8 +162,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 								"RegisteredServices", "RemovalPending", "Required", "RequiredBundles", "RequiringBundles",
 								"StartLevel", "State", "ServicesInUse", "SymbolicName", "Version"});
 
-		Collection values = bundleList.values();
-		Iterator iter = values.iterator();
+		Collection< ? > values = bundleList.values();
+		Iterator< ? > iter = values.iterator();
 		boolean foundBundle1 = false;
 		boolean foundBundle2 = false;
 		while (iter.hasNext()) {
@@ -269,7 +270,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 				TabularData headersList = (TabularData)	item.get("Headers");
 				assertTabularDataStructure(headersList, "HEADERS_TYPE", "Key",	new String[] { "Key", "Value" });
 				int foundKeys = 0;
-				Iterator headersListIter = headersList.values().iterator();
+				Iterator< ? > headersListIter = headersList.values().iterator();
 				while (headersListIter.hasNext()) {
 					String key = (String) ((CompositeData) headersListIter.next()).get("Key");
 					if (key.equals("Bundle-Version") || key.equals("Bundle-Activator") || key.equals("Bundle-Vendor")) {
@@ -294,9 +295,12 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 				assertNotNull(version);
 			}
 		}
-		assertTrue("listBundles() did not return data for some of the test bundles", foundBundle1 && foundBundle1);
+		assertTrue(
+				"listBundles() did not return data for some of the test bundles",
+				foundBundle1 && foundBundle2);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testGetBundlesRestricted() throws IOException {
         TabularData bundleList = bsMBean.listBundles(BundleStateMBean.SYMBOLIC_NAME, BundleStateMBean.VERSION);
         assertTabularDataStructure(bundleList, "BUNDLES_TYPE", BundleStateMBean.IDENTIFIER,
@@ -316,7 +320,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
             foundBundles++;
             int foundValues = 0;
-            for (String key : (Set<String>) BundleStateMBean.BUNDLE_TYPE.keySet()) {
+			for (String key : BundleStateMBean.BUNDLE_TYPE.keySet()) {
                 Object value = data.get(key);
                 if (BundleStateMBean.IDENTIFIER.equals(key)) {
                     assertEquals(bundle.getBundleId(), value);
@@ -408,7 +412,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		TabularData headersList = bsMBean.getHeaders(testBundle1.getBundleId());
 		assertTabularDataStructure(headersList, "HEADERS_TYPE", "Key",	new String[] { "Key", "Value" });
 		int foundKeys = 0;
-		Iterator headersListIter = headersList.values().iterator();
+		Iterator< ? > headersListIter = headersList.values().iterator();
 		while (headersListIter.hasNext()) {
 			String key = (String) ((CompositeData) headersListIter.next()).get("Key");
 			if (key.equals("Bundle-Version") || key.equals("Bundle-Activator") || key.equals("Bundle-Vendor")) {
@@ -446,7 +450,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	public void testGetRegisteredServices() throws IOException {
 		long[] serviceIdentifiers = bsMBean.getRegisteredServices(testBundle2.getBundleId());
 		assertTrue("testBundle2 defines three services", serviceIdentifiers.length == 3);
-		ServiceReference ref = getContext().getServiceReference("org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
+		ServiceReference< ? > ref = getContext().getServiceReference(
+				"org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
 		Long expectedserviceId = (Long)ref.getProperty("service.id");
 		boolean matched = false;
 		for (int i = 0; i < serviceIdentifiers.length; i++) {
@@ -462,7 +467,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetServicesInUse() throws IOException {
 		assertNotNull(bsMBean);
-		ServiceReference ref = getContext().getServiceReference("org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
+		ServiceReference< ? > ref = getContext().getServiceReference(
+				"org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
 		Long expectedserviceId = (Long)ref.getProperty("service.id");
 		long[] servicesInUse = bsMBean.getServicesInUse(testBundle1.getBundleId());
 		boolean found = false;
@@ -580,8 +586,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetHosts() throws IOException {
 		TabularData bundleList = bsMBean.listBundles();
-		Collection values = bundleList.values();
-		Iterator iter = values.iterator();
+		Collection< ? > values = bundleList.values();
+		Iterator< ? > iter = values.iterator();
 		while (iter.hasNext()) {
 			CompositeData item = (CompositeData) iter.next();
 			long tempBundleId = ((Long) item.get("Identifier")).longValue();

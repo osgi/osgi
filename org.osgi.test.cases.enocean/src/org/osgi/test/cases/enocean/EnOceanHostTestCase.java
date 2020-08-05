@@ -40,7 +40,8 @@ public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
     public void testEnOceanHostServiceAvailability() {
 	try {
 	    super.testStepProxy.execute(PLUG_DONGLE, "Plug the EnOcean USB dongle.");
-	    ServiceReference[] srs = getContext().getAllServiceReferences(EnOceanHost.class.getName(), null);
+		ServiceReference< ? >[] srs = getContext()
+				.getAllServiceReferences(EnOceanHost.class.getName(), null);
 	    assertNotNull("Test failed: no EnOceanHost service has been found in the OSGi service registry.", srs);
 	    tlog("The test found " + srs.length + " EnOceanHost service(s).");
 	} catch (InvalidSyntaxException e) {

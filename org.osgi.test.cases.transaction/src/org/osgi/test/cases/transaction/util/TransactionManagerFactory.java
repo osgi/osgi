@@ -27,7 +27,7 @@ import org.osgi.test.support.sleep.Sleep;
  */
 public class TransactionManagerFactory {
 
-    private static ServiceReference _tmRef;
+	private static ServiceReference<TransactionManager>	_tmRef;
     private static TransactionManager _tm;
     private static BundleContext _context;
 
@@ -46,8 +46,7 @@ public class TransactionManagerFactory {
 
         if (waitTime == 0) {
             // get TransactionManager from Service Reference
-            _tmRef = _context.getServiceReference(TransactionManager.class
-                    .getName());
+			_tmRef = _context.getServiceReference(TransactionManager.class);
         }
 
         if (waitTime > 0) {
@@ -55,8 +54,7 @@ public class TransactionManagerFactory {
             int count = 0;
             while (!done) {
                 // get TransactionManager from Service Reference
-                _tmRef = _context.getServiceReference(TransactionManager.class
-                        .getName());
+				_tmRef = _context.getServiceReference(TransactionManager.class);
 
                 // check if we are able to get a valid _tmRef. If not, wait a
                 // second
@@ -83,7 +81,7 @@ public class TransactionManagerFactory {
         }
 
         if (_tmRef != null) {
-            _tm = (TransactionManager) _context.getService(_tmRef);
+            _tm = _context.getService(_tmRef);
         }
 
         return _tm;

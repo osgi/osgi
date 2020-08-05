@@ -44,6 +44,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -79,14 +82,14 @@ public class DmtSessionConstraints {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			tbc.log("#testConstraints001");
+			DefaultTestBundleControl.log("#testConstraints001");
 			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			tbc.pass("Two concurrent read only sessions were created.");
+			DefaultTestBundleControl.pass("Two concurrent read only sessions were created.");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -104,17 +107,17 @@ public class DmtSessionConstraints {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			tbc.log("#testConstraints002");
+			DefaultTestBundleControl.log("#testConstraints002");
 			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc
+			TestCase
 					.fail("A read only session didn't block the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)");
 		} catch (DmtException e) {
-			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -128,7 +131,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 	public void testConstraints003() {
-		tbc.log("#testConstraints003");
+		DefaultTestBundleControl.log("#testConstraints003");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -136,12 +139,12 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_SHARED);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc
+			TestCase
 					.fail("A read only session didn't block the creation of an updating session (with a LOCK_TYPE_ATOMIC)");
 		} catch (DmtException e) {
-			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_ATOMIC)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_ATOMIC)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -156,7 +159,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 	public void testConstraints004() {
-		tbc.log("#testConstraints004");
+		DefaultTestBundleControl.log("#testConstraints004");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -164,12 +167,12 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc
+			TestCase
 					.fail("An EXCLUSIVE session could be shared with an ATOMIC session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An EXCLUSIVE session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -183,7 +186,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 	public void testConstraints005() {
-		tbc.log("#testConstraints005");
+		DefaultTestBundleControl.log("#testConstraints005");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -191,12 +194,12 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			tbc
+			TestCase
 					.fail("An EXCLUSIVE session could be shared with a SHARED session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An EXCLUSIVE session could NOT be shared with an SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -210,7 +213,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 	public void testConstraints006() {
-		tbc.log("#testConstraints006");
+		DefaultTestBundleControl.log("#testConstraints006");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -218,12 +221,12 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc
+			TestCase
 					.fail("An EXCLUSIVE session could be shared with an EXCLUSIVE session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -238,7 +241,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 	public void testConstraints007() {
-		tbc.log("#testConstraints007");
+		DefaultTestBundleControl.log("#testConstraints007");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -248,12 +251,12 @@ public class DmtSessionConstraints {
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.INTERIOR_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc
+			TestCase
 					.fail("An ATOMIC session could be shared with an ATOMIC session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -268,7 +271,7 @@ public class DmtSessionConstraints {
 	 */
 
 	public void testConstraints008() {
-		tbc.log("#testConstraints008");
+		DefaultTestBundleControl.log("#testConstraints008");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -278,12 +281,12 @@ public class DmtSessionConstraints {
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc
+			TestCase
 					.fail("An ATOMIC session could be shared with an EXCLUSIVE session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -297,7 +300,7 @@ public class DmtSessionConstraints {
 	 */
 
 	public void testConstraints009() {
-		tbc.log("#testConstraints009");
+		DefaultTestBundleControl.log("#testConstraints009");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -307,12 +310,12 @@ public class DmtSessionConstraints {
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
-			tbc
+			TestCase
 					.fail("An ATOMIC session could be shared with a SHARED session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			TestCase.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);

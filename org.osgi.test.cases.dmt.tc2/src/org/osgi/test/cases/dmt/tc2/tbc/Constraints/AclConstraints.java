@@ -47,6 +47,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -85,13 +88,13 @@ public class AclConstraints {
 	private void testAclConstraints001() {
 
 		try {
-			tbc.log("#testAclConstraints001");
+			DefaultTestBundleControl.log("#testAclConstraints001");
 			
             new org.osgi.service.dmt.Acl("Add=test&Exec=test &Get=*");
 			
-            tbc.failException("",IllegalArgumentException.class);
+            DefaultTestBundleControl.failException("",IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("White space between tokens of a Acl is not allowed.");			
+			DefaultTestBundleControl.pass("White space between tokens of a Acl is not allowed.");			
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(IllegalArgumentException.class, e);
 		}
@@ -105,11 +108,11 @@ public class AclConstraints {
 	private void testAclConstraints002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints002");
+			DefaultTestBundleControl.log("#testAclConstraints002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String expectedRootAcl = "Add=*&Get=*&Replace=*";
 			String rootAcl = session.getNodeAcl(".").toString();
-			tbc.assertEquals("This test asserts that if the root node ACL is not explicitly set, it should be set to Add=*&Get=*&Replace=*.",expectedRootAcl,rootAcl);
+			TestCase.assertEquals("This test asserts that if the root node ACL is not explicitly set, it should be set to Add=*&Get=*&Replace=*.",expectedRootAcl,rootAcl);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -125,12 +128,12 @@ public class AclConstraints {
 	private void testAclConstraints003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints003");
+			DefaultTestBundleControl.log("#testAclConstraints003");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(".",null);
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {	
-			tbc.assertEquals("Asserts that the root node of DMT must always have an ACL associated with it",
+			TestCase.assertEquals("Asserts that the root node of DMT must always have an ACL associated with it",
 			    DmtException.COMMAND_NOT_ALLOWED,e.getCode());
 			
 		} catch (Exception e) {
@@ -154,12 +157,12 @@ public class AclConstraints {
 	private void testAclConstraints004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints004");
+			DefaultTestBundleControl.log("#testAclConstraints004");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String expectedRootAcl = "Add=*&Exec=*&Replace=*";
 			session.setNodeAcl(".",new org.osgi.service.dmt.Acl(expectedRootAcl));
 			String rootAcl = session.getNodeAcl(".").toString();
-			tbc.assertEquals("Asserts that the root's ACL can be changed.",expectedRootAcl,rootAcl);
+			TestCase.assertEquals("Asserts that the root's ACL can be changed.",expectedRootAcl,rootAcl);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -183,7 +186,7 @@ public class AclConstraints {
 	private void testAclConstraints005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints005");
+			DefaultTestBundleControl.log("#testAclConstraints005");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -192,7 +195,7 @@ public class AclConstraints {
 
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
-			tbc.assertNull("This test asserts that the Dmt Admin service synchronizes the ACLs with any change "
+			TestCase.assertNull("This test asserts that the Dmt Admin service synchronizes the ACLs with any change "
 							+ "in the DMT that is made through its service interface",
 							session.getNodeAcl(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
@@ -211,7 +214,7 @@ public class AclConstraints {
 	private void testAclConstraints006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints006");
+			DefaultTestBundleControl.log("#testAclConstraints006");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -221,9 +224,9 @@ public class AclConstraints {
 
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.RENAMED_NODE_NAME);
 			TestExecPlugin.setAllUriIsExistent(true);
-			tbc.assertNull("Asserts that the method rename deletes the ACL of the source.",session.getNodeAcl(TestExecPluginActivator.INTERIOR_NODE));
+			TestCase.assertNull("Asserts that the method rename deletes the ACL of the source.",session.getNodeAcl(TestExecPluginActivator.INTERIOR_NODE));
 			
-			tbc.assertEquals("Asserts that the method rename moves the ACL from the source to the destiny.",
+			TestCase.assertEquals("Asserts that the method rename moves the ACL from the source to the destiny.",
 					expectedRootAcl,session.getNodeAcl(TestExecPluginActivator.RENAMED_NODE).toString());
 			
 		} catch (Exception e) {
@@ -244,14 +247,14 @@ public class AclConstraints {
 	private void testAclConstraints007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints007");
+			DefaultTestBundleControl.log("#testAclConstraints007");
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL_2, Acl.GET );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
 			
-			tbc.pass("If a principal has Replace access to a node, the principal is permitted to change the ACL of all its child nodes");
+			DefaultTestBundleControl.pass("If a principal has Replace access to a node, the principal is permitted to change the ACL of all its child nodes");
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -269,7 +272,7 @@ public class AclConstraints {
 	private void testAclConstraints008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testAclConstraints008");
+			DefaultTestBundleControl.log("#testAclConstraints008");
             //We need to set that a parent of the node does not have Replace else the acl of the root "." is gotten
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.DELETE );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
@@ -277,9 +280,9 @@ public class AclConstraints {
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
             session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
-			tbc.failException("",DmtException.class);
+			DefaultTestBundleControl.failException("",DmtException.class);
 		} catch (DmtException e) {	
-			tbc.assertEquals("Asserts that Replace access on a leaf node does not allow changing the ACL property itself.",
+			TestCase.assertEquals("Asserts that Replace access on a leaf node does not allow changing the ACL property itself.",
 			    DmtException.PERMISSION_DENIED,e.getCode());
 			
 		} catch (Exception e) {
@@ -300,7 +303,7 @@ public class AclConstraints {
     private void testAclConstraints009() {
         DmtSession session = null;
         try {
-            tbc.log("#testAclConstraints009");
+			DefaultTestBundleControl.log("#testAclConstraints009");
             session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -309,7 +312,7 @@ public class AclConstraints {
 
             session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
-            tbc.pass("ACLs is only verified by the Dmt Admin service when the session has an associated principal.");
+            DefaultTestBundleControl.pass("ACLs is only verified by the Dmt Admin service when the session has an associated principal.");
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
         } finally {
@@ -327,7 +330,7 @@ public class AclConstraints {
     private void testAclConstraints010() {
         DmtSession session = null;
         try {
-            tbc.log("#testAclConstraints010");
+			DefaultTestBundleControl.log("#testAclConstraints010");
             tbc.cleanAcl(TestExecPluginActivator.INEXISTENT_NODE);
             
             session = tbc.getDmtAdmin().getSession(".",
@@ -343,7 +346,7 @@ public class AclConstraints {
             session.copy(TestExecPluginActivator.INTERIOR_NODE,
                     TestExecPluginActivator.INEXISTENT_NODE, true);
             TestExecPlugin.setAllUriIsExistent(true);
-            tbc.assertTrue("Asserts that the copied nodes inherit the access rights from the parent of the destination node.",
+            TestCase.assertTrue("Asserts that the copied nodes inherit the access rights from the parent of the destination node.",
                 aclParent.equals(session.getEffectiveNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
         } catch (Exception e) {
@@ -365,7 +368,7 @@ public class AclConstraints {
     private void testAclConstraints011() {
         DmtSession session = null;
         try {
-            tbc.log("#testAclConstraints011");
+			DefaultTestBundleControl.log("#testAclConstraints011");
             
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET | Acl.ADD );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
@@ -385,7 +388,7 @@ public class AclConstraints {
             session.close();
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             
-            tbc.assertTrue("Asserts that if the calling principal does not have Replace rights for the parent, " +
+            TestCase.assertTrue("Asserts that if the calling principal does not have Replace rights for the parent, " +
             		"the destiny node must be set with an Acl having Add, Delete and Replace permissions.",
             		aclExpected.equals(session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
@@ -407,7 +410,7 @@ public class AclConstraints {
     private void testAclConstraints012() {
         try {
             int aclModifiers = Acl.class.getModifiers();
-            tbc.assertTrue("Asserts that Acl is a public final class", aclModifiers == (Modifier.FINAL | Modifier.PUBLIC));
+            TestCase.assertTrue("Asserts that Acl is a public final class", aclModifiers == (Modifier.FINAL | Modifier.PUBLIC));
             
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);

@@ -47,6 +47,9 @@ import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingExecPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingSubtreeDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.ToBeOverlappedDataPlugin;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -77,18 +80,18 @@ public class OverlappingPlugins {
 	public void testOverlappingPlugins001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testOverlappingPlugins001");
+			DefaultTestBundleControl.log("#testOverlappingPlugins001");
 
 			session = tbc.getDmtAdmin().getSession(
 					OverlappingDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			String nodeTitle = session.getNodeTitle(OverlappingDataPluginActivator.ROOT);
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that a DataPlugin cannot be overlapped by other DataPlugin",
 							TestDataPlugin.GETNODETITLE, nodeTitle);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, true);
 		}
@@ -102,18 +105,18 @@ public class OverlappingPlugins {
 	public void testOverlappingPlugins002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testOverlappingPlugins002");
+			DefaultTestBundleControl.log("#testOverlappingPlugins002");
 			session = tbc.getDmtAdmin().getSession(
 					OverlappingSubtreeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			String nodeTitle = session.getNodeTitle(OverlappingSubtreeDataPluginActivator.ROOT);
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that a it is not possible for a plugin to control the same, or part of the same, "
 									+
 					"subtree that another plugins controls.",TestDataPlugin.GETNODETITLE,nodeTitle);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, true);
 
@@ -127,25 +130,25 @@ public class OverlappingPlugins {
 	public void testOverlappingPlugins003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testOverlappingPlugins003");
+			DefaultTestBundleControl.log("#testOverlappingPlugins003");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(TestExecPluginActivator.ROOT);
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",
 							ToBeOverlappedDataPlugin.MESSAGE, nodeTitle);
 			
 			session.execute(TestExecPluginActivator.ROOT, "");
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",
 							TestExecPlugin.EXECUTE, DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, true);
 		}
@@ -159,25 +162,25 @@ public class OverlappingPlugins {
 	public void testOverlappingPlugins004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testOverlappingPlugins004");
+			DefaultTestBundleControl.log("#testOverlappingPlugins004");
 
 			session = tbc.getDmtAdmin().getSession(
 					OverlappingExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(OverlappingExecPluginActivator.ROOT);
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",
 							ToBeOverlappedDataPlugin.MESSAGE, nodeTitle);
 			
 			session.execute(OverlappingExecPluginActivator.ROOT, "");
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",
 							TestExecPlugin.EXECUTE, DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, true);
 		}

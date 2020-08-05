@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal.functions.data;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.data.AlarmData;
 import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
@@ -34,7 +35,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data comparison is wrong!",
@@ -45,7 +46,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(AlarmData.FIELD_SEVERITY, Integer.valueOf(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, Integer.valueOf(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -73,7 +74,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				0, data.compareTo(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals(
@@ -84,7 +85,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(AlarmData.FIELD_SEVERITY, Integer.valueOf(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, Integer.valueOf(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -111,7 +112,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)).hashCode());
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data hash code is wrong!",
@@ -122,7 +123,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)).hashCode());
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(AlarmData.FIELD_SEVERITY, Integer.valueOf(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, Integer.valueOf(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
@@ -145,13 +146,13 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		checkAlarmDataFields(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
 
 		// check with metadata
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
 
 		// check with fields map
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(AlarmData.FIELD_SEVERITY, Integer.valueOf(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, Integer.valueOf(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
@@ -168,7 +169,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 * Checks the {@code AlarmData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		Map fields = new HashMap();
+		Map<String,Object> fields = new HashMap<>();
 		fields.put(AlarmData.FIELD_SEVERITY, "invalid-severity");
 		fields.put(AlarmData.FIELD_TYPE, Integer.valueOf(AlarmData.TYPE_COLD));
 		checkInvalidFieldType(fields);
@@ -200,7 +201,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		try {
 			new AlarmData(
 					System.currentTimeMillis(),
-					new HashMap(),
+					new HashMap<>(),
 					Integer.MIN_VALUE,
 					AlarmData.TYPE_ACCESS_CONTROL);
 			fail("Alarm data is built with invalid severity.");
@@ -215,7 +216,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	public void testToString() {
 		AlarmData alarmData = new AlarmData(
 				System.currentTimeMillis(),
-				new HashMap(),
+				new HashMap<>(),
 				AlarmData.SEVERITY_UNDEFINED,
 				AlarmData.TYPE_ACCESS_CONTROL);
 		assertNotNull("There is no string representation of the alarm data.", alarmData.toString());
@@ -227,7 +228,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		assertNotNull("There is no string representation of the alarm data.", alarmData.toString());
 	}
 
-	private void checkInvalidFieldType(Map fields) {
+	private void checkInvalidFieldType(Map<String, ? > fields) {
 		try {
 			new AlarmData(fields);
 			fail("The alarm data is built with invalid fields: " + fields);
@@ -236,7 +237,8 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		}
 	}
 
-	private void checkAlarmDataFields(long timestamp, Map metadata, int severity, int type, AlarmData actualData) {
+	private void checkAlarmDataFields(long timestamp, Map<String, ? > metadata,
+			int severity, int type, AlarmData actualData) {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
 		assertEquals(
 				"The severity is not correct!",

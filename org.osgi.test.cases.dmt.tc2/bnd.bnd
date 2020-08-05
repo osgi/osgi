@@ -3,8 +3,9 @@
 
 Bundle-Description: Dmt Test Case 002
 -conditionalpackage					= org.osgi.test.support.*
+-exportcontents					= org.osgi.test.support.*
 Export-Package						= ${p}.tbc.*
-	
+
 -includeresource					= \
 	tb1.jar
 

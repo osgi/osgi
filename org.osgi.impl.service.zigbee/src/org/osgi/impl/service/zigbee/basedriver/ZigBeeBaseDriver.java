@@ -17,8 +17,8 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.io.InputStream;
+
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.basedriver.configuration.ConfigurationFileReader;
 import org.osgi.impl.service.zigbee.util.Logger;
@@ -38,7 +38,7 @@ public class ZigBeeBaseDriver {
 
 	private ConfigurationFileReader	conf;
 
-	private ServiceRegistration		sRegTestStep	= null;
+	private ServiceRegistration<TestStep>	sRegTestStep	= null;
 
 	/**
 	 * This constructor creates the ZigBeeBaseDriver object based on the
@@ -54,13 +54,12 @@ public class ZigBeeBaseDriver {
 	 * This method starts the base driver. It registers also the TestStep
 	 * service.
 	 * 
-	 * @throws InvalidSyntaxException
 	 */
-	public void start() throws InvalidSyntaxException {
+	public void start() {
 		Logger.d(TAG, "Start the base driver.");
 
 		TestStepForZigBeeImpl testStep = new TestStepForZigBeeImpl(this);
-		sRegTestStep = bc.registerService(TestStep.class.getName(), testStep, null);
+		sRegTestStep = bc.registerService(TestStep.class, testStep, null);
 	}
 
 	/**

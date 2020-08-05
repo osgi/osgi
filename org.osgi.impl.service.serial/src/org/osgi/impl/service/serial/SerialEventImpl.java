@@ -27,10 +27,12 @@ public class SerialEventImpl implements SerialEvent {
 		this.type = type;
 	}
 
+	@Override
 	public int getType() {
 		return type;
 	}
 
+	@Override
 	public String getComPort() {
 		return comPort;
 	}

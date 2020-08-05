@@ -17,8 +17,7 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.spi.DataPlugin;
-
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -27,6 +26,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -39,28 +39,29 @@ public class ConfigPluginActivator implements BundleActivator {
     };
     static final String PLUGIN_ROOT_URI = "./OSGi/Configuration";
 
-    private ServiceRegistration servReg;
-	private ServiceTracker      configTracker;
-    private ServiceTracker      logTracker;
+	private ServiceRegistration< ? >								servReg;
+	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>	configTracker;
+	private ServiceTracker<LogService,LogService>					logTracker;
 	private ConfigPlugin        configPlugin;
 
     
+	@Override
 	public void start(BundleContext bc) throws BundleException {
 		System.out.println("Configuration plugin activation started.");
         
 		// looking up the Configuration Admin and the Log service
         configTracker = 
-            new ServiceTracker(bc, ConfigurationAdmin.class.getName(), null);
+				new ServiceTracker<>(bc, ConfigurationAdmin.class, null);
         configTracker.open();
         
-        logTracker = new ServiceTracker(bc, LogService.class.getName(), null);
+		logTracker = new ServiceTracker<>(bc, LogService.class, null);
         logTracker.open();
         
 		// creating the service
 		configPlugin = new ConfigPlugin(configTracker, logTracker);
         
 		// registering the service
-		Hashtable properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
         properties.put("service.pid", DMT_CONFIG_PLUGIN_SERVICE_PID);
         String[] services = new String[] {
@@ -71,6 +72,7 @@ public class ConfigPluginActivator implements BundleActivator {
 		System.out.println("Configuration plugin activation finished successfully.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws BundleException {
         // unregistering the service
 		servReg.unregister();

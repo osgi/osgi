@@ -14,7 +14,7 @@ public class TestStateVariable implements UPnPLocalStateVariable {
 	/**
 	 * The java type of the variable.
 	 */
-	private final Class		javaDT;
+	private final Class< ? >	javaDT;
 	/**
 	 * The upnp data type of the variable.
 	 */
@@ -60,7 +60,7 @@ public class TestStateVariable implements UPnPLocalStateVariable {
 	 * @param step the variable's inc/dec step.
 	 * @param events show if events should be send.
 	 */
-	public TestStateVariable(String name, Class javaDataType,
+	public TestStateVariable(String name, Class< ? > javaDataType,
 			String upnpDataType, Object defaultValue, String[] allowedValues,
 			Number minimum, Number maximum, Number step, boolean sendEvents) {
 		this.name = name;
@@ -89,7 +89,7 @@ public class TestStateVariable implements UPnPLocalStateVariable {
 	 * 
 	 * @return the java class of this variable.
 	 */
-	public Class getJavaDataType() {
+	public Class< ? > getJavaDataType() {
 		return javaDT;
 	}
 

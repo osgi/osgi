@@ -20,10 +20,12 @@ public class TestFilter implements Filter {
 		this.c = c;
 	}
 
+	@Override
 	public void destroy() {
 		//
 	}
 
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 		ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
 
@@ -40,6 +42,7 @@ public class TestFilter implements Filter {
 		writer.close();
 	}
 
+	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		//
 	}

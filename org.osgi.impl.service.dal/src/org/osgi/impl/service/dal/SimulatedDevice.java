@@ -12,21 +12,23 @@ package org.osgi.impl.service.dal;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceFactory;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DevicePermission;
 
-final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
+final class SimulatedDevice extends SimulatedService implements Device {
 
 	private final SimulatedFunction[]	functions;
 
-	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedFunction[] functions) {
+	public SimulatedDevice(Dictionary<String,Object> deviceProps,
+			BundleContext bc, SimulatedFunction[] functions) {
 		this.functions = functions;
 		super.register(new String[] {Device.class.getName()}, deviceProps, bc);
 	}
 
+	@Override
 	public void remove() {
 		SecurityManager securityManager = System.getSecurityManager();
 		if (null != securityManager) {
@@ -44,6 +46,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		}
 	}
 
+	@Override
 	public Object getServiceProperty(String propName) {
 		Object value = super.serviceRef.getProperty(propName);
 		if (null == value) {
@@ -52,6 +55,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		return value;
 	}
 
+	@Override
 	public String[] getServicePropertyKeys() {
 		return super.serviceRef.getPropertyKeys();
 	}
@@ -60,7 +64,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		if ((null == this.functions) || (null == functionClassName)) {
 			return null;
 		}
-		List result = new ArrayList();
+		List<SimulatedFunction> result = new ArrayList<>();
 		for (int i = 0; i < this.functions.length; i++) {
 			if (contains(
 					(String[]) this.functions[i].getServiceProperty(Constants.OBJECTCLASS),
@@ -69,7 +73,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 			}
 		}
 		return result.isEmpty() ? null :
-				(SimulatedFunction[]) result.toArray(new SimulatedFunction[result.size()]);
+				result.toArray(new SimulatedFunction[0]);
 	}
 
 	private static boolean contains(String[] array, String element) {

@@ -11,7 +11,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.async.delegate.AsyncDelegate;
 import org.osgi.service.log.LogService;
 import org.osgi.util.promise.Deferred;
-import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.tracker.ServiceTracker;
@@ -69,7 +68,9 @@ public class MethodCall {
 		}
 	}
 	
-	public <V> Promise<V> invokeAsynchronously(Bundle clientBundle, ExecutorService executor) {
+	public <V> Promise<V> invokeAsynchronously(
+			@SuppressWarnings("hiding") Bundle clientBundle,
+			ExecutorService executor) {
 		
 		Deferred<V> deferred = new Deferred<V>();
 
@@ -112,16 +113,14 @@ public class MethodCall {
 		Promise<V> promise = deferred.getPromise();
 		
 		//Release the service we got at the start of this method
-		promise.onResolve(new Runnable() {
-			public void run() {
-				releaseService();
-			}
-		});
+		promise.onResolve(() -> releaseService());
 		
 		return promise;
 	}
 
-	public Promise<Void> fireAndForget(Bundle clientBundle, ExecutorService executor) {
+	public Promise<Void> fireAndForget(
+			@SuppressWarnings("hiding") Bundle clientBundle,
+			ExecutorService executor) {
 		Object svc;
 		try {
 			svc = getService();
@@ -148,15 +147,12 @@ public class MethodCall {
 		Deferred<Void> started = new Deferred<Void>();
 		try {
 			executor.execute(new FireAndForgetWork(this, cleanup, started));
-			cleanup.getPromise().onResolve(new Runnable() {
-				public void run() {
-					releaseService();
-				}
-			}).then(null, new Failure(){
-				public void fail(Promise<?> resolved) throws Exception {
-					logError("The fire-and-forget invocation failed", resolved.getFailure());
-				}
-			});
+			cleanup.getPromise()
+					.onResolve(() -> releaseService())
+					.then(null,
+							resolved -> logError(
+									"The fire-and-forget invocation failed",
+									resolved.getFailure()));
 			return started.getPromise();
 		} catch (RejectedExecutionException ree) {
 			logError("The Async Service threadpool rejected the fire-and-forget invocation", ree);

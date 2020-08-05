@@ -48,6 +48,7 @@ public class JSONString extends JSONObject {
 	/**
 	 * return hardcoded true.
 	 */
+	@Override
 	public boolean isJsonString() {
 		return true;
 	}

@@ -26,7 +26,7 @@ public class IDManager {
 	private static final String _PID = "org.osgi.impl.service.dmt.Persistency";
 	
 	private Hashtable<String, IDList> ids;
-	private ServiceTracker trackerCM;
+	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin>	trackerCM;
 
 	/**
 	 * holder class for an index/pid combination 
@@ -40,6 +40,7 @@ public class IDManager {
 			this.bundleID = bundleID;
 			this.index = index;
 		}
+		@Override
 		public String toString() {
 			return " pid: " + pid + "  bunldeID: " + bundleID + "  id: " + index;
 		}
@@ -51,6 +52,7 @@ public class IDManager {
 	 *
 	 */
 	class IDList {
+		@SuppressWarnings("hiding")
 		Vector<ID> ids = new Vector<ID>();
 		
 		ID getId( String pid, long bundleID ) {
@@ -86,7 +88,8 @@ public class IDManager {
 	
 	//*** EnumerationManager implementation
 	public IDManager( BundleContext context ) {
-		trackerCM = new ServiceTracker(context, ConfigurationAdmin.class.getName(), null);
+		trackerCM = new ServiceTracker<>(context, ConfigurationAdmin.class,
+				null);
 		trackerCM.open();
 	}
 	
@@ -111,6 +114,7 @@ public class IDManager {
 	 * @return
 	 */
 	private ID getID( String uri, String pid, long bundleID ) {
+		@SuppressWarnings("hiding")
 		IDList ids = getIDList(uri);
 		// if pid is given, then look for this special ID
 		ID id = null;
@@ -134,7 +138,8 @@ public class IDManager {
 	 * @return
 	 */
 	private IDList getIDList( String uri ) {
-		IDList ids = (IDList) getIDTable().get(uri);
+		@SuppressWarnings("hiding")
+		IDList ids = getIDTable().get(uri);
 		if ( ids == null ) {
 			ids = new IDList();
 			getIDTable().put(uri, ids);
@@ -160,7 +165,7 @@ public class IDManager {
 	 */
 	private void store( String uri, ID id ) {
 		
-		ConfigurationAdmin ca = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin ca = trackerCM.getService();
 		if (ca != null) {
 			try {
 				if ( getConfiguration(uri, id) == null) {
@@ -184,7 +189,7 @@ public class IDManager {
 
 	private Configuration getConfiguration(String uri, ID id) {
 		Configuration configuration = null;
-		ConfigurationAdmin ca = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin ca = trackerCM.getService();
 		if (ca != null) {
 			try {
 				StringBuffer filter = new StringBuffer();
@@ -220,7 +225,7 @@ public class IDManager {
 	private void restore() {
 		getIDTable().clear();
 		Configuration[] configs = null;
-		ConfigurationAdmin ca = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin ca = trackerCM.getService();
 		if (ca != null) {
 
 			String filter = "(" + ConfigurationAdmin.SERVICE_FACTORYPID + "="

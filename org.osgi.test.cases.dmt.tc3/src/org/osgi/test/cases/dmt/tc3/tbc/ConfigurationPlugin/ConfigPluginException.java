@@ -25,7 +25,11 @@ import org.osgi.service.dmt.DmtException;
  * to indicate DMT errors without knowing all the parameters. 
  */
 class ConfigPluginException extends Exception {
-    private int code;
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	private int					code;
 
     /**
      * Creates a new ConfigPluginException with the given error code and detail

@@ -16,15 +16,11 @@
 
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
-import static org.osgi.framework.Constants.OBJECTCLASS;
+import static org.osgi.framework.Constants.*;
 import static org.osgi.framework.Constants.SERVICE_EXPORTED_CONFIGS;
-import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.framework.Constants.SERVICE_IMPORTED_CONFIGS;
 import static org.osgi.framework.Constants.SERVICE_INTENTS;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_PACKAGE_VERSION_;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,14 +29,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.test.support.MockFactory;
+
+import junit.framework.TestCase;
 
 public class EndpointDescriptionTests extends TestCase {
 
@@ -184,6 +180,7 @@ public class EndpointDescriptionTests extends TestCase {
 	}
 
 	public void testBadMap() {
+		@SuppressWarnings("unused")
 		EndpointDescription ed;
 		Map<String, Object> props = new HashMap<String, Object>();
 		String testUUID = "testUUID";
@@ -196,7 +193,8 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 
 		props.put("foo", "bar");
 		props.put("Foo", "bar");
@@ -219,6 +217,9 @@ public class EndpointDescriptionTests extends TestCase {
 
 		props.remove("Foo");
 		props.put("foo", "bar");
+		@SuppressWarnings({
+				"rawtypes", "unchecked"
+		})
 		Map<Object, Object> bad = (Map) props;
 		bad.put(this, "bar");
 
@@ -247,7 +248,8 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 
 		try {
 			ed = newEndpointDescription(ref, null);
@@ -412,7 +414,8 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		List<String> intents;
 
 		ed = newEndpointDescription(props);
@@ -535,7 +538,8 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		List<String> configTypes;
 
 		props.put(SERVICE_IMPORTED_CONFIGS, this);
@@ -654,7 +658,8 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		EndpointDescription ed1, ed2, ed3;
 
 		ed1 = newEndpointDescription(props);
@@ -670,6 +675,7 @@ public class EndpointDescriptionTests extends TestCase {
 		assertEquals("id not trimmed of whitespace", someId, ed1.getId());
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public void testEquals() {
 		Map<String, Object> props = new HashMap<String, Object>();
 		String someId = "someId";
@@ -685,7 +691,8 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		EndpointDescription ed1, ed2, ed3;
 
 		ed1 = newEndpointDescription(props);
@@ -723,7 +730,8 @@ public class EndpointDescriptionTests extends TestCase {
 		Long someID = Long.valueOf(12l);
 		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		EndpointDescription ed1, ed2, ed3, ed4;
 
 		ed1 = newEndpointDescription(props);
@@ -760,7 +768,8 @@ public class EndpointDescriptionTests extends TestCase {
 		Long someID = Long.valueOf(12l);
 		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		EndpointDescription ed1, ed2;
 
 		ed1 = newEndpointDescription(props);
@@ -808,7 +817,8 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		serviceProps.put("Service.Exported.Configs", "config");
-		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		ServiceReference< ? > ref = newMockServiceReference(testBundle,
+				serviceProps);
 		EndpointDescription ed1, ed2;
 
 		ed1 = newEndpointDescription(props);
@@ -820,7 +830,8 @@ public class EndpointDescriptionTests extends TestCase {
 				.getProperties().containsKey(SERVICE_EXPORTED_CONFIGS));
 	}
 
-	private EndpointDescription newEndpointDescription(ServiceReference ref,
+	private EndpointDescription newEndpointDescription(
+			ServiceReference< ? > ref,
 			Map<String, Object> props) {
 		EndpointDescription ed = new EndpointDescription(ref, props);
 		testMutability(ed);
@@ -855,7 +866,8 @@ public class EndpointDescriptionTests extends TestCase {
 		testListMutability(interfs);
 	}
 
-	private void testListMutability(List list) {
+	@SuppressWarnings("unchecked")
+	private <T> void testListMutability(List<T> list) {
 		try {
 			if (!list.isEmpty()) {
 				list.clear();
@@ -866,7 +878,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 		try {
-			list.add("foo");
+			list.add((T) "foo");
 			fail("list is mutable");
 		}
 		catch (RuntimeException e) {
@@ -883,7 +895,7 @@ public class EndpointDescriptionTests extends TestCase {
 	}
 
 	public static BundleContext newMockBundleContext(String uuid) {
-		return (BundleContext) MockFactory.newMock(BundleContext.class,
+		return MockFactory.newMock(BundleContext.class,
 				new MockBundleContext(uuid));
 	}
 
@@ -894,6 +906,7 @@ public class EndpointDescriptionTests extends TestCase {
 			this.uuid = uuid;
 		}
 
+		@SuppressWarnings("unused")
 		public String getProperty(String key) {
 			if (key.equals("org.osgi.framework.uuid")) {
 				return uuid;
@@ -904,7 +917,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 	public static Bundle newMockBundle(long id, String name, String location,
 			BundleContext context) {
-		return (Bundle) MockFactory.newMock(Bundle.class, new MockBundle(id,
+		return MockFactory.newMock(Bundle.class, new MockBundle(id,
 				name, location, context));
 	}
 
@@ -921,26 +934,30 @@ public class EndpointDescriptionTests extends TestCase {
 			this.context = context;
 		}
 
+		@SuppressWarnings("unused")
 		public long getBundleId() {
 			return id;
 		}
 
+		@SuppressWarnings("unused")
 		public String getLocation() {
 			return location;
 		}
 
+		@SuppressWarnings("unused")
 		public String getSymbolicName() {
 			return name;
 		}
 
+		@SuppressWarnings("unused")
 		public BundleContext getBundleContext() {
 			return context;
 		}
 	}
 
-	public static ServiceReference newMockServiceReference(Bundle bundle,
+	public static ServiceReference< ? > newMockServiceReference(Bundle bundle,
 			Map<String, Object> properties) {
-		return (ServiceReference) MockFactory.newMock(ServiceReference.class,
+		return MockFactory.newMock(ServiceReference.class,
 				new MockServiceReference(bundle, properties));
 	}
 
@@ -953,10 +970,12 @@ public class EndpointDescriptionTests extends TestCase {
 			this.properties = properties;
 		}
 
+		@SuppressWarnings("unused")
 		public Bundle getBundle() {
 			return bundle;
 		}
 
+		@SuppressWarnings("unused")
 		public Object getProperty(String key) {
 			Object result = properties.get(key);
 			if (result != null) {
@@ -972,6 +991,7 @@ public class EndpointDescriptionTests extends TestCase {
 			return null;
 		}
 
+		@SuppressWarnings("unused")
 		public String[] getPropertyKeys() {
 			String[] result = new String[properties.size()];
 			properties.keySet().toArray(result);

@@ -1,8 +1,11 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.upnp.cd.ssdp.EventAccessForExporter;
+import org.osgi.service.upnp.UPnPEventListener;
 
 // This class is the key database for eventing. This class holds the subscribers list which
 // contains subscription id mapped to subscription object . Also holds the database for
@@ -11,22 +14,22 @@ public class EventRegistry implements EventAccessForExporter {
 	// This table holds the subscriber list. This table maintains all the
 	// subscription info against the
 	// service unique id given by the device.
-	private static Hashtable	subscribersList;
-	private static Hashtable	idMapsListener;
+	private static Hashtable<String,Subscription>			subscribersList;
+	private static Hashtable<String,ServiceRegistration<UPnPEventListener>>	idMapsListener;
 	public Subscription			theSubscription;
 	private GenaConstants		gc;
 
 	// Constructor for initializing subscriberList table.
 	public EventRegistry(String IP) {
-		subscribersList = new Hashtable();
-		idMapsListener = new Hashtable();
+		subscribersList = new Hashtable<>();
+		idMapsListener = new Hashtable<>();
 		gc = new GenaConstants(IP);
 	}
 
 	// This method inserts the listener mapped with serviceid in idmapslistener
 	// table
 	public synchronized static void insertListeners(String serviceId,
-			ServiceRegistration registration) {
+			ServiceRegistration<UPnPEventListener> registration) {
 		idMapsListener.put(serviceId, registration);
 	}
 
@@ -48,7 +51,7 @@ public class EventRegistry implements EventAccessForExporter {
 	// This method retrieves the subscription object against the given
 	// subscription id
 	public synchronized static Subscription getSubscriber(String subscriptionId) {
-		return (Subscription) subscribersList.get(subscriptionId);
+		return subscribersList.get(subscriptionId);
 	}
 
 	// This method removes the subscription from the list
@@ -61,8 +64,9 @@ public class EventRegistry implements EventAccessForExporter {
 	// from the framework. If any subscriber subscribers for this service's
 	// eventing url,
 	// that subscriber will also be removed from the list.
+	@Override
 	public synchronized void removeServiceId(String serviceId) {
-		ServiceRegistration registration = (ServiceRegistration) idMapsListener
+		ServiceRegistration<UPnPEventListener> registration = idMapsListener
 				.get(serviceId);
 		if (registration != null) {
 			try {
@@ -74,9 +78,10 @@ public class EventRegistry implements EventAccessForExporter {
 			}
 		}
 		idMapsListener.remove(serviceId);
-		for (Enumeration enumeration = subscribersList.keys(); enumeration.hasMoreElements();) {
-			String subscriptionId = (String) enumeration.nextElement();
-			Subscription subscription = (Subscription) subscribersList
+		for (Enumeration<String> enumeration = subscribersList
+				.keys(); enumeration.hasMoreElements();) {
+			String subscriptionId = enumeration.nextElement();
+			Subscription subscription = subscribersList
 					.get(subscriptionId);
 			String serviceIdentifier = subscription.getServiceId();
 			if (serviceIdentifier.equals(serviceId)) {
@@ -86,7 +91,7 @@ public class EventRegistry implements EventAccessForExporter {
 	}
 
 	// This method retrieves all the subscription ids from the list
-	public synchronized static Enumeration getSubscriberIds() {
+	public synchronized static Enumeration<String> getSubscriberIds() {
 		return subscribersList.keys();
 	}
 
@@ -104,16 +109,17 @@ public class EventRegistry implements EventAccessForExporter {
 	// keeping of listener with framework.
 	public static void checkForServiceId(String serviceId) {
 		boolean removeListener = true;
-		for (Enumeration enumeration = subscribersList.elements(); enumeration
+		for (Enumeration<Subscription> enumeration = subscribersList
+				.elements(); enumeration
 				.hasMoreElements();) {
-			if (((Subscription) enumeration.nextElement()).getServiceId().equals(
+			if (enumeration.nextElement().getServiceId().equals(
 					serviceId)) {
 				removeListener = false;
 				break;
 			}
 		}
 		if (removeListener) {
-			ServiceRegistration registration = (ServiceRegistration) idMapsListener
+			ServiceRegistration<UPnPEventListener> registration = idMapsListener
 					.get(serviceId);
 			try {
 				registration.unregister();
@@ -127,9 +133,10 @@ public class EventRegistry implements EventAccessForExporter {
 	}
 
 	public void releaseAllListeners() {
-		for (Enumeration enumeration = idMapsListener.keys(); enumeration.hasMoreElements();) {
-			String eventUrl = (String) enumeration.nextElement();
-			ServiceRegistration registration = (ServiceRegistration) idMapsListener
+		for (Enumeration<String> enumeration = idMapsListener
+				.keys(); enumeration.hasMoreElements();) {
+			String eventUrl = enumeration.nextElement();
+			ServiceRegistration<UPnPEventListener> registration = idMapsListener
 					.get(eventUrl);
 			try {
 				registration.unregister();

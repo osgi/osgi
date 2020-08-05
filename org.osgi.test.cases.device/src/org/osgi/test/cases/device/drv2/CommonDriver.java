@@ -1,9 +1,13 @@
 package org.osgi.test.cases.device.drv2;
 
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.device.Driver;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * A common driver implementation - a driver that will be matched with other
@@ -14,10 +18,10 @@ import org.osgi.test.cases.device.tbc.*;
  * @version 1.0
  */
 public class CommonDriver implements Driver, BundleActivator {
-	private ServiceRegistration	driverRegistration	= null;
+	private ServiceRegistration<Driver>			driverRegistration	= null;
 	private BundleContext		bc					= null;
 	private TestBundleControl	master				= null;
-	private ServiceReference	masterRef			= null;
+	private ServiceReference<TestBundleControl>	masterRef			= null;
 
 	/**
 	 * The start method of the activator of the CommonDriver bundle. As required
@@ -26,15 +30,15 @@ public class CommonDriver implements Driver, BundleActivator {
 	public void start(BundleContext bc) {
 		this.bc = bc;
 		/* get the master of this test case */
-		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
-		master = (TestBundleControl) bc.getService(masterRef);
+		masterRef = bc.getServiceReference(TestBundleControl.class);
+		master = bc.getService(masterRef);
 		log("starting driver bundle");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("DRIVER_ID", "common_driver");
 		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(42));
 		log("registering service");
 		driverRegistration = bc.registerService(
-				"org.osgi.service.device.Driver", this, h);
+				Driver.class, this, h);
 	}
 
 	/**
@@ -50,7 +54,7 @@ public class CommonDriver implements Driver, BundleActivator {
 	 * @param reference service reference to the registred device.
 	 * @returns 255
 	 */
-	public int match(ServiceReference reference) {
+	public int match(ServiceReference< ? > reference) {
 		return 255;
 	}
 
@@ -64,7 +68,7 @@ public class CommonDriver implements Driver, BundleActivator {
 	 *        attachtes always successfully
 	 * @returns null
 	 */
-	public String attach(ServiceReference reference) throws Exception {
+	public String attach(ServiceReference< ? > reference) throws Exception {
 		log("attaching to " + (String) reference.getProperty("deviceID"));
 		master.setMessage(TestBundleControl.MESSAGE_ERROR);
 		bc.ungetService(masterRef);

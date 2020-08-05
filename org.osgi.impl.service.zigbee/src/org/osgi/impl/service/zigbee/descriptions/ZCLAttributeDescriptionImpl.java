@@ -49,52 +49,64 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 		this.manufacturerCode = -1;
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public boolean isReadOnly() {
 		return isReadOnly;
 	}
 
+	@Override
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public String getShortDescription() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public boolean isMandatory() {
 		return isMandatory;
 	}
 
+	@Override
 	public boolean isReportable() {
 		return isReportable;
 	}
 
+	@Override
 	public boolean isPartOfAScene() {
 		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.getClass().getName() + "[id: " + id + ", isReadOnly: " + isReadOnly + ", defaultValue: "
 				+ defaultValue + ", name: " + name + ", isMandatory: " + isMandatory + ", isReportable: " + isReportable
 				+ ", datatype: " + datatype + "]";
 	}
 
+	@Override
 	public boolean isManufacturerSpecific() {
 		return manufacturerCode < 0 ? false : true;
 	}
 
+	@Override
 	public int getManufacturerCode() {
 		return manufacturerCode;
 	}
 
+	@Override
 	public ZCLDataTypeDescription getDataType() {
 		return datatype;
 	}

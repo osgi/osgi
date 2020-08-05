@@ -34,18 +34,18 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	/**
 	 * service registration ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration	serviceRegistration;
+	private ServiceRegistration<ResourceContextListener>	serviceRegistration;
 
 	/**
 	 * list of received events
 	 */
-	private final List			events;
+	private final List<ResourceContextEvent>	events;
 
 	/**
 	 * 
 	 */
 	public ResourceContextListenerTestImpl() {
-		events = new ArrayList();
+		events = new ArrayList<>();
 	}
 
 	/**
@@ -55,7 +55,8 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	 * @param bundleContext
 	 */
 	public void start(BundleContext bundleContext) {
-		serviceRegistration = bundleContext.registerService(ResourceContextListener.class.getName(), this, null);
+		serviceRegistration = bundleContext
+				.registerService(ResourceContextListener.class, this, null);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 		if (index < 0) {
 			return null;
 		} else {
-			return (ResourceContextEvent) events.get(index);
+			return events.get(index);
 		}
 	}
 
@@ -99,7 +100,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 		if (index < 0) {
 			return null;
 		} else {
-			return (ResourceContextEvent) events.get(index);
+			return events.get(index);
 		}
 	}
 
@@ -108,7 +109,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	 * 
 	 * @return received events, or an empty list if there is no event.
 	 */
-	public List getReceivedEvents() {
+	public List<ResourceContextEvent> getReceivedEvents() {
 		return events;
 	}
 

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -67,7 +68,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 */
 	protected Function[] getFunctions(String functionClassName) {
 		BundleContext bc = super.getContext();
-		ServiceReference[] functionSRefs = null;
+		ServiceReference< ? >[] functionSRefs = null;
 		try {
 			functionSRefs = bc.getServiceReferences(functionClassName, null);
 		} catch (InvalidSyntaxException e) {
@@ -116,7 +117,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 		if ((null == expectedMetadata) || (null == valueUnit)) {
 			return;
 		}
-		Map additionalMetadata = expectedMetadata.getMetadata(null);
+		Map<String, ? > additionalMetadata = expectedMetadata.getMetadata(null);
 		if (null == additionalMetadata) {
 			return;
 		}
@@ -139,7 +140,8 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * @param metadata The metadata to check.
 	 * @param actualData The actual data.
 	 */
-	protected void assertFunctionDataFields(long timestamp, Map metadata, FunctionData actualData) {
+	protected void assertFunctionDataFields(long timestamp,
+			Map<String, ? > metadata, FunctionData actualData) {
 		// time stamp
 		assertEquals(
 				"The timestamp is not correct!",
@@ -198,12 +200,13 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 */
 	protected Function[] getFunctions(String functionClass, int propertyAccess) {
 		try {
-			ServiceReference[] functionSRefs = super.getContext().getServiceReferences(
+			ServiceReference< ? >[] functionSRefs = super.getContext()
+					.getServiceReferences(
 					functionClass, '(' + Function.SERVICE_PROPERTY_NAMES + "=*)");
 			assertNotNull(
 					"There are no functions of type: " + functionClass + " and property access: " + propertyAccess,
 					functionSRefs);
-			List result = new ArrayList(functionSRefs.length);
+			List<Function> result = new ArrayList<>(functionSRefs.length);
 			for (int i = 0; i < functionSRefs.length; i++) {
 				Function function = (Function) super.getContext().getService(functionSRefs[i]);
 				if (null == function) {
@@ -221,7 +224,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 			assertFalse(
 					"There is no function, which contains a proeprty with an access: " + propertyAccess,
 					result.isEmpty());
-			return (Function[]) result.toArray(new Function[result.size()]);
+			return result.toArray(new Function[0]);
 		} catch (InvalidSyntaxException e) {
 			// the filter is valid
 		}
@@ -234,7 +237,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 		if (null == propertyMetadata) {
 			return false;
 		}
-		Map metadata = propertyMetadata.getMetadata(null);
+		Map<String, ? > metadata = propertyMetadata.getMetadata(null);
 		if (null == metadata) {
 			return false;
 		}

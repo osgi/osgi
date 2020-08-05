@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.dal.functions.data;
 
 import java.math.BigDecimal;
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.Meter;
@@ -71,7 +72,7 @@ public class LevelData extends FunctionData {
 	 * @throws IllegalArgumentException If the level is missing.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public LevelData(Map fields) {
+	public LevelData(Map<String, ? > fields) {
 		super(fields);
 		this.level = (BigDecimal) fields.get(FIELD_LEVEL);
 		if (null == this.level) {
@@ -90,7 +91,8 @@ public class LevelData extends FunctionData {
 	 *
 	 * @throws NullPointerException If {@code level} is {@code null}.
 	 */
-	public LevelData(long timestamp, Map metadata, BigDecimal level, String unit) {
+	public LevelData(long timestamp, Map<String,Object> metadata,
+			BigDecimal level, String unit) {
 		super(timestamp, metadata);
 		this.level = level;
 		if (null == this.level) {
@@ -129,6 +131,7 @@ public class LevelData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -161,6 +164,7 @@ public class LevelData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		int hashCode = super.hashCode();
 		if (null != this.unit) {
@@ -192,6 +196,7 @@ public class LevelData extends FunctionData {
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(Object o) {
 		int result = super.compareTo(o);
 		if (0 != result) {
@@ -210,6 +215,7 @@ public class LevelData extends FunctionData {
 	 *
 	 * @return The string representation of this level data.
 	 */
+	@Override
 	public String toString() {
 		return getClass().getName() + " [level=" + level + ", unit=" + unit +
 				", timestamp=" + super.getTimestamp() + "]";

@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
@@ -156,7 +157,7 @@ public class FunctionTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
-		ServiceReference[] functionSRefs = getFunctionSRefs();
+		ServiceReference< ? >[] functionSRefs = getFunctionSRefs();
 		for (int i = 0; i < functionSRefs.length; i++) {
 			super.checkRequiredProperties(
 					functionSRefs[i],
@@ -172,7 +173,7 @@ public class FunctionTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
-		ServiceReference[] functionSRefs = getFunctionSRefs();
+		ServiceReference< ? >[] functionSRefs = getFunctionSRefs();
 		boolean compared = false;
 		for (int i = 0; i < functionSRefs.length; i++) {
 			Function function = (Function) super.getContext().getService(functionSRefs[i]);
@@ -289,7 +290,7 @@ public class FunctionTest extends AbstractDeviceTest {
 					"No return type is expected for the property setter: " + propertyName,
 					Void.TYPE,
 					setters[i].getReturnType());
-			Class[] paramTypes = setters[i].getParameterTypes();
+			Class< ? >[] paramTypes = setters[i].getParameterTypes();
 			switch (paramTypes.length) {
 				case 1 :
 					assertFalse("There must be only one setter with one parameters: " + setters[i], setterWithOneParam);
@@ -311,16 +312,17 @@ public class FunctionTest extends AbstractDeviceTest {
 		assertEquals("Only one getter is expected: " + getterName, 1, getters.length);
 		Method getter = getters[0];
 		assertEquals("The getter must not accept parameters.", 0, getter.getParameterTypes().length);
-		Class returnType = getter.getReturnType();
+		Class< ? > returnType = getter.getReturnType();
 		assertNotNull("The function getter must have return type: " + getterName, returnType);
 		assertTrue(
 				"The function getter must return a subclass of " + FunctionData.class.getName(),
 				FunctionData.class.isAssignableFrom(returnType));
 	}
 
-	private ServiceReference[] getFunctionSRefs() {
+	private ServiceReference< ? >[] getFunctionSRefs() {
 		try {
-			ServiceReference[] functionSRefs = super.getContext().getServiceReferences(
+			ServiceReference< ? >[] functionSRefs = super.getContext()
+					.getServiceReferences(
 					(String)null, '(' + Function.SERVICE_UID + "=*)");
 			assertNotNull("There are no functions.", functionSRefs);
 			return functionSRefs;
@@ -332,10 +334,11 @@ public class FunctionTest extends AbstractDeviceTest {
 
 	private Function[] getFunctions(String functionClass, int propertyAccess) {
 		try {
-			ServiceReference[] functionSRefs = super.getContext().getServiceReferences(
+			ServiceReference< ? >[] functionSRefs = super.getContext()
+					.getServiceReferences(
 					functionClass, '(' + Function.SERVICE_PROPERTY_NAMES + "=*)");
 			assertNotNull("There are no functions.", functionSRefs);
-			List result = new ArrayList(functionSRefs.length);
+			List<Function> result = new ArrayList<>(functionSRefs.length);
 			for (int i = 0; i < functionSRefs.length; i++) {
 				Function function = (Function) super.getContext().getService(functionSRefs[i]);
 				if (null == function) {
@@ -353,7 +356,7 @@ public class FunctionTest extends AbstractDeviceTest {
 			assertFalse(
 					"There is no function, which contains a proeprty with an access: " + propertyAccess,
 					result.isEmpty());
-			return (Function[]) result.toArray(new Function[result.size()]);
+			return result.toArray(new Function[0]);
 		} catch (InvalidSyntaxException e) {
 			// the filter is valid
 		}
@@ -366,7 +369,7 @@ public class FunctionTest extends AbstractDeviceTest {
 		if (null == propertyMetadata) {
 			return false;
 		}
-		Map metadata = propertyMetadata.getMetadata(null);
+		Map<String, ? > metadata = propertyMetadata.getMetadata(null);
 		if (null == metadata) {
 			return false;
 		}
@@ -374,7 +377,8 @@ public class FunctionTest extends AbstractDeviceTest {
 		return (null != accessType) && (propertyAccess == (accessType.intValue() & propertyAccess));
 	}
 
-	private void checkFunctionPropertyType(String propertyName, Class[] expectedTypes) {
+	private void checkFunctionPropertyType(String propertyName,
+			Class< ? >[] expectedTypes) {
 		Function[] functions = null;
 		try {
 			functions = super.getFunctions(propertyName, null);
@@ -382,7 +386,9 @@ public class FunctionTest extends AbstractDeviceTest {
 			fail(null, e);
 		}
 		for (int i = 0; i < functions.length; i++) {
-			Class propertyType = functions[i].getServiceProperty(propertyName).getClass();
+			Class< ? > propertyType = functions[i]
+					.getServiceProperty(propertyName)
+					.getClass();
 			assertTrue("The function proeprty type is not correct: " + propertyName + ", type: " + propertyType,
 					TestUtil.contains(expectedTypes, propertyType));
 		}

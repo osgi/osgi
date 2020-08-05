@@ -4,14 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Dictionary;
-import java.util.Hashtable;
 
 import org.osgi.impl.service.upnp.cp.util.Control;
 import org.osgi.impl.service.upnp.cp.util.UPnPController;
 
 public class ControlImpl implements Control {
-	private Hashtable		serviceObjects;
 	private SOAPMaker		maker;
+	@SuppressWarnings("unused")
 	private SOAPErrorCodes	errorCodes;
 	private SOAPParser		parser;
 	UPnPController			controller;
@@ -22,12 +21,13 @@ public class ControlImpl implements Control {
 		maker = new SOAPMaker();
 		errorCodes = new SOAPErrorCodes();
 		parser = new SOAPParser();
-		serviceObjects = new Hashtable();
 	}
 
 	// This method is used to invoke a control request for a particular service.
-	public Dictionary sendControlRequest(String path, String host,
-			String serviceType, String actionName, Dictionary parameters,
+	@Override
+	public Dictionary<String,Object> sendControlRequest(String path,
+			String host, String serviceType, String actionName,
+			Dictionary<String,Object> parameters,
 			boolean first) throws Exception {
 		String soapRequest;
 		if (first) {

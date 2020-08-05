@@ -18,10 +18,10 @@
 
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.osgi.service.dmt.DmtException;
 
 // OPTIMIZE implement operations to work on either path or URI, depending on which is available.
 public class Node {
@@ -119,7 +119,8 @@ public class Node {
         StringBuffer sb = new StringBuffer();
         int len = uri.length();
         int start = 0;
-        int numSegments = 0;
+		@SuppressWarnings("unused")
+		int numSegments = 0;
         for(int i = 0; i < len; i++) {
             if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
                 if(i == len-1) // last character cannot be an unescaped '/'
@@ -215,12 +216,14 @@ public class Node {
     }
     
     String getLastSegment() {
-        String[] path = getPath();
+		@SuppressWarnings("hiding")
+		String[] path = getPath();
         return path.length == 0 ? null : path[path.length-1];
     }
     
     boolean isAbsolute() {
-        String[] path = getPath();
+		@SuppressWarnings("hiding")
+		String[] path = getPath();
         if(path.length == 0)
             return false;
         return ".".equals(path[0]);
@@ -248,7 +251,8 @@ public class Node {
     // precondition: both nodes are absolute
     boolean isAncestorOf(Node other, boolean strict) {
         String[] otherPath = other.getPath();
-        String[] path = getPath();
+		@SuppressWarnings("hiding")
+		String[] path = getPath();
         
         if(otherPath.length < path.length)
             return false;
@@ -272,7 +276,8 @@ public class Node {
         if(isEmpty() || isRoot())
             return null;
 
-        String[] path = getPath();
+		@SuppressWarnings("hiding")
+		String[] path = getPath();
         String[] parent = new String[path.length-1];
         System.arraycopy(path, 0, parent, 0, path.length-1);
         return new Node(parent);
@@ -299,7 +304,8 @@ public class Node {
     Node getRelativeNode(Node descendentNode) {
         if (!isAncestorOf(descendentNode))
             return null;
-        String uri = getUri();
+		@SuppressWarnings("hiding")
+		String uri = getUri();
         String descendentUri = descendentNode.getUri();
         
         if (uri.length() == descendentUri.length())
@@ -307,18 +313,21 @@ public class Node {
         return new Node(descendentUri.substring(uri.length() + 1));
     }
     
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if(!(other instanceof Node))
             return false;
         
         return getUri().equals(((Node) other).getUri());
     }
     
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return getUri().hashCode();
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return getUri();
     }
     
@@ -326,7 +335,7 @@ public class Node {
         if(uri.length() == 0)
             return new String[] {};
         
-        List segments = new ArrayList();
+		List<String> segments = new ArrayList<>();
         StringBuffer segment = new StringBuffer();
         
         boolean escape = false;
@@ -347,7 +356,7 @@ public class Node {
         }
         segments.add(segment.toString());
     
-        return (String[]) segments.toArray(new String[segments.size()]);
+		return segments.toArray(new String[0]);
     }
     
 }

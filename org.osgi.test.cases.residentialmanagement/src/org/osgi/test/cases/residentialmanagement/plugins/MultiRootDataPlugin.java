@@ -47,10 +47,11 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 	
 	boolean forceFatalExceptionOnNextGetNodeSize; 
 
+	@SuppressWarnings("unused")
 	private String pluginID;
 	private Node pluginRootNode;
 	
-	private Set mountPoints;
+	private Set<MountPoint>		mountPoints;
 	
 
 	/**
@@ -77,10 +78,10 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 			if ( absPath.length == level+1 )
 				return start;
 			
-			Iterator iterator = start.getChildren().iterator();
+			Iterator<Node> iterator = start.getChildren().iterator();
 			while (iterator.hasNext()) {
 				// check next segment of the path with the nodes children
-				Node found = findNode((Node)iterator.next(), absPath, level + 1);
+				Node found = findNode(iterator.next(), absPath, level + 1);
 				if ( found != null )
 					return found;
 			}
@@ -115,29 +116,34 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 		return true;
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
 		throw new DmtException(Uri.toUri(nodePath), DmtException.FEATURE_NOT_SUPPORTED, "This plugin does not support copy operations.");
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
 		// find parent node
@@ -149,6 +155,7 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 			new Node(parent, nodePath[nodePath.length - 1], null );
 	}
 
+	@Override
 	public void createLeafNode(String[] nodePath, DmtData value, String mimeType)
 			throws DmtException {
 		// find parent node
@@ -160,28 +167,33 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 			new Node(parent, nodePath[nodePath.length - 1], "" + value );
 	}
 
+	@Override
 	public void deleteNode(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath );
 		n.getParent().removeChild(n);
 	}
 
+	@Override
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
 		Node n = findNode(nodePath );
 		n.setName(newName);
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
 		Node n = findNode(nodePath );
 		n.setTitle(title);
 	}
 
+	@Override
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		this.lastAction = ACTION_SET_NODE_VALUE;
@@ -189,16 +201,19 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 		this.lastValue = data;
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void close() throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath);
 		Vector<String> children = new Vector<String>();
@@ -209,11 +224,13 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 		return children.toArray( new String[n.getChildren().size()] );
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath);
 		return n != null ? n.getMetaNode() : null;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		if ( forceFatalExceptionOnNextGetNodeSize ) {
 			forceFatalExceptionOnNextGetNodeSize = false;
@@ -222,21 +239,25 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath);
 		return n != null ? n.getTitle() : null;
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		this.lastAction = ACTION_IS_NODE_URI;
 		this.lastUri = Uri.toUri(nodePath);
@@ -244,26 +265,31 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 	}
 
 	// it is a leaf node, if it has a value and no children
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath);
 		return n != null && n.getValue() != null && n.getChildren().size() == 0;
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		Node n = findNode(nodePath);
 		return (n != null ? new DmtData(n.getValue()) : null);
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public void commit() throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void rollback() throws DmtException {
 		// TODO Auto-generated method stub
 
@@ -291,6 +317,7 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 
 	
 	
+	@Override
 	public void mountPointAdded(MountPoint mountPoint) {
 		// add to volatile debugging-list
 		getAddedMountPoints().add(mountPoint);
@@ -298,17 +325,20 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 		getMountPoints().add(mountPoint);
 	}
 
+	@Override
 	public void mountPointRemoved(MountPoint mountPoint) {
 		getRemovedMountPoints().add(mountPoint);
 		// remove from permanent list
 		getMountPoints().remove(mountPoint);
 	}
 
+	@Override
 	public void handleEvent(Event event) {
 		this.lastReceivedEvent = event;
 		
 	}
 
+	@Override
 	public void execute(DmtSession session, String[] nodePath,
 			String correlator, String data) throws DmtException {
 		this.lastExecPath = nodePath;
@@ -321,7 +351,8 @@ public class MultiRootDataPlugin implements DataPlugin, TransactionalDataSession
 	 * @param newNodes
 	 * @param props
 	 */
-	void postInternalEvent( String topic, String[] nodes, String[] newNodes, Dictionary props ) {
+	void postInternalEvent(String topic, String[] nodes, String[] newNodes,
+			Dictionary<String,Object> props) {
 		for ( MountPoint mp : getMountPoints() )
 			mp.postEvent(topic, nodes, newNodes, props);
 	}

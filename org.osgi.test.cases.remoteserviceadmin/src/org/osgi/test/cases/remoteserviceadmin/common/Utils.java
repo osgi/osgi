@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import org.osgi.framework.BundleContext;
@@ -36,6 +37,7 @@ public class Utils {
 	public static String isInterested(Object scopeobj,
 			EndpointDescription description) {
 		if (scopeobj instanceof List<?>) {
+			@SuppressWarnings("unchecked")
 			List<String> scope = (List<String>) scopeobj;
 			for (Iterator<String> it = scope.iterator(); it.hasNext();) {
 				String filter = it.next();
@@ -82,6 +84,7 @@ public class Utils {
 	 *         exporting bundle in the child framework
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unchecked")
 	public static EndpointDescription reconstructEndpoint(String version,
 			OSGiTestCase testCase, int registrationNumber) throws IOException {
 		String propstr = testCase.getProperty("RSA_TCK.EndpointDescription_"
@@ -157,8 +160,9 @@ public class Utils {
 
 	public static void processFreePortProperties(Map<String, Object> properties) {
 		String freePort = getFreePort();
-		for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
+		for (Iterator<Entry<String,Object>> it = properties.entrySet()
+				.iterator(); it.hasNext();) {
+			Entry<String,Object> entry = it.next();
 			if (entry.getValue().toString().trim().equals(FREE_PORT)) {
 				entry.setValue(freePort);
 			}

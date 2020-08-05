@@ -61,11 +61,12 @@ import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
-	private long timeout;
+	long						timeout;
 	
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = getLongProperty("rsa.ct.timeout", 300000L);
@@ -74,6 +75,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
+	@Override
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
@@ -122,9 +124,10 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		// find the RSA in the parent framework and import the
 		// service
 		//
-		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+		ServiceReference<RemoteServiceAdmin> rsaRef = getContext()
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
+		RemoteServiceAdmin rsa = getContext().getService(rsaRef);
 		assertNotNull(rsa);
 
 		try {
@@ -179,12 +182,12 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			ImportReference importRef = importReg.getImportReference();
 			assertNotNull(importRef);
 			
-			ServiceReference sref = importRef.getImportedService();
+			ServiceReference< ? > sref = importRef.getImportedService();
 			assertNotNull(sref);
 			assertEquals("has been overridden", sref.getProperty("mykey"));
 			assertEquals("myvalue", sref.getProperty("myprop"));
-			assertTrue(((List)sref.getProperty("mylist")).size() == 2);
-			assertTrue(((Set)sref.getProperty("myset")).size() == 2);
+			assertTrue(((List< ? >) sref.getProperty("mylist")).size() == 2);
+			assertTrue(((Set< ? >) sref.getProperty("myset")).size() == 2);
 			assertEquals(3.1415f, sref.getProperty("myfloat"));
 			assertEquals(-3.1415d, sref.getProperty("mydouble"));
 			assertEquals('t', sref.getProperty("mychar"));
@@ -278,7 +281,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertNull(rsaevent.getException());
 			ImportReference importRef2 = importReg.getImportReference();
 			assertNotNull(importRef2);
-			ServiceReference sref2 = importRef.getImportedService();
+			ServiceReference< ? > sref2 = importRef.getImportedService();
 			assertNotNull(sref2);
 			// Bug 2642, It is not required anymore that proxy services are
 			// shared among multiple imports
@@ -310,7 +313,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			// not available version
 			Filter filter = getContext().createFilter("(version=3.0.0)");
-			ServiceReference[] refs = getContext().getServiceReferences(A.class.getName(), filter.toString());
+			ServiceReference< ? >[] refs = getContext()
+					.getServiceReferences(A.class.getName(), filter.toString());
 			try {
 				assertNull(refs);
 			} finally {
@@ -443,9 +447,10 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		// find the RSA in the parent framework and import the
 		// service
 		//
-		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+		ServiceReference<RemoteServiceAdmin> rsaRef = getContext()
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
+		RemoteServiceAdmin rsa = getContext().getService(rsaRef);
 		assertNotNull(rsa);
 
 		try {
@@ -487,6 +492,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 * @param property Object
 	 * @return List<String> of content of the property
 	 */
+	@SuppressWarnings("unchecked")
 	private List<String> getPropertyAsList(Object property) throws Exception {
 		if (property instanceof List) {
 			return (List<String>) property;
@@ -517,6 +523,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		/**
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
 		 */
+		@Override
 		public String getA() {
 			return "this is A";
 		}
@@ -524,6 +531,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		/**
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 		 */
+		@Override
 		public String getB() {
 			return "this is B";
 		}
@@ -544,6 +552,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
 		 */
+		@Override
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
 			sem.release();

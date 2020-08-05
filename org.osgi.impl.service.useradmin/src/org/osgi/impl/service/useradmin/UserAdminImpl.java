@@ -41,7 +41,7 @@ public class UserAdminImpl implements UserAdmin {
 	 * The role database. It is represented as a mapping from role names to
 	 * roles.
 	 */
-	protected Hashtable			/* String -> Role */rolemap;
+	protected Hashtable<String,RoleImpl>						rolemap;
 	/**
 	 * Database version number. Increases every time the database is modified.
 	 * Used to check if an authorization cache should be invalidated.
@@ -72,7 +72,7 @@ public class UserAdminImpl implements UserAdmin {
 	/**
 	 * Tracker for listeners to notify when the database is modified.
 	 */
-	private ServiceTracker			listeners;
+	private ServiceTracker<UserAdminListener,UserAdminListener>	listeners;
 	/**
 	 * Convenient log wrapper.
 	 */
@@ -102,11 +102,11 @@ public class UserAdminImpl implements UserAdmin {
 	public UserAdminImpl(Activator activator) {
 		this.activator = activator;
 		log = activator.log;
-		listeners = new ServiceTracker(activator.bc, UserAdminListener.class
-				.getName(), null);
+		listeners = new ServiceTracker<>(activator.bc, UserAdminListener.class,
+				null);
 		listeners.open();
 		// Initialize the database
-		rolemap = new Hashtable();
+		rolemap = new Hashtable<>();
 		// Load database from file
 		String filename = activator.bc.getProperty(DBPROP);
 		if (filename == null)
@@ -125,11 +125,12 @@ public class UserAdminImpl implements UserAdmin {
 	 * @see org.osgi.service.useradmin.User
 	 * @see org.osgi.service.useradmin.Group
 	 */
+	@Override
 	public Role createRole(String name, int type) {
 		// Check that the caller has permission to use this method.
 		checkPermission(adminPermission);
 		synchronized (dblock) {
-			Role role = (Role) rolemap.get(name);
+			RoleImpl role = rolemap.get(name);
 			if (role != null)
 				return null;
 			switch (type) {
@@ -154,6 +155,7 @@ public class UserAdminImpl implements UserAdmin {
 	 * Removes a role. Implementation of
 	 * {@link org.osgi.service.useradmin.UserAdmin#removeRole}.
 	 */
+	@Override
 	public boolean removeRole(String name) {
 		// Check that the role is not the user.anyone role
 		if (name.equals(ANYONE))
@@ -161,14 +163,15 @@ public class UserAdminImpl implements UserAdmin {
 		// Check that the caller has permission to use this method.
 		checkPermission(adminPermission);
 		synchronized (dblock) {
-			RoleImpl role = (RoleImpl) rolemap.get(name);
+			RoleImpl role = rolemap.get(name);
 			if (role == null)
 				return false;
 			notifyListeners(UserAdminEvent.ROLE_REMOVED, role);
 			rolemap.remove(name);
 			// Remove all references to this role from groups.
-			for (Enumeration en = rolemap.elements(); en.hasMoreElements();) {
-				((RoleImpl) en.nextElement()).removeReferenceTo(role);
+			for (Enumeration<RoleImpl> en = rolemap.elements(); en
+					.hasMoreElements();) {
+				en.nextElement().removeReferenceTo(role);
 			}
 			// Persistently save the database.
 			save();
@@ -180,9 +183,10 @@ public class UserAdminImpl implements UserAdmin {
 	 * Gets a named role. Implementation of
 	 * {@link org.osgi.service.useradmin.UserAdmin#getRole}.
 	 */
+	@Override
 	public Role getRole(String name) {
 		synchronized (dblock) {
-			return (Role) rolemap.get(name);
+			return rolemap.get(name);
 		}
 	}
 
@@ -190,12 +194,14 @@ public class UserAdminImpl implements UserAdmin {
 	 * Gets a user with the specified property set to the specified value.
 	 * Implementation of {@link org.osgi.service.useradmin.UserAdmin#getUser}.
 	 */
+	@Override
 	public User getUser(String key, String value) {
 		User user = null;
 		synchronized (dblock) {
 			// Linear search. A real implementation will do something else.
-			for (Enumeration en = rolemap.elements(); en.hasMoreElements();) {
-				Role role = (Role) en.nextElement();
+			for (Enumeration<RoleImpl> en = rolemap.elements(); en
+					.hasMoreElements();) {
+				Role role = en.nextElement();
 				Object pval = role.getProperties().get(key);
 				if (pval != null && pval instanceof String
 						&& value.equals(pval)) {
@@ -214,20 +220,21 @@ public class UserAdminImpl implements UserAdmin {
 	 * Gets the role matching the specified filter. Implementation of
 	 * {@link org.osgi.service.useradmin.UserAdmin#getRoles}.
 	 */
+	@Override
 	public Role[] getRoles(String filterstr) throws InvalidSyntaxException {
 		synchronized (dblock) {
-			Enumeration en = rolemap.elements();
+			Enumeration<RoleImpl> en = rolemap.elements();
 			if (filterstr == null) {
 				Role[] roles = new Role[rolemap.size()];
 				for (int i = 0; en.hasMoreElements(); i++)
-					roles[i] = (Role) en.nextElement();
+					roles[i] = en.nextElement();
 				return roles;
 			}
 			else {
 				Filter filter = activator.bc.createFilter(filterstr);
-				Vector matches = new Vector();
-				for (int i = 0; en.hasMoreElements(); i++) {
-					Role role = (Role) en.nextElement();
+				Vector<Role> matches = new Vector<>();
+				while (en.hasMoreElements()) {
+					Role role = en.nextElement();
 					if (filter.match(role.getProperties()))
 						matches.addElement(role);
 				}
@@ -246,6 +253,7 @@ public class UserAdminImpl implements UserAdmin {
 	 * Gets an authorization context for the specified user. Implementation of
 	 * {@link org.osgi.service.useradmin.UserAdmin#getAuthorization}.
 	 */
+	@Override
 	public Authorization getAuthorization(User user) {
 		return new AuthorizationImpl(this, user);
 	}
@@ -279,8 +287,9 @@ public class UserAdminImpl implements UserAdmin {
 		version++;
 		Properties p = new Properties();
 		int counter = 0;
-		for (Enumeration en = rolemap.elements(); en.hasMoreElements(); counter++) {
-			RoleImpl role = (RoleImpl) en.nextElement();
+		for (Enumeration<RoleImpl> en = rolemap.elements(); en
+				.hasMoreElements(); counter++) {
+			RoleImpl role = en.nextElement();
 			p.put(counter + "n", role.getName());
 			role.properties.save(counter + "p", p);
 			switch (role.getType()) {
@@ -299,7 +308,7 @@ public class UserAdminImpl implements UserAdmin {
 			}
 			if (role instanceof GroupImpl) {
 				GroupImpl group = (GroupImpl) role;
-				Enumeration en2 = group.basic_members.elements();
+				Enumeration<String> en2 = group.basic_members.elements();
 				for (int i = 0; en2.hasMoreElements(); i++) {
 					p.put(counter + "bm" + i, en2.nextElement());
 				}
@@ -323,7 +332,7 @@ public class UserAdminImpl implements UserAdmin {
 	 * Load the user manager database from a property file.
 	 */
 	void load() {
-		rolemap = new Hashtable();
+		rolemap = new Hashtable<>();
 		// Load the database with the predefined roles
 		rolemap.put(ANYONE, new RoleImpl(this, ANYONE, Role.ROLE));
 		Properties p = new Properties();
@@ -347,7 +356,7 @@ public class UserAdminImpl implements UserAdmin {
 						+ ")");
 				continue;
 			}
-			Role role = null;
+			RoleImpl role = null;
 			if (type.equals("group")) {
 				int t = Role.GROUP;
 				GroupImpl group = new GroupImpl(this, name, t);
@@ -372,7 +381,7 @@ public class UserAdminImpl implements UserAdmin {
 						log.warning("Strange role type: " + type);
 					}
 			rolemap.put(name, role);
-			((RoleImpl) role).properties.load(counter + "p", p);
+			role.properties.load(counter + "p", p);
 			if (role instanceof UserImpl)
 				((UserImpl) role).credentials.load(counter + "c", p);
 		}

@@ -88,6 +88,7 @@ public class EventHandlerImpl implements EventHandler {
 	/**
 	 * Should be called by EventAdmin when a close() method is called.
 	 */
+	@Override
 	public void handleEvent(Event event) {
 
 		String properties[] = event.getPropertyNames();

@@ -22,18 +22,20 @@ import java.util.Hashtable;
 import javax.naming.NamingException;
 import javax.naming.spi.ObjectFactory;
 
-import org.osgi.test.cases.jndi.provider.CTObjectFactory;
-
 /**
  * @author $Id$
  */
 public class CTObjectFactoryBuilder implements javax.naming.spi.ObjectFactoryBuilder {
 
-	public ObjectFactory createObjectFactory(Object obj, Hashtable environment)
+	@SuppressWarnings("unchecked")
+	@Override
+	public ObjectFactory createObjectFactory(Object obj,
+			Hashtable< ? , ? > environment)
 			throws NamingException {
 		if (obj instanceof CTReference || obj instanceof String) {
 			if (environment != null) {
-				return new CTObjectFactory(environment);
+				return new CTObjectFactory(
+						(Hashtable<String,Object>) environment);
 			} else {
 				return new CTObjectFactory();
 			}

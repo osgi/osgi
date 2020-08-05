@@ -10,19 +10,19 @@ import java.util.List;
 public class JSONArray extends JSONObject {
 
 	// List<JSONObject> elements
-	private final List	elements;
+	private final List<JSONObject> elements;
 
 	/**
 	 * Create a new JSONArray
 	 */
 	public JSONArray() {
-		elements = new ArrayList();
+		elements = new ArrayList<>();
 	}
 
 	/**
 	 * @return List<JSONObject> of elements.
 	 */
-	public List getElements() {
+	public List<JSONObject> getElements() {
 		return elements;
 	}
 

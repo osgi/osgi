@@ -51,6 +51,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestMetaNode;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -65,6 +68,7 @@ public class GetMetaNode implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testGetMetaNode001();
@@ -87,13 +91,13 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode001");
+			DefaultTestBundleControl.log("#testGetMetaNode001");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
 			MetaNode metaNode = session.getMetaNode(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.assertTrue("Asserts that the metanode was correctly returned.",
+			TestCase.assertTrue("Asserts that the metanode was correctly returned.",
 					metaNode instanceof TestMetaNode);
 			
 		} catch (Exception e) {
@@ -111,7 +115,7 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode002");
+			DefaultTestBundleControl.log("#testGetMetaNode002");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -120,7 +124,7 @@ public class GetMetaNode implements TestInterface {
 
 			session.getMetaNode(TestExecPluginActivator.INTERIOR_NODE);
 
-			tbc.pass("getMetaNode was successfully executed");
+			DefaultTestBundleControl.pass("getMetaNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -138,7 +142,7 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode003");
+			DefaultTestBundleControl.log("#testGetMetaNode003");
 
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -148,7 +152,7 @@ public class GetMetaNode implements TestInterface {
 
 			session.getMetaNode(DmtConstants.OSGi_LOG);
 
-			tbc.pass("getMetaNode was successfully executed");
+			DefaultTestBundleControl.pass("getMetaNode was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -166,14 +170,14 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode004");
+			DefaultTestBundleControl.log("#testGetMetaNode004");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getMetaNode(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
-			tbc.pass("A relative URI can be used with getMetaNode.");
+			DefaultTestBundleControl.pass("A relative URI can be used with getMetaNode.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -189,11 +193,11 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode005");
+			DefaultTestBundleControl.log("#testGetMetaNode005");
             
             session = tbc.getDmtAdmin().getSession(TestNonAtomicPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-            tbc.assertNull("Asserts that DmtSession.getMetaNode returns null if there is no meta data " +
+            TestCase.assertNull("Asserts that DmtSession.getMetaNode returns null if there is no meta data " +
                     "available for the given node",session.getMetaNode(TestNonAtomicPluginActivator.INTERIOR_NODE));
             
         } catch (Exception e) {
@@ -211,11 +215,11 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode006");
+			DefaultTestBundleControl.log("#testGetMetaNode006");
             
             session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-            tbc.assertNotNull("Asserts that a node does not have to exist for having meta-data associated with it",session.getMetaNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE));
+            TestCase.assertNotNull("Asserts that a node does not have to exist for having meta-data associated with it",session.getMetaNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE));
             
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
@@ -234,14 +238,14 @@ public class GetMetaNode implements TestInterface {
 	private void testGetMetaNode007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode007");
+			DefaultTestBundleControl.log("#testGetMetaNode007");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getMetaNode("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

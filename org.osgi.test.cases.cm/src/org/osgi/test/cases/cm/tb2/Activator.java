@@ -25,6 +25,7 @@
 
 package org.osgi.test.cases.cm.tb2;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -60,16 +61,16 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		ServiceReference serviceReference = context
-				.getServiceReference(ConfigurationAdmin.class.getName());
+		ServiceReference<ConfigurationAdmin> serviceReference = context
+				.getServiceReference(ConfigurationAdmin.class);
 		try {
-			ConfigurationAdmin cm = (ConfigurationAdmin) context
+			ConfigurationAdmin cm = context
 					.getService(serviceReference);
 			Configuration config = cm
 					.getConfiguration(CMControl.PACKAGE
 					+ ".tb2pid."
 					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-			Hashtable props = new Hashtable();
+			Dictionary<String,Object> props = new Hashtable<>();
 			props.put("key", "value1");
 			config.update(props);
 			config.delete();

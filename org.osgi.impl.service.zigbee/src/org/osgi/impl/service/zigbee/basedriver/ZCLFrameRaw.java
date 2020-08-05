@@ -55,21 +55,25 @@ public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 	 * Override methods
 	 */
 
+	@Override
 	public byte[] getBytes() {
-		return (byte[]) frame.clone();
+		return frame.clone();
 	}
 
+	@Override
 	public int getBytes(byte[] buffer) {
 		System.arraycopy(frame, 0, buffer, 0, frame.length);
 		return getSize();
 	}
 
+	@Override
 	public int getSize() {
 		return frame.length;
 	}
 
 	private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+	@Override
 	public String toString() {
 		String s = "[ ";
 		for (int i = 0; i < frame.length; i++) {

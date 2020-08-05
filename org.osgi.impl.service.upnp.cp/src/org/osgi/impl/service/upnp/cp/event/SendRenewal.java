@@ -11,6 +11,7 @@ public class SendRenewal extends GenaSocket implements Runnable {
 	}
 
 	// This method creates the renewal message and sends it to the given host.
+	@Override
 	public void run() {
 		formRenewalMessage();
 		try {

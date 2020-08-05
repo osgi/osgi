@@ -26,12 +26,14 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.service.jndi.JNDIContextManager;
 
-class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
+class JNDIContextManagerServiceFactoryImpl
+		implements ServiceFactory<JNDIContextManager> {
 
 	// map of bundles to context managers (CloseableJNDIContextManager)
-	private Map m_mapOfManagers = 
-		Collections.synchronizedMap(new HashMap());
+	Map<Bundle,CloseableJNDIContextManager>	m_mapOfManagers	= Collections
+			.synchronizedMap(new HashMap<>());
 	
 	/* BundleContext for the JNDI Implementation Bundle */
 	private final BundleContext m_implBundleContext;
@@ -40,7 +42,9 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 		m_implBundleContext = implBundleContext;
 	}
 	
-	public Object getService(Bundle bundle, ServiceRegistration registration) {
+	@Override
+	public JNDIContextManager getService(Bundle bundle,
+			ServiceRegistration<JNDIContextManager> registration) {
 		CloseableJNDIContextManager jndiContextManager = 
 			createJNDIContextManager(bundle, m_implBundleContext);
 		m_mapOfManagers.put(bundle, jndiContextManager);
@@ -50,23 +54,26 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 
 	
 
-	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+	@Override
+	public void ungetService(Bundle bundle,
+			ServiceRegistration<JNDIContextManager> registration,
+			JNDIContextManager service) {
 		closeContextManager(bundle);
 	}
 	
 	protected void closeAll() {
 		synchronized(m_mapOfManagers) {
-			Iterator iterator = m_mapOfManagers.keySet().iterator();
+			Iterator<Bundle> iterator = m_mapOfManagers.keySet().iterator();
 			while(iterator.hasNext()) {
-				Bundle bundleKey = (Bundle)iterator.next();
+				Bundle bundleKey = iterator.next();
 				closeContextManager(bundleKey);
 			}
 		}
 	}
 
-	private void closeContextManager(Bundle bundle) {
+	void closeContextManager(Bundle bundle) {
 		CloseableJNDIContextManager jndiContextManager = 
-			(CloseableJNDIContextManager)m_mapOfManagers.get(bundle);
+			m_mapOfManagers.get(bundle);
 		if(jndiContextManager != null) {
 			jndiContextManager.close();
 			m_mapOfManagers.remove(bundle);
@@ -75,6 +82,10 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 	
 	
 	private class ContextManagerBundleListener implements SynchronousBundleListener {
+		ContextManagerBundleListener() {
+			super();
+		}
+		@Override
 		public void bundleChanged(BundleEvent event) {
 			if(event.getType() == BundleEvent.STOPPED) {
 				if(m_mapOfManagers.containsKey(event.getBundle())) {

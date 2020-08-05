@@ -40,6 +40,7 @@ public class SerialDeviceImpl implements SerialDevice {
 		this.os = new ByteArrayOutputStream();
 	}
 
+	@Override
 	public InputStream getInputStream() throws IOException {
 		if (is == null) {
 			throw new IOException("This connection has been closed already.");
@@ -47,6 +48,7 @@ public class SerialDeviceImpl implements SerialDevice {
 		return is;
 	}
 
+	@Override
 	public OutputStream getOutputStream() throws IOException {
 		if (os == null) {
 			throw new IOException("This connection has been closed already.");
@@ -54,10 +56,12 @@ public class SerialDeviceImpl implements SerialDevice {
 		return os;
 	}
 
+	@Override
 	public SerialPortConfiguration getConfiguration() {
 		return configuration;
 	}
 
+	@Override
 	public void setConfiguration(SerialPortConfiguration configuration) throws SerialDeviceException {
 		int baudRate = configuration.getBaudRate();
 		int dataBits = configuration.getDataBits();
@@ -96,26 +100,32 @@ public class SerialDeviceImpl implements SerialDevice {
 		this.configuration = configuration;
 	}
 
+	@Override
 	public boolean isDTR() {
 		return dtr;
 	}
 
+	@Override
 	public boolean isRTS() {
 		return rts;
 	}
 
+	@Override
 	public boolean isDSR() {
 		return false;
 	}
 
+	@Override
 	public boolean isCTS() {
 		return false;
 	}
 
+	@Override
 	public void setDTR(boolean dtr) throws SerialDeviceException {
 		this.dtr = dtr;
 	}
 
+	@Override
 	public void setRTS(boolean rts) throws SerialDeviceException {
 		this.rts = rts;
 	}

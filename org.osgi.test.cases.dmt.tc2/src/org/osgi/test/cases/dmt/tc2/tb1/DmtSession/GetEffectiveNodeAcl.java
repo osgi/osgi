@@ -45,6 +45,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -60,6 +63,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testGetEffectiveNodeAcl001();
@@ -84,13 +88,13 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl001");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl001");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			Acl acl = new Acl(DmtConstants.ACLSTR);
 
 			session.setNodeAcl(TestExecPluginActivator.ROOT, acl);
-			tbc.assertEquals("Asserting the effective node ", acl.toString(),
+			TestCase.assertEquals("Asserting the effective node ", acl.toString(),
 					session.getEffectiveNodeAcl(TestExecPluginActivator.CHILD_INTERIOR_NODE)
 							.toString());
 		} catch (Exception e) {
@@ -111,13 +115,13 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl002");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl002");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			Acl acl = new Acl(DmtConstants.ACLSTR);
 			session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE, acl);
-			tbc.assertEquals("Asserting the effective node ", acl.toString(),
+			TestCase.assertEquals("Asserting the effective node ", acl.toString(),
 					session.getEffectiveNodeAcl(TestExecPluginActivator.INTERIOR_NODE)
 							.toString());
 		} catch (Exception e) {
@@ -136,16 +140,16 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl003");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl003");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
 			session.getEffectiveNodeAcl(TestExecPluginActivator.INEXISTENT_NODE);
 
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException's code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
@@ -165,7 +169,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl004");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl004");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -173,7 +177,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.getEffectiveNodeAcl(TestExecPluginActivator.INTERIOR_NODE);
 
-			tbc.pass("getEffectiveNodeAcl was successfully executed");
+			DefaultTestBundleControl.pass("getEffectiveNodeAcl was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 
@@ -193,7 +197,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl005");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl005");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -203,7 +207,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 			
 			session.getEffectiveNodeAcl(DmtConstants.OSGi_LOG);
 			
-			tbc.pass("getEffectiveNodeAcl was successfully executed");
+			DefaultTestBundleControl.pass("getEffectiveNodeAcl was successfully executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 
@@ -223,14 +227,14 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl006");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl006");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getEffectiveNodeAcl(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
-			tbc.pass("A relative URI can be used with getEffectiveNodeAcl.");
+			DefaultTestBundleControl.pass("A relative URI can be used with getEffectiveNodeAcl.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -246,14 +250,14 @@ public class GetEffectiveNodeAcl implements TestInterface {
 	private void testGetEffectiveNodeAcl007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetEffectiveNodeAcl007");
+			DefaultTestBundleControl.log("#testGetEffectiveNodeAcl007");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getEffectiveNodeAcl("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

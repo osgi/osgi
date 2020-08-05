@@ -9,7 +9,6 @@
  */
 package org.osgi.impl.service.useradmin;
 
-import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.service.useradmin.UserAdminPermission;
 
 /**
@@ -37,10 +36,12 @@ public class UACredentials extends UAProperties {
 	/**
 	 * The permission need to modify the credentials.
 	 */
+	@Override
 	protected String getChangeAction() {
 		return UserAdminPermission.CHANGE_CREDENTIAL;
 	}
 
+	@Override
 	public Object get(Object key) {
 		synchronized (role.ua.activator) {
 			if (key instanceof String) {
@@ -55,6 +56,7 @@ public class UACredentials extends UAProperties {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "#Credentials#";
 	}

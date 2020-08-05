@@ -13,3 +13,5 @@ Fragment-Host: system.bundle
 Import-Package: !*
 
 -failok: true
+
+-fixupmessages.host: "Host * for this fragment"

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.zigbee;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.osgi.util.promise.Promise;
 
 /**
@@ -206,7 +207,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
-	public Promise /* <Boolean> */ refreshNetwork() throws Exception;
+	public Promise<Boolean> refreshNetwork() throws Exception;
 
 	/**
 	 * Returns the network security level.
@@ -249,6 +250,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 *         be asynchronously notified about the ZCLFrame responses sent back
 	 *         by the ZigBee nodes.
 	 */
+	@Override
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
 	/**
@@ -268,6 +270,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @see #setBroadcastRadius(short) Setting the broadcast radius.
 	 */
+	@Override
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**

@@ -55,7 +55,7 @@ public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 	 */
 
 	public byte[] getBytes() {
-		return (byte[]) frame.clone();
+		return frame.clone();
 	}
 
 	private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};

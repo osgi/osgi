@@ -1,9 +1,11 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.util.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * Used in the driver loadin test. Simulates some crashes that may happen in the
@@ -24,7 +26,7 @@ public class DriverLoadingLocator2 implements DriverLocator {
 	 * and the following situations will be recognized: exception thrown, null
 	 * returned, invalid stream returned
 	 */
-	public String[] findDrivers(Dictionary props) {
+	public String[] findDrivers(Dictionary<String, ? > props) {
 		String[] toReturn = new String[3];
 		toReturn[0] = "exceptionInLoading";
 		toReturn[1] = "returnNull";

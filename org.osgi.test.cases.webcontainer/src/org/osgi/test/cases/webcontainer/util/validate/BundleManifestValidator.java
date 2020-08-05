@@ -45,10 +45,9 @@ public class BundleManifestValidator implements Validator {
 
     boolean debug = false;
     Bundle b;
-    Dictionary dictionary;
+	Dictionary<String,String>	dictionary;
     Manifest manifest;
-    Map deployOptions;
-    private final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
+	Map<String,Object>			deployOptions;
     private static final String WEBINFCLASSES = "WEB-INF/classes";
     private static final String WEBINFLIB = "WEB-INF/lib";
     
@@ -63,7 +62,8 @@ public class BundleManifestValidator implements Validator {
         this.debug = debug;
     }
     
-    public BundleManifestValidator(Bundle b, Map deployOptions, boolean debug) {
+	public BundleManifestValidator(Bundle b, Map<String,Object> deployOptions,
+			boolean debug) {
         this.b = b;
         this.dictionary = b.getHeaders();
         this.deployOptions = deployOptions;
@@ -71,7 +71,8 @@ public class BundleManifestValidator implements Validator {
     }
     
     
-    public BundleManifestValidator(Bundle b, Manifest m, Map deployOptions, boolean debug) {
+	public BundleManifestValidator(Bundle b, Manifest m,
+			Map<String,Object> deployOptions, boolean debug) {
         this.b = b;
         this.dictionary = b.getHeaders();
         this.manifest = m;
@@ -79,7 +80,8 @@ public class BundleManifestValidator implements Validator {
         this.debug = debug;
     }
     
-    public void validate() throws Exception {
+    @Override
+	public void validate() throws Exception {
         validateSymbolicName();
         validateBundleVersion();
         validateBundleManifestVersion();
@@ -165,21 +167,21 @@ public class BundleManifestValidator implements Validator {
         
         log("verify Bundle-ManifestVersion exists and >=2");
         if (this.debug) {
-            log(Constants.BUNDLE_MANIFESTVERSION + " is " + (String)this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
+            log(Constants.BUNDLE_MANIFESTVERSION + " is " + this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         }       
         assertNotNull(this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
-        assertTrue((Integer.parseInt((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION))) >= 2);
+        assertTrue((Integer.parseInt(this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION))) >= 2);
         
         // dVersion - deployer specified Bundle-Version value
         Object dVersion = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_MANIFESTVERSION);
         // mVersion - manifest Bundle-Version value
         Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(Constants.BUNDLE_MANIFESTVERSION));
         if (dVersion != null) {
-            assertEquals((String)dVersion, (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
+            assertEquals((String)dVersion, this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         } else if (mVersion !=null) {
-            assertEquals((String)mVersion, (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
+            assertEquals((String)mVersion, this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         } else {
-            assertEquals("2", (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
+            assertEquals("2", this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         }
         
     }
@@ -196,7 +198,7 @@ public class BundleManifestValidator implements Validator {
         
         // verify Bundle-ClassPath exists
         log("verify Bundle-ClasaPath exists");
-        String actualClassPath = (String)this.dictionary.get(Constants.BUNDLE_CLASSPATH);
+        String actualClassPath = this.dictionary.get(Constants.BUNDLE_CLASSPATH);
         if (this.debug) {
             log(Constants.BUNDLE_CLASSPATH + " is " + actualClassPath);
         }
@@ -204,16 +206,20 @@ public class BundleManifestValidator implements Validator {
         String[] actualClassPathArray = toArray(actualClassPath);
 
         // mClasspath - original manifest classpath String
-        Object mClasspath = this.manifest == null ? null : this.manifest.getMainAttributes().get(new Name(Constants.BUNDLE_CLASSPATH));
+		@SuppressWarnings("unused")
+		Object mClasspath = this.manifest == null ? null
+				: this.manifest.getMainAttributes()
+						.get(new Name(Constants.BUNDLE_CLASSPATH));
         // dClasspath - deployer specified classpath String
+		@SuppressWarnings("unused")
         Object dClasspath = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_CLASSPATH);
 
         assertEquals("verify WEB-INF/classes exist in the actual classpath and is the first entry", WEBINFCLASSES, actualClassPathArray[0]);
         // verify WEB-INF/lib jars exist in the actual classpath
-        Enumeration e = this.b.findEntries(WEBINFLIB, "*.jar", false);
+		Enumeration<URL> e = this.b.findEntries(WEBINFLIB, "*.jar", false);
         int count = 0;
         while (e != null && e.hasMoreElements()) {
-            URL url = (URL) e.nextElement();
+            URL url = e.nextElement();
             String jarPath = url.getFile();
             // strip out the first / of the jarPath if jarPath is /WEB-INF/lib/xxx.jar
             if (url.getFile().startsWith("/")) {
@@ -240,7 +246,7 @@ public class BundleManifestValidator implements Validator {
      */
     public void validateImportPackage() throws Exception {
         assertNotNull(this.dictionary);
-        String actualImports = (String)this.dictionary.get(Constants.IMPORT_PACKAGE);
+        String actualImports = this.dictionary.get(Constants.IMPORT_PACKAGE);
         // verify Import-package exists
         if (this.debug) {
             log(Constants.IMPORT_PACKAGE + " is " + actualImports);
@@ -249,7 +255,10 @@ public class BundleManifestValidator implements Validator {
         String[] actualImportsArray = toArray(actualImports);
         
         // mImports - original manifest Import-Package String array
-        Object mImports = this.manifest == null ? null : this.manifest.getMainAttributes().get(new Name(Constants.IMPORT_PACKAGE));
+		@SuppressWarnings("unused")
+		Object mImports = this.manifest == null ? null
+				: this.manifest.getMainAttributes()
+						.get(new Name(Constants.IMPORT_PACKAGE));
         // dImports - deployer specified Import-Package String array
         Object dImports = this.deployOptions == null ? null : this.deployOptions.get(Constants.IMPORT_PACKAGE);
  
@@ -295,7 +304,7 @@ public class BundleManifestValidator implements Validator {
         // verify Web-ContextPath exists
         log(WEB_CONTEXT_PATH + " must exist as it is required");
         if (this.debug) {
-            log(WEB_CONTEXT_PATH + " is " + (String)this.dictionary.get(WEB_CONTEXT_PATH));
+            log(WEB_CONTEXT_PATH + " is " + this.dictionary.get(WEB_CONTEXT_PATH));
         }
         assertNotNull(this.dictionary.get(WEB_CONTEXT_PATH));
         
@@ -307,9 +316,9 @@ public class BundleManifestValidator implements Validator {
         // mWebContextPath - manifest Web-ContextPath value
         Object mWebContextPath = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(WEB_CONTEXT_PATH));
         if (dWebContextPath != null) {
-            assertEquals("Expected web context path from URL params is " + correctWebContextPath, correctWebContextPath, (String) this.dictionary.get(WEB_CONTEXT_PATH));
+            assertEquals("Expected web context path from URL params is " + correctWebContextPath, correctWebContextPath, this.dictionary.get(WEB_CONTEXT_PATH));
         } else if (mWebContextPath !=null) {
-            assertEquals("Expected web context path from manifest is " + (String)mWebContextPath, (String)mWebContextPath, (String) this.dictionary.get(WEB_CONTEXT_PATH));
+            assertEquals("Expected web context path from manifest is " + (String)mWebContextPath, (String)mWebContextPath, this.dictionary.get(WEB_CONTEXT_PATH));
         }
         // TODO: verify Web-ContextPath is unique on the server
     }
@@ -322,8 +331,8 @@ public class BundleManifestValidator implements Validator {
         // original manifest attribute
         Attributes attributes = this.manifest.getMainAttributes();
 
-        Set keyset = attributes.keySet();
-        Iterator it = keyset.iterator();
+		Set<Object> keyset = attributes.keySet();
+		Iterator<Object> it = keyset.iterator();
         while(it.hasNext()) {
             Name key = (Name)it.next();
             if (key.toString().equals(Constants.BUNDLE_VERSION) ||
@@ -337,13 +346,21 @@ public class BundleManifestValidator implements Validator {
                 continue;
             } else {
                 // compare the other attribute with what is in the dictionary from the bundle.getHeaders()
-                log("from original manifest " + key + ": " + attributes.get(key));
+				log("from original manifest " + key + ": "
+						+ attributes.getValue(key));
                 log("from bundle headers " + key + ": " + this.dictionary.get(key.toString()));
-                if (key.equals("version")) {
+				if (key.toString().equals("version")) {
                     // we need to make sure version=1.0 and version=1.0.0 are the same
-                    assertEquals("checking if other attributes from original manifest is preserved", Version.parseVersion((String)attributes.get(key)), Version.parseVersion((String)this.dictionary.get(key.toString())));                               
+					assertEquals(
+							"checking if other attributes from original manifest is preserved",
+							Version.parseVersion(attributes.getValue(key)),
+							Version.parseVersion(
+									this.dictionary.get(key.toString())));
                 } else {
-                    assertEquals("checking if other attributes from original manifest is preserved", attributes.get(key), this.dictionary.get(key.toString()));           
+					assertEquals(
+							"checking if other attributes from original manifest is preserved",
+							attributes.getValue(key),
+							this.dictionary.get(key.toString()));
                 }
             }
         }
@@ -396,7 +413,7 @@ public class BundleManifestValidator implements Validator {
     }
     
     private boolean containDuplicate (String[] s) {
-        HashSet h = new HashSet();
+		HashSet<String> h = new HashSet<>();
         for (int i = 0; i < s.length; i++) {
             boolean success = h.add(s[i]);
             if (!success) {
@@ -408,7 +425,8 @@ public class BundleManifestValidator implements Validator {
     /*
      * get the package name out of the import package value
      */
-    private String getPackage(String p) {
+	@SuppressWarnings("unused")
+	private String getPackage(String p) {
         int i = p.indexOf(";");
         return i > 0 ? p.substring(0, i-1) : p;
     }
@@ -422,7 +440,8 @@ public class BundleManifestValidator implements Validator {
      * and I think all 3 are valid
      * 
      */
-    private String trimAll(String s) {
+	@SuppressWarnings("unused")
+	private String trimAll(String s) {
         String result = trimAll(s, " ");
         return trimAll(result, "\"");     
     }

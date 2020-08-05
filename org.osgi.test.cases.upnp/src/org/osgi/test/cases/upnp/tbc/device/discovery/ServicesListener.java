@@ -17,7 +17,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * devices on the network.
  * 
  */
-public class ServicesListener extends ServiceTracker {
+public class ServicesListener extends ServiceTracker<UPnPDevice,UPnPDevice> {
 	private final Semaphore	waiter;
 	private final int		desiredCount;
 	private UPnPDevice	last;
@@ -60,8 +60,8 @@ public class ServicesListener extends ServiceTracker {
 		return size;
 	}
 
-	public Object addingService(ServiceReference ref) {
-		UPnPDevice device = (UPnPDevice) super.addingService(ref);
+	public UPnPDevice addingService(ServiceReference<UPnPDevice> ref) {
+		UPnPDevice device = super.addingService(ref);
 
 		DefaultTestBundleControl.log("adding UPnP Device " + device);
 		synchronized (this) {
@@ -77,7 +77,8 @@ public class ServicesListener extends ServiceTracker {
 		return device;
 	}
 
-	public void removedService(ServiceReference reference, Object service) {
+	public void removedService(ServiceReference<UPnPDevice> reference,
+			UPnPDevice service) {
 		DefaultTestBundleControl.log("removing UPnP Device " + service);
 		super.removedService(reference, service);
 		synchronized (this) {

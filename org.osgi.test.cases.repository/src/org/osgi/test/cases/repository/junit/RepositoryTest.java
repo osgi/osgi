@@ -352,7 +352,6 @@ public class RepositoryTest extends RepositoryTestBase {
         assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
     }
 
-	@SuppressWarnings("boxing")
 	public void testAttributeDataTypes() throws Exception {
         Requirement req = new RequirementImpl("osgi.test.namespace", "(osgi.test.namespace=a testing namespace)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);

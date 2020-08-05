@@ -41,9 +41,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @deprecated
  */
-@SuppressWarnings("deprecation")
+@Deprecated
 public class Activator implements BundleActivator, A, B {
-	ServiceRegistration registration;
+	ServiceRegistration< ? >																									registration;
 	BundleContext       context;
 	EndpointDescription endpoint;
 
@@ -55,6 +55,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
@@ -71,6 +72,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		
@@ -83,6 +85,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
 	 */
+	@Override
 	public String getA() {
 		return "this is A";
 	}
@@ -90,6 +93,7 @@ public class Activator implements BundleActivator, A, B {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 	 */
+	@Override
 	public String getB() {
 		return "this is B";
 	}
@@ -163,12 +167,13 @@ public class Activator implements BundleActivator, A, B {
 		// 
 		// find the EndpointListeners and call them with the endpoint description
 		//
-		ServiceReference[] listeners = tracker.getServiceReferences();
+		ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener>[] listeners = tracker
+				.getServiceReferences();
 		assertNotNull("no EndpointListeners found", listeners);
 		
 		boolean foundListener = false;
-		for (ServiceReference sr : listeners) {
-			org.osgi.service.remoteserviceadmin.EndpointListener listener = (org.osgi.service.remoteserviceadmin.EndpointListener) context
+		for (ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener> sr : listeners) {
+			org.osgi.service.remoteserviceadmin.EndpointListener listener = context
 					.getService(sr);
 			Object scope = sr.getProperty(
 					org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE);

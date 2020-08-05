@@ -15,7 +15,7 @@ public class ArrayAssert {
 			assertTrue(expected == actual);
 			return;
 		}
-		List actualList = Arrays.asList(actual);
+		List<Object> actualList = Arrays.asList(actual);
 		for (int i = 0; i < expected.length; i++) {
 			if (message != null) {
 				assertTrue(message, actualList.contains(expected[i]));

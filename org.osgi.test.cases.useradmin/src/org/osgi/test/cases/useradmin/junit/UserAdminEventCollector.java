@@ -11,7 +11,8 @@ import org.osgi.service.useradmin.UserAdminEvent;
 import org.osgi.service.useradmin.UserAdminListener;
 import org.osgi.test.support.EventCollector;
 
-public class UserAdminEventCollector extends EventCollector implements
+public class UserAdminEventCollector extends EventCollector<UserAdminEvent>
+		implements
 		UserAdminListener {
 	private final int	mask;
 
@@ -24,14 +25,12 @@ public class UserAdminEventCollector extends EventCollector implements
 			addEvent(event);
 	}
 
-	public Comparator getComparator() {
-		return new Comparator() {
-			public int compare(Object o1, Object o2) {
-				UserAdminEvent event1 = (UserAdminEvent) o1;
-				UserAdminEvent event2 = (UserAdminEvent) o2;
+	public Comparator<UserAdminEvent> getComparator() {
+		return new Comparator<UserAdminEvent>() {
+			public int compare(UserAdminEvent event1, UserAdminEvent event2) {
 
-				ServiceReference ref1 = event1.getServiceReference();
-				ServiceReference ref2 = event2.getServiceReference();
+				ServiceReference< ? > ref1 = event1.getServiceReference();
+				ServiceReference< ? > ref2 = event2.getServiceReference();
 				int result = ref1.compareTo(ref2);
 				if (result != 0) {
 					return result;

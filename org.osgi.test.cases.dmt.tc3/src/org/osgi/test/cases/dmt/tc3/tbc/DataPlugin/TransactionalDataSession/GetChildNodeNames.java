@@ -46,6 +46,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * 
@@ -75,13 +78,13 @@ public class GetChildNodeNames {
 	public void testGetChildNodeNames001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames001");
+			DefaultTestBundleControl.log("#testGetChildNodeNames001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			String[] child = session.getChildNodeNames(TestDataPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETCHILDNODENAMES+" to the correct plugin",TestDataPlugin.GETCHILDNODENAMES,child[0]);
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETCHILDNODENAMES+" to the correct plugin",TestDataPlugin.GETCHILDNODENAMES,child[0]);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -95,21 +98,21 @@ public class GetChildNodeNames {
 	public void testGetChildNodeNames002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames002");
+			DefaultTestBundleControl.log("#testGetChildNodeNames002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			
 			session.getChildNodeNames(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
 					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
 					.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
 					.getMessage().indexOf(TestDataPlugin.GETCHILDNODENAMES)>-1);
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}

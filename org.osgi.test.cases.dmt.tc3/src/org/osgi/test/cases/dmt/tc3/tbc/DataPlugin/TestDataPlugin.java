@@ -109,25 +109,30 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		SESSION_OPENED="openReadOnlySession";
         return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
         SESSION_OPENED="openReadWriteSession";
         return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
         SESSION_OPENED="openAtomicSession";
         return this;
 	}
+	@Override
 	public void rollback() throws DmtException {
 	    if (rollbackThrowsException)
 	        throw new DmtException((String)null,DmtException.ALERT_NOT_ROUTED,ROLLBACK);
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -141,6 +146,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.LEAF_NODE_EXCEPTION)) {
@@ -166,6 +172,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public void setNodeType(String[] nodeUri, String type) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -180,6 +187,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 
 	}
 
+	@Override
 	public void deleteNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -194,6 +202,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 	}
 
 
+	@Override
 	public void createInteriorNode(String[] nodeUri, String type)
 			throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
@@ -208,6 +217,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 	}
 
 
+	@Override
 	public void createLeafNode(String[] nodeUri, DmtData value, String mimeType)
 			throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
@@ -224,6 +234,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 
 	}
 
+	@Override
 	public void copy(String[] nodeUri, String[] newNodeUri, boolean recursive)
 			throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
@@ -239,6 +250,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public void renameNode(String[] nodeUri, String newName) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -252,11 +264,13 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public void close() throws DmtException {
 		if (closeThrowsException)
 		    throw new DmtException((String)null, DmtException.CONCURRENT_ACCESS, CLOSE);
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.INEXISTENT_NODE) 
@@ -270,6 +284,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.LEAF_NODE_EXCEPTION)) {
@@ -279,6 +294,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -288,6 +304,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -297,6 +314,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -306,6 +324,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -315,6 +334,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.LEAF_NODE_EXCEPTION)) {
@@ -324,6 +344,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION)) {
@@ -335,6 +356,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if(nodeName.equals(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION2)) {
@@ -351,11 +373,13 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 
 	}
 	
+	@Override
 	public void commit() throws DmtException {
 		if (commitThrowsException)
 		    throw new DmtException((String)null,DmtException.COMMAND_FAILED,COMMIT);
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestDataPluginActivator.LEAF_NODE) || nodeName.equals(TestDataPluginActivator.LEAF_NODE_EXCEPTION)) {
@@ -366,6 +390,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 		}
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 	    if (nodeChangedThrowsException)
 	        throw new DmtException(nodePath, DmtException.DATA_STORE_FAILURE, NODECHANGED);

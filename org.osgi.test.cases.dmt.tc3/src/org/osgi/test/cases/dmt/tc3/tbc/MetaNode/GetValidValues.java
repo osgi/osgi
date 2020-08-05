@@ -42,6 +42,9 @@ package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>getValidValues</code> method of MetaNode, 
@@ -67,7 +70,7 @@ public class GetValidValues {
 	public void testGetValidValues001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetValidValues001");
+			DefaultTestBundleControl.log("#testGetValidValues001");
 			session = tbc.getDmtAdmin().getSession(
 					TestMetaNodeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
@@ -75,11 +78,11 @@ public class GetValidValues {
 			MetaNode metanode = session
 					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 
-			tbc.assertEquals("Asserts getValidValues method",
+			TestCase.assertEquals("Asserts getValidValues method",
 					TestMetaNode.DEFAULT_VALID_VALUES, metanode
 							.getValidValues());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

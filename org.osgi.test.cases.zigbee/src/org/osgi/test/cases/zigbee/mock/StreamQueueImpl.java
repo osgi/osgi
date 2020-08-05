@@ -18,13 +18,13 @@ package org.osgi.test.cases.zigbee.mock;
 
 import java.util.LinkedList;
 
-public class StreamQueueImpl implements StreamQueue {
+public class StreamQueueImpl<T> implements StreamQueue<T> {
 
 	private final Object	lock	= new Object();
 
-	LinkedList				queue	= new LinkedList();
+	LinkedList<T>			queue	= new LinkedList<>();
 
-	public void add(Object element) {
+	public void add(T element) {
 		if (element == null) {
 			throw new NullPointerException("Adding null object is not allowed.");
 		}
@@ -35,7 +35,7 @@ public class StreamQueueImpl implements StreamQueue {
 		}
 	}
 
-	public Object poll(long timeout) throws InterruptedException {
+	public T poll(long timeout) throws InterruptedException {
 		synchronized (lock) {
 			if (queue.size() == 0) {
 				synchronized (queue) {

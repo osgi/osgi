@@ -36,35 +36,37 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Plugins;
 
-import org.osgi.service.dmt.spi.DataPlugin;
-
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
 
 public class OverlappingExecPluginActivator implements BundleActivator {
 
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	private OverlappingExecPlugin overlappingExecPlugin;
 
 	public static final String ROOT = TestExecPluginActivator.ROOT;
 
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		overlappingExecPlugin = new OverlappingExecPlugin();
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("execRootURIs", new String[] { ROOT });
 		props.put("dataRootURIs", new String[] { ROOT });
-		String[] ifs = new String[] {DataPlugin.class.getName()};
-		servReg = bc.registerService(ifs, overlappingExecPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, overlappingExecPlugin,
+				props);
 		System.out.println("OverlappingExecPluginActivator activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

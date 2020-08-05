@@ -17,9 +17,10 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import java.util.Vector;
 
 import org.osgi.service.dmt.Acl;
@@ -36,7 +37,7 @@ public class DmtEventCore {
     private List<Node> nodes;
     private List<Node> newNodes;
     private List<Acl> acls;
-    private Properties props;
+	private Dictionary<String,Object>	props;
 
     static int getType(String topic) {
     	if (DmtConstants.EVENT_TOPIC_ADDED.equals(topic))
@@ -60,7 +61,8 @@ public class DmtEventCore {
     	this( getType(topic), sessionId);
     }
     
-    DmtEventCore(String topic, int sessionId, Properties initialProps ) {
+	DmtEventCore(String topic, int sessionId,
+			Dictionary<String,Object> initialProps) {
     	this( getType(topic), sessionId);
     	this.props = initialProps;
     }
@@ -191,7 +193,8 @@ public class DmtEventCore {
     }
     
     
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("DmtEventCore(");
         sb.append(sessionId).append(", ");
@@ -211,9 +214,9 @@ public class DmtEventCore {
             throw new IllegalArgumentException("Unknown event type");
     }
     
-    Properties getProperties() {
+	Dictionary<String,Object> getProperties() {
     	if (props == null)
-			props = new Properties();
+			props = new Hashtable<>();
 		return props;
     }
     
@@ -222,7 +225,7 @@ public class DmtEventCore {
     }
     
     String[] getPropertyNames() {
-    	return getProperties().keySet().toArray(new String[getProperties().size()]);
+		return Collections.list(getProperties().keys()).toArray(new String[0]);
     }
     
     Object getProperty( String key ) {

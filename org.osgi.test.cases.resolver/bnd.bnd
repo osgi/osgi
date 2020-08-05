@@ -44,7 +44,9 @@ Import-Package: ${-signaturetest}, *
 				   resolver.tb1.v110.jar, \
 				   resolver.tb1.v120.jar, \
 				   resolver.tb5.jar
-	
+
+-fixupmessages.host: "Host * for this fragment"
+
 -signaturetest                      = org.osgi.service.resolver
 
 -buildpath							= \

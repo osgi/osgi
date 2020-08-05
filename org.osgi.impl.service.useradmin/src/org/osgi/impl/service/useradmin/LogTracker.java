@@ -17,11 +17,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class LogTracker extends ServiceTracker implements LogService {
+public class LogTracker extends ServiceTracker<LogService,LogService>
+		implements LogService {
 	BundleContext	bc;
 
 	public LogTracker(BundleContext bc) {
-		super(bc, LogService.class.getName(), null);
+		super(bc, LogService.class, null);
 		this.bc = bc;
 		open();
 	}
@@ -39,20 +40,26 @@ public class LogTracker extends ServiceTracker implements LogService {
 	}
 
 	// Log implementation
+	@Override
 	public void log(int level, String msg, Throwable e) {
 		log(null, level, msg, e);
 	}
 
+	@Override
 	public void log(int level, String msg) {
 		log(null, level, msg, null);
 	}
 
-	public void log(ServiceReference sr, int level, String msg) {
+	@Override
+	public void log(@SuppressWarnings("rawtypes") ServiceReference sr,
+			int level, String msg) {
 		log(sr, level, msg, null);
 	}
 
-	public void log(ServiceReference sr, int level, String msg, Throwable e) {
-		LogService ls = (LogService) getService();
+	@Override
+	public void log(@SuppressWarnings("rawtypes") ServiceReference sr,
+			int level, String msg, Throwable e) {
+		LogService ls = getService();
 		if (ls != null) {
 			if (sr == null)
 				ls.log(level, msg, e);

@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.jndi.dirObjectFactoryBuilder1;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.naming.spi.ObjectFactoryBuilder;
@@ -30,17 +31,19 @@ import org.osgi.test.cases.jndi.provider.CTDirObjectFactoryBuilder;
  */
 public class DirObjectFactoryBuilder1Activator implements BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		String[] interfaces = {ObjectFactoryBuilder.class.getName()};
 		
 		CTDirObjectFactoryBuilder ofb = new CTDirObjectFactoryBuilder();
 		sr = context.registerService(interfaces, ofb, props);	
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();

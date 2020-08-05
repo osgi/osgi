@@ -41,9 +41,11 @@ import org.osgi.service.dmt.DmtIllegalStateException;
 import org.osgi.service.dmt.security.DmtPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 /**
  * @author Luiz Felipe Guimaraes
  * 
@@ -58,6 +60,7 @@ public class Commit implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testCommit001();
@@ -79,12 +82,12 @@ public class Commit implements TestInterface {
 	private void testCommit001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCommit001");
+			DefaultTestBundleControl.log("#testCommit001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.commit();
-			tbc.failException("#", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("#", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
+			DefaultTestBundleControl.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
@@ -101,12 +104,12 @@ public class Commit implements TestInterface {
 	private void testCommit002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCommit002");
+			DefaultTestBundleControl.log("#testCommit002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.commit();
-			tbc.failException("#", DmtIllegalStateException.class);
+			DefaultTestBundleControl.failException("#", DmtIllegalStateException.class);
 		} catch (DmtIllegalStateException e) {
-			tbc.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
+			DefaultTestBundleControl.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
@@ -123,11 +126,11 @@ public class Commit implements TestInterface {
     private void testCommit003() {
         DmtSession session = null;
         try {
-            tbc.log("#testCommit003");
+            DefaultTestBundleControl.log("#testCommit003");
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
             session.commit();
             session.close();
-            tbc.pass("Asserting that session was committed correctly");
+            DefaultTestBundleControl.pass("Asserting that session was committed correctly");
         } catch (Exception e) {
             tbc.failUnexpectedException(e);
         } finally {
@@ -143,10 +146,10 @@ public class Commit implements TestInterface {
     private void testCommit004() {
         DmtSession session = null;
         try {
-            tbc.log("#testCommit004");
+            DefaultTestBundleControl.log("#testCommit004");
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
             session.commit();
-            tbc.assertEquals("Asserting that after a commit(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
+            TestCase.assertEquals("Asserting that after a commit(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
         } catch (Exception e) {
         	tbc.failUnexpectedException(e);
         } finally {

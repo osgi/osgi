@@ -3,12 +3,11 @@ package org.osgi.test.cases.dmt.tc4.ext.junit;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.MountPoint;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
@@ -17,7 +16,6 @@ import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDmtEventListener;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestEventHandler;
-import org.osgi.test.support.sleep.Sleep;
 
 public class InternalChangedEventTest extends DmtAdminTestCase {
 
@@ -29,13 +27,15 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 	private TestDmtEventListener dmtEventListener;
 
-	private ServiceRegistration eventHandlerRegistration;
+	private ServiceRegistration<EventHandler>	eventHandlerRegistration;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		getDmtAdmin();
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		unregisterPlugins();
 		closeDmtSession();
@@ -256,11 +256,12 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 	public void testPostEventWithNodesToRemovedMountPoint() throws Exception {
 		TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
-		ServiceRegistration regigstartionA1 = registerMountDataPlugin(pluginA1,
+		ServiceRegistration<DataPlugin> regigstartionA1 = registerMountDataPlugin(
+				pluginA1,
 				"./A1");
 
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		unregister(regigstartionA1);
 		// try {
@@ -295,11 +296,12 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 	public void testPostEventWithNodesAndNewNodesToRemovedMountPoint()
 			throws Exception {
 		TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
-		ServiceRegistration regigstartionA1 = registerMountDataPlugin(pluginA1,
+		ServiceRegistration<DataPlugin> regigstartionA1 = registerMountDataPlugin(
+				pluginA1,
 				"./A1");
 
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 
 		unregister(regigstartionA1);
@@ -691,7 +693,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		mountPoint.postEvent(DmtConstants.EVENT_TOPIC_ADDED, new String[] {
 				"B1", "C1" }, eventProps);
@@ -759,7 +761,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		mountPoint.postEvent(DmtConstants.EVENT_TOPIC_DELETED, new String[] {
 				"B1", "C1" }, eventProps);
@@ -828,7 +830,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		mountPoint.postEvent(DmtConstants.EVENT_TOPIC_REPLACED, new String[] {
 				"B1", "C1" }, eventProps);
@@ -899,7 +901,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] {
 				"B1", "C1" }, new String[] { "B2", "C2" }, eventProps);
@@ -974,7 +976,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put("key1", "value1");
 		mountPoint.postEvent(DmtConstants.EVENT_TOPIC_COPIED, new String[] {
 				"B1", "C1" }, new String[] { "B2", "C2" }, eventProps);
@@ -1049,7 +1051,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put(EventConstants.EVENT_TOPIC, "foo");
 		eventProps.put(DmtConstants.EVENT_PROPERTY_NODES, "bar");
 		eventProps.put(DmtConstants.EVENT_PROPERTY_NEW_NODES, "baz");
@@ -1123,7 +1125,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 		long timeStamp = System.currentTimeMillis();
 		MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put(EventConstants.EVENT_TOPIC, "foo");
 		eventProps.put(DmtConstants.EVENT_PROPERTY_NODES, "bar");
 		eventProps.put(DmtConstants.EVENT_PROPERTY_NEW_NODES, "baz");
@@ -1201,11 +1203,11 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
 	private TestEventHandler registerEventHandler() {
 		TestEventHandler handler = new TestEventHandler();
-		Hashtable serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(EventConstants.EVENT_TOPIC,
 				"org/osgi/service/dmt/DmtEvent/*");
 		eventHandlerRegistration = context.registerService(
-				EventHandler.class.getName(), handler, serviceProps);
+				EventHandler.class, handler, serviceProps);
 		return handler;
 	}
 
@@ -1377,12 +1379,12 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 	}
 
 	private void postEvent(MountPoint mountPoint, String topic, String node,
-			Dictionary props) {
+			Dictionary<String,Object> props) {
 		mountPoint.postEvent(topic, new String[] { node }, props);
 	}
 
 	private void postEvent(MountPoint mountPoint, String topic, String node,
-			String newNode, Dictionary props) {
+			String newNode, Dictionary<String,Object> props) {
 		mountPoint.postEvent(topic, new String[] { node },
 				new String[] { newNode }, props);
 	}

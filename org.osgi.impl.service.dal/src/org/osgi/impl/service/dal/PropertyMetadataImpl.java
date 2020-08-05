@@ -10,6 +10,7 @@
 package org.osgi.impl.service.dal;
 
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 
@@ -18,7 +19,7 @@ import org.osgi.service.dal.PropertyMetadata;
  */
 public final class PropertyMetadataImpl implements PropertyMetadata {
 
-	private final Map				metadata;
+	private final Map<String, ? >	metadata;
 	private final FunctionData		step;
 	private final FunctionData[]	enumValues;
 	private final FunctionData		minValue;
@@ -34,7 +35,7 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 	 * @param maxValue The maximum value, if any.
 	 */
 	public PropertyMetadataImpl(
-			Map metadata,
+			Map<String, ? > metadata,
 			FunctionData step,
 			FunctionData[] enumValues,
 			FunctionData minValue,
@@ -46,22 +47,27 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 		this.maxValue = maxValue;
 	}
 
-	public Map getMetadata(String unit) {
+	@Override
+	public Map<String, ? > getMetadata(String unit) {
 		return this.metadata;
 	}
 
+	@Override
 	public FunctionData getStep(String unit) {
 		return this.step;
 	}
 
+	@Override
 	public FunctionData[] getEnumValues(String unit) {
 		return this.enumValues;
 	}
 
+	@Override
 	public FunctionData getMinValue(String unit) {
 		return this.minValue;
 	}
 
+	@Override
 	public FunctionData getMaxValue(String unit) {
 		return this.maxValue;
 	}

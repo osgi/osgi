@@ -46,6 +46,9 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -60,6 +63,7 @@ public class GetPrincipal implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 		testGetPrincipal001();
@@ -76,12 +80,12 @@ public class GetPrincipal implements TestInterface {
 	private void testGetPrincipal001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetPrincipal001");
+			DefaultTestBundleControl.log("#testGetPrincipal001");
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
 					".", DmtSession.LOCK_TYPE_ATOMIC);
 
-			tbc.assertEquals("Asserts that getPrincipal returns the principal passed in the DmtSession's constructor",
+			TestCase.assertEquals("Asserts that getPrincipal returns the principal passed in the DmtSession's constructor",
 					DmtConstants.PRINCIPAL, session.getPrincipal());
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -98,13 +102,13 @@ public class GetPrincipal implements TestInterface {
 	private void testGetPrincipal002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetPrincipal002");
+			DefaultTestBundleControl.log("#testGetPrincipal002");
             tbc.setPermissions(new PermissionInfo[] {
                     new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET)});
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertNull("Asserts that getPrincipal returns null when the session is local", session
+			TestCase.assertNull("Asserts that getPrincipal returns null when the session is local", session
 					.getPrincipal());
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

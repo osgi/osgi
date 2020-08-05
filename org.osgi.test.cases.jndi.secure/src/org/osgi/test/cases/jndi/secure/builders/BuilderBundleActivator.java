@@ -19,6 +19,7 @@ package org.osgi.test.cases.jndi.secure.builders;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.ObjectFactoryBuilder;
@@ -34,27 +35,29 @@ import org.osgi.test.cases.jndi.secure.provider.CTObjectFactoryBuilder;
  */
 public class BuilderBundleActivator implements BundleActivator {
 
-	private ArrayList serviceRegistrations = new ArrayList();
+	private List<ServiceRegistration< ? >> serviceRegistrations = new ArrayList<>();
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable builderProps = new Hashtable();
+		Hashtable<String,Object> builderProps = new Hashtable<>();
 		String[] builderInterfaces = {InitialContextFactoryBuilder.class.getName()};
 		
 		CTInitialContextFactoryBuilder ctfb = new CTInitialContextFactoryBuilder();
 		serviceRegistrations.add(context.registerService(builderInterfaces, ctfb, builderProps));
 		
-		Hashtable ofbProps = new Hashtable();
+		Hashtable<String,Object> ofbProps = new Hashtable<>();
 		String[] ofbInterfaces = {ObjectFactoryBuilder.class.getName()};
 		
 		CTObjectFactoryBuilder ofb = new CTObjectFactoryBuilder();
 		serviceRegistrations.add(context.registerService(ofbInterfaces, ofb, ofbProps));
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		for(int i=0; i < serviceRegistrations.size(); i++) {
-			ServiceRegistration sr = (ServiceRegistration) serviceRegistrations.get(i);
+			ServiceRegistration< ? > sr = serviceRegistrations.get(i);
 			sr.unregister();
 		}
 	}

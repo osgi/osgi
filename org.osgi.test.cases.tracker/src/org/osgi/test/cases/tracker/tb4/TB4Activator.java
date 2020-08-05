@@ -24,8 +24,8 @@ public class TB4Activator implements BundleActivator {
 	 * Starts the bundle. Installs several services later filtered by the tbc
 	 */
 	public void start(BundleContext bc) {
-		ServiceReference<TestService2> sr = (ServiceReference<TestService2>) bc
-				.getServiceReference(TestService2.NAME);
+		ServiceReference<TestService2> sr = bc
+				.getServiceReference(TestService2.class);
 		ts2 = bc.getService(sr);
 	}
 

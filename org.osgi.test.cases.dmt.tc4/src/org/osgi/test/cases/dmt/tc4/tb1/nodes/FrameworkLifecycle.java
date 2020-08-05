@@ -21,36 +21,44 @@ public class FrameworkLifecycle extends InteriorNode {
 	}
 
 	
+	@Override
 	public void open() {
 		update.open();
 		restart.open();
 		shutdown.open();
 	}
 	
+	@Override
 	public void close() {
 		update.close();
 		restart.close();
 		shutdown.close();
 	}
 	
+	@Override
 	public String getNodeName() {
 		return "FrameworkLifecycle";
 	}
 	
+	@Override
 	public String getNodePath() {
 		return "./OSGi/_Framework/FrameworkLifecycle";
 	}
 	
+	@Override
 	public Node[] getChildNodes() {
 		return new Node[] {update, restart, shutdown};
 	}
 	
+	@Override
 	public String[] getChildNodeNames() {
 		return new String[] {update.getNodeName(), restart.getNodeName(), shutdown.getNodeName()};
 	}
 	
+	@Override
 	public MetaNode getMetaNode() {
 		return new InteriorMetaNode() {
+			@Override
 			public boolean can(int operation) {
 				if ( operation == MetaNode.CMD_GET ) {
 					return true;
@@ -59,14 +67,17 @@ public class FrameworkLifecycle extends InteriorNode {
 				return false;
 			}
 
+			@Override
 			public String getDescription() {
 				return "Interior node that contains the values for Lifecycle control of the OSGi Framework.";
 			}
 
+			@Override
 			public int getMaxOccurrence() {
 				return 1;
 			}
 
+			@Override
 			public int getScope() {
 				return MetaNode.PERMANENT;
 			}

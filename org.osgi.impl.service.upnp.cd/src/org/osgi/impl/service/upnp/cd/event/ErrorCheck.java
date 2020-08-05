@@ -14,7 +14,7 @@ public class ErrorCheck {
 	// This method will be called by the subscription check and renwal check to
 	// check ,
 	// headers.
-	boolean checkHeaders(Hashtable headers) {
+	boolean checkHeaders(Hashtable<String, ? > headers) {
 		if (headers.get("sid") != null) {
 			if (headers.get("nt") != null || headers.get("callback") != null) {
 				result = GenaConstants.GENA_SERVER_VERSION
@@ -27,7 +27,7 @@ public class ErrorCheck {
 
 	// This method will be called by the subscription check to check ,
 	// whether the request contains valid sid or not
-	boolean check_SID(Hashtable headers) {
+	boolean check_SID(Hashtable<String, ? > headers) {
 		String sid = (String) headers.get("sid");
 		if (sid == null || EventRegistry.getSubscriber(sid) == null) {
 			result = GenaConstants.GENA_ERROR_412;
@@ -43,6 +43,7 @@ public class ErrorCheck {
 	void setTime(String timeOut, Subscription subscription) {
 		String timeconvert = null;
 		if (timeOut.startsWith("Second-") || timeOut.startsWith("Seconds-")) {
+			@SuppressWarnings("hiding")
 			int result = timeOut.indexOf("-");
 			timeconvert = timeOut.substring(result + 1);
 		}
@@ -75,7 +76,7 @@ public class ErrorCheck {
 	// This method will be called by the subscription check and renwal check to
 	// form ,
 	// subscription okay message which will be send back to the subscribers.
-	String formSubscription_Okay_Message(Hashtable headers,
+	String formSubscription_Okay_Message(Hashtable<String, ? > headers,
 			Subscription subscription) {
 		String message = GenaConstants.GENA_SERVER_VERSION
 				+ GenaConstants.GENA_OK_200 + "\r\n" + "DATE: " + getDate()

@@ -40,5 +40,7 @@ interface InvocationHandlerFactory {
 	 * @return an InvocationHandler that can be associated with a dynamic proxy
 	 *         for the specified service.  
 	 */
-	InvocationHandler create(BundleContext bundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService);
+	InvocationHandler create(BundleContext bundleContext,
+			ServiceReference< ? > serviceReference, OSGiURLParser urlParser,
+			Object osgiService);
 }

@@ -17,7 +17,8 @@
 package org.osgi.test.cases.zigbee;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZDPException;
@@ -144,7 +145,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 
 		ZigBeeEndpoint badEnpoint = new TestNotExportedZigBeeEndpoint(invalidEndpointId, clientClusters, serverClusters, ep.getSimpleDescriptor());
 
-		Dictionary endpointProperties = new Properties();
+		Dictionary<String,Object> endpointProperties = new Hashtable<>();
 		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, host.getIEEEAddress());
 		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(badEnpoint.getId()));
 		endpointProperties.put(ZigBeeEndpoint.ZIGBEE_EXPORT, "exported");

@@ -18,10 +18,6 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,17 +29,21 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
 import org.osgi.service.cm.Configuration;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 class ConfigReadWriteSession extends ConfigReadOnlySession
         implements TransactionalDataSession {
 
-    private Vector changes;
-    private HashSet storedConfigurationIdSet;
+	private Vector<Event>	changes;
+	private HashSet<String>	storedConfigurationIdSet;
     
     private String concurrentAccessError;
     
@@ -53,7 +53,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         init();
     }
 
-    public void commit() throws DmtException {
+    @Override
+	public void commit() throws DmtException {
         if(concurrentAccessError != null)
             throw new DmtException((String)null, DmtException.CONCURRENT_ACCESS,
                     concurrentAccessError);
@@ -61,7 +62,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         // This is an expensive check to detect concurrent modifications on the
         // list of registered Configuration tables.
         if(storedConfigurationIdSet != null && !storedConfigurationIdSet.equals(
-                new HashSet(Arrays.asList(super.getConfigurationIds(null)))))
+				new HashSet<>(Arrays.asList(super.getConfigurationIds(null)))))
             throw new DmtException((String) null, 
                     DmtException.CONCURRENT_ACCESS, "Configuration table " +
                     "list was changed outside the scope of the session.");
@@ -71,13 +72,13 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         // copy plugin root path, last element left empty for configuration PIDs
         System.arraycopy(root, 0, pidPath, 0, root.length);
         
-        Iterator i = changes.iterator();
+		Iterator<Event> i = changes.iterator();
         while (i.hasNext()) {
-            Event event = (Event) i.next();
+            Event event = i.next();
             Conf table = event.getTable();
             String name = event.getName();
             Configuration configuration;
-            Dictionary dict;
+			Dictionary<String,Object> dict;
             pidPath[pidPath.length-1] = name;
             try {
                 switch(event.getType()) {
@@ -115,12 +116,14 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         init();
     }
 
-    public void rollback() throws DmtException {
-        changes = new Vector();
+    @Override
+	public void rollback() throws DmtException {
+		changes = new Vector<>();
         // nothing needs to be done
     }
 
-    public void createInteriorNode(String[] fullPath, String type)
+    @Override
+	public void createInteriorNode(String[] fullPath, String type)
             throws DmtException {
         if(type != null)
             throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
@@ -179,7 +182,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         }
     }
 
-    public void createLeafNode(String[] fullPath, DmtData data, 
+    @Override
+	public void createLeafNode(String[] fullPath, DmtData data, 
             String mimeType) throws DmtException {
         // proper MIME type ensured by meta-data
         
@@ -315,7 +319,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         }
     }
 
-    public void setNodeValue(String[] fullPath, DmtData data)
+    @Override
+	public void setNodeValue(String[] fullPath, DmtData data)
             throws DmtException {
         // only VALUE and VALUES can be replaced, these don't have defaults
         if(data == null) 
@@ -362,7 +367,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         }
     }
     
-    public void deleteNode(String[] fullPath) throws DmtException {
+    @Override
+	public void deleteNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
 
         // path has at least one component because the root node is permanent
@@ -415,7 +421,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         }
     }
 
-    public void setNodeType(String[] fullPath, String type) 
+    @Override
+	public void setNodeType(String[] fullPath, String type) 
             throws DmtException {
         if(type == null)
             return;
@@ -427,13 +434,15 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         // do nothing, meta-data guarantees that type is "text/plain"
     }
 
-    public void setNodeTitle(String[] fullPath, String title) 
+    @Override
+	public void setNodeTitle(String[] fullPath, String title) 
             throws DmtException {
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Title property not supported.");
     }
 
-    public void renameNode(String[] fullPath, String newName)
+    @Override
+	public void renameNode(String[] fullPath, String newName)
             throws DmtException {
         String[] path = chopPath(fullPath);
         
@@ -489,7 +498,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         }
     }
 
-    public void copy(String[] fullPath, String[] newNodePath, boolean recursive)
+    @Override
+	public void copy(String[] fullPath, String[] newNodePath, boolean recursive)
             throws DmtException {
         // ENHANCE allow cloning pid, key (on the same level)
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
@@ -499,7 +509,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
     
     // Override some read methods to provide up-to-date info in mid-session  
     
-    public String[] getChildNodeNames(String[] fullPath) throws DmtException {
+    @Override
+	public String[] getChildNodeNames(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         if(path.length == 0)
             return getConfigurationIds(fullPath);
@@ -514,7 +525,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                     "Configuration data for the given PID has been deleted.");
         
         if (path.length == 1) {
-            List l = new ArrayList();
+			List<String> l = new ArrayList<>();
             if(conf.getPid() != null)
                 l.add(PID);
             if(!conf.canCreateLocation())
@@ -522,7 +533,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
             l.add(KEYS);
             if(conf.getFactoryPid() != null)
                 l.add(FACTORY_PID);
-            return (String[]) l.toArray(new String[l.size()]);
+			return l.toArray(new String[0]);
         }
         
         if(path.length == 2)
@@ -534,7 +545,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                     "The specified key does not exist in the configuration.");
         
         if(path.length == 3) {
-            List l = new ArrayList();
+			List<String> l = new ArrayList<>();
             if(entry.getType() != null)
                 l.add(TYPE);
             if(entry.getCardinality() != null)
@@ -543,7 +554,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                 l.add(VALUE);
             if(entry.getValues() != null)
                 l.add(VALUES);
-            return (String[]) l.toArray(new String[l.size()]);
+			return l.toArray(new String[0]);
         }
         
         Integer[] indices;
@@ -560,7 +571,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         return children;
     }
     
-    public DmtData getNodeValue(String[] fullPath) throws DmtException {
+    @Override
+	public DmtData getNodeValue(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         
         // path.length > 1  because only leaf nodes are given
@@ -656,7 +668,8 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         return element.getData();
     }
     
-    public boolean isNodeUri(String[] fullPath) {
+    @Override
+	public boolean isNodeUri(String[] fullPath) {
         String[] path = chopPath(fullPath);
 
         if(path.length == 0) // $/Configuration
@@ -724,13 +737,14 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
     
     //----- Utility methods -----//
 
-    protected String[] getConfigurationIds(String[] fullPath) 
+    @Override
+	protected String[] getConfigurationIds(String[] fullPath) 
             throws DmtException {
-        Set configurations = getStoredConfigurationIdSet(fullPath);
+		Set<String> configurations = getStoredConfigurationIdSet(fullPath);
                 
-        Iterator i = changes.iterator();
+		Iterator<Event> i = changes.iterator();
         while (i.hasNext()) {
-            Event event = (Event) i.next();
+            Event event = i.next();
             int type = event.getType();
             if(type == Event.EVENT_TYPE_CREATE)
                 configurations.add(event.getName());
@@ -738,12 +752,11 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                 configurations.remove(event.getName());
         }
         
-        return (String[])
-            configurations.toArray(new String[configurations.size()]);
+        return configurations.toArray(new String[0]);
     }
     
     private void init() {
-        changes = new Vector();
+		changes = new Vector<>();
         storedConfigurationIdSet = null;
         concurrentAccessError = null;
     }
@@ -754,20 +767,21 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                 : getStoredConfigurationIdSet(fullPath).contains(nodeName);
     }
      
-    private Set getStoredConfigurationIdSet(String[] fullPath) 
+	private Set<String> getStoredConfigurationIdSet(String[] fullPath)
             throws DmtException {
         if(storedConfigurationIdSet == null)
             storedConfigurationIdSet = 
-                new HashSet(Arrays.asList(super.getConfigurationIds(fullPath)));
+					new HashSet<>(
+							Arrays.asList(super.getConfigurationIds(fullPath)));
 
-        return (Set) storedConfigurationIdSet.clone();
+		return new HashSet<>(storedConfigurationIdSet);
     }
     
     private Event getEventForConfiguration(String name) {
         Event event = null;
-        Iterator iter = changes.iterator();
+		Iterator<Event> iter = changes.iterator();
         while (iter.hasNext()) {
-            event = (Event) iter.next();
+            event = iter.next();
             if(name.equals(event.getName())) // found event for the given name
                 return event;
         }
@@ -883,7 +897,7 @@ class Conf {
     private String factoryPid;
     private boolean canCreateFactoryPid;
     
-    private Map properties;
+	private Map<String,Object>	properties;
     
     Conf() {
         pid = null;
@@ -891,7 +905,7 @@ class Conf {
         canCreateLocation = true;
         factoryPid = null;
         canCreateFactoryPid = true;
-        properties = new TreeMap(new CaseInsensitiveStringComparator());
+		properties = new TreeMap<>(new CaseInsensitiveStringComparator());
     }
     
     Conf(Configuration configuration) {
@@ -900,14 +914,15 @@ class Conf {
         canCreateLocation = false;
         factoryPid = configuration.getFactoryPid();
         canCreateFactoryPid = false;
-        properties = new TreeMap(new CaseInsensitiveStringComparator());
+		properties = new TreeMap<>(new CaseInsensitiveStringComparator());
 
-        Dictionary propertyDictionary = configuration.getProperties();
-        Enumeration e = propertyDictionary.keys();
+		Dictionary<String,Object> propertyDictionary = configuration
+				.getProperties();
+		Enumeration<String> e = propertyDictionary.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             Object value = propertyDictionary.get(key);
-            if(value instanceof Vector && ((Vector)value).size() == 0)
+			if (value instanceof Vector && ((Vector< ? >) value).size() == 0)
                 continue;
             properties.put(key, new ConfigEntry(value));
         }
@@ -956,8 +971,8 @@ class Conf {
     }
     
     String[] getKeys() {
-        Set keySet = properties.keySet();
-        return (String[]) keySet.toArray(new String[keySet.size()]);
+		Set<String> keySet = properties.keySet();
+		return keySet.toArray(new String[0]);
     }
     
     void createPid(String pid) {
@@ -1009,12 +1024,12 @@ class Conf {
         return (ConfigEntry) properties.remove(key);
     }
     
-    Dictionary getDictionary() throws ConfigPluginException {
-        Dictionary dict = new Hashtable();
+	Dictionary<String,Object> getDictionary() throws ConfigPluginException {
+		Dictionary<String,Object> dict = new Hashtable<>();
         
-        Iterator i = properties.entrySet().iterator();
+		Iterator<Entry<String,Object>> i = properties.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+			Entry<String,Object> entry = i.next();
             Object value = ((ConfigEntry) entry.getValue()).getObject();
             dict.put(entry.getKey(), value);
         }
@@ -1022,9 +1037,10 @@ class Conf {
         return dict;
     }
     
-    class CaseInsensitiveStringComparator implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            return ((String) obj1).compareToIgnoreCase((String) obj2);
+	class CaseInsensitiveStringComparator implements Comparator<String> {
+        @Override
+		public int compare(String obj1, String obj2) {
+            return obj1.compareToIgnoreCase(obj2);
         }
     }
 }

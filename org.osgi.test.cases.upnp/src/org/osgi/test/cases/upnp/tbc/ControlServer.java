@@ -64,7 +64,7 @@ public class ControlServer implements Runnable {
 	public void checkAns() throws Exception {
 		String answer = ans;
 		BufferedReader br = new BufferedReader(new StringReader(answer));
-		Hashtable hash = new Hashtable(6);
+		Hashtable<String,String> hash = new Hashtable<>(6);
 		String ll = br.readLine();
 		if (ll.equals("HTTP/1.1 200 OK")) {
 			String body = answer
@@ -74,13 +74,13 @@ public class ControlServer implements Runnable {
 			if (!rootTag.hasOnlyTags()) {
 				fail("CONTROL SERVER: Root tag has something else except tags");
 			}
-			Vector content = rootTag.getContent();
+			Vector<Object> content = rootTag.getContent();
 			for (int i = 0; i < content.size(); i++) {
 				XMLTag tag = (XMLTag) content.elementAt(i);
-				Vector elems = tag.getContent();
+				Vector<Object> elems = tag.getContent();
 				for (int j = 0; j < elems.size(); j++) {
 					XMLTag elem = (XMLTag) elems.elementAt(j);
-					Vector params = elem.getContent();
+					Vector<Object> params = elem.getContent();
 					for (int k = 0; k < params.size(); k++) {
 						XMLTag param = (XMLTag) params.elementAt(k);
 						if (param.hasOnlyText()) {
@@ -98,7 +98,7 @@ public class ControlServer implements Runnable {
 		}
 	}
 
-	private static void controlTest(Dictionary val) {
+	private static void controlTest(Dictionary<String,String> val) {
 		assertNotNull(val);
 
 		String str = val.get(UPnPConstants.N_OUT_STRING).toString();

@@ -17,10 +17,10 @@ import org.osgi.test.cases.device.tbc.TestBundleControl;
  * @version 1.0
  */
 public class BasicDevice implements BundleActivator, Device {
-	private ServiceRegistration	deviceSR	= null;
+	private ServiceRegistration< ? >			deviceSR	= null;
 	private String[]			category	= {"test"};
 	private TestBundleControl	master		= null;
-	private ServiceReference	masterRef	= null;
+	private ServiceReference<TestBundleControl>	masterRef	= null;
 
 	/**
 	 * The start method of the activator of the device bundle. Registers
@@ -39,10 +39,10 @@ public class BasicDevice implements BundleActivator, Device {
 	 */
 	public void start(BundleContext bc) {
 		// get the master of this test case - it is used for logging
-		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
-		master = (TestBundleControl) bc.getService(masterRef);
+		masterRef = bc.getServiceReference(TestBundleControl.class);
+		master = bc.getService(masterRef);
 			// general device - used by the driver selection test
-		Hashtable h = new Hashtable();
+			Hashtable<String,Object> h = new Hashtable<>();
 		h.put("deviceID", "generalDevice");
 		h.put("DEVICE_CATEGORY", category);
 		h.put("device.test", Boolean.TRUE);

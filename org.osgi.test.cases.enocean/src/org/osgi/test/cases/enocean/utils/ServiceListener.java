@@ -29,8 +29,9 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author $Id$
  */
-public class ServiceListener extends ServiceTracker {
+public class ServiceListener<T> extends ServiceTracker<T,T> {
 
+	@SuppressWarnings("unused")
 	static private final String TAG = "ServiceListener";
 
 	/** SERVICE_ADDED */
@@ -43,25 +44,25 @@ public class ServiceListener extends ServiceTracker {
 	private final Semaphore		waiter;
 
 	private BundleContext		bc;
-	private LinkedList lastActions;
-	private ServiceReference	serviceReference;
+	private LinkedList<String>	lastActions;
+	private ServiceReference<T>	serviceReference;
 
 	/**
 	 * @param bc
 	 * @param cls
 	 * @throws InvalidSyntaxException
 	 */
-	public ServiceListener(BundleContext bc, Class cls)
+	public ServiceListener(BundleContext bc, Class<T> cls)
 			throws InvalidSyntaxException {
-		super(bc, bc.createFilter("(&(objectclass=" + cls.getName() + "))"), null);
+		super(bc, cls, null);
 		this.bc = bc;
-		this.lastActions = new LinkedList();
+		this.lastActions = new LinkedList<>();
 		waiter = new Semaphore(0);
 		open();
 	}
 
-	public Object addingService(ServiceReference ref) {
-		Object service = bc.getService(ref);
+	public T addingService(ServiceReference<T> ref) {
+		T service = bc.getService(ref);
 		if (service != null) {
 			serviceReference = ref;
 			lastActions.addFirst(SERVICE_ADDED);
@@ -70,7 +71,7 @@ public class ServiceListener extends ServiceTracker {
 		return service;
 	}
 
-	public void modifiedService(ServiceReference ref, Object service) {
+	public void modifiedService(ServiceReference<T> ref, T service) {
 		super.modifiedService(ref, service);
 		if (service != null) {
 			serviceReference = ref;
@@ -79,7 +80,7 @@ public class ServiceListener extends ServiceTracker {
 		}
 	}
 
-	public void removedService(ServiceReference ref, Object service) {
+	public void removedService(ServiceReference<T> ref, T service) {
 		super.removedService(ref, service);
 		if (service != null) {
 			serviceReference = ref;
@@ -94,7 +95,7 @@ public class ServiceListener extends ServiceTracker {
 	 * 
 	 * @see org.osgi.util.tracker.ServiceTracker#getServiceReference()
 	 */
-	public synchronized ServiceReference getServiceReference() {
+	public synchronized ServiceReference<T> getServiceReference() {
 		return serviceReference;
 	}
 
@@ -107,7 +108,7 @@ public class ServiceListener extends ServiceTracker {
 	 */
 	public String waitForEvent(long timeout) throws InterruptedException {
 		if (!lastActions.isEmpty()) {
-			return (String) lastActions.removeLast();
+			return lastActions.removeLast();
 		}
 		if (waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			return lastActions.isEmpty() ? null : (String) lastActions

@@ -11,4 +11,4 @@ Fragment-Host: ${p}.tw8
 -includeresource = \
 	resources/fragment.tw8
 	
-	
+-fixupmessages.host: "Host * for this fragment"

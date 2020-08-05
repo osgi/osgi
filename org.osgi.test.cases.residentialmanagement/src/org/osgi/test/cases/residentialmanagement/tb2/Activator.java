@@ -35,15 +35,17 @@ import org.osgi.test.cases.residentialmanagement.sharedpackage.SharedPackage;
 
 public class Activator implements BundleActivator {
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Bundle using SharedPackage is going to start.");
-		ServiceReference reference = context
-				.getServiceReference(SharedPackage.class.getName());
-		SharedPackage sp = (SharedPackage) context.getService(reference);
+		ServiceReference<SharedPackage> reference = context
+				.getServiceReference(SharedPackage.class);
+		SharedPackage sp = context.getService(reference);
 		sp.printVersion();
 		
 	}
 
+	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		System.out.println("Bundle using SharedPackage is going to stop.");
 

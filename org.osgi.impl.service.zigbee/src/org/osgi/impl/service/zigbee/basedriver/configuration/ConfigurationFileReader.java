@@ -19,8 +19,10 @@ package org.osgi.impl.service.zigbee.basedriver.configuration;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.osgi.impl.service.zigbee.basedriver.ZCLClusterImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeEndpointImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeHostImpl;
@@ -261,6 +263,7 @@ public class ConfigurationFileReader {
 		BigInteger ieeeAddress = ParserUtils.getAttribute(nodeElement, "ieeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
 		BigInteger hostIeeeAddress = ParserUtils.getAttribute(nodeElement, "hostIeeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
 		String userDescription = ParserUtils.getAttribute(nodeElement, "userDescription", ParserUtils.OPTIONAL, "");
+		@SuppressWarnings("unused")
 		int activeEndpointsNumber = ParserUtils.getAttribute(nodeElement, "activeEndpointsNumber", ParserUtils.MANDATORY, -1);
 
 		if (!hostIeeeAddress.equals(host.getIEEEAddress())) {
@@ -352,26 +355,32 @@ public class ConfigurationFileReader {
 
 			ZigBeeMacCapabiliyFlags flags = new ZigBeeMacCapabiliyFlags() {
 
+				@Override
 				public boolean isSecurityCapable() {
 					return true;
 				}
 
+				@Override
 				public boolean isReceiverOnWhenIdle() {
 					return true;
 				}
 
+				@Override
 				public boolean isMainsPower() {
 					return false;
 				}
 
+				@Override
 				public boolean isFullFunctionDevice() {
 					return true;
 				}
 
+				@Override
 				public boolean isAlternatePANCoordinator() {
 					return false;
 				}
 
+				@Override
 				public boolean isAddressAllocate() {
 					return false;
 				}

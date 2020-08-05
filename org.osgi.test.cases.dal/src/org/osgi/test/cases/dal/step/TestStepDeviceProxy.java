@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal.step;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -38,7 +39,7 @@ public final class TestStepDeviceProxy implements ServiceListener, EventHandler 
 
 	private final BundleContext			bc;
 	private final TestStepProxy			testStepProxy;
-	private final ServiceRegistration	handlerSReg;
+	private final ServiceRegistration<EventHandler>	handlerSReg;
 
 	private volatile boolean			printEvent;
 
@@ -55,9 +56,10 @@ public final class TestStepDeviceProxy implements ServiceListener, EventHandler 
 		} catch (InvalidSyntaxException e) {
 			// correct filter is used
 		}
-		Dictionary regProps = new Hashtable(1, 1F);
+		Dictionary<String,Object> regProps = new Hashtable<>(1, 1F);
 		regProps.put(EventConstants.EVENT_TOPIC, FunctionEvent.TOPIC_PROPERTY_CHANGED);
-		this.handlerSReg = bc.registerService(EventHandler.class.getName(), this, regProps);
+		this.handlerSReg = bc.registerService(EventHandler.class, this,
+				regProps);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public final class TestStepDeviceProxy implements ServiceListener, EventHandler 
 	 */
 	public void serviceChanged(ServiceEvent event) {
 		if (printEvent && (ServiceEvent.REGISTERED == event.getType())) {
-			ServiceReference sRef = event.getServiceReference();
+			ServiceReference< ? > sRef = event.getServiceReference();
 			String message = toFunctionString(sRef);
 			if (null != message) {
 				System.out.println(message);
@@ -126,7 +128,7 @@ public final class TestStepDeviceProxy implements ServiceListener, EventHandler 
 				"] Property has been changed to: " + functionEvent.getFunctionPropertyValue();
 	}
 
-	private static String toFunctionString(ServiceReference sRef) {
+	private static String toFunctionString(ServiceReference< ? > sRef) {
 		String functionUID = (String) sRef.getProperty(Function.SERVICE_UID);
 		if (null == functionUID) {
 			return null;
@@ -137,7 +139,7 @@ public final class TestStepDeviceProxy implements ServiceListener, EventHandler 
 				((null == deviceUID) ? "" : " for [" + deviceUID + "] device") + '.';
 	}
 
-	private static String toDeviceString(ServiceReference sRef) {
+	private static String toDeviceString(ServiceReference< ? > sRef) {
 		String deviceUID = (String) sRef.getProperty(Device.SERVICE_UID);
 		if (null == deviceUID) {
 			return null;

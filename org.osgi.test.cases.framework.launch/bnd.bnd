@@ -32,7 +32,9 @@ Import-Package: ${-signaturetest}, *
     dependency.tb3.v1.jar, \
     dependency.tb4.v1.jar, \
     mrjars.tb1.jar
-	
+
+-fixupmessages.host: "Host * for this fragment"
+
 -signaturetest                      = org.osgi.framework.connect , \
 	org.osgi.framework.launch , \
 	org.osgi.service.condition

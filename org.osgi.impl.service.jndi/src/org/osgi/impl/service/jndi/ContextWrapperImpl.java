@@ -15,13 +15,20 @@
  */
 package org.osgi.impl.service.jndi;
 
-import javax.naming.*;
-import javax.naming.spi.ObjectFactory;
-
 import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.naming.Binding;
+import javax.naming.Context;
+import javax.naming.Name;
+import javax.naming.NameClassPair;
+import javax.naming.NameNotFoundException;
+import javax.naming.NameParser;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.spi.ObjectFactory;
 
 /**
  * A Decorated Context class that will allow the JNDI Framework to handle
@@ -41,10 +48,12 @@ class ContextWrapperImpl implements Context {
 	}
 
 
+	@Override
 	public Object lookup(Name name) throws NamingException {
 		return m_context.lookup(name);
 	}
 
+	@Override
 	public Object lookup(String name) throws NamingException {
 		if (isURLRequest(name)) {
 			// attempt to find a URL Context Factory to satisfy this lookup
@@ -52,7 +61,7 @@ class ContextWrapperImpl implements Context {
 			ObjectFactory objectFactory = null;
 			try {
 				// obtain URL Context Factory in a doPrivilieged() block
-				objectFactory = (ObjectFactory)SecurityUtils.invokePrivilegedAction(new GetObjectFactoryAction(m_factoryManager, name));
+				objectFactory = SecurityUtils.invokePrivilegedAction(new GetObjectFactoryAction(m_factoryManager, name));
 			} catch (Exception e) {
 				logger.log(Level.FINE, 
 						   "Exception occurred while trying to obtain a reference to a URL Context Factory.",
@@ -102,112 +111,143 @@ class ContextWrapperImpl implements Context {
 
 	
 
+	@Override
 	public void bind(Name name, Object obj) throws NamingException {
 		m_context.bind(name, obj);
 	}
 
+	@Override
 	public void bind(String name, Object obj) throws NamingException {
 		m_context.bind(name, obj);
 	}
 
+	@Override
 	public void rebind(Name name, Object obj) throws NamingException {
 		m_context.rebind(name, obj);
 	}
 
+	@Override
 	public void rebind(String name, Object obj) throws NamingException {
 		m_context.rebind(name, obj);
 	}
 
+	@Override
 	public void unbind(Name name) throws NamingException {
 		m_context.unbind(name);
 	}
 
+	@Override
 	public void unbind(String name) throws NamingException {
 		m_context.unbind(name);
 	}
 
+	@Override
 	public void rename(Name oldName, Name newName) throws NamingException {
 		m_context.rename(oldName, newName);
 	}
 
+	@Override
 	public void rename(String oldName, String newName) throws NamingException {
 		m_context.rename(oldName, newName);
 	}
 
-	public NamingEnumeration list(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(Name name)
+			throws NamingException {
 		return m_context.list(name);
 	}
 
-	public NamingEnumeration list(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(String name)
+			throws NamingException {
 		return m_context.list(name);
 	}
 
-	public NamingEnumeration listBindings(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(Name name)
+			throws NamingException {
 		return m_context.listBindings(name);
 	}
 
-	public NamingEnumeration listBindings(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(String name)
+			throws NamingException {
 		return m_context.listBindings(name);
 	}
 
+	@Override
 	public void destroySubcontext(Name name) throws NamingException {
 		m_context.destroySubcontext(name);
 	}
 
+	@Override
 	public void destroySubcontext(String name) throws NamingException {
 		m_context.destroySubcontext(name);
 	}
 
+	@Override
 	public Context createSubcontext(Name name) throws NamingException {
 		return m_context.createSubcontext(name);
 	}
 
+	@Override
 	public Context createSubcontext(String name) throws NamingException {
 		return m_context.createSubcontext(name);
 	}
 
+	@Override
 	public Object lookupLink(Name name) throws NamingException {
 		return m_context.lookupLink(name);
 	}
 
+	@Override
 	public Object lookupLink(String name) throws NamingException {
 		return m_context.lookupLink(name);
 	}
 
+	@Override
 	public NameParser getNameParser(Name name) throws NamingException {
 		return m_context.getNameParser(name);
 	}
 
+	@Override
 	public NameParser getNameParser(String name) throws NamingException {
 		return m_context.getNameParser(name);
 	}
 
+	@Override
 	public Name composeName(Name name, Name prefix) throws NamingException {
 		return m_context.composeName(name, prefix);
 	}
 
+	@Override
 	public String composeName(String name, String prefix)
 			throws NamingException {
 		return m_context.composeName(name, prefix);
 	}
 
+	@Override
 	public Object addToEnvironment(String propName, Object propVal)
 			throws NamingException {
 		return m_context.addToEnvironment(propName, propVal);
 	}
 
+	@Override
 	public Object removeFromEnvironment(String propName) throws NamingException {
 		return m_context.removeFromEnvironment(propName);
 	}
 
-	public Hashtable getEnvironment() throws NamingException {
+	@Override
+	public Hashtable< ? , ? > getEnvironment() throws NamingException {
 		return m_context.getEnvironment();
 	}
 
+	@Override
 	public void close() throws NamingException {
 		m_context.close();
 	}
 
+	@Override
 	public String getNameInNamespace() throws NamingException {
 		return m_context.getNameInNamespace();
 	}
@@ -217,7 +257,7 @@ class ContextWrapperImpl implements Context {
 		return (indexOfColon != -1);
 	}
 
-	private static String getScheme(String name) {
+	static String getScheme(String name) {
 		int indexOfColon = name.indexOf(":");
 		if (indexOfColon != -1) {
 			return name.substring(0, indexOfColon);
@@ -226,7 +266,8 @@ class ContextWrapperImpl implements Context {
 		return null;
 	}
 	
-	private static class GetObjectFactoryAction implements PrivilegedExceptionAction {
+	private static class GetObjectFactoryAction
+			implements PrivilegedExceptionAction<ObjectFactory> {
 		private final FactoryManager m_factoryManager;
 		private final String m_name;
 		
@@ -235,7 +276,8 @@ class ContextWrapperImpl implements Context {
 			m_name = name;
 		}
 
-		public Object run() throws Exception {
+		@Override
+		public ObjectFactory run() throws Exception {
 			return obtainObjectFactory(m_name);
 		}
 		

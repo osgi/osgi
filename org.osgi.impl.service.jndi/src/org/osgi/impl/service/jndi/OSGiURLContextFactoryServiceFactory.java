@@ -17,18 +17,26 @@
 
 package org.osgi.impl.service.jndi;
 
+import javax.naming.spi.ObjectFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 
-class OSGiURLContextFactoryServiceFactory implements ServiceFactory {
+class OSGiURLContextFactoryServiceFactory
+		implements ServiceFactory<ObjectFactory> {
 
-	public Object getService(Bundle bundle, ServiceRegistration registration) {
+	@Override
+	public ObjectFactory getService(Bundle bundle,
+			ServiceRegistration<ObjectFactory> registration) {
 		return new OSGiURLContextFactory(bundle.getBundleContext());
 	}
 
-	public void ungetService(Bundle bundle, ServiceRegistration registration,
-			Object service) {
+	@Override
+	public void ungetService(Bundle bundle,
+			ServiceRegistration<ObjectFactory> registration,
+			ObjectFactory service) {
+		// empty
 	}
 
 }

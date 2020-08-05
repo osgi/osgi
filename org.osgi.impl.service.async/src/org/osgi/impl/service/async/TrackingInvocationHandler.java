@@ -58,6 +58,7 @@ class TrackingInvocationHandler implements InvocationHandler, net.sf.cglib.proxy
 		this.ref = null;
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		asyncService.registerInvocation(new MethodCall(clientBundle, logServiceTracker, 

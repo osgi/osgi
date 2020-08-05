@@ -34,16 +34,18 @@ import org.osgi.framework.ServiceReference;
  * 
  * @author $Id$
  */
-abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
+abstract class ServiceBasedNamingEnumeration<T extends NameClassPair>
+		implements NamingEnumeration<T> {
 
 	protected boolean				m_isOpen	= false;
 	protected int					m_index	= -1;
 	protected final BundleContext	m_bundleContext;
 	protected final String			m_interfaceName;
-	protected final ServiceReference[]	m_serviceReferences;
-	protected NameClassPair[]		m_nameClassPairs;
+	protected final ServiceReference< ? >[]	m_serviceReferences;
+	protected T[]							m_nameClassPairs;
 
-	public ServiceBasedNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, String interfaceName) {
+	public ServiceBasedNamingEnumeration(BundleContext bundleContext,
+			ServiceReference< ? >[] serviceReferences, String interfaceName) {
 		m_bundleContext = bundleContext;
 		if(interfaceName == null) {
 			m_interfaceName = "";
@@ -58,20 +60,24 @@ abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 		}
 	}
 
+	@Override
 	public void close() throws NamingException {
 		m_isOpen = false;
 	}
 
+	@Override
 	public boolean hasMore() throws NamingException {
 		checkIsOpen();
 		return (isIndexValid());
 	}
 
-	public Object next() throws NamingException {
+	@Override
+	public T next() throws NamingException {
 		checkIsOpen();
 		return internalNextElement();
 	}
 
+	@Override
 	public boolean hasMoreElements() {
 		if(!m_isOpen) {
 			return false;
@@ -81,7 +87,8 @@ abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 		
 	}
 
-	public Object nextElement() {
+	@Override
+	public T nextElement() {
 		return internalNextElement();
 	}
 
@@ -95,7 +102,7 @@ abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 		return m_index < m_nameClassPairs.length;
 	}
 
-	private Object internalNextElement() {
+	private T internalNextElement() {
 		if(isIndexValid()) {
 			return internalNextClassPair();
 		} else {
@@ -103,7 +110,7 @@ abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 		}
 	}
 
-	private NameClassPair internalNextClassPair() {
+	private T internalNextClassPair() {
 		return m_nameClassPairs[m_index++];
 	}
 

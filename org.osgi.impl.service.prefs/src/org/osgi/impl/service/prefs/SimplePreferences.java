@@ -7,8 +7,11 @@
  */
 package org.osgi.impl.service.prefs;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * Simple "proof of concept" Preferences implementation. This implementation
@@ -19,9 +22,9 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 class SimplePreferences extends AbstractPreferences {
 	private static final int	INIT_HASHTABLE_SIZE	= 3;
-	private Hashtable			prefs				= new Hashtable(
+	private Hashtable<String,String>		prefs				= new Hashtable<>(
 															INIT_HASHTABLE_SIZE);
-	private Hashtable			kids				= new Hashtable(
+	private Hashtable<String,Preferences>	kids				= new Hashtable<>(
 															INIT_HASHTABLE_SIZE);
 
 	protected SimplePreferences(SimplePreferences parent, String name) {
@@ -29,36 +32,41 @@ class SimplePreferences extends AbstractPreferences {
 		setModified();
 	}
 
+	@Override
 	protected void putSpi(String key, String value) {
 		setModified();
 		prefs.put(key, value);
 	}
 
+	@Override
 	protected String getSpi(String key) {
-		return (String) prefs.get(key);
+		return prefs.get(key);
 	}
 
+	@Override
 	protected void removeSpi(String key) {
 		setModified();
 		prefs.remove(key);
 	}
 
+	@Override
 	protected String[] keysSpi() {
-		Enumeration enumeration = prefs.keys();
+		Enumeration<String> enumeration = prefs.keys();
 		String[] result = new String[prefs.size()];
 		for (int i = 0; enumeration.hasMoreElements(); i++) {
-			result[i] = (String) enumeration.nextElement();
+			result[i] = enumeration.nextElement();
 		}
 		return result;
 		// Java 2 version:
 		// return (String[]) prefs.keySet().toArray(new String[prefs.size()]);
 	}
 
+	@Override
 	public String[] childrenNamesSpi() {
-		Enumeration enumeration = kids.keys();
+		Enumeration<String> enumeration = kids.keys();
 		String[] result = new String[kids.size()];
 		for (int i = 0; enumeration.hasMoreElements(); i++) {
-			result[i] = (String) enumeration.nextElement();
+			result[i] = enumeration.nextElement();
 		}
 		return result;
 		// Java 2 version:
@@ -66,6 +74,7 @@ class SimplePreferences extends AbstractPreferences {
 		//    kids.keySet().toArray(new String[kids.size()]);
 	}
 
+	@Override
 	public void flush() throws BackingStoreException {
 		synchronized (lock) {
 			if (isRemoved()) {
@@ -75,10 +84,12 @@ class SimplePreferences extends AbstractPreferences {
 		}
 	}
 
+	@Override
 	public void sync() throws BackingStoreException {
 		flush();
 	}
 
+	@Override
 	protected AbstractPreferences childSpi(String name) {
 		AbstractPreferences result = (AbstractPreferences) kids.get(name);
 		if (result == null) {
@@ -88,6 +99,7 @@ class SimplePreferences extends AbstractPreferences {
 		return result;
 	}
 
+	@Override
 	protected void removeSpi() throws BackingStoreException{
 		((SimplePreferences) parent()).kids.remove(name());
 		setModified();

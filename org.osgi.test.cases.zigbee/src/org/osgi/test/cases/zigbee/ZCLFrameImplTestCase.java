@@ -17,6 +17,7 @@
 package org.osgi.test.cases.zigbee;
 
 import java.io.EOFException;
+
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeDataInput;
@@ -298,7 +299,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		log(TAG, "test ZigBeeDataInput.readInt()");
 
 		try {
-			int v = dataInput.readInt(0);
+			dataInput.readInt(0);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -307,7 +308,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		}
 
 		try {
-			int v = dataInput.readInt(5);
+			dataInput.readInt(5);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -335,7 +336,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		log(TAG, "test ZigBeeDataInput.readLong()");
 
 		try {
-			long v = dataInput.readLong(0);
+			dataInput.readLong(0);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -344,7 +345,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		}
 
 		try {
-			long v = dataInput.readLong(9);
+			dataInput.readLong(9);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception

@@ -26,6 +26,7 @@ public class ControlPoint extends Thread {
 	private final DatagramSocket	msocket;
 	private final InetAddress		address;
 	private final Object lock = new Object();
+	@SuppressWarnings("unused")
 	private volatile boolean			running;
 	private final int		SEC_TO_DELAY	= 6;
 	private final String	NS_VALUE		= "01";

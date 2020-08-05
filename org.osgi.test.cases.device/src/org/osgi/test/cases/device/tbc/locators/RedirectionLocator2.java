@@ -1,8 +1,10 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.util.*;
-import org.osgi.service.device.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
 
 /**
  * When using redirection all registred locators should be called. This locator
@@ -14,7 +16,7 @@ import org.osgi.service.device.*;
 public class RedirectionLocator2 implements DriverLocator {
 	public static boolean	called	= false;
 
-	public String[] findDrivers(Dictionary props) {
+	public String[] findDrivers(Dictionary<String, ? > props) {
 		return null;
 	}
 

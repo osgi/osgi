@@ -4,6 +4,7 @@ import org.osgi.test.cases.residentialmanagement.sharedpackage.SharedPackage;
 
 public class SPImpl implements SharedPackage{
 
+	@Override
 	public void printVersion() {
 		System.out.println("###VERSION:    version:  1.0.0");
 	

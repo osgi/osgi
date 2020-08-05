@@ -53,38 +53,47 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 		this.responseCommandId = responseId;
 	}
 
+	@Override
 	public short getId() {
 		return id;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public String getShortDescription() {
 		return "command description";
 	}
 
+	@Override
 	public boolean isMandatory() {
 		return isMandatory;
 	}
 
+	@Override
 	public ZCLParameterDescription[] getParameterDescriptions() {
 		return parameterDescription;
 	}
 
+	@Override
 	public boolean isClusterSpecificCommand() {
 		return isCusterSpecificCommand;
 	}
 
+	@Override
 	public int getManufacturerCode() {
 		return manufacturerCode;
 	}
 
+	@Override
 	public boolean isClientServerDirection() {
 		return isServerSide;
 	}
 
+	@Override
 	public boolean isManufacturerSpecific() {
 		return manufacturerCode >= 0;
 	}

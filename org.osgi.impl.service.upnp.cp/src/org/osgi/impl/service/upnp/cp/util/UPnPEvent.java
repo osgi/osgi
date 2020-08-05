@@ -12,11 +12,11 @@ public class UPnPEvent {
 	public static final int	UPNP_TIME_EXPIRED	= 5;
 	private int				type;
 	private String			timeout;
-	private Hashtable		statevariables;
+	private Hashtable<String,Object>	statevariables;
 	private String			serviceId;
 
 	public UPnPEvent(int state, String serviceId, String timeout,
-			Hashtable states) {
+			Hashtable<String,Object> states) {
 		this.type = state;
 		this.timeout = timeout;
 		this.statevariables = states;
@@ -35,7 +35,7 @@ public class UPnPEvent {
 	}
 
 	// Returns a table containing all the changed variables and values.
-	public Hashtable getList() {
+	public Hashtable<String,Object> getList() {
 		return statevariables;
 	}
 

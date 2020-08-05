@@ -44,6 +44,9 @@ package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * This test case validates the implementation of <code>can</code> method of MetaNode, 
@@ -69,22 +72,22 @@ public class Can {
 	public void testCan001() {
 		DmtSession session = null;
 		try {
-		tbc.log("#testCan001");
+		DefaultTestBundleControl.log("#testCan001");
 		session = tbc.getDmtAdmin().getSession(
 				TestMetaNodeDataPluginActivator.ROOT,
 				DmtSession.LOCK_TYPE_SHARED);	
 		
 		MetaNode metanode = session.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
 		
-		tbc.assertTrue("Asserts can method with ADD as argument", metanode.can(MetaNode.CMD_ADD));
-		tbc.assertTrue("Asserts can method with DELETE as argument", metanode.can(MetaNode.CMD_DELETE));
-		tbc.assertTrue("Asserts can method with EXECUTE as argument", metanode.can(MetaNode.CMD_EXECUTE));
-		tbc.assertTrue("Asserts can method with GET as argument", metanode.can(MetaNode.CMD_GET));
-		tbc.assertTrue("Asserts can method with REPLACE as argument", metanode.can(MetaNode.CMD_REPLACE));
+		TestCase.assertTrue("Asserts can method with ADD as argument", metanode.can(MetaNode.CMD_ADD));
+		TestCase.assertTrue("Asserts can method with DELETE as argument", metanode.can(MetaNode.CMD_DELETE));
+		TestCase.assertTrue("Asserts can method with EXECUTE as argument", metanode.can(MetaNode.CMD_EXECUTE));
+		TestCase.assertTrue("Asserts can method with GET as argument", metanode.can(MetaNode.CMD_GET));
+		TestCase.assertTrue("Asserts can method with REPLACE as argument", metanode.can(MetaNode.CMD_REPLACE));
         
-        tbc.assertTrue("Asserts can method returns false when the argument is an invalid value", !metanode.can(200));
+        TestCase.assertTrue("Asserts can method returns false when the argument is an invalid value", !metanode.can(200));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -98,29 +101,29 @@ public class Can {
     public void testCan002() {
         DmtSession session = null;
         try {
-        tbc.log("#testCan002");
+        DefaultTestBundleControl.log("#testCan002");
         session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                 DmtSession.LOCK_TYPE_EXCLUSIVE);   
         
         session.createInteriorNode(TestMetaNodeDataPluginActivator.INEXISTENT_NODE_WITHOUT_METANODE);
-        tbc.pass("Asserts that if getMetaNode returns null, the add operation is allowed");
+        DefaultTestBundleControl.pass("Asserts that if getMetaNode returns null, the add operation is allowed");
         
         session.deleteNode(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE);
-        tbc.pass("Asserts that if getMetaNode returns null, the delete operation is allowed");
+        DefaultTestBundleControl.pass("Asserts that if getMetaNode returns null, the delete operation is allowed");
         
         session.execute(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE,null);
-        tbc.pass("Asserts that if getMetaNode returns null, the exec operation is allowed");
+        DefaultTestBundleControl.pass("Asserts that if getMetaNode returns null, the exec operation is allowed");
         
         session.getChildNodeNames(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE);
-        tbc.pass("Asserts that if getMetaNode returns null, the get operation is allowed");
+        DefaultTestBundleControl.pass("Asserts that if getMetaNode returns null, the get operation is allowed");
         
         session.setNodeType(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE,"text/xml");
-        tbc.pass("Asserts that if getMetaNode returns null, the exec operation is allowed");
+        DefaultTestBundleControl.pass("Asserts that if getMetaNode returns null, the exec operation is allowed");
         
         
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	DmtTestControl.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }

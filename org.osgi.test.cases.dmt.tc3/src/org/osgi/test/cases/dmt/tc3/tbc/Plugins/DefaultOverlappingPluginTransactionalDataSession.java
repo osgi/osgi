@@ -58,18 +58,22 @@ public class DefaultOverlappingPluginTransactionalDataSession implements Transac
 		MESSAGE = className;
 	}
 
+	@Override
 	public void rollback() throws DmtException {
 
 	}
 
+	@Override
 	public void commit() throws DmtException {
 
     }
 
+	@Override
 	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
 	}
+	@Override
 	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
@@ -79,90 +83,108 @@ public class DefaultOverlappingPluginTransactionalDataSession implements Transac
 		DmtConstants.TEMPORARY = MESSAGE;
 	}
 
+	@Override
 	public void setNodeType(String[] nodeUri, String type) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 	}
 
+	@Override
 	public void deleteNode(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodeUri, String type) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
 	}
 
 
+	@Override
 	public void createLeafNode(String[] nodeUri, DmtData value, String mimeType) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
 		DmtConstants.PARAMETER_3 = MESSAGE;
 	}
 
+	@Override
 	public void copy(String[] nodeUri, String[] newNodeUri, boolean recursive) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
 		DmtConstants.PARAMETER_3 = MESSAGE;
 	}
 
+	@Override
 	public void renameNode(String[] nodeUri, String newName) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		DmtConstants.PARAMETER_2 = MESSAGE;
 	}
+	@Override
 	public void close() throws DmtException {
 		
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return true;
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return false;
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return MESSAGE;
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return null;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return 0;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return new String[] {};
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 		return null;
 	}
 
+	@Override
 	public void nodeChanged(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
 	}

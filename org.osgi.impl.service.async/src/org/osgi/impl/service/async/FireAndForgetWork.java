@@ -9,10 +9,10 @@ import org.osgi.util.promise.Deferred;
 
 public class FireAndForgetWork implements Runnable {
 
-	private final MethodCall methodCall;
+	final MethodCall					methodCall;
 	
-	private final Deferred<Void> cleanup;
-	private final Deferred<Void> started;
+	final Deferred<Void>				cleanup;
+	final Deferred<Void>				started;
 
 	private final AccessControlContext acc;
 	
@@ -24,6 +24,7 @@ public class FireAndForgetWork implements Runnable {
 	}
 
 
+	@Override
 	public void run() {
 		try {
 			final Object service = methodCall.getService();
@@ -31,19 +32,17 @@ public class FireAndForgetWork implements Runnable {
 			// have been allowed to happen, so this should always be safe.
 			methodCall.method.setAccessible(true);
 			
-			AccessController.doPrivileged(new PrivilegedAction<Void>() {
-				public Void run() {
-					started.resolve(null);
-					try {
-						methodCall.method.invoke(service, methodCall.arguments);
-						cleanup.resolve(null);
-					} catch (InvocationTargetException ite) {
-						cleanup.fail(ite.getTargetException());
-					} catch (Exception e) {
-						cleanup.fail(e);
-					}
-					return null;
+			AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+				started.resolve(null);
+				try {
+					methodCall.method.invoke(service, methodCall.arguments);
+					cleanup.resolve(null);
+				} catch (InvocationTargetException ite) {
+					cleanup.fail(ite.getTargetException());
+				} catch (Exception e) {
+					cleanup.fail(e);
 				}
+				return null;
 			}, acc);
 		} catch (Exception e) {
 			started.fail(e);

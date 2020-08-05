@@ -19,7 +19,6 @@ package org.osgi.impl.service.serial;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -29,8 +28,8 @@ final class SerialDeviceManager {
 
 	private static SerialDeviceManager	instance	= new SerialDeviceManager();
 
-	private Map							propsMap	= new HashMap();
-	private Map							regMap		= new HashMap();
+	private Map<String,Dictionary<String,Object>>			propsMap	= new HashMap<>();
+	private Map<String,ServiceRegistration<SerialDevice>>	regMap		= new HashMap<>();
 
 	private SerialDeviceManager() {
 	}
@@ -39,11 +38,15 @@ final class SerialDeviceManager {
 		return instance;
 	}
 
-	String addSerialDevice(Properties props) {
-		SerialDevice service = new SerialDeviceImpl(props.getProperty(SerialDevice.SERIAL_COMPORT));
-		ServiceRegistration reg = Activator.getContext().registerService(SerialDevice.class.getName(), service, (Dictionary)props);
+	String addSerialDevice(Dictionary<String,Object> props) {
+		SerialDevice service = new SerialDeviceImpl(
+				(String)
+				props.get(SerialDevice.SERIAL_COMPORT));
+		ServiceRegistration<SerialDevice> reg = Activator.getContext()
+				.registerService(SerialDevice.class, service, props);
 
-		String id = ((Long) reg.getReference().getProperty(Constants.SERVICE_ID)).toString();
+		String id = ((Long) reg.getReference()
+				.getProperty(Constants.SERVICE_ID)).toString();
 
 		propsMap.put(id, props);
 		regMap.put(id, reg);
@@ -52,13 +55,13 @@ final class SerialDeviceManager {
 	}
 
 	void modifySerialDevice(String id) {
-		Properties props = (Properties) propsMap.get(id);
-		ServiceRegistration reg = (ServiceRegistration) regMap.get(id);
+		Dictionary<String,Object> props = propsMap.get(id);
+		ServiceRegistration<SerialDevice> reg = regMap.get(id);
 		reg.setProperties(props);
 	}
 
 	void removeSerialDevice(String id) {
-		ServiceRegistration reg = (ServiceRegistration) regMap.remove(id);
+		ServiceRegistration<SerialDevice> reg = regMap.remove(id);
 		if (reg != null) {
 			reg.unregister();
 		}

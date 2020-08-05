@@ -36,20 +36,20 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPlugin;
-
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 
 public class FatalExceptionDataPluginActivator implements BundleActivator {
 
-	private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
 	
 	public static final String TEST_EXCEPTION_PLUGIN_ROOT = DmtConstants.OSGi_ROOT + "/data_plugin_exception";
 	
@@ -65,16 +65,18 @@ public class FatalExceptionDataPluginActivator implements BundleActivator {
         this.tbc = tbc;
     }
 
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		fatalExceptionDataPlugin = new FatalExceptionDataPlugin(tbc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("dataRootURIs", new String[] { TEST_EXCEPTION_PLUGIN_ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		servReg = bc.registerService(ifs, fatalExceptionDataPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, fatalExceptionDataPlugin,
+				props);
 		System.out.println("FatalExceptionDataPlugin activated.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		// unregistering the service
 		servReg.unregister();

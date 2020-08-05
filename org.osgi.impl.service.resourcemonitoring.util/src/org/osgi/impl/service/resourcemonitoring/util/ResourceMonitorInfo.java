@@ -3,6 +3,7 @@ package org.osgi.impl.service.resourcemonitoring.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 
 /**
@@ -26,7 +27,7 @@ public class ResourceMonitorInfo {
 	/**
 	 * @param resourceMonitor
 	 */
-	public ResourceMonitorInfo(final ResourceMonitor resourceMonitor) {
+	public ResourceMonitorInfo(final ResourceMonitor<Long> resourceMonitor) {
 		resourceContextName = resourceMonitor.getContext().getName();
 		enabled = resourceMonitor.isEnabled();
 	}
@@ -76,7 +77,7 @@ public class ResourceMonitorInfo {
 
 	private static String[] split(String inputString, String separatingCharacter) {
 		// List<String> parts = new ArrayList<String>();
-		List parts = new ArrayList();
+		List<String> parts = new ArrayList<>();
 		int length = inputString.length();
 		int fromIndex = 0;
 		int index = 0;
@@ -90,7 +91,7 @@ public class ResourceMonitorInfo {
 		}
 		parts.add(inputString.substring(fromIndex, length));
 
-		return (String[]) parts.toArray(new String[parts.size()]);
+		return parts.toArray(new String[parts.size()]);
 	}
 
 }

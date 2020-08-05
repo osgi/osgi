@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  * tree.
  * 
  */
-@SuppressWarnings("boxing")
 public class ServiceLayerTestCase extends AbstractOSGiTestCase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLayerTestCase.class);
@@ -73,6 +72,7 @@ public class ServiceLayerTestCase extends AbstractOSGiTestCase {
 		cleanup();
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testRetrieve1() {
 		LOGGER.info("----Start RETRIEVE Test 1----");
@@ -548,7 +548,6 @@ public class ServiceLayerTestCase extends AbstractOSGiTestCase {
 	public void testNotify1() {
 		LOGGER.info("----Start Notify Test 1----");
 
-		@SuppressWarnings("hiding")
 		String myaddress = getMyAddress();
 
 		HashSet<RequestPrimitiveDTO> set = new HashSet<RequestPrimitiveDTO>();

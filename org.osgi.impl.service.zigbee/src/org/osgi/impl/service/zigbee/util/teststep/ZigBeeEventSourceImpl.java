@@ -78,6 +78,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 		}
 	}
 
+	@Override
 	public synchronized void run() {
 		while (!exit) {
 			this.registrationInfo.eventListener.notifyEvent(event);

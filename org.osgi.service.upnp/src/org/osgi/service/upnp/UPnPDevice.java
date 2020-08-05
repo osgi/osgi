@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -287,5 +287,5 @@ public interface UPnPDevice {
 	 *         Strings
 	 * 
 	 */
-	Dictionary<String, String> getDescriptions(String locale);
+	Dictionary<String,Object> getDescriptions(String locale);
 }

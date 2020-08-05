@@ -21,19 +21,21 @@ public class TestBug1657_CMDependency extends OSGiTestCase{
 	Bundle configAdminBundle;
 	Bundle dmtAdminBundle;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
 
 		// stopping the configuration admin service
-		ServiceReference ref = getContext().getServiceReference(ConfigurationAdmin.class.getName());
+		ServiceReference< ? > ref = getContext()
+				.getServiceReference(ConfigurationAdmin.class);
 		if (ref != null ) {
 			configAdminBundle = ref.getBundle();
 			configAdminBundle.stop();
 			System.out.println( "stopped configuration-admin bundle" );
 			Sleep.sleep(200);
 		}
-		ref = getContext().getServiceReference(DmtAdmin.class.getName());
+		ref = getContext().getServiceReference(DmtAdmin.class);
 		if (ref != null ) {
 			dmtAdminBundle = ref.getBundle();
 			dmtAdminBundle.stop();
@@ -42,6 +44,7 @@ public class TestBug1657_CMDependency extends OSGiTestCase{
 		}
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println( "tearing down");

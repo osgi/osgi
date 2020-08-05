@@ -41,6 +41,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -69,39 +72,39 @@ public class Rollback {
 	public void testRollback001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testRollback001");
+			DefaultTestBundleControl.log("#testRollback001");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			TestDataPlugin.setRollbackThrowsException(true);
 			session.rollback();
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
 							DmtException.ROLLBACK_FAILED, e.getCode());
 			if (e.getCause() instanceof DmtException) {
 				DmtException exception = (DmtException)e.getCause();
-				tbc
+				TestCase
 						.assertNull(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct subtree (null)",exception.getURI());
-				tbc
+				TestCase
 						.assertEquals(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
 								DmtException.ALERT_NOT_ROUTED, exception.getCode());
-				tbc
+				TestCase
 						.assertTrue(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 								exception.getMessage().indexOf(
 										TestDataPlugin.ROLLBACK) > -1);
 				
 			} else {
-				tbc.failExpectedOtherException(DmtException.class, e.getCause());
+				DmtTestControl.failExpectedOtherException(DmtException.class, e.getCause());
 			}
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			TestDataPlugin.setRollbackThrowsException(false);

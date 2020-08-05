@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.service.dal;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.service.event.Event;
 
 /**
@@ -79,7 +80,7 @@ public class FunctionEvent extends Event {
 	 * @param topic The event topic.
 	 * @param properties The event properties.
 	 */
-	public FunctionEvent(String topic, Dictionary properties) {
+	public FunctionEvent(String topic, Dictionary<String, ? > properties) {
 		super(topic, properties);
 	}
 
@@ -89,7 +90,7 @@ public class FunctionEvent extends Event {
 	 * @param topic The event topic.
 	 * @param properties The event properties.
 	 */
-	public FunctionEvent(String topic, Map properties) {
+	public FunctionEvent(String topic, Map<String, ? > properties) {
 		super(topic, properties);
 	}
 
@@ -140,11 +141,11 @@ public class FunctionEvent extends Event {
 		return (FunctionData) super.getProperty(PROPERTY_VALUE);
 	}
 
-	private static Map prepareEventProps(
+	private static Map<String, ? > prepareEventProps(
 			String funtionUID,
 			String propName,
 			FunctionData propValue) {
-		Map eventProps = new HashMap(3, 1F);
+		Map<String,Object> eventProps = new HashMap<>(3, 1F);
 		eventProps.put(PROPERTY_NAME, propName);
 		eventProps.put(PROPERTY_VALUE, propValue);
 		eventProps.put(FUNCTION_UID, funtionUID);

@@ -27,15 +27,16 @@ package org.osgi.test.cases.cm.junit;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
-import java.util.concurrent.Semaphore;
 
 public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 	private final String	name;
+	@SuppressWarnings("unused")
 	private final String	propertyName;
-	private final Map		services	= new HashMap();
+	private final Map<String,SomeService>	services	= new HashMap<>();
 	private final Semaphore	semaphore;
 
 	public ManagedServiceFactoryImpl(String name, String propertyName,
@@ -49,7 +50,8 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 		return name;
 	}
 
-	public synchronized void updated(String pid, Dictionary properties)
+	public synchronized void updated(String pid,
+			Dictionary<String, ? > properties)
 			throws ConfigurationException {
 		try {
 			CMControl.log("+++ updating " + pid);
@@ -61,7 +63,7 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 			 * "not found in the properties"); }
 			 */
 			/* Try to get the service */
-			SomeService theService = (SomeService) services.get(pid);
+			SomeService theService = services.get(pid);
 			/* If the service did not exist... */
 			if (theService == null) {
 				theService = new SomeService();
@@ -85,6 +87,7 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 	}
 
 	class SomeService {
+		@SuppressWarnings("unused")
 		private String	configData;
 
 		public void setConfigData(String configData) {

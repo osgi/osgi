@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dal.FunctionEvent;
@@ -29,9 +30,9 @@ public final class FunctionEventHandler implements EventHandler {
 															"org.osgi.test.cases.dal.timeout", 10000).longValue();
 
 	private final BundleContext	bc;
-	private final List			events;
+	private final List<Event>					events;
 
-	private ServiceRegistration	handlerSReg;
+	private ServiceRegistration<EventHandler>	handlerSReg;
 
 	/**
 	 * Constructs a new test event handler with the specified bundle context.
@@ -40,7 +41,7 @@ public final class FunctionEventHandler implements EventHandler {
 	 */
 	public FunctionEventHandler(BundleContext bc) {
 		this.bc = bc;
-		this.events = new ArrayList();
+		this.events = new ArrayList<>();
 	}
 
 	/**
@@ -53,7 +54,7 @@ public final class FunctionEventHandler implements EventHandler {
 		if (null != this.handlerSReg) {
 			return;
 		}
-		Dictionary handlerRegProps = new Hashtable(2, 1F);
+		Dictionary<String,Object> handlerRegProps = new Hashtable<>(2, 1F);
 		handlerRegProps.put(EventConstants.EVENT_TOPIC, FunctionEvent.TOPIC_PROPERTY_CHANGED);
 		String eventFilter = null;
 		if (null != funtionUID) {
@@ -69,7 +70,8 @@ public final class FunctionEventHandler implements EventHandler {
 		if (null != eventFilter) {
 			handlerRegProps.put(EventConstants.EVENT_FILTER, eventFilter);
 		}
-		this.handlerSReg = this.bc.registerService(EventHandler.class.getName(), this, handlerRegProps);
+		this.handlerSReg = this.bc.registerService(EventHandler.class, this,
+				handlerRegProps);
 	}
 
 	/**

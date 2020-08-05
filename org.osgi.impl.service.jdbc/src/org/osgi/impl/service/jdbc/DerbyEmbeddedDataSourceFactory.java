@@ -64,6 +64,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 	 * @throws SQLException
 	 * @see org.osgi.service.jdbc.DataSourceFactory#createDataSource(java.util.Properties)
 	 */
+	@Override
 	public DataSource createDataSource(Properties props) throws SQLException {
 		if (props == null) {
 			props = new Properties();
@@ -83,6 +84,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 	 * @throws SQLException
 	 * @see org.osgi.service.jdbc.DataSourceFactory#createConnectionPoolDataSource(java.util.Properties)
 	 */
+	@Override
 	public ConnectionPoolDataSource createConnectionPoolDataSource(
 			Properties props) throws SQLException {
 		if (props == null) {
@@ -102,6 +104,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 	 * @throws SQLException
 	 * @see org.osgi.service.jdbc.DataSourceFactory#createXADataSource(java.util.Properties)
 	 */
+	@Override
 	public XADataSource createXADataSource(Properties props)
 			throws SQLException {
 		if (props == null) {
@@ -114,7 +117,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 
 	private void setDataSourceProperties(Object object, Properties props)
 			throws SQLException {
-		Enumeration enumeration = props.keys();
+		Enumeration<Object> enumeration = props.keys();
 		while (enumeration.hasMoreElements()) {
 			String name = (String) enumeration.nextElement();
 			setProperty(object, name, props.getProperty(name));
@@ -237,7 +240,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 
 	private void setProperty(Object object, String name, String value)
 			throws SQLException {
-		Class type = object.getClass();
+		Class< ? > type = object.getClass();
 
 		java.beans.PropertyDescriptor[] descriptors;
 		try {
@@ -249,7 +252,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 			sqlException.initCause(exc);
 			throw sqlException;
 		}
-		List names = new ArrayList();
+		List<String> names = new ArrayList<>();
 
 		for (int i = 0; i < descriptors.length; i++) {
 			if (descriptors[i].getWriteMethod() == null) {
@@ -258,7 +261,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 
 			if (descriptors[i].getName().equals(name)) {
 				Method method = descriptors[i].getWriteMethod();
-				Class paramType = method.getParameterTypes()[0];
+				Class< ? > paramType = method.getParameterTypes()[0];
 				Object param = toBasicType(value, paramType.getName());
 
 				try {
@@ -288,6 +291,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
      * @return A configured org.apache.derby.jdbc.EmbeddedDriver.
      * @throws SQLException If the org.apache.derby.jdbc.EmbeddedDriver cannot be created.
      */
+	@Override
 	public Driver createDriver(Properties props) throws SQLException {
 		if (props == null) {
 			props = new Properties();

@@ -1,5 +1,6 @@
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -24,6 +25,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 	private static final String SYSTEM_PACKAGES_EXTRA = "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 	private long m_timeout;
 
+	@Override
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
@@ -81,10 +83,10 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 		// find the RSA in the parent framework and import the
 		// service
 		//
-		ServiceReference rsaRef = getContext().getServiceReference(
-				RemoteServiceAdmin.class.getName());
+		ServiceReference<RemoteServiceAdmin> rsaRef = getContext()
+				.getServiceReference(RemoteServiceAdmin.class);
 		assertNotNull(rsaRef);
-		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(
+		RemoteServiceAdmin rsa = getContext().getService(
 				rsaRef);
 		assertNotNull(rsa);
 
@@ -119,6 +121,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
+				@SuppressWarnings("unused")
 				String topic = event.getTopic();
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION,
@@ -128,10 +131,10 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 			// get the modifiable service that has been exported from tb8
 			ModifiableService modifiableService = null;
 			{
-				ServiceReference modifiableServiceRef = getContext()
-						.getServiceReference(ModifiableService.class.getName());
+				ServiceReference<ModifiableService> modifiableServiceRef = getContext()
+						.getServiceReference(ModifiableService.class);
 				assertNotNull(modifiableServiceRef);
-				modifiableService = (ModifiableService) getContext()
+				modifiableService = getContext()
 						.getService(
 						modifiableServiceRef);
 				assertNotNull(modifiableService);
@@ -166,19 +169,21 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 			// get the modified service that has been exported by tb8
 			ModifiableService alreadyModifiedService = null;
 			{
-				ServiceReference alreadyModifiedServiceRefs[] = getContext()
+				Collection<ServiceReference<ModifiableService>> alreadyModifiedServiceRefs = getContext()
 						.getServiceReferences(
-								ModifiableService.class.getName(),
+								ModifiableService.class,
 								"(someNewProp=SomeValue)");
 
 				assertTrue(
 						"after importing the updated remote service, we need to be able to find at least one suitable service",
-						alreadyModifiedServiceRefs.length >= 1);
+						alreadyModifiedServiceRefs.size() >= 1);
 
-				ServiceReference alreadyModifiedServiceRef = alreadyModifiedServiceRefs[0];
+				ServiceReference<ModifiableService> alreadyModifiedServiceRef = alreadyModifiedServiceRefs
+						.iterator()
+						.next();
 				
 				assertNotNull(alreadyModifiedServiceRef);
-				alreadyModifiedService = (ModifiableService) getContext()
+				alreadyModifiedService = getContext()
 						.getService(
 						alreadyModifiedServiceRef);
 				assertNotNull(alreadyModifiedService);
@@ -198,6 +203,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
+				@SuppressWarnings("unused")
 				String topic = event.getTopic();
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.IMPORT_UPDATE,

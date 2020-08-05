@@ -24,14 +24,16 @@ import org.osgi.service.wireadmin.WireConstants;
  */
 public class ConsumerImpl implements BundleActivator, Consumer {
 
+	@Override
 	public void start(BundleContext context) {
-		Hashtable p = new Hashtable();
+		Hashtable<String,Object> p = new Hashtable<>();
 		p.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS, new Class[] {
 				String.class, Integer.class, Envelope.class});
 		p.put(Constants.SERVICE_PID, "consumer.ConsumerImplA");
 		context.registerService(Consumer.class.getName(), this, p);
 	}
 
+	@Override
 	public void stop(BundleContext context) {
 		// service unregistered by framework
 	}
@@ -41,6 +43,7 @@ public class ConsumerImpl implements BundleActivator, Consumer {
 	 * 
 	 * @param wires
 	 */
+	@Override
 	public void producersConnected(Wire[] wires) {
 		// empty
 	}
@@ -51,6 +54,7 @@ public class ConsumerImpl implements BundleActivator, Consumer {
 	 * @param wire
 	 * @param value
 	 */
+	@Override
 	public void updated(Wire wire, Object value) {
 		// empty
 	}

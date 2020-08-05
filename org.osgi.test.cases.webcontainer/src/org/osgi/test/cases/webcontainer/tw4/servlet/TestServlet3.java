@@ -43,7 +43,8 @@ public class TestServlet3 extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request,
+    @Override
+	protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         // Servlet returns 4 MB file,
         // reuse code from org.osgi.test.cases.http HTTPTestServlet1.java with
@@ -67,7 +68,8 @@ public class TestServlet3 extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doPost(HttpServletRequest request,
+    @Override
+	protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
     }

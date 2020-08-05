@@ -1,6 +1,6 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import org.osgi.impl.service.upnp.cp.util.*;
+import org.osgi.impl.service.upnp.cp.util.UPnPListener;
 
 public class Subscription {
 	private String				subscriptionId;
@@ -10,7 +10,6 @@ public class Subscription {
 	boolean						active			= false;
 	private UPnPListener		listener;
 	private String				host;
-	private EventServiceImpl	esi;
 	private int					eventKey		= 0;
 	boolean						initialEvent	= true;
 	private boolean				infinite		= false;

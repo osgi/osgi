@@ -22,6 +22,7 @@ public class MetaNode implements org.osgi.service.dmt.MetaNode {
 	}
 	
 	
+	@Override
 	public boolean can(int operation) {
 		for (int i = 0; i < operations.length; i++)
 			if ( operation == operations [i])
@@ -29,84 +30,101 @@ public class MetaNode implements org.osgi.service.dmt.MetaNode {
 		return false;
 	}
 
+	@Override
 	public boolean isLeaf() {
 		return leaf;
 	}
 
+	@Override
 	public int getScope() {
 		return scope;
 	}
 
+	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String[] getMimeTypes() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public double getMax() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public double getMin() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public DmtData[] getValidValues() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public int getFormat() {
 		return format;
 	}
 
+	@Override
 	public String[] getRawFormatNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public boolean isValidValue(DmtData value) {
 		return true;
 	}
 
+	@Override
 	public String[] getValidNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public boolean isValidName(String name) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	// this stuff seems necessary (for any obscure reasons) to make the OSGi-ref-impl-DMTAdmin avoid NullPointerExceptions
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
     	return null;
 //        return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
 //        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
 //            return Boolean.valueOf(true);
 //        

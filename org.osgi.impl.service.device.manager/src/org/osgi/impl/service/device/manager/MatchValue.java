@@ -27,7 +27,7 @@ public class MatchValue {
 
     String pid;
 
-    ServiceReference dev;
+	ServiceReference< ? >	dev;
 
     int match;
 }

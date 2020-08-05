@@ -67,6 +67,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 	ServiceTracker<EndpointEventListener, EndpointEventListener> tracker;
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.bctx = context;
 
@@ -129,6 +130,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		notifyEndpointEventListeners(bctx, endpointEvent);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		stoptest();
@@ -137,10 +139,12 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		}
 	}
 
+	@Override
 	public String getB() {
 		return "this is B";
 	}
 
+	@Override
 	public void addServiceProperty() {
 		System.out
 				.println("TestBundle7: ------------------------- ADD SERVICE PROPERTY AND SEND MODIFIED EVENT ---------------- ");
@@ -165,6 +169,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		}
 	}
 
+	@Override
 	public void changeRequiredServiceProperty() {
 
 		// update the service registration
@@ -215,7 +220,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		}
 	}
 
-	private EndpointEventListener sendEventIfMatches(
+	EndpointEventListener sendEventIfMatches(
 			final EndpointEvent endpointEvent, BundleContext context,
 			ServiceReference<EndpointEventListener> reference) {
 		EndpointEventListener listener = context.getService(reference);

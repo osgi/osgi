@@ -1,5 +1,9 @@
 package org.osgi.test.cases.dmt.tc4.rfc141.plugins;
 
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Vector;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -12,11 +16,6 @@ import org.osgi.service.dmt.spi.MountPoint;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
-
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Vector;
-
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -34,12 +33,13 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	public String lastOpenedSession;
 	public String lastUri;
 	public Object lastValue;
-	public Vector lastAddedMountPoints;
-	public Vector lastRemovedMountPoints;
+	public Vector<MountPoint>	lastAddedMountPoints;
+	public Vector<MountPoint>	lastRemovedMountPoints;
 	public Event lastReceivedEvent;
 	public String[] lastExecPath;
 	public String lastExecData;
 
+	@SuppressWarnings("unused")
 	private String pluginID;
 	private String rootUri;
 	private String rootPrefix;
@@ -68,9 +68,9 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	private Node findNode(Node start, String uri) {
 		if (uri.equals(rootPrefix + start.getURI()))
 			return start;
-		Iterator iterator = start.getChildren().iterator();
+		Iterator<Node> iterator = start.getChildren().iterator();
 		while (iterator.hasNext()) {
-			Node found = findNode((Node) iterator.next(), uri);
+			Node found = findNode(iterator.next(), uri);
 			if (found != null)
 				return found;
 		}
@@ -81,30 +81,35 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 		return findNode(start, Uri.toUri(nodePath));
 	}
 
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
 		lastOpenedSession = Uri.toUri(sessionRoot);
 		return this;
 	}
 
+	@Override
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
 //		Node node = findNode(pluginRoot, nodePath);
 		throw new DmtException(Uri.toUri(nodePath), DmtException.FEATURE_NOT_SUPPORTED, "This plugin does not support copy operations.");
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
 		// find parent node
@@ -116,6 +121,7 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 			new Node(parent, nodePath[nodePath.length - 1], null );
 	}
 
+	@Override
 	public void createLeafNode(String[] nodePath, DmtData value, String mimeType)
 			throws DmtException {
 		// find parent node
@@ -127,28 +133,33 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 			new Node(parent, nodePath[nodePath.length - 1], "" + value );
 	}
 
+	@Override
 	public void deleteNode(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath );
 		n.getParent().removeChild(n);
 	}
 
+	@Override
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
 		Node n = findNode(pluginRoot, nodePath );
 		n.setName(newName);
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
 		Node n = findNode(pluginRoot, nodePath );
 		n.setTitle(title);
 	}
 
+	@Override
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		this.lastAction = ACTION_SET_NODE_VALUE;
@@ -156,52 +167,61 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 		this.lastValue = data;
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void close() throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
-		Vector children = new Vector();
+		Vector<String> children = new Vector<>();
 		if ( n != null ) {
-			Iterator i = n.getChildren().iterator();
+			Iterator<Node> i = n.getChildren().iterator();
 			while (i.hasNext())
-				children.add( ((Node)i.next()).getName());
+				children.add( i.next().getName());
 		}
-		return (String[]) children.toArray( new String[n.getChildren().size()] );
+		return children.toArray(new String[0]);
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
 		return n != null ? n.getMetaNode() : null;
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
 		return n != null ? n.getTitle() : null;
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		String uri = Uri.toUri(nodePath);
 		this.lastAction = ACTION_IS_NODE_URI;
@@ -210,26 +230,31 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	}
 
 	// it is a leaf node, if it has a value and no children
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
 		return n != null && n.getValue() != null && n.getChildren().size() == 0;
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
 		return (n != null ? new DmtData(n.getValue()) : null);
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public void commit() throws DmtException {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void rollback() throws DmtException {
 		// TODO Auto-generated method stub
 
@@ -253,6 +278,7 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 
 	public static void main(String[] args) {
 		Node n2 = new Node(null, "A", "node A");
+		@SuppressWarnings("unused")
 		Node n3 = new Node(n2, "B", "node B");
 		GenericDataPlugin gdp = new GenericDataPlugin("P1", "./A", n2);
 		System.out.println(gdp.findNode(n2, "./A/B"));
@@ -260,24 +286,28 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 
 	
 	
+	@Override
 	public void mountPointAdded(MountPoint mountPoint) {
 		if ( lastAddedMountPoints == null )
-			lastAddedMountPoints = new Vector();
+			lastAddedMountPoints = new Vector<>();
 		lastAddedMountPoints.add(mountPoint);
 	}
 
+	@Override
 	public void mountPointRemoved(MountPoint mountPoint) {
 		if ( lastRemovedMountPoints == null )
-			lastRemovedMountPoints = new Vector();
+			lastRemovedMountPoints = new Vector<>();
 		lastRemovedMountPoints.add(mountPoint);
 	}
 
+	@Override
 	public void handleEvent(Event event) {
 		System.out.println("############# received event: " + event);
 		System.out.println("############# this: " + this);
 		lastReceivedEvent = event;
 	}
 
+	@Override
 	public void execute(DmtSession session, String[] nodePath,
 			String correlator, String data) throws DmtException {
 		lastExecPath = nodePath;

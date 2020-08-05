@@ -23,8 +23,9 @@ import org.osgi.service.wireadmin.WireConstants;
  * @since
  */
 public class ProducerImpl implements BundleActivator, Producer {
+	@Override
 	public void start(BundleContext context) {
-		Hashtable p = new Hashtable();
+		Hashtable<String,Object> p = new Hashtable<>();
 		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, new Class[] {
 				String.class, Integer.class, Envelope.class});
 		p.put(Constants.SERVICE_PID, "producer.ProducerImplC");
@@ -32,6 +33,7 @@ public class ProducerImpl implements BundleActivator, Producer {
 		context.registerService(Producer.class.getName(), this, p);
 	}
 
+	@Override
 	public void stop(BundleContext context) {
 		// service unregistered by framework
 	}
@@ -41,6 +43,7 @@ public class ProducerImpl implements BundleActivator, Producer {
 	 * 
 	 * @param wires
 	 */
+	@Override
 	public void consumersConnected(Wire[] wires) {
 		// empty
 	}
@@ -51,6 +54,7 @@ public class ProducerImpl implements BundleActivator, Producer {
 	 * @param wire
 	 * @return
 	 */
+	@Override
 	public Object polled(Wire wire) {
 		return "";
 	}

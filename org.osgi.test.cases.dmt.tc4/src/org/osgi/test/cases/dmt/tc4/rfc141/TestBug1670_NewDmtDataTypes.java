@@ -1,18 +1,22 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Date;
 
-import org.osgi.service.dmt.*;
-import org.osgi.test.support.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.test.support.OSGiTestCase;
 
 public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println( "tearing down");
@@ -220,7 +224,8 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	 * @param fieldName the name of the field
 	 * @param value the expected value of the field
 	 */
-	private void checkIntConstant( Class fieldClass, String fieldName, int value ) {
+	private void checkIntConstant(Class< ? > fieldClass, String fieldName,
+			int value) {
 		
 		try {
 			Field f = fieldClass.getField(fieldName);

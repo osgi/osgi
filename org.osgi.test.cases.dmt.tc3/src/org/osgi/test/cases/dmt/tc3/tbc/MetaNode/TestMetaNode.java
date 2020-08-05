@@ -124,6 +124,7 @@ public class TestMetaNode implements MetaNode {
         CANEXECUTE = true;
         scope = MetaNode.DYNAMIC;
     }
+	@Override
 	public boolean can(int perm) {
 		switch (perm) {
 		case MetaNode.CMD_ADD: {
@@ -145,26 +146,32 @@ public class TestMetaNode implements MetaNode {
 		return false;
 	}
 
+	@Override
 	public boolean isLeaf() {
 		return isLeaf;
 	}
 
+	@Override
 	public int getScope() {
 		return scope;
 	}
 
+	@Override
 	public String getDescription() {
 		return DEFAULT_DESCRIPTION;
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		return DEFAULT_MAX_OCCURENCE;
 	}
 	
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		return false;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		return new DmtData(DEFAULT_VALUE);
 	}
@@ -177,26 +184,32 @@ public class TestMetaNode implements MetaNode {
 		return false;
 	}
 
+	@Override
 	public double getMax() {
 		return DEFAULT_MAX_VALUE;
 	}
 
+	@Override
 	public double getMin() {
 		return DEFAULT_MIN_VALUE;
 	}
 
+	@Override
 	public DmtData[] getValidValues() {
 		return DEFAULT_VALID_VALUES;
 	}
 
+	@Override
 	public String[] getValidNames() {
 		return DEFAULT_VALID_NAMES;
 	}
 
+	@Override
 	public int getFormat() {
 		return DmtData.FORMAT_NODE;
 	}
 
+	@Override
 	public String[] getMimeTypes() {
 		return DEFAULT_MIME_TYPES;
 	}
@@ -209,6 +222,7 @@ public class TestMetaNode implements MetaNode {
 		return DEFAULT_NAME_REGEXP;
 	}
 
+	@Override
 	public boolean isValidValue(DmtData value) {
         if (null != DEFAULT_VALID_NAMES) {
     		for (int i=0;i<DEFAULT_VALID_VALUES.length;i++) {
@@ -222,6 +236,7 @@ public class TestMetaNode implements MetaNode {
         }
 	}
 
+	@Override
 	public boolean isValidName(String name) {
 		if (null != DEFAULT_VALID_NAMES) {
             for (int i=0;i<DEFAULT_VALID_NAMES.length;i++) {
@@ -236,14 +251,17 @@ public class TestMetaNode implements MetaNode {
 		
 	}
 
+	@Override
 	public String[] getExtensionPropertyKeys() {
 		return DEFAULT_EXTENSION_PROPERTY_KEYS;
 	}
 
+	@Override
 	public Object getExtensionProperty(String key) {
             return DEFAULT_EXTENSION_PROPERTY;
 	}
 
+	@Override
 	public String[] getRawFormatNames() {
 		return DEFAULT_RAW_FORMAT_NAMES;
 	}

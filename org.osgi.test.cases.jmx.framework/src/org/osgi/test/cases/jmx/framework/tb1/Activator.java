@@ -35,9 +35,12 @@ public class Activator implements BundleActivator {
 	
 
 	public void start(BundleContext context) throws Exception {
-		ServiceReference ref = context.getServiceReference("org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
+		@SuppressWarnings("unchecked")
+		ServiceReference<HelloSayer> ref = (ServiceReference<HelloSayer>) context
+				.getServiceReference(
+						"org.osgi.test.cases.jmx.framework.tb2.api.HelloSayer");
 		
-		HelloSayer sayer = (HelloSayer)context.getService(ref);
+		HelloSayer sayer = context.getService(ref);
 		System.out.println(sayer.sayHello() + ", I am started");
 	}
 

@@ -16,10 +16,10 @@
 
 package org.osgi.test.cases.zigbee.mock;
 
-public interface StreamQueue {
+public interface StreamQueue<T> {
 
-	public void add(Object element);
+	public void add(T element);
 
-	public Object poll(long timeout) throws InterruptedException, RuntimeException;
+	public T poll(long timeout) throws InterruptedException, RuntimeException;
 
 }

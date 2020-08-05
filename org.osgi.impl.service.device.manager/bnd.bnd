@@ -11,3 +11,5 @@ Export-Package					= org.osgi.service.device; -split-package:=first; provide:=tr
     org.osgi.service.device;	version=project, \
 	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;						version=4.3.1
+
+-fixupmessages.version: "Version for package * is set to different values"

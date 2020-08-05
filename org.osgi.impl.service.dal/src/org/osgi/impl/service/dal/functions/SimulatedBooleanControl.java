@@ -12,6 +12,7 @@ package org.osgi.impl.service.dal.functions;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.OperationMetadataImpl;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
@@ -21,6 +22,7 @@ import org.osgi.service.dal.OperationMetadata;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -28,13 +30,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedBooleanControl extends SimulatedFunction implements BooleanControl { // NO_UCD
 
-	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA;
+	private static final Map<String,Object>	PROPERTY_METADATA;
+	private static final Map<String,Object>	OPERATION_METADATA;
 
 	private BooleanData			data;
 
 	static {
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(
 				PropertyMetadata.ACCESS,
 				Integer.valueOf(
@@ -47,13 +49,13 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue
-		PROPERTY_METADATA = new HashMap();
+		PROPERTY_METADATA = new HashMap<>();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 
-		metadata = new HashMap();
+		metadata = new HashMap<>();
 		metadata.put(OperationMetadata.DESCRIPTION, "Simulator boolean control operation.");
 		OperationMetadata opMetadata = new OperationMetadataImpl(metadata, null, null);
-		OPERATION_METADATA = new HashMap();
+		OPERATION_METADATA = new HashMap<>();
 		OPERATION_METADATA.put(OPERATION_INVERSE, opMetadata);
 		OPERATION_METADATA.put(OPERATION_SET_FALSE, opMetadata);
 		OPERATION_METADATA.put(OPERATION_SET_TRUE, opMetadata);
@@ -66,7 +68,9 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 	 * @param bc The bundle context to register the service.
 	 * @param eventAdminTracker The event admin tracker to post events.
 	 */
-	public SimulatedBooleanControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
+	public SimulatedBooleanControl(Dictionary<String,Object> functionProps,
+			BundleContext bc,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.data = new BooleanData(System.currentTimeMillis(), null, false);
 		super.register(
@@ -74,10 +78,12 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 
+	@Override
 	public BooleanData getData() {
 		return this.data;
 	}
 
+	@Override
 	public void setData(boolean data) {
 		if (this.data.getValue() == data) {
 			return; // nothing to do
@@ -87,18 +93,22 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		super.postEvent(PROPERTY_DATA, newData);
 	}
 
+	@Override
 	public void inverse() {
 		setData(this.data.getValue() ? false : true);
 	}
 
+	@Override
 	public void setTrue() {
 		setData(true);
 	}
 
+	@Override
 	public void setFalse() {
 		setData(false);
 	}
 
+	@Override
 	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
@@ -106,7 +116,8 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		inverse();
 	}
 
-	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
+	private static Dictionary<String,Object> addPropertyAndOperationNames(
+			Dictionary<String,Object> functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
 				new String[] {PROPERTY_DATA});

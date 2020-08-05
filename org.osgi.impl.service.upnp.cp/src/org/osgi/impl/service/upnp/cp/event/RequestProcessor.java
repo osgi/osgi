@@ -1,23 +1,22 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 public class RequestProcessor {
 	private BufferedInputStream	in;
-	private String				reqProtocol;
+	@SuppressWarnings("unused")
 	private String				reqUriPath;
 	protected String			reqMethod;
-	public Hashtable			headers;
+	public Hashtable<String,String>	headers;
 	public String				contentBody	= null;
-	private String				error_number;
-	private String				nameSpace;
-	private String				timeOut;
 	public String				errorMessage;
 
 	public RequestProcessor(BufferedInputStream in) {
 		this.in = in;
-		headers = new Hashtable();
+		headers = new Hashtable<>();
 	}
 
 	// function used for separating the given string into multiple tokens and
@@ -39,8 +38,6 @@ public class RequestProcessor {
 	// in headers
 	// table, stores all the cookies in the reqCookies table.
 	public int parseRequest() {
-		byte[] lineBytes = new byte[4096];
-		int len;
 		String line;
 		try {
 			line = getLine();
@@ -69,13 +66,13 @@ public class RequestProcessor {
 			}
 			reqMethod = tokens[0];
 			reqUriPath = tokens[1];
-			String host = (String) headers.get("host");
+			String host = headers.get("host");
 			if (reqMethod.equals("NOTIFY")) {
 				if (host == null) {
 					setErrorMessage("PreCondition Failed");
 					return 412;
 				}
-				String content_type = (String) headers.get("content-type");
+				String content_type = headers.get("content-type");
 				if (content_type == null) {
 					setErrorMessage("PreCondition Failed");
 					return 412;
@@ -88,7 +85,7 @@ public class RequestProcessor {
 					setErrorMessage("PreCondition Failed");
 					return 412;
 				}
-				int contentLength = Integer.parseInt((String) headers
+				int contentLength = Integer.parseInt(headers
 						.get("content-length"));
 				if (contentLength <= 0) {
 					setErrorMessage("Length Required");

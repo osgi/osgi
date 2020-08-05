@@ -18,6 +18,7 @@ public class Util {
 	 * @param property ... given object
 	 * @return ... Collection of Strings or null, if types don't fit
 	 */
+	@SuppressWarnings("unchecked")
 	public static Collection<String> toCollection(Object property) {
 		if (property instanceof Collection<?>)
 			return (Collection<String>) property;

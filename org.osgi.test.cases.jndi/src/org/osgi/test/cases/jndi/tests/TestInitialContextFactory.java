@@ -18,13 +18,13 @@ package org.osgi.test.cases.jndi.tests;
 
 import java.util.Hashtable;
 
-import javax.naming.spi.InitialContextFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
+import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.jndi.provider.CTContext;
@@ -48,7 +48,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("initialContextFactory1.jar");
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Setup the environment for grabbing the specific initialContextFactory
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the initialContext
 		Context ctx = null;
@@ -78,7 +78,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("initialDirContextFactory1.jar");
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Setup the environment for grabbing the specific initialDirContextFactory
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		// Grab the initialDirContext)
 		DirContext ctx = null;
@@ -166,7 +166,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		int invokeCountBefore = CTContext.getInvokeCount();
 		Context ctx = null;
@@ -195,7 +195,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialDirContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
 		int invokeCountBefore = CTContext.getInvokeCount();
 		DirContext ctx = null;
@@ -311,7 +311,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// unregistered
 		uninstallBundle(testBundle);
 		// Try to get a context using the just removed initialContextFactory
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try {
@@ -337,7 +337,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		uninstallBundle(testBundle);
 		// Try to grab the initialContextFactory. We should get a
 		// NullPointerException
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try {
@@ -357,7 +357,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 
 	public void testNoInitialContextFound() throws Exception {
 		// Setup the environment for grabbing the specific initialContextFactory
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Try to grab a context from the specified initialContextFactory. This
 		// should throw an exception.
@@ -365,6 +365,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		try {
 			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
+			@SuppressWarnings("unused")
 			Object testObject = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			return;
@@ -389,7 +390,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
                         InitialContextFactory ctf = (InitialContextFactory) ctx.lookup("osgi:service/javax.naming.spi.InitialContextFactory");
 			// Let's grab a context instance and check the environment
-			Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
+			Hashtable< ? , ? > ctxEnv = ctf.getInitialContext(null)
+					.getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {
 				fail("The right context was not returned");
 			}
@@ -411,7 +413,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
-			Hashtable ctxEnv = ctx.getEnvironment();
+			Hashtable< ? , ? > ctxEnv = ctx.getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {
 				fail("The right context was not returned");
 			}

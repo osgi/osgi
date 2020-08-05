@@ -1,7 +1,9 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 // This class is used for parsing the HttpRequest. This class parses the request Line, http 
 // headers,and http body. This class accepts a buffered input stream and parses the request.
@@ -11,7 +13,7 @@ public class RequestProcessor {
 	private BufferedInputStream	in;
 	private String				line;
 	public String				reqMethod;
-	public Hashtable			headers;
+	public Hashtable<String,String>	headers;
 	public String				charSet;
 	public String				contentBody	= null;
 	public String				nameSpace;
@@ -23,7 +25,7 @@ public class RequestProcessor {
 	// variables.
 	public RequestProcessor(BufferedInputStream in) {
 		this.in = in;
-		headers = new Hashtable();
+		headers = new Hashtable<>();
 	}
 
 	// function used for separating the given string into multiple tokens and
@@ -45,8 +47,6 @@ public class RequestProcessor {
 	// in headers
 	// table, stores all the cookies in the reqCookies table.
 	public int parseRequest() throws Exception {
-		byte[] lineBytes = new byte[4096];
-		int len;
 		try {
 			line = getLine();
 			if (line == null || line.length() == 0) {
@@ -63,7 +63,7 @@ public class RequestProcessor {
 			reqMethod = tokens[0];
 			reqUriPath = tokens[1];
 			if (reqMethod.equals("POST") || reqMethod.equals("M-POST")) {
-				String content_type = (String) headers.get("content-type");
+				String content_type = headers.get("content-type");
 				int result = checkContentHeaders(content_type);
 				if (result != 200) {
 					return result;
@@ -88,7 +88,7 @@ public class RequestProcessor {
 	// This method extracts the content body which is been send with the
 	// request.
 	private int extractContentBody() {
-		int contentLength = Integer.parseInt((String) headers
+		int contentLength = Integer.parseInt(headers
 				.get("content-length"));
 		if (contentLength <= 0) {
 			setErrorMessage("Length Required");
@@ -108,6 +108,7 @@ public class RequestProcessor {
 				}
 			}
 			catch (Exception e) {
+				// ignored
 			}
 			if (i2 == -1) {
 				setErrorMessage("Length Required");
@@ -156,7 +157,7 @@ public class RequestProcessor {
 
 	// This function extracts the namespace header from man header.
 	public void setNamespace() {
-		String man = (String) headers.get("man");
+		String man = headers.get("man");
 		int result;
 		if (man != null) {
 			result = man.indexOf("ns");
@@ -169,7 +170,7 @@ public class RequestProcessor {
 	// This function extracts the charactor set from the conent-type header and
 	// stores in a local variable
 	public void setCharset() {
-		String content_type = (String) headers.get("content-type");
+		String content_type = headers.get("content-type");
 		int result;
 		if (content_type != null) {
 			result = content_type.indexOf("charset");

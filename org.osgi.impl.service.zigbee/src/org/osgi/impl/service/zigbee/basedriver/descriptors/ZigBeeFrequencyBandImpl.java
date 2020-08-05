@@ -31,14 +31,17 @@ public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
 		this.value = band;
 	}
 
+	@Override
 	public boolean is868() {
 		return value == 868;
 	}
 
+	@Override
 	public boolean is915() {
 		return value == 915;
 	}
 
+	@Override
 	public boolean is2400() {
 		return value == 2400;
 	}

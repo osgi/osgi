@@ -17,24 +17,26 @@
 
 package org.osgi.test.cases.jndi.service1;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
+import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 
 /** 
  * @author $Id$
  */
 public class ExampleServiceActivator implements BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
+	@Override
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put("osgi.jndi.service.name", "ExampleService");
 		
 		String[] interfaces = {ExampleService.class.getName()};
@@ -43,6 +45,7 @@ public class ExampleServiceActivator implements BundleActivator {
 		sr = context.registerService(interfaces, service, props);		
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();

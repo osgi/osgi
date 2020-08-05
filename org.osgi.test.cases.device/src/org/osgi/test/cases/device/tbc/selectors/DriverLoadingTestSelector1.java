@@ -1,8 +1,8 @@
 package org.osgi.test.cases.device.tbc.selectors;
 
-import org.osgi.framework.*;
-import org.osgi.service.device.Match;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.device.DriverSelector;
+import org.osgi.service.device.Match;
 import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
@@ -13,6 +13,7 @@ import org.osgi.test.cases.device.tbc.TestBundleControl;
  * @version 1.0
  */
 public class DriverLoadingTestSelector1 implements DriverSelector {
+	@SuppressWarnings("unused")
 	private TestBundleControl	master	= null;
 
 	public DriverLoadingTestSelector1(TestBundleControl master) {
@@ -27,10 +28,10 @@ public class DriverLoadingTestSelector1 implements DriverSelector {
 	 * @param match an array of successfull matches
 	 * @returns the index of the winner
 	 */
-	public int select(ServiceReference reference, Match[] matches) {
+	public int select(ServiceReference< ? > reference, Match[] matches) {
 		logDriverList(matches);
 		for (int i = 0; i < matches.length; i++) {
-			if ("Driver_Winner".equals((String) matches[i].getDriver()
+			if ("Driver_Winner".equals(matches[i].getDriver()
 					.getProperty("DRIVER_ID"))) {
 				log("winner selected");
 				return i;

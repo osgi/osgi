@@ -17,11 +17,11 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.LogPlugin;
 
+import java.util.List;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtIllegalStateException;
 import org.osgi.service.dmt.MetaNode;
-
-import java.util.List;
 
 class LogMetaNode implements MetaNode {
     static final boolean MODIFIABLE = true; 
@@ -51,7 +51,7 @@ class LogMetaNode implements MetaNode {
     private DmtData   defaultValue;
 
     // used for checking the components of a comma-separated list
-    private List validComponents;
+	private List<String>		validComponents;
 
     // Meta-node constructor for interior nodes
     protected LogMetaNode(int scope, boolean modifiable, 
@@ -76,7 +76,7 @@ class LogMetaNode implements MetaNode {
     
     // Meta-node constructor for leaf nodes
 	protected LogMetaNode(boolean isSearchParameter, int format, 
-            DmtData defaultValue, List validComponents, 
+			DmtData defaultValue, List<String> validComponents,
             String description) {
         this.canDelete       = false;
         this.canAdd          = false;
@@ -97,7 +97,8 @@ class LogMetaNode implements MetaNode {
 
 	/* ---------------------------------------------------------------------- */
 
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         switch(operation) {
         case CMD_DELETE:  return canDelete;
         case CMD_ADD:     return canAdd;
@@ -108,63 +109,78 @@ class LogMetaNode implements MetaNode {
         return false;
     }       
 
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
 		return isLeaf;
 	}
 
+	@Override
 	public int getScope() {
 		return scope;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	@Override
 	public int getMaxOccurrence() {
 		return maxOccurrence;
 	}
 
+	@Override
 	public boolean isZeroOccurrenceAllowed() {
 		return isZeroOccurrenceAllowed;
 	}
 
+	@Override
 	public DmtData getDefault() {
 		return defaultValue;
 	}
 
+	@Override
 	public double getMax() {
 		return Double.MAX_VALUE;
 	}
 
+	@Override
 	public double getMin() {
 		return Double.MIN_VALUE;
 	}
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
     
+	@Override
 	public DmtData[] getValidValues() {
 		return null;
 	}
 
+	@Override
 	public int getFormat() {
 		return format;
 	}
 
+	@Override
 	public String[] getRawFormatNames() {
         return null;
     }
 
-    public String[] getMimeTypes() {
+    @Override
+	public String[] getMimeTypes() {
 		return mimeTypes;
 	}
     
-    public boolean isValidName(String name) {
+    @Override
+	public boolean isValidName(String name) {
         return true;
     }
     
-    public boolean isValidValue(DmtData value) {
+    @Override
+	public boolean isValidValue(DmtData value) {
         if((format & value.getFormat()) == 0)
             return false;
         
@@ -183,11 +199,13 @@ class LogMetaNode implements MetaNode {
         return true;
     }
     
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
         return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
         if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
             return Boolean.valueOf(false);
         

@@ -510,11 +510,10 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 
 		registerService(ManagedService.class.getName(), new ManagedService() {
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public void updated(Dictionary<String, ? > properties)
 					throws ConfigurationException {
-				synchronizer.signal((Dictionary<String,Object>) properties);
+				synchronizer.signal(properties);
 
 			}
 		}, Util.singletonDictionary(Constants.SERVICE_PID, pid));
@@ -539,13 +538,12 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 						return null;
 					}
 
-					@SuppressWarnings("unchecked")
 					@Override
 					public void updated(String pid,
 							Dictionary<String, ? > properties)
 							throws ConfigurationException {
 						synchronizer
-								.signal((Dictionary<String,Object>) properties);
+								.signal(properties);
 					}
 
 					@Override
@@ -621,6 +619,9 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	}
 
 	private static final class PluginContext {
+		PluginContext() {
+			super();
+		}
 		public String				pid;
 		public String				factoryPid;
 		public final List<Integer>	invocationOrder	= new ArrayList<>();

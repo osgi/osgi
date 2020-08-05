@@ -11,3 +11,4 @@ Provide-Capability: osgi.serviceloader;uses:="${p}.spi";provider="CT";.hint="by 
 -includeresource = \
  {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
 
+-fixupmessages.serviceloader: "osgi.serviceloader capability found with no 'register:' directive"

@@ -1,12 +1,12 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.util.Hashtable;
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class ParsedRequest {
 	private String		serviceType;
 	private String		actionName;
-	private Hashtable	args	= new Hashtable();
+	private Hashtable<String,Object>	args	= new Hashtable<>();
 	private String		returnValue;
 
 	// This method sets the serviceType.
@@ -35,8 +35,8 @@ public class ParsedRequest {
 	}
 
 	// This method returns all the arguments
-	public Dictionary getArguments() {
-		return (Dictionary) args;
+	public Dictionary<String,Object> getArguments() {
+		return args;
 	}
 
 	// This method returns the argument value of the given name

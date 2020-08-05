@@ -28,7 +28,8 @@ import java.security.PrivilegedExceptionAction;
  *
  * @author $Id$
  */
-abstract class ReflectiveInvokeAction implements PrivilegedExceptionAction {
+abstract class ReflectiveInvokeAction
+		implements PrivilegedExceptionAction<Object> {
 
 	private final Method m_method;
 	private final Object[] m_args;
@@ -38,6 +39,7 @@ abstract class ReflectiveInvokeAction implements PrivilegedExceptionAction {
 		m_args = args;
 	}
 	
+	@Override
 	public Object run() throws Exception {
 		try {
 			return invokeMethod(m_method, m_args);

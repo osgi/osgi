@@ -1,8 +1,13 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 // This class used for parsing the M-SEARCH requests and sending M-SEARCH responses. It 
 // uses the ssdp related databse. 
@@ -36,6 +41,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	}
 
 	// This method invoked by thread pool
+	@Override
 	public void run() {
 		if (data != null) {
 			parseData();
@@ -139,9 +145,10 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	// device ,embedded
 	// device or service information.It is for M-SEARCH request with ssdp:all.
 	void sendReplyForSsdpAll(String maxWait) {
-		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = ssdpcomp.allDeviceDetails
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			if (devDet.isRoot()) {
 				String[] response = new String[3];
 				ssdpAll(devDet, maxWait, response, null);
@@ -150,9 +157,10 @@ public class SSDPParser implements SSDPConstants, Runnable {
 				String[] response = new String[2];
 				ssdpAll(devDet, maxWait, response, null);
 			}
-			Hashtable services = devDet.getServices();
-			for (Enumeration e = services.elements(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
+			Hashtable<String,String> services = devDet.getServices();
+			for (Enumeration<String> e = services.elements(); e
+					.hasMoreElements();) {
+				String type = e.nextElement();
 				String response[] = new String[1];
 				ssdpAll(devDet, maxWait, response, type);
 			}
@@ -201,9 +209,10 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = ssdpcomp.allDeviceDetails
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			if (devDet.isRoot()) {
 				usn = new String(devDet.getUUID() + "::" + ROOTDEVICE);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(),
@@ -218,7 +227,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String[] response = new String[1];
 		if (ssdpcomp.allDeviceDetails.get(uuid) != null) {
-			DeviceDetails devDet = (DeviceDetails) ssdpcomp.allDeviceDetails
+			DeviceDetails devDet = ssdpcomp.allDeviceDetails
 					.get(uuid);
 			response[0] = ssdpcomp.makeMsearchResponse(dt.toString(), uuid,
 					uuid, devDet.getLocation());
@@ -237,9 +246,10 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = ssdpcomp.allDeviceDetails
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			if (devDet.isDevAvailable(st)) {
 				usn = new String(devDet.getUUID() + "::" + st);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(), st,
@@ -261,9 +271,10 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
+		for (Enumeration<DeviceDetails> enumeration = ssdpcomp.allDeviceDetails
+				.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
+			DeviceDetails devDet = enumeration.nextElement();
 			if (devDet.isServiceAvailable(st)) {
 				usn = new String(devDet.getUUID() + "::" + st);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(), st,
@@ -311,7 +322,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 			String rands = Double.toString(rand);
 			rands = rands.substring(0, rands.indexOf("."));
 			Long lval = Long.valueOf(rands);
-			resTime = (long) (lval.longValue() * in.intValue());
+			resTime = lval.longValue() * in.intValue();
 		}
 		catch (Exception e) {
 			Long wt = Long.valueOf(maxWait);
@@ -321,6 +332,7 @@ public class SSDPParser implements SSDPConstants, Runnable {
 			Thread.sleep(resTime);
 		}
 		catch (InterruptedException e) {
+			// ignored
 		}
 	}
 
@@ -330,7 +342,6 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		String s = null;
 		String s1 = null;
 		String s2 = null;
-		String s3 = null;
 		for (int i = 0; i < tokensArray.length; i++) {
 			s = header.toUpperCase();
 			s1 = tokensArray[i].toUpperCase();

@@ -22,7 +22,7 @@ import java.util.Vector;
 
 class Splitter {
 	static String[] split(String input, char sep, int limit) {
-		Vector v = new Vector();
+		Vector<String> v = new Vector<>();
 		boolean limited = (limit > 0);
 		int applied = 0;
 		int index = 0;
@@ -49,7 +49,7 @@ class Splitter {
 		int last = v.size();
 		if (0 == limit) {
 			for (int j = v.size() - 1; j >= 0; --j) {
-				String s = (String) v.elementAt(j);
+				String s = v.elementAt(j);
 				if ("".equals(s))
 					--last;
 				else
@@ -58,7 +58,7 @@ class Splitter {
 		}
 		String[] ret = new String[last];
 		for (int i = 0; i < last; ++i)
-			ret[i] = (String) v.elementAt(i);
+			ret[i] = v.elementAt(i);
 		return ret;
 	}
 }

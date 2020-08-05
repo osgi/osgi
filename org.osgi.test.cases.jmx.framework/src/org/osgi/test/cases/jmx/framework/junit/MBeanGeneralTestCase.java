@@ -39,8 +39,8 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 
 	//private BundleContext context;
 	private MBeanServer mBeanServer = null;
-	private ServiceReference reference = null;
-	private ServiceRegistration registration;
+	private ServiceReference< ? >		reference				= null;
+	private ServiceRegistration< ? >	registration;
 
 	protected final static String STRING_NULL = null;
 	protected final static String STRING_EMPTY = "";
@@ -128,7 +128,6 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		registration.unregister();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected <T> T getMBeanFromServer(String objectName, Class<T> type) {
 		ObjectName objectName0;
 		try {

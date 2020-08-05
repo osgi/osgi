@@ -8,15 +8,23 @@
  */
 package org.osgi.test.cases.http.junit;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Hashtable;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HttpTestServlet2 extends javax.servlet.http.HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long				serialVersionUID	= 1L;
 	private static final String	pagePart1	= "<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>";
 	private static final String	pagePart2	= "</body></html>";
-	private static Hashtable	testCaseMap	= new Hashtable();
+	private static Hashtable<String,String>	testCaseMap			= new Hashtable<>();
 	static {
 		testCaseMap.put("3", "3 Registration of two overlapping servlets</h1>");
 		testCaseMap.put("4", "4 Unregistration of overlapping servlet</h1>");

@@ -8,8 +8,10 @@
  */
 package org.osgi.test.cases.http.tb1;
 
-import org.osgi.framework.*;
-import org.osgi.service.http.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpService;
 
 /*
  * Testbundle 2 for test case 5
@@ -18,12 +20,12 @@ public class HttpTestBundle2 implements BundleActivator {
 	HttpService	http;
 
 	public void start(BundleContext context) throws Exception {
-		ServiceReference ref = context.getServiceReference(HttpService.class
-				.getName());
+		ServiceReference<HttpService> ref = context
+				.getServiceReference(HttpService.class);
 		if (ref == null)
 			throw new RuntimeException(
 					"No Http Service available in http.tbc.tb1");
-		http = (HttpService) context.getService(ref);
+		http = context.getService(ref);
 		if (http == null)
 			throw new RuntimeException(
 					"No Http Service available in http.tbc.tb1");

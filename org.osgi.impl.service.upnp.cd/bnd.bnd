@@ -16,3 +16,5 @@ Export-Package				= org.osgi.service.upnp; -split-package:=first; provide:=true
 	osgi.core;maven-scope=provided;version=4.3.1, \
 	osgi.cmpn;						version=4.3.1, \
 	org.osgi.impl.bundle.servlet; 	version=2.1
+
+-fixupmessages.version: "Version for package * is set to different values"

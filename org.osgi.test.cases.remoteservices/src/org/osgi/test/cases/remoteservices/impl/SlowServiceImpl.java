@@ -19,6 +19,7 @@ import org.osgi.test.cases.remoteservices.common.SlowService;
 
 public class SlowServiceImpl implements SlowService {
 
+	@Override
 	public String goSlow(int millis) {
 		try {
 			Thread.sleep(millis);

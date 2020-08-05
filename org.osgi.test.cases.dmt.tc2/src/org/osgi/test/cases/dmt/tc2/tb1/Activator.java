@@ -81,15 +81,18 @@ import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class Activator implements BundleActivator, TB1Service  {
-	private ServiceRegistration servReg;
+	private ServiceRegistration<TB1Service> servReg;
+	@Override
 	public void start(BundleContext bc) throws Exception {
-		servReg = bc.registerService(TB1Service.class.getName(),this,null);
+		servReg = bc.registerService(TB1Service.class, this, null);
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		servReg.unregister();
 	}
 
+	@Override
 	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
 		return new TestInterface[] { 
 				 new Close((DmtTestControl)tbc), 

@@ -7,6 +7,7 @@ import org.osgi.service.http.context.ServletContextHelper;
 
 public class MockSCHFactory implements ServiceFactory<ServletContextHelper> {
 
+	@Override
 	public ServletContextHelper getService(
 			Bundle bundle,
 			ServiceRegistration<ServletContextHelper> registration) {
@@ -14,6 +15,7 @@ public class MockSCHFactory implements ServiceFactory<ServletContextHelper> {
 		return new ServletContextHelper(bundle) {};
 	}
 
+	@Override
 	public void ungetService(
 			Bundle bundle,
 			ServiceRegistration<ServletContextHelper> registration,

@@ -15,7 +15,6 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
 
-import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.service.useradmin.UserAdminEvent;
 import org.osgi.service.useradmin.UserAdminPermission;
 
@@ -33,7 +32,7 @@ import org.osgi.service.useradmin.UserAdminPermission;
  * A {@link UserAdminPermission}with the action <code>changeProperty</code>
  * is required to change a Role's properties.
  */
-public class UAProperties extends Dictionary {
+public class UAProperties extends Dictionary<String,Object> {
 	/**
 	 * A link to the role having these properties.
 	 */
@@ -42,20 +41,21 @@ public class UAProperties extends Dictionary {
 	 * The actual property map. Mapped from lowercased keys for efficient
 	 * lookup. The real keys are stored in keymap.
 	 */
-	protected Hashtable /* String -> Object */ht		= new Hashtable();
+	protected Hashtable<String,Object>	ht		= new Hashtable<>();
 	/**
 	 * Mapping from lowercased keys to the original keys.
 	 */
-	protected Hashtable /* String -> String */keymap	= new Hashtable();
+	protected Hashtable<String,String>	keymap	= new Hashtable<>();
 
 	public UAProperties(RoleImpl role) {
 		this.role = role;
 	}
 
-	public Enumeration elements() {
-		Vector v = new Vector();
+	@Override
+	public Enumeration<Object> elements() {
+		Vector<Object> v = new Vector<>();
 		synchronized (role.ua.dblock) {
-			for (Enumeration en = ht.keys(); en.hasMoreElements();) {
+			for (Enumeration<String> en = ht.keys(); en.hasMoreElements();) {
 				try {
 					v.addElement(get(en.nextElement()));
 				}
@@ -69,6 +69,7 @@ public class UAProperties extends Dictionary {
 		return v.elements();
 	}
 
+	@Override
 	public Object get(Object key) {
 		synchronized (role.ua.dblock) {
 			// No security check for properties
@@ -87,20 +88,24 @@ public class UAProperties extends Dictionary {
 		}
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return ht.isEmpty();
 	}
 
-	public Enumeration keys() {
+	@Override
+	public Enumeration<String> keys() {
 		synchronized (role.ua.dblock) {
 			return keymap.elements();
 		}
 	}
 
+	@Override
 	public int size() {
 		return ht.size();
 	}
 
+	@Override
 	public Object remove(Object key) {
 		synchronized (role.ua.dblock) {
 			if (key instanceof String) {
@@ -122,33 +127,30 @@ public class UAProperties extends Dictionary {
 		}
 	}
 
-	public Object put(Object key, Object value) {
+	@Override
+	public Object put(String key, Object value) {
 		synchronized (role.ua.dblock) {
-			if (key instanceof String) {
-				if (value instanceof String || value instanceof byte[]) {
-					role.ua.checkPermission(new UserAdminPermission(
-							(String) key, getChangeAction()));
-					String lckey = ((String) key).toLowerCase();
-					Object res = ht
-							.put(lckey, value instanceof String ? new String(
-									(String) value) : ((byte[]) value).clone());
-					keymap.put(lckey, key);
-					role.ua.notifyListeners(UserAdminEvent.ROLE_CHANGED, role);
-					// Persistently save the database.
-					role.ua.save();
-					return res;
-				}
-				else
-					throw new IllegalArgumentException(
-							"The value must be of type String or byte[],  got "
-									+ value.getClass());
+			if (value instanceof String || value instanceof byte[]) {
+				role.ua.checkPermission(
+						new UserAdminPermission(key, getChangeAction()));
+				String lckey = key.toLowerCase();
+				Object res = ht.put(lckey,
+						value instanceof String ? new String((String) value)
+								: ((byte[]) value).clone());
+				keymap.put(lckey, key);
+				role.ua.notifyListeners(UserAdminEvent.ROLE_CHANGED, role);
+				// Persistently save the database.
+				role.ua.save();
+				return res;
 			}
 			else
 				throw new IllegalArgumentException(
-						"The key must be a String, got " + key.getClass());
+						"The value must be of type String or byte[],  got "
+								+ value.getClass());
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "#Properties";
 	}
@@ -165,10 +167,10 @@ public class UAProperties extends Dictionary {
 	 * are prefixed by the specified name.
 	 */
 	public void save(String name, Properties p) {
-		Enumeration en = ht.keys();
+		Enumeration<String> en = ht.keys();
 		for (int i = 0; en.hasMoreElements(); i++) {
 			Object lckey = en.nextElement();
-			String key = (String) keymap.get(lckey);
+			String key = keymap.get(lckey);
 			p.put(name + i + "n", key);
 			Object obj = ht.get(lckey);
 			String vname, value;

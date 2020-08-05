@@ -20,7 +20,6 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.StringRefAddr;
 import javax.naming.directory.BasicAttributes;
 
@@ -49,7 +48,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBundle = installBundle("objectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a referenceable object for testing
 			CTTestObject ref = new CTTestObject("pass");
@@ -66,7 +65,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a referenceable object for testing
 			BasicAttributes attrs = new BasicAttributes();
@@ -86,7 +85,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBuilderBundle = installBundle("objectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Do a getObjectInstance call with only the object class as an option
 			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(CTTestObject.class.getName(), null, null, null);
@@ -101,7 +100,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle dirObjectFactoryBuilderBundle = installBundle("dirObjectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Do a getObjectInstance call with only the object class as an option and the desired attributes
 			BasicAttributes attrs = new BasicAttributes();
@@ -118,7 +117,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -135,7 +134,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			BasicAttributes attrs = new BasicAttributes();
 			attrs.put("testAttribute", new Object());
@@ -154,7 +153,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing
 			CTReference ref = new CTReference(CTTestObject.class.getName());
@@ -171,7 +170,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try { 
 			BasicAttributes attrs = new BasicAttributes();
 			attrs.put("testAttribute", new Object());
@@ -192,11 +191,11 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		Bundle urlContextBundle = installBundle("urlContext1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		// Setup context so we can grab the reference from it
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = null;
 		try {
@@ -221,7 +220,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBuilderBundle = installBundle("objectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -238,7 +237,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle dirObjectFactoryBuilderBundle = installBundle("dirObjectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			BasicAttributes attrs = new BasicAttributes();
 			attrs.put("testAttributes", new Object());
@@ -255,7 +254,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 	
 	public void testGetObjectInstanceWithMissingFactory() throws Exception {
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -272,7 +271,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 	
 	public void testGetObjectInstanceWithMissingFactoryAndAttributes() throws Exception {
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			BasicAttributes attrs = new BasicAttributes();
 			attrs.put("testAttributes", new Object());
@@ -293,7 +292,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a referenceable object for testing
 			BasicAttributes attrs = new BasicAttributes();

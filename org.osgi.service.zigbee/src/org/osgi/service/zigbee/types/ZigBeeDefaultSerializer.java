@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -456,7 +457,7 @@ class ZigBeeDefaultSerializer {
 							throw new IllegalArgumentException("invalid array length");
 						}
 
-						byte[] copy = (byte[]) array.clone();
+						byte[] copy = array.clone();
 						swap(copy);
 						os.writeBytes(copy, array.length);
 					} else {

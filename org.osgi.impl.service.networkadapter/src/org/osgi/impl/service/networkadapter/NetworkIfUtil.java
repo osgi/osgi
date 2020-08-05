@@ -91,8 +91,9 @@ class NetworkIfUtil {
 
         InetAddress inetAddress = null;
         try {
-            inetAddress = (InetAddress)AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws Exception {
+			inetAddress = AccessController.doPrivileged(new PrivilegedExceptionAction<InetAddress>() {
+                @Override
+				public InetAddress run() throws Exception {
                     return InetAddress.getByName(address);
                 }
             });

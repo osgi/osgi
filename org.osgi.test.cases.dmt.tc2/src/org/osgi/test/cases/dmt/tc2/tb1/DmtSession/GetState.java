@@ -42,6 +42,9 @@ import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -56,6 +59,7 @@ public class GetState implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
 	    //STATE_INVALID is tested in org.osgi.test.cases.dmt.plugins.tbc.Others.UseCases
@@ -74,11 +78,11 @@ public class GetState implements TestInterface {
 	private void testGetState001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetState001");
+			DefaultTestBundleControl.log("#testGetState001");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
-			tbc.assertEquals("Asserting that the session is opened ",
+			TestCase.assertEquals("Asserting that the session is opened ",
 					DmtSession.STATE_OPEN, session.getState());
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -95,12 +99,12 @@ public class GetState implements TestInterface {
 	private void testGetState002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetState002");
+			DefaultTestBundleControl.log("#testGetState002");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 			session.close();
-			tbc.assertEquals("Asserting that the session is closed ",
+			TestCase.assertEquals("Asserting that the session is closed ",
 					DmtSession.STATE_CLOSED, session.getState());
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

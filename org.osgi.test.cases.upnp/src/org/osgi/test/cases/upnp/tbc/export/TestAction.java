@@ -19,12 +19,13 @@ public class TestAction implements UPnPAction {
 	// Input argument names.
 	private final String[]		iaNames;
 	// Contains service state variables.
-	private final Dictionary	argSSV;
+	private final Dictionary<String,Object>	argSSV;
 	// the response when action is invoked
-	private final Dictionary	response;
+	private final Dictionary<String,Object>	response;
 
 	public TestAction(String name, String raName, String[] iaNames,
-			String[] oaNames, Dictionary argSSV, Dictionary response) {
+			String[] oaNames, Dictionary<String,Object> argSSV,
+			Dictionary<String,Object> response) {
 		this.name = name;
 		this.raName = raName;
 		this.oaNames = ((oaNames == null) ? null : (String[]) oaNames.clone());
@@ -45,21 +46,22 @@ public class TestAction implements UPnPAction {
 		if (iaNames == null) {
 			return null;
 		}
-		return (String[]) iaNames.clone();
+		return iaNames.clone();
 	}
 
 	public String[] getOutputArgumentNames() {
 		if (oaNames == null) {
 			return null;
 		}
-		return (String[]) oaNames.clone();
+		return oaNames.clone();
 	}
 
 	public UPnPStateVariable getStateVariable(String argumentName) {
 		return (UPnPStateVariable) argSSV.get(argumentName);
 	}
 
-	public Dictionary invoke(Dictionary d) throws Exception {
+	public Dictionary<String,Object> invoke(Dictionary<String,Object> d)
+			throws Exception {
 		/*
 		 * String st = (String) d.get(UPnPConstants.N_IN_STRING); Double dl =
 		 * (Double) d.get(UPnPConstants.N_IN_NUMBER); Integer inint = (Integer)

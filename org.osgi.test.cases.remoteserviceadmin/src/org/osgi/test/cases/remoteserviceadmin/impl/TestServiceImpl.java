@@ -28,6 +28,7 @@ public class TestServiceImpl implements A, B {
 	/**
 	 * @see org.osgi.test.cases.distribution.common.A#getA()
 	 */
+	@Override
 	public String getA() {
 		return "A";
 	}
@@ -35,6 +36,7 @@ public class TestServiceImpl implements A, B {
 	/**
 	 * @see org.osgi.test.cases.distribution.common.B#getB()
 	 */
+	@Override
 	public String getB() {
 		return "B";
 	}

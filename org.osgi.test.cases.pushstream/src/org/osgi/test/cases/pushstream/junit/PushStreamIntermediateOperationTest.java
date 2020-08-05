@@ -31,7 +31,7 @@ import org.osgi.util.pushstream.QueuePolicyOption;
  * Section 706.3 The Push Stream
  */
 @SuppressWarnings({
-		"boxing", "rawtypes", "unchecked"
+		"rawtypes", "unchecked"
 })
 public class PushStreamIntermediateOperationTest
 		extends PushStreamComplianceTest {
@@ -153,6 +153,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
 
+		@SuppressWarnings("unused")
 		Promise<Object[]> prm = ps.filter((i) -> {
 			try {
 				Thread.sleep(1000);
@@ -494,9 +495,10 @@ public class PushStreamIntermediateOperationTest
 				.unbuffered()
 				.build();
 
+		@SuppressWarnings("unused")
 		Promise<Object[]> p = ps.limit(Duration.ofMillis(5)).toArray();
 		gen.getExecutionThread().join();
-		long elapse = (gen.stop - gen.start);
+		// long elapse = (gen.stop - gen.start);
 		// System.out.println(elapse + " : " + Arrays.toString(p.getValue()));
 		ExtGeneratorStatus status = gen.status();
 		assertNotNull(status);

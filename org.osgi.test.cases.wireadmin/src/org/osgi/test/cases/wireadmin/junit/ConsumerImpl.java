@@ -7,6 +7,7 @@ package org.osgi.test.cases.wireadmin.junit;
 
 import org.osgi.service.wireadmin.Consumer;
 import org.osgi.service.wireadmin.Wire;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * A simple consumer implementation for test purposes
@@ -22,26 +23,27 @@ public class ConsumerImpl implements Consumer {
 		this.pid = pid;
 	}
 
+	@Override
 	public void producersConnected(Wire[] wires) {
 		if (wac.getProperty("dump.now") != null) {
-			WireAdminControl
+			DefaultTestBundleControl
 					.log("**********************************************************************");
-			WireAdminControl
+			DefaultTestBundleControl
 					.log("producersConnected called and will set counter to "
 							+ (wac.synchCounterx + 1));
-			WireAdminControl.log("consumer is: " + pid + " " + hashCode());
+			DefaultTestBundleControl.log("consumer is: " + pid + " " + hashCode());
 			if (wires != null) {
 				for (int i = 0; i < wires.length; i++) {
 					Wire wire = wires[i];
-					WireAdminControl.log("wire is: " + wire);
-					WireAdminControl.log("connected: " + wire.isConnected());
-					WireAdminControl.log("properties: " + wire.getProperties());
+					DefaultTestBundleControl.log("wire is: " + wire);
+					DefaultTestBundleControl.log("connected: " + wire.isConnected());
+					DefaultTestBundleControl.log("properties: " + wire.getProperties());
 				}
 			}
 			else {
-				WireAdminControl.log("wires are null");
+				DefaultTestBundleControl.log("wires are null");
 			}
-			WireAdminControl
+			DefaultTestBundleControl
 					.log("**********************************************************************");
 			// new Exception("Stack trace").printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class ConsumerImpl implements Consumer {
 		wac.syncup(pid + " " + wires);
 	}
 
+	@Override
 	public void updated(Wire wire, Object value) {
 		// empty
 	}

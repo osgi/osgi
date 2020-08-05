@@ -1,5 +1,6 @@
 package org.osgi.test.cases.cm.shared;
 
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -21,25 +22,26 @@ public class Util {
 		return root + "." + suffix;
 	}
 
-	public static Object getService(BundleContext context, String clazz) {
-		ServiceReference reference = context.getServiceReference(clazz);
+	public static <S> S getService(BundleContext context, Class<S> clazz) {
+		ServiceReference<S> reference = context.getServiceReference(clazz);
 		if (reference == null)
 			throw new IllegalStateException("Fail to get ServiceReference of "
 					+ clazz);
-		Object service = context.getService(reference);
+		S service = context.getService(reference);
 		if (service == null)
 			throw new IllegalStateException("Fail to get Service of " + clazz);
 		return service;
 	}
 
-	public static Object getService(BundleContext context, String clazz,
+	public static <S> S getService(BundleContext context, Class<S> clazz,
 			String filter) throws InvalidSyntaxException {
-		ServiceReference[] references = context.getServiceReferences(clazz,
+		Collection<ServiceReference<S>> references = context
+				.getServiceReferences(clazz,
 				filter);
-		if (references == null)
+		if (references.isEmpty())
 			throw new IllegalStateException("Fail to get ServiceReference of "
 					+ clazz);
-		Object service = context.getService(references[0]);
+		S service = context.getService(references.iterator().next());
 		if (service == null)
 			throw new IllegalStateException("Fail to get Service of " + clazz);
 		return service;

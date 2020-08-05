@@ -1,14 +1,32 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.*;
-import org.osgi.util.tracker.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cp.description.*;
-import org.osgi.impl.service.upnp.cp.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.upnp.cp.description.Action;
+import org.osgi.impl.service.upnp.cp.description.ServiceInfo;
+import org.osgi.impl.service.upnp.cp.description.StateVariable;
+import org.osgi.impl.service.upnp.cp.util.Converter;
+import org.osgi.impl.service.upnp.cp.util.SamsungUPnPService;
+import org.osgi.impl.service.upnp.cp.util.SamsungUPnPStateVariable;
+import org.osgi.impl.service.upnp.cp.util.UPnPEvent;
+import org.osgi.impl.service.upnp.cp.util.UPnPListener;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPEventListener;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class UPnPServiceImpl implements SamsungUPnPService,
-		ServiceTrackerCustomizer, UPnPListener {
+		ServiceTrackerCustomizer<UPnPEventListener,UPnPEventListener>,
+		UPnPListener {
 	public ServiceInfo			serviceinfo;
 	private String				id;
 	private String				type;
@@ -16,9 +34,9 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	private UPnPActionImpl[]		actions;
 	private UPnPStateVariableImpl[]	variables;
 	private UPnPBaseDriver		basedriver;
-	private ServiceTracker		stk;
+	private ServiceTracker<UPnPEventListener,UPnPEventListener>	stk;
 	private UPnPEventListener	upnplistener;
-	private Vector				listeners;
+	private Vector<UPnPEventListener>							listeners;
 	private String				devid;
 	private String				devtype;
 	private String				eventUrl;
@@ -26,7 +44,7 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	public String				host;
 	private String				urlbase;
 	private String				subscribeid;
-	private Dictionary			initialEvents;
+	private Dictionary<String,Object>							initialEvents;
 	private boolean				firstSub	= true;
 	private boolean				firstEvent	= true;
 
@@ -39,7 +57,7 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 		this.devid = devid;
 		this.devtype = devtype;
 		this.bc = bc;
-		listeners = new Vector(5, 5);
+		listeners = new Vector<>(5, 5);
 		if (serviceinfo != null) {
 			id = serviceinfo.getServiceID();
 			type = serviceinfo.getServiceType();
@@ -75,28 +93,32 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 					variables[j] = upnpvar;
 				}
 			}
-			stk = new ServiceTracker(bc, UPnPEventListener.class.getName(),
+			stk = new ServiceTracker<>(bc, UPnPEventListener.class,
 					this);
 			stk.open();
 		}
 	}
 
 	// This method returns the service id.
+	@Override
 	public String getId() {
 		return id;
 	}
 
 	// This method returns the type of the service.
+	@Override
 	public String getType() {
 		return type;
 	}
 
 	// This method returns the version of the service.
+	@Override
 	public String getVersion() {
 		return version;
 	}
 
 	// This method returns the upnp action based on the given name.
+	@Override
 	public UPnPAction getAction(String s) {
 		checkState();
 		if (actions != null) {
@@ -110,18 +132,21 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	}
 
 	// This method returns all the UPnP actions.
+	@Override
 	public UPnPAction[] getActions() {
 		checkState();
 		return actions;
 	}
 
 	// This method returns all the state variables.
+	@Override
 	public UPnPStateVariable[] getStateVariables() {
 		checkState();
 		return variables;
 	}
 
 	//	This method returns the state variable based on the given name.
+	@Override
 	public UPnPStateVariable getStateVariable(String s) {
 		checkState();
 		for (int i = 0; i < variables.length; i++) {
@@ -135,14 +160,16 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	// This method called by service tracker when ever it tracks the log Service
 	// added.It subscribes
 	// with device when ever application adds listener with framework.
-	public Object addingService(ServiceReference sr) {
+	@Override
+	public UPnPEventListener addingService(
+			ServiceReference<UPnPEventListener> sr) {
 		Filter fl = (Filter) sr.getProperty(UPnPEventListener.UPNP_FILTER);
 		if (fl == null) {
 			return null;
 		}
 		String f = fl.toString();
 		//System.out.println(f);
-		upnplistener = (UPnPEventListener) bc.getService(sr);
+		upnplistener = bc.getService(sr);
 		boolean b1 = true;
 		boolean b2 = true;
 		boolean b3 = true;
@@ -182,8 +209,10 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 
 	// This method called by service tracker when ever it tracks log Service
 	// removed
-	public void removedService(ServiceReference sr, Object obj) {
-		upnplistener = (UPnPEventListener) bc.getService(sr);
+	@Override
+	public void removedService(ServiceReference<UPnPEventListener> sr,
+			UPnPEventListener obj) {
+		upnplistener = bc.getService(sr);
 		listeners.remove(upnplistener);
 		firstSub = true;
 		if (listeners.size() == 0) {
@@ -193,25 +222,32 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	}
 
 	// This method called by service tracker when ever log Service modified
-	public void modifiedService(ServiceReference sr, Object obj) {
+	@Override
+	public void modifiedService(ServiceReference<UPnPEventListener> sr,
+			UPnPEventListener obj) {
+		// empty
 	}
 
 	// This method sets all state variable values of service.
-	public void setChangedValue(Dictionary dict) {
-		for (Enumeration enumeration = dict.keys(); enumeration.hasMoreElements();) {
-			String variablename = (String) enumeration.nextElement();
+	@Override
+	public void setChangedValue(Dictionary<String,Object> dict) {
+		for (Enumeration<String> enumeration = dict.keys(); enumeration
+				.hasMoreElements();) {
+			String variablename = enumeration.nextElement();
 			SamsungUPnPStateVariable sst = (SamsungUPnPStateVariable) getStateVariable(variablename);
 			if (sst != null) {
 				sst.setChangedValue((String) dict.get(variablename));
 			}
 		}
-		for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
-			UPnPEventListener listener = (UPnPEventListener) e.nextElement();
+		for (Enumeration<UPnPEventListener> e = listeners.elements(); e
+				.hasMoreElements();) {
+			UPnPEventListener listener = e.nextElement();
 			listener.notifyUPnPEvent(devid, id, dict);
 		}
 	}
 
 	// This method returns the state variable value.
+	@Override
 	public String getChangedValue(String name) {
 		SamsungUPnPStateVariable sst = (SamsungUPnPStateVariable) getStateVariable(name);
 		if (sst != null) {
@@ -223,13 +259,14 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	}
 
 	// This method is called whenever the service state is been changed.
+	@Override
 	public void serviceStateChanged(UPnPEvent upnpevent) {
-		Hashtable VariablePair = new Hashtable();
+		Hashtable<String,Object> VariablePair = new Hashtable<>();
 		Converter convert = new Converter();
-		Dictionary events = (Dictionary) upnpevent.getList();
+		Dictionary<String,Object> events = upnpevent.getList();
 		UPnPStateVariable SVariable;
 		for (int i = 0; i < variables.length; i++) {
-			SVariable = (UPnPStateVariable) variables[i];
+			SVariable = variables[i];
 			VariablePair.put(SVariable.getName(), SVariable.getUPnPDataType());
 		}
 		try {
@@ -237,15 +274,16 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
-		};
+		}
 		if (firstEvent) {
 			initialEvents = events;
 		}
 		if (events != null) {
 			subscribeid = upnpevent.getSubscriptionId();
 		}
-		for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
-			UPnPEventListener listener = (UPnPEventListener) e.nextElement();
+		for (Enumeration<UPnPEventListener> e = listeners.elements(); e
+				.hasMoreElements();) {
+			UPnPEventListener listener = e.nextElement();
 			listener.notifyUPnPEvent(devid, id, events);
 		}
 	}

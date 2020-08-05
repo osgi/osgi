@@ -11,9 +11,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
-import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 
 /**
  * This class persists and restores Monitors into a csv file. The CSV file
@@ -42,7 +42,7 @@ public class Persistence {
 	 *        {@link #FILE_NAME})
 	 * @throws PersistenceException if any exception occurs
 	 */
-	public static void persistMonitors(Collection mms,
+	public static void persistMonitors(Collection<ResourceMonitor<Long>> mms,
 			BundleContext bundleContext, String pFileName)
 			throws PersistenceException {
 
@@ -76,8 +76,9 @@ public class Persistence {
 					+ "not found.", e);
 		}
 
-		for (Iterator it = mms.iterator(); it.hasNext();) {
-			ResourceMonitor mm = (ResourceMonitor) it.next();
+		for (Iterator<ResourceMonitor<Long>> it = mms.iterator(); it
+				.hasNext();) {
+			ResourceMonitor<Long> mm = it.next();
 			ResourceMonitorInfo mmi = new ResourceMonitorInfo(mm);
 			ps.println(mmi.toCsv());
 		}
@@ -101,10 +102,11 @@ public class Persistence {
 	 *         null.
 	 * @throws PersistenceException if any exception occurs
 	 */
-	public static Collection loadMonitors(BundleContext bundleContext,
+	public static Collection<ResourceMonitorInfo> loadMonitors(
+			BundleContext bundleContext,
 			String pFileName) throws PersistenceException {
 
-		Collection mmis = new ArrayList();
+		Collection<ResourceMonitorInfo> mmis = new ArrayList<>();
 
 		String fileName = pFileName;
 		if (fileName == null) {

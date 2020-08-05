@@ -15,7 +15,7 @@ import org.osgi.service.dmt.DmtData;
  * @author steffen
  *
  */
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 	
 	private String name;
 	private DmtData value;
@@ -64,6 +64,7 @@ public class Node implements Comparable {
 		return path;
 	}
 	
+	@SuppressWarnings("unused")
 	private Node getChildNode( String name ) {
 		if ( leaf )
 			return null;
@@ -200,10 +201,10 @@ public class Node implements Comparable {
 		return getURI();
 	}
 
-	public int compareTo(Object o) {
-		if ( o == null || ! (o instanceof Node) )
+	public int compareTo(Node o) {
+		if (o == null)
 			return -1; 
-		return this.getURI().compareTo(((Node)o).getURI());
+		return this.getURI().compareTo(o.getURI());
 	}
 	
 	/**
@@ -232,8 +233,8 @@ public class Node implements Comparable {
 		return DmtConstants.DDF_LIST.equals(getType());
 	}
 	
-	private Collection getList() {
-		Vector v = new Vector();
+	private Collection<Object> getList() {
+		Vector<Object> v = new Vector<>();
 		Set<Node> children = getChildren();
 		if ( children.size() == 0 )
 			return v;
@@ -278,6 +279,7 @@ public class Node implements Comparable {
 		int index = 0; 
 		for (Object element : list) {
 			// create new node from element and add it as child
+			@SuppressWarnings("unused")
 			Node n = new Node(this, "" + index, true, createDmtData(element), null);
 			// the metadata is maintained by the parent
 			index++;
@@ -288,13 +290,14 @@ public class Node implements Comparable {
 		for (Object key : map.keySet()) {
 			// create new node from element and add it as child
 			// do we need a type here ?
+			@SuppressWarnings("unused")
 			Node n = new Node(this, (String) key, true, createDmtData(map.get(key)), null);
 			// the metadata is maintained by the parent
 		}
 	}
 
-	private Map getMap() {
-		Map m = new HashMap();
+	private Map<String,Object> getMap() {
+		Map<String,Object> m = new HashMap<>();
 		Set<Node> children = getChildren();
 		if ( children.size() == 0 )
 			return m;

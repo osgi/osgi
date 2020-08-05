@@ -25,4 +25,6 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.http.hostname=127.0.0.1, \
 	org.osgi.service.http.port=8082
 
+-runvm: -Djava.net.preferIPv4Stack=true
+
 -signaturetest                      = org.osgi.service.upnp

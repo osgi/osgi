@@ -24,6 +24,7 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
@@ -37,19 +38,21 @@ import org.osgi.service.dmt.spi.DataPlugin;
 public class FiltersPluginActivator implements BundleActivator {
     static String PLUGIN_ROOT_URI = "./Filter";
     
-    private ServiceRegistration servReg;
+	private ServiceRegistration<DataPlugin>	servReg;
     private FiltersPlugin     filtersPlugin;
     
+	@Override
 	public void start(BundleContext bc) throws Exception {
 		if(RMTConstants.RMT_ROOT!=null){
 			PLUGIN_ROOT_URI = RMTConstants.RMT_ROOT+"/Filter";
 		}		
  		filtersPlugin = new FiltersPlugin(bc);
-		Hashtable props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(DataPlugin.DATA_ROOT_URIS, PLUGIN_ROOT_URI);
-		servReg = bc.registerService(DataPlugin.class.getName(), filtersPlugin, props);
+		servReg = bc.registerService(DataPlugin.class, filtersPlugin, props);
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws Exception {
 		servReg.unregister();
 	}

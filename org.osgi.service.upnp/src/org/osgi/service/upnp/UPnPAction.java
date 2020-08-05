@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,5 +138,6 @@ public interface UPnPAction {
 	 * 
 	 * @see UPnPStateVariable
 	 */
-	Dictionary<String, Object> invoke(Dictionary<String, ?> args) throws Exception;
+	Dictionary<String,Object> invoke(Dictionary<String,Object> args)
+			throws Exception;
 }

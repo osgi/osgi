@@ -44,7 +44,8 @@ public class UserImpl extends RoleImpl implements User {
 	 * Gets the credentials of this role. Implementation of
 	 * {@link org.osgi.service.useradmin.User#getCredentials}.
 	 */
-	public Dictionary getCredentials() {
+	@Override
+	public Dictionary<String,Object> getCredentials() {
 		return credentials;
 	}
 
@@ -52,6 +53,7 @@ public class UserImpl extends RoleImpl implements User {
 	 * Checks if this user has the specified credential. Implementation of
 	 * {@link org.osgi.service.useradmin.User#hasCredential}.
 	 */
+	@Override
 	public boolean hasCredential(String key, Object value) {
 		Object rvalue = credentials.get(key);
 		if (rvalue == null)

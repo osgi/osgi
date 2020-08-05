@@ -47,6 +47,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	private final List<LogEntry>	localLogEntries	= new ArrayList<LogEntry>();
 	private volatile boolean	enableLog;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		log = getService(LogService.class);
@@ -55,6 +56,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		this.enableLog = false;
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		try {
@@ -96,7 +98,9 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 			String uri = LOG_ROOT + "/" + LOG_ENTRIES + "/" + i + "/";
 
 			long time = session.getNodeValue(uri + TIME).getDateTime().getTime();
+			@SuppressWarnings("unused")
 			int level = session.getNodeValue(uri + LEVEL).getInt();
+			@SuppressWarnings("unused")
 			String message = session.getNodeValue(uri + MESSAGE).getString();
 			assertTrue( "The log entries are not ordered correctly (most recent to oldest)", time <= oldTime );
 			oldTime = time;
@@ -242,6 +246,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 	//********* Utilities
 
+	@Override
 	public synchronized void logged(LogEntry entry) {
 		if (enableLog && entry.getMessage().startsWith(LOG_TEST_MESSAGE_PREFIX)) {
 			localLogEntries.add(entry);

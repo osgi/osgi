@@ -1,9 +1,10 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import org.osgi.test.cases.device.tbc.TestBundleControl;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Dictionary;
+
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * Simulates crash in findDrivers method
@@ -24,7 +25,7 @@ public class DriverLoadingLocator3 implements
 	 * 
 	 * @throws RuntimeException every time
 	 */
-	public String[] findDrivers(Dictionary props) {
+	public String[] findDrivers(Dictionary<String, ? > props) {
 		throw new RuntimeException(
 				"[findDrivers] Testing the device manager exception handling");
 	}

@@ -1,9 +1,13 @@
 package org.osgi.test.cases.device.drv4;
 
-import org.osgi.framework.*;
-import org.osgi.service.device.Driver;
-import org.osgi.service.device.Device;
 import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.device.Device;
+import org.osgi.service.device.Driver;
 import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
@@ -14,17 +18,18 @@ import org.osgi.test.cases.device.tbc.TestBundleControl;
  * @version 1.0
  */
 public class WinnerDriver implements Driver, BundleActivator {
-	private ServiceRegistration	driverRegistration	= null;
+	private ServiceRegistration<Driver>			driverRegistration	= null;
 	private BundleContext		bc					= null;
 	private TestBundleControl	master				= null;
-	private ServiceReference	masterRef			= null;
+	private ServiceReference<TestBundleControl>	masterRef			= null;
 	/*
 	 * !!!FIX!!! The device service this driver is attaching to The driver must
 	 * hold this until it is uninstalled (or the device is uninstalled) else the
 	 * device will be considered idle and will be included in any searches.
 	 */
+	@SuppressWarnings("unused")
 	private Device				device				= null;
-	private ServiceReference	deviceRef			= null;
+	private ServiceReference< ? >				deviceRef			= null;
 
 	/**
 	 * The start method of the activator of this Driver bundle. As required
@@ -33,16 +38,16 @@ public class WinnerDriver implements Driver, BundleActivator {
 	public void start(BundleContext bc) {
 		this.bc = bc;
 		/* get the master of this test case */
-		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
-		master = (TestBundleControl) bc.getService(masterRef);
+		masterRef = bc.getServiceReference(TestBundleControl.class);
+		master = bc.getService(masterRef);
 		log("starting driver bundle");
 		/* register the driver service */
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("DRIVER_ID", "Driver_Winner");
 		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(4242));
 		log("registering service");
 		driverRegistration = bc.registerService(
-				"org.osgi.service.device.Driver", this, h);
+				Driver.class, this, h);
 	}
 
 	/**
@@ -60,7 +65,7 @@ public class WinnerDriver implements Driver, BundleActivator {
 	 * @param reference service reference to the registred device.
 	 * @return 255
 	 */
-	public int match(ServiceReference reference) {
+	public int match(ServiceReference< ? > reference) {
 		return 255;
 	}
 
@@ -71,7 +76,7 @@ public class WinnerDriver implements Driver, BundleActivator {
 	 *        attachtes always successfully
 	 * @returns null
 	 */
-	public String attach(ServiceReference reference) throws Exception {
+	public String attach(ServiceReference< ? > reference) throws Exception {
 		// FIX
 		device = (Device) bc.getService(reference);
 		deviceRef = reference;

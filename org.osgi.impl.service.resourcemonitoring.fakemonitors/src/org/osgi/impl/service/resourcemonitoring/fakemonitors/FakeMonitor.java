@@ -5,14 +5,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemonitoring.util.EventNotifier;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextException;
-import org.osgi.service.resourcemonitoring.ResourceListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 
 /**
  *
  */
-public class FakeMonitor implements ResourceMonitor, Runnable {
+public class FakeMonitor implements ResourceMonitor<Long>, Runnable {
 
 	/**
 	 * {@link ResourceContext} associated with this monitor.
@@ -130,14 +129,17 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 
 	}
 
+	@Override
 	public ResourceContext getContext() {
 		return resourceContext;
 	}
 
+	@Override
 	public String getResourceType() {
 		return resourceType;
 	}
 
+	@Override
 	public void delete() throws ResourceMonitorException {
 		isDeleted = true;
 		try {
@@ -149,14 +151,17 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		eventNotifier.stop();
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return isEnable;
 	}
 
+	@Override
 	public boolean isDeleted() {
 		return isDeleted;
 	}
 
+	@Override
 	public void enable() throws ResourceMonitorException {
 		checkExistency("This monitor has been deleted, it can not be enabled anymore.");
 
@@ -169,6 +174,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 
 	}
 
+	@Override
 	public void disable() throws ResourceMonitorException {
 		checkExistency("This monitor has been deleted, it can not be disabled anymore.");
 		isEnable = false;
@@ -183,20 +189,24 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		eventNotifier.reportEnableDisable();
 	}
 
-	public Comparable getUsage() throws ResourceMonitorException {
+	@Override
+	public Comparable<Long> getUsage() throws ResourceMonitorException {
 		checkExistency("This monitor has been deleted.");
 		return currentUsage;
 	}
 
+	@Override
 	public long getSamplingPeriod() {
 		System.out.println("samplingPeriod: " + samplingPeriod + ", but the method is implemented to return 0.");
 		return 0;
 	}
 
+	@Override
 	public long getMonitoredPeriod() {
 		return 0;
 	}
 
+	@Override
 	public void run() {
 		long usage = initialValue;
 		setUsage(initialValue);

@@ -43,7 +43,8 @@ import org.osgi.test.cases.cm.shared.Util;
 public class BundleT1Activator implements BundleActivator {
 
 	private BundleContext context;
-	private static List srList = new ArrayList(4);
+	static List<ServiceRegistration< ? >>	srList	= new ArrayList<>(
+			4);
 	private static final boolean DEBUG = true;
 
 	/*
@@ -61,27 +62,29 @@ public class BundleT1Activator implements BundleActivator {
 		final String fpid1 = Util.createPid("factoryPid1");
 		final String fpid2 = Util.createPid("factoryPid2");
 
-		final String msClazz = ManagedService.class.getName();
-		final String msfClazz = ManagedServiceFactory.class.getName();
 
 		String filter1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync1-1)";
-		ServiceRegistration sr1 = registerService(context, pid1, msClazz,
+		ServiceRegistration<ManagedService> sr1 = registerService(context, pid1,
+				ManagedService.class,
 				filter1);
 		// srList.add(registerService(context, pid1, msClazz, filter1));
 		srList.add(sr1);
 		String filter2 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=sync1-2)";
-		ServiceRegistration sr2 = registerService(context, pid2, msClazz,
+		ServiceRegistration<ManagedService> sr2 = registerService(context, pid2,
+				ManagedService.class,
 				filter2);
 		srList.add(sr2);
 
 		String filterF1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=syncF1-1)";
-		ServiceRegistration srF1 = registerService(context, fpid1, msfClazz,
+		ServiceRegistration<ManagedServiceFactory> srF1 = registerService(
+				context, fpid1,
+				ManagedServiceFactory.class,
 				filterF1);
 		srList.add(srF1);
 
@@ -92,47 +95,50 @@ public class BundleT1Activator implements BundleActivator {
 		// + org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 		// + "=syncF1-2deleted)";
 		// registerService(context, fpid2, msfClazz, filterF2, filterF2d);
-		ServiceRegistration srF2 = registerService(context, fpid2, msfClazz,
+		ServiceRegistration<ManagedServiceFactory> srF2 = registerService(
+				context, fpid2,
+				ManagedServiceFactory.class,
 				filterF2);
 		srList.add(srF2);
 		this.context.registerService(ModifyPid.class.getName(),
 				new ModifyPidImpl(), null);
 	}
 
-	private ServiceRegistration registerService(BundleContext context,
-			final String pid, final String clazz, String filterUpdated)
+	private <S> ServiceRegistration<S> registerService(BundleContext context,
+			final String pid, final Class<S> clazz, String filterUpdated)
 			throws InvalidSyntaxException, Exception {
 		return this.registerService(context, pid, clazz, filterUpdated, null);
 	}
 
-	private ServiceRegistration registerService(BundleContext context,
-			final String pid, final String clazz, String filterUpdated,
+	private <S> ServiceRegistration<S> registerService(BundleContext context,
+			final String pid, final Class<S> clazz, String filterUpdated,
 			String filterDeleted) throws InvalidSyntaxException, Exception {
 		Synchronizer syncUpdated = null;
 		try {
-			syncUpdated = (Synchronizer) Util.getService(context,
-					Synchronizer.class.getName(), filterUpdated);
+			syncUpdated = Util.getService(context,
+					Synchronizer.class, filterUpdated);
 		} catch (IllegalStateException ise) {
 			return null;
 		}
 
+		@SuppressWarnings("unused")
 		Synchronizer syncDeleted = null;
 		if (filterDeleted != null) {
 			try {
-				syncDeleted = (Synchronizer) Util.getService(context,
-						Synchronizer.class.getName(), filterDeleted);
+				syncDeleted = Util.getService(context,
+						Synchronizer.class, filterDeleted);
 
 			} catch (IllegalStateException ise) {
 				return null;
 			}
 		}
 		final Object service;
-		if (clazz.equals(ManagedService.class.getName())) {
+		if (clazz == ManagedService.class) {
 			service = new ManagedServiceImpl(syncUpdated);
 		} else {
 			service = new ManagedServiceFactoryImpl(syncUpdated);
 		}
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register " + clazz + ": pid=\n\t" + pid);
 
@@ -140,8 +146,9 @@ public class BundleT1Activator implements BundleActivator {
 		props.put(org.osgi.framework.Constants.SERVICE_RANKING, "1");
 
 		try {
-			ServiceRegistration sr = this.context.registerService(clazz,
-					service, props);
+			@SuppressWarnings("unchecked")
+			ServiceRegistration<S> sr = this.context.registerService(clazz,
+					(S) service, props);
 			log("Succeed in registering service:clazz=" + clazz + ":pid=" + pid);
 			return sr;
 		} catch (Exception e) {
@@ -171,7 +178,8 @@ public class BundleT1Activator implements BundleActivator {
 			this.syncUpdated = syncUpdated;
 		}
 
-		public void updated(Dictionary props) throws ConfigurationException {
+		public void updated(Dictionary<String, ? > props)
+				throws ConfigurationException {
 			// this.props = props;
 			if (props != null) {
 				String pid = (String) props
@@ -202,7 +210,7 @@ public class BundleT1Activator implements BundleActivator {
 			// this.syncDeleted = syncDeleted;
 		}
 
-		public void updated(String pid, Dictionary props)
+		public void updated(String pid, Dictionary<String, ? > props)
 				throws ConfigurationException {
 			// this.props = props;
 			if (props != null) {
@@ -245,14 +253,15 @@ public class BundleT1Activator implements BundleActivator {
 	class ModifyPidImpl implements ModifyPid {
 
 		public void changeMsPid(Long serviceId, String newPid) {
-			for (Iterator list = srList.iterator(); list.hasNext();) {
-				ServiceRegistration sr = (ServiceRegistration) list.next();
+			for (Iterator<ServiceRegistration< ? >> list = srList
+					.iterator(); list.hasNext();) {
+				ServiceRegistration< ? > sr = list.next();
 				if (sr == null)
 					continue;
-				ServiceReference reference = sr.getReference();
+				ServiceReference< ? > reference = sr.getReference();
 				if (reference.getProperty(Constants.SERVICE_ID).equals(
 						serviceId)) {
-					Dictionary props = new Hashtable();
+					Dictionary<String,Object> props = new Hashtable<>();
 					String[] keys = reference.getPropertyKeys();
 					for (int i = 0; i < keys.length; i++) {
 						props.put(keys[i], reference.getProperty(keys[i]));

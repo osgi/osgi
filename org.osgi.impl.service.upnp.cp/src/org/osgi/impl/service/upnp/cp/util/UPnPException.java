@@ -1,8 +1,10 @@
 package org.osgi.impl.service.upnp.cp.util;
 
-import java.lang.Exception;
-
 public class UPnPException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private Throwable	th;
 
 	public Throwable getNestedException() {

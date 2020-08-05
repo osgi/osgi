@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -427,16 +428,17 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		List<ServiceWire> wires = new ArrayList<ServiceWire>();
 
 		// REQUIREMENTS
-		ServiceReference[] usedServices = bundle.getServicesInUse();
+		ServiceReference< ? >[] usedServices = bundle.getServicesInUse();
 		if( usedServices != null )
-			for ( ServiceReference ref : usedServices )
+			for (ServiceReference< ? > ref : usedServices)
 				// accept wires that are provided and used by same bundle
 				wires.add( new ServiceWire(ref, ref.getBundle().getLocation(), bundle.getLocation()));
 		
 		// CAPABILITIES
-		ServiceReference[] registeredServices = bundle.getRegisteredServices();
+		ServiceReference< ? >[] registeredServices = bundle
+				.getRegisteredServices();
 		if ( registeredServices != null )
-			for (ServiceReference ref : registeredServices) {
+			for (ServiceReference< ? > ref : registeredServices) {
 				Bundle[] usingBundles = ref.getUsingBundles();
 				if ( usingBundles != null )
 					for (Bundle b : usingBundles)

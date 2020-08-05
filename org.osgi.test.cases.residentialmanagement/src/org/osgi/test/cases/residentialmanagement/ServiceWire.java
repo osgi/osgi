@@ -9,9 +9,10 @@ public class ServiceWire implements RMTConstants{
 
 	String provider;
 	String requirer;
-	ServiceReference ref;
+	ServiceReference< ? >	ref;
 
-	public ServiceWire( ServiceReference ref, String provider, String requirer) {
+	public ServiceWire(ServiceReference< ? > ref, String provider,
+			String requirer) {
 		this.ref = ref;
 		this.provider = provider;
 		this.requirer = requirer;

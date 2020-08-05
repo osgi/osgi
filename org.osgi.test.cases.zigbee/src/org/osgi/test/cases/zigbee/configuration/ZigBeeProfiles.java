@@ -23,9 +23,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
@@ -51,7 +53,7 @@ public class ZigBeeProfiles {
 	/**
 	 * List of the ZCLGlobalDescriptions parsed from the file
 	 */
-	List							globalDescriptions	= new ArrayList();
+	List<ZCLGlobalClusterDescription>	globalDescriptions	= new ArrayList<>();
 
 	public void loadProfile(InputStream is) throws SAXException, IOException, ParserConfigurationException {
 
@@ -61,8 +63,9 @@ public class ZigBeeProfiles {
 	}
 
 	public ZCLGlobalClusterDescription getZCLGlobalDescription(int clusterId) {
-		for (Iterator iterator = globalDescriptions.iterator(); iterator.hasNext();) {
-			ZCLGlobalClusterDescription description = (ZCLGlobalClusterDescription) iterator.next();
+		for (Iterator<ZCLGlobalClusterDescription> iterator = globalDescriptions
+				.iterator(); iterator.hasNext();) {
+			ZCLGlobalClusterDescription description = iterator.next();
 
 			if (description.getClusterId() == clusterId) {
 				return description;
@@ -87,19 +90,19 @@ public class ZigBeeProfiles {
 		return instance;
 	}
 
-	private class Parser extends DefaultHandler {
+	class Parser extends DefaultHandler {
 
-		private Map								clusterAttributes		= null;
+		private Map<String,String>					clusterAttributes		= null;
 
 		private ZCLAttributeDescriptionImpl		attributeDescription;
 		private ZCLParameterDescriptionImpl		parameterDescription;
 		private ZCLGlobalClusterDescriptionImpl	gobalClusterDescription;
 
-		private List							parameterDescriptions	= new ArrayList();
-		private List							attributeDescriptions	= new ArrayList();
-		private List							commandDescriptions		= new ArrayList();
+		private List<ZCLParameterDescriptionImpl>	parameterDescriptions	= new ArrayList<>();
+		private List<ZCLAttributeDescriptionImpl>	attributeDescriptions	= new ArrayList<>();
+		private List<ZCLCommandDescriptionImpl>		commandDescriptions		= new ArrayList<>();
 
-		private Map								commandAttributes;
+		private Map<String,String>					commandAttributes;
 
 		private boolean							isServerSide;
 
@@ -132,7 +135,7 @@ public class ZigBeeProfiles {
 				this.isServerSide = false;
 
 			} else if (qName.equalsIgnoreCase("attribute")) {
-				Map attributesMap = getAttributes(attributes);
+				Map<String,String> attributesMap = getAttributes(attributes);
 				int id = ParserUtils.getAttribute(attributesMap, "id", ParserUtils.MANDATORY, -1);
 				boolean isReadOnly = ParserUtils.getAttribute(attributesMap, "readOnly", ParserUtils.MANDATORY, false);
 				String defaultValue = ParserUtils.getAttribute(attributesMap, "defaultValue", ParserUtils.OPTIONAL, "");
@@ -155,7 +158,7 @@ public class ZigBeeProfiles {
 			} else if (qName.equalsIgnoreCase("command")) {
 				this.commandAttributes = getAttributes(attributes);
 			} else if (qName.equalsIgnoreCase("param")) {
-				Map attributesMap = getAttributes(attributes);
+				Map<String,String> attributesMap = getAttributes(attributes);
 				String dataTypeName = ParserUtils.getAttribute(attributesMap, "dataType", ParserUtils.MANDATORY, "");
 				ZCLDataTypeDescription dataType;
 				try {
@@ -169,8 +172,8 @@ public class ZigBeeProfiles {
 			}
 		}
 
-		private Map getAttributes(Attributes attributes) {
-			Map map = new HashMap();
+		private Map<String,String> getAttributes(Attributes attributes) {
+			Map<String,String> map = new HashMap<>();
 			for (int i = 0; i < attributes.getLength(); i++) {
 				map.put(attributes.getQName(i), attributes.getValue(i));
 			}
@@ -190,12 +193,12 @@ public class ZigBeeProfiles {
 
 				ZCLAttributeDescriptionImpl[] attributes = new ZCLAttributeDescriptionImpl[attributeDescriptions.size()];
 				for (int i = 0; i < attributes.length; i++) {
-					attributes[i] = (ZCLAttributeDescriptionImpl) attributeDescriptions.get(i);
+					attributes[i] = attributeDescriptions.get(i);
 				}
 
 				ZCLCommandDescriptionImpl[] commands = new ZCLCommandDescriptionImpl[commandDescriptions.size()];
 				for (int i = 0; i < commands.length; i++) {
-					commands[i] = (ZCLCommandDescriptionImpl) commandDescriptions.get(i);
+					commands[i] = commandDescriptions.get(i);
 				}
 
 				attributeDescriptions.clear();
@@ -227,7 +230,7 @@ public class ZigBeeProfiles {
 
 				ZCLParameterDescriptionImpl[] parameters = new ZCLParameterDescriptionImpl[parameterDescriptions.size()];
 				for (int i = 0; i < parameters.length; i++) {
-					parameters[i] = (ZCLParameterDescriptionImpl) parameterDescriptions.get(i);
+					parameters[i] = parameterDescriptions.get(i);
 				}
 
 				byte[] rawFrame = ParserUtils.hexStringToByteArray(zclFrame);

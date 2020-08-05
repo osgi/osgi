@@ -32,3 +32,6 @@ Import-Package: ${-signaturetest}, *
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.device.manager;  version=latest
+
+-fixupmessages.private: "Export * has * private references"
+

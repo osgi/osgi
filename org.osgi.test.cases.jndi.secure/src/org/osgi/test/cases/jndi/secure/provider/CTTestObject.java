@@ -83,6 +83,7 @@ public class CTTestObject implements Referenceable {
 		return this.factoryClassName;
 	}
 	
+	@Override
 	public Reference getReference() throws NamingException {
 		Reference ref = null;
 		

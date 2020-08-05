@@ -50,7 +50,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author $Id$
  */
 public class Activator implements BundleActivator, HttpContext {
-	ServiceTracker	tracker;
+	ServiceTracker<HttpService,HttpService>	tracker;
 
 	public static long	TIMEOUT1	= 60000;
 	public static long	TIMEOUT2	= 10000;
@@ -112,9 +112,10 @@ public class Activator implements BundleActivator, HttpContext {
 				// empty
 			}
 		}
-		tracker = new ServiceTracker(c, HttpService.class
-				.getName(), null) {
-			public Object addingService(ServiceReference ref) {
+		tracker = new ServiceTracker<HttpService,HttpService>(c,
+				HttpService.class, null) {
+			public HttpService addingService(
+					ServiceReference<HttpService> ref) {
 				hostName = context
 						.getProperty("org.osgi.service.http.hostname");
 				if (hostName == null) {
@@ -136,7 +137,7 @@ public class Activator implements BundleActivator, HttpContext {
 								"unknown port for http service");
 					}
 				}
-				final HttpService http = (HttpService) super.addingService(ref);
+				final HttpService http = super.addingService(ref);
 				try {
 					http.registerServlet("/test/rsh", new RshServlet(), null,
 							Activator.this);

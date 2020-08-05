@@ -13,6 +13,7 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+
 import org.osgi.framework.Constants;
 import org.osgi.impl.service.dal.simulator.DeviceSimulator;
 import org.osgi.service.dal.Device;
@@ -36,22 +37,22 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class TestStepImpl implements TestStep {
 
-	private static final Set		STEPS_EMPTY_DEVICE;
-	private static final Set		STEPS_FULL_DEVICE;
+	private static final Set<String>								STEPS_EMPTY_DEVICE;
+	private static final Set<String>								STEPS_FULL_DEVICE;
 	private static final String		DEVICE_UID_PREFIX	= "test-step-simulator:";
 
-	private final ServiceTracker	deviceSimulatorTracker;
+	private final ServiceTracker<DeviceSimulator,DeviceSimulator>	deviceSimulatorTracker;
 
 	private int						deviceCounter;
 
 	static {
-		STEPS_EMPTY_DEVICE = new HashSet();
+		STEPS_EMPTY_DEVICE = new HashSet<>();
 		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_REGISTER_DEVICE);
 		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE);
 		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_DEVICES_ALL_PROPS);
 		STEPS_EMPTY_DEVICE.add(SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE);
 
-		STEPS_FULL_DEVICE = new HashSet();
+		STEPS_FULL_DEVICE = new HashSet<>();
 		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION);
 		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION);
 		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_OPERATION);
@@ -73,7 +74,8 @@ public class TestStepImpl implements TestStep {
 	 * 
 	 * @param deviceSimulatorTracker Simulator service tracker.
 	 */
-	public TestStepImpl(ServiceTracker deviceSimulatorTracker) {
+	public TestStepImpl(
+			ServiceTracker<DeviceSimulator,DeviceSimulator> deviceSimulatorTracker) {
 		this.deviceSimulatorTracker = deviceSimulatorTracker;
 	}
 
@@ -81,6 +83,7 @@ public class TestStepImpl implements TestStep {
 	 * @see org.osgi.test.support.step.TestStep#execute(java.lang.String,
 	 *      java.lang.String)
 	 */
+	@Override
 	public String execute(String stepId, String userPrompt) {
 		if (STEPS_EMPTY_DEVICE.contains(stepId)) {
 			registerNewDevice(null);
@@ -120,9 +123,10 @@ public class TestStepImpl implements TestStep {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Device registerNewDevice(String[] functionClassNames) {
 		DeviceSimulator deviceSimulator = getDeviceSimulator();
-		Dictionary deviceProps = new Hashtable();
+		Dictionary<String,Object> deviceProps = new Hashtable<>();
 		String deviceUID = DEVICE_UID_PREFIX + deviceCounter++;
 		deviceProps.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, Device.DEVICE_CATEGORY);
 		deviceProps.put(Device.SERVICE_UID, deviceUID);
@@ -140,12 +144,12 @@ public class TestStepImpl implements TestStep {
 		deviceProps.put(Device.SERVICE_SERIAL_NUMBER, deviceUID + "-serial_number");
 		deviceProps.put(Device.SERVICE_TYPES, new String[] {deviceUID + "-type"});
 		deviceProps.put(Device.SERVICE_REFERENCE_UIDS, new String[] {"fake-ref-uid"});
-		Dictionary[] functionProps = null;
+		Dictionary<String,Object>[] functionProps = null;
 		if (null != functionClassNames) {
 			functionProps = new Dictionary[functionClassNames.length];
 			for (int i = 0; i < functionProps.length; i++) {
 				String functionUID = deviceUID + ':' + i;
-				functionProps[i] = new Hashtable();
+				functionProps[i] = new Hashtable<>();
 				functionProps[i].put(Constants.OBJECTCLASS, functionClassNames[i]);
 				functionProps[i].put(Function.SERVICE_UID, functionUID);
 				functionProps[i].put(Function.SERVICE_VERSION, functionUID + "-version");
@@ -168,7 +172,7 @@ public class TestStepImpl implements TestStep {
 	}
 
 	private DeviceSimulator getDeviceSimulator() {
-		DeviceSimulator deviceSimulator = (DeviceSimulator) this.deviceSimulatorTracker.getService();
+		DeviceSimulator deviceSimulator = this.deviceSimulatorTracker.getService();
 		if (null == deviceSimulator) {
 			throw new IllegalStateException("The device simulator service is missing.");
 		}

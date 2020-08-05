@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.service.dal.FunctionEvent;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -27,12 +28,12 @@ public final class FunctionEventTest extends DefaultTestBundleControl {
 	 * Test the function event properties.
 	 */
 	public void testEventProperties() {
-		Hashtable eventProps = new Hashtable();
+		Dictionary<String,Object> eventProps = new Hashtable<>();
 		eventProps.put(FunctionEvent.PROPERTY_NAME, PROP_NAME);
 		eventProps.put(FunctionEvent.PROPERTY_VALUE, PROP_VALUE);
 		eventProps.put(FunctionEvent.FUNCTION_UID, FUNCTION_UID);
 		checkEventProps(new FunctionEvent(
-				FunctionEvent.TOPIC_PROPERTY_CHANGED, (Dictionary) eventProps));
+				FunctionEvent.TOPIC_PROPERTY_CHANGED, eventProps));
 
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.dal.functions.data;
 
 import java.util.Map;
+
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.BooleanSensor;
@@ -56,7 +57,7 @@ public class BooleanData extends FunctionData {
 	 * @throws IllegalArgumentException If the value is missing.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public BooleanData(Map fields) {
+	public BooleanData(Map<String, ? > fields) {
 		super(fields);
 		Boolean booleanValue = (Boolean) fields.get(FIELD_VALUE);
 		if (null == booleanValue) {
@@ -72,7 +73,8 @@ public class BooleanData extends FunctionData {
 	 * @param metadata The boolean data metadata optional field.
 	 * @param value The boolean value mandatory field.
 	 */
-	public BooleanData(long timestamp, Map metadata, boolean value) {
+	public BooleanData(long timestamp, Map<String, ? > metadata,
+			boolean value) {
 		super(timestamp, metadata);
 		this.value = value;
 	}
@@ -96,6 +98,7 @@ public class BooleanData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -123,6 +126,7 @@ public class BooleanData extends FunctionData {
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return super.hashCode() + (this.value ?
 				Boolean.TRUE.hashCode() : Boolean.FALSE.hashCode());
@@ -151,6 +155,7 @@ public class BooleanData extends FunctionData {
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(Object o) {
 		int result = super.compareTo(o);
 		if (0 != result) {
@@ -164,6 +169,7 @@ public class BooleanData extends FunctionData {
 	 *
 	 * @return The string representation of this boolean data.
 	 */
+	@Override
 	public String toString() {
 		return getClass().getName() + " [value=" + value + ", timestamp=" + super.getTimestamp() + ']';
 	}

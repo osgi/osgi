@@ -9,6 +9,10 @@
 
 package org.osgi.test.cases.dal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Collection;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
@@ -33,16 +37,17 @@ public class DeviceTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
-		ServiceReference[] deviceSRefs = getDeviceSRefs();
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(null);
 		boolean isRemoved = false;
-		for (int i = 0; i < deviceSRefs.length; i++) {
-			Device device = (Device) super.getContext().getService(deviceSRefs[i]);
+		for (ServiceReference<Device> deviceSRef : deviceSRefs) {
+			Device device = super.getContext().getService(deviceSRef);
 			if (null == device) {
 				continue;
 			}
 			try {
 				device.remove();
-				assertNull("The device service is not unregistered.", super.getContext().getService(deviceSRefs[i]));
+				assertNull("The device service is not unregistered.",
+						super.getContext().getService(deviceSRef));
 				isRemoved = true;
 				break;
 			} catch (UnsupportedOperationException uoe) {
@@ -84,18 +89,19 @@ public class DeviceTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
-		ServiceReference[] deviceSRefs = getDeviceSRefs();
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(null);
 		boolean compared = false;
-		for (int i = 0; i < deviceSRefs.length; i++) {
-			Device device = (Device) super.getContext().getService(deviceSRefs[i]);
+		for (ServiceReference<Device> deviceSRef : deviceSRefs) {
+			Device device = super.getContext().getService(deviceSRef);
 			if (null == device) {
 				continue;
 			}
-			String[] refKeys = deviceSRefs[i].getPropertyKeys();
+			String[] refKeys = deviceSRef.getPropertyKeys();
 			for (int ii = 0; ii < refKeys.length; ii++) {
 				assertTrue(
 						"The device property and service property values are different.",
-						TestUtil.areEqual(deviceSRefs[i].getProperty(refKeys[ii]), device.getServiceProperty(refKeys[ii])));
+						TestUtil.areEqual(deviceSRef.getProperty(refKeys[ii]),
+								device.getServiceProperty(refKeys[ii])));
 			}
 			compared = true;
 		}
@@ -132,10 +138,10 @@ public class DeviceTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
-		ServiceReference[] deviceSRefs = getDeviceSRefs();
-		for (int i = 0; i < deviceSRefs.length; i++) {
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(null);
+		for (ServiceReference<Device> deviceSRef : deviceSRefs) {
 			super.checkRequiredProperties(
-					deviceSRefs[i],
+					deviceSRef,
 					new String[] {
 							Device.SERVICE_UID,
 							Device.SERVICE_DRIVER,
@@ -143,7 +149,8 @@ public class DeviceTest extends AbstractDeviceTest {
 		}
 	}
 
-	private void checkDevicePropertyType(String propertyName, Class[] expectedTypes) {
+	private void checkDevicePropertyType(String propertyName,
+			Class< ? >[] expectedTypes) {
 		Device[] devices = null;
 		try {
 			devices = getDevices(propertyName);
@@ -151,16 +158,20 @@ public class DeviceTest extends AbstractDeviceTest {
 			fail(null, e); // not possible
 		}
 		for (int i = 0; i < devices.length; i++) {
-			Class propertyType = devices[i].getServiceProperty(propertyName).getClass();
+			Class< ? > propertyType = devices[i]
+					.getServiceProperty(propertyName)
+					.getClass();
 			assertTrue("The device proeprty type is not correct: " + propertyName + ", type: " + propertyType,
 					TestUtil.contains(expectedTypes, propertyType));
 		}
 	}
 
-	private ServiceReference[] getDeviceSRefs() {
+	private Collection<ServiceReference<Device>> getDeviceSRefs(String filter) {
 		try {
-			ServiceReference[] deviceSRefs = super.getContext().getServiceReferences(Device.class.getName(), null);
-			assertNotNull("Device validation needs at least one device service.", deviceSRefs);
+			Collection<ServiceReference<Device>> deviceSRefs = super.getContext()
+					.getServiceReferences(Device.class, filter);
+			assertThat(deviceSRefs).as("No device services; filter=%s.", filter)
+					.isNotEmpty();
 			return deviceSRefs;
 		} catch (InvalidSyntaxException e) {
 			// null is a valid filter
@@ -170,16 +181,17 @@ public class DeviceTest extends AbstractDeviceTest {
 
 	private Device[] getDevices(String devicePropName) throws InvalidSyntaxException {
 		BundleContext bc = super.getContext();
-		ServiceReference[] deviceSRefs = bc.getServiceReferences(
-				Device.class.getName(), '(' + devicePropName + "=*)");
-		assertNotNull("There is no device with property: " + devicePropName, deviceSRefs);
-		Device[] devices = new Device[deviceSRefs.length];
-		for (int i = 0; i < devices.length; i++) {
-			devices[i] = (Device) bc.getService(deviceSRefs[i]);
+		Collection<ServiceReference<Device>> deviceSRefs = getDeviceSRefs(
+				"(" + devicePropName + "=*)");
+
+		Device[] devices = deviceSRefs.stream().map(ref -> {
+			Device device = bc.getService(ref);
 			assertNotNull(
-					"The device service is missing with UID: " + deviceSRefs[i].getProperty(Device.SERVICE_UID),
-					devices[i]);
-		}
+					"The device service is missing with UID: "
+							+ ref.getProperty(Device.SERVICE_UID),
+					device);
+			return device;
+		}).toArray(Device[]::new);
 		return devices;
 	}
 }

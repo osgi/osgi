@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
@@ -24,6 +25,7 @@ import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -35,8 +37,8 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	private static final String[]	MILLIS_ARRAY			= new String[] {MILLIS};
 	private static final LevelData	MIN_WAKE_UP_INTERVAL	= new LevelData(
 																	System.currentTimeMillis(), null, new BigDecimal(0), MILLIS);
-	private static final Map		PROPERTY_METADATA;
-	private static final Map		OPERATION_METADATA		= null;
+	private static final Map<String,Object>	PROPERTY_METADATA;
+	private static final Map<String,Object>	OPERATION_METADATA		= null;
 
 	private final Timer				timer;
 	private final Object			lock					= new Object();
@@ -46,7 +48,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	private LevelData				wakeUpInterval			= MIN_WAKE_UP_INTERVAL;
 
 	static {
-		Map metadata = new HashMap();
+		Map<String,Object> metadata = new HashMap<>();
 		metadata.put(
 				PropertyMetadata.ACCESS,
 				Integer.valueOf(
@@ -60,10 +62,10 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				null,     // enumValues
 				MIN_WAKE_UP_INTERVAL,     // minValue
 				null);    // maxValue
-		PROPERTY_METADATA = new HashMap();
+		PROPERTY_METADATA = new HashMap<>();
 		PROPERTY_METADATA.put(PROPERTY_WAKE_UP_INTERVAL, propMetadata);
 
-		metadata = new HashMap();
+		metadata = new HashMap<>();
 		metadata.put(
 				PropertyMetadata.ACCESS,
 				Integer.valueOf(
@@ -85,7 +87,10 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	 * @param eventAdminTracker The event admin service tracker to post events.
 	 * @param timer The timer used for awake notifications.
 	 */
-	public SimulatedWakeUp(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
+	public SimulatedWakeUp(Dictionary<String,Object> functionProps,
+			BundleContext bc,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker,
+			Timer timer) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.timer = timer;
 		super.register(
@@ -93,6 +98,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 
+	@Override
 	public LevelData getWakeUpInterval() {
 		synchronized (this.lock) {
 			if (this.removed) {
@@ -102,6 +108,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		}
 	}
 
+	@Override
 	public void setWakeUpInterval(BigDecimal interval, String unit) {
 		if ((null != unit) && (!MILLIS.equals(unit))) {
 			throw new IllegalArgumentException("The unit is not supported: " + unit);
@@ -109,6 +116,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		this.setWakeUpInterval(interval, true, true);
 	}
 
+	@Override
 	public void remove() {
 		synchronized (this.lock) {
 			if (null != this.timerTask) {
@@ -120,6 +128,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		super.remove();
 	}
 
+	@Override
 	public void publishEvent(String propName) {
 		if (PROPERTY_AWAKE.equals(propName)) {
 			setWakeUpInterval(getWakeUpInterval().getLevel(), false, false);
@@ -155,7 +164,8 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		}
 	}
 
-	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
+	private static Dictionary<String,Object> addPropertyAndOperationNames(
+			Dictionary<String,Object> functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
 				new String[] {
@@ -170,6 +180,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 			// default constructor
 		}
 
+		@Override
 		public void run() {
 			postEvent(WakeUp.PROPERTY_AWAKE, new BooleanData(System.currentTimeMillis(), null, true));
 		}

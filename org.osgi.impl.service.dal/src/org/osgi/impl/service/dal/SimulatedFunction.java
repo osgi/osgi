@@ -10,6 +10,7 @@
 package org.osgi.impl.service.dal;
 
 import java.util.Map;
+
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.FunctionEvent;
@@ -24,12 +25,12 @@ import org.osgi.util.tracker.ServiceTracker;
 public abstract class SimulatedFunction extends SimulatedService implements Function {
 
 	/** The property metadata. */
-	private final Map				propertyMetadata;
+	private final Map<String,Object>					propertyMetadata;
 
 	/** The operation metadata. */
-	private final Map				operationMetadata;
+	private final Map<String,Object>					operationMetadata;
 
-	private final ServiceTracker	eventAdminTracker;
+	private final ServiceTracker<EventAdmin,EventAdmin>	eventAdminTracker;
 
 	/**
 	 * Constructs a new simulated function with the specified arguments.
@@ -39,24 +40,27 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 	 * @param eventAdminTracker The event admin tracker.
 	 */
 	public SimulatedFunction(
-			Map propertyMetadata,
-			Map operationMetadata,
-			ServiceTracker eventAdminTracker) {
+			Map<String,Object> propertyMetadata,
+			Map<String,Object> operationMetadata,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker) {
 		this.propertyMetadata = propertyMetadata;
 		this.operationMetadata = operationMetadata;
 		this.eventAdminTracker = eventAdminTracker;
 	}
 
+	@Override
 	public PropertyMetadata getPropertyMetadata(String propertyName) {
 		return (null == this.propertyMetadata) ? null :
 				(PropertyMetadata) this.propertyMetadata.get(propertyName);
 	}
 
+	@Override
 	public OperationMetadata getOperationMetadata(String operationName) {
 		return (null == this.operationMetadata) ? null :
 				(OperationMetadata) this.operationMetadata.get(operationName);
 	}
 
+	@Override
 	public Object getServiceProperty(String propName) {
 		Object value = super.serviceRef.getProperty(propName);
 		if (null == value) {
@@ -65,6 +69,7 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 		return value;
 	}
 
+	@Override
 	public String[] getServicePropertyKeys() {
 		return super.serviceRef.getPropertyKeys();
 	}
@@ -91,7 +96,7 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 	 * @param propValue The function property value
 	 */
 	public void postEvent(String propName, FunctionData propValue) {
-		EventAdmin eventAdmin = (EventAdmin) this.eventAdminTracker.getService();
+		EventAdmin eventAdmin = this.eventAdminTracker.getService();
 		if (null == eventAdmin) {
 			throw new IllegalStateException("The event cannot be posted because of missing Event Admin.");
 		}

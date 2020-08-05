@@ -49,9 +49,9 @@ public class TestServlet4 extends HttpServlet {
      *      response) This method is based on the mime type test cases from
      *      org.osgi.test.cases.http
      */
-    protected void doGet(HttpServletRequest request,
+    @Override
+	protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        String content = "";
         String type = request.getParameter("type");
 
         if (type == null) {
@@ -89,7 +89,8 @@ public class TestServlet4 extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doPost(HttpServletRequest request,
+    @Override
+	protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
     }

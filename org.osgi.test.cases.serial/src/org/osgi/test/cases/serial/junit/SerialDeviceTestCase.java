@@ -16,8 +16,9 @@
 
 package org.osgi.test.cases.serial.junit;
 
+import java.util.Collection;
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
@@ -50,8 +51,10 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 	public void testSerialDevice01() {
 		try {
 			String filter = "(" + Constants.OBJECTCLASS + "=" + SerialDevice.class.getName() + ")";
-			TestServiceListener regListener = new TestServiceListener(ServiceEvent.REGISTERED);
-			TestServiceListener unregListener = new TestServiceListener(ServiceEvent.UNREGISTERING);
+			TestServiceListener<SerialDevice> regListener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
+			TestServiceListener<SerialDevice> unregListener = new TestServiceListener<>(
+					ServiceEvent.UNREGISTERING);
 			getContext().addServiceListener(regListener, filter);
 			getContext().addServiceListener(unregListener, filter);
 
@@ -60,7 +63,7 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 
 			assertEquals("Only one registered service event is expected.", 1, regListener.size());
 
-			ServiceReference ref = regListener.get(0);
+			ServiceReference<SerialDevice> ref = regListener.get(0);
 			Long serviceId1 = (Long) ref.getProperty(Constants.SERVICE_ID);
 
 			message = "Disconnect the device.";
@@ -84,8 +87,10 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 	public void testSerialDevice02() {
 		try {
 			String filter = "(" + Constants.OBJECTCLASS + "=" + SerialDevice.class.getName() + ")";
-			TestServiceListener regListener = new TestServiceListener(ServiceEvent.REGISTERED);
-			TestServiceListener unregListener = new TestServiceListener(ServiceEvent.UNREGISTERING);
+			TestServiceListener<SerialDevice> regListener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
+			TestServiceListener<SerialDevice> unregListener = new TestServiceListener<>(
+					ServiceEvent.UNREGISTERING);
 			getContext().addServiceListener(regListener, filter);
 			getContext().addServiceListener(unregListener, filter);
 
@@ -94,7 +99,7 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 
 			assertEquals("Only one registered service event is expected.", 1, regListener.size());
 
-			ServiceReference ref = regListener.get(0);
+			ServiceReference<SerialDevice> ref = regListener.get(0);
 			Long serviceId1 = (Long) ref.getProperty(Constants.SERVICE_ID);
 
 			message = "Connect the second device.";
@@ -135,7 +140,8 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 	public void testSerialDevice03() {
 		String[] ids = null;
 		try {
-			TestServiceListener listener = new TestServiceListener(ServiceEvent.REGISTERED);
+			TestServiceListener<SerialDevice> listener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
 			getContext().addServiceListener(listener, "(" + Constants.OBJECTCLASS + "=" + SerialDevice.class.getName() + ")");
 
 			String message = "[TEST-SD03] Connect a device.";
@@ -143,7 +149,7 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 
 			getContext().removeServiceListener(listener);
 
-			ServiceReference ref = listener.get(0);
+			ServiceReference<SerialDevice> ref = listener.get(0);
 			String[] category = (String[]) ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY);
 			boolean categoryFlag = false;
 			for (int i = 0; i < category.length; i++) {
@@ -172,14 +178,15 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 	public void testSerialDevice04() {
 		String[] ids = null;
 		try {
-			TestServiceListener listener = new TestServiceListener(ServiceEvent.REGISTERED);
+			TestServiceListener<SerialDevice> listener = new TestServiceListener<>(
+					ServiceEvent.REGISTERED);
 			getContext().addServiceListener(listener, "(" + Constants.OBJECTCLASS + "=" + SerialDevice.class.getName() + ")");
 
 			String message = "[TEST-SD04] Connect a device.";
 			ids = testProxy.executeTestStep("add", message, new String[] {});
 
 			getContext().removeServiceListener(listener);
-			SerialDevice serialDevice = (SerialDevice) getContext().getService(listener.get(0));
+			SerialDevice serialDevice = getContext().getService(listener.get(0));
 
 			SerialPortConfiguration config = serialDevice.getConfiguration();
 			config.getBaudRate();
@@ -214,17 +221,25 @@ public class SerialDeviceTestCase extends DefaultTestBundleControl {
 			TestSerialEventListener serialListenerAll = new TestSerialEventListener();
 			getContext().registerService(SerialEventListener.class.getName(), serialListenerAll, null);
 
-			ServiceReference[] refs1 = getContext().getServiceReferences(SerialDevice.class.getName(), "(service.id=" + ids1[0] + ")");
-			String comport1 = (String) refs1[0].getProperty(SerialDevice.SERIAL_COMPORT);
+			Collection<ServiceReference<SerialDevice>> refs1 = getContext()
+					.getServiceReferences(SerialDevice.class,
+							"(service.id=" + ids1[0] + ")");
+			String comport1 = (String) refs1.iterator()
+					.next()
+					.getProperty(SerialDevice.SERIAL_COMPORT);
 			TestSerialEventListener serialListener1 = new TestSerialEventListener();
-			Dictionary props1 = new Properties();
+			Dictionary<String,Object> props1 = new Hashtable<>();
 			props1.put(SerialEventListener.SERIAL_COMPORT, comport1);
 			getContext().registerService(SerialEventListener.class.getName(), serialListener1, props1);
 
-			ServiceReference[] refs2 = getContext().getServiceReferences(SerialDevice.class.getName(), "(service.id=" + ids2[0] + ")");
-			String comport2 = (String) refs2[0].getProperty(SerialDevice.SERIAL_COMPORT);
+			Collection<ServiceReference<SerialDevice>> refs2 = getContext()
+					.getServiceReferences(SerialDevice.class,
+							"(service.id=" + ids2[0] + ")");
+			String comport2 = (String) refs2.iterator()
+					.next()
+					.getProperty(SerialDevice.SERIAL_COMPORT);
 			TestSerialEventListener serialListener2 = new TestSerialEventListener();
-			Dictionary props2 = new Properties();
+			Dictionary<String,Object> props2 = new Hashtable<>();
 			props2.put(SerialEventListener.SERIAL_COMPORT, comport2);
 			getContext().registerService(SerialEventListener.class.getName(), serialListener2, props2);
 

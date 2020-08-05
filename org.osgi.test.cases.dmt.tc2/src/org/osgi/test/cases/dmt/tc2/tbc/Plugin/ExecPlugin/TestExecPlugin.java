@@ -87,26 +87,32 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	
+	@Override
 	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
 		return this;
 	}
 
+	@Override
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
 	    return this;
 	}
 
+	@Override
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
 	    return this;
 	}
 
+	@Override
 	public void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException {
 		
 	}
 
+	@Override
 	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
 		checkExistence(nodeUri);
 	}
 
+	@Override
 	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
 		checkExistence(nodeUri);
 	}
@@ -115,14 +121,17 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		checkExistence(nodeUri);
 	}
 
+	@Override
 	public void setNodeType(String[] nodeUri, String type) throws DmtException {
 		checkExistence(nodeUri);
 	}
 
+	@Override
 	public void deleteNode(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 	}
 
+	@Override
 	public void createInteriorNode(String[] nodeUri, String type)
 			throws DmtException {
 		newInteriorNodeName = nodeUri;
@@ -132,23 +141,28 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
         }
 	}
 
+	@Override
 	public void createLeafNode(String[] nodeUri, DmtData value, String mimeType)
 			throws DmtException {
         createLeafNodeCount++;
 	}
 
+	@Override
 	public void copy(String[] nodeUri, String[] newNodeUri, boolean recursive)
 			throws DmtException {
 
 	}
 
+	@Override
 	public void renameNode(String[] nodeUri, String newName) throws DmtException {
 
 	}
+	@Override
 	public void close() throws DmtException {
 
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodeUri) {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (allUriIsExistent 
@@ -167,6 +181,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		}
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		String uri = tbc.mangleUri(nodeUri);
@@ -179,32 +194,38 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		}
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		return nodeTitle;
 	}
 
+	@Override
 	public String getNodeType(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		return 0;
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		return null;
 	}
 
 
+	@Override
 	public int getNodeSize(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		return 0;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES)) {
@@ -220,6 +241,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestExecPluginActivator.LEAF_NODE)
@@ -236,6 +258,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	
+	@Override
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
 		String nodeName = tbc.mangleUri(nodeUri);
@@ -246,14 +269,17 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		}
 	}
 
+	@Override
 	public void nodeChanged(String[] nodeUri) throws DmtException {
 
 	}
 
+	@Override
 	public void commit() throws DmtException {
 		
 	}
 
+	@Override
 	public void rollback() throws DmtException {
 		
 	}	
@@ -298,12 +324,14 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 
+	@Override
 	public void mountPointAdded(MountPoint mountPoint) {
 		System.out.println( "mountPointsAdded invoked with mountPoints:" );
 			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
 	}
 
 
+	@Override
 	public void mountPointRemoved(MountPoint mountPoint) {
 		System.out.println( "mountPointsRemoved invoked with mountPoints:" );
 			System.out.println( Uri.toUri(mountPoint.getMountPath()) );

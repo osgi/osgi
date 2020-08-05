@@ -43,55 +43,67 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 		this.isConstantMainsPowerAvailable = isconstant;
 	}
 
+	@Override
 	public short getCurrentPowerMode() {
 		return currentPowerMode;
 	}
 
+	@Override
 	public short getCurrentPowerSource() {
 		return currentPowerSource;
 	}
 
+	@Override
 	public short getCurrentPowerSourceLevel() {
 		return currentPowerSourceLevel;
 	}
 
+	@Override
 	public boolean isConstantMainsPowerAvailable() {
 		return isConstantMainsPowerAvailable;
 	}
 
+	@Override
 	public boolean isDisposableBatteryAvailable() {
 		return true;
 	}
 
+	@Override
 	public boolean isRechargableBatteryAvailable() {
 		return true;
 	}
 
+	@Override
 	public boolean isMainsPower() {
 
 		return false;
 	}
 
+	@Override
 	public boolean isDisposableBattery() {
 
 		return false;
 	}
 
+	@Override
 	public boolean isRechargableBattery() {
 
 		return false;
 	}
 
+	@Override
 	public boolean isSyncronizedWithOnIdle() {
 
 		return false;
 	}
 
+	@Override
 	public boolean isPeriodicallyOn() {
 
 		return false;
 	}
 
+	@Override
 	public boolean isOnWhenStimulated() {
 
 		return false;

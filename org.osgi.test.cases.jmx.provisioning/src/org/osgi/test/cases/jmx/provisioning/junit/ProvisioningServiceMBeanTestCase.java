@@ -34,7 +34,7 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		Hashtable<String, Object> table = OSGiProperties.propertiesFrom(pMBean
 				.listInformation());
 
-		Dictionary dict = pService.getInformation();
+		Dictionary<String,Object> dict = pService.getInformation();
 		compareDictAndTable(dict, table);
 	}
 
@@ -133,12 +133,11 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void compareDictAndTable(Dictionary<String, String> dict,
-			Hashtable<String, Object> table) {
-		Enumeration keyEnumeration = dict.keys();
+	private void compareDictAndTable(Dictionary<String, ? > dict,
+			Hashtable<String, ? > table) {
+		Enumeration<String> keyEnumeration = dict.keys();
 		while (keyEnumeration.hasMoreElements()) {
-			Object key = keyEnumeration.nextElement();
+			String key = keyEnumeration.nextElement();
 			assertTrue("failed to verify key "+key+" in the dictionary.", table.containsKey(key));
 			assertTrue("failed to verify key "+key+" in the dictionary.", table.get(key).equals(dict.get(key)));
 		}

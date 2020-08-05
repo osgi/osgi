@@ -10,14 +10,15 @@
 package org.osgi.test.cases.dal;
 
 import java.util.Map;
+
 import org.osgi.service.dal.Device;
 
 final class TestDevice implements Device {
 
-	private final Map		deviceProps;
+	private final Map<String,Object>	deviceProps;
 	private final String	uid;
 
-	public TestDevice(Map deviceProps) {
+	public TestDevice(Map<String,Object> deviceProps) {
 		this.deviceProps = deviceProps;
 		this.uid = (null != deviceProps) ? null : String.valueOf(System.currentTimeMillis());
 	}
@@ -29,7 +30,8 @@ final class TestDevice implements Device {
 
 	public String[] getServicePropertyKeys() {
 		return (null != this.deviceProps) ?
-				(String[]) this.deviceProps.keySet().toArray(new String[this.deviceProps.size()]) :
+				(String[]) this.deviceProps.keySet().toArray(new String[0])
+				:
 				new String[] {Device.SERVICE_UID};
 	}
 

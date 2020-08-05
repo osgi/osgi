@@ -65,7 +65,9 @@ import org.osgi.test.support.sleep.Sleep;
 public class DiscoveryTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
-	private final static List<Class> SUPPORTED_TYPES = Arrays.asList(new Class[] {String.class,
+	private final static List<Class< ? >>	SUPPORTED_TYPES			= Arrays
+			.asList(new Class[] {
+					String.class,
 		Long.TYPE, Long.class,
 		Integer.TYPE, Integer.class,
 		Byte.TYPE, Byte.class,
@@ -80,6 +82,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = getLongProperty("rsa.ct.timeout", 300000L);
@@ -87,6 +90,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
 	 */
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.out.println("Sleep for 5s before ending to allow for cleanup of ports before the next run.");
@@ -96,6 +100,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
+	@Override
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
@@ -144,9 +149,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 						endpointListenerFilter, secondFilter
 				});
 
-		ServiceRegistration endpointListenerRegistration = getContext().registerService(
-						org.osgi.service.remoteserviceadmin.EndpointListener.class
-								.getName(),
+		ServiceRegistration<org.osgi.service.remoteserviceadmin.EndpointListener> endpointListenerRegistration = getContext()
+				.registerService(
+						org.osgi.service.remoteserviceadmin.EndpointListener.class,
 						endpointListenerImpl, endpointListenerProperties);
 		assertNotNull(endpointListenerRegistration);
 
@@ -251,15 +256,18 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 		TestServiceImpl service = new TestServiceImpl();
 
-		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()}, service, dictionary);
+		ServiceRegistration< ? > registration = getContext()
+				.registerService(new String[] {
+						A.class.getName(), B.class.getName()
+				}, service, dictionary);
 		assertNotNull(registration);
 		
-		ServiceReference rsaRef = null;
+		ServiceReference<RemoteServiceAdmin> rsaRef = null;
 		
 		try {
-			rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+			rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class);
 			assertNotNull(rsaRef);
-			RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
+			RemoteServiceAdmin rsa = getContext().getService(rsaRef);
 			assertNotNull(rsa);
 
 			Map<String, Object> properties = loadCTProperties();
@@ -406,7 +414,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 
 			// get the service provided by our test bundle
-			ServiceReference modServiceRef = tb7Bundle.getRegisteredServices()[0];
+			ServiceReference< ? > modServiceRef = tb7Bundle
+					.getRegisteredServices()[0];
 			assertNotNull(modServiceRef);
 			
 			// let it know that we want it to modify its registration (and raise
@@ -595,7 +604,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			return null;
 		}
 
-		Class type = value.getClass().getComponentType();
+		Class< ? > type = value.getClass().getComponentType();
 		if (!SUPPORTED_TYPES.contains(type)) {
 			System.err.println("unsupported array type " + type);
 		}
@@ -688,9 +697,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				scope);
 
 		EndpointListenerImpl el = new EndpointListenerImpl();
-		ServiceRegistration elr = getContext().registerService(
-				org.osgi.service.remoteserviceadmin.EndpointListener.class
-						.getName(),
+		ServiceRegistration<org.osgi.service.remoteserviceadmin.EndpointListener> elr = getContext()
+				.registerService(
+						org.osgi.service.remoteserviceadmin.EndpointListener.class,
 				el, elp);
 		assertNotNull(elr);
 		assertNotNull(elr.getReference());
@@ -722,6 +731,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * @deprecated
 	 */
+	@Deprecated
 	class EndpointListenerImpl
 			implements org.osgi.service.remoteserviceadmin.EndpointListener {
 		private Semaphore semAdded = new Semaphore(0);
@@ -730,26 +740,27 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		private String remMatchedFilter;
 		private EndpointDescription addedEndpoint;
 		private EndpointDescription removedEndpoint;
-		private ServiceRegistration serviceRegistration;
+		private ServiceRegistration<org.osgi.service.remoteserviceadmin.EndpointListener>	serviceRegistration;
 
 		/**
 		 * @param serviceRegistration the serviceRegistration to set
 		 */
 		public void setServiceRegistration(
-				ServiceRegistration serviceRegistration) {
+				ServiceRegistration<org.osgi.service.remoteserviceadmin.EndpointListener> serviceRegistration) {
 			this.serviceRegistration = serviceRegistration;
 		}
 		
 		/**
 		 * @return the serviceRegistration
 		 */
-		public ServiceRegistration getServiceRegistration() {
+		public ServiceRegistration<org.osgi.service.remoteserviceadmin.EndpointListener> getServiceRegistration() {
 			return this.serviceRegistration;
 		}
 		
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.EndpointListener#endpointAdded(org.osgi.service.remoteserviceadmin.EndpointDescription, java.lang.String)
 		 */
+		@Override
 		public void endpointAdded(EndpointDescription endpoint,
 				String matchedFilter) {
 
@@ -761,6 +772,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.EndpointListener#endpointRemoved(org.osgi.service.remoteserviceadmin.EndpointDescription, java.lang.String)
 		 */
+		@Override
 		public void endpointRemoved(EndpointDescription endpoint,
 				String matchedFilter) {
 
@@ -820,6 +832,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			this.serviceId = serviceId;
 		}
 
+		@Override
 		public void endpointAdded(EndpointDescription endpoint,
 				String matchedFilter) {
 
@@ -828,6 +841,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			}
 		}
 
+		@Override
 		public void endpointRemoved(EndpointDescription endpoint,
 				String matchedFilter) {
 
@@ -849,6 +863,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		private EndpointDescription lastAddedEndpoint;
 		private EndpointDescription lastRemovedEndpoint;
 
+		@Override
 		public void endpointChanged(EndpointEvent event, String matchedFilter) {
 			System.out
 					.println("***************************************************************** ENDPOINT CHANGED!!! "

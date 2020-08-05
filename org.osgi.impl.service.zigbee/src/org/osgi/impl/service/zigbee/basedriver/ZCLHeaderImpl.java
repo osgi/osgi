@@ -98,30 +98,37 @@ public class ZCLHeaderImpl implements ZCLHeader {
 		this.manufacturerCode = manufacturerCode;
 	}
 
+	@Override
 	public short getCommandId() {
 		return this.commandId;
 	}
 
+	@Override
 	public int getManufacturerCode() {
 		return this.manufacturerCode;
 	}
 
+	@Override
 	public boolean isClusterSpecificCommand() {
 		return isClusterSpecificCommand;
 	}
 
+	@Override
 	public boolean isManufacturerSpecific() {
 		return isManufacturerSpecific;
 	}
 
+	@Override
 	public boolean isClientServerDirection() {
 		return isClientServerDirection;
 	}
 
+	@Override
 	public boolean isDefaultResponseDisabled() {
 		return disableDefaultResponse;
 	}
 
+	@Override
 	public byte getSequenceNumber() {
 		return this.tsn;
 	}
@@ -131,6 +138,7 @@ public class ZCLHeaderImpl implements ZCLHeader {
 	 * that we have to reveal the way the bits are mapped into this field.
 	 */
 
+	@Override
 	public short getFrameControlField() {
 		return 0;
 	}

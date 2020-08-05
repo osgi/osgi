@@ -3,6 +3,7 @@ package org.osgi.impl.service.resourcemonitoring.bundlemanagement;
 
 import java.util.Hashtable;
 import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -35,14 +36,14 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	 * currently lock, i.e. no other operation can be done until this bundle
 	 * lock is released.
 	 */
-	private Map				/* <Long, BundleLock> */bundleLocks;
+	private Map<Long,BundleLock>	bundleLocks;
 
 	/**
 	 * this map contains the association between bundle and resource contexts.
 	 * if a bundle id is in this map, the bundle is associated to a resource
 	 * contexts.
 	 */
-	private Map				/* <Long, BundleHolder> */resourceContexts;
+	private Map<Long,BundleHolder>	resourceContexts;
 
 	/**
 	 * bundle context.
@@ -55,10 +56,11 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	 * 
 	 */
 	public BundleManagerImpl() {
-		bundleLocks = new Hashtable/* <Long, BundleLock> */();
-		resourceContexts = new Hashtable/* <Long, BundleHolder> */();
+		bundleLocks = new Hashtable<>();
+		resourceContexts = new Hashtable<>();
 	}
 
+	@Override
 	public void addBundleToHolder(long bundleId, BundleHolder bundleHolder)
 			throws BundleManagerException {
 		checkState(state, INITIALIZED);
@@ -86,6 +88,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	}
 
+	@Override
 	public void removeBundleFromHolder(long bundleId, BundleHolder bundleHolder)
 			throws BundleManagerException {
 		checkState(state, INITIALIZED);
@@ -103,7 +106,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 						+ " is not associated with a ResourceContext");
 			}
 
-			BundleHolder currentBH = (BundleHolder) resourceContexts
+			BundleHolder currentBH = resourceContexts
 					.get(Long.valueOf(Long.toString(bundleId)));
 			if (!currentBH.equals(bundleHolder)) {
 				// release bundle lock
@@ -125,6 +128,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	}
 
+	@Override
 	public void bundleChanged(BundleEvent event) {
 		// create/delete Bundle Locks
 		if (event.getType() == BundleEvent.INSTALLED) {
@@ -137,7 +141,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 				// if the bundle was associated to a context
 				// remove it
 				synchronized (resourceContexts) {
-					BundleHolder holder = (BundleHolder) resourceContexts
+					BundleHolder holder = resourceContexts
 							.get(Long.valueOf(Long.toString(bundleId)));
 					if (holder != null) {
 						holder.removeBundleToHolder(bundleId);
@@ -147,6 +151,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 			}
 	}
 
+	@Override
 	public void start(BundleContext pBundleContext)
 			throws BundleManagerException {
 		try {
@@ -172,6 +177,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		state = INITIALIZED;
 	}
 
+	@Override
 	public void stop() {
 		try {
 			checkState(state, INITIALIZED);
@@ -189,6 +195,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		}
 	}
 
+	@Override
 	public ResourceContext getResourceContext(long bundleId) {
 		ResourceContext resourceContext;
 		synchronized (resourceContexts) {
@@ -214,7 +221,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	private void acquireBundleLock(long bundleId) throws BundleManagerException {
 		synchronized (bundleLocks) {
-			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
+			BundleLock bl = bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
 				throw new BundleManagerException("Bundle " + bundleId
 						+ " does not exist");
@@ -227,7 +234,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	private void releaseBundleLock(long bundleId) throws BundleManagerException {
 		synchronized (bundleLocks) {
-			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
+			BundleLock bl = bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
 				throw new BundleManagerException("BundleLock bl == null.");
 			} else {

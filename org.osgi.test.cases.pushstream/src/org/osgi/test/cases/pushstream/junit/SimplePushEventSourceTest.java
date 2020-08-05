@@ -14,7 +14,6 @@ import junit.framework.TestCase;
 
 public class SimplePushEventSourceTest extends TestCase {
 
-	@SuppressWarnings("boxing")
 	public void testSimplePushEventSource() throws Exception {
 		
 		PushStreamProvider psp = new PushStreamProvider();

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerException;
@@ -31,13 +32,13 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * Bundles belonging to the Context. List<Long> bundles.
 	 */
-	private final List							bundles;
+	private final List<Long>					bundles;
 
 	/**
 	 * Resource Monitors associated to the context. Map<String, ResourceMonitor>
 	 * monitors.
 	 */
-	private final Map							monitors;
+	private final Map<String,ResourceMonitor< ? >>	monitors;
 
 	/**
 	 * notifier for ResourceContextEvent.
@@ -76,14 +77,16 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		bundleManager = pBundleManager;
 		eventNotifier = pEventNotifier;
 		name = pName;
-		bundles = new ArrayList();
-		monitors = new Hashtable();
+		bundles = new ArrayList<>();
+		monitors = new Hashtable<>();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void addBundle(long bundleId) throws ResourceContextException {
 		// check the Resource Context exist
 		checkResourceContextExistency();
@@ -102,6 +105,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
+	@Override
 	public void removeBundle(long bundleId) throws ResourceContextException {
 		checkResourceContextExistency();
 
@@ -119,6 +123,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
+	@Override
 	public void removeBundle(long bundleId, ResourceContext destination) throws ResourceContextException {
 		removeBundle(bundleId);
 
@@ -130,16 +135,21 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public synchronized ResourceMonitor getMonitor(String resourceType) throws ResourceContextException {
+	@Override
+	public synchronized ResourceMonitor< ? > getMonitor(String resourceType)
+			throws ResourceContextException {
 		checkResourceContextExistency();
-		ResourceMonitor monitor = null;
+		ResourceMonitor< ? > monitor = null;
 		synchronized (monitors) {
-			monitor = (ResourceMonitor) monitors.get(resourceType);
+			monitor = monitors.get(resourceType);
 		}
 		return monitor;
 	}
 
-	public synchronized void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException {
+	@Override
+	public synchronized void addResourceMonitor(
+			ResourceMonitor< ? > resourceMonitor)
+			throws ResourceContextException {
 
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
@@ -169,7 +179,10 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public synchronized void removeResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException {
+	@Override
+	public synchronized void removeResourceMonitor(
+			ResourceMonitor< ? > resourceMonitor)
+			throws ResourceContextException {
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
 
@@ -180,7 +193,8 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		}
 
 		// check if the ResourceMonitor is associated with this Resource Context
-		ResourceMonitor innerRm = getMonitor(resourceMonitor.getResourceType());
+		ResourceMonitor< ? > innerRm = getMonitor(
+				resourceMonitor.getResourceType());
 		if (!innerRm.equals(resourceMonitor)) {
 			// TODO handle this kind of error
 		}
@@ -191,18 +205,19 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
+	@Override
 	public synchronized void removeContext(ResourceContext destination) throws ResourceContextException {
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
 
 		// delete all bundles
-		List bs = new ArrayList();
+		List<Long> bs = new ArrayList<>();
 		synchronized (bundles) {
 			bs.addAll(bundles);
 		}
-		for (Iterator it = bs.iterator(); it.hasNext();) {
+		for (Iterator<Long> it = bs.iterator(); it.hasNext();) {
 			try {
-				Long bundleId = (Long) it.next();
+				Long bundleId = it.next();
 				removeBundle(bundleId.longValue(), destination);
 			} catch (ResourceContextException e) {
 				// this exception can be thrown if the destination context has
@@ -212,12 +227,13 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		}
 
 		// delete all monitors
-		List resourceMonitors = new ArrayList();
+		List<ResourceMonitor< ? >> resourceMonitors = new ArrayList<>();
 		synchronized (monitors) {
 			resourceMonitors.addAll(monitors.values());
 		}
-		for (Iterator it = resourceMonitors.iterator(); it.hasNext();) {
-			ResourceMonitor rm = (ResourceMonitor) it.next();
+		for (Iterator<ResourceMonitor< ? >> it = resourceMonitors.iterator(); it
+				.hasNext();) {
+			ResourceMonitor< ? > rm = it.next();
 			try {
 				rm.delete();
 			} catch (ResourceMonitorException e) {
@@ -242,12 +258,13 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		}
 	}
 
+	@Override
 	public long[] getBundleIds() {
 		long[] bundleIds = new long[bundles.size()];
 		int i = 0;
 		synchronized (bundles) {
-			for (Iterator it = bundles.iterator(); it.hasNext();) {
-				Long bundleId = (Long) it.next();
+			for (Iterator<Long> it = bundles.iterator(); it.hasNext();) {
+				Long bundleId = it.next();
 				bundleIds[i] = bundleId.longValue();
 				i++;
 			}
@@ -255,15 +272,18 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		return bundleIds;
 	}
 
-	public ResourceMonitor[] getMonitors() throws ResourceContextException {
+	@Override
+	public ResourceMonitor< ? >[] getMonitors()
+			throws ResourceContextException {
 		checkResourceContextExistency();
-		ResourceMonitor[] array = new ResourceMonitor[0];
+		ResourceMonitor< ? >[] array = new ResourceMonitor[0];
 		synchronized (monitors) {
-			array = (ResourceMonitor[]) monitors.values().toArray(array);
+			array = monitors.values().toArray(array);
 		}
 		return array;
 	}
 
+	@Override
 	public void addBundleToHolder(long bundleId) {
 		synchronized (bundles) {
 			bundles.add(Long.valueOf(Long.toString(bundleId)));
@@ -271,6 +291,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
+	@Override
 	public void removeBundleToHolder(long bundleId) {
 		synchronized (bundles) {
 			bundles.remove(Long.valueOf(Long.toString(bundleId)));
@@ -282,6 +303,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	 * Resource Context c1 is equals to ResourceContext c2 if c1.getName()
 	 * equals c2.getName().
 	 */
+	@Override
 	public boolean equals(Object resourceContext) {
 		if (resourceContext == null) {
 			return false;

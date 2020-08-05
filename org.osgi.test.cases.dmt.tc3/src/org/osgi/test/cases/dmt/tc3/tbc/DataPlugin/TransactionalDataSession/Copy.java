@@ -42,6 +42,9 @@ import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -71,7 +74,7 @@ public class Copy {
 	public void testCopy001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy001");
+			DefaultTestBundleControl.log("#testCopy001");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
@@ -79,23 +82,23 @@ public class Copy {
 			session.copy(TestDataPluginActivator.INTERIOR_NODE,
 					TestDataPluginActivator.INEXISTENT_NODE, true);
 
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "
 					+ TestDataPlugin.COPY
 					+ " to the correct plugin",
 					TestDataPlugin.COPY, DmtConstants.TEMPORARY);
 
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "
 					+ TestDataPlugin.COPY
 					+ " to the correct plugin",
 					TestDataPluginActivator.INEXISTENT_NODE,
 					DmtConstants.PARAMETER_2);
 
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+			TestCase.assertEquals("Asserts that DmtAdmin fowarded "
 					+ TestDataPlugin.COPY
 					+ " to the correct plugin", String.valueOf(true),
 					DmtConstants.PARAMETER_3);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -109,30 +112,30 @@ public class Copy {
 	public void testCopy002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy002");
+			DefaultTestBundleControl.log("#testCopy002");
 			session = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.copy(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION3,
 					TestDataPluginActivator.INEXISTENT_NODE, true);
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ",
 							TestDataPluginActivator.INTERIOR_NODE_EXCEPTION3, e
 									.getURI());
-			tbc
+			TestCase
 					.assertEquals(
 							"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
 							DmtException.URI_TOO_LONG, e.getCode());
-			tbc
+			TestCase
 					.assertTrue(
 							"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 							e.getMessage().indexOf(
 									TestDataPlugin.COPY) > -1);
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
+			DmtTestControl.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}

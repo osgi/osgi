@@ -7,9 +7,10 @@ import java.util.Hashtable;
 // header , and bif valid unsubscribes the subscription by removing the entry from the Event Registry.
 public class UnsubscribeCheck extends ErrorCheck {
 	private DataOutputStream	dos;
-	private Hashtable			headers;
+	private Hashtable<String,String>	headers;
 
-	public UnsubscribeCheck(DataOutputStream dos, Hashtable headers) {
+	public UnsubscribeCheck(DataOutputStream dos,
+			Hashtable<String,String> headers) {
 		this.dos = dos;
 		this.headers = headers;
 	}
@@ -30,7 +31,7 @@ public class UnsubscribeCheck extends ErrorCheck {
 			writeData(result);
 			return;
 		}
-		String sid = (String) headers.get("sid");
+		String sid = headers.get("sid");
 		Subscription subscription = EventRegistry.getSubscriber(sid);
 		String serviceId = subscription.getServiceId();
 		EventRegistry.removeSubscriber(sid);
@@ -49,6 +50,7 @@ public class UnsubscribeCheck extends ErrorCheck {
 			dos.close();
 		}
 		catch (Exception e) {
+			// ignored
 		}
 	}
 }

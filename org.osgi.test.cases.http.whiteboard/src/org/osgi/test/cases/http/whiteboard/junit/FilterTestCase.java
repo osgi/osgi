@@ -94,14 +94,20 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		final AtomicBoolean invoked = new AtomicBoolean(false);
 		MockServlet mockServlet = new MockServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			final ExecutorService	executor	= Executors.newCachedThreadPool();
 
+			@Override
 			protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 				doGetAsync(req.startAsync());
 			}
 
 			private void doGetAsync(final AsyncContext asyncContext) {
 				executor.submit(new Callable<Void>() {
+					@Override
 					public Void call() throws Exception {
 						try {
 							invoked.set(true);
@@ -196,6 +202,11 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 
 		MockServlet mockServlet = new MockServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/a");
@@ -241,6 +252,11 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("a", request("a"));
 
 		MockServlet mockServlet = new MockServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -289,6 +305,11 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 
 		MockServlet mockServlet = new MockServlet() {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -335,6 +356,11 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("bab", request("a"));
 
 		MockServlet mockServlet = new MockServlet() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -721,9 +747,11 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 
 		PrototypeServiceFactory<Filter> factory = new PrototypeServiceFactory<Filter>() {
 
+			@Override
 			public void ungetService(Bundle bundle, ServiceRegistration<Filter> registration, Filter service) {
 			}
 
+			@Override
 			public Filter getService(Bundle bundle, ServiceRegistration<Filter> registration) {
 				invokedGetService.set(true);
 				return new AFilter().around("b");

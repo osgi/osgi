@@ -10,6 +10,7 @@
 package org.osgi.impl.service.dal;
 
 import java.util.Map;
+
 import org.osgi.service.dal.OperationMetadata;
 import org.osgi.service.dal.PropertyMetadata;
 
@@ -18,7 +19,7 @@ import org.osgi.service.dal.PropertyMetadata;
  */
 public final class OperationMetadataImpl implements OperationMetadata {
 
-	private final Map					metadata;
+	private final Map<String, ? >		metadata;
 	private final PropertyMetadata		returnValueMetadata;
 	private final PropertyMetadata[]	parametersMetadata;
 
@@ -29,20 +30,25 @@ public final class OperationMetadataImpl implements OperationMetadata {
 	 * @param returnValueMetadata The return value metadata.
 	 * @param parametersMetadata The parameters metadata.
 	 */
-	public OperationMetadataImpl(Map metadata, PropertyMetadata returnValueMetadata, PropertyMetadata[] parametersMetadata) {
+	public OperationMetadataImpl(Map<String, ? > metadata,
+			PropertyMetadata returnValueMetadata,
+			PropertyMetadata[] parametersMetadata) {
 		this.metadata = metadata;
 		this.returnValueMetadata = returnValueMetadata;
 		this.parametersMetadata = parametersMetadata;
 	}
 
-	public Map getMetadata() {
+	@Override
+	public Map<String, ? > getMetadata() {
 		return this.metadata;
 	}
 
+	@Override
 	public PropertyMetadata getReturnValueMetadata() {
 		return this.returnValueMetadata;
 	}
 
+	@Override
 	public PropertyMetadata[] getParametersMetadata() {
 		return this.parametersMetadata;
 	}

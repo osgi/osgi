@@ -25,75 +25,93 @@ public class ScaffoldMetaNode implements MetaNode {
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
         "org.osgi.impl.service.dmt.interior-node-value-support";
 
-    public boolean can(int operation) {
+    @Override
+	public boolean can(int operation) {
         return operation == CMD_GET;
     }
     
-    public boolean isLeaf() {
+    @Override
+	public boolean isLeaf() {
         return false;
     }
 
-    public int getScope() {
+    @Override
+	public int getScope() {
         return PERMANENT;        
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return null;
     }
 
-    public int getMaxOccurrence() {
+    @Override
+	public int getMaxOccurrence() {
         return 1;
     }
 
-    public boolean isZeroOccurrenceAllowed() {
+    @Override
+	public boolean isZeroOccurrenceAllowed() {
         return true;
     }
 
-    public DmtData getDefault() {
+    @Override
+	public DmtData getDefault() {
         return null;
     }
 
-    public double getMax() {
+    @Override
+	public double getMax() {
         return Double.MAX_VALUE;
     }
 
-    public double getMin() {
+    @Override
+	public double getMin() {
         return Double.MIN_VALUE;
     }
 
-    public String[] getValidNames() {
+    @Override
+	public String[] getValidNames() {
         return null;
     }
     
-    public DmtData[] getValidValues() {
+    @Override
+	public DmtData[] getValidValues() {
         return null;
     }
 
-    public int getFormat() {
+    @Override
+	public int getFormat() {
         return DmtData.FORMAT_NODE;
     }
 
-    public String[] getRawFormatNames() {
+    @Override
+	public String[] getRawFormatNames() {
         return null;
     }
 
-    public String[] getMimeTypes() {
+    @Override
+	public String[] getMimeTypes() {
         return new String[] { DmtConstants.DDF_SCAFFOLD };
     }
     
-    public boolean isValidName(String name) {
+    @Override
+	public boolean isValidName(String name) {
         return true;
     }
     
-    public boolean isValidValue(DmtData value) {
+    @Override
+	public boolean isValidValue(DmtData value) {
         return false;
     }
 
-    public String[] getExtensionPropertyKeys() {
+    @Override
+	public String[] getExtensionPropertyKeys() {
         return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
     }
 
-    public Object getExtensionProperty(String key) {
+    @Override
+	public Object getExtensionProperty(String key) {
         if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
             return Boolean.valueOf(false);
         

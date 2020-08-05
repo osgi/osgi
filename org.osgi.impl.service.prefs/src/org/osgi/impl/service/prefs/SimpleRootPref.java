@@ -8,7 +8,11 @@
 package org.osgi.impl.service.prefs;
 
 import java.io.File;
-import java.security.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -18,8 +22,8 @@ import org.osgi.service.prefs.BackingStoreException;
  * @author $Id$
  */
 class SimpleRootPref extends SimplePreferences {
-	private final File	preferencesFile;
-	private final File	tmpFile;
+	final File		preferencesFile;
+	final File		tmpFile;
 	private boolean	modified	= false;
 
 	public SimpleRootPref(final File preferencesFile, File tmpFile) {
@@ -27,8 +31,9 @@ class SimpleRootPref extends SimplePreferences {
 		this.preferencesFile = preferencesFile;
 		this.tmpFile = tmpFile;
 		//j2security
-		AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
+		AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			@Override
+			public Void run() {
 				//endblock
 				TextFileSupport.read(preferencesFile, SimpleRootPref.this);
 				//j2security
@@ -41,6 +46,7 @@ class SimpleRootPref extends SimplePreferences {
 	// Attempt to avoid possible data loss on e.g. a power
 	// failure while writing the file: Write to a temp file
 	// and then rename it.
+	@Override
 	public void flush() throws BackingStoreException {
 		synchronized (lock) {
 			if (isRemoved()) {	// RFC 60
@@ -51,8 +57,10 @@ class SimpleRootPref extends SimplePreferences {
 				//j2security
 				try {
 					AccessController
-							.doPrivileged(new PrivilegedExceptionAction() {
-								public Object run()
+							.doPrivileged(
+									new PrivilegedExceptionAction<Void>() {
+								@Override
+										public Void run()
 										throws BackingStoreException {
 									//endblock
 									tmpFile.delete();
@@ -93,6 +101,7 @@ class SimpleRootPref extends SimplePreferences {
 	 * out of the file, but at the cost of holding up all accesses during a
 	 * flush.)
 	 */
+	@Override
 	void setModified() {
 		modified = true;
 	}
@@ -101,12 +110,14 @@ class SimpleRootPref extends SimplePreferences {
 	 * RFC 60 Override SimplePreferences since we have no parent. 
 	 * Delete the backing store.
 	 */
+	@Override
 	protected void removeSpi() throws BackingStoreException{
 		//j2security
 		try {
 			AccessController
-					.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run()
+					.doPrivileged(new PrivilegedExceptionAction<Void>() {
+						@Override
+						public Void run()
 								throws BackingStoreException {
 							//endblock
 							tmpFile.delete();

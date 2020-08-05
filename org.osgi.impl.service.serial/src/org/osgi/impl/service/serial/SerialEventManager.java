@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.serial;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,29 +31,34 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class SerialEventManager {
 	private BundleContext	context;
-	private List			list	= new LinkedList();
+	List<ServiceReference<SerialEventListener>>	list	= new LinkedList<>();
 
 	public SerialEventManager(BundleContext context) {
 		this.context = context;
-		ServiceTracker tracker = new ServiceTracker(context, SerialEventListener.class.getName(), new SerialCustomizer());
+		ServiceTracker<SerialEventListener,ServiceReference<SerialEventListener>> tracker = new ServiceTracker<>(
+				context, SerialEventListener.class, new SerialCustomizer());
 		tracker.open();
 	}
 
 	public void sendEvent(String id) {
 		try {
 			String serialDeviceFilter = "(service.id=" + id + ")";
-			ServiceReference[] serialDeviceRefs = context.getServiceReferences(SerialDevice.class.getName(), serialDeviceFilter);
-			String comPort = (String) serialDeviceRefs[0].getProperty(SerialDevice.SERIAL_COMPORT);
+			Collection<ServiceReference<SerialDevice>> serialDeviceRefs = context
+					.getServiceReferences(SerialDevice.class,
+							serialDeviceFilter);
+			String comPort = (String) serialDeviceRefs.iterator()
+					.next()
+					.getProperty(SerialDevice.SERIAL_COMPORT);
 
 			SerialEvent event = new SerialEventImpl(comPort, SerialEvent.DATA_AVAILABLE);
 			for (int i = 0; i < list.size(); i++) {
-				ServiceReference ref = (ServiceReference) list.get(i);
+				ServiceReference<SerialEventListener> ref = list.get(i);
 				String filter = (String) ref.getProperty(SerialEventListener.SERIAL_COMPORT);
 				if (filter == null) {
-					SerialEventListener listener = (SerialEventListener) context.getService(ref);
+					SerialEventListener listener = context.getService(ref);
 					listener.notifyEvent(event);
 				} else if (filter.equals(comPort)) {
-					SerialEventListener listener = (SerialEventListener) context.getService(ref);
+					SerialEventListener listener = context.getService(ref);
 					listener.notifyEvent(event);
 				}
 			}
@@ -62,17 +68,30 @@ public class SerialEventManager {
 		}
 	}
 
-	private class SerialCustomizer implements ServiceTrackerCustomizer {
+	private class SerialCustomizer implements
+			ServiceTrackerCustomizer<SerialEventListener,ServiceReference<SerialEventListener>> {
 
-		public Object addingService(ServiceReference reference) {
+		SerialCustomizer() {
+			super();
+		}
+		@Override
+		public ServiceReference<SerialEventListener> addingService(
+				ServiceReference<SerialEventListener> reference) {
 			list.add(reference);
 			return reference;
 		}
 
-		public void modifiedService(ServiceReference reference, Object service) {
+		@Override
+		public void modifiedService(
+				ServiceReference<SerialEventListener> reference,
+				ServiceReference<SerialEventListener> service) {
+			// empty
 		}
 
-		public void removedService(ServiceReference reference, Object service) {
+		@Override
+		public void removedService(
+				ServiceReference<SerialEventListener> reference,
+				ServiceReference<SerialEventListener> service) {
 			list.remove(reference);
 		}
 	}

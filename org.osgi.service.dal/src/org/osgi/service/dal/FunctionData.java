@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.service.dal;
 
 import java.lang.reflect.Array;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Map;
  * and additional metadata. The subclasses are responsible to provide concrete
  * value and unit if required.
  */
-public abstract class FunctionData implements Comparable {
+public abstract class FunctionData implements Comparable<Object> {
 
 	/**
 	 * Represents the timestamp field name. The field value is available with
@@ -50,7 +49,7 @@ public abstract class FunctionData implements Comparable {
 	public static final String	DESCRIPTION		= "description";
 
 	private final long			timestamp;
-	private final Map			metadata;
+	private final Map<String, ? >	metadata;
 
 	/**
 	 * Constructs new {@code FunctionData} instance with the specified field
@@ -72,10 +71,11 @@ public abstract class FunctionData implements Comparable {
 	 * @throws ClassCastException If the field value types are not expected.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public FunctionData(Map fields) {
+	@SuppressWarnings("unchecked")
+	public FunctionData(Map<String, ? > fields) {
 		Long timestampLocal = (Long) fields.get(FIELD_TIMESTAMP);
 		this.timestamp = (null != timestampLocal) ? timestampLocal.longValue() : Long.MIN_VALUE;
-		this.metadata = (Map) fields.get(FIELD_METADATA);
+		this.metadata = (Map<String, ? >) fields.get(FIELD_METADATA);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public abstract class FunctionData implements Comparable {
 	 * @param timestamp The data timestamp optional field.
 	 * @param metadata The data metadata optional field.
 	 */
-	public FunctionData(long timestamp, Map metadata) {
+	public FunctionData(long timestamp, Map<String, ? > metadata) {
 		this.timestamp = timestamp;
 		this.metadata = metadata;
 	}
@@ -114,7 +114,7 @@ public abstract class FunctionData implements Comparable {
 	 * @return {@code FunctionData} metadata or {@code null} is there is no
 	 *         metadata.
 	 */
-	public Map getMetadata() {
+	public Map<String, ? > getMetadata() {
 		return this.metadata;
 	}
 
@@ -130,6 +130,7 @@ public abstract class FunctionData implements Comparable {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
@@ -151,6 +152,7 @@ public abstract class FunctionData implements Comparable {
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return ((int) (this.timestamp ^ (this.timestamp >>> 32))) +
 				calculateMapHashCode(this.metadata);
@@ -185,6 +187,7 @@ public abstract class FunctionData implements Comparable {
 	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(Object o) {
 		FunctionData other = (FunctionData) o;
 		if (this.timestamp == other.timestamp) {
@@ -193,30 +196,31 @@ public abstract class FunctionData implements Comparable {
 		return (this.timestamp < other.timestamp) ? -1 : 1;
 	}
 
-	private static int calculateMapHashCode(Map map) {
+	private static int calculateMapHashCode(Map< ? , ? > map) {
 		if (null == map) {
 			return 0;
 		}
 		return calculateMapHashCodeDeep(map, null);
 	}
 
-	private static int calculateMapHashCodeDeep(Map map, IdentityHashMap usedContainers) {
+	private static int calculateMapHashCodeDeep(Map< ? , ? > map,
+			IdentityHashMap<Object,Object> usedContainers) {
 		int result = 0;
-		for (Iterator entriesIter = map.entrySet().iterator(); entriesIter.hasNext();/* empty */) {
-			Map.Entry currentEntry = (Map.Entry) entriesIter.next();
+		for (Map.Entry< ? , ? > currentEntry : map.entrySet()) {
 			result += currentEntry.getKey().hashCode();
 			result += calculateValueHashCodeDeep(currentEntry.getValue(), usedContainers);
 		}
 		return result;
 	}
 
-	private static int calculateValueHashCodeDeep(Object value, IdentityHashMap usedContainers) {
+	private static int calculateValueHashCodeDeep(Object value,
+			IdentityHashMap<Object,Object> usedContainers) {
 		if (null == value) {
 			return 0;
 		}
 		if (value.getClass().isArray()) {
 			if (null == usedContainers) {
-				usedContainers = new IdentityHashMap();
+				usedContainers = new IdentityHashMap<>();
 			}
 			if (null != usedContainers.put(value, value)) {
 				return 0;
@@ -229,13 +233,14 @@ public abstract class FunctionData implements Comparable {
 		}
 		if (value instanceof Map) {
 			if (null == usedContainers) {
-				usedContainers = new IdentityHashMap();
+				usedContainers = new IdentityHashMap<>();
 			}
 			if (null != usedContainers.put(value, value)) {
 				return 0;
 			}
 			try {
-				return calculateMapHashCodeDeep((Map) value, usedContainers);
+				return calculateMapHashCodeDeep((Map< ? , ? >) value,
+						usedContainers);
 			} finally {
 				usedContainers.remove(value);
 			}
@@ -243,7 +248,8 @@ public abstract class FunctionData implements Comparable {
 		return value.hashCode();
 	}
 
-	private static int calculateArrayHashCodeDeep(Object array, IdentityHashMap usedContainers) {
+	private static int calculateArrayHashCodeDeep(Object array,
+			IdentityHashMap<Object,Object> usedContainers) {
 		int arrayLength = Array.getLength(array);
 		int result = 0;
 		for (int i = 0; i < arrayLength; i++) {
@@ -252,7 +258,8 @@ public abstract class FunctionData implements Comparable {
 		return result;
 	}
 
-	private static int compareMaps(Map thisMap, Map otherMap) {
+	private static int compareMaps(Map< ? , ? > thisMap,
+			Map< ? , ? > otherMap) {
 		if (null == thisMap) {
 			return (null != otherMap) ? -1 : 0;
 		}
@@ -262,13 +269,15 @@ public abstract class FunctionData implements Comparable {
 		return compareMapsDeep(thisMap, otherMap, null);
 	}
 
-	private static int compareMapsDeep(Map thisMap, Map otherMap, IdentityHashMap thisUsedContainers) {
+	private static int compareMapsDeep(Map< ? , ? > thisMap,
+			Map< ? , ? > otherMap,
+			IdentityHashMap<Object,Object> thisUsedContainers) {
 		int result = compare(thisMap.size(), otherMap.size());
 		if (0 != result) {
 			return result;
 		}
-		for (Iterator thisEntriesIter = thisMap.entrySet().iterator(); thisEntriesIter.hasNext();/* empty */) {
-			Map.Entry thisEntry = (Map.Entry) thisEntriesIter.next();
+
+		for (Map.Entry< ? , ? > thisEntry : thisMap.entrySet()) {
 			if (otherMap.containsKey(thisEntry.getKey())) {
 				result = compareValuesDeep(thisEntry.getValue(), otherMap.get(thisEntry.getKey()), thisUsedContainers);
 				if (0 != result) {
@@ -281,7 +290,9 @@ public abstract class FunctionData implements Comparable {
 		return 0;
 	}
 
-	private static int compareValuesDeep(Object thisValue, Object otherValue, IdentityHashMap thisUsedContainers) {
+	@SuppressWarnings("unchecked")
+	private static int compareValuesDeep(Object thisValue, Object otherValue,
+			IdentityHashMap<Object,Object> thisUsedContainers) {
 		if (null == thisValue) {
 			return (null == otherValue) ? 0 : -1;
 		}
@@ -291,7 +302,7 @@ public abstract class FunctionData implements Comparable {
 		if (thisValue.getClass().isArray()) {
 			if (otherValue.getClass().isArray()) {
 				if (null == thisUsedContainers) {
-					thisUsedContainers = new IdentityHashMap();
+					thisUsedContainers = new IdentityHashMap<>();
 				}
 				if (null != thisUsedContainers.put(thisValue, thisValue)) {
 					return -1;
@@ -307,13 +318,14 @@ public abstract class FunctionData implements Comparable {
 		if (thisValue instanceof Map) {
 			if (otherValue instanceof Map) {
 				if (null == thisUsedContainers) {
-					thisUsedContainers = new IdentityHashMap();
+					thisUsedContainers = new IdentityHashMap<>();
 				}
 				if (null != thisUsedContainers.put(thisValue, thisValue)) {
 					return -1;
 				}
 				try {
-					return compareMapsDeep((Map) thisValue, (Map) otherValue, thisUsedContainers);
+					return compareMapsDeep((Map< ? , ? >) thisValue,
+							(Map< ? , ? >) otherValue, thisUsedContainers);
 				} finally {
 					thisUsedContainers.remove(thisValue);
 				}
@@ -321,12 +333,13 @@ public abstract class FunctionData implements Comparable {
 			return 1;
 		}
 		if (thisValue instanceof Comparable) {
-			return (((Comparable) thisValue)).compareTo(otherValue);
+			return (((Comparable<Object>) thisValue)).compareTo(otherValue);
 		}
 		return thisValue.equals(otherValue) ? 0 : 1;
 	}
 
-	private static int compareArraysDeep(Object thisArray, Object otherArray, IdentityHashMap thisUsedContainers) {
+	private static int compareArraysDeep(Object thisArray, Object otherArray,
+			IdentityHashMap<Object,Object> thisUsedContainers) {
 		int thisArrayLength = Array.getLength(thisArray);
 		int otherArrayLength = Array.getLength(otherArray);
 		int result = compare(thisArrayLength, otherArrayLength);

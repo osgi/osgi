@@ -342,6 +342,7 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		System.out.println(message);
 	}
 
+	@SuppressWarnings("resource")
 	protected String request(String path) throws InterruptedException, IOException {
 		URL serverURL = getServerURL(path);
 
@@ -439,6 +440,7 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return context.getService(serviceReference);
 	}
 
+	@Override
 	protected void setUp() throws Exception {
 		for (String bundlePath : getBundlePaths()) {
 			Bundle bundle = install(bundlePath);
@@ -481,6 +483,7 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		this.runtimeTracker.open();
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		if (this.runtimeTracker != null) {
 			this.runtimeTracker.close();

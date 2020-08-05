@@ -28,6 +28,7 @@ public class MessageRPS extends Message {
 		super(data);
 	}
 
+	@Override
 	public boolean isTeachin() {
 		return true;
 	}
@@ -35,6 +36,7 @@ public class MessageRPS extends Message {
 	/**
 	 * @return true if the message teach-in embeds profile & manufacturer info.
 	 */
+	@Override
 	public boolean hasTeachInInfo() {
 		return true;
 	}
@@ -42,6 +44,7 @@ public class MessageRPS extends Message {
 	/**
 	 * @return a fake FUNC
 	 */
+	@Override
 	public int teachInFunc() {
 		return -1;
 	}
@@ -49,6 +52,7 @@ public class MessageRPS extends Message {
 	/**
 	 * @return a fake TYPE
 	 */
+	@Override
 	public int teachInType() {
 		return -1;
 	}
@@ -56,6 +60,7 @@ public class MessageRPS extends Message {
 	/**
 	 * @return a fake MANUF
 	 */
+	@Override
 	public int teachInManuf() {
 		return -1;
 	}

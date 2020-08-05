@@ -20,6 +20,8 @@ import org.osgi.service.usbinfo.USBInfoDevice;
 
 public class USBInfoDeviceImpl implements Device, USBInfoDevice {
 
-    public void noDriverFound() {
+    @Override
+	public void noDriverFound() {
+		// empty
     }
 }

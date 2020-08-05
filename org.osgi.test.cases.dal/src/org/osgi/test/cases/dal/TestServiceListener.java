@@ -11,6 +11,7 @@ package org.osgi.test.cases.dal;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -29,12 +30,12 @@ final class TestServiceListener implements ServiceListener {
 	public static final String	DEVICE_FUNCTION_FILTER	= "(|" + DEVICE_FILTER +
 																'(' + Constants.OBJECTCLASS + '=' + Function.class.getName() + "))";
 
-	private final List			events;
+	private final List<ServiceEvent>	events;
 	private final BundleContext	bc;
 
 	public TestServiceListener(BundleContext bc, String filter) throws InvalidSyntaxException {
 		this.bc = bc;
-		this.events = new ArrayList();
+		this.events = new ArrayList<>();
 		this.bc.addServiceListener(this, filter);
 	}
 
@@ -50,7 +51,7 @@ final class TestServiceListener implements ServiceListener {
 
 	public ServiceEvent[] getEvents() {
 		synchronized (this.events) {
-			return (ServiceEvent[]) this.events.toArray(new ServiceEvent[this.events.size()]);
+			return this.events.toArray(new ServiceEvent[0]);
 		}
 	}
 

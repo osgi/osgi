@@ -21,10 +21,12 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.naming.Binding;
 import javax.naming.CompositeName;
 import javax.naming.Context;
 import javax.naming.InvalidNameException;
 import javax.naming.Name;
+import javax.naming.NameClassPair;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -38,29 +40,32 @@ import org.osgi.test.cases.jndi.provider.CTNameParser;
  */
 public class ctURLContext implements Context {
 	
-	private Map env = new HashMap();
+	private Map<String,Object>		env		= new HashMap<>();
 	private static final NameParser parser = new CTNameParser();
 	
 	public ctURLContext() {
 		
 	}
 	
-	public ctURLContext(Map env) {
+	public ctURLContext(Map<String,Object> env) {
 		this.env = env;
 	}
 
+	@Override
 	public Object addToEnvironment(String propName, Object propVal) throws NamingException {
 		Object previousValue = env.get(propName);
 		env.put(propName, propVal);
 		return previousValue;
 	}
 
+	@Override
 	public void bind(String name, Object obj) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		ctx.bind(bindName, obj);
 	}
 
+	@Override
 	public void bind(Name name, Object obj) throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
@@ -69,57 +74,72 @@ public class ctURLContext implements Context {
 		}
 	}
 
+	@Override
 	public void close() throws NamingException {
 		env.clear();
 	}
 
+	@Override
 	public String composeName(String first, String second) throws NamingException {
 		return composeName(new CompositeName(first), new CompositeName(second)).toString();
 	}
 
+	@Override
 	public Name composeName(Name first, Name second) throws NamingException {
 		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
+	@Override
 	public Context createSubcontext(String name) throws NamingException {
 		return createSubcontext(new CompositeName(name));
 	}
 
+	@Override
 	public Context createSubcontext(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Subcontexts are not supported");
 	}
 
+	@Override
 	public void destroySubcontext(String name) throws NamingException {
 		destroySubcontext(new CompositeName(name));
 	}
 
+	@Override
 	public void destroySubcontext(Name name) throws NamingException {
 		throw new OperationNotSupportedException("Subcontexts are not supported");
 	}
 
-	public Hashtable getEnvironment() throws NamingException {
-		return new Hashtable(env);
+	@Override
+	public Hashtable< ? , ? > getEnvironment() throws NamingException {
+		return new Hashtable<>(env);
 	}
 
+	@Override
 	public String getNameInNamespace() throws NamingException {
 		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
+	@Override
 	public NameParser getNameParser(String name) throws NamingException {
 		return getNameParser(new CompositeName(name));
 	}
 
+	@Override
 	public NameParser getNameParser(Name name) throws NamingException {
 		return parser;
 	}
 
-	public NamingEnumeration list(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(String name)
+			throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		return ctx.list(bindName);
 	}
 
-	public NamingEnumeration list(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<NameClassPair> list(Name name)
+			throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
 		} else {
@@ -127,13 +147,17 @@ public class ctURLContext implements Context {
 		}
 	}
 
-	public NamingEnumeration listBindings(String name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(String name)
+			throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		return ctx.listBindings(bindName);
 	}
 
-	public NamingEnumeration listBindings(Name name) throws NamingException {
+	@Override
+	public NamingEnumeration<Binding> listBindings(Name name)
+			throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
 		} else {
@@ -141,12 +165,14 @@ public class ctURLContext implements Context {
 		}
 	}
 
+	@Override
 	public Object lookup(String name) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		return ctx.lookup(bindName);	
 	}
 
+	@Override
 	public Object lookup(Name name) throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
@@ -155,12 +181,14 @@ public class ctURLContext implements Context {
 		}
 	}
 
+	@Override
 	public Object lookupLink(String name) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		return ctx.lookupLink(bindName);
 	}
 
+	@Override
 	public Object lookupLink(Name name) throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
@@ -169,12 +197,14 @@ public class ctURLContext implements Context {
 		}
 	}
 
+	@Override
 	public void rebind(String name, Object obj) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		ctx.rebind(bindName, obj);
 	}
 
+	@Override
 	public void rebind(Name name, Object obj) throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
@@ -184,12 +214,14 @@ public class ctURLContext implements Context {
 
 	}
 
+	@Override
 	public Object removeFromEnvironment(String propName) throws NamingException {
 		Object previousValue = env.get(propName);
 		env.remove(propName);
 		return previousValue;
 	}
 
+	@Override
 	public void rename(String name, String newName) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
@@ -197,6 +229,7 @@ public class ctURLContext implements Context {
 		ctx.rename(bindName, newBindName);
 	}
 
+	@Override
 	public void rename(Name name, Name newName) throws NamingException {
 		if (name.size() != 1 && newName.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");
@@ -206,12 +239,14 @@ public class ctURLContext implements Context {
 
 	}
 
+	@Override
 	public void unbind(String name) throws NamingException {
 		Context ctx = new CTContext(env);
 		String bindName = removeURL(name);
 		ctx.unbind(bindName);
 	}
 
+	@Override
 	public void unbind(Name name) throws NamingException {
 		if (name.size() != 1) {
 			throw new InvalidNameException("Composite names not supported");

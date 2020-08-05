@@ -62,9 +62,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	private PermissionAdmin	pa;
 	private Helper			helper;
 	private WireAdmin		wa;
-	private Hashtable		returnedWires;
+	private Hashtable<String,Wire[]>	returnedWires;
 	public int				synchCounterx;
-	private List			permBundles;
+	private List<String>				permBundles;
 
 	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// /////////////////////////////////////////wire admin test methods start
@@ -73,16 +73,18 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	/**
 	 * Increase the test case timeout
 	 */
+	@Override
 	protected synchronized void setUp() {
-		returnedWires = new Hashtable();
+		returnedWires = new Hashtable<>();
 		clearSync();
-		permBundles = new ArrayList();
+		permBundles = new ArrayList<>();
 		wa = getService(WireAdmin.class);
 		pa = getService(PermissionAdmin.class);
 		helper = new Helper(getContext(), this);
 		Helper.deleteAllWires(wa);
 	}
 
+	@Override
 	protected synchronized void tearDown() {
 		helper.unregisterAll();
 		Helper.deleteAllWires(wa);
@@ -169,7 +171,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		waitForSync(1, 100);
 		compareConnected("producer.ProducerImplA", "");
 
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put("property1", Integer.valueOf(1));
 		properties.put("property2", Float.valueOf(1.0f));
 		properties.put("property3", Boolean.valueOf(false));
@@ -193,7 +195,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		assertEquals("Test update wire: NOT OK. ", "NEW VALUE", wire
 				.getLastValue());
 
-		Hashtable newProperties = new Hashtable();
+		Hashtable<String,Object> newProperties = new Hashtable<>();
 		newProperties.put("property1", Integer.valueOf(2));
 		newProperties.put("property2", Float.valueOf(2.0f));
 		newProperties.put("property3", Boolean.valueOf(false));
@@ -232,7 +234,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		log("Deleting wire. Must call consumersConnected and producersConnected");
 		wa.deleteWire(wire1);
 		waitForSync(2, 200);
-		Wire[] wires = (Wire[]) returnedWires.get("deletedWireProducer");
+		Wire[] wires = returnedWires.get("deletedWireProducer");
 		assertNotNull(
 				"{deletedWireProducer} Invokes consumersConnected(..) NOT OK, Wrong Wire[]",
 				wires);
@@ -240,7 +242,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				"{deletedWireProducer} Invokes consumersConnected(..) NOT OK, Wrong Wire[]",
 				1, wires.length);
 
-		wires = (Wire[]) returnedWires.get("deletedWireConsumer");
+		wires = returnedWires.get("deletedWireConsumer");
 		assertNotNull(
 				"{deletedWireConsumer} Invokes producersConnected(..) NOT OK, Wrong Wire[]",
 				wires);
@@ -282,6 +284,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 * incompatible flavors (should be created but data should not be tranfered
 	 * over it)
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
 	public void testIncorrectCreateWire() throws Exception {
 		Wire wire = helper.createWire(wa, "aa.bb.cc", "cc.dd", null);
 		assertTrue("Test createWire with non-existing PIDs: NOT OK. ", wire
@@ -299,16 +304,17 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		catch (IllegalArgumentException e) {
 			log("Test createWire with null PIDs: Operation passed: OK. Exception thrown.");
 		}
-		Hashtable properties1 = new Hashtable();
+		Hashtable<Object,Object> properties1 = new Hashtable<>();
 		properties1.put(Integer.valueOf(1), "test");
 		try {
-			wire = helper.createWire(wa, "abc.bac", "bac.abc", properties1);
+			wire = helper.createWire(wa, "abc.bac", "bac.abc",
+					(Map) properties1);
 			fail("Test createWire with incorrect properties' key: NOT OK. ");
 		}
 		catch (IllegalArgumentException e) {
 			log("Test createWire with incorrect properties' key: Operation passed: OK. Exception thrown.");
 		}
-		Hashtable properties2 = new Hashtable();
+		Hashtable<String,Object> properties2 = new Hashtable<>();
 		properties2.put("Test", Integer.valueOf(1));
 		properties2.put("test", Integer.valueOf(2));
 		try {
@@ -355,6 +361,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 * deleted wire (not defined in the specification - the test expecs an
 	 * Exception to be thrown)
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
 	public void testIncorrectUpdateWire() throws Exception {
 		log("Must call producersConnected(..) for consumer.ConsumerImplA");
 		helper.registerConsumer("consumer.ConsumerImplA", new Class[] {
@@ -374,16 +383,16 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		waitForSync(2, 100);
 		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
 
-		Hashtable properties = new Hashtable();
-		properties.put(Integer.valueOf(1), "TEST");
+		Hashtable<Object,Object> properties2 = new Hashtable<>();
+		properties2.put(Integer.valueOf(1), "TEST");
 		try {
-			helper.updateWire(wa, wire, properties);
+			helper.updateWire(wa, wire, (Map) properties2);
 			fail("Test updateWire with incorrect properties' keys: NOT OK.");
 		}
 		catch (IllegalArgumentException e) {
 			log("Test updateWire with incorrect properties' keys: Operation passed: OK.Exception thrown.");
 		}
-		properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put("property1", "TEST1");
 		properties.put("PROPERTY1", "TEST2");
 		try {
@@ -439,7 +448,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				String.class, Float.class, Boolean.class});
 		waitForSync(1, 100);
 		compareConnected("producer.ProducerImplC", "");
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put("property1", new String("TEST"));
 		properties.put("property2", Float.valueOf(5.0f));
 		properties.put("property3", Boolean.valueOf(false));
@@ -448,7 +457,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				"consumer.ConsumerImplC", properties);
 		waitForSync(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
-		Dictionary oldProperties = wire.getProperties();
+		Dictionary<String,Object> oldProperties = wire.getProperties();
 		log("Must call producersConnected(..) for producer.ProducerImplC");
 		helper.unregisterProducer("producer.ProducerImplC");
 		waitForSync(1, 100);
@@ -502,7 +511,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				String.class, Float.class, Boolean.class});
 		waitForSync(1, 100);
 		compareConnected("producer.ProducerImplC", "");
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put("property1", new String("TEST"));
 		properties.put("property2", Float.valueOf(5.0f));
 		properties.put("property3", Boolean.valueOf(false));
@@ -518,7 +527,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.unregisterProducer("producer.ProducerImplC");
 		waitForSync(1, 100);
 		compareConnected("", "consumer.ConsumerImplC");
-		properties = new Hashtable();
+		properties = new Hashtable<>();
 		properties.put("property1", new String("NEW TEST FOR PRODUCER"));
 		properties.put("property2", Float.valueOf(2.0f));
 		helper.updateWire(wa, wire, properties);
@@ -538,7 +547,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.unregisterConsumer("consumer.ConsumerImplC");
 		waitForSync(1, 100);
 		compareConnected("producer.ProducerImplC", "");
-		properties = new Hashtable();
+		properties = new Hashtable<>();
 		properties.put("property1", new String("NEW TEST FOR CONSUMER"));
 		properties.put("property2", Float.valueOf(1.0f));
 		helper.updateWire(wa, wire, properties);
@@ -685,10 +694,11 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// unneeded/undesired
 		// producer/consumer notifications
 
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put("property1", Integer.valueOf(1));
 		properties.put("property2", Float.valueOf(1.0f));
 		properties.put("property3", Boolean.valueOf(false));
+		@SuppressWarnings("unused")
 		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
 				"consumer.ConsumerImplA", properties);
 		wire = helper.createWire(wa, "producer.ProducerImplC",
@@ -763,7 +773,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 */
 	public void testPollUpdate() throws Exception {
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		Wire localWire = helper.createWire(wa, "wireAPITest.producer.pid",
 				"wireAPITest.consumer.pid", h);
@@ -820,7 +830,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String filter = "(" + WireConstants.WIREVALUE_CURRENT + "=5)";
 		// create wire
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
 		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
@@ -857,7 +867,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 1)) {
 			Sleep.sleep(50);
 		}
-		List values = fci.resetValuesReceived();
+		List<Object> values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {Integer.valueOf(5)}), values);
 		log(delimiter);
@@ -891,9 +901,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String filter = "(" + WireConstants.WIREVALUE_DELTA_ABSOLUTE + ">=3)";
 		// create wire
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
+		@SuppressWarnings("unused")
 		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
 		// register producer
 		log("register test producer");
@@ -928,7 +939,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 2)) {
 			Sleep.sleep(50);
 		}
-		List values = fci.resetValuesReceived();
+		List<Object> values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Integer[] {
 				Integer.valueOf(4), Integer.valueOf(8)}), values);
 		log(delimiter);
@@ -947,9 +958,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String filter = "(" + WireConstants.WIREVALUE_DELTA_RELATIVE + ">=0.4)";
 		// create wire
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
+		@SuppressWarnings("unused")
 		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
 		// register producer
 		log("register test producer");
@@ -983,7 +995,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
 			Sleep.sleep(50);
 		}
-		List values = fci.resetValuesReceived();
+		List<Object> values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {Integer.valueOf(0), Integer.valueOf(2),
 						Integer.valueOf(4), Integer.valueOf(8)}), values);
@@ -999,7 +1011,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String filter = "(" + WireConstants.WIREVALUE_ELAPSED + ">=1000)";
 		// create wire
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
 		// register producer
@@ -1043,7 +1055,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
 			Sleep.sleep(50);
 		}
-		List values = fci.resetValuesReceived();
+		List<Object> values = fci.resetValuesReceived();
 		assertEquals("incorrect values received",
 				Arrays.asList(new Integer[] {Integer.valueOf(2), Integer.valueOf(4),
 						Integer.valueOf(6), Integer.valueOf(8)}), values);
@@ -1056,14 +1068,15 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String filter = "(" + WireConstants.WIREVALUE_CURRENT + ">=5)";
 		// create wire
 		log("create wire for the test");
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
+		@SuppressWarnings("unused")
 		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
 		// register producer
 		log("register test producer");
 		FilteredProducerImpl fpi = new FilteredProducerImpl();
-		Map p_h = new HashMap();
+		Map<String,Object> p_h = new HashMap<>();
 		p_h.put(WireConstants.WIREADMIN_PRODUCER_FILTERS, new Object());
 		helper.registerProducer(fpi, producerPid, new Class[] {Integer.class},
 				p_h);
@@ -1096,7 +1109,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
 			Sleep.sleep(50);
 		}
-		List values = fci.resetValuesReceived();
+		List<Object> values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {Integer.valueOf(0), Integer.valueOf(3),
 						Integer.valueOf(6), Integer.valueOf(9)}), values);
@@ -1118,23 +1131,23 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// receive
 		// events
 		// real listener
-		Hashtable walProps = new Hashtable();
+		Hashtable<String,Object> walProps = new Hashtable<>();
 		walProps.put(WireConstants.WIREADMIN_EVENTS, mask);
-		ServiceRegistration listenerReg = getContext().registerService(
-				WireAdminListener.class.getName(), listener, walProps);
+		ServiceRegistration<WireAdminListener> listenerReg = getContext()
+				.registerService(WireAdminListener.class, listener, walProps);
 		// dummy listener
-		Hashtable dummyProps = new Hashtable();
+		Hashtable<String,Object> dummyProps = new Hashtable<>();
 		dummyProps.put(WireConstants.WIREADMIN_EVENTS, Integer.valueOf(0));
-		ServiceRegistration dummyReg = getContext().registerService(
-				WireAdminListener.class.getName(), dummy, dummyProps);
+		ServiceRegistration<WireAdminListener> dummyReg = getContext()
+				.registerService(WireAdminListener.class, dummy, dummyProps);
 		// real test
-		Hashtable h = new Hashtable();
+		Hashtable<String,Object> h = new Hashtable<>();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		log("Create a wire: WIRE_CREATED event is expected");
 		Wire w = helper.createWire(wa, "producer.event.test.pid",
 				"consumer.event.test.pid", h);
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
-		List result = listener.resetValuesReceived();
+		List<Object> result = listener.resetValuesReceived();
 		assertEquals("incorrect values received",
 				Arrays.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_CREATED)}), result);
@@ -1485,8 +1498,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	private void removePermissions() {
 		synchronized (permBundles) {
-			for (Iterator i = permBundles.iterator(); i.hasNext();) {
-				pa.setPermissions((String) i.next(), null);
+			for (Iterator<String> i = permBundles.iterator(); i.hasNext();) {
+				pa.setPermissions(i.next(), null);
 			}
 			permBundles.clear();
 		}
@@ -1519,7 +1532,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	private Wire[] getConnected(Wire[] all) {
 		if (all == null)
 			return null;
-		List v = new ArrayList();
+		List<Wire> v = new ArrayList<>();
 		for (int counter = 0; counter < all.length; counter++) {
 			if (all[counter].isConnected())
 				v.add(all[counter]);
@@ -1537,7 +1550,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		if (!producerPID.equals("")) {
 			wires = getConnected(getWiresForFilter("(wireadmin.producer.pid="
 					+ producerPID + ")"));
-			returned = (Wire[]) returnedWires.remove(producerPID);
+			returned = returnedWires.remove(producerPID);
 			assertNotNull("{" + producerPID
 					+ "} Invokes consumersConnected(..): NOT OK, Not invoked",
 					returned);
@@ -1551,7 +1564,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		if (!consumerPID.equals("")) {
 			wires = getConnected(getWiresForFilter("(wireadmin.consumer.pid="
 					+ consumerPID + ")"));
-			returned = (Wire[]) returnedWires.remove(consumerPID);
+			returned = returnedWires.remove(consumerPID);
 			assertNotNull("{" + consumerPID
 					+ "} Invokes producersConnected(..): NOT OK, Not invoked",
 					returned);
@@ -1589,10 +1602,11 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		return true;
 	}
 
-	private boolean compareWireProperties(Dictionary current, Dictionary correct) {
-		Enumeration keys = correct.keys();
+	private boolean compareWireProperties(Dictionary<String,Object> current,
+			Dictionary<String,Object> correct) {
+		Enumeration<String> keys = correct.keys();
 		while (keys.hasMoreElements()) {
-			String key = (String) keys.nextElement();
+			String key = keys.nextElement();
 			if (!(correct.get(key).equals(current.get(key)))) {
 				return false;
 			}
@@ -1617,6 +1631,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	// //////// some helper methods for additonal debugging ... not used by
 	// default
+	@SuppressWarnings("unused")
 	private void dumpWires(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
 			// different threads
@@ -1637,11 +1652,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void dumpProducers(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
 			// different threads
 			try {
-				ServiceReference[] producers = getContext()
+				ServiceReference< ? >[] producers = getContext()
 						.getServiceReferences(Producer.class.getName(), filter);
 				if (producers == null) {
 					System.out.println("No producers registered for filter "
@@ -1667,11 +1683,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void dumpConsumers(String filter) {
 		synchronized (this.getClass()) { // to avoid messups when called from
 			// different threads
 			try {
-				ServiceReference[] consumers = getContext()
+				ServiceReference< ? >[] consumers = getContext()
 						.getServiceReferences(Consumer.class.getName(), filter);
 				if (consumers == null) {
 					System.out.println("No consumer registered for filter "

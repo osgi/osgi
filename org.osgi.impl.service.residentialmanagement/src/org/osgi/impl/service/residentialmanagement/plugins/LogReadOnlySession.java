@@ -46,7 +46,7 @@ import org.osgi.service.log.LogReaderService;
 public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 	protected int rootLength = 1;
-	protected Vector logEntries = new Vector();
+	protected Vector<LogEntry>	logEntries				= new Vector<>();
 	protected LogReaderService lr = null;
 	protected int				lengthOfLogEntryList	= Integer
 																.parseInt(RMTConstants
@@ -56,10 +56,10 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	protected boolean keepLogEntriesFlag = false;
 
 	LogReadOnlySession(BundleContext context) {
-		ServiceReference sr = context
-				.getServiceReference(LogReaderService.class.getName());
+		ServiceReference<LogReaderService> sr = context
+				.getServiceReference(LogReaderService.class);
 		if (sr != null) {
-			lr = (LogReaderService) context.getService(sr);
+			lr = context.getService(sr);
 			lr.addLogListener(this);
 		}
 		if (RMTConstants.RMT_ROOT != null) {
@@ -73,14 +73,17 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			lr.removeLogListener(this);
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// do nothing - the version and time stamp properties are not supported
 	}
 
+	@Override
 	public void close() throws DmtException {
 		// no cleanup needs to be done when closing read-only session
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -101,7 +104,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 		if (path.length == 3) {
 			try {
-				LogEntry le = (LogEntry) logEntries.get(Integer
+				LogEntry le = logEntries.get(Integer
 						.parseInt(path[2]));
 				if (le.getException() != null) {
 					String[] children = new String[5];
@@ -128,6 +131,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				"The specified node does not exist in the log object.");
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -184,25 +188,30 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				"No such node defined in the Log log object.");
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		return getNodeValue(nodePath).getSize();
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Version property is not supported in the Log log object.");
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property is not supported in the Log log object.");
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property is not supported in the Log log object.");
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -234,6 +243,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				"The specified node is not found in the Log log object.");
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
 
@@ -258,7 +268,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 		if (path.length == 4) {
 			try {
-				LogEntry le = (LogEntry) logEntries.get(Integer
+				LogEntry le = logEntries.get(Integer
 						.parseInt(path[2]));
 				if (le.getException() != null) {
 					if (path[3].equals(RMTConstants.BUNDLE)
@@ -281,6 +291,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		return false;
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -299,6 +310,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				"The specified node is not found in the Log log object.");
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 		if (path.length <= 3)
@@ -308,7 +320,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 		if (path.length == 4) {
 			try {
-				LogEntry le = (LogEntry) logEntries.get(Integer
+				LogEntry le = logEntries.get(Integer
 						.parseInt(path[2]));
 				if (path[3].equals(RMTConstants.BUNDLE)) {
 					return new DmtData(le.getBundle().getLocation());
@@ -354,6 +366,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		this.keepLogEntriesFlag = false;
 	}
 
+	@Override
 	public void logged(LogEntry entry) {
 		if(this.keepLogEntriesFlag)
 			return;

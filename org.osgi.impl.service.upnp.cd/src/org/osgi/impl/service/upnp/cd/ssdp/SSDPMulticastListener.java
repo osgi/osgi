@@ -1,7 +1,9 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 
 // This class contineously listens on mulicast port and give the received packet to the parser. 
 public class SSDPMulticastListener extends Thread {
@@ -26,6 +28,7 @@ public class SSDPMulticastListener extends Thread {
 	}
 
 	// This method receives mulcast packets and gives to SSDPParser.
+	@Override
 	public void run() {
 		while (flag) {
 			String recvData = null;
@@ -69,6 +72,7 @@ public class SSDPMulticastListener extends Thread {
 			msock.close();
 		}
 		catch (IOException e) {
+			// ignored
 		}
 		msock = null;
 		dpack = null;

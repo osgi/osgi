@@ -26,9 +26,10 @@ public class MountPointImpl implements MountPoint {
 	private static final List<String> STANDARD_PROPS = new ArrayList<String>();
 	private static final List<String> VALID_TOPICS_WITHOUT_NEWNODES = new ArrayList<String>();
 	private static final List<String> VALID_TOPICS_WITH_NEWNODES = new ArrayList<String>();
-	private Plugin plugin;
+	private Plugin< ? >					plugin;
 	private String[] path;
 	private String uri;
+	@SuppressWarnings("unused")
 	private Bundle pluginBundle;
 	private EventDispatcher eventDispatcher;
 
@@ -51,7 +52,8 @@ public class MountPointImpl implements MountPoint {
 	 * @param path ... the absolute mount path of a plugin in the tree
 	 * @param pluginBundle ... the Bundle that has registered the plugin
 	 */
-	public MountPointImpl( Plugin plugin, String[] path, Bundle pluginBundle ) {
+	public MountPointImpl(Plugin< ? > plugin, String[] path,
+			Bundle pluginBundle) {
 		this.plugin = plugin;
 		this.path = path;
 		this.uri = Uri.toUri(path);
@@ -60,17 +62,20 @@ public class MountPointImpl implements MountPoint {
 		this.eventDispatcher = new EventDispatcher(DmtAdminActivator.getContext(), -1, pluginBundle);
 	}
 
+	@Override
 	public String[] getMountPath() {
 		return path;
 	}
 
+	@Override
 	public void postEvent(String topic, String[] relativeURIs,
-			Dictionary properties) {
+			Dictionary<String, ? > properties) {
 		postEvent(topic, relativeURIs, null, properties);
 	}
 
+	@Override
 	public void postEvent(String topic, String[] relativeNodes,
-			String[] newRelativeNodes, Dictionary properties) {
+			String[] newRelativeNodes, Dictionary<String, ? > properties) {
 
 		// ignore, if associated plugin is already closed
 		if ( plugin.closed )
@@ -81,9 +86,9 @@ public class MountPointImpl implements MountPoint {
 		
 		Properties props = new Properties();
 		if ( properties != null ) {
-			Enumeration keys = properties.keys();
+			Enumeration<String> keys = properties.keys();
 			while (keys.hasMoreElements()) {
-				Object key = (Object) keys.nextElement();
+				Object key = keys.nextElement();
 				if ( ! STANDARD_PROPS.contains(key))
 					props.put( key, properties.get(key));
 			}
@@ -126,10 +131,12 @@ public class MountPointImpl implements MountPoint {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return this.uri.hashCode();
 	}
 	
+	@Override
 	public boolean equals( Object obj ) {
 		if ( obj == null ) return false;
 		if ( ! (obj instanceof MountPoint )) return false;

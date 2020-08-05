@@ -13,11 +13,13 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 import org.osgi.test.cases.upnp.tbc.device.event.EventSender;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -29,13 +31,13 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class DeviceServlet extends HttpServlet {
 	private static final long			serialVersionUID	= 1L;
 	private final DescriptionInvoker	invoker;
-	private final Hashtable				evs;
+	private final Hashtable<String,Hashtable<String,Object[]>>	evs;
 	private final StringBuffer			root;
 	private static long					sids	= 0;
 
 	public DeviceServlet() throws Exception {
 		invoker = new DescriptionInvoker();
-		evs = new Hashtable();
+		evs = new Hashtable<>();
 		root = new StringBuffer();
 		addContent(root, "/org/osgi/test/cases/upnp/tbc/resources/dd1.xml");
 		root.append("  <URLBase>http://");
@@ -63,9 +65,10 @@ public class DeviceServlet extends HttpServlet {
 		addHash(evs, "u");
 	}
 
-	private void addHash(Hashtable to, String el) {
+	private void addHash(Hashtable<String,Hashtable<String,Object[]>> to,
+			String el) {
 		for (int i = 1; i < 4; i++) {
-			Hashtable hash = new Hashtable();
+			Hashtable<String,Object[]> hash = new Hashtable<>();
 			to.put((i + el).intern(), hash);
 		}
 	}
@@ -193,7 +196,8 @@ public class DeviceServlet extends HttpServlet {
 		invoker.sendError(httpservletresponse, i, s);
 	}
 
-	private Dictionary getActionArguments(String xml, String actionName) {
+	private Dictionary<String,Object> getActionArguments(String xml,
+			String actionName) {
 		String env_string = extractStringT(xml, ":Envelope", ">");
 		if (env_string.length() == 0) {
 			DefaultTestBundleControl
@@ -229,7 +233,7 @@ public class DeviceServlet extends HttpServlet {
 					.log("There are no argumets in the invoke XML, although that is a possible scenario the testcase has no actions with no arguments");
 			return null;
 		}
-		Dictionary a = parseArgs(arguments);
+		Dictionary<String,Object> a = parseArgs(arguments);
 		if (a == null) {
 			DefaultTestBundleControl.log("Unable to parse the " + actionName
 					+ " arguments");
@@ -237,8 +241,8 @@ public class DeviceServlet extends HttpServlet {
 		return a;
 	}
 
-	private Hashtable parseArgs(String xml) {
-		Hashtable args = new Hashtable(5);
+	private Hashtable<String,Object> parseArgs(String xml) {
+		Hashtable<String,Object> args = new Hashtable<>(5);
 		StringTokenizer st = new StringTokenizer(xml, "\r\n");
 		while (st.hasMoreTokens()) {
 			String row = st.nextToken();
@@ -351,7 +355,7 @@ public class DeviceServlet extends HttpServlet {
 		int in = 0;
 		String serviceType = soap.substring(1, in = soap.indexOf("#"));
 		String actionName = soap.substring(in + 1, soap.length() - 1);
-		Dictionary args = getActionArguments(body, actionName);
+		Dictionary<String,Object> args = getActionArguments(body, actionName);
 		if (args == null) {
 			DefaultTestBundleControl
 					.log("Error while parsing invoke XML for action "
@@ -395,8 +399,8 @@ public class DeviceServlet extends HttpServlet {
 					res.sendError(412, UPnPConstants.ERR_MSID);
 					return;
 				}
-				Hashtable rdev = (Hashtable) evs.get(dsi);
-				Object[] arr = (Object[]) rdev.get(sid);
+				Hashtable<String,Object[]> rdev = evs.get(dsi);
+				Object[] arr = rdev.get(sid);
 				if (arr == null) {
 					res.sendError(412, UPnPConstants.ERR_ISID);
 					return;
@@ -449,7 +453,7 @@ public class DeviceServlet extends HttpServlet {
 				Object[] obj = new Object[2];
 				obj[0] = url;
 				obj[1] = Long.valueOf(System.currentTimeMillis() + (time * 1000));
-				Hashtable rdev = (Hashtable) evs.get(dsi);
+				Hashtable<String,Object[]> rdev = evs.get(dsi);
 				rdev.put(sid, obj);
 				eventing = true;
 			}
@@ -491,8 +495,8 @@ public class DeviceServlet extends HttpServlet {
 				res.sendError(412, UPnPConstants.ERR_MSID);
 				return;
 			}
-			Hashtable rdev = (Hashtable) evs.get(dsi);
-			Object[] arr = (Object[]) rdev.get(sid);
+			Hashtable<String,Object[]> rdev = evs.get(dsi);
+			Object[] arr = rdev.get(sid);
 			if (arr == null) {
 				res.sendError(412, UPnPConstants.ERR_ISID);
 				return;
@@ -516,8 +520,9 @@ public class DeviceServlet extends HttpServlet {
 			servicePrivileged(req, res);
 		} else {
 			try {
-				AccessController.doPrivileged(new PrivilegedExceptionAction() {
-					public Object run() throws Exception {
+				AccessController
+						.doPrivileged(new PrivilegedExceptionAction<Void>() {
+							public Void run() throws Exception {
 						servicePrivileged(req, res);
 						return null;
 					}
@@ -536,7 +541,7 @@ public class DeviceServlet extends HttpServlet {
 		}
 	}
 
-	private void servicePrivileged(HttpServletRequest req, HttpServletResponse res)
+	void servicePrivileged(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		String method = req.getMethod();
 		if (method.equals(UPnPConstants.SUBSCRIBE)) {

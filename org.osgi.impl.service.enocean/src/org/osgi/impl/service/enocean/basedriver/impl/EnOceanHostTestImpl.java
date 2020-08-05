@@ -23,7 +23,6 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
-import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.impl.service.enocean.utils.teststep.TestStepForEnOceanImpl;
@@ -43,10 +42,11 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
     /**
      * EnOcean base driver impl's tag/prefix for logger.
      */
-    private static final String TAG = "EnOceanHostTestImpl";
+	@SuppressWarnings("hiding")
+	private static final String				TAG						= "EnOceanHostTestImpl";
 
     private TestStepForEnOceanImpl testStepForEnOceanImpl = new TestStepForEnOceanImpl();
-    private ServiceRegistration testStepSR;
+	private ServiceRegistration<TestStep>	testStepSR;
 
     /**
      * @param path
@@ -55,18 +55,20 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
     public EnOceanHostTestImpl(String path, BundleContext bc) {
 	super(path, bc);
 	Logger.d(TAG, "Create, and register EnOcean's Test Step OSGi service.");
-	this.testStepSR = bc.registerService(TestStep.class.getName(), 
+	this.testStepSR = bc.registerService(TestStep.class,
 		testStepForEnOceanImpl, null);
 	Logger.d(TAG,
 		"EnOcean's Test Step OSGi service has been created, and registered.");
     }
 
-    public void startup() throws EnOceanHostImplException {
+	@Override
+	public void startup() {
 	this.isRunning = true;
 	this.start();
     }
 
-    public void run() {
+    @Override
+	public void run() {
 	while (this.isRunning) {
 	    try {
 		Thread.sleep(400);
@@ -124,7 +126,8 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	this.isRunning = false;
     }
 
-    public void send(byte[] data) {
+    @Override
+	public void send(byte[] data) {
 	testStepForEnOceanImpl.pushDataInTestStep(data);
     }
 
@@ -192,13 +195,15 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
     private EnOceanMessageDescriptionSet createEnOceanMessageDescriptionSet() {
 	return new EnOceanMessageDescriptionSet() {
-	    public EnOceanMessageDescription getMessageDescription(int rorg,
+	    @Override
+		public EnOceanMessageDescription getMessageDescription(int rorg,
 		    int func, int type, int extra) throws IllegalArgumentException {
 		return new EnOceanMessageDescription() {
 		    EnOceanChannel floatValue = new TemperatureChannel_00();
 		    EnOceanChannel learn = new LearnChannel_4BS();
 
-		    public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException {
+		    @Override
+			public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException {
 
 			/*
 			 * Every message description should ensure this
@@ -216,7 +221,8 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			return new EnOceanChannel[] { floatValue, learn };
 		    }
 
-		    public byte[] serialize(EnOceanChannel[] channels)
+		    @Override
+			public byte[] serialize(EnOceanChannel[] channels)
 			    throws IllegalArgumentException {
 			return null;
 		    }
@@ -225,22 +231,27 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
 			private byte b0;
 
+			@Override
 			public String getChannelId() {
 			    return "CID";
 			}
 
+			@Override
 			public void setRawValue(byte[] rawValue) {
 			    b0 = rawValue[0];
 			}
 
+			@Override
 			public int getSize() {
 			    return 8;
 			}
 
+			@Override
 			public byte[] getRawValue() {
 			    return Utils.byteToBytes(b0);
 			}
 
+			@Override
 			public int getOffset() {
 			    return 16;
 			}
@@ -251,30 +262,36 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
 			private boolean isLearn;
 
+			@Override
 			public String getChannelId() {
 			    return "LRN_4BS";
 			}
 
+			@Override
 			public void setRawValue(byte[] rawValue) {
 			    isLearn = rawValue[0] == 0;
 			}
 
+			@Override
 			public int getSize() {
 			    return 1;
 			}
 
+			@Override
 			public byte[] getRawValue() {
 			    return isLearn ? new byte[] { 0x0 }
 			    : new byte[] { 0x1 };
 			}
 
+			@Override
 			public int getOffset() {
 			    return 28;
 			}
 
 		    }
 
-		    public String getMessageDescription() {
+		    @Override
+			public String getMessageDescription() {
 			return "A description";
 		    }
 
@@ -285,15 +302,17 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
     private EnOceanChannelDescriptionSet createEnOceanChannelDescriptionSet() {
 	return new EnOceanChannelDescriptionSet() {
-	    private Map channelTable = null;
+		private Map<String,EnOceanDataChannelDescription> channelTable = null;
 
-	    public EnOceanChannelDescription getChannelDescription(String channelId) 
+	    @Override
+		public EnOceanChannelDescription getChannelDescription(String channelId) 
 		    throws IllegalArgumentException {
 		if (channelTable == null) {
-		    channelTable = new Hashtable();
+				channelTable = new Hashtable<>();
 		    channelTable.put("CID",
 			    new EnOceanDataChannelDescription() {
 
+			@Override
 			public String getType() {
 			    return EnOceanChannelDescription.TYPE_DATA;
 			}
@@ -322,6 +341,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			    return Math.round(A * y + B);
 			}
 
+			@Override
 			public byte[] serialize(Object obj) throws IllegalArgumentException {
 			    float value;
 			    if (obj == null) {
@@ -340,6 +360,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			    return new byte[] { (byte) input };
 			}
 
+			@Override
 			public Object deserialize(byte[] bytes) throws IllegalArgumentException {
 			    if (bytes == null) {
 				throw new IllegalArgumentException("Supplied array was NULL");
@@ -355,22 +376,27 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			    return output;
 			}
 
+			@Override
 			public int getDomainStart() {
 			    return 0;
 			}
 
+			@Override
 			public int getDomainStop() {
 			    return 255;
 			}
 
+			@Override
 			public double getRangeStart() {
 			    return -40.0f;
 			}
 
+			@Override
 			public double getRangeStop() {
 			    return 0.0f;
 			}
 
+			@Override
 			public String getUnit() {
 			    return "°C";
 			}
@@ -380,7 +406,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 		    throw new IllegalArgumentException("Input ID was NULL");
 		}
 		try {
-		    return (EnOceanChannelDescription) channelTable.get(channelId);
+		    return channelTable.get(channelId);
 		} catch (Exception e) {
 		    throw new IllegalArgumentException("There was an error reading the messageSet : "
 			    + e.getMessage());

@@ -49,18 +49,21 @@ class FrameworkPlugin implements DataPlugin {
     		this.context.removeBundleListener(readonly);
     }
     
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
     	readonly.managedWires();
         return readonly;
     }
 
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
         return null; // non-atomic write sessions not supported
     }
 
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
     	if(sessionRoot.length > 
                 FrameworkPluginActivator.PLUGIN_ROOT_PATH_LENGTH + 1)

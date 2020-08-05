@@ -6,7 +6,7 @@ import java.util.TreeSet;
  * @author steffen
  *
  */
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 	
 	private String name;
 	private String value;
@@ -45,6 +45,7 @@ public class Node implements Comparable {
 		return path;
 	}
 	
+	@SuppressWarnings("unused")
 	private Node getChildNode( String name ) {
 		Node node = null;
 		for ( Node child : getChildren() )
@@ -124,6 +125,7 @@ public class Node implements Comparable {
 	}
 
 	
+	@Override
 	public String toString() {
 		return getURI();
 	}
@@ -137,10 +139,11 @@ public class Node implements Comparable {
 		System.out.println( n3.getPath() );
 	}
 
-	public int compareTo(Object o) {
-		if ( o == null || ! (o instanceof Node) )
+	@Override
+	public int compareTo(Node o) {
+		if (o == null)
 			return -1; 
-		return this.getURI().compareTo(((Node)o).getURI());
+		return this.getURI().compareTo(o.getURI());
 	}
 	
 	/**

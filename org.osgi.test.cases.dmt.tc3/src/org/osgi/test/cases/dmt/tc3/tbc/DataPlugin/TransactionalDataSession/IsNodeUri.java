@@ -40,6 +40,9 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -67,14 +70,14 @@ public class IsNodeUri {
 	public void testIsNodeUri001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsNodeUri001");
+			DefaultTestBundleControl.log("#testIsNodeUri001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
 					+" to the correct plugin",session.isNodeUri(TestDataPluginActivator.INTERIOR_NODE));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -88,14 +91,14 @@ public class IsNodeUri {
 	public void testIsNodeUri002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsNodeUri002");
+			DefaultTestBundleControl.log("#testIsNodeUri002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
+			TestCase.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
 					+" to the correct plugin",!session.isNodeUri(TestDataPluginActivator.INEXISTENT_NODE));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			DmtTestControl.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

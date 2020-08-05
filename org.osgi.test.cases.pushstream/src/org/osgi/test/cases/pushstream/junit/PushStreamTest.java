@@ -28,7 +28,6 @@ import org.osgi.util.pushstream.PushStreamProvider;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("boxing")
 public class PushStreamTest extends TestCase {
 
 	static class Generator implements PushEventSource<Integer> {

@@ -49,6 +49,9 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+import junit.framework.TestCase;
 
 /**
  * @author Andre Assad
@@ -63,6 +66,7 @@ public class GetNodeSize implements TestInterface {
 		this.tbc = tbc;
 	}
 
+	@Override
 	public void run() {
         prepare();
         if (DmtConstants.SUPPORTS_NODE_SIZE) {        
@@ -88,15 +92,15 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize001");
+			DefaultTestBundleControl.log("#testGetNodeSize001");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 			session.getNodeSize(TestExecPluginActivator.INEXISTENT_NODE);
-			tbc.failException("", DmtException.class);
+			DefaultTestBundleControl.failException("", DmtException.class);
 
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException's code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
@@ -114,7 +118,7 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize002");
+			DefaultTestBundleControl.log("#testGetNodeSize002");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.GET );
 
@@ -126,7 +130,7 @@ public class GetNodeSize implements TestInterface {
 
 			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
 
-			tbc.pass("getNodeSize correctly executed");
+			DefaultTestBundleControl.pass("getNodeSize correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -145,7 +149,7 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize003");
+			DefaultTestBundleControl.log("#testGetNodeSize003");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -155,7 +159,7 @@ public class GetNodeSize implements TestInterface {
 
 			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
 
-			tbc.pass("getNodeSize correctly executed");
+			DefaultTestBundleControl.pass("getNodeSize correctly executed");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -174,16 +178,16 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize004");
+			DefaultTestBundleControl.log("#testGetNodeSize004");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session.getNodeSize(TestExecPluginActivator.INTERIOR_NODE);
 
-			tbc.failException("#", DmtException.class);
+			DefaultTestBundleControl.failException("#", DmtException.class);
 
 		} catch (DmtException e) {
-			tbc.assertEquals(
+			TestCase.assertEquals(
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
@@ -201,14 +205,14 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize005");
+			DefaultTestBundleControl.log("#testGetNodeSize005");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getNodeSize(TestExecPluginActivator.LEAF_RELATIVE);
 
-			tbc.pass("A relative URI can be used with getNodeSize.");
+			DefaultTestBundleControl.pass("A relative URI can be used with getNodeSize.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -226,14 +230,14 @@ public class GetNodeSize implements TestInterface {
 	private void testGetNodeSize006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize006");
+			DefaultTestBundleControl.log("#testGetNodeSize006");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.getNodeSize("");
 
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			DefaultTestBundleControl.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -250,15 +254,15 @@ public class GetNodeSize implements TestInterface {
     private void testGetNodeSizeFeatureNotSupported001() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetNodeSizeFeatureNotSupported001");
+            DefaultTestBundleControl.log("#testGetNodeSizeFeatureNotSupported001");
 
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_SHARED);
             session.getNodeSize(TestExecPluginActivator.INTERIOR_NODE);
-            tbc.failException("", DmtException.class);
+            DefaultTestBundleControl.failException("", DmtException.class);
 
         } catch (DmtException e) {
-            tbc.assertEquals(
+            TestCase.assertEquals(
                     "Asserting that DmtException's code is FEATURE_NOT_SUPPORTED",
                     DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
 import org.osgi.impl.service.upnp.cp.description.StateVariable;
 import org.osgi.impl.service.upnp.cp.util.SamsungUPnPStateVariable;
 
@@ -16,23 +18,27 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 		name = var.getName();
 		type = var.getDataType();
 		newValue = var.getDefaultValue();
-		Vector values = var.getAllowedValueList();
+		Vector<String> values = var.getAllowedValueList();
 		if (null != values) {
+			@SuppressWarnings("hiding")
 			String[] vals = new String[values.size()];
 			int i = 0;
-			for (Enumeration e = values.elements(); e.hasMoreElements(); i++) {
-				vals[i] = (String) e.nextElement();
+			for (Enumeration<String> e = values.elements(); e
+					.hasMoreElements(); i++) {
+				vals[i] = e.nextElement();
 			}
 			this.vals = vals;
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
 	// This method returns the java data type of the state variable.
-	public Class getJavaDataType() {
+	@Override
+	public Class< ? > getJavaDataType() {
 		if ((type.equals("ui1")) || (type.equals("ui2")) || (type.equals("i1"))
 				|| (type.equals("i2")) || (type.equals("i4"))
 				|| (type.equals("int"))) {
@@ -75,37 +81,44 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 	}
 
 	// This method returns the UPnPData type of the state variable.
+	@Override
 	public String getUPnPDataType() {
 		return type;
 	}
 
 	// This method returns the default value of the state variable.
+	@Override
 	public Object getDefaultValue() {
 		return var.getDefaultValue();
 	}
 
 	// This method returns the allowed values of the state variable.
+	@Override
 	public String[] getAllowedValues() {
 		return vals;
 	}
 
 	// This method returns the minimum value of the state variable.
+	@Override
 	public Number getMinimum() {
 		return var.getMinimum();
 	}
 
 	//	
+	@Override
 	public Number getMaximum() {
 		return var.getMaximum();
 	}
 
 	// This method returns the step value of the state variable.
+	@Override
 	public Number getStep() {
 		return var.getStep();
 	}
 
 	// This method returns the value of the state variable's sendEvent
 	// attribute.
+	@Override
 	public boolean sendsEvents() {
 		if (var.getSendEvents().equals("yes")) {
 			return true;
@@ -114,11 +127,13 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 	}
 
 	// This method sets the state variable value.
+	@Override
 	public void setChangedValue(String value) {
 		newValue = value;
 	}
 
 	// This method returns the state variable value.
+	@Override
 	public String getChangedValue() {
 		return newValue;
 	}

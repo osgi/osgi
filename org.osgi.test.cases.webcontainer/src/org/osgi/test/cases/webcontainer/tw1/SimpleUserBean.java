@@ -24,7 +24,11 @@ import java.io.Serializable;
  */
 public class SimpleUserBean implements Serializable {
     
-    String email;
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	String						email;
     String message;
 
     public String getEmail() {

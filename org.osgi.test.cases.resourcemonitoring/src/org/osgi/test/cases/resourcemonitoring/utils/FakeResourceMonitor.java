@@ -25,7 +25,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorException;
  * 
  * @author $Id$
  */
-public class FakeResourceMonitor implements ResourceMonitor {
+public class FakeResourceMonitor implements ResourceMonitor<Object> {
 
 	private String			resourceType;
 	private ResourceContext	resourceContext;
@@ -78,7 +78,7 @@ public class FakeResourceMonitor implements ResourceMonitor {
 		// TODO Auto-generated method stub
 	}
 
-	public Comparable getUsage() throws ResourceMonitorException {
+	public Comparable<Object> getUsage() throws ResourceMonitorException {
 		// TODO Auto-generated method stub
 		return null;
 	}

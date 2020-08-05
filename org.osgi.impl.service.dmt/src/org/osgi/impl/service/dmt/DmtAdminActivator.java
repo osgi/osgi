@@ -17,14 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.DmtAdmin;
-
-// TODO removed the factory reference, not sure what happens
-
-import org.osgi.service.dmt.notification.NotificationService;
-
 import java.lang.reflect.Field;
 import java.security.AllPermission;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -34,6 +29,11 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.dmt.DmtAdmin;
+
+// TODO removed the factory reference, not sure what happens
+
+import org.osgi.service.dmt.notification.NotificationService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class DmtAdminActivator implements BundleActivator {
@@ -46,15 +46,16 @@ public class DmtAdminActivator implements BundleActivator {
         "org.osgi.impl.service.dmt.perms";
     private static Context context;
     
-    private ServiceRegistration	notificationReg;
-    private ServiceRegistration adminFactoryReg;
-    private ServiceRegistration permissionReg;
+	private ServiceRegistration<NotificationService>	notificationReg;
+	private ServiceRegistration< ? >					adminFactoryReg;
+	private ServiceRegistration< ? >					permissionReg;
     
     private Field factoryContext;
     private DmtAdminFactory dmtAdminFactory;
     private DmtAdminCore dmtAdmin;
     
 
+	@Override
 	public void start(BundleContext bc) throws BundleException {
         System.out.println("Dmt Admin activation started.");
 
@@ -87,23 +88,24 @@ public class DmtAdminActivator implements BundleActivator {
                 new NotificationServiceImpl(context);
 
             // registering the services
-            notificationReg = bc.registerService(NotificationService.class
-                    .getName(), notificationService, null);
+			notificationReg = bc.registerService(NotificationService.class,
+					notificationService, null);
             
-            adminFactoryReg = bc.registerService(DmtAdmin.class.getName(), 
-                    dmtAdminFactory, null);
+			adminFactoryReg = bc.registerService(DmtAdmin.class.getName(),
+					dmtAdminFactory, null);
                 
             String[] services = new String[] {
                     DmtPrincipalPermissionAdmin.class.getName(),
                     ManagedService.class.getName()
             };
-            Hashtable properties = new Hashtable();
+			Dictionary<String,Object> properties = new Hashtable<>();
             properties.put("service.pid", DMT_PERMISSION_ADMIN_SERVICE_PID);
             permissionReg = bc.registerService(services, 
                     dmtPermissionAdmin, properties);
             
             // adding default (all) permissions for remote principal "admin"
-            Map permissions = dmtPermissionAdmin.getPrincipalPermissions();
+			Map<String,PermissionInfo[]> permissions = dmtPermissionAdmin
+					.getPrincipalPermissions();
             permissions.put("admin", new PermissionInfo[] {
                     new PermissionInfo(AllPermission.class.getName(), "", "")
             });
@@ -116,6 +118,7 @@ public class DmtAdminActivator implements BundleActivator {
         System.out.println("Dmt Admin activation finished successfully.");
 	}
 
+	@Override
 	public void stop(BundleContext bc) throws BundleException {
         // stopping event delivery to listeners directly registered in DmtAdmin
         dmtAdminFactory.stop();

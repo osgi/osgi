@@ -840,7 +840,6 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		Runnable init = () -> queueRef
 				.set(getQueueForInternalBuffering(count.getAsInt()));
 
-		@SuppressWarnings("resource")
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<R>(
 				psp, promiseFactory, this) {
 			@Override
@@ -969,7 +968,6 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
 		};
 
-		@SuppressWarnings("resource")
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<R>(
 				psp, new PromiseFactory(Objects.requireNonNull(ex),
 						promiseFactory.scheduledExecutor()),

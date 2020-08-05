@@ -5,7 +5,6 @@ import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.Event;
@@ -29,7 +27,7 @@ import org.osgi.service.log.LogService;
 //this queue is emptied by DmtAdminFactory, which forwards the events to all
 //locally registered DmtEventListeners
 public class EventDispatcher {
-	private static LinkedList localEventQueue = new LinkedList();
+	private static LinkedList<DmtEventCore> localEventQueue = new LinkedList<>();
 
 	private static void postLocalEvent(DmtEventCore event) {
 		synchronized (localEventQueue) {
@@ -55,7 +53,7 @@ public class EventDispatcher {
 					return null;
 			}
 
-			return (DmtEventCore) localEventQueue.removeFirst();
+			return localEventQueue.removeFirst();
 		}
 	}
 	
@@ -64,7 +62,7 @@ public class EventDispatcher {
 	private final Bundle initiatingBundle;
 	private Collection<String> signers;
 	
-	private LinkedList events;
+	private LinkedList<DmtEventCore>	events;
 
 	public EventDispatcher(Context context, int sessionId, Bundle initiatingBundle) {
 		this.sessionId = sessionId;
@@ -77,7 +75,7 @@ public class EventDispatcher {
 			// bugfix for 2350
 			signers.add(cert.getSubjectDN().getName());
 
-		events = new LinkedList();
+		events = new LinkedList<>();
 	}
 
 	synchronized void clear() {
@@ -85,9 +83,9 @@ public class EventDispatcher {
 	}
 
 	synchronized void excludeRoot(Node root) {
-		Iterator iterator = events.iterator();
+		Iterator<DmtEventCore> iterator = events.iterator();
 		while (iterator.hasNext())
-			((DmtEventCore) iterator.next()).excludeRoot(root);
+			iterator.next().excludeRoot(root);
 	}
 
 	synchronized void add(int type, Node node, Node newNode, Acl acl,
@@ -99,11 +97,11 @@ public class EventDispatcher {
 			// create new DmtEventCore, if it is the first event at all or
 			// the type differs from previous event
 			if (event == null || event.getType() != type) {
-				event = new DmtEventCore(typeInteger, sessionId);
+				event = new DmtEventCore(typeInteger.intValue(), sessionId);
 				events.add(event);
 			}
 			// only add this node, if it differs from last node in this event
-			List eventNodes = event.getNodes();
+			List<Node> eventNodes = event.getNodes();
 			boolean sameNode = eventNodes != null && eventNodes.size() > 0
 					&& node.equals(eventNodes.get(eventNodes.size() - 1));
 			if (!sameNode)
@@ -115,9 +113,9 @@ public class EventDispatcher {
 
 	synchronized void dispatchEvents() {
 		// send all events in the list in chronological order
-		Iterator iterator = events.iterator();
+		Iterator<DmtEventCore> iterator = events.iterator();
 		while (iterator.hasNext())
-			dispatchEvent((DmtEventCore) iterator.next());
+			dispatchEvent(iterator.next());
 		clear();
 	}
 
@@ -157,7 +155,8 @@ public class EventDispatcher {
 		dmtEvent.addProperty(EventConstants.BUNDLE_SIGNER, signers );
 		dmtEvent.addProperty(EventConstants.BUNDLE_SYMBOLICNAME, initiatingBundle.getSymbolicName());
 		dmtEvent.addProperty(EventConstants.BUNDLE_VERSION, initiatingBundle.getVersion());
-		dmtEvent.addProperty(EventConstants.BUNDLE_ID, initiatingBundle.getBundleId());
+		dmtEvent.addProperty(EventConstants.BUNDLE_ID,
+				Long.valueOf(initiatingBundle.getBundleId()));
 
 		// add the nodes and newnodes properties
 		List<Node> nodes = dmtEvent.getNodes();
@@ -182,7 +181,7 @@ public class EventDispatcher {
 	}
 
 	private void postOSGiEvent(DmtEventCore dmtEvent) {
-		final EventAdmin eventChannel = (EventAdmin) context.getTracker(
+		final EventAdmin eventChannel = context.getTracker(
 				EventAdmin.class).getService();
 
 		if (eventChannel == null) {// logging a warning if Event Admin is
@@ -196,10 +195,11 @@ public class EventDispatcher {
 		}
 
 		final Event event = new Event(dmtEvent.getTopic(),
-				(Dictionary)dmtEvent.getProperties());
+				dmtEvent.getProperties());
 
-		AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
+		AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			@Override
+			public Void run() {
 				eventChannel.postEvent(event);
 				return null;
 			}

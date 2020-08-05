@@ -43,13 +43,14 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 	
 	public void testLookupAccessRestrictions() throws Exception {
 		// Grab the context manager
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		Context ctx = null;
 		try {
 			// Grab a default context for looking up services
 			ctx = ctxManager.newInitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Try to grab a service that we shouldn't be allowed to grab.
+			@SuppressWarnings("unused")
 			Object testObject = ctx.lookup("osgi:service/org.osgi.service.permissionadmin.PermissionAdmin");
 		} catch (javax.naming.NameNotFoundException ex) {
 			pass("javax.naming.NameNotFoundException caught in testLookupAccessRestrictions: SUCCESS");
@@ -69,7 +70,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		Bundle contextBundle = installBundle("inaccessibleBundleContext.jar");
 		// Grab the context manager
 		Context ctx = null;
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		BundleContext bundleCtx = (BundleContext) getService(Object.class,
 				"(tb=inaccessibleBundleContext)");
 		env.put(JNDIConstants.BUNDLE_CONTEXT, bundleCtx);
@@ -78,6 +79,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			//Try to grab the bundle context.  We don't have permissions for it so this should fail.
+			@SuppressWarnings("unused")
 			Object testObject = ctx.lookup("osgi:framework/bundleContext");
 		} catch (javax.naming.NameNotFoundException ex) {
 			pass("javax.naming.NameNotFoundException caught in testBundleContextAccessRestrictions: SUCCESS");
@@ -97,9 +99,9 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Install the bundle necessary for this test
 		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -128,9 +130,9 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Install the bundle necessary for this test
 		Bundle builderBundle = installBundle("builderBundle.jar");
 		// Grab the JNDIContextManager service
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		JNDIContextManager ctxManager = getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		Hashtable env = new Hashtable();
+		Hashtable<String,Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
 		Context ctx = null;
@@ -159,7 +161,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Install the bundle necessary for this test
 		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -176,7 +178,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Install the bundle necessary for this test
 		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			BasicAttributes attrs = new BasicAttributes();
 			attrs.put("testAttribute", new Object());
@@ -195,7 +197,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Install the bundle necessary for this test
 		Bundle builderBundle = installBundle("builderBundle.jar");
 		// Grab the JNDIProviderAdmin service
-		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		JNDIProviderAdmin ctxAdmin = getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());

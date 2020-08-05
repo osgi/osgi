@@ -17,6 +17,7 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.Map;
+
 import org.osgi.impl.service.zigbee.util.teststep.ZigBeeEventSourceImpl;
 import org.osgi.service.zigbee.ZCLEventListener;
 
@@ -28,6 +29,6 @@ import org.osgi.service.zigbee.ZCLEventListener;
  */
 public class RegistratonInfo {
 	public ZCLEventListener			eventListener;
-	public Map						properties;
+	public Map<String,Object>		properties;
 	public ZigBeeEventSourceImpl	eventSource;
 }

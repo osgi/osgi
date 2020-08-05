@@ -25,6 +25,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -62,7 +63,8 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
-	private static final String	TAG						= ZigBeeHostImpl.class.getName();
+	static final String											TAG						= ZigBeeHostImpl.class
+			.getName();
 
 	private long				communicationTimeout	= 60 * 1000;
 	private String				hostPid;
@@ -75,32 +77,32 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private String				preconfiguredLinkKey	= "KEY";
 
-	private List				nodes					= new ArrayList();
+	private List<ZigBeeNodeImpl>	nodes					= new ArrayList<>();
 
 	private final static int	STOPPED					= 0;
 	private final static int	STARTING				= 1;
 	private final static int	STARTED					= 2;
+	@SuppressWarnings("unused")
 	private final static int	STOPPING				= 3;
 
 	private int					state					= STOPPED;
 
-	private ServiceRegistration	hostServiceReg			= null;
+	private ServiceRegistration<ZigBeeHost>	hostServiceReg			= null;
 
-	private BundleContext		bc;
+	BundleContext											bc;
 
-	private List				importedEpsList			= new ArrayList();
-	private List				exportedEpsList			= new ArrayList();
+	private List<ZigBeeEndpoint>			exportedEpsList			= new ArrayList<>();
 
 	private static final String	EXPORTED_EPS_FILTER		= "(&(objectClass=" + ZigBeeEndpoint.class.getName() + ")(" + ZigBeeEndpoint.ZIGBEE_EXPORT + "=*))";
 
-	private ServiceTracker		exportedEpsTracker		= null;
+	private ServiceTracker<ZigBeeEndpoint,ZigBeeEndpoint>	exportedEpsTracker		= null;
 
 	/**
 	 * ServiceTracker for ZCLEventListener objects.
 	 */
-	private ServiceTracker		eventListenersTracker	= null;
+	private ServiceTracker<ZCLEventListener,ZCLEventListener>	eventListenersTracker	= null;
 
-	protected Map				eventListenersMap		= new HashMap();
+	protected Map<ZCLEventListener,RegistratonInfo>				eventListenersMap		= new HashMap<>();
 
 	/**
 	 * Creates a ZigBeeHost object.
@@ -126,6 +128,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		this.hostPid = hostPid;
 	}
 
+	@Override
 	public void start() throws Exception {
 		synchronized (this) {
 			if (state != STOPPED) {
@@ -136,6 +139,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public void stop() throws Exception {
 		synchronized (this) {
 			if (state != STARTED) {
@@ -149,7 +153,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 		this.nodeDescriptor.getLogicalType();
 
-		if (this.nodeDescriptor.getLogicalType() == ZigBeeHost.COORDINATOR) {
+		if (this.nodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
 			/*
 			 * Register the ZigBeeNode services and their ZigBeeEndpoint
 			 * services according to the information present in the
@@ -157,8 +161,9 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 			 * are registered before their ZigBeeNode.
 			 */
 
-			for (Iterator iterator = nodes.iterator(); iterator.hasNext();) {
-				ZigBeeNodeImpl node = (ZigBeeNodeImpl) iterator.next();
+			for (Iterator<ZigBeeNodeImpl> iterator = nodes.iterator(); iterator
+					.hasNext();) {
+				ZigBeeNodeImpl node = iterator.next();
 				node.activate(bc);
 			}
 
@@ -172,9 +177,10 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 		this.unregisterTrackers();
 
-		if (this.nodeDescriptor.getLogicalType() == ZigBeeHost.COORDINATOR) {
-			for (Iterator iterator = nodes.iterator(); iterator.hasNext();) {
-				ZigBeeNodeImpl node = (ZigBeeNodeImpl) iterator.next();
+		if (this.nodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
+			for (Iterator<ZigBeeNodeImpl> iterator = nodes.iterator(); iterator
+					.hasNext();) {
+				ZigBeeNodeImpl node = iterator.next();
 				node.deactivate(bc);
 			}
 		}
@@ -182,12 +188,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		this.state = STOPPED;
 	}
 
+	@Override
 	public boolean isStarted() {
 		synchronized (this) {
 			return (state == STARTED);
 		}
 	}
 
+	@Override
 	public void setPanId(int panId) throws IllegalStateException {
 		synchronized (this) {
 			if (state != STOPPED) {
@@ -202,24 +210,28 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public int getPanId() {
 		synchronized (this) {
 			return panId;
 		}
 	}
 
+	@Override
 	public String getHostPid() {
 		synchronized (this) {
 			return hostPid;
 		}
 	}
 
+	@Override
 	public BigInteger getExtendedPanId() {
 		synchronized (this) {
 			return extendedPanId;
 		}
 	}
 
+	@Override
 	public void setExtendedPanId(BigInteger extendedPanId) {
 		synchronized (this) {
 			if (state != STOPPED) {
@@ -229,13 +241,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public String getPreconfiguredLinkKey() throws Exception {
 		synchronized (this) {
 			return preconfiguredLinkKey;
 		}
 	}
 
-	public Promise refreshNetwork() throws Exception {
+	@Override
+	public Promise<Boolean> refreshNetwork() throws Exception {
 		synchronized (this) {
 			if (state != STARTED) {
 				Promises.failed(new IllegalStateException("host is not started"));
@@ -245,6 +259,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public void permitJoin(short duration) throws Exception {
 		synchronized (this) {
 			if (duration < 0 || duration > 0xff) {
@@ -258,24 +273,28 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public int getChannelMask() throws Exception {
 		synchronized (this) {
 			return channelMask;
 		}
 	}
 
+	@Override
 	public int getChannel() {
 		synchronized (this) {
 			return currentChannel;
 		}
 	}
 
+	@Override
 	public int getSecurityLevel() {
 		synchronized (this) {
 			return securityLevel;
 		}
 	}
 
+	@Override
 	public void setLogicalType(short logicalNodeType) throws Exception {
 		synchronized (this) {
 			if (state != STOPPED) {
@@ -287,12 +306,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public void setChannelMask(int mask) throws IOException, IllegalStateException {
 		synchronized (this) {
 			this.channelMask = mask;
 		}
 	}
 
+	@Override
 	public void createGroupService(int groupAddress) throws Exception {
 		new UnsupportedOperationException("This method is not implemented because cannot be tested by the CT.");
 	}
@@ -301,6 +322,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		new UnsupportedOperationException("This method is not implemented because cannot be tested by the CT.");
 	}
 
+	@Override
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
 
 		ZCLCommandResponseStreamImpl stream = new ZCLCommandResponseStreamImpl();
@@ -315,6 +337,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return stream;
 	}
 
+	@Override
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame,
 			String exportedServicePID) {
 		ZCLCommandResponseStreamImpl stream = new ZCLCommandResponseStreamImpl();
@@ -329,6 +352,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return stream;
 	}
 
+	@Override
 	public void updateNetworkChannel(byte channel) throws IllegalStateException, IOException {
 		synchronized (this) {
 			if (state != STARTED) {
@@ -338,12 +362,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public short getBroadcastRadius() {
 		synchronized (this) {
 			return broadcastRadius;
 		}
 	}
 
+	@Override
 	public void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException {
 		synchronized (this) {
 
@@ -358,6 +384,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public void setCommunicationTimeout(long timeout) {
 		synchronized (this) {
 
@@ -369,6 +396,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
+	@Override
 	public long getCommunicationTimeout() {
 		synchronized (this) {
 			return communicationTimeout;
@@ -407,7 +435,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 			 * configuration file.
 			 */
 
-			Dictionary hostProperties = new Hashtable();
+			Dictionary<String,Object> hostProperties = new Hashtable<>();
 			if (wasStarted) {
 				hostProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
 				hostProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
@@ -426,7 +454,8 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 				hostProperties.put(org.osgi.service.device.Constants.DEVICE_SERIAL, complexDescriptor.getSerialNumber());
 			}
 
-			hostServiceReg = bc.registerService(ZigBeeHost.class.getName(), this, hostProperties);
+			hostServiceReg = bc.registerService(ZigBeeHost.class, this,
+					hostProperties);
 
 			if (wasStarted) {
 				this.internalStart();
@@ -445,29 +474,40 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	protected void registerTrackers() throws InvalidSyntaxException {
-		exportedEpsTracker = new ServiceTracker(bc, bc.createFilter(EXPORTED_EPS_FILTER), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference ref) {
-				ZigBeeEndpoint endpoint = (ZigBeeEndpoint) bc.getService(ref);
-				boolean hasBeenExported = tryToExportEndpoint(endpoint);
-				if (hasBeenExported) {
-					addExportedEndpoint(endpoint);
-				}
-				return endpoint;
-			}
+		exportedEpsTracker = new ServiceTracker<>(
+				bc, bc.createFilter(EXPORTED_EPS_FILTER),
+				new ServiceTrackerCustomizer<ZigBeeEndpoint,ZigBeeEndpoint>() {
+					@Override
+					public ZigBeeEndpoint addingService(
+							ServiceReference<ZigBeeEndpoint> ref) {
+						ZigBeeEndpoint endpoint = bc.getService(ref);
+						boolean hasBeenExported = tryToExportEndpoint(endpoint);
+						if (hasBeenExported) {
+							addExportedEndpoint(endpoint);
+						}
+						return endpoint;
+					}
 
-			public void modifiedService(ServiceReference reference, Object service) {
-				/*
-				 * It should check if the service, since the service properties
-				 * are changed can now be exported. In our CT we do not issue
-				 * this check (modify the service properties) so we do not have
-				 * to implement this method.
-				 */
-			}
+					@Override
+					public void modifiedService(
+							ServiceReference<ZigBeeEndpoint> reference,
+							ZigBeeEndpoint service) {
+						/*
+						 * It should check if the service, since the service
+						 * properties are changed can now be exported. In our CT
+						 * we do not issue this check (modify the service
+						 * properties) so we do not have to implement this
+						 * method.
+						 */
+					}
 
-			public void removedService(ServiceReference reference, Object service) {
-				removeExportedEndpoint((ZigBeeEndpoint) service);
-			}
-		});
+					@Override
+					public void removedService(
+							ServiceReference<ZigBeeEndpoint> reference,
+							ZigBeeEndpoint service) {
+						removeExportedEndpoint(service);
+					}
+				});
 
 		/*
 		 * Starts to track exported ZigBeeEndpoint services.
@@ -477,66 +517,85 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		String IEEE_ADDRESS_FILTER = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + this.getIEEEAddress() + ")";
 		String ZCL_EVENT_LISTENER_CLASS_FILTER = "(objectClass=" + ZCLEventListener.class.getName() + ")";
 
+		@SuppressWarnings("unused")
 		String eventsFilter = "(&" + ZCL_EVENT_LISTENER_CLASS_FILTER + IEEE_ADDRESS_FILTER + ")";
 
-		eventListenersTracker = new ServiceTracker(bc, bc.createFilter(ZCL_EVENT_LISTENER_CLASS_FILTER), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference ref) {
-				ZCLEventListener eventListener = (ZCLEventListener) bc.getService(ref);
+		eventListenersTracker = new ServiceTracker<>(bc,
+				bc.createFilter(ZCL_EVENT_LISTENER_CLASS_FILTER),
+				new ServiceTrackerCustomizer<ZCLEventListener,ZCLEventListener>() {
+					@Override
+					public ZCLEventListener addingService(
+							ServiceReference<ZCLEventListener> ref) {
+						ZCLEventListener eventListener = bc.getService(ref);
 
-				RegistratonInfo registrationInfo = new RegistratonInfo();
-				registrationInfo.properties = getProperties(ref);
-				registrationInfo.eventListener = eventListener;
+						RegistratonInfo registrationInfo = new RegistratonInfo();
+						registrationInfo.properties = getProperties(ref);
+						registrationInfo.eventListener = eventListener;
 
-				ZigBeeEvent event;
-				try {
-					event = createEvent(registrationInfo, new Boolean(true));
-					registrationInfo.eventSource = new ZigBeeEventSourceImpl(registrationInfo, event);
-					registrationInfo.eventSource.start();
-					eventListenersMap.put(eventListener, registrationInfo);
-				} catch (Throwable e) {
-					Logger.e(TAG, "Exception creating event: " + e.getMessage());
-				}
+						ZigBeeEvent event;
+						try {
+							event = createEvent(registrationInfo,
+									new Boolean(true));
+							registrationInfo.eventSource = new ZigBeeEventSourceImpl(
+									registrationInfo, event);
+							registrationInfo.eventSource.start();
+							eventListenersMap.put(eventListener,
+									registrationInfo);
+						} catch (Throwable e) {
+							Logger.e(TAG, "Exception creating event: "
+									+ e.getMessage());
+						}
 
-				return eventListener;
-			}
+						return eventListener;
+					}
 
-			public void modifiedService(ServiceReference reference, Object eventListener) {
+					@Override
+					public void modifiedService(
+							ServiceReference<ZCLEventListener> reference,
+							ZCLEventListener eventListener) {
 
-				Logger.d(TAG, "the ZCLEventListener has been updated");
+						Logger.d(TAG, "the ZCLEventListener has been updated");
 
-				RegistratonInfo registrationInfo = (RegistratonInfo) eventListenersMap.get(eventListener);
-				registrationInfo.properties = getProperties(reference);
+						RegistratonInfo registrationInfo = eventListenersMap
+								.get(eventListener);
+						registrationInfo.properties = getProperties(reference);
 
-				try {
-					registrationInfo.eventSource.update();
-				} catch (Throwable e) {
-					Logger.e(TAG, "Exception creating event: " + e.getMessage());
-				}
-			}
+						try {
+							registrationInfo.eventSource.update();
+						} catch (Throwable e) {
+							Logger.e(TAG, "Exception creating event: "
+									+ e.getMessage());
+						}
+					}
 
-			public void removedService(ServiceReference reference, Object eventListener) {
-				// stop the eventListener
+					@Override
+					public void removedService(
+							ServiceReference<ZCLEventListener> reference,
+							ZCLEventListener eventListener) {
+						// stop the eventListener
 
-				RegistratonInfo registrationInfo = (RegistratonInfo) eventListenersMap.get(eventListener);
-				try {
-					registrationInfo.eventSource.stop();
-				} catch (InterruptedException e) {
+						RegistratonInfo registrationInfo = eventListenersMap
+								.get(eventListener);
+						try {
+							registrationInfo.eventSource.stop();
+						} catch (InterruptedException e) {
+							// ignore
+						}
 
-				}
+						eventListenersMap.remove(eventListener);
+					}
 
-				eventListenersMap.remove(eventListener);
-			}
-
-			private Map getProperties(ServiceReference ref) {
-				Map map = new HashMap();
-				String[] keys = ref.getPropertyKeys();
-				for (int i = 0; i < keys.length; i++) {
-					Object value = ref.getProperty(keys[i]);
-					map.put(keys[i], value);
-				}
-				return map;
-			}
-		});
+					private Map<String,Object> getProperties(
+							ServiceReference<ZCLEventListener> ref) {
+						Map<String,Object> map = new HashMap<>();
+						String[] keys = ref.getPropertyKeys();
+						for (int i = 0; i < keys.length; i++) {
+							Object value = ref.getProperty(keys[i]);
+							map.put(keys[i], value);
+						}
+						return map;
+					}
+				});
 
 		/*
 		 * Starts to track exported ZigBeeEndpoint services.
@@ -590,8 +649,9 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 			return false;
 		}
 
-		for (Iterator it = exportedEpsList.iterator(); it.hasNext();) {
-			ZigBeeEndpoint endpoint = (ZigBeeEndpoint) it.next();
+		for (Iterator<ZigBeeEndpoint> it = exportedEpsList.iterator(); it
+				.hasNext();) {
+			ZigBeeEndpoint endpoint = it.next();
 			if (endpoint.getId() == newEndpoint.getId() && endpoint.getNodeAddress().equals(newEndpoint.getNodeAddress())) {
 				/*
 				 * Once the notExported() method has been called once we can
@@ -623,7 +683,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	 * @return The created and filled ZigBeeEvent instance.
 	 */
 	protected ZigBeeEvent createEvent(RegistratonInfo registrationInfo, Object value) {
-		Map map = registrationInfo.properties;
+		Map<String, ? > map = registrationInfo.properties;
 
 		BigInteger ieeeAddress = ParserUtils.getParameter(map, ZigBeeNode.IEEE_ADDRESS, ParserUtils.MANDATORY, BigInteger.ZERO);
 		short endpointId = ParserUtils.getParameter(map, ZigBeeEndpoint.ENDPOINT_ID, ParserUtils.MANDATORY, (short) -1);

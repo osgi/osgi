@@ -16,6 +16,7 @@ public class GenaServer extends Thread {
 	private boolean			done	= false;	// Flag indicating when to
 	// stop
 	public Socket			client;
+	@SuppressWarnings("unused")
 	private EventRegistry	eventRegistry;
 	public ControlImpl		cti;
 	private int				defaultPort;
@@ -57,6 +58,7 @@ public class GenaServer extends Thread {
 	// each processing, checks the pool,if pool is not empty , relases the
 	// thread else added to the
 	// pool for waiting requests.
+	@Override
 	public void run() {
 		try {
 			Processor pr = null;

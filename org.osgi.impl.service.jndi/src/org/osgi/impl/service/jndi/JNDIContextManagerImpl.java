@@ -40,8 +40,8 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 	private final OSGiInitialContextFactoryBuilder	m_builder;
 	
 	/* list of Context implementations */
-	private final List m_listOfContexts = 
-		Collections.synchronizedList(new LinkedList());
+	private final List<Context>						m_listOfContexts	= Collections
+			.synchronizedList(new LinkedList<>());
 
 	JNDIContextManagerImpl(Bundle callingBundle, BundleContext implBundleContext) {
 		// create a new builder for each client bundle
@@ -51,15 +51,18 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 	}
 
 
+	@Override
 	public Context newInitialContext() throws NamingException {
 		synchronized (m_builder) {
-			final Context initialContext = createNewInitialContext(new Hashtable());
+			final Context initialContext = createNewInitialContext(
+					new Hashtable<>());
 			m_listOfContexts.add(initialContext);
 			return initialContext;
 		}
 	}
 
-	public Context newInitialContext(Map environment)
+	@Override
+	public Context newInitialContext(Map<String, ? > environment)
 			throws NamingException {
 		synchronized (m_builder) {
 			final Context initialContext = createNewInitialContext(environment);
@@ -68,9 +71,11 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 		}
 	}
 
+	@Override
 	public DirContext newInitialDirContext() throws NamingException {
 		synchronized (m_builder) {
-			Context contextToReturn = createNewInitialContext(new Hashtable());
+			Context contextToReturn = createNewInitialContext(
+					new Hashtable<>());
 			if (contextToReturn instanceof DirContext) {
 				m_listOfContexts.add(contextToReturn);
 				return (DirContext) contextToReturn;
@@ -80,7 +85,9 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type."); 
 	}
 
-	public DirContext newInitialDirContext(Map environment) throws NamingException {
+	@Override
+	public DirContext newInitialDirContext(Map<String, ? > environment)
+			throws NamingException {
 		synchronized (m_builder) {
 			Context context = createNewInitialContext(environment);
 			if (context instanceof DirContext) {
@@ -96,13 +103,14 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 	 * Closes all the known context implementations that have 
 	 * been provided by this service.  
 	 */
+	@Override
 	public void close() {
 		// close known Context implementations
 		synchronized (m_listOfContexts) {
-			Iterator iterator = m_listOfContexts.iterator();
+			Iterator<Context> iterator = m_listOfContexts.iterator();
 			// call close() on all known contexts
 			while (iterator.hasNext()) {
-				Context context = (Context) iterator.next();
+				Context context = iterator.next();
 				try {
 					context.close();
 				}
@@ -122,9 +130,10 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 		}
 	}
 
-	private Context createNewInitialContext(final Map environment)
+	private Context createNewInitialContext(final Map<String, ? > environment)
 			throws NamingException {
-		final Hashtable jndiEnvironment = new Hashtable(environment);
+		final Hashtable<String,Object> jndiEnvironment = new Hashtable<>(
+				environment);
 		InitialContextFactory factory = 
 			m_builder.createInitialContextFactory(jndiEnvironment);
 		return factory.getInitialContext(jndiEnvironment);

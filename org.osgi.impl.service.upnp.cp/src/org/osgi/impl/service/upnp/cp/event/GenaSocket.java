@@ -1,10 +1,11 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.URL;
 
 public class GenaSocket {
-	private String				path;
 	private BufferedInputStream	in;
 	private OutputStream		dos;
 	private RequestProcessor	requestparser;
@@ -51,7 +52,7 @@ public class GenaSocket {
 	// This method checks for the subscription id. And if the subscription id is
 	// invalid.
 	void checkSubscriptionId() throws Exception {
-		sid = (String) requestparser.headers.get("sid");
+		sid = requestparser.headers.get("sid");
 		if (sid == null || !sid.startsWith("uuid:")) {
 			throw new Exception("Invalid sid received, please try again");
 		}
@@ -60,7 +61,7 @@ public class GenaSocket {
 	// This method checks for the timeout duration. And if the timeout duration
 	// is invalid
 	void checkTimeoutDuration() throws Exception {
-		receivedTimeout = (String) requestparser.headers.get("timeout");
+		receivedTimeout = requestparser.headers.get("timeout");
 		if (receivedTimeout == null) {
 			throw new Exception("Invalid timeout received,please try again");
 		}

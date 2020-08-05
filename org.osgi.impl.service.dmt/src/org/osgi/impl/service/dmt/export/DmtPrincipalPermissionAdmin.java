@@ -20,6 +20,8 @@ package org.osgi.impl.service.dmt.export;
 import java.io.IOException;
 import java.util.Map;
 
+import org.osgi.service.permissionadmin.PermissionInfo;
+
 public interface DmtPrincipalPermissionAdmin {
     /**
      * Returns the mapping of principal names to Java permissions. The
@@ -32,7 +34,7 @@ public interface DmtPrincipalPermissionAdmin {
      * @return a <code>Map</code> containing principal names and the
      *         permissions associated with them
      */
-    Map  getPrincipalPermissions();
+	Map<String,PermissionInfo[]> getPrincipalPermissions();
     
     /**
      * Replaces the current permission table with the argument. The given map
@@ -46,5 +48,6 @@ public interface DmtPrincipalPermissionAdmin {
      * @throws IOException if there is an error updating the persistent
      *         permission store
      */
-    void setPrincipalPermissions(Map permissions) throws IOException;
+	void setPrincipalPermissions(Map<String,PermissionInfo[]> permissions)
+			throws IOException;
 }

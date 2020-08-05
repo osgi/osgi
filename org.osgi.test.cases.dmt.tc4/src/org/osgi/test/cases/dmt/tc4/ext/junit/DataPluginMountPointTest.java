@@ -2,6 +2,7 @@ package org.osgi.test.cases.dmt.tc4.ext.junit;
 
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.MountPoint;
 import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.MountPointEvent;
@@ -9,12 +10,14 @@ import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
 
 public class DataPluginMountPointTest extends DmtAdminTestCase {
 
-    protected void setUp() throws Exception {
+    @Override
+	protected void setUp() throws Exception {
         super.setUp();
         getDmtAdmin();
     }
 
-    protected void tearDown() throws Exception {
+    @Override
+	protected void tearDown() throws Exception {
         unregisterPlugins();
         closeDmtSession();
         super.tearDown();
@@ -23,7 +26,8 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test1MountPointCallback() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1");
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1");
 
         MountPointEvent addedEvent = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent.getType());
@@ -43,7 +47,10 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
         TestDataMountPlugin pluginA = new TestDataMountPlugin();
         setLeafNode(pluginA, "./A1");
         setLeafNode(pluginA, "./A2");
-        ServiceRegistration registrationA = registerMountDataPlugin(pluginA, new String[] { "./A1", "./A2" });
+		ServiceRegistration<DataPlugin> registrationA = registerMountDataPlugin(
+				pluginA, new String[] {
+						"./A1", "./A2"
+				});
 
         MountPointEvent addedEvent0 = pluginA.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent0.getType());
@@ -71,7 +78,10 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
         TestDataMountPlugin pluginA = new TestDataMountPlugin();
         setLeafNode(pluginA, "./A1");
         setLeafNode(pluginA, "./A2/B1");
-        ServiceRegistration registrationA = registerMountDataPlugin(pluginA, new String[] { "./A1", "./A2/B1" });
+		ServiceRegistration<DataPlugin> registrationA = registerMountDataPlugin(
+				pluginA, new String[] {
+						"./A1", "./A2/B1"
+				});
 
         MountPointEvent addedEvent1 = pluginA.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEvent1.getType());
@@ -97,7 +107,10 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test2MountPluginsCallbackPattern01() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
 
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
@@ -106,7 +119,10 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
         TestDataMountPlugin pluginA2B2 = new TestDataMountPlugin();
         setLeafNode(pluginA2B2, "./A1/B2");
         setLeafNode(pluginA2B2, "./A2");
-        ServiceRegistration registrationA2B2 = registerMountDataPlugin(pluginA2B2, new String[] { "./A1/B2", "./A2" });
+		ServiceRegistration<DataPlugin> registrationA2B2 = registerMountDataPlugin(
+				pluginA2B2, new String[] {
+						"./A1/B2", "./A2"
+				});
 
         MountPointEvent addedEventA2B21 = pluginA2B2.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA2B21.getType());
@@ -143,21 +159,26 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test2MountPluginsCallbackPattern03() throws Exception {
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setLeafNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1");
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1");
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginB2C2 = new TestDataMountPlugin();
         setLeafNode(pluginB2C2, "./A1/B2/C2");
-        ServiceRegistration registrationB2C2 = registerMountDataPlugin(pluginB2C2, "./A1/B2/C2");
+		ServiceRegistration<DataPlugin> registrationB2C2 = registerMountDataPlugin(
+				pluginB2C2, "./A1/B2/C2");
         MountPointEvent addedEventB2C2 = pluginB2C2.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB2C2.getType());
         assertMountPath("./A1/B2/C2", addedEventB2C2.getMountPoint());
 
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertScaffoldNode("./A1");
@@ -182,21 +203,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern01() throws Exception {
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
@@ -215,21 +243,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern02() throws Exception {
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
@@ -248,18 +283,25 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern03() throws Exception {
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
@@ -278,21 +320,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern04() throws Exception {
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
@@ -311,21 +360,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern05() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
@@ -355,21 +411,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void test3MountPluginsCallbackPattern06() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
@@ -405,21 +468,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPatten08() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setLeafNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1");
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1");
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
@@ -449,28 +519,38 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPattern10() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setInteriorNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1", new String[] { "D1" });
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1", new String[] {
+						"D1"
+				});
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginD1 = new TestDataMountPlugin();
         setLeafNode(pluginD1, "./A1/B1/C1/D1");
-        ServiceRegistration registrationD1 = registerMountDataPlugin(pluginD1, "./A1/B1/C1/D1");
+		ServiceRegistration<DataPlugin> registrationD1 = registerMountDataPlugin(
+				pluginD1, "./A1/B1/C1/D1");
         MountPointEvent addedEventD1 = pluginD1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventD1.getType());
         assertMountPath("./A1/B1/C1/D1", addedEventD1.getMountPoint());
@@ -505,28 +585,38 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPattern11() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setInteriorNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1", new String[] { "D1" });
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1", new String[] {
+						"D1"
+				});
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginD1 = new TestDataMountPlugin();
         setLeafNode(pluginD1, "./A1/B1/C1/D1");
-        ServiceRegistration registrationD1 = registerMountDataPlugin(pluginD1, "./A1/B1/C1/D1");
+		ServiceRegistration<DataPlugin> registrationD1 = registerMountDataPlugin(
+				pluginD1, "./A1/B1/C1/D1");
         MountPointEvent addedEventD1 = pluginD1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventD1.getType());
         assertMountPath("./A1/B1/C1/D1", addedEventD1.getMountPoint());
@@ -581,28 +671,38 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPattern12() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setInteriorNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1", new String[] { "D1" });
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1", new String[] {
+						"D1"
+				});
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
 
         TestDataMountPlugin pluginD1 = new TestDataMountPlugin();
         setLeafNode(pluginD1, "./A1/B1/C1/D1");
-        ServiceRegistration registrationD1 = registerMountDataPlugin(pluginD1, "./A1/B1/C1/D1");
+		ServiceRegistration<DataPlugin> registrationD1 = registerMountDataPlugin(
+				pluginD1, "./A1/B1/C1/D1");
         MountPointEvent addedEventD1 = pluginD1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventD1.getType());
         assertMountPath("./A1/B1/C1/D1", addedEventD1.getMountPoint());
@@ -657,7 +757,10 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPattern13() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
@@ -665,21 +768,28 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
         setInteriorNode(pluginB1, "./A1/B1/C1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1/D1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1/D1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginD1 = new TestDataMountPlugin();
         setInteriorNode(pluginD1, "./A1/B1/C1/D1");
-        ServiceRegistration registrationD1 = registerMountDataPlugin(pluginD1, "./A1/B1/C1/D1", new String[] { "E1" });
+		ServiceRegistration<DataPlugin> registrationD1 = registerMountDataPlugin(
+				pluginD1, "./A1/B1/C1/D1", new String[] {
+						"E1"
+				});
         MountPointEvent addedEventD1 = pluginD1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventD1.getType());
         assertMountPath("./A1/B1/C1/D1", addedEventD1.getMountPoint());
 
         TestDataMountPlugin pluginE1 = new TestDataMountPlugin();
         setLeafNode(pluginE1, "./A1/B1/C1/D1/E1");
-        ServiceRegistration registrationE1 = registerMountDataPlugin(pluginE1, "./A1/B1/C1/D1/E1");
+		ServiceRegistration<DataPlugin> registrationE1 = registerMountDataPlugin(
+				pluginE1, "./A1/B1/C1/D1/E1");
         MountPointEvent addedEventE1 = pluginE1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventE1.getType());
         assertMountPath("./A1/B1/C1/D1/E1", addedEventE1.getMountPoint());
@@ -736,21 +846,30 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
     public void testMountPluginCallbackPattern14() throws Exception {
         TestDataMountPlugin pluginA1 = new TestDataMountPlugin();
         setInteriorNode(pluginA1, "./A1");
-        ServiceRegistration registrationA1 = registerMountDataPlugin(pluginA1, "./A1", new String[] { "B1" });
+		ServiceRegistration<DataPlugin> registrationA1 = registerMountDataPlugin(
+				pluginA1, "./A1", new String[] {
+						"B1"
+				});
         MountPointEvent addedEventA1 = pluginA1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventA1.getType());
         assertMountPath("./A1", addedEventA1.getMountPoint());
 
         TestDataMountPlugin pluginB1 = new TestDataMountPlugin();
         setInteriorNode(pluginB1, "./A1/B1");
-        ServiceRegistration registrationB1 = registerMountDataPlugin(pluginB1, "./A1/B1", new String[] { "C1" });
+		ServiceRegistration<DataPlugin> registrationB1 = registerMountDataPlugin(
+				pluginB1, "./A1/B1", new String[] {
+						"C1"
+				});
         MountPointEvent addedEventB1 = pluginB1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventB1.getType());
         assertMountPath("./A1/B1", addedEventB1.getMountPoint());
 
         TestDataMountPlugin pluginC1 = new TestDataMountPlugin();
         setInteriorNode(pluginC1, "./A1/B1/C1");
-        ServiceRegistration registrationC1 = registerMountDataPlugin(pluginC1, "./A1/B1/C1", new String[] { "D1" });
+		ServiceRegistration<DataPlugin> registrationC1 = registerMountDataPlugin(
+				pluginC1, "./A1/B1/C1", new String[] {
+						"D1"
+				});
         MountPointEvent addedEventC1 = pluginC1.getMountPointEvent(0);
         assertEquals(MountPointEvent.MOUNT_POINTS_ADDED, addedEventC1.getType());
         assertMountPath("./A1/B1/C1", addedEventC1.getMountPoint());
@@ -771,7 +890,8 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
 
         TestDataMountPlugin pluginD1 = new TestDataMountPlugin();
         setLeafNode(pluginD1, "./A1/B1/C1/D1");
-        ServiceRegistration registrationD1 = registerMountDataPlugin(pluginD1, "./A1/B1/C1/D1");
+		ServiceRegistration<DataPlugin> registrationD1 = registerMountDataPlugin(
+				pluginD1, "./A1/B1/C1/D1");
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertInteriorNode("./A1");

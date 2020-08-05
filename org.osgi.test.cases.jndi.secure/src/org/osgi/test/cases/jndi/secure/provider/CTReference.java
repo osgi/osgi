@@ -42,10 +42,12 @@ public class CTReference extends Reference {
 		super(className, addr, factory, factoryLocation);
 	}
 	
+	@Override
 	public String getClassName() {
 		return className;
 	}
 
+	@Override
 	public String getFactoryClassName() {
 		return classFactory; 
 	}	

@@ -5,10 +5,8 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
 
@@ -28,8 +26,8 @@ public class BundleT6Activator implements BundleActivator {
 		final String filter = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
 				+ "=syncT6-1)";
-		final Synchronizer sync = (Synchronizer) Util.getService(context,
-				Synchronizer.class.getName(), filter);
+		final Synchronizer sync = Util.getService(context,
+				Synchronizer.class, filter);
 
 		registerService(context, Util.createPid("pid_targeted1"), sync);
 	}
@@ -39,7 +37,7 @@ public class BundleT6Activator implements BundleActivator {
 			final Synchronizer sync) throws Exception {
 
 		final Object service = new ManagedServiceImpl(sync);
-		final Dictionary props = new Hashtable();
+		final Dictionary<String,Object> props = new Hashtable<>();
 
 		log("Going to register ManagedService. pid:\n\t"
 				+pid);
@@ -76,7 +74,8 @@ public class BundleT6Activator implements BundleActivator {
 			this.sync = sync;
 		}
 
-		public void updated(final Dictionary props) throws ConfigurationException {
+		public void updated(final Dictionary<String, ? > props)
+				throws ConfigurationException {
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);

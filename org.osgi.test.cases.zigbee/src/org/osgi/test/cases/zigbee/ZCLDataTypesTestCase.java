@@ -18,6 +18,7 @@ package org.osgi.test.cases.zigbee;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -348,7 +349,9 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeSecurityKey128.getInstance(), ZigBeeDataTypes.SECURITY_KEY_128, 8, byte[].class, U, I, A);
 	}
 
-	protected void basicDataTypeChecks(ZCLSimpleTypeDescription dataType, short dataTypeId, int size, Class clazz, boolean U, boolean I, boolean A) {
+	protected void basicDataTypeChecks(ZCLSimpleTypeDescription dataType,
+			short dataTypeId, int size, Class< ? > clazz, boolean U, boolean I,
+			boolean A) {
 
 		/*
 		 * Checks if the name assigned to the data type is the expected one.
@@ -823,7 +826,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 		int offset = payload.getCurrentOutputIndex();
 
-		Class clazz = dataType.getJavaDataType();
+		Class< ? > clazz = dataType.getJavaDataType();
 		// try to serialize a zero value
 		try {
 			dataType.serialize(dataOutput, value);
@@ -866,7 +869,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 		int offset = payload.getCurrentOutputIndex();
 
-		Class clazz = dataType.getJavaDataType();
+		Class< ? > clazz = dataType.getJavaDataType();
 		try {
 			dataType.serialize(dataOutput, value);
 		} catch (IllegalArgumentException e) {
@@ -940,6 +943,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 	 * @return {@code true} if the bytes in the range [start, start + size) are
 	 *         all zero.
 	 */
+	@SuppressWarnings("unused")
 	private boolean isEmpty(byte[] array, int start, int size) {
 		for (int i = start; i < (start + size); i++) {
 			if (array[i] != 0) {
@@ -983,7 +987,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 	 * {@link IllegalArgumentException} exception!
 	 */
 	private void checkAgainstSerializeWrongJavaType(ZCLSimpleTypeDescription dataType, ZigBeeDataOutput dataOutput) {
-		Class clazz = dataType.getJavaDataType();
+		Class< ? > clazz = dataType.getJavaDataType();
 
 		for (int i = 0; i < dataTypesZeroValue.length; i++) {
 			Object zeroValue = this.dataTypesZeroValue[i];
@@ -1005,6 +1009,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private Object createUnsignedNumber(int size) {
 		byte b = (byte) 0xBF;
 

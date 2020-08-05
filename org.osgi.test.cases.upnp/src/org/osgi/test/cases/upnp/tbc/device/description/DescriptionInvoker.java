@@ -16,14 +16,15 @@ import org.osgi.test.support.sleep.Sleep;
  *
  */
 public class DescriptionInvoker {
-	private final Hashtable	hash;
+	private final Hashtable<String,Object> hash;
 
 	public DescriptionInvoker() {
-		hash = new Hashtable();
+		hash = new Hashtable<>();
 	}
 
 	public void response(String serviceType, String actionName,
-			Dictionary args, boolean mposted, HttpServletResponse res)
+			Dictionary<String,Object> args, boolean mposted,
+			HttpServletResponse res)
 			throws IOException {
 		hash.clear();
 		DefaultTestBundleControl.log("Incoming invoke request for Action: "
@@ -87,7 +88,8 @@ public class DescriptionInvoker {
 										}
 	}
 
-	private void postOutSucc(String serv, String act, Dictionary params,
+	private void postOutSucc(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) throws IOException {
 		hash.put(UPnPConstants.N_OUT_INT, UPnPConstants.V_OUT_INT);
 		hash.put(UPnPConstants.N_OUT_UI4, UPnPConstants.V_OUT_UI4);
@@ -106,7 +108,8 @@ public class DescriptionInvoker {
 		sendOK(serv, act, hash, res);
 	}
 
-	private void postInSucc(String serv, String act, Dictionary params,
+	private void postInSucc(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) throws IOException {
 		hash.put(UPnPConstants.N_OUT_OUT, UPnPConstants.V_OUT_OUT_OK);
 		String cur = (String) params.get(UPnPConstants.N_IN_INT);
@@ -162,7 +165,8 @@ public class DescriptionInvoker {
 		sendOK(serv, act, hash, res);
 	}
 
-	private void postBlock(String serv, String act, Dictionary params,
+	private void postBlock(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) throws IOException {
 		try {
 			Sleep.sleep(40000L);
@@ -174,17 +178,20 @@ public class DescriptionInvoker {
 		sendOK(serv, act, hash, res);
 	}
 
-	private void postQuery(String serv, String act, Dictionary params,
+	private void postQuery(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) {
 		// empty
 	}
 
-	private void postFail(String serv, String act, Dictionary params,
+	private void postFail(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) throws IOException {
 		sendError(res, 500, UPnPConstants.ERR_ISE);
 	}
 
-	public void sendOK(String serv, String act, Dictionary params,
+	public void sendOK(String serv, String act,
+			Dictionary<String,Object> params,
 			HttpServletResponse res) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		sb.append(UPnPConstants.ENV_ST);
@@ -202,7 +209,7 @@ public class DescriptionInvoker {
 		sb.append("\"");
 		sb.append(UPnPConstants.RB);
 		sb.append(UPnPConstants.CRLF);
-		Enumeration keys = params.keys();
+		Enumeration<String> keys = params.keys();
 		while (keys.hasMoreElements()) {
 			Object obj = keys.nextElement();
 			Object val = params.get(obj);

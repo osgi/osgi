@@ -25,6 +25,7 @@ public class SSDPMulticastListener extends Thread implements SSDPConstants {
 	}
 
 	// This method contineously listens on multicast channel
+	@Override
 	public void run() {
 		while (flag) {
 			String recvData = null;

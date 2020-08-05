@@ -27,6 +27,7 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 
 	private ZCLGlobalClusterDescription		global;
+	@SuppressWarnings("unused")
 	private boolean							isServer;
 	private ZCLAttributeDescriptionImpl[]	attributeDescriptions;
 	private ZCLCommandDescription[]			commandDescriptions;
@@ -38,26 +39,32 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 		this.commandDescriptions = commandDescriptions;
 	}
 
+	@Override
 	public int getId() {
 		return global.getClusterId();
 	}
 
+	@Override
 	public ZCLGlobalClusterDescription getGlobalClusterDescription() {
 		return global;
 	}
 
+	@Override
 	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
 		return commandDescriptions;
 	}
 
+	@Override
 	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public ZCLAttributeDescription[] getAttributeDescriptions() {
 		return attributeDescriptions;
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.getClass().getName() + "[id: " + global.getClusterId() + ", global: " + global + "]";
 	}

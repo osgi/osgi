@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Timer;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dal.simulator.DeviceSimulator;
 import org.osgi.service.dal.Device;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -27,13 +29,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 class DeviceSimulatorImpl implements DeviceSimulator {
 
-	private static final Class[]	FUNCTION_CONSTRUCTOR_ARGS		= new Class[] {
+	private static final Class< ? >[]					FUNCTION_CONSTRUCTOR_ARGS		= new Class[] {
 																	Dictionary.class,
 																	BundleContext.class,
 																	ServiceTracker.class
 																	};
 
-	private static final Class[]	FUNCTION_CONSTRUCTOR_ARGS_TIMER	= new Class[] {
+																	private static final Class< ? >[] FUNCTION_CONSTRUCTOR_ARGS_TIMER = new Class[] {
 																	Dictionary.class,
 																	BundleContext.class,
 																	ServiceTracker.class,
@@ -41,12 +43,12 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 																	};
 
 	private final BundleContext		bc;
-	private final ServiceTracker	eventAdminTracker;
+	private final ServiceTracker<EventAdmin,EventAdmin>	eventAdminTracker;
 	private final Timer				timer;
 	private final Object			lock							= new Object();
 
-	private List					registeredDevices;
-	private ServiceRegistration		deviceSimulatorSReg;
+	private List<Device>								registeredDevices;
+	private ServiceRegistration<DeviceSimulator>		deviceSimulatorSReg;
 
 	/**
 	 * Constructs the device simulator implementation with the given arguments.
@@ -55,8 +57,10 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 	 * @param eventAdminTracker The event admin tracker.
 	 * @param timer The timer used by some functions.
 	 */
-	DeviceSimulatorImpl(BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
-		this.registeredDevices = new ArrayList();
+	DeviceSimulatorImpl(BundleContext bc,
+			ServiceTracker<EventAdmin,EventAdmin> eventAdminTracker,
+			Timer timer) {
+		this.registeredDevices = new ArrayList<>();
 		this.bc = bc;
 		this.eventAdminTracker = eventAdminTracker;
 		this.timer = timer;
@@ -66,7 +70,9 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 	 * All function implementations must provide a constructor with three
 	 * parameters: properties, bundle context and event admin tracker.
 	 */
-	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps) {
+	@Override
+	public Device registerDevice(Dictionary<String,Object> deviceProps,
+			Dictionary<String,Object>[] functionProps) {
 		if (null == deviceProps) {
 			throw new NullPointerException("The device properties are null."); // NOPMD
 		}
@@ -74,7 +80,7 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 		if (null != functionProps) {
 			functions = new SimulatedFunction[functionProps.length];
 			for (int i = 0; i < functionProps.length; i++) {
-				Class functionClass;
+				Class< ? > functionClass;
 				try {
 					functionClass = Class.forName(
 							getSimulatedFunctionClass((String) functionProps[i].get(Constants.OBJECTCLASS)));
@@ -99,6 +105,7 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 		throw new IllegalStateException("The device simulator service is unregistred.");
 	}
 
+	@Override
 	public void publishEvent(String functionClassName, String propertyName) {
 		synchronized (this.lock) {
 			if (null == this.registeredDevices) {
@@ -119,7 +126,8 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 	 * Starts the simulator.
 	 */
 	void start() {
-		this.deviceSimulatorSReg = this.bc.registerService(DeviceSimulator.class.getName(), this, null);
+		this.deviceSimulatorSReg = this.bc
+				.registerService(DeviceSimulator.class, this, null);
 	}
 
 	/**
@@ -128,21 +136,26 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 	void stop() {
 		synchronized (this.lock) {
 			for (int i = 0, size = this.registeredDevices.size(); i < size; i++) {
-				DeviceUtil.silentDeviceRemove((Device) this.registeredDevices.get(i));
+				DeviceUtil.silentDeviceRemove(this.registeredDevices.get(i));
 			}
 			this.registeredDevices = null;
 		}
 		this.deviceSimulatorSReg.unregister();
 	}
 
-	private SimulatedFunction newFunctionInstance(Class functionClass, Dictionary functionProps) throws IllegalAccessException, InstantiationException, InvocationTargetException,
+	private SimulatedFunction newFunctionInstance(Class< ? > functionClass,
+			Dictionary<String,Object> functionProps)
+			throws IllegalAccessException, InstantiationException,
+			InvocationTargetException,
 			NoSuchMethodException {
 		try {
-			Constructor functionConstructor = functionClass.getConstructor(FUNCTION_CONSTRUCTOR_ARGS);
+			Constructor< ? > functionConstructor = functionClass
+					.getConstructor(FUNCTION_CONSTRUCTOR_ARGS);
 			return (SimulatedFunction) functionConstructor.newInstance(
 					new Object[] {functionProps, this.bc, this.eventAdminTracker});
 		} catch (NoSuchMethodException nsme) {
-			Constructor functionConstructor = functionClass.getConstructor(FUNCTION_CONSTRUCTOR_ARGS_TIMER);
+			Constructor< ? > functionConstructor = functionClass
+					.getConstructor(FUNCTION_CONSTRUCTOR_ARGS_TIMER);
 			return (SimulatedFunction) functionConstructor.newInstance(
 					new Object[] {functionProps, this.bc, this.eventAdminTracker, this.timer});
 		}

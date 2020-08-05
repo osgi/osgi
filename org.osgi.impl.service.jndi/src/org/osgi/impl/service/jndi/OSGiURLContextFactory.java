@@ -41,7 +41,8 @@ class OSGiURLContextFactory implements ObjectFactory {
 
 	private static final String OSGI_BUNDLE_CONTEXT_LOOKUP = "osgi:framework/bundleContext";
 
-	private static final Logger logger = Logger.getLogger(OSGiURLContextFactory.class.getName());
+	static final Logger			logger						= Logger
+			.getLogger(OSGiURLContextFactory.class.getName());
 	
 	private final BundleContext	m_bundleContext;
 
@@ -49,7 +50,9 @@ class OSGiURLContextFactory implements ObjectFactory {
 		m_bundleContext = bundleContext;
 	}
 
-	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment) throws Exception {
+	@Override
+	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
+			Hashtable< ? , ? > environment) throws Exception {
 		return new OSGiURLContext(m_bundleContext);
 	}
 
@@ -70,6 +73,7 @@ class OSGiURLContextFactory implements ObjectFactory {
 		}
 		
 
+		@Override
 		public Object lookup(String name) throws NamingException {
 			String osgiURL = name;
 			try {
@@ -136,11 +140,11 @@ class OSGiURLContextFactory implements ObjectFactory {
 		}
 
 		private static Object getService(BundleContext bundleContext, OSGiURLParser urlParser) throws InvalidSyntaxException {
-			ServiceReference[] serviceReferences = 
+			ServiceReference< ? >[] serviceReferences =
 				bundleContext.getServiceReferences(urlParser.getServiceInterface(), 
 						                           urlParser.getFilter());
 			if (serviceReferences != null) {
-				final ServiceReference[] sortedServiceReferences = 
+				final ServiceReference< ? >[] sortedServiceReferences = 
 					ServiceUtils.sortServiceReferences(serviceReferences);
 				if (urlParser.isServiceListURL()) {
 					// return a Context that can handle service.id lookups
@@ -155,10 +159,10 @@ class OSGiURLContextFactory implements ObjectFactory {
 				// service interface name may not map to a published name
 				// check the registry for a service that supports the
 				// osgi.jndi.serviceName property
-				ServiceReference[] serviceReferencesByName = 
+				ServiceReference< ? >[] serviceReferencesByName =
 					ServiceUtils.getServiceReferencesByServiceName(bundleContext, urlParser);
 				if (serviceReferencesByName != null) {
-					final ServiceReference[] sortedServiceReferences = 
+					final ServiceReference< ? >[] sortedServiceReferences = 
 						ServiceUtils.sortServiceReferences(serviceReferencesByName);
 					ServiceProxyInfo proxyInfo = 
 						ReflectionUtils.getProxyForSingleService(bundleContext, urlParser, sortedServiceReferences[0]);

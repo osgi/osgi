@@ -50,14 +50,14 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 	protected FiltersPlugin plugin;
 	protected BundleContext context;
-	protected Map searches;
+	protected Map<String,Filters>	searches;
 	protected int instanceId;
 	protected int rootLength = 1;
 
 	FiltersReadOnlySession(FiltersPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
-		searches = new HashMap();
+		searches = new HashMap<>();
 		instanceId = 0;
 		if (RMTConstants.RMT_ROOT != null) {
 			String[] rootArray = RMTUtil.pathToArrayUri(RMTConstants.RMT_ROOT + Uri.PATH_SEPARATOR_CHAR);
@@ -65,18 +65,21 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 	}
 
+	@Override
 	public void close() throws DmtException {
+		// empty
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 		if (path.length == 1) {
 			if (searches.size() == 0)
 				return new String[0];
 			String[] children = new String[searches.size()];
-			Iterator it = searches.keySet().iterator();
+			Iterator<String> it = searches.keySet().iterator();
 			for (int i = 0; it.hasNext(); i++) {
-				children[i] = (String) it.next();
+				children[i] = it.next();
 			}
 			return children;
 		}
@@ -96,7 +99,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 3 && path[2].equals(RMTConstants.RESULTURILIST)) {
 			if (searches.get(path[1]) != null) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (!fs.isCreateResult())
 					fs.search(plugin.getSession());
 				String[] children = new String[fs.getResultUriList().size()];
@@ -109,7 +112,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		
 		if (path.length == 3 && path[2].equals(RMTConstants.RESULT)) {
 			if (searches.get(path[1]) != null) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (!fs.isCreateResult())
 					fs.search(plugin.getSession());
 				Node resultNode = fs.getResultNode();
@@ -120,7 +123,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		if (path.length > 3 && path[2].equals(RMTConstants.RESULT)) {
 			if (searches.get(path[1]) != null) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (!fs.isCreateResult())
 					fs.search(plugin.getSession());
 				Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
@@ -132,6 +135,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		"The specified node does not exist in the filter object.");
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 		if (path.length == 1)
@@ -211,7 +215,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		if (path.length >= 4) {
 			if (path[2].equals(RMTConstants.RESULT)) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (!fs.isCreateResult())
 					fs.search(plugin.getSession());
 				Node targetNode = fs.getResultNode().findNode(
@@ -224,20 +228,24 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				"No such node defined in the Filters MO.");
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		return getNodeValue(nodePath).getSize();
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property is not supported.");
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property is not supported.");
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 		if (path.length == 1)
@@ -246,7 +254,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			if (path[2].equals(RMTConstants.RESULTURILIST))
 				return DmtConstants.DDF_LIST;
 		if (path.length >= 4 && path[2].equals(RMTConstants.RESULT)) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (!fs.isCreateResult())
 				fs.search(plugin.getSession());
 			Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
@@ -267,6 +275,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		return FiltersMetaNode.FILTERS_MO_TYPE;
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 		if (path.length <= 2)
@@ -276,37 +285,37 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 3) {
 			if (path[2].equals(RMTConstants.TARGET)) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (fs != null)
 					return new DmtData(fs.getTarget());
 			}
 			if (path[2].equals(RMTConstants.FILTER)) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (fs != null)
 					return new DmtData(fs.getFilter());
 			}
 			if (path[2].equals(RMTConstants.LIMIT)) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (fs != null)
 					return new DmtData(fs.getLimit());
 			}
 			if (path[2].equals(RMTConstants.INSTANCEID)) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (fs != null)
 					return new DmtData(fs.getInstanceId());
 			}
 		}
 
 		if (path.length == 4 && path[2].equals(RMTConstants.RESULTURILIST)) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (!fs.isCreateResult())
 				fs.search(plugin.getSession());
-			return new DmtData((String) fs.getResultUriList().get(
+			return new DmtData(fs.getResultUriList().get(
 					Integer.parseInt(path[3])));
 		}
 
 		if (path.length >= 4 && path[2].equals(RMTConstants.RESULT)) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (!fs.isCreateResult())
 				fs.search(plugin.getSession());
 			Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
@@ -318,16 +327,19 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				"The specified key does not exist in the filters object.");
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Version property is not supported.");
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// do nothing - the version and timestamp properties are not supported
 
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 
@@ -335,7 +347,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			return false;
 
 		if (path.length == 3) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (fs != null)
 				if (path[2].equals(RMTConstants.TARGET) || path[2].equals(RMTConstants.FILTER)
 						|| path[2].equals(RMTConstants.LIMIT) || path[2].equals(RMTConstants.INSTANCEID))
@@ -346,13 +358,13 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 4 && path[2].equals(RMTConstants.RESULTURILIST))
 			if (searches.get(path[1]) != null) {
-				Filters fs = (Filters) searches.get(path[1]);
+				Filters fs = searches.get(path[1]);
 				if (fs.isCreateResult())
 					return true;
 			}
 
 		if (path.length >= 4 && path[2].equals(RMTConstants.RESULT)) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
 			if (targetNode != null)
 				return targetNode.isLeafNode();
@@ -361,6 +373,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		"The specified node does not exist in the filter object.");
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = RMTUtil.shapedPath(nodePath, rootLength);
 
@@ -370,13 +383,13 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 2) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (fs != null)
 				return true;
 		}
 
 		if (path.length == 3) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			if (fs != null)
 				if (path[2].equals(RMTConstants.TARGET) || path[2].equals(RMTConstants.FILTER)
 						|| path[2].equals(RMTConstants.LIMIT) || path[2].equals(RMTConstants.INSTANCEID)
@@ -386,8 +399,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 4 && path[2].equals(RMTConstants.RESULTURILIST)) {
-			Filters fs = (Filters) searches.get(path[1]);
-			Vector vec = fs.getResultUriList();
+			Filters fs = searches.get(path[1]);
+			Vector<String> vec = fs.getResultUriList();
 			try {
 				vec.get(Integer.parseInt(path[3]));
 				return true;
@@ -399,7 +412,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length >= 4 && path[2].equals(RMTConstants.RESULT)) {
-			Filters fs = (Filters) searches.get(path[1]);
+			Filters fs = searches.get(path[1]);
 			Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
 			if (targetNode != null)
 				return true;
@@ -417,8 +430,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		private String name;
 		private boolean createResultFlag = false;
 		private DmtSession session;
-		private Vector targetList = new Vector();
-		private Vector resultUriList = new Vector();
+		private Vector<String>	targetList			= new Vector<>();
+		private Vector<String>	resultUriList		= new Vector<>();
 		private Node resultNodes = new Node(RMTConstants.RESULT, null, true);
 		private int count = 0;
 
@@ -467,7 +480,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			return this.resultNodes;
 		}
 
-		protected Vector getResultUriList() {
+		protected Vector<String> getResultUriList() {
 			return this.resultUriList;
 		}
 
@@ -475,7 +488,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			return this.createResultFlag;
 		}
 
-		protected void search(DmtSession session) throws DmtException {
+		protected void search(@SuppressWarnings("hiding") DmtSession session)
+				throws DmtException {
 			if (!(this.target.equals("")) && !(this.filter.equals(""))) {
 				this.session = session;
 				processTarget();
@@ -523,12 +537,13 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			if (star == -1 && bar == -1) {
 				this.targetList.add(modifiedTarget);
 			} else {
-				Vector tList = new Vector();
+				Vector<String> tList = new Vector<>();
 				tList.add(modifiedTarget);
 				tList = tProcess(tList);
-				Vector removeTargets = new Vector();
-				for (Iterator it = tList.iterator(); it.hasNext();) {
-					String target = (String) it.next();
+				Vector<String> removeTargets = new Vector<>();
+				for (Iterator<String> it = tList.iterator(); it.hasNext();) {
+					@SuppressWarnings("hiding")
+					String target = it.next();
 					if (target.endsWith("/")) {
 						String mTarget = target.substring(0,
 								target.length() - 1);
@@ -543,8 +558,9 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					}
 					
 				}
-				for (Iterator it = removeTargets.iterator(); it.hasNext();) {
-					String removeTarget = (String) it.next();
+				for (Iterator<String> it = removeTargets.iterator(); it
+						.hasNext();) {
+					String removeTarget = it.next();
 					tList.remove(removeTarget);
 				}
 				this.targetList.addAll(tList);
@@ -565,14 +581,16 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 		
 
-		private Vector tProcess(Vector tList) throws DmtException {
+		private Vector<String> tProcess(Vector<String> tList)
+				throws DmtException {
 
 			if (tList.isEmpty())
 				return tList;
-			Vector removeList = new Vector();
-			Vector addList = new Vector();
-			for (Iterator it = tList.iterator(); it.hasNext();) {
-				String target = (String) it.next();
+			Vector<String> removeList = new Vector<>();
+			Vector<String> addList = new Vector<>();
+			for (Iterator<String> it = tList.iterator(); it.hasNext();) {
+				@SuppressWarnings("hiding")
+				String target = it.next();
 				int star = target.indexOf("/*/");
 				int bar = target.indexOf("/-/");
 				if (bar == -1 && star == -1)
@@ -622,9 +640,11 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 						if (isLeafNode(startPath + Uri.PATH_SEPARATOR_CHAR + children[i])==1||isLeafNode(startPath + Uri.PATH_SEPARATOR_CHAR + children[i])==3)
 							continue;
 						String basePath = startPath + Uri.PATH_SEPARATOR_CHAR + children[i];
-						Vector vec = findPath(basePath, targetNodeName, null);
-						for (Iterator ite = vec.iterator(); ite.hasNext();) {
-							String result = (String) ite.next();
+						Vector<String> vec = findPath(basePath, targetNodeName,
+								null);
+						for (Iterator<String> ite = vec.iterator(); ite
+								.hasNext();) {
+							String result = ite.next();
 							String newTarget = result
 									+ Uri.PATH_SEPARATOR_CHAR
 									+ target.substring(
@@ -637,18 +657,18 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					removeList.add(target);
 				}
 			}
-			for (Iterator it = removeList.iterator(); it.hasNext();) {
-				String remove = (String) it.next();
+			for (Iterator<String> it = removeList.iterator(); it.hasNext();) {
+				String remove = it.next();
 				tList.remove(remove);
 			}
-			for (Iterator it = addList.iterator(); it.hasNext();) {
-				String add = (String) it.next();
+			for (Iterator<String> it = addList.iterator(); it.hasNext();) {
+				String add = it.next();
 				tList.add(add);
 			}
 
 			boolean flag = false;
-			for (Iterator it = tList.iterator(); it.hasNext();) {
-				String path = (String) it.next();
+			for (Iterator<String> it = tList.iterator(); it.hasNext();) {
+				String path = it.next();
 				int star = path.indexOf("/*/");
 				int bar = path.indexOf("/-/");
 				if (bar != -1 || star != -1)
@@ -659,11 +679,11 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			return tList;
 		}
 
-		private Vector findPath(String basePath, String targetNode,
-				Vector vector) throws DmtException {
-			Vector vec;
+		private Vector<String> findPath(String basePath, String targetNode,
+				Vector<String> vector) throws DmtException {
+			Vector<String> vec;
 			if (vector == null)
-				vec = new Vector();
+				vec = new Vector<>();
 			else
 				vec = vector;
 			String[] children = session.getChildNodeNames(basePath);
@@ -681,8 +701,10 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		private void createResultUri() throws DmtException {
 			String sessionRoot = session.getRootUri();
 			String[] rootArray = RMTUtil.pathToArrayUri(sessionRoot+Uri.PATH_SEPARATOR_CHAR);
-			for (Iterator it = this.targetList.iterator(); it.hasNext();) {
-				String target = (String) it.next();
+			for (Iterator<String> it = this.targetList.iterator(); it
+					.hasNext();) {
+				@SuppressWarnings("hiding")
+				String target = it.next();
 				boolean flag;
 					flag = checkFilter(this.filter, target);
 					if (flag) {
@@ -704,6 +726,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		private boolean checkFilter(String filterString, String targetSubtree)
 				throws DmtException {
+			@SuppressWarnings("hiding")
 			Filter filter = null;
 			try {
 				if (filterString.equals("*")) {
@@ -717,7 +740,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 						"The specified filer is NOT correct.");
 			}
 			
-			Dictionary prop = new Hashtable();
+			Dictionary<String,Object> prop = new Hashtable<>();
 			if (targetSubtree.lastIndexOf("/") == targetSubtree.length() - 1) {
 				targetSubtree = targetSubtree.substring(0,
 						targetSubtree.lastIndexOf("/"));
@@ -819,8 +842,10 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		private void createResultNodes() throws DmtException {
 			createNodesInTargetPath();
-			for (Iterator it = this.resultUriList.iterator(); it.hasNext();) {
-				String target = (String) it.next();
+			for (Iterator<String> it = this.resultUriList.iterator(); it
+					.hasNext();) {
+				@SuppressWarnings("hiding")
+				String target = it.next();
 				String[] tArray = RMTUtil.pathToArrayUri(target+Uri.PATH_SEPARATOR_CHAR);
 				Node endNode = this.resultNodes.findNode(tArray);
 				createResultNode(target, endNode);
@@ -828,8 +853,10 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 
 		private void createNodesInTargetPath() throws DmtException {
-			for (Iterator it = this.resultUriList.iterator(); it.hasNext();) {
-				String target = (String) it.next();
+			for (Iterator<String> it = this.resultUriList.iterator(); it
+					.hasNext();) {
+				@SuppressWarnings("hiding")
+				String target = it.next();
 				String[] tArray = RMTUtil.pathToArrayUri(target+Uri.PATH_SEPARATOR_CHAR);
 				Node node = this.resultNodes;
 				StringBuffer sb = new StringBuffer();
@@ -861,7 +888,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			}
 		}
 
-		protected void createResultNode(String target, Node node)
+		protected void createResultNode(
+				@SuppressWarnings("hiding") String target, Node node)
 				throws DmtException {
 			if (target.lastIndexOf("/") == target.length() - 1) {
 				target = target.substring(0, target.lastIndexOf("/"));
@@ -938,7 +966,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		static final String LEAF = "leaf";
 		private String name;
 		private String type;
-		private Vector children = new Vector();
+		private Vector<Node>	children	= new Vector<>();
 		private MetaNode metanode = null;
 		String nodetype = null;
 		DmtData data = null;
@@ -950,7 +978,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					this.children.add(children[i]);
 				}
 			} else
-				this.children = new Vector();
+				this.children = new Vector<>();
 			if (isInterior)
 				type = INTERIOR;
 			else
@@ -959,15 +987,15 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		protected Node findNode(String[] path) {
 			for (int i = 0; i < children.size(); i++) {
-				if ((((Node) children.get(i)).getName()).equals(path[0])) {
+				if ((children.get(i).getName()).equals(path[0])) {
 					if (path.length == 1) {
-						return (Node) children.get(i);
+						return children.get(i);
 					} else {
 						String[] nextpath = new String[path.length - 1];
 						for (int x = 1; x < path.length; x++) {
 							nextpath[x - 1] = path[x];
 						}
-						return ((Node) children.get(i)).findNode(nextpath);
+						return children.get(i).findNode(nextpath);
 					}
 				}
 			}
@@ -989,15 +1017,16 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		protected Node[] getChildren() {
 			Node[] nodes = new Node[children.size()];
 			for (int i = 0; i < children.size(); i++) {
-				nodes[i] = ((Node) children.get(i));
+				nodes[i] = (children.get(i));
 			}
 			return nodes;
 		}
 
 		protected String[] getChildNodeNames() {
+			@SuppressWarnings("hiding")
 			String[] name = new String[children.size()];
 			for (int i = 0; i < children.size(); i++) {
-				Node node = ((Node) children.get(i));
+				Node node = (children.get(i));
 				name[i] = node.getName();
 			}
 			return name;

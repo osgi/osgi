@@ -1,5 +1,7 @@
 package org.osgi.test.cases.device.tbc.locators;
 
+import static org.osgi.test.support.compatibility.DefaultTestBundleControl.log;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.security.AccessController;
@@ -11,7 +13,7 @@ import org.osgi.service.device.DriverLocator;
 import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
- * The locator used in the device detection test. For all IDs it retunrs an
+ * The locator used in the device detection test. For all IDs it returns an
  * InputStream to the basic driver (in fact this is the only driver bundle in
  * the whole test case)
  */
@@ -28,12 +30,12 @@ public class BasicTestLocator implements DriverLocator {
 	/**
 	 * Searches for drivers
 	 * 
-	 * @param props the properties of the registed Device service
-	 * @retunrs a single element String array containing the property with key
-	 *          "deviceID" from the props Dictionary
+	 * @param props the properties of the registered Device service
+	 * @return a single element String array containing the property with key
+	 *         "deviceID" from the props Dictionary
 	 */
-	public String[] findDrivers(Dictionary props) {
-		master.log("searching for " + props.get("deviceID"));
+	public String[] findDrivers(Dictionary<String, ? > props) {
+		log("searching for " + props.get("deviceID"));
 		String[] toReturn = new String[1];
 		toReturn[0] = (String) props.get("deviceID");
 		return toReturn;
@@ -47,11 +49,11 @@ public class BasicTestLocator implements DriverLocator {
 	 * @return an InputStream to the basicdrv.jar bundle
 	 */
 	public InputStream loadDriver(String id) {
-		master.log("loading for " + id);
+		log("loading for " + id);
 		try {
-			return (InputStream) AccessController
-					.doPrivileged(new PrivilegedExceptionAction() {
-						public Object run() throws Exception {
+			return AccessController
+					.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
+						public InputStream run() throws Exception {
 							URL url = new URL(master.getWebServer()
 									+ "drv1.jar");
 							return url.openStream();
@@ -60,8 +62,7 @@ public class BasicTestLocator implements DriverLocator {
 		}
 		catch (PrivilegedActionException e) {
 			e.getException().printStackTrace();
-			master
-					.log("error while reading the /drivers/basicdrv.jar resource");
+			log("error while reading the /drivers/basicdrv.jar resource");
 			return null;
 		}
 	}

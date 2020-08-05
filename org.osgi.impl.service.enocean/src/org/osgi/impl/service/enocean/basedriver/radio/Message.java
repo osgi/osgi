@@ -73,7 +73,8 @@ public abstract class Message implements EnOceanMessage {
 	setSecurityLevel(data[data.length - 1]);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 	byte[] out = Utils.byteConcat(RORG, data);
 	out = Utils.byteConcat(out, senderId);
 	out = Utils.byteConcat(out, status);
@@ -83,7 +84,8 @@ public abstract class Message implements EnOceanMessage {
     /**
      * The message's RadioTelegram Type
      */
-    public int getRorg() {
+    @Override
+	public int getRorg() {
 	return (RORG & 0xff);
     }
 
@@ -94,11 +96,13 @@ public abstract class Message implements EnOceanMessage {
 	RORG = (byte) (rorg & 0xff);
     }
 
-    public byte[] getBytes() {
+    @Override
+	public byte[] getBytes() {
 	return messageBytes;
     }
 
-    public int getSenderId() {
+    @Override
+	public int getSenderId() {
 	return Utils.bytes2intLE(senderId, 0, 4);
     }
 
@@ -115,7 +119,8 @@ public abstract class Message implements EnOceanMessage {
      * EnOceanMessage status byte. bit 7 : if set, use crc8 else use checksum
      * bits 5-6 : reserved bits 0-4 : repeater count
      */
-    public int getStatus() {
+    @Override
+	public int getStatus() {
 	return (status & 0xff);
     }
 
@@ -126,7 +131,8 @@ public abstract class Message implements EnOceanMessage {
 	this.status = (byte) (status & 0xff);
     }
 
-    public int getSubTelNum() {
+    @Override
+	public int getSubTelNum() {
 	return subTelNum;
     }
 
@@ -137,7 +143,8 @@ public abstract class Message implements EnOceanMessage {
 	this.subTelNum = subTelNum;
     }
 
-    public int getDestinationId() {
+    @Override
+	public int getDestinationId() {
 	// return Utils.bytes2intLE(destinationId, 0, 4);
 	return destinationId;
     }
@@ -149,7 +156,8 @@ public abstract class Message implements EnOceanMessage {
 	this.destinationId = destinationId;
     }
 
-    public int getDbm() {
+    @Override
+	public int getDbm() {
 	return dbm;
     }
 
@@ -160,7 +168,8 @@ public abstract class Message implements EnOceanMessage {
 	this.dbm = dbm;
     }
 
-    public int getSecurityLevelFormat() {
+    @Override
+	public int getSecurityLevelFormat() {
 	return securityLevel;
     }
 
@@ -178,7 +187,8 @@ public abstract class Message implements EnOceanMessage {
 	this.func = (byte) func;
     }
 
-    public int getFunc() {
+    @Override
+	public int getFunc() {
 	return func;
     }
 
@@ -189,11 +199,13 @@ public abstract class Message implements EnOceanMessage {
 	this.type = (byte) type;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
 	return type;
     }
 
-    public byte[] getPayloadBytes() {
+    @Override
+	public byte[] getPayloadBytes() {
 	return data;
     }
 
@@ -208,8 +220,8 @@ public abstract class Message implements EnOceanMessage {
     /**
      * @return telegram(s)
      */
-    public List getTelegrams() {
-	List list = new ArrayList();
+	public List<byte[]> getTelegrams() {
+		List<byte[]> list = new ArrayList<>();
 	list.add(getBytes());
 	return list;
     }

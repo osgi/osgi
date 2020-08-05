@@ -17,6 +17,12 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import org.osgi.impl.service.dmt.dispatcher.Dispatcher;
+import org.osgi.impl.service.dmt.dispatcher.Segment;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -26,13 +32,6 @@ import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-
-import org.osgi.impl.service.dmt.dispatcher.Dispatcher;
-import org.osgi.impl.service.dmt.dispatcher.Segment;
 
 
 public class RootPlugin implements DataPlugin, ReadableDataSession {
@@ -51,45 +50,58 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 //    }
 
 	//----- DmtReadOnlyDataPlugin methods -----//
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+    @Override
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) {
         return this;
     }
     
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, 
+    @Override
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, 
             DmtSession session) {
         return null;
     }
 
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot, 
+    @Override
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot, 
             DmtSession session) {
         return null;
     }
     
-    public void nodeChanged(String[] nodePath) {}
+    @Override
+	public void nodeChanged(String[] nodePath) {
+		// empty
+	}
 
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath)
 			throws DmtException {
 		return new ScaffoldMetaNode();
 	}
 
 	//----- DmtReadOnly methods -----//
-	public void close() throws DmtException {}
+	@Override
+	public void close() throws DmtException {
+		// empty
+	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
-		Segment segment = dispatcher.findSegment(nodePath);
+		Segment<DataPlugin> segment = dispatcher.findSegment(nodePath);
 //		System.out.println( "isNodeUri: segment is: " + segment.getUri());
 		return segment != null;
 	}
     
-    public boolean isLeafNode(String[] nodePath) throws DmtException {
+    @Override
+	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 			"Node not found: " + Uri.toUri(nodePath));
         return false; // currently all nodes are internal
     }
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -97,6 +109,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 		return null;
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -105,6 +118,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 				"Title property not supported.");
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -112,6 +126,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 		return null;
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -120,6 +135,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
                 "Version property not supported.");
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -128,6 +144,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 				"Timestamp property not supported.");
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		if ( ! isNodeUri(nodePath))
 			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -135,15 +152,16 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 		return 0;
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
-		Segment segment = dispatcher.findSegment(nodePath);
+		Segment<DataPlugin> segment = dispatcher.findSegment(nodePath);
 		if ( segment == null ) 
 			return null;
 		Vector<String> childNodeNames = new Vector<String>();
-		List<Segment> children = segment.getChildren();
-		for ( Segment child : children )
+		List<Segment<DataPlugin>> children = segment.getChildren();
+		for (Segment<DataPlugin> child : children)
 			childNodeNames.add( child.getName() );
-		return (String[]) childNodeNames.toArray( new String[childNodeNames.size()] );
+		return childNodeNames.toArray( new String[childNodeNames.size()] );
 	}
     
 }

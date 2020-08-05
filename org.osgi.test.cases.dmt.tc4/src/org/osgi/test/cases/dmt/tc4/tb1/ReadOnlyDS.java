@@ -19,51 +19,63 @@ public class ReadOnlyDS implements ReadableDataSession {
 	}
 	
 
+	@Override
 	public void close() throws DmtException {
 		framework.close();
 		System.out.println("[Framework Data Session] Closing a Read-Only Session");
 	}
 
+	@Override
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getChildNodeNames();
 	}
 
+	@Override
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getMetaNode();
 	}
 
+	@Override
 	public int getNodeSize(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeSize();
 	}
 
+	@Override
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getTimestamp();
 	}
 
+	@Override
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getTitle();
 	}
 
+	@Override
 	public String getNodeType(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeType();
 	}
 
+	@Override
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getNodeValue();
 	}
 
+	@Override
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		return findNode(nodePath).getVersion();
 	}
 
+	@Override
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		return findNode(nodePath).isLeaf();
 	}
 
+	@Override
 	public boolean isNodeUri(String[] nodePath) {
 		return ( findNode(nodePath) == null ) ? false : true;
 	}
 
+	@Override
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		findNode(nodePath).nodeChanged();
 	}

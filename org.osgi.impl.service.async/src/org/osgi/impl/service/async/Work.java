@@ -10,7 +10,7 @@ import org.osgi.util.promise.Deferred;
 
 public class Work<T> implements Runnable {
 
-	private final MethodCall methodCall;
+	final MethodCall					methodCall;
 	
 	private final Deferred<T> deferred;
 
@@ -23,6 +23,7 @@ public class Work<T> implements Runnable {
 	}
 
 
+	@Override
 	public void run() {
 		try {
 			final Object service = methodCall.getService();
@@ -31,11 +32,10 @@ public class Work<T> implements Runnable {
 			methodCall.method.setAccessible(true);
 			
 			@SuppressWarnings("unchecked")
-			T returnValue = AccessController.doPrivileged(new PrivilegedExceptionAction<T>() {
-				public T run() throws Exception {
-					return (T) methodCall.method.invoke(service, methodCall.arguments);
-				}
-			}, acc);
+			T returnValue = AccessController.doPrivileged(
+					(PrivilegedExceptionAction<T>) () -> (T) methodCall.method
+							.invoke(service, methodCall.arguments),
+					acc);
 			
 			
 			

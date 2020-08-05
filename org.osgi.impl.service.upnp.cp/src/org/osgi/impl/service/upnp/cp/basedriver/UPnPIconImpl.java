@@ -21,31 +21,37 @@ public class UPnPIconImpl implements UPnPIcon {
 	}
 
 	// This method returns the mimetype of the icon.
+	@Override
 	public String getMimeType() {
 		return icon.getMimeType();
 	}
 
 	// This method returns the width of the icon.
+	@Override
 	public int getWidth() {
 		return icon.getWidth();
 	}
 
 	// This method returns the height of the icon.
+	@Override
 	public int getHeight() {
 		return icon.getHeight();
 	}
 
 	// This method returns the size of the icon.
+	@Override
 	public int getSize() {
 		return -1;
 	}
 
 	// This method returns the depth of the icon.
+	@Override
 	public int getDepth() {
 		return icon.getDepth();
 	}
 
 	// This method returns the input stream of the icon.
+	@Override
 	public InputStream getInputStream() throws IOException {
 		if (this.isReleased) {
 			throw new IllegalStateException(
