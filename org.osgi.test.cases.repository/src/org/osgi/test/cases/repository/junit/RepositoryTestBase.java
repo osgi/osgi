@@ -149,7 +149,6 @@ public abstract class RepositoryTestBase extends DefaultTestBundleControl {
         return xml;
     }
 
-    @SuppressWarnings("boxing")
     protected static String getSHA256(byte[] bytes) throws NoSuchAlgorithmException {
         StringBuilder builder = new StringBuilder();
         MessageDigest md = MessageDigest.getInstance("SHA-256");
