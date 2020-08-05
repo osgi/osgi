@@ -60,7 +60,8 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue("the ServletContext should be registered", register);
     }
 
-    public void tearDown() throws Exception {
+    @Override
+	public void tearDown() throws Exception {
 		uninstallBundle(fragmentBundle);
         super.tearDown();
     }

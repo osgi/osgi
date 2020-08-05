@@ -165,7 +165,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
 
         // also verify that no other headers are modified
-        Dictionary d = this.b.getHeaders();
+		Dictionary<String,String> d = this.b.getHeaders();
         Object classPath = d.get(Constants.BUNDLE_CLASSPATH);
         String cp = classPath == null ? "" : (String)classPath;
         assertTrue("Bundle-Classpath should be empty as it doesn't exist in the bundle before", cp.length() == 0);

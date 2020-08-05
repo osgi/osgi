@@ -40,17 +40,20 @@ public class ExtenderTestEventHandler implements EventHandler, BundleActivator {
             "org/osgi/service/web/UNDEPLOYED",
             "org/osgi/service/web/FAILED" };
 
-    public void start(BundleContext context) {
-        Dictionary d = new Hashtable();
+    @Override
+	public void start(BundleContext context) {
+		Dictionary<String,Object> d = new Hashtable<>();
         d.put(EventConstants.EVENT_TOPIC, topics);
         d.put(EventConstants.EVENT_FILTER, "(bundle.symbolicName=org.osgi.test.cases.webcontainer.tw*)");
         context.registerService(EventHandler.class.getName(), this, d);
     }
 
-    public void stop(BundleContext context) throws Exception {
+    @Override
+	public void stop(BundleContext context) throws Exception {
     }
 
-    public void handleEvent(Event event) {
+    @Override
+	public void handleEvent(Event event) {
         // let's record the event
     	EventFactory.registerEvent(event);
     	System.out.println("event factory size is " + EventFactory.getEventSize());

@@ -62,22 +62,26 @@ public abstract class WebContainerTestBundleControl extends
     protected static final String[] IMPORTS_JNDI = {"javax.naming"};
 
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
 		this.server = new Server(getContext());
         this.debug = true;
 
         // capture a time before install
         this.beforeInstall = System.currentTimeMillis();
-		ServiceReference[] sr = getContext().getAllServiceReferences("javax.servlet.ServletContext", null);
+		ServiceReference< ? >[] sr = getContext()
+				.getAllServiceReferences("javax.servlet.ServletContext", null);
 		this.srSize = (sr == null ? 0 : sr.length);
     }
 
+	@Override
 	public void tearDown() throws Exception {
 	    uninstallBundle(this.b);
 
 		// make sure all war/wab are uninstalled
-		ServiceReference[] sr = getContext().getAllServiceReferences("javax.servlet.ServletContext", null);
+		ServiceReference< ? >[] sr = getContext()
+				.getAllServiceReferences("javax.servlet.ServletContext", null);
 		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
 		this.b = null;
 	}
@@ -487,7 +491,8 @@ public abstract class WebContainerTestBundleControl extends
 	    filterString.append("(&(" + Constants.OBJECTCLASS + "=javax.servlet.ServletContext)");
         filterString.append("(osgi.web.contextpath" + "=" + webContextPath + "))");
 	    Filter filter = getContext().createFilter(filterString.toString());
-	    ServiceTracker st = new ServiceTracker(getContext(), filter, null);
+		ServiceTracker<Object,Object> st = new ServiceTracker<>(getContext(),
+				filter, null);
 	    st.open();
 
 		Object obj = Tracker.waitForService(

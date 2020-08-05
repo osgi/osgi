@@ -44,7 +44,8 @@ public class TestServlet2 extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request,
+    @Override
+	protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         printContext(request, response);
     }
@@ -53,7 +54,8 @@ public class TestServlet2 extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doPost(HttpServletRequest request,
+    @Override
+	protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         printContext(request, response);
     }

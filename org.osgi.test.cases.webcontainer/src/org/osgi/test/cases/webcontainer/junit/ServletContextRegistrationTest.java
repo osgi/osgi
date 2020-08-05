@@ -158,7 +158,7 @@ public class ServletContextRegistrationTest extends
 
 		String cp = options.get(WEB_CONTEXT_PATH) == null ? null
 				: (String) options.get(WEB_CONTEXT_PATH);
-		ServiceReference sr = null;
+		ServiceReference< ? > sr = null;
 		ServletContext sc;
 
 		// validate the bundle
@@ -169,7 +169,7 @@ public class ServletContextRegistrationTest extends
 		validator.validate();
 
 	    String filter = "(" + OSGI_WEB_SYMBOLICNAME + "="
-          + (String) bundle.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME)
+          + bundle.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME)
           + ")";
 	    if (debug) {
 	        log("filter is " + filter);
@@ -183,7 +183,7 @@ public class ServletContextRegistrationTest extends
 						"Bundle not started yet - should not be able to access "
 								+ cp, super.ableAccessPath(cp));
 			}
-		    ServiceReference[] srs = getContext().getServiceReferences(
+			ServiceReference< ? >[] srs = getContext().getServiceReferences(
 		                ServletContext.class.getName(), filter);
 			assertNull(
 					"ServletContext service should not be present as the bundle has not been started yet",
@@ -196,7 +196,8 @@ public class ServletContextRegistrationTest extends
 		assertTrue("ServletContext associated with Web-ContextPath " + cp + " should be registered",
 		        super.checkServiceRegistered(cp));
 		// get the service reference by Bundle-SymbolicName and Bundle-Version
-		ServiceReference[] srs = getContext().getServiceReferences(
+		ServiceReference< ? >[] srs = getContext()
+				.getServiceReferences(
 				ServletContext.class.getName(), filter);
 		assertNotNull("No ServletContext services", srs);
 		for (int i = 0; i < srs.length; i++) {
@@ -239,7 +240,7 @@ public class ServletContextRegistrationTest extends
 		srs = getContext().getServiceReferences(
 				ServletContext.class.getName(),
 				"(" + OSGI_WEB_CONTEXTPATH + "="
-						+ (String) bundle.getHeaders().get(WEB_CONTEXT_PATH) + ")");
+						+ bundle.getHeaders().get(WEB_CONTEXT_PATH) + ")");
 		assertNotNull(srs);
 		assertEquals(sc, getContext().getService(srs[0]));
 
@@ -267,7 +268,7 @@ public class ServletContextRegistrationTest extends
 				"("
 						+ OSGI_WEB_SYMBOLICNAME
 						+ "="
-						+ (String) bundle.getHeaders().get(
+						+ bundle.getHeaders().get(
 								Constants.BUNDLE_SYMBOLICNAME) + ")");
 		assertNull("srs should be null as the bundle has been stopped", srs);
 
