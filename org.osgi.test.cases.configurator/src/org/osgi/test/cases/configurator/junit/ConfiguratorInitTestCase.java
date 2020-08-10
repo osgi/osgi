@@ -41,7 +41,6 @@ import org.osgi.test.support.OSGiTestCase;
 public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 	private static final String	STORAGEROOT			= "org.osgi.test.cases.configurator.storageroot";
-	private static final String	DEFAULT_STORAGEROOT	= "generated/testframeworkstorage";
 	private static final String	FRAMEWORK_FACTORY	= "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 
 	// in these tests we launch a new Framework each time and check whether the
@@ -63,7 +62,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 		}
 
 		// provide file uri as configurator.initial
-		Map<String,String> launchConfig = new HashMap<>();
+		Map<String,String> launchConfig = getConfiguration(getName());
 		String config = f.toURI().toString();
 		launchConfig.put("configurator.initial", config);
 
@@ -79,7 +78,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 	public void testInitialConfig() throws Exception {
 		String pid = "org.osgi.test.init.pid1";
-		Map<String,String> launchConfig = new HashMap<>();
+		Map<String,String> launchConfig = getConfiguration(getName());
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:symbolic-name\": \"org.osgi.test.config.init\","
 				+ "\":configurator:version\": \"1.0.0\"," + "\"" + pid
@@ -98,7 +97,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 	public void testInitialConfigRequiresVersion() throws Exception {
 		String pid = "org.osgi.test.init.pid2";
-		Map<String,String> launchConfig = new HashMap<>();
+		Map<String,String> launchConfig = getConfiguration(getName());
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:symbolic-name\": \"org.osgi.test.config.init\","
 				+ "\"" + pid + "\":{\"foo\": \"bar\"}}";
@@ -116,7 +115,7 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 
 	public void testInitialConfigRequiresSymbolicname() throws Exception {
 		String pid = "org.osgi.test.init.pid3";
-		Map<String,String> launchConfig = new HashMap<>();
+		Map<String,String> launchConfig = getConfiguration(getName());
 		String config = "{\":configurator:resource-version\": 1,"
 				+ "\":configurator:version\": \"1.0.0\","
 				+ "\"" + pid + "\":{\"foo\": \"bar\"}}";
@@ -154,11 +153,6 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 		FrameworkFactory frameworkFactory = (FrameworkFactory) clazz
 				.getConstructor()
 				.newInstance();
-
-		// set storage area
-		String rootStorageArea = getStorageAreaRoot();
-		File rootFile = new File(rootStorageArea);
-		delete(rootFile);
 
 		// create and start framework
 		Framework framework = frameworkFactory.newFramework(configuration);
@@ -211,13 +205,35 @@ public class ConfiguratorInitTestCase extends OSGiTestCase {
 		return null;
 	}
 
+	private Map<String,String> getConfiguration(String testName) {
+		return getConfiguration(testName, true);
+	}
+
+	private Map<String,String> getConfiguration(String testName,
+			boolean delete) {
+		Map<String,String> configuration = new HashMap<>();
+		if (testName != null)
+			configuration.put(Constants.FRAMEWORK_STORAGE,
+					getStorageArea(testName, delete).getAbsolutePath());
+		return configuration;
+	}
+
 	private String getStorageAreaRoot() {
-		BundleContext context = getBundleContextWithoutFail();
-		if (context == null) {
-			String storageroot = getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
-			return storageroot;
+		String storageroot = getProperty(STORAGEROOT);
+		assertNotNull("Must set property: " + STORAGEROOT, storageroot);
+		return storageroot;
+	}
+
+	protected File getStorageArea(String testName, boolean delete) {
+		File storageArea = new File(getStorageAreaRoot(), testName);
+		if (delete) {
+			assertTrue(
+					"Could not clean up storage area: " + storageArea.getPath(),
+					delete(storageArea));
+			assertTrue("Could not create storage area directory: "
+					+ storageArea.getPath(), storageArea.mkdirs());
 		}
-		return context.getDataFile("storageroot").getAbsolutePath();
+		return storageArea;
 	}
 
 	private boolean delete(File file) {
