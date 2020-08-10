@@ -27,26 +27,26 @@ public class IntegerServiceProvider {
 	@Service(Integer.class)
 	@ServiceRanking(5000)
 	Integer int1() {
-		return new Integer(Double.valueOf(Math.random()).intValue());
+		return Integer.valueOf(Double.valueOf(Math.random()).intValue());
 	}
 
 	@Produces
 	@Service(Integer.class)
 	@ServiceRanking(12000)
 	Integer int2() {
-		return new Integer(Double.valueOf(Math.random()).intValue());
+		return Integer.valueOf(Double.valueOf(Math.random()).intValue());
 	}
 
 	@Produces
 	@Service(Integer.class)
 	@ServiceRanking(1000)
 	Integer int3() {
-		return new Integer(Double.valueOf(Math.random()).intValue());
+		return Integer.valueOf(Double.valueOf(Math.random()).intValue());
 	}
 
 	@Produces
 	@Service(Integer.class)
 	@ServiceRanking(100000)
-	Integer int4 = new Integer(Double.valueOf(Math.random()).intValue());
+	Integer int4 = Integer.valueOf(Double.valueOf(Math.random()).intValue());
 
 }

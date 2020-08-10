@@ -48,7 +48,7 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		Class< ? > javaType = desc.getDataType().getJavaDataType();
 
 		if (javaType.equals(Integer.class)) {
-			value = new Integer(0);
+			value = Integer.valueOf(0);
 		} else if (javaType.equals(String.class)) {
 			value = desc.getDefaultValue();
 		} else {

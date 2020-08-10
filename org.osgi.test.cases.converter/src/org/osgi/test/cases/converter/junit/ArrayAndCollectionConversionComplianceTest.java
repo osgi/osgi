@@ -46,7 +46,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		Set<Long> converted = converter.convert(scalar)
 				.to(new TypeReference<Set<Long>>() {});
 		assertEquals(1, converted.size());
-		assertTrue(new Long(225).equals(converted.iterator().next()));
+		assertTrue(Long.valueOf(225).equals(converted.iterator().next()));
 
 		char[] scalarCharacters = converter.convert(scalar).to(char[].class);
 		assertEquals(3, scalarCharacters.length);

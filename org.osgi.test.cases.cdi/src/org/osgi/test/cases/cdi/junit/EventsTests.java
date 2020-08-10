@@ -53,7 +53,8 @@ public class EventsTests extends AbstractTestCase {
 
 			long changeCount = containerDTO.changeCount;
 
-			ServiceRegistration<Integer> int1 = bundleContext.registerService(Integer.class, new Integer(12), null);
+			ServiceRegistration<Integer> int1 = bundleContext
+					.registerService(Integer.class, Integer.valueOf(12), null);
 
 			try {
 				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {
@@ -107,7 +108,8 @@ public class EventsTests extends AbstractTestCase {
 
 			long changeCount = containerDTO.changeCount;
 
-			ServiceRegistration<Integer> int1 = bundleContext.registerService(Integer.class, new Integer(12), null);
+			ServiceRegistration<Integer> int1 = bundleContext
+					.registerService(Integer.class, Integer.valueOf(12), null);
 
 			try {
 				for (long i = 10; i > 0 && (getContainerDTO(cdiRuntime, tb).changeCount == changeCount); i--) {

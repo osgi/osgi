@@ -136,21 +136,23 @@ public class ZCLClusterImpl implements ZCLCluster {
 				ZCLException failure = new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "unknown attributeId");
 				ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, failure);
 				readStatusRecords[i] = readStatusRecord;
-				readStatusMap.put(new Integer(attrId), readStatusRecord);
+				readStatusMap.put(Integer.valueOf(attrId), readStatusRecord);
 				continue;
 			} else if (attributeInfo.getDataType() != null && attribute.getDataType() != null) {
 				if (attributeInfo.getDataType().getId() != attribute.getDataType().getId()) {
 					ZCLException failure = new ZCLException(ZCLException.INVALID_DATA_TYPE, "requested attribute data type does not match returned one");
 					ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, failure);
 					readStatusRecords[i] = readStatusRecord;
-					readStatusMap.put(new Integer(attribute.getId()), readStatusRecord);
+					readStatusMap.put(Integer.valueOf(attribute.getId()),
+							readStatusRecord);
 					continue;
 				}
 			}
 			Object value = attribute.getInternalValue();
 			ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, null, value);
 			readStatusRecords[i] = readStatusRecord;
-			readStatusMap.put(new Integer(attribute.getId()), readStatusRecord);
+			readStatusMap.put(Integer.valueOf(attribute.getId()),
+					readStatusRecord);
 		}
 		return Promises.resolved(readStatusMap);
 	}
@@ -204,7 +206,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 			} else {
 				status = ZCLException.UNSUPPORTED_ATTRIBUTE;
 			}
-			resultMap.put(new Integer(attributeInfo.getId()), new Integer(status));
+			resultMap.put(Integer.valueOf(attributeInfo.getId()),
+					Integer.valueOf(status));
 		}
 
 		return Promises.resolved(resultMap);

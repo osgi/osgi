@@ -437,16 +437,22 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 			Dictionary<String,Object> hostProperties = new Hashtable<>();
 			if (wasStarted) {
-				hostProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
+				hostProperties.put(ZigBeeNode.PAN_ID,
+						Integer.valueOf(this.getPanId()));
 				hostProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
 			}
 
 			hostProperties.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
 			hostProperties.put(Constants.SERVICE_PID, this.getHostPid());
-			hostProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
-			hostProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
-			hostProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
-			hostProperties.put(ZigBeeNode.POWER_SOURCE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
+			hostProperties.put(ZigBeeNode.LOGICAL_TYPE,
+					Short.valueOf(nodeDescriptor.getLogicalType()));
+			hostProperties.put(ZigBeeNode.MANUFACTURER_CODE,
+					Integer.valueOf(nodeDescriptor.getManufacturerCode()));
+			hostProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE,
+					Boolean.valueOf(nodeDescriptor.getMacCapabilityFlags()
+							.isReceiverOnWhenIdle()));
+			hostProperties.put(ZigBeeNode.POWER_SOURCE, Boolean.valueOf(
+					nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
 
 			hostProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
 			if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {
@@ -535,7 +541,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 						ZigBeeEvent event;
 						try {
 							event = createEvent(registrationInfo,
-									new Boolean(true));
+									Boolean.valueOf(true));
 							registrationInfo.eventSource = new ZigBeeEventSourceImpl(
 									registrationInfo, event);
 							registrationInfo.eventSource.start();

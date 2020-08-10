@@ -44,7 +44,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			long changeCount = containerDTO.changeCount;
 
 			ServiceRegistration<Integer> int1 = bundleContext.registerService(
-				Integer.class, new Integer(12),
+					Integer.class, Integer.valueOf(12),
 				new Hashtable<>(Collections.singletonMap("bean.id", "as")));
 
 			try {
@@ -98,7 +98,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			long changeCount = containerDTO.changeCount;
 
 			ServiceRegistration<Integer> int1 = bundleContext.registerService(
-				Integer.class, new Integer(12),
+					Integer.class, Integer.valueOf(12),
 				new Hashtable<>(Collections.singletonMap("bean.id", "sc")));
 
 			try {
@@ -169,7 +169,7 @@ public class OptionalReluctantReferenceTests extends AbstractTestCase {
 			long changeCount = containerDTO.changeCount;
 
 			ServiceRegistration<Integer> int1 = bundleContext.registerService(
-				Integer.class, new Integer(12),
+					Integer.class, Integer.valueOf(12),
 				new Hashtable<>(Collections.singletonMap("bean.id", "fc")));
 
 			try {

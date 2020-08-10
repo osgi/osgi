@@ -115,7 +115,7 @@ public class Test152_3_1 extends AbstractTestCase {
 			int trackingCount = twoTracker.getTrackingCount();
 
 			ServiceRegistration<Integer> integerReg = bundleContext.registerService(
-				Integer.class, new Integer(45),
+					Integer.class, Integer.valueOf(45),
 				new Hashtable() {{put(Constants.SERVICE_DESCRIPTION, "two");}});
 
 			while (trackingCount == twoTracker.getTrackingCount()) {Thread.sleep(50);}
@@ -225,7 +225,7 @@ public class Test152_3_1 extends AbstractTestCase {
 			int trackingCount = threeTracker.getTrackingCount();
 
 			ServiceRegistration<Integer> integerReg = bundleContext.registerService(
-				Integer.class, new Integer(45),
+					Integer.class, Integer.valueOf(45),
 				new Hashtable() {{put(Constants.SERVICE_DESCRIPTION, "three");}});
 
 			int count = 10;

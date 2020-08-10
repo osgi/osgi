@@ -119,8 +119,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLAttributeInfo attributeInfo1 = new ZCLAttributeInfoImpl(0x0, 0x05, ZigBeeBoolean.getInstance());
 		ZCLAttributeInfo attributeInfo2 = new ZCLAttributeInfoImpl(0x1, -1, ZigBeeBoolean.getInstance());
 
-		wrongMap1.put(attributeInfo1, new Boolean(true));
-		wrongMap1.put(attributeInfo2, new Boolean(true));
+		wrongMap1.put(attributeInfo1, Boolean.valueOf(true));
+		wrongMap1.put(attributeInfo2, Boolean.valueOf(true));
 
 		p = cluster.writeAttributes(false, wrongMap1);
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -130,7 +130,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Find a CharacterString writable attribute inside the CT configuration
 		 * file.
 		 */
-		AttributeCoordinates attributeCoordinates = conf.findAttribute(new Boolean(true), null, ZigBeeUnsignedInteger16.getInstance());
+		AttributeCoordinates attributeCoordinates = conf.findAttribute(
+				Boolean.valueOf(true), null,
+				ZigBeeUnsignedInteger16.getInstance());
 
 		assertNotNull("unable to find in the CT file a CharacterSting writable attribute", attributeCoordinates);
 
@@ -139,7 +141,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLAttributeInfo writableAttributeInfo = new ZCLAttributeInfoImpl(attributeCoordinates.expectedAttributeDescription);
 
 		Map<ZCLAttributeInfo,Object> writeMap = new HashMap<>();
-		writeMap.put(writableAttributeInfo, new Integer(10));
+		writeMap.put(writableAttributeInfo, Integer.valueOf(10));
 
 		p = cluster.writeAttributes(false, writeMap);
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -153,7 +155,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		/*
 		 * Find a read only boolean attribute inside the CT configuration file.
 		 */
-		attributeCoordinates = conf.findAttribute(new Boolean(false), null, ZigBeeBoolean.getInstance());
+		attributeCoordinates = conf.findAttribute(Boolean.valueOf(false), null,
+				ZigBeeBoolean.getInstance());
 
 		assertNotNull("unable to find in the CT configuration file a Boolean read-only attribute", attributeCoordinates);
 
@@ -162,7 +165,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLAttributeInfo readOnlyAttributeInfo = new ZCLAttributeInfoImpl(attributeCoordinates.expectedAttributeDescription);
 
 		Map<ZCLAttributeInfo,Object> readOnlyMap = new HashMap<>();
-		readOnlyMap.put(readOnlyAttributeInfo, new Boolean(false));
+		readOnlyMap.put(readOnlyAttributeInfo, Boolean.valueOf(false));
 
 		p = cluster.writeAttributes(false, readOnlyMap);
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -170,7 +173,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
 			assertEquals(context + " expected a map with size 1 as result of asking to write a read-only attribute", 1, map.size());
 
-			Object s = map.get(new Integer(readOnlyAttributeInfo.getId()));
+			Object s = map.get(Integer.valueOf(readOnlyAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
 				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
@@ -184,8 +187,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLAttributeInfo unsupportedAttributeInfo = new ZCLAttributeInfoImpl(0xfa11, -1, ZigBeeBoolean.getInstance());
 
 		Map<ZCLAttributeInfo,Object> readOnlyAndUndefinedMap = new HashMap<>();
-		readOnlyAndUndefinedMap.put(readOnlyAttributeInfo, new Boolean(false));
-		readOnlyAndUndefinedMap.put(unsupportedAttributeInfo, new Boolean(false));
+		readOnlyAndUndefinedMap.put(readOnlyAttributeInfo,
+				Boolean.valueOf(false));
+		readOnlyAndUndefinedMap.put(unsupportedAttributeInfo,
+				Boolean.valueOf(false));
 
 		p = cluster.writeAttributes(false, readOnlyAndUndefinedMap);
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -193,7 +198,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
 			assertEquals(context + " expected a map with size 2 as result of asking to write one read-only and one undefined attribute", 2, map.size());
 
-			Object s = map.get(new Integer(readOnlyAttributeInfo.getId()));
+			Object s = map.get(Integer.valueOf(readOnlyAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
 				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
@@ -201,7 +206,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 				fail(context + " must return a Map<Integer, Short>");
 			}
 
-			s = map.get(new Integer(unsupportedAttributeInfo.getId()));
+			s = map.get(Integer.valueOf(unsupportedAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
 				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.UNSUPPORTED_ATTRIBUTE, status);
@@ -322,7 +327,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 			assertMapContent(context, map, Integer.class, ZCLReadStatusRecord.class, zclAttributeInfos.length);
 
-			ZCLReadStatusRecord readStatusRecord = map.get(new Integer(unsupportedAttributeId));
+			ZCLReadStatusRecord readStatusRecord = map
+					.get(Integer.valueOf(unsupportedAttributeId));
 			assertReadStatusRecord(context, readStatusRecord, zclAttributeInfos[0], ZCLException.UNSUPPORTED_ATTRIBUTE);
 		} else {
 			fail(context + " promise resolved with an unexpected exception.", p.getFailure());
@@ -346,7 +352,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 			for (int i = 0; i < zclAttributeInfos.length; i++) {
 				int key = zclAttributeInfos[i].getId();
-				ZCLReadStatusRecord readStatusRecord = map.get(new Integer(key));
+				ZCLReadStatusRecord readStatusRecord = map
+						.get(Integer.valueOf(key));
 				assertNotNull(context + ": requested attributeId " + zclAttributeInfos[i].getId() + " entry not found in the response map", readStatusRecord);
 
 				@SuppressWarnings("unused")
@@ -376,7 +383,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 					Map.class);
 
 			assertMapContent(context, map, Integer.class, ZCLReadStatusRecord.class, zclAttributeInfos.length);
-			ZCLReadStatusRecord readStatusRecord = map.get(new Integer(attributeId));
+			ZCLReadStatusRecord readStatusRecord = map
+					.get(Integer.valueOf(attributeId));
 			assertReadStatusRecord(context, readStatusRecord, zclAttributeInfos[0], ZCLException.INVALID_DATA_TYPE);
 
 		} else {
@@ -393,7 +401,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 	public void testZCLAttribute() throws Exception {
 
-		AttributeCoordinates uint16attribute = conf.findAttribute(new Boolean(true), null, ZigBeeUnsignedInteger16.getInstance());
+		AttributeCoordinates uint16attribute = conf.findAttribute(
+				Boolean.valueOf(true), null,
+				ZigBeeUnsignedInteger16.getInstance());
 
 		assertNotNull("No writeable ZigBeeUnsignedInteger16 attribute found, please modify the configuration file to add a cluster with such an attribute", uint16attribute);
 		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(uint16attribute.expectedEndpoint);
@@ -441,7 +451,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		log(TAG, "ZCLAttribute.setValue(): on the previously read writable uint16 attribute with a wrong class value (Float instead of Integer)");
 
-		Promise<Void> p3 = attribute.setValue(new Float(4));
+		Promise<Void> p3 = attribute.setValue(Float.valueOf(4));
 		waitForPromise(p3, INVOKE_TIMEOUT);
 		if (p3.getFailure() != null) {
 			assertPromiseZCLException(p3,
@@ -457,7 +467,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		log(TAG, context + ": issue ZCLAttribute.setValue() on the previously read ZCLAttribute.");
 
-		p3 = attribute.setValue(new Integer(4));
+		p3 = attribute.setValue(Integer.valueOf(4));
 		waitForPromise(p3, INVOKE_TIMEOUT);
 		if (p3.getFailure() != null) {
 			fail("ZCLAttribute.setValue(): we didn't expect to fail writing a writable attribute",
@@ -475,7 +485,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		/* find any read-only attribute */
 
-		AttributeCoordinates readOnlyAttribute = conf.findAttribute(new Boolean(false), null, null);
+		AttributeCoordinates readOnlyAttribute = conf
+				.findAttribute(Boolean.valueOf(false), null, null);
 		endpoint = this.getZigBeeEndpointService(readOnlyAttribute.expectedEndpoint);
 		assertNotNull("ZigBeeEndpoint service " + this.printScope(readOnlyAttribute.expectedEndpoint) + " not registered.", endpoint);
 		cluster = endpoint.getServerCluster(readOnlyAttribute.expectedCluster.getId());

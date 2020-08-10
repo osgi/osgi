@@ -318,10 +318,17 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			Dictionary<String,Object> props = new Hashtable<>();
 
 			props.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
-			props.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
-			props.put(ZigBeeEndpoint.PROFILE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationProfileId()));
-			props.put(ZigBeeEndpoint.DEVICE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationDeviceId()));
-			props.put(ZigBeeEndpoint.DEVICE_VERSION, new Byte(endpoint.getSimpleDescriptorInternal().getApplicationDeviceVersion()));
+			props.put(ZigBeeEndpoint.ENDPOINT_ID,
+					Short.valueOf(endpoint.getId()));
+			props.put(ZigBeeEndpoint.PROFILE_ID,
+					Integer.valueOf(endpoint.getSimpleDescriptorInternal()
+							.getApplicationProfileId()));
+			props.put(ZigBeeEndpoint.DEVICE_ID,
+					Integer.valueOf(endpoint.getSimpleDescriptorInternal()
+							.getApplicationDeviceId()));
+			props.put(ZigBeeEndpoint.DEVICE_VERSION,
+					Byte.valueOf(endpoint.getSimpleDescriptorInternal()
+							.getApplicationDeviceVersion()));
 			props.put(ZigBeeEndpoint.HOST_PID, this.getHostPid());
 			props.put(ZigBeeEndpoint.OUTPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getOutputClusters());
 			props.put(ZigBeeEndpoint.INPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getInputClusters());
@@ -339,13 +346,17 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		 */
 		Dictionary<String,Object> nodeProperties = new Hashtable<>();
 
-		nodeProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
+		nodeProperties.put(ZigBeeNode.PAN_ID, Integer.valueOf(this.getPanId()));
 		nodeProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
 		nodeProperties.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
-		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
-		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
-		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
-		nodeProperties.put(ZigBeeNode.POWER_SOURCE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
+		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE,
+				Short.valueOf(nodeDescriptor.getLogicalType()));
+		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE,
+				Integer.valueOf(nodeDescriptor.getManufacturerCode()));
+		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, Boolean.valueOf(
+				nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+		nodeProperties.put(ZigBeeNode.POWER_SOURCE, Boolean.valueOf(
+				nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
 		nodeProperties.put("service.pid", nodePid);
 
 		nodeProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);

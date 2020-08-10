@@ -225,7 +225,8 @@ public abstract class AbstractTestCase {
 
 	long getChangeCount(ServiceReference<?> reference) {
 		return Optional.ofNullable(reference.getProperty(Constants.SERVICE_CHANGECOUNT)).map(v -> (Long) v)
-				.orElse(new Long(-1)).longValue();
+				.orElse(Long.valueOf(-1))
+				.longValue();
 	}
 
 	static final Bundle bundle = FrameworkUtil.getBundle(AbstractTestCase.class);
