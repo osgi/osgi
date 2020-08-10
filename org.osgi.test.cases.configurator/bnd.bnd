@@ -37,4 +37,5 @@ Import-Package: *
     org.osgi.impl.service.log; version=latest
 
 -runproperties = ${runproperties},\
+    ${p}.storageroot=${target-dir}/${p}.testStorageRoot,\
     ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest}}"
