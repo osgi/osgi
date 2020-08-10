@@ -106,7 +106,11 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 	byte[]		nullDate			= new byte[] {0x00, 0x00, 0x00, 0x00};
-	Object[]	dataTypesZeroValue	= new Object[] {new Byte((byte) 0), new Short((short) 0), new Integer(0), new Long(0), BigInteger.valueOf(0), new String(), nullDate};
+	Object[]	dataTypesZeroValue	= new Object[] {
+			Byte.valueOf((byte) 0), Short.valueOf((short) 0),
+			Integer.valueOf(0),
+			Long.valueOf(0), BigInteger.valueOf(0), new String(), nullDate
+	};
 
 	public void testGeneralDataTypes() {
 
@@ -441,15 +445,24 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			}
 
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);
-			checkValue(dataType, payload, new Byte((byte) 0), size, new byte[] {0x00});
-			checkValue(dataType, payload, new Byte(Byte.MAX_VALUE), size, new byte[] {Byte.MAX_VALUE});
+			checkValue(dataType, payload, Byte.valueOf((byte) 0), size,
+					new byte[] {
+							0x00
+					});
+			checkValue(dataType, payload, Byte.valueOf(Byte.MAX_VALUE), size,
+					new byte[] {
+							Byte.MAX_VALUE
+					});
 			/*
 			 * since the data type may allow Invalid number values, we do not
 			 * have to use it, otherwise the deserialize method would return
 			 * null instead of the number we serialized causing this test to
 			 * fail.
 			 */
-			checkValue(dataType, payload, new Byte((byte) 0x81), size, new byte[] {(byte) 0x81});
+			checkValue(dataType, payload, Byte.valueOf((byte) 0x81), size,
+					new byte[] {
+							(byte) 0x81
+					});
 
 		} else if (clazz.equals(Short.class)) {
 			if ((size < 1) || (size > 2)) {
@@ -463,29 +476,44 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 * we have to do with unsigned data types. The size is 1, but we
 				 * need a bigger java wrapper to allow unsigned numbers.
 				 */
-				checkValue(dataType, payload, new Short((byte) 0), size, new byte[] {0x00, 0x00});
+				checkValue(dataType, payload, Short.valueOf((byte) 0), size,
+						new byte[] {
+								0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
 				 * return null instead of the number we serialized causing this
 				 * test to fail.
 				 */
-				checkValue(dataType, payload, new Short((short) 0xfe), size, new byte[] {(byte) 0xfe});
+				checkValue(dataType, payload, Short.valueOf((short) 0xfe), size,
+						new byte[] {
+								(byte) 0xfe
+						});
 			} else if (size == 2) {
 				/*
 				 * This is a signed data type or an unsigned data type that we
 				 * would like to manage like signed (i.e. general data type or
 				 * bitmap)
 				 */
-				checkValue(dataType, payload, new Short((short) 0), size, new byte[] {0x00, 0x00});
-				checkValue(dataType, payload, new Short(Short.MAX_VALUE), size, new byte[] {(byte) 0xff, 0x7f});
+				checkValue(dataType, payload, Short.valueOf((short) 0), size,
+						new byte[] {
+								0x00, 0x00
+						});
+				checkValue(dataType, payload, Short.valueOf(Short.MAX_VALUE),
+						size, new byte[] {
+								(byte) 0xff, 0x7f
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
 				 * return null instead of the number we serialized causing this
 				 * test to fail.
 				 */
-				checkValue(dataType, payload, new Short((short) 0x8001), size, new byte[] {0x01, (byte) 0x80});
+				checkValue(dataType, payload, Short.valueOf((short) 0x8001),
+						size, new byte[] {
+								0x01, (byte) 0x80
+						});
 			}
 		} else if (clazz.equals(Integer.class)) {
 			if ((size < 2) || (size > 4)) {
@@ -500,23 +528,35 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 * that do not fit into a Short.
 				 */
 
-				checkValue(dataType, payload, new Integer(0), size, new byte[] {0x00, 0x00});
+				checkValue(dataType, payload, Integer.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00
+						});
 
 				/*
 				 * the maximum unsigned value that fits into 2 bytes and that it
 				 * cannot confused with an Invalid number
 				 */
-				checkValue(dataType, payload, new Integer(0xfffe), size, new byte[] {(byte) 0xfe, (byte) 0xff});
+				checkValue(dataType, payload, Integer.valueOf(0xfffe), size,
+						new byte[] {
+								(byte) 0xfe, (byte) 0xff
+						});
 
 				// another number
-				checkValue(dataType, payload, new Integer(0xfafb), size, new byte[] {(byte) 0xfb, (byte) 0xfa});
+				checkValue(dataType, payload, Integer.valueOf(0xfafb), size,
+						new byte[] {
+								(byte) 0xfb, (byte) 0xfa
+						});
 			} else if (size == 3) {
 				/*
 				 * we could have to do here with both unsigned and signed data
 				 * types.
 				 */
 
-				checkValue(dataType, payload, new Integer(0), size, new byte[] {0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Integer.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
@@ -528,16 +568,28 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					 * the maximum unsigned value that fits into 3 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
-					checkValue(dataType, payload, new Integer(0xfffffe), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff});
+					checkValue(dataType, payload, Integer.valueOf(0xfffffe),
+							size, new byte[] {
+									(byte) 0xfe, (byte) 0xff, (byte) 0xff
+							});
 
 					// another number
-					checkValue(dataType, payload, new Integer(0xfafbfc), size, new byte[] {(byte) 0xfc, (byte) 0xfb, (byte) 0xfa});
+					checkValue(dataType, payload, Integer.valueOf(0xfafbfc),
+							size, new byte[] {
+									(byte) 0xfc, (byte) 0xfb, (byte) 0xfa
+							});
 				} else {
 					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Integer(0x7fffff), size, new byte[] {(byte) 0xff, (byte) 0xff, 0x7f});
+					checkValue(dataType, payload, Integer.valueOf(0x7fffff),
+							size, new byte[] {
+									(byte) 0xff, (byte) 0xff, 0x7f
+							});
 
 					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Integer(0xff800000 + 1), size, new byte[] {(byte) 0x01, (byte) 0x00, (byte) 0x80});
+					checkValue(dataType, payload,
+							Integer.valueOf(0xff800000 + 1), size, new byte[] {
+									(byte) 0x01, (byte) 0x00, (byte) 0x80
+							});
 				}
 			} else if (size == 4) {
 				/*
@@ -545,15 +597,24 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 * handled like signed (i.e general data and bitmap).
 				 */
 
-				checkValue(dataType, payload, new Integer(0), size, new byte[] {0x00, 0x00, 0x00, 0x00});
-				checkValue(dataType, payload, new Integer(Integer.MAX_VALUE), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
+				checkValue(dataType, payload, Integer.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00
+						});
+				checkValue(dataType, payload,
+						Integer.valueOf(Integer.MAX_VALUE), size, new byte[] {
+								(byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
 				 * return null instead of the number we serialized causing this
 				 * test to fail.
 				 */
-				checkValue(dataType, payload, new Integer(0x80123456), size, new byte[] {0x56, 0x34, 0x12, (byte) 0x80});
+				checkValue(dataType, payload, Integer.valueOf(0x80123456), size,
+						new byte[] {
+								0x56, 0x34, 0x12, (byte) 0x80
+						});
 			}
 		} else if (clazz.equals(Long.class)) {
 			if ((size < 4) || (size > 8)) {
@@ -566,16 +627,27 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				/*
 				 * This is an unsigned type. For instance an unsigned int 32.
 				 */
-				checkValue(dataType, payload, new Long(0), size, new byte[] {0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Long.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00
+						});
 
 				/*
 				 * the maximum unsigned value that fits into 4 bytes and that it
 				 * cannot confused with an Invalid number
 				 */
-				checkValue(dataType, payload, new Long(0xfffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff});
+				checkValue(dataType, payload, Long.valueOf(0xfffffffeL), size,
+						new byte[] {
+								(byte) 0xfe, (byte) 0xff, (byte) 0xff,
+								(byte) 0xff
+						});
 
 				// another number
-				checkValue(dataType, payload, new Long(0xf8f9fafbL), size, new byte[] {(byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
+				checkValue(dataType, payload, Long.valueOf(0xf8f9fafbL), size,
+						new byte[] {
+								(byte) 0xfb, (byte) 0xfa, (byte) 0xf9,
+								(byte) 0xf8
+						});
 
 			} else if (size == 5) {
 				/*
@@ -583,7 +655,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 * types (i.e. unsigned integer 32 or signed integer 40
 				 */
 
-				checkValue(dataType, payload, new Long(0), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Long.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
@@ -595,23 +670,42 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					 * the maximum unsigned value that fits into 4 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
-					checkValue(dataType, payload, new Long(0xfffffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
+					checkValue(dataType, payload, Long.valueOf(0xfffffffffeL),
+							size, new byte[] {
+									(byte) 0xfe, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, (byte) 0xff
+							});
 
 					// another number
-					checkValue(dataType, payload, new Long(0xf8f9fafbfcL), size, new byte[] {(byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
+					checkValue(dataType, payload, Long.valueOf(0xf8f9fafbfcL),
+							size, new byte[] {
+									(byte) 0xfc, (byte) 0xfb, (byte) 0xfa,
+									(byte) 0xf9, (byte) 0xf8
+							});
 				} else {
 					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Long(0x7fffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
+					checkValue(dataType, payload, Long.valueOf(0x7fffffffffL),
+							size, new byte[] {
+									(byte) 0xff, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, 0x7f
+							});
 
 					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Long(0xffffff8000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, (byte) 0x80});
+					checkValue(dataType, payload,
+							Long.valueOf(0xffffff8000000000L + 1), size,
+							new byte[] {
+									0x01, 0x00, 0x00, 0x00, (byte) 0x80
+							});
 				}
 			} else if (size == 6) {
 				/*
 				 * we could have to do here with both unsigned and signed data
 				 * types (i.e. unsigned integer 40 or signed integer 48
 				 */
-				checkValue(dataType, payload, new Long(0), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Long.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
@@ -623,24 +717,43 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					 * the maximum unsigned value that fits into 6 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
-					checkValue(dataType, payload, new Long(0xfffffffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
+					checkValue(dataType, payload, Long.valueOf(0xfffffffffffeL),
+							size, new byte[] {
+									(byte) 0xfe, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, (byte) 0xff, (byte) 0xff
+							});
 
 					// another number
-					checkValue(dataType, payload, new Long(0xf8f9fafbfcfdL), size, new byte[] {(byte) 0xfd, (byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
+					checkValue(dataType, payload, Long.valueOf(0xf8f9fafbfcfdL),
+							size, new byte[] {
+									(byte) 0xfd, (byte) 0xfc, (byte) 0xfb,
+									(byte) 0xfa, (byte) 0xf9, (byte) 0xf8
+							});
 				} else {
 					// the maximum signed value that fits into 6 bytes.
-					checkValue(dataType, payload, new Long(0x7fffffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
+					checkValue(dataType, payload, Long.valueOf(0x7fffffffffffL),
+							size, new byte[] {
+									(byte) 0xff, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, (byte) 0xff, 0x7f
+							});
 
 					// the minimum signed value that fits into 6 bytes and it is
 					// not an Invalid Number
-					checkValue(dataType, payload, new Long(0xffff800000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
+					checkValue(dataType, payload,
+							Long.valueOf(0xffff800000000000L + 1), size,
+							new byte[] {
+									0x01, 0x00, 0x00, 0x00, 0x00, (byte) 0x80
+							});
 				}
 			} else if (size == 7) {
 				/*
 				 * we could have to do here with both unsigned and signed data
 				 * types (i.e. unsigned integer 40 or signed integer 48
 				 */
-				checkValue(dataType, payload, new Long(0), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Long.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
@@ -652,19 +765,38 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					 * the maximum unsigned value that fits into 7 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
-					checkValue(dataType, payload, new Long(0xfffffffffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
+					checkValue(dataType, payload,
+							Long.valueOf(0xfffffffffffffeL), size, new byte[] {
+									(byte) 0xfe, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff
+							});
 
 					// another number
-					checkValue(dataType, payload, new Long(0xf8f9fafbfcfdfeL), size, new byte[] {(byte) 0xfe, (byte) 0xfd, (byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
+					checkValue(dataType, payload,
+							Long.valueOf(0xf8f9fafbfcfdfeL), size, new byte[] {
+									(byte) 0xfe, (byte) 0xfd, (byte) 0xfc,
+									(byte) 0xfb, (byte) 0xfa, (byte) 0xf9,
+									(byte) 0xf8
+							});
 				} else {
 					// the maximum signed value that fits into 7 bytes.
-					checkValue(dataType, payload, new Long(0x7fffffffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
+					checkValue(dataType, payload,
+							Long.valueOf(0x7fffffffffffffL), size, new byte[] {
+									(byte) 0xff, (byte) 0xff, (byte) 0xff,
+									(byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f
+							});
 
 					/*
 					 * the minimum signed value that fits into 7 bytes and that
 					 * it cannot confused with an Invalid number
 					 */
-					checkValue(dataType, payload, new Long(0xff80000000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
+					checkValue(dataType, payload,
+							Long.valueOf(0xff80000000000000L + 1), size,
+							new byte[] {
+									0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+									(byte) 0x80
+							});
 				}
 			} else if (size == 8) {
 				/*
@@ -673,7 +805,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 * bitmap 64
 				 */
 
-				checkValue(dataType, payload, new Long(0), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+				checkValue(dataType, payload, Long.valueOf(0), size,
+						new byte[] {
+								0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+						});
 				/*
 				 * since the data type may allow Invalid number values, we do
 				 * not have to use it, otherwise the deserialize method would
@@ -687,22 +822,32 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					 */
 					checkValue(dataType,
 							payload,
-							new Long(0xfffffffffffffffeL),
+							Long.valueOf(0xfffffffffffffffeL),
 							size,
 							new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
 
 					// another number
 					checkValue(dataType,
 							payload,
-							new Long(0xf8f9fafbfcfdfeffL),
+							Long.valueOf(0xf8f9fafbfcfdfeffL),
 							size,
 							new byte[] {(byte) 0xff, (byte) 0xfe, (byte) 0xfd, (byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
 				} else {
 					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Long(0x7f00000000000000L), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f});
+					checkValue(dataType, payload,
+							Long.valueOf(0x7f00000000000000L), size,
+							new byte[] {
+									0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+									0x7f
+							});
 
 					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Long(0x8000000000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
+					checkValue(dataType, payload,
+							Long.valueOf(0x8000000000000000L + 1), size,
+							new byte[] {
+									0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+									(byte) 0x80
+							});
 				}
 			}
 		} else if (clazz.equals(BigInteger.class)) {
@@ -794,9 +939,15 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);
 
 			if (size == 2) {
-				checkValue(dataType, payload, new Float(-252.5), size, new byte[] {(byte) 0xe4, (byte) 0xdb});
+				checkValue(dataType, payload, Float.valueOf(-252.5f), size,
+						new byte[] {
+								(byte) 0xe4, (byte) 0xdb
+						});
 			} else if (size == 4) {
-				checkValue(dataType, payload, new Float(-252.5), size, new byte[] {0x00, (byte) 0x80, 0x7c, (byte) 0xc3});
+				checkValue(dataType, payload, Float.valueOf(-252.5f), size,
+						new byte[] {
+								0x00, (byte) 0x80, 0x7c, (byte) 0xc3
+						});
 			}
 
 		} else if (clazz.equals(Double.class)) {
@@ -805,7 +956,11 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			}
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);
 
-			checkValue(dataType, payload, new Double(-252.5), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x90, 0x6f, (byte) 0xc0});
+			checkValue(dataType, payload, Double.valueOf(-252.5), size,
+					new byte[] {
+							0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x90, 0x6f,
+							(byte) 0xc0
+					});
 
 		} else if (clazz.equals(Boolean.class)) {
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);

@@ -100,7 +100,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		for (int i = 0; i < attributesInfoArray.length; i++) {
 			ZCLAttributeInfo attributeInfo = attributesInfoArray[i];
-			code.add(new Integer(attributeInfo.getManufacturerCode()));
+			code.add(Integer.valueOf(attributeInfo.getManufacturerCode()));
 			if (code.size() != 1) {
 				return Promises.failed(new IllegalArgumentException(
 						attributeInfo.getId() + " has a different manufacturer code compared to the others"));

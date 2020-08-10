@@ -65,7 +65,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	public void testScalarConversionFromBoolean() {
 		Converter converter = Converters.standardConverter();
 
-		Boolean fstToBoConverted = new Boolean(true);
+		Boolean fstToBoConverted = Boolean.valueOf(true);
 
 		boolean booleanConverted = converter.convert(fstToBoConverted)
 				.to(boolean.class);
@@ -77,7 +77,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 		int intConverted = converter.convert(fstToBoConverted).to(int.class);
 		assertEquals(1, intConverted);
 
-		fstToBoConverted = new Boolean(false);
+		fstToBoConverted = Boolean.valueOf(false);
 
 		booleanConverted = converter.convert(fstToBoConverted)
 				.to(boolean.class);
@@ -173,7 +173,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	public void testScalarConversionFromNumber() {
 		Converter converter = Converters.standardConverter();
 
-		Number fstToBoConverted = new Double(65);
+		Number fstToBoConverted = Double.valueOf(65);
 
 		boolean booleanConverted = converter.convert(fstToBoConverted)
 				.to(boolean.class);
@@ -185,7 +185,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 		int intConverted = converter.convert(fstToBoConverted).to(int.class);
 		assertEquals(65, intConverted);
 
-		fstToBoConverted = new Integer(0);
+		fstToBoConverted = Integer.valueOf(0);
 
 		booleanConverted = converter.convert(fstToBoConverted)
 				.to(boolean.class);

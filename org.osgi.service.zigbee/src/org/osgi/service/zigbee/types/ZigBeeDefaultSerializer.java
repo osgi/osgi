@@ -511,25 +511,25 @@ class ZigBeeDefaultSerializer {
 			case ZigBeeDataTypes.GENERAL_DATA_8 :
 			case ZigBeeDataTypes.BITMAP_8 : {
 				byte b = is.readByte();
-				return new Byte(b);
+				return Byte.valueOf(b);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_16 :
 			case ZigBeeDataTypes.BITMAP_16 : {
 				short s = (short) is.readInt(2);
-				return new Short(s);
+				return Short.valueOf(s);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_24 :
 			case ZigBeeDataTypes.BITMAP_24 : {
 				int i = is.readInt(3) & 0xffffff;
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_32 :
 			case ZigBeeDataTypes.BITMAP_32 : {
 				int i = is.readInt(4);
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_40 :
@@ -538,25 +538,25 @@ class ZigBeeDefaultSerializer {
 				if (l == 0xffffffff) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_48 :
 			case ZigBeeDataTypes.BITMAP_48 : {
 				long l = is.readLong(6) & 0xffffffffffffL;
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_56 :
 			case ZigBeeDataTypes.BITMAP_56 : {
 				long l = is.readLong(7) & 0xffffffffffffffL;
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_64 :
 			case ZigBeeDataTypes.BITMAP_64 : {
 				long l = is.readLong(8);
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_8 :
@@ -565,7 +565,7 @@ class ZigBeeDefaultSerializer {
 				if (s == 0xff) {
 					return null;
 				}
-				return new Short(s);
+				return Short.valueOf(s);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_16 :
@@ -574,7 +574,7 @@ class ZigBeeDefaultSerializer {
 				if (i == 0xffff) {
 					return null;
 				}
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_24 : {
@@ -582,7 +582,7 @@ class ZigBeeDefaultSerializer {
 				if (i == 0xffffff) {
 					return null;
 				}
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
@@ -592,7 +592,7 @@ class ZigBeeDefaultSerializer {
 				if (l == 0xffffffffL) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_40 : {
@@ -600,7 +600,7 @@ class ZigBeeDefaultSerializer {
 				if (l == 0xffffffffffL) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_48 : {
@@ -608,7 +608,7 @@ class ZigBeeDefaultSerializer {
 				if (l == 0xffffffffffffL) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_56 : {
@@ -616,7 +616,7 @@ class ZigBeeDefaultSerializer {
 				if (l == 0xffffffffffffffL) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_64 : {
@@ -636,7 +636,7 @@ class ZigBeeDefaultSerializer {
 				if (s == Byte.MIN_VALUE) {
 					return null;
 				}
-				return new Byte(s);
+				return Byte.valueOf(s);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_16 : {
@@ -644,7 +644,7 @@ class ZigBeeDefaultSerializer {
 				if (s == Short.MIN_VALUE) {
 					return null;
 				}
-				return new Short(s);
+				return Short.valueOf(s);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_24 : {
@@ -652,7 +652,7 @@ class ZigBeeDefaultSerializer {
 				if ((i & 0xffffff) == 0x800000) {
 					return null;
 				}
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_32 : {
@@ -660,7 +660,7 @@ class ZigBeeDefaultSerializer {
 				if (i == Integer.MIN_VALUE) {
 					return null;
 				}
-				return new Integer(i);
+				return Integer.valueOf(i);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_40 : {
@@ -668,7 +668,7 @@ class ZigBeeDefaultSerializer {
 				if ((l & 0xffffffffffL) == 0x8000000000L) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_48 : {
@@ -676,7 +676,7 @@ class ZigBeeDefaultSerializer {
 				if ((l & 0xffffffffffffL) == 0x800000000000L) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_56 : {
@@ -684,7 +684,7 @@ class ZigBeeDefaultSerializer {
 				if ((l & 0xffffffffffffffL) == 0x80000000000000L) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_64 : {
@@ -692,7 +692,7 @@ class ZigBeeDefaultSerializer {
 				if (l == Long.MIN_VALUE) {
 					return null;
 				}
-				return new Long(l);
+				return Long.valueOf(l);
 			}
 
 			case ZigBeeDataTypes.BOOLEAN : {
@@ -746,7 +746,7 @@ class ZigBeeDefaultSerializer {
 				if (value == 0xffff) {
 					return null;
 				}
-				return new Integer(value);
+				return Integer.valueOf(value);
 			}
 
 			case ZigBeeDataTypes.FLOATING_SEMI : {
@@ -757,7 +757,7 @@ class ZigBeeDefaultSerializer {
 				if (Float.compare(f, Float.NaN) == 0) {
 					return null;
 				}
-				return new Float(f);
+				return Float.valueOf(f);
 			}
 
 			case ZigBeeDataTypes.FLOATING_SINGLE : {
@@ -766,7 +766,7 @@ class ZigBeeDefaultSerializer {
 				if (Float.compare(f, Float.NaN) == 0) {
 					return null;
 				}
-				return new Float(f);
+				return Float.valueOf(f);
 			}
 
 			case ZigBeeDataTypes.FLOATING_DOUBLE : {
@@ -777,7 +777,7 @@ class ZigBeeDefaultSerializer {
 				if (Double.compare(d, Double.NaN) == 0) {
 					return null;
 				}
-				return new Double(d);
+				return Double.valueOf(d);
 			}
 
 			case ZigBeeDataTypes.ARRAY :
@@ -808,7 +808,8 @@ class ZigBeeDefaultSerializer {
 
 			/*
 			 * case ZigBeeDataTypes.UTC_TIME : { long value = is.readLong(4); if
-			 * (value == 0xffffffffL) { return null; } return new Long(value); }
+			 * (value == 0xffffffffL) { return null; } return
+			 * Long.valueOf(value); }
 			 */
 
 			case ZigBeeDataTypes.IEEE_ADDRESS : {

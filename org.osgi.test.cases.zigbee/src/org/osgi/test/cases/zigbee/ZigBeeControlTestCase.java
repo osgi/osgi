@@ -1130,11 +1130,11 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		SortedSet<Integer> actualClusterIds = new TreeSet<>();
 
 		for (int i = 0; i < expected.length; i++) {
-			expectedClusterIds.add(new Integer(actual[i]));
+			expectedClusterIds.add(Integer.valueOf(actual[i]));
 		}
 
 		for (int i = 0; i < actual.length; i++) {
-			actualClusterIds.add(new Integer(actual[i]));
+			actualClusterIds.add(Integer.valueOf(actual[i]));
 		}
 
 		if (actual.length != actualClusterIds.size()) {
@@ -1611,7 +1611,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		for (int i = 0; i < clusters.length; i++) {
 			assertNotNull(context + ": returned an array with null entries.", clusters[i]);
 			clustersSet.add(clusters[i]);
-			clusterIdsSet.add(new Integer(clusters[i].getId()));
+			clusterIdsSet.add(Integer.valueOf(clusters[i].getId()));
 		}
 
 		if (clusters.length != clustersSet.size()) {
@@ -1628,7 +1628,8 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		 */
 
 		for (int i = 0; i < expectedClusters.length; i++) {
-			boolean containsExpectedCluster = clusterIdsSet.contains(new Integer(expectedClusters[i].getId()));
+			boolean containsExpectedCluster = clusterIdsSet
+					.contains(Integer.valueOf(expectedClusters[i].getId()));
 			if (!containsExpectedCluster) {
 				fail(context + " do not return the cluster ids that are defined in the CT configuration file.");
 			}
@@ -1691,7 +1692,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		/* find a clusterId that does not exist in the endpoint */
 		int notExistentClusterId = -1;
 		for (int i = 0; i < 0xffff; i++) {
-			if (!clusterIdsSet.contains(new Integer(i))) {
+			if (!clusterIdsSet.contains(Integer.valueOf(i))) {
 				notExistentClusterId = i;
 				break;
 			}
@@ -1733,7 +1734,8 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		 * Find in the CT configuration file an endpoint that has a reportable
 		 * attribute of data type ZigBeeBoolean
 		 */
-		AttributeCoordinates attributeCoordinates = conf.findAttribute(null, new Boolean(true), null);
+		AttributeCoordinates attributeCoordinates = conf.findAttribute(null,
+				Boolean.valueOf(true), null);
 
 		assertNotNull("unable to find in the CT a ZigBee reportable attribute of Boolean ZCL data type.");
 
@@ -1751,15 +1753,19 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		 * monitored.
 		 */
 		properties.put(ZigBeeNode.IEEE_ADDRESS, endpoint.getNodeAddress());
-		properties.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
-		properties.put(ZCLCluster.ID, new Integer(attributeCoordinates.expectedCluster.getId()));
-		properties.put(ZCLAttribute.ID, new Integer(attribute.getId()));
-		properties.put(ZCLEventListener.ATTRIBUTE_DATA_TYPE, new Short(attribute.getDataType().getId()));
+		properties.put(ZigBeeEndpoint.ENDPOINT_ID,
+				Short.valueOf(endpoint.getId()));
+		properties.put(ZCLCluster.ID,
+				Integer.valueOf(attributeCoordinates.expectedCluster.getId()));
+		properties.put(ZCLAttribute.ID, Integer.valueOf(attribute.getId()));
+		properties.put(ZCLEventListener.ATTRIBUTE_DATA_TYPE,
+				Short.valueOf(attribute.getDataType().getId()));
 
 		/*
 		 * Configure the reporting.
 		 */
-		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(maxReportInterval));
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL,
+				Integer.valueOf(maxReportInterval));
 
 		ZCLEventListenerImpl eventListener = registerEventListener(properties);
 		StreamQueue<ZigBeeEvent> stream = eventListener.getStreamQueue();
@@ -1814,7 +1820,8 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		maxReportInterval = maxReportInterval / 2;
 		maxIntervalAllowed = 2 * maxReportInterval;
 
-		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(maxReportInterval));
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL,
+				Integer.valueOf(maxReportInterval));
 		eventListener.update(properties);
 
 		/*

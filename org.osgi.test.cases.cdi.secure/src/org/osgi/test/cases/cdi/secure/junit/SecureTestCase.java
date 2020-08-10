@@ -229,7 +229,7 @@ public class SecureTestCase extends AbstractTestCase {
 		Bundle bundle = install("tb4.jar");
 
 		ServiceRegistration<Integer> registration = bundleContext
-				.registerService(Integer.class, new Integer(25), null);
+				.registerService(Integer.class, Integer.valueOf(25), null);
 
 		try (CloseableTracker<Callable,Callable> tracker = track(
 				"(objectClass=%s)",
