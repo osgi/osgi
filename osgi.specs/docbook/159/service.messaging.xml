@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="159"
+         revision="$Id: fa0a654229a2edc593716123862ac98ff507555c $"
+         version="5.0" xml:id="service.messaging"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Messaging Specification</title>
+
+  <!-- <info>
+    <releaseinfo><xref endterm="org.osgi.service.messaging-version"
+    linkend="org.osgi.service.messaging"/></releaseinfo>
+  </info> -->
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Asynchronous communication is an important factor in today's business applications. 
+    Especially in the IoT domain but also for distributed infrastructures the communication 
+    over publish/subscribe protocols are common mechanisms. Messaging is a pattern 
+    to reliably transport messages over an inherent unreliable network from a producer to one or 
+    more receivers. The process is to move messages from one system to another or many. 
+    The messaging system uses channels to do that. Because it is never clear, if the network or the 
+    receiver system is available, it is the task of the messaging system to handle that.
+    This specification addresses the these facts to provide a common boundary for a common interface.</para>
+
+    <para>With the OSGi Event Admin, there is already a specification that already describes 
+    an asynchronous event model within an OSGi environment. The messaging specification breaks
+    this restriction to seamless integrate in other systems outside the OSGi scope. Thus additional
+    use-cases needs to considered as well as additional configuration parameters, that are often needed 
+    at connection- or publishing-time. This specification uses OSGi Promises and PushStreams, that also address 
+    the asynchronous programming model.</para>
+
+    <para>This specification defines OSGi Messaging, that makes it easy to
+    interact with asynchronous third-party communication protocols over a common API.
+    It defines the boundaries and rules for an integration of such a protocol as well as
+    special use-cases for distributed communication.</para>
+  </section>
+
+  <section>
+    <title>Entities</title>
+
+    <para>The following entities are used in this specification:</para>
+
+    <itemizedlist>
+    
+      <listitem>
+        <para><emphasis>Channel</emphasis> - a channel is a definition/name for a message topic or a queue.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Channel Type</emphasis> - a channel type defined the way a message can be transported from a sender to receiver/s.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Message</emphasis> - a message contains the payload and meta-data (message context) that are used for the transport..</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Message Context</emphasis> - a message context defines the meta-data that are needed to describe the message 
+        and the way the message has to be handled on sender or/and receiver side.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Message Builder</emphasis> - can create message objects and their corresponding message contexts or message contexts alone.</para>
+      </listitem>
+ 
+      <listitem>
+        <para><emphasis>Subscription</emphasis> - a subscription can subscribe to a certain message channel.</para>
+      </listitem>
+ 
+      <listitem>
+        <para><emphasis>Publisher</emphasis> - a publisher sends a message to a certain channel.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Reply-To Publisher</emphasis> - a publisher that send a request message to a channel and expects 
+        at least one answer message.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Reply-To Subscription</emphasis> - a subscription that expects messages over a request channel and
+        handles the answer logic to publish at least one answer to a response channel.</para>
+      </listitem>
+           
+      <listitem>
+        <para><emphasis>Standard Converter</emphasis> - a converter
+        implementation that follows this specification.</para>
+      </listitem>
+
+    </itemizedlist>
+
+    <!-- <figure pgwide="1">
+      <title>Converter Entity overview</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="4.100in"
+                     contentwidth="6.000in" fileref="converter-overview.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure> -->
+  </section>
+
+  <section>
+    <title>Subscription</title>
+
+    <para>The Subscription is a service provider interface. Each implementation must provide a service
+    using the Subscription interface. To specify the implementation provider and protocol, 
+    the mandatory properties <code>osgi.messaging.provider</code>, <code>osgi.messaging.protocol</code> needs 
+    to provided to the service implementation.</para>
+    
+    <para>Consumers can use this service to subscribe to a certain messaging channel. The properties that define
+    provider and protocol can be used to filter and distinguish between multiple implementations.</para>
+
+    <para>Example subscription: <programlisting>
+ 
+@Reference
+private Subscription sub;
+    
+@Reference
+private MessageBuilder mb;
+
+...
+    
+// Create message context
+MessageContext mctx = mb.channel("foo-topic").buildContext();
+
+PushStream&lt;Message&gt; ps = sub.subscribe(ctx);
+		ps.map(this::doSomething).forEach((m)->{
+			// do something
+		});
+	</programlisting></para>
+  </section>
+  
+  <section>
+    <title>Security</title>
+
+    <para>TBD.</para>
+  </section>
+
+  <!-- <xi:include href="../../generated/javadoc/docbook/org.osgi.service.messaging.xml"/> -->
+
+  <section>
+    <title>References</title>
+	<para>TBD.</para>
+    <!-- <bibliolist>
+      <bibliomixed xml:id="util.converter-jls.ref"><title>The Java Language
+      Specification, Java SE 8 Edition</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
+    </bibliolist> -->
+  </section>
+</chapter>
