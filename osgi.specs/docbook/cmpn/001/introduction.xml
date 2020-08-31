@@ -720,6 +720,17 @@
               <entry><code><xref endterm="org.osgi.util.converter-version"
               linkend="util.converter"/></code></entry>
             </row>
+
+            <row>
+              <entry><xref linkend="util.features"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.util.feature"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.util.feature-version"
+              linkend="util.features"/></code></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -844,6 +855,11 @@
         linkend="service.log.stream" xrefstyle="template:%t"/> was separated
         out of the Log Service specification into a new chapter in this
         specification.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="util.features"
+        xrefstyle="template:%t"/> as Chapter 708.</para>
       </listitem>
     </itemizedlist>
   </section>

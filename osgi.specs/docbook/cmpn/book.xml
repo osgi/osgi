@@ -134,7 +134,5 @@
 
   <xi:include href="../707/util.converter.xml"/>
 
-  <!--
   <xi:include href="../708/util.features.xml"/>
-  -->
 </book>
