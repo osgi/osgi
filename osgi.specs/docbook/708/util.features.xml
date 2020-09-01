@@ -432,8 +432,10 @@ As Features are immutable, a given Feature identifier always refers to the same 
     </para>
     
     <para>
-      Additional capabilities can be used when resolving a number of features together, to provide a capability that is needed
-      in one of these.
+      Additional capabilities can be provided by a feature. For example, a feature can declare a set of bundles and configurations which together
+      may provide an <code>osgi.implementation</code> capability, meaning that sum of these provide the implementation of a specification.
+      Any kind of capability can be declared to be provided by the feature. These capabilities can be used as part of the resolution 
+      process when a number of features are resolved together.
     </para>
     
     <para>
