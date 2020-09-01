@@ -111,7 +111,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration</emphasis> - A feature can contain configurations applied to the Configuration Admin service.</para>
+          <para><emphasis>Configuration</emphasis> - A feature can contain configurations for the Configuration Admin service.</para>
         </listitem>
 
         <listitem>
@@ -220,7 +220,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
             <row>
               <entry>name</entry>
               <entry>String</entry>
-              <entry>Mandatory</entry>
+              <entry>Optional</entry>
               <entry>The short descriptive name of the feature.</entry>
             </row>
 
