@@ -454,15 +454,15 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		List<BundleCapability> extenders = wiring
 				.getCapabilities(ExtenderNamespace.EXTENDER_NAMESPACE);
 		for (BundleCapability extender : extenders) {
-			if ("osgi.component".equals(extender.getAttributes().get(
-					ExtenderNamespace.EXTENDER_NAMESPACE))) {
+			if (ComponentConstants.COMPONENT_CAPABILITY_NAME
+					.equals(extender.getAttributes()
+							.get(ExtenderNamespace.EXTENDER_NAMESPACE))) {
 				found = true;
-				assertEquals(
-						"osgi.extender capability version wrong",
-						new Version(1, 4, 0),
+				assertEquals("osgi.extender capability version wrong",
+						new Version(
+								ComponentConstants.COMPONENT_SPECIFICATION_VERSION),
 						extender.getAttributes()
-								.get(
-								ExtenderNamespace.CAPABILITY_VERSION_ATTRIBUTE));
+								.get(ExtenderNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 				String uses = extender.getDirectives().get(
 						Namespace.CAPABILITY_USES_DIRECTIVE);
 				assertNotNull(
