@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Component Property Types Package Version 1.4.
+ * Component Property Types Package Version 1.5.
  * <p>
  * When used as annotations, component property types are processed by tools to
  * generate Component Descriptions which are used at runtime.
@@ -25,7 +25,7 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.component.propertytypes; version="[1.4,2.0)"}
+ * {@code  Import-Package: org.osgi.service.component.propertytypes; version="[1.5,2.0)"}
  *
  * @author $Id$
  */

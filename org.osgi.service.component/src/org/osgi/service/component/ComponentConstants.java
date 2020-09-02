@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ public interface ComponentConstants {
 	 * 
 	 * <pre>
 	 * Require-Capability: osgi.extender;
-	 *  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.4)(!(version&gt;=2.0)))"
+	 *  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.5)(!(version&gt;=2.0)))"
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -149,5 +149,5 @@ public interface ComponentConstants {
 	 * 
 	 * @since 1.4
 	 */
-	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.4.0";
+	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.5.0";
 }
