@@ -504,6 +504,12 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
               target type.</para>
             </listitem>
           </orderedlist></para>
+          
+        <para>Note that when applying these rules care must be taken with 
+        <code>null</code> keys and values. A <code>null</code> is not an 
+        <code>Object</code> and therefore has no type. As a result 
+        <code>null</code> is never the same type as, or type assignable to,
+        a target type.</para>
 
         <para>Conversion to <code>Map.Entry</code> from a scalar is not
         supported.</para>
@@ -750,6 +756,33 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></pa
         the target type as described in <xref
         linkend="util.converter-arrays.collections"/> and <xref
         linkend="util.converter-special.cases.map.entry"/>.</para>
+        
+        <para>Note that due to the rules for converting a <code>Map.Entry</code>
+        into a scalar it is possible that the target Array or Collection may 
+        contain elements that were keys from the map, values from the map, 
+        or a mixture of the two. To be certain that only keys or values from
+        the map will be used then it is recommended to first convert the 
+        map-like structure to a map, and then to convert the <code>keySet</code>
+        or <code>values</code> from that Map into the required target type.</para>
+        
+        <para>For example:
+        <programlisting>  Map&lt;Integer,String&gt; map = Map.of(1, "hi", 
+        2, null,
+        3, "ho");
+        
+  Converter c = Converters.standardConverter();
+    
+  List&lt;String&gt; result;
+    
+  // This result will be ["hi", "2", "ho"]
+  result = c.convert(map).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+
+  // This result will be ["1", "2", "3"]
+  result = c.convert(map.keySet()).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+
+  // This result will be ["hi", null, "ho"]
+  result = c.convert(map.values()).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+</programlisting></para>
       </section>
 
       <section>
