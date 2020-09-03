@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.osgi.service.component.AnyService;
 
 /**
  * Identify the annotated member or parameter as a reference of a Service
@@ -104,6 +106,7 @@ public @interface Reference {
 	 * </ul>
 	 * 
 	 * @see "The interface attribute of the reference element of a Component Description."
+	 * @see AnyService
 	 */
 	Class<?> service() default Object.class;
 
@@ -161,9 +164,9 @@ public @interface Reference {
 
 	/**
 	 * The target property for this reference.
-	 * 
 	 * <p>
-	 * If not specified, no target property is set.
+	 * If not specified, no target property is set. A target property must be
+	 * specified if the {@link #service()} element refers to {@link AnyService}.
 	 * 
 	 * @see "The target attribute of the reference element of a Component Description."
 	 */
