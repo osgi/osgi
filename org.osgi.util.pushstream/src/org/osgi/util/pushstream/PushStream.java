@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2020). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,9 +68,10 @@ public interface PushStream<T> extends AutoCloseable {
 	void close();
 
 	/**
-	 * Must be run after the channel is closed. This handler will run after the
-	 * downstream methods have processed the close event and before the upstream
-	 * methods have closed.
+	 * Provide a handler that must be run after the PushStream is closed. This
+	 * handler will run after any downstream operations have processed the
+	 * terminal event but before any upstream operations have processed the
+	 * terminal event.
 	 * 
 	 * @param closeHandler Will be called on close
 	 * @return This stream
@@ -78,14 +79,17 @@ public interface PushStream<T> extends AutoCloseable {
 	PushStream<T> onClose(Runnable closeHandler);
 
 	/**
-	 * Must be run after the channel is closed. This handler will run after the
-	 * downstream methods have processed the close event and before the upstream
-	 * methods have closed.
+	 * Provide a handler that will be called if the PushStream is closed with an
+	 * event of type {@link PushEvent.EventType#ERROR}. The error value from
+	 * this event will be passed to the callback function after the PushStream
+	 * is closed. This handler will run after any downstream operations have
+	 * processed the error event but before any upstream operations have
+	 * processed the error event.
 	 * 
-	 * @param closeHandler Will be called on close
+	 * @param errorHandler Will be called on an error event
 	 * @return This stream
 	 */
-	PushStream<T> onError(Consumer< ? super Throwable> closeHandler);
+	PushStream<T> onError(Consumer< ? super Throwable> errorHandler);
 
 	/**
 	 * Only pass events downstream when the predicate tests true.
