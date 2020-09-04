@@ -57,7 +57,7 @@
         blocks can work together. 
         Architects of these systems need to think about components without having to dive into the 
         individual implementation details of each subcomponent. 
-        The features defined in this specification can be used to model such applications. Features
+        The Features defined in this specification can be used to model such applications. Features
         contain the definition of an application or component and can be composed into larger systems.
     </para>
 
@@ -72,13 +72,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Extensible</emphasis> - Features are extensible with custom content to allow all information related to 
-          a feature to be co-located.
+          <para><emphasis>Extensible</emphasis> - Features are extensible with custom content to facilitate all information related to 
+          a Feature to be co-located.
           </para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Human Readable</emphasis> - No special software is needed to read or author features.
+          <para><emphasis>Human Readable</emphasis> - No special software is needed to read or author Features.
           </para>
         </listitem>
 
@@ -97,38 +97,38 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Feature</emphasis> - A feature contains a number of entities that, when provided to a 
+          <para><emphasis>Feature</emphasis> - A Feature contains a number of entities that, when provided to a 
           launcher can be turned into an executable system. Features can also be building blocks which 
           are assembled into larger systems.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundles</emphasis> - A feature can contain one ore more bundles.</para>
+          <para><emphasis>Bundles</emphasis> - A Feature can contain one ore more bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Capabilities</emphasis> and <emphasis>Requirements</emphasis> - A feature can declare additional capabilities and requirements.</para>
+          <para><emphasis>Capabilities</emphasis> and <emphasis>Requirements</emphasis> - A Feature can declare additional capabilities and requirements.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration</emphasis> - A feature can contain configurations for the Configuration Admin service.</para>
+          <para><emphasis>Configuration</emphasis> - A Feature can contain configurations for the Configuration Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extension</emphasis> - A feature can contain a number of extensions with custom content.</para>
+          <para><emphasis>Extension</emphasis> - A Feature can contain a number of extensions with custom content.</para>
         </listitem>
         
         <listitem>
-          <para><emphasis>Launcher</emphasis> - A launcher can turn one or more features into an executable system.</para>
+          <para><emphasis>Launcher</emphasis> - A launcher can turn one or more Features into an executable system.</para>
         </listitem>
         
         <listitem>
-          <para><emphasis>Processor</emphasis> - A feature processor can read features and perform a processing
-          operation on them, such as validation, transformation or generation of new entities based on the features.</para>
+          <para><emphasis>Processor</emphasis> - A Feature processor can read Features and perform a processing
+          operation on them, such as validation, transformation or generation of new entities based on the Features.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Properties</emphasis> - Framework properties can be specified in a feature.</para>
+          <para><emphasis>Properties</emphasis> - Framework properties can be specified in a Feature.</para>
         </listitem>
 
       </itemizedlist>
@@ -200,7 +200,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
     <section>
       <title>Attributes</title>
       <para>
-        A feature can have the following attributes:
+        A Feature can have the following attributes:
       </para>
 
       <table rowheader="firstcol">
@@ -221,42 +221,42 @@ As Features are immutable, a given Feature identifier always refers to the same 
               <entry>name</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>The short descriptive name of the feature.</entry>
+              <entry>The short descriptive name of the Feature.</entry>
             </row>
 
             <row>
               <entry>description</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>A longer description of the feature.</entry>
+              <entry>A longer description of the Feature.</entry>
             </row>
 
             <row>
               <entry>isComplete</entry>
               <entry>boolean</entry>
               <entry>Optional, defaults to <code>false</code></entry>
-              <entry>Completeness of the feature. A feature is complete when it has no external dependencies.</entry>
+              <entry>Completeness of the Feature. A Feature is complete when it has no external dependencies.</entry>
             </row>
 
             <row>
               <entry>isFinal</entry>
               <entry>boolean</entry>
               <entry>Optional, defaults to <code>false</code></entry>
-              <entry>If the feature is final. A final feature cannot be used as a prototype for another feature.</entry>
+              <entry>If the Feature is final. A final Feature cannot be used as a prototype for another Feature.</entry>
             </row>
 
             <row>
               <entry>license</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>The license of the feature.</entry>
+              <entry>The license of the Feature.</entry>
             </row>
 
             <row>
               <entry>vendor</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>The vendor of the feature.</entry>
+              <entry>The vendor of the Feature.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -290,7 +290,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
       IDs with additional metadata. 
     </para>
     <para>
-      The following example shows a simple feature model describing a small application with its dependencies:
+      The following example shows a simple Feature describing a small application with its dependencies:
       <programlisting>{
   "id": "org.acme:acmeapp:1.0.0",
     
@@ -313,7 +313,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
   ]
    
   /* 
-    Additional feature model entities here 
+    Additional Feature entities here 
     ...
   */
 }</programlisting>
@@ -340,13 +340,13 @@ As Features are immutable, a given Feature identifier always refers to the same 
     <para>
       Features support configuration using the OSGi Configurator syntax, see 
       <xref linkend="service.configurator"/>. This can be specified with the 
-      <code>configurations</code> key in the feature. A Launcher can apply 
+      <code>configurations</code> key in the Feature. A Launcher can apply 
       these configurations to the Configuration Admin service when starting 
       the system.
     </para>
 
     <para>
-      It is an error to define the same PID (or Factory PID) twice in a single feature model.
+      It is an error to define the same PID (or Factory PID) twice in a single Feature.
     </para>
     
     <para>
@@ -366,7 +366,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
   <section>
     <title>Framework Properties</title>
     <para>
-      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. These can be provided in the Framework Properties section of the Feature Model.
+      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. These can be provided in the Framework Properties section of the Feature.
       If a launcher is not able to set the Framework properties it may fail.
     </para>
     <remark>TODO to specify failure behavior in all sections.</remark>
@@ -392,7 +392,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
     </para>
     
     <para>
-      Variables are declared in the <code>variables</code> section of the feature and they can have a default value specified.
+      Variables are declared in the <code>variables</code> section of the Feature and they can have a default value specified.
       The default can be of type <code>String</code>, <code>number</code> or <code>boolean</code>. Variables can also be declared
       to <emphasis>not</emphasis> have a default, which means that they must be provided with a value through the Launcher. 
       This is done by specifying <code>null</code> as the default in the variable declaration.
@@ -428,19 +428,19 @@ As Features are immutable, a given Feature identifier always refers to the same 
     <title>Capabilities &amp; Requirements</title>
     <para>
       Features inherit all capabilities and requirements from their bundles. Additional capabilities and requirements can be added 
-      to the feature directly.
+      to the Feature directly.
     </para>
     
     <para>
-      Additional capabilities can be provided by a feature. For example, a feature can declare a set of bundles and configurations which together
+      Additional capabilities can be provided by a Feature. For example, a Feature can declare a set of bundles and configurations which together
       may provide an <code>osgi.implementation</code> capability, meaning that sum of these provide the implementation of a specification.
-      Any kind of capability can be declared to be provided by the feature. These capabilities can be used as part of the resolution 
-      process when a number of features are resolved together.
+      Any kind of capability can be declared to be provided by the Feature. These capabilities can be used as part of the resolution 
+      process when a number of Features are resolved together.
     </para>
     
     <para>
-      Additional requirements can mean that a feature is only complete, when these requirements are also satisfied, in addition 
-      to the requirements provided in the bundles that are part of the feature.
+      Additional requirements can mean that a Feature is only complete, when these requirements are also satisfied, in addition 
+      to the requirements provided in the bundles that are part of the Feature.
     </para>
     
     <para>
@@ -449,7 +449,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
   "id": "org.acme:acmeapp:osgifeature:capreq:1.0.0",
   
   // Requirements over and above the requirements in the bundles 
-  // referenced by the feature.
+  // referenced by the Feature.
   "requirements": [
     {
       "namespace": "osgi.contract",
@@ -460,7 +460,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
   ],
 
   // Capabilities over and above the capabilities provided by the 
-  // bundles referenced by the feature.
+  // bundles referenced by the Feature.
   "capabilities": [
     {
       "namespace": "osgi.service",
@@ -484,8 +484,8 @@ As Features are immutable, a given Feature identifier always refers to the same 
     
     <para>
       If a Feature has a prototype, the prototype Feature is declared by ID in the <code>prototype</code> section along with any 
-      potential removals. This means that the listed entities will not be in the new feature that uses the prototype as its base. 
-      Listed removals have no effect on the feature that serves as the prototype itself.
+      potential removals. This means that the listed entities will not be in the new Feature that uses the prototype as its base. 
+      Listed removals have no effect on the Feature that serves as the prototype itself.
     </para>
     
     <para>
@@ -542,11 +542,11 @@ As Features are immutable, a given Feature identifier always refers to the same 
   <section>
     <title>Extensions</title>
     <para>
-      Features can be extended with custom content. This makes it possible to keep entities and information relating to the feature
-    together with the rest of the feature.</para>
+      Features can be extended with custom content. This makes it possible to keep entities and information relating to the Feature
+    together with the rest of the Feature.</para>
     
     <para>
-      Custom content is provided through feature extensions, and can be in one of the following formats:
+      Custom content is provided through Feature extensions, and can be in one of the following formats:
     </para>
      
     <itemizedlist>
@@ -559,13 +559,13 @@ As Features are immutable, a given Feature identifier always refers to the same 
       </listitem>
 
       <listitem>
-        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts associated with the feature.</para>
+        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts associated with the Feature.</para>
       </listitem>
     </itemizedlist>
     
     <para>
       Extensions can have a variety of consumers. For example they can be handled by a Feature Launcher
-      or by an external tool which can process the extension at any point of the feature
+      or by an external tool which can process the extension at any point of the Feature
       life cycle.
     </para>
     
@@ -575,27 +575,27 @@ As Features are immutable, a given Feature identifier always refers to the same 
     
     <itemizedlist>
       <listitem>
-        <para><emphasis>Mandatory</emphasis> - The entity processing this feature 
+        <para><emphasis>Mandatory</emphasis> - The entity processing this Feature 
         <emphasis>must</emphasis> know how to handle this extension.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Optional</emphasis> - This extension is optional. If the entity
-        processing the feature cannot handle it, the extension can be skipped or ignored.
+        processing the Feature cannot handle it, the extension can be skipped or ignored.
         This is the default.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Transient</emphasis> - This extension contains transient information
-        which can be used to optimize the processing of the feature. It is not part of the 
-        feature definition.</para>
+        which can be used to optimize the processing of the Feature. It is not part of the 
+        Feature definition.</para>
       </listitem>
     </itemizedlist>
     
     <para>
-      Extensions are specified as JSON objects under the <code>extensions</code> key in the feature. A feature can
+      Extensions are specified as JSON objects under the <code>extensions</code> key in the Feature. A Feature can
       contain any number of extensions, as long as the extension keys are unique. It is recommended to use reverse
-      DNS naming for extension keys to avoid name clashing of multiple extensions in a single feature. 
+      DNS naming for extension keys to avoid name clashing of multiple extensions in a single Feature. 
       Extensions names without DNS prefix are reserved for OSGi use.
     </para>
     
@@ -603,7 +603,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
       <title>Text Extensions</title>
       
       <para>
-        Text extensions allow the addition of custom text content to the feature model. 
+        Text extensions support the addition of custom text content to the Feature. 
         The text is provided as JSON string values or as a JSON array of strings.
         If an array is used, the actual text value is the concatenation of the strings in the array.
         <remark>No linefeeds or spaces are inserted</remark>
@@ -643,12 +643,12 @@ As Features are immutable, a given Feature identifier always refers to the same 
       <title>JSON Extensions</title>
       
       <para>
-        Custom JSON content can be added to features by using a JSON extension. The content can either be a
+        Custom JSON content can be added to Features by using a JSON extension. The content can either be a
         JSON object or a JSON array.
       </para>
 
       <para>
-        The following example extension declares under which execution environment the feature is complete,
+        The following example extension declares under which execution environment the Feature is complete,
         using a custom JSON object.       
         <programlisting>{
     "id": "org.acme:acmeapp:2.1.0",
@@ -683,11 +683,11 @@ As Features are immutable, a given Feature identifier always refers to the same 
       
       <para>
         Custom extensions can also be used to associate artifacts that are not listed 
-        as <code>bundles</code> with the feature.
+        as <code>bundles</code> with the Feature.
       </para>
       
       <para>  
-        For example, database definition resources can be listed as artifacts in a feature. In
+        For example, database definition resources can be listed as artifacts in a Feature. In
         the following example, the extension <code>org.acme.ddlfiles</code> lists 
         Database Definition Resources which <emphasis>must</emphasis> be handled by 
         the launcher agent, that is, the database must be configured when the application is run:
