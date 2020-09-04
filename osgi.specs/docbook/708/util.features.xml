@@ -262,6 +262,13 @@ As Features are immutable, a given Feature identifier always refers to the same 
         </tgroup>
       </table>
     </section>
+    <section>
+      <title>Using the Feature API</title>
+      <para>
+        Features can also be created, read and written using the Feature API. 
+        <remark>add more text and example</remark>
+      </para>
+    </section>
   </section>
 
   <section>
@@ -366,8 +373,10 @@ As Features are immutable, a given Feature identifier always refers to the same 
   <section>
     <title>Framework Properties</title>
     <para>
-      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. These can be provided in the Framework Properties section of the Feature.
-      If a launcher is not able to set the Framework properties it may fail.
+      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. 
+      These can be provided in the Framework Properties section of the Feature.
+      The Launcher must be able to satisfy the specified properties. 
+      If it cannot ensure that these are present in the running Framework the launcher must fail.      
     </para>
     <remark>TODO to specify failure behavior in all sections.</remark>
 
@@ -412,7 +421,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
             "org.osgi.service.http.port:Integer": "${http.port}"
         },
         "org.acme.db": {
-            "username": "${db.username}",
+            "username": "${db.username}-user",
             "password": "${db.password}"
         }
     }    
@@ -421,6 +430,13 @@ As Features are immutable, a given Feature identifier always refers to the same 
       in the configuration value or framework property value section.  
       To support conversion of variables to non-string types the configurator syntax
       specifying the datatype with the configuration key can be used, as in the above example.
+    </para>
+    
+    <para>
+      Multiple variables can be referenced for a single configuration or framework property value and variables can be combined with text. 
+      Variable substitution is applied recursively, that is if the value of a variable is again a variable it must be substituted.
+      If no variable exist with the given name, then the <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
+      must be retained in the value.
     </para>
   </section>
  
@@ -432,7 +448,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
     </para>
     
     <para>
-      Additional capabilities can be provided by a Feature. For example, a Feature can declare a set of bundles and configurations which together
+      For example, a Feature can declare a set of bundles and configurations which together
       may provide an <code>osgi.implementation</code> capability, meaning that sum of these provide the implementation of a specification.
       Any kind of capability can be declared to be provided by the Feature. These capabilities can be used as part of the resolution 
       process when a number of Features are resolved together.
@@ -604,9 +620,8 @@ As Features are immutable, a given Feature identifier always refers to the same 
       
       <para>
         Text extensions support the addition of custom text content to the Feature. 
-        The text is provided as JSON string values or as a JSON array of strings.
-        If an array is used, the actual text value is the concatenation of the strings in the array.
-        <remark>No linefeeds or spaces are inserted</remark>
+        The text is provided as a JSON string value or as a JSON array of strings.
+        <remark>update the API to report text as an array</remark>
       </para>
       
       <para>
@@ -682,7 +697,7 @@ As Features are immutable, a given Feature identifier always refers to the same 
       <title>Artifact list Extension</title>
       
       <para>
-        Custom extensions can also be used to associate artifacts that are not listed 
+        Custom extensions can be used to associate artifacts that are not listed 
         as <code>bundles</code> with the Feature.
       </para>
       
@@ -717,6 +732,13 @@ As Features are immutable, a given Feature identifier always refers to the same 
       </para>
         
     </section>
+  </section>
+  
+  <section>
+    <title>Merging Features</title>
+    <para>
+      ...
+    </para>
   </section>
   
   <section>
