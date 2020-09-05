@@ -399,7 +399,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.activator"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.Activator"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -450,7 +450,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.handler"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.HandlerImpl"/&gt;
     &lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
     &lt;service&gt; 
@@ -528,7 +528,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -548,7 +548,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"    
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
     <emphasis role="underline">&lt;service&gt;</emphasis>
         &lt;provide interface="com.acme.usb.USBConnection"/&gt;
@@ -720,7 +720,10 @@
         </listitem>
       </itemizedlist>
 
-      <para>A suitable method is selected using the following priority:</para>
+      <para>A suitable method is selected using the following priority. If the
+      type specified by the reference's <code>interface</code> attribute is
+      <code>org.osgi.service.component.AnyService</code>, then the parameter
+      type must be <code>java.lang.Object</code> to match.</para>
 
       <orderedlist>
         <listitem>
@@ -801,7 +804,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.LogLookupImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LoggerFactory"/&gt;
@@ -823,7 +826,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LoggerFactory"
@@ -891,7 +894,11 @@
         <listitem>
           <para><code>&lt;service-type&gt;</code> - The bound service object.
           The type of the field can be the actual service type or it can be a
-          type that is assignable from the actual service type.</para>
+          type that is assignable from the actual service type. If the type
+          specified by the reference's <code>interface</code> attribute is
+          <code>org.osgi.service.component.AnyService</code>, then the actual
+          service type is considered to be
+          <code>java.lang.Object</code>.</para>
         </listitem>
 
         <listitem>
@@ -1002,7 +1009,11 @@
       SCR must locate a suitable field as specified in <xref
       linkend="service.component-locating.members"/>. If no suitable field is
       located, SCR must log an error message with the Log Service, if present,
-      and no field will not be modified for the reference.</para>
+      and no field will not be modified for the reference. If the bound
+      service cannot be assigned to the field because the type is
+      unassignable, SCR must log an error message containing the exception
+      with the Log Service, if present, and no field will not be modified for
+      the reference.</para>
 
       <para>Care must be taken by the component implementation regarding the
       field. SCR has no way to know if the component implementation itself may
@@ -1016,7 +1027,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LoggerFactory"
@@ -1105,7 +1116,11 @@
 
       <para>If the constructor throws an exception, SCR must log an error
       message containing the exception with the Log Service, if present, and
-      the component configuration is not activated.</para>
+      the component configuration is not activated. If the bound service
+      cannot be assigned to the constructor parameter because the type is
+      unassignable, SCR must log an error message containing the exception
+      with the Log Service, if present, and the component configuration is not
+      activated.</para>
 
       <para>If the constructor parameter is associated with a reference having
       cardinality of <code>0..1</code> and there is no bound service for the
@@ -1117,7 +1132,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen" init="1"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LoggerFactory"
@@ -1238,7 +1253,7 @@ multiplicity ::= '1' | 'n'</programlisting>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
@@ -1410,7 +1425,7 @@ public class HttpResourceImpl {
 
         <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
@@ -1700,7 +1715,7 @@ public class HttpResourceImpl {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.FactoryTracker"/&gt;
     &lt;reference name="FACTORY"
         interface=
@@ -1719,6 +1734,46 @@ public class HttpResourceImpl {
       the component description. See <xref
       linkend="service.component-target.property"/> for more
       information.</para>
+
+      <section xml:id="service.component-anyservice">
+        <title>Any Service Type</title>
+
+        <para>A special exception to the selecting of target services is the
+        use of the special interface name
+        <code>org.osgi.service.component.AnyService</code>. This allows for
+        any service type to match the reference rather than just services of
+        the type of the specified name. When the special interface name of
+        <code>org.osgi.service.component.AnyService</code> is used, a target
+        property must be present to constrain the target services to some
+        subset of all services. If no target property is present, SCR must log
+        an error message with the Log Service, if present, and the reference
+        cannot be satisfied. Note that there may be performance impacts
+        resulting from a target property matching too broad a set of target
+        services. A target property of <code>(service.id=*)</code> is valid
+        but will match all services in the service registry which will likely
+        be neither very useful nor performant.</para>
+
+        <para>The reference member or parameter must have a service type of
+        <code>java.lang.Object</code> to allow SCR to provide any service
+        object.</para>
+
+        <para>For example, a component wants to track all JAX-RS Extension
+        services. JAX-RS Extension services can be registered under many
+        different service types but must be registered with the service
+        property <code>osgi.jaxrs.extension=true</code>. The following
+        component description shows how this can be done.</para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;scr:component name="jaxrs.extension.listener"
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
+    &lt;implementation class="com.acme.impl.ExtensionListener"/&gt;
+    &lt;reference name="EXTENSIONS"
+        interface=
+            "org.osgi.service.component.AnyService"
+        target="(osgi.jaxrs.extension=true)"
+    /&gt;
+&lt;/scr:component&gt;</programlisting>
+      </section>
     </section>
 
     <section xml:id="service.component-circular.references">
@@ -1862,7 +1917,7 @@ public class MyComponent {
       <xref linkend="i1636361"/>, stored in a <code>UTF-8</code> encoded
       bundle entry. The namespace for component descriptions is:</para>
 
-      <programlisting>http://www.osgi.org/xmlns/scr/v1.4.0</programlisting>
+      <programlisting>http://www.osgi.org/xmlns/scr/v1.5.0</programlisting>
 
       <para>The recommended prefix for this namespace is <code>scr</code>.
       This prefix is used by examples in this specification. XML documents
@@ -2696,7 +2751,15 @@ public class Foo implements EventHandler { ... }</programlisting>
               <code>Reference</code> annotation will use the type of the first
               parameter of the annotated method or the type of the annotated
               parameter or field to determine the <code>service</code>
-              value.</para></entry>
+              value.</para><para>The special
+              <code>org.osgi.service.component.AnyService</code> service name
+              can be used to indicate that the service type name is not used
+              to select target services. Only the target property is used to
+              select target services. When using this special service name,
+              the reference field or parameter must be of type
+              <code>java.lang.Object</code> so that any service object can be
+              provided. See <xref
+              linkend="service.component-anyservice"/>.</para></entry>
             </row>
 
             <row>
@@ -4120,7 +4183,7 @@ void unsetLogService( LogService log ) {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.binding"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.Binding"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
@@ -4779,7 +4842,7 @@ public class MacSpeech implements Speech {
       component description similar to the following XML:</para>
 
       <programlisting>&lt;scr:component name="com.example.MacSpeech"
-  xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
+  xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
   &lt;implementation class="com.acme.impl.MacSpeech"/&gt;
   &lt;service&gt;
     &lt;provide interface="com.acme.service.speech.Speech"/&gt;
@@ -6130,7 +6193,7 @@ public class MyComponent implements AcmeService {}</programlisting>
     <para>This XML Schema defines the component description grammar.</para>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
-        href="../../generated/xmlns/scr/v1.4.0/scr.xsd" parse="text"/></programlisting>
+        href="../../generated/xmlns/scr/v1.5.0/scr.xsd" parse="text"/></programlisting>
 
     <para>SCR must not require component descriptions to specify the elements
     in the order required by the schema. SCR must allow other orderings since
@@ -6197,94 +6260,10 @@ public class MyComponent implements AcmeService {}</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Added support for factory properties on Component Factory
-        service. See <xref linkend="service.component-factorycomponent"/> and
-        <xref
-        linkend="service.component-factoryproperty.factoryproperties.elements"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that if SCR cannot locate a referenced field, an error
-        must be logged.</para>
-      </listitem>
-
-      <listitem>
-        <para>The <code>Reference</code> annotation is updated to allow the
-        <code>field-collection-type</code> to be set if the desired type
-        cannot be properly inferred by the annotation processing tool. See
-        <xref
-        linkend="org.osgi.service.component.annotations.Reference.collectionType--"
-        xrefstyle="hyperlink"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A new <xref
-        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO.FAILED_ACTIVATION"
-        xrefstyle="hyperlink"/> state is added to <xref
-        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
-        xrefstyle="hyperlink"/> along with a <xref
-        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO.failure"
-        xrefstyle="hyperlink"/> field to hold the failure exception.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="service.component-delayed.component"/> is updated
-        to clarify when a component configuration may be reclaimed.</para>
-      </listitem>
-
-      <listitem>
-        <para>Component property types can be used as annotations on a
-        component implementation class. See <xref
-        linkend="service.component-component.property.types"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A set of standard component property types for standard service
-        properties has been defined. See <xref
-        linkend="service.component-standard.component.property.types"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>If there is no corresponding component property for a component
-        property type method returning an array type, the component property
-        type method must return an empty array instead of null. See <xref
-        linkend="service.component-component.property.value.coercion"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="service.component-component.property.mapping"/>
-        is updated to add support for mapping to hyphen-minus in component
-        property names, to add special handling for the mapping of the value
-        method in component property types which are single-element
-        annotations, and to add support for PREFIX_.</para>
-      </listitem>
-
-      <listitem>
-        <para>Special support is added for references to Loggers from the Log
-        Service specification. SCR will convert a reference to a LoggerFactory
-        to a Logger object on behalf of the component. See <xref
-        linkend="service.component-logger.support"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Support is added for injecting activation objects into fields.
-        See <xref linkend="service.component-activation.objects"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Support is added for constructor injection. See <xref
-        linkend="service.component-constructor.injection"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>SCR must ensure Configuration Plugins participate in the
-        configuration process. See <xref
-        linkend="service.component-deployment"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>SCR must support implicit coordinations. See <xref
-        linkend="service.component-coordinatorsupport"/>.</para>
+        <para>Added support for <xref
+        linkend="org.osgi.service.component.AnyService"
+        xrefstyle="hyperlink"/>. See <xref
+        linkend="service.component-anyservice"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
