@@ -63,9 +63,9 @@ public interface ComponentConstants {
 	public final static String	COMPONENT_FACTORY							= "component.factory";
 
 	/**
-	 * The suffix for reference target properties. These properties contain the
-	 * filter to select the target services for a reference. The value of this
-	 * property must be of type {@code String}.
+	 * The suffix for the target property of a reference. These properties
+	 * contain the filter to select the target services for a reference. The
+	 * value of a target property must be of type {@code String}.
 	 */
 	public final static String	REFERENCE_TARGET_SUFFIX						= ".target";
 
@@ -150,4 +150,11 @@ public interface ComponentConstants {
 	 * @since 1.4
 	 */
 	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.5.0";
+
+	/**
+	 * Reference name for a component's satisfying condition.
+	 *
+	 * @since 1.5
+	 */
+	public static final String	REFERENCE_NAME_SATISFYING_CONDITION			= "osgi.ds.satisfying.condition";
 }
