@@ -1838,6 +1838,66 @@ public class MyComponent {
   }
 }</programlisting>
     </section>
+
+    <section xml:id="service.component-satisfying.condition">
+      <title>Satisfying Condition</title>
+
+      <para>The <emphasis>Condition Service Specification</emphasis> in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> defines
+      <emphasis>Condition</emphasis> services representing a particular state
+      at runtime and requires the OSGi Framework to always register the
+      <emphasis>True Condition</emphasis> service.</para>
+
+      <para>Every component description is defined to have a reference to a
+      <emphasis>satisfying condition</emphasis>. The name of this reference
+      must be <code>osgi.ds.satisfying.condition</code>. If a component
+      description does not explicitly declare a reference with the name
+      <code>osgi.ds.satisfying.condition</code>, SCR must augment the
+      component description to add the following implicit reference as the
+      last reference:</para>
+
+      <programlisting>&lt;reference name="osgi.ds.satisfying.condition"
+    interface="org.osgi.service.condition.Condition"
+    target="(osgi.conditon.id=true)"
+    policy="dynamic"
+/&gt;</programlisting>
+
+      <para>The implicit reference is handled in the same manner as any
+      explicit reference in the component description, including handling
+      reference properties. See <xref
+      linkend="service.component-reference.properties"/>. In order for a
+      component configuration to be satisfied, the reference for the
+      satisfying condition, like all other references, must be satisfied. The
+      target property for the reference to the satisfying condition,
+      <code>osgi.ds.satisfying.condition.target</code>, can be used to select
+      the satisfying condition. This allows a component configuration to be
+      configured to select which Condition service is the satisfying
+      condition. The implicit reference defaults to the target property value
+      of <code>(osgi.conditon.id=true)</code> which targets the True
+      Condition, that is always registered by the OSGi Framework, and thus the
+      implicit reference, using the default target property value, can always
+      be satisfied.</para>
+
+      <para>For example, you can use the <xref
+      linkend="org.osgi.service.component.propertytypes.SatisfyingConditionTarget"
+      xrefstyle="hyperlink"/> component property type to set the target
+      property for the reference to the satisfying condition to select a
+      condition indicating that some subsystem needed by the component is
+      ready.</para>
+
+      <programlisting>@Component
+@SatisfyingConditionTarget(target="(osgi.conditon.id=my.subsystem.ready)")
+public class MyComponent {
+  ...
+}</programlisting>
+
+      <para>A component's satisfying condition can be used as a way to
+      control, via the configuration of component properties, whether a
+      component configuration can be satisfied. That is, it can be a way to
+      "enable" or "disable" a component configuration through its
+      configuration. See <xref linkend="service.condition.factory"/> for
+      additional information on Conditions.</para>
+    </section>
   </section>
 
   <section xml:id="service.component-component.description">
@@ -4290,9 +4350,16 @@ void unsetLogService( LogService log ) {
         <para>Properties specified in the component description. Properties
         specified later in the component description override properties that
         have the same name specified earlier. Properties can be specified in
-        the component description in the following ways:</para>
+        the component description in the following ways (in order of
+        precedence):</para>
 
-        <itemizedlist>
+        <orderedlist>
+          <listitem>
+            <para><code>property</code> and <code>properties</code> elements -
+            See <xref
+            linkend="service.component-property.properties.elements"/>.</para>
+          </listitem>
+
           <listitem>
             <para><code>target</code> attribute of <code>reference</code>
             elements - Sets the target property of the reference. See <xref
@@ -4300,13 +4367,7 @@ void unsetLogService( LogService log ) {
             <code>target</code> attribute is used for the value of a target
             property.</para>
           </listitem>
-
-          <listitem>
-            <para><code>property</code> and <code>properties</code> elements -
-            See <xref
-            linkend="service.component-property.properties.elements"/>.</para>
-          </listitem>
-        </itemizedlist>
+        </orderedlist>
       </listitem>
     </orderedlist>
 
@@ -4375,7 +4436,7 @@ void unsetLogService( LogService log ) {
       properties of the registered service.</para>
     </section>
 
-    <section>
+    <section xml:id="service.component-reference.properties">
       <title>Reference Properties</title>
 
       <para>This specification defines some component properties which are
@@ -5569,7 +5630,7 @@ public class MyComponent {
       <section xml:id="service.component-standard.component.property.types">
         <title>Standard Component Property Types</title>
 
-        <para>Component property types for standard service properties are
+        <para>Component property types for standard component properties are
         specified in the <xref
         linkend="org.osgi.service.component.propertytypes"
         xrefstyle="hyperlink"/> package.</para>
@@ -5603,6 +5664,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         linkend="org.osgi.service.component.propertytypes.ExportedService"
         xrefstyle="hyperlink"/> component property type can be used to specify
         service properties for remote services.</para>
+
+        <para>The <xref
+        linkend="org.osgi.service.component.propertytypes.SatisfyingConditionTarget"
+        xrefstyle="hyperlink"/> component property type can be used to specify
+        the target property for a reference to the satisfying condition of a
+        component configuration. See <xref
+        linkend="service.component-satisfying.condition"/>.</para>
       </section>
     </section>
 
@@ -6105,6 +6173,30 @@ public class MyComponent implements AcmeService {}</programlisting>
         </listitem>
       </itemizedlist>
     </section>
+
+    <section xml:id="service.component-locating.true.condition">
+      <title>Locating the True Condition Service</title>
+
+      <para>SCR must locate the True Condition service. This can be done using
+      the Bundle Context of SCR itself. However, if SCR is unable to locate
+      the True Condition service using the Bundle Context of SCR itself, it
+      may retry using the Bundle Context of the system bundle. This retry to
+      locate the True Condition service can succeed when a service hook
+      implementation is in use that has not been updated to support the
+      Condition Service Specification by providing visibility of the True
+      Condition service to all bundles.</para>
+
+      <para>If SCR is unable to locate the True Condition service, which can
+      occur if SCR is running on an older OSGi Framework which does not
+      support the Condition Service Specification and register the True
+      Condition service, then SCR must not augment component descriptions to
+      add the implicit reference for a satisfying condition. See <xref
+      linkend="service.component-satisfying.condition"/>.</para>
+
+      <para>SCR may use the already located True Condition service to satisfy
+      any component configuration's reference to the True Condition
+      service.</para>
+    </section>
   </section>
 
   <section>
@@ -6264,6 +6356,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         linkend="org.osgi.service.component.AnyService"
         xrefstyle="hyperlink"/>. See <xref
         linkend="service.component-anyservice"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for satisfying conditions using the Condition
+        Service Specification. See <xref
+        linkend="service.component-satisfying.condition"/> and <xref
+        linkend="service.component-locating.true.condition"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
