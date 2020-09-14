@@ -261,13 +261,47 @@ As Features are immutable, a given Feature identifier always refers to the same 
           </tbody>
         </tgroup>
       </table>
+
+      <para>
+        An initial Feature without content can be declared as follows:
+      </para>
+
+      <programlisting>{
+  "id": "org.acme:acmeapp:1.0.0",
+
+  "name": "The ACME app",
+  "description": 
+    "This is the main ACME app, from where all functionality can be reached."
+
+  /*
+    Additional Feature entities here
+    ...
+  */
+}</programlisting>
+      
     </section>
     <section>
       <title>Using the Feature API</title>
       <para>
-        Features can also be created, read and written using the Feature API. 
-        <remark>add more text and example</remark>
+        Features can also be created, read and written using the Feature API. The Feature API uses
+        the builder pattern to create most entities used in Features.
       </para>
+      
+      <para>
+        A builder is used to create a single entity and cannot be re-used to create a second one.
+        Builders are obtained from the
+        <xref linkend="org.osgi.util.feature.BuilderFactory" xrefstyle="hyperlink"/>
+      </para> 
+      
+      <programlisting>BuilderFactory factory = // ... from Service Registry ...
+
+FeatureBuilder builder = factory.newFeatureBuilder(
+  new ID("org.acme", "acmeapp", "1.0.0"));
+builder.setName("The ACME app");
+builder.setDescription("This is the main ACME app, "
+  + "from where all functionality can be reached.");
+
+Feature f = builder.build();</programlisting>
     </section>
   </section>
 
