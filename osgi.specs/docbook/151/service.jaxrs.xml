@@ -678,7 +678,7 @@ public class Foo {
         <para>JAX-RS supports asynchronous responses either for single-valued
         results, or for streams of data.</para>
 
-        <para>Single valued results are provided by the
+        <para>Single valued results may be provided by the
         <code>AsyncResponse</code> type which is injected into resource
         methods using the <code>@Suspended</code> annotation. If the resource
         is request scoped then the resource must not be released until after
@@ -698,6 +698,29 @@ public class Foo {
         Promise&lt;String&gt; p = doLongRunningTaskAsynchronously();
         p.onSuccess(v -&gt; async.resume(v))
             .onFailure(t -&gt; async.resume(t));
+    }
+}</programlisting>
+
+        <para>Single valued asynchronous results can also be provided by returning 
+        a suitable type from the resource method. This can be a 
+        <code>CompletionStage</code> as described in the JAX-RS specification,
+        or an OSGi <code>Promise</code> type. In this case the response from the 
+        resource method will be sent once the returned type has completed, either 
+        successfully or by failing.</para>
+        
+        <para>The following example demonstrates the use of an
+        asynchronous return value:</para>
+        
+<programlisting>@Component(service = MyResource.class,
+      scope = ServiceScope.PROTOTYPE)
+ @JaxrsResource     
+ public class MyResource {
+  
+    @Path(“foo”)
+    @GET
+    public Promise&lt;String&gt; getFoo() {
+        Promise&lt;String&gt; p = doLongRunningTaskAsynchronously();
+        return p;
     }
 }</programlisting>
 

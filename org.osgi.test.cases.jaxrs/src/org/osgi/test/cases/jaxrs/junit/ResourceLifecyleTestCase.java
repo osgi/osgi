@@ -37,6 +37,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
+import org.osgi.test.cases.jaxrs.resources.AsyncReturnWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
@@ -248,6 +249,53 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			assertEquals("quack", response);
 
 			assertFalse(wasReleasedPreCompletion.get());
+
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.4.2.3 Show that async return values are supported
+	 * 
+	 * @throws Exception
+	 */
+	public void testAsyncReturnValues() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<AsyncReturnWhiteboardResource> reg = getContext()
+				.registerService(AsyncReturnWhiteboardResource.class,
+						new AsyncReturnWhiteboardResource(), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			// Do a get
+
+			CloseableHttpResponse httpResponse = client.execute(
+					RequestBuilder
+							.get(baseURI + "whiteboard/asyncReturn/cs/woof")
+							.build());
+
+			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("woof", response);
+
+			httpResponse.close();
+
+			httpResponse = client.execute(
+					RequestBuilder
+							.get(baseURI + "whiteboard/asyncReturn/p/miaow")
+							.build());
+
+			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("miaow", response);
 
 		} finally {
 			reg.unregister();
