@@ -18,11 +18,10 @@ package org.osgi.test.cases.component.junit;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.osgi.test.cases.component.junit.DTOUtil.*;
-import static org.osgi.test.common.dictionary.Dictionaries.*;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.After;
@@ -51,11 +50,11 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.Logger;
+import org.osgi.test.assertj.dictionary.DictionaryAssert;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ObjectProvider1;
 import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
-import org.osgi.test.support.map.Maps;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
@@ -165,8 +164,9 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						.waitForService(factoryTracker, SLEEP);
 				assertThat(factory).as("ComponentFactory service").isNotNull();
 				assertThat(factoryTracker.getTrackingCount()).isEqualTo(1);
-				assertThat(asMap(
-						factoryTracker.getServiceReference().getProperties()))
+				DictionaryAssert
+						.assertThat(factoryTracker.getServiceReference()
+								.getProperties())
 								.containsEntry(
 										ComponentConstants.COMPONENT_FACTORY,
 										NAMED_CLASS)
@@ -177,16 +177,18 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 				try {
 					tracker.open();
 					// create the first service
-					Map<String,String> props = Maps.mapOf("name", "hello");
+					Dictionary<String,String> props = Dictionaries
+							.dictionaryOf("name", "hello");
 
 					assertThat(tracker.getTrackingCount()).isEqualTo(0);
 					ComponentInstance<Object> instance = factory
-							.newInstance(asDictionary(props));
+							.newInstance(props);
 					try {
 						Tracker.waitForService(tracker, SLEEP);
 						assertThat(tracker.getTrackingCount()).isEqualTo(1);
-						assertThat(asMap(
-								tracker.getServiceReference().getProperties()))
+						DictionaryAssert
+								.assertThat(tracker.getServiceReference()
+										.getProperties())
 										.containsEntry("name", "hello")
 										.doesNotContainKeys("factory.id",
 												"factory.properties");
@@ -233,7 +235,8 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 					"org.osgi.test.cases.component.tb28.FailedActivation", true,
 					false, new String[] {
 							"org.osgi.test.cases.component.service.ObjectProvider1"
-					}, Maps.<String, Object> mapOf(), new ReferenceDTO[0],
+					}, Collections.<String, Object> emptyMap(),
+					new ReferenceDTO[0],
 					"activate", "deactivate", null, "optional", new String[] {
 							"org.osgi.test.cases.component.tb28.FailedActivation"
 					}, null, new String[0], 0);
@@ -425,8 +428,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 		final String PID = PID_ROOT + ".ConfigurationPlugin";
 
 		Configuration config = cm.getConfiguration(PID, null);
-		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
-		config.update(Dictionaries.asDictionary(props));
+		config.update(Dictionaries.dictionaryOf(PID_ROOT, "config"));
 
 		final Bundle tb23 = install("tb23.jar");
 		try {
@@ -441,8 +443,12 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 									msBundle.set(reference.getBundle());
 									properties.put(PID_ROOT, "plugin");
 								}
-							}, Dictionaries.asDictionary(Maps.mapOf(
-									ConfigurationPlugin.CM_TARGET, new String[] {PID})));
+							},
+							Dictionaries.dictionaryOf(
+									ConfigurationPlugin.CM_TARGET,
+									new String[] {
+											PID
+									}));
 			try {
 				tb23.start();
 
@@ -462,7 +468,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 							.hasValue(tb23);
 					Dictionary<String,Object> componentProps = b1
 							.getProperties();
-					assertThat(Dictionaries.asMap(componentProps))
+					DictionaryAssert.assertThat(componentProps)
 							.containsEntry(PID_ROOT, "plugin")
 							.containsEntry(Constants.SERVICE_PID, PID);
 				} finally {
@@ -486,8 +492,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 		final String PID = PID_ROOT + ".Coordinator";
 
 		Configuration config = cm.getConfiguration(PID, null);
-		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
-		config.update(Dictionaries.asDictionary(props));
+		config.update(Dictionaries.dictionaryOf(PID_ROOT, "config"));
 
 		final Bundle tb23 = install("tb23.jar");
 		try {
@@ -505,7 +510,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						SLEEP * 3);
 				assertThat(b1).as("missing base1").isNotNull();
 				Dictionary<String,Object> componentProps = b1.getProperties();
-				assertThat(Dictionaries.asMap(componentProps))
+				DictionaryAssert.assertThat(componentProps)
 						.containsEntry(PID_ROOT, "config")
 						.containsEntry(Constants.SERVICE_PID, PID);
 
@@ -513,11 +518,11 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						.waitForService(coordinatorTracker, SLEEP);
 				Coordination coordination = coordinator.begin("ds-test", 0);
 				try {
-					props = Maps.mapOf(PID_ROOT, "updated");
-					config.update(Dictionaries.asDictionary(props));
+					config.update(
+							Dictionaries.dictionaryOf(PID_ROOT, "updated"));
 					Sleep.sleep(SLEEP * 4);
 					componentProps = b1.getProperties();
-					assertThat(Dictionaries.asMap(componentProps))
+					DictionaryAssert.assertThat(componentProps)
 							.containsEntry(PID_ROOT, "config")
 							.containsEntry(Constants.SERVICE_PID, PID);
 				} finally {
@@ -527,7 +532,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 
 				Sleep.sleep(SLEEP * 2);
 				componentProps = b1.getProperties();
-				assertThat(Dictionaries.asMap(componentProps))
+				DictionaryAssert.assertThat(componentProps)
 						.containsEntry(PID_ROOT, "updated")
 						.containsEntry(Constants.SERVICE_PID, PID);
 
@@ -549,8 +554,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 		final String PID = PID_ROOT + ".Coordinator";
 
 		Configuration config = cm.getConfiguration(PID, null);
-		Map<String,String> props = Maps.mapOf(PID_ROOT, "config");
-		config.update(Dictionaries.asDictionary(props));
+		config.update(Dictionaries.dictionaryOf(PID_ROOT, "config"));
 
 		final Bundle tb23 = install("tb23.jar");
 		try {
@@ -568,7 +572,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						SLEEP * 3);
 				assertThat(b1).as("missing base1").isNotNull();
 				Dictionary<String,Object> componentProps = b1.getProperties();
-				assertThat(Dictionaries.asMap(componentProps))
+				DictionaryAssert.assertThat(componentProps)
 						.containsEntry(PID_ROOT, "config")
 						.containsEntry(Constants.SERVICE_PID, PID);
 
@@ -576,11 +580,11 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 						.waitForService(coordinatorTracker, SLEEP);
 				Coordination coordination = coordinator.begin("ds-test", 0);
 				try {
-					props = Maps.mapOf(PID_ROOT, "updated");
-					config.update(Dictionaries.asDictionary(props));
+					config.update(
+							Dictionaries.dictionaryOf(PID_ROOT, "updated"));
 					Sleep.sleep(SLEEP * 4);
 					componentProps = b1.getProperties();
-					assertThat(Dictionaries.asMap(componentProps))
+					DictionaryAssert.assertThat(componentProps)
 							.containsEntry(PID_ROOT, "config")
 							.containsEntry(Constants.SERVICE_PID, PID);
 					assertThat(
@@ -596,7 +600,7 @@ public class DS14TestCase extends AbstractOSGiTestCase {
 
 				Sleep.sleep(SLEEP * 2);
 				componentProps = b1.getProperties();
-				assertThat(Dictionaries.asMap(componentProps))
+				DictionaryAssert.assertThat(componentProps)
 						.containsEntry(PID_ROOT, "updated")
 						.containsEntry(Constants.SERVICE_PID, PID);
 

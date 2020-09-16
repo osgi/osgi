@@ -16,16 +16,14 @@
 
 package org.osgi.test.cases.bundle.annotations.junit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.osgi.test.common.dictionary.Dictionaries.asMap;
-
 import org.junit.jupiter.api.Test;
+import org.osgi.test.assertj.dictionary.DictionaryAssert;
 
 public class HeaderAnnotationsTestClass extends AnnotationsTestCase {
 
 	@Test
 	public void testHeaders() {
-		assertThat(asMap(impl.getHeaders("")))
+		DictionaryAssert.assertThat(impl.getHeaders(""))
 				.as("Headers missing from manifest of bundle %s", impl)
 				.containsEntry("FooPackage", "bar-package")
 				.containsEntry("FooClass", "bar-class");

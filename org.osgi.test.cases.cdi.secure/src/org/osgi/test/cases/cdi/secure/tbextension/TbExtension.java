@@ -16,7 +16,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.common.dictionary.Dictionaries;
-import org.osgi.test.support.map.Maps;
 
 @Capability(namespace = "osgi.cdi.extension", name = "tb.extension")
 @Header(name = Constants.BUNDLE_ACTIVATOR, value = "${@class}")
@@ -40,8 +39,7 @@ public class TbExtension implements BundleActivator, Extension,
 	public void start(BundleContext context) throws Exception {
 		registration = context.registerService(Extension.class,
 				(PrototypeServiceFactory<Extension>) this, Dictionaries
-						.asDictionary(
-						Maps.mapOf("osgi.cdi.extension", "tb.extension")));
+						.dictionaryOf("osgi.cdi.extension", "tb.extension"));
 	}
 
 	@Override
