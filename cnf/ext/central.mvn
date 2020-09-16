@@ -42,12 +42,13 @@ org.junit.platform:junit-platform-engine:${junit-platform.version}
 org.junit.platform:junit-platform-launcher:${junit-platform.version}
 org.junit.vintage:junit-vintage-engine:${junit-jupiter.version}
 org.opentest4j:opentest4j:1.2.0
-org.apache.servicemix.bundles:org.apache.servicemix.bundles.junit:4.12_1
+org.apache.servicemix.bundles:org.apache.servicemix.bundles.junit:4.13_1
 org.osgi:org.osgi.test.common:${osgi-test.version}
 org.osgi:org.osgi.test.assertj.framework:${osgi-test.version}
 org.osgi:org.osgi.test.assertj.promise:${osgi-test.version}
 org.osgi:org.osgi.test.junit4:${osgi-test.version}
 org.osgi:org.osgi.test.junit5:${osgi-test.version}
+org.osgi:org.osgi.test.junit5.cm:${osgi-test.version}
 
 # 3rd party artifacts
 javax.ejb:javax.ejb-api:3.2

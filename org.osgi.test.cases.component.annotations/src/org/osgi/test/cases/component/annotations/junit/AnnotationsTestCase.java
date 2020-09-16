@@ -17,9 +17,11 @@
 package org.osgi.test.cases.component.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.osgi.test.assertj.dictionary.DictionaryAssert.assertThat;
 
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,6 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Before;
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
 import org.osgi.test.support.string.Strings;
 import org.osgi.test.support.xpath.BaseNamespaceContext;
@@ -84,7 +85,7 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 				"Could not locate the bundle with Bundle Symbolic Name %s", bsn)
 				.isNotNull();
 
-		Map<String,String> headers = Dictionaries.asMap(impl.getHeaders());
+		Dictionary<String,String> headers = impl.getHeaders();
 		assertThat(headers).containsKey(ComponentConstants.SERVICE_COMPONENT);
 		String header = headers.get(ComponentConstants.SERVICE_COMPONENT);
 		assertThat(header).as("%s header is missing",
