@@ -560,6 +560,7 @@ Feature f = builder.build();</programlisting>
     </para>
   </section>
 
+  <!--
   <section>
     <title>Prototype</title>
     <para>
@@ -624,6 +625,7 @@ Feature f = builder.build();</programlisting>
 }</programlisting>
     </para>
   </section>
+  -->
     
   <section>
     <title>Extensions</title>
