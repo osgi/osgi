@@ -47,6 +47,16 @@ public final class TypedEventConstants {
 	public static final String	TYPED_EVENT_TOPICS					= "event.topics";
 
 	/**
+	 * The name of the service property used to indicate a filter that should be
+	 * applied to events from the {@link #TYPED_EVENT_TOPICS}. Only events which
+	 * match the filter will be delivered to the Event Handler service.
+	 * <p>
+	 * If this service property is not present then all events from the topic(s)
+	 * will be delivered to the Event Handler service.
+	 */
+	public static final String	TYPED_EVENT_FILTER					= "event.filter";
+
+	/**
 	 * The name of the implementation capability for the Type Safe Events
 	 * specification
 	 */
