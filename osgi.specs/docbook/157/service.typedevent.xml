@@ -228,13 +228,63 @@ public class ExampleEventSource {
     </section>
     
     <section>
-      <title>Event Mutability</title>
+      <title>Event Mutability and Thread Safety</title>
       
-      <para>DTO types provide a simple yet powerful mechanism for defining an Event Schema in a 
-      type-safe way, however their use of mutable public fields means that they are potentially
-      dangerous when shared between threads. Bundles publishing or consuming events should 
-      assume that their event instances are shared between threads and should not mutate 
-      their fields after publication or receipt.</para>
+      <section>
+        <title>Thread Safety</title>
+        <para>The <code>TypedEventBus</code> implementation must thread safe and allow for
+        simultaneous event publication from multiple threads. For any given source 
+        thread events must be delivered in the same order as they were published by that
+        thread. Events published by different threads, however, may be delivered in a 
+        different order from the one in which they were published.</para>
+        
+        <para> For example, if thread 
+        <emphasis>A</emphasis> publishes events <emphasis>1</emphasis>, <emphasis>2</emphasis>
+        and <emphasis>3</emphasis>, while thread <emphasis>B</emphasis> publishes events
+        <emphasis>4</emphasis>, <emphasis>5</emphasis> and <emphasis>6</emphasis>, then
+        the events may be delivered:</para>
+        
+        <itemizedlist>
+          <listitem><para><emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>3</emphasis>,
+            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>6</emphasis></para>
+          </listitem>
+          
+          <listitem><para><emphasis>4</emphasis>, <emphasis>1</emphasis>, <emphasis>2</emphasis>,
+            <emphasis>5</emphasis>, <emphasis>6</emphasis>, <emphasis>3</emphasis></para>
+          </listitem>
+          <listitem><para>and so on</para>
+          </listitem>
+          
+        </itemizedlist>
+        <para>but events will never be delivered <emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>6</emphasis>,
+            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
+      </section>
+      <section>
+        <title>Typed Event Mutability</title>
+        <para>Typed Events, and in particular DTO types, provide a simple yet powerful mechanism 
+        for defining an Event Schema in a type-safe way, however their use of mutable public 
+        fields means that they are potentially dangerous when shared between threads. Event Sources 
+        and Event Consumers should assume that their event instances are shared between 
+        threads and therefore not mutate the event data after publication or receipt.</para>
+        <para>If an Event Handler does need to make changes to an incoming event then it must copy the
+        event data into a new DTO instance. This can be easily achieved in code, or by using the OSGi
+        <code>Converter</code>. Note that any nested DTO values in the event data must also be
+        copied if they are to be mutated.</para>
+      </section>
+      <section>
+        <title>Untyped Event Mutability</title>
+        <para>When an event source publishes untyped event data it passes a Map instance to the Typed Event
+        Bus. The Typed Event Bus is not required to take a copy of this Map, and therefore the event source
+        must not change the Map, or any data structures within the Map, after the call to 
+        <xref linkend="org.osgi.service.typedevent.TypedEventBus.deliverUntyped-String-Map-"
+          xrefstyle="hyperlink"/>.
+        </para>
+        <para>Untyped Events are delivered as implementations of the Map interface. Bundles 
+        consuming untyped events should not rely on the event object being any particular
+        implementation of Map, and should treat the event object as immutable. The 
+        Typed Event Bus implementation may make copies of the event data, or enforce
+        the immutability of the map, before passing the event data to an Event Handler.</para>
+      </section>
     </section>
   </section>
   
@@ -328,10 +378,10 @@ public class ExampleEventSource {
       a valid topic the full stop <code>.</code> separators must be converted
       into solidus <code>/</code> separators. A non-normative example implementation follows:</para>
       
-      <programlisting>public void publish(Object event) {
+      <programlisting>public void deliver(Object event) {
     String topicName = event.getClass().getName().replace('.', '/');
     
-    this.publish(topicName, event);
+    this.deliver(topicName, event);
 }</programlisting>
       
       <para>The following example demonstrates how an Event Source can make use of an
@@ -530,7 +580,52 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     }
 }</programlisting>
     </section>
-
+    <section>
+      <title>Filtering Events</title>
+      <para>Sometimes the use of a topic is insufficient to restrict the events received by an event consumer.
+      In these cases the consumer can further restrict the events that they receive by using a filter. The 
+      filter is supplied using the <code>event.filter</code> service property, the value of which is an LDAP
+      filter string. This filter is applied to the event data, and only events which match the filter are
+      delivered to the event handler service.
+      </para>
+      <section>
+        <title>Nested Event Data</title>
+        <para>Complex events may contain nested data structures, such as DTOs, as values in the event data.
+        As LDAP filtering is only designed to match against simple data this means that some event
+        properties cannot be filtered using the <code>event.filter</code> property. The event filter
+        is therefore only suitable for use in matching top-level event properties.</para>
+      </section>
+      <section>
+        <title>Ignored Events</title>
+        <para>Note that the use of a filter is different from receiving an event and choosing to ignore it based
+        on its data. If an event fails to match the filter supplied by an event handler service then it is 
+        <emphasis>not delivered</emphasis> to that event handler. This means that the event data remains eligible
+        to be sent to an <code>UnhandledEventHandler</code> unless another event handler does receive it.
+        An event that is received, but ignored, by an event handler service <emphasis>does</emphasis> count
+        as having been delivered, and so will never be sent to an <code>UnhandledEventHandler</code>.</para>
+      </section>
+    </section>
+    <section>
+      <title>Failing Event Handlers</title>
+      <para>Event Handler implementations are called back by the Typed Event Bus implementation, and are
+      expected:</para>
+      <itemizedlist>
+        <listitem>
+          <para>Not to throw exceptions from their callback method</para>
+        </listitem>
+        <listitem>
+          <para>To return quickly - any long running tasks should be moved to another thread</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>If a Typed Event Bus implementation detects an Event Handler that is behaving incorrectly, either by
+      throwing exceptions, or by taking a long time to process the event, or some other problem, then the 
+      implementation may block further event delivery to that Event Handler.</para>
+      
+      <para>If an Event Handler is blocked by the event implementation then this situation must be logged.
+      Also, if a blocked Event Handler service is updated then the block must be removed by the implementation.
+      If the updated service continues to behave incorrectly then the block may be reinstated.</para>
+    </section>
     <section>
       <title>Event Handler Service Properties</title>
       
@@ -581,6 +676,18 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
               for <code>UntypedEventHandler</code> services, but <code>TypedEventHandler</code> services may use
               it if they wish to further refine the type of data they wish to receive.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TYPE"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+            <row>
+              <entry><code>event.filter</code></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>Defines an LDAP filter which should be tested against the properties in
+              the event data. Only events which pass the filter will be passed to the the Event Handler
+              service. Ths service property is permitted for both <code>TypedEventHandler</code> and
+              <code>UntypedEventHandler</code> services.</para><para>See <xref
+              linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_FILTER"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
