@@ -1887,7 +1887,7 @@ public class MyComponent {
       ready.</para>
 
       <programlisting>@Component
-@SatisfyingConditionTarget(target="(osgi.conditon.id=my.subsystem.ready)")
+@SatisfyingConditionTarget("(osgi.conditon.id=my.subsystem.ready)")
 public class MyComponent {
   ...
 }</programlisting>
