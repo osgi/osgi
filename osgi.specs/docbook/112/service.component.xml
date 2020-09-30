@@ -1740,18 +1740,19 @@ public class HttpResourceImpl {
 
         <para>A special exception to the selecting of target services is the
         use of the special interface name
-        <code>org.osgi.service.component.AnyService</code>. This allows for
-        any service type to match the reference rather than just services of
-        the type of the specified name. When the special interface name of
+        <code>org.osgi.service.component.AnyService</code>. This means that a
+        service type is not used to select the target services and just the
+        target property is used to select the target services. When the
+        special interface name of
         <code>org.osgi.service.component.AnyService</code> is used, a target
         property must be present to constrain the target services to some
-        subset of all services. If no target property is present, SCR must log
-        an error message with the Log Service, if present, and the reference
-        cannot be satisfied. Note that there may be performance impacts
-        resulting from a target property matching too broad a set of target
-        services. A target property of <code>(service.id=*)</code> is valid
-        but will match all services in the service registry which will likely
-        be neither very useful nor performant.</para>
+        subset of all available services. If no target property is present,
+        SCR must log an error message with the Log Service, if present, and
+        the reference cannot be satisfied. Note that there may be performance
+        impacts resulting from a target property matching too broad a set of
+        target services. A target property of <code>(service.id=*)</code> is
+        valid but will match all services in the service registry which will
+        likely be neither very useful nor performant.</para>
 
         <para>The reference member or parameter must have a service type of
         <code>java.lang.Object</code> to allow SCR to provide any service
