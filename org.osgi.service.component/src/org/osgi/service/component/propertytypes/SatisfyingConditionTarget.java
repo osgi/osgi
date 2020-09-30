@@ -21,7 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.condition.Condition;
@@ -46,8 +45,7 @@ public @interface SatisfyingConditionTarget {
 	 * Prefix for the property name. This value is prepended to each property
 	 * name.
 	 */
-	String PREFIX_ = ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION
-			+ ".";
+	String PREFIX_ = "osgi.ds.";
 
 	/**
 	 * Filter expression to select the component's satisfying condition.
@@ -55,6 +53,6 @@ public @interface SatisfyingConditionTarget {
 	 * @return The filter expression to select the component's satisfying
 	 *         condition.
 	 */
-	String target() default "(" + Condition.CONDITION_ID + "="
+	String value() default "(" + Condition.CONDITION_ID + "="
 			+ Condition.CONDITION_ID_TRUE + ")";
 }
