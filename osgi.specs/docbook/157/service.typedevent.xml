@@ -230,35 +230,11 @@ public class ExampleEventSource {
     <section>
       <title>Event Mutability and Thread Safety</title>
       
-      <section>
-        <title>Thread Safety</title>
-        <para>The <code>TypedEventBus</code> implementation must thread safe and allow for
-        simultaneous event publication from multiple threads. For any given source 
-        thread events must be delivered in the same order as they were published by that
-        thread. Events published by different threads, however, may be delivered in a 
-        different order from the one in which they were published.</para>
-        
-        <para> For example, if thread 
-        <emphasis>A</emphasis> publishes events <emphasis>1</emphasis>, <emphasis>2</emphasis>
-        and <emphasis>3</emphasis>, while thread <emphasis>B</emphasis> publishes events
-        <emphasis>4</emphasis>, <emphasis>5</emphasis> and <emphasis>6</emphasis>, then
-        the events may be delivered:</para>
-        
-        <itemizedlist>
-          <listitem><para><emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>3</emphasis>,
-            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>6</emphasis></para>
-          </listitem>
-          
-          <listitem><para><emphasis>4</emphasis>, <emphasis>1</emphasis>, <emphasis>2</emphasis>,
-            <emphasis>5</emphasis>, <emphasis>6</emphasis>, <emphasis>3</emphasis></para>
-          </listitem>
-          <listitem><para>and so on</para>
-          </listitem>
-          
-        </itemizedlist>
-        <para>but events will never be delivered <emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>6</emphasis>,
-            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
-      </section>
+      <para>The Typed Event Service is inherently multi-threaded. Events may be published from
+      multiple threads, and event data may be delivered to consumers on multiple threads.
+      Event Sources and Event Consumers must therefore assume that event data is shared between
+      threads from the moment that it is first passed to the <code>TypedEventBus</code>.</para>
+      
       <section>
         <title>Typed Event Mutability</title>
         <para>Typed Events, and in particular DTO types, provide a simple yet powerful mechanism 
@@ -267,9 +243,8 @@ public class ExampleEventSource {
         and Event Consumers should assume that their event instances are shared between 
         threads and therefore not mutate the event data after publication or receipt.</para>
         <para>If an Event Handler does need to make changes to an incoming event then it must copy the
-        event data into a new DTO instance. This can be easily achieved in code, or by using the OSGi
-        <code>Converter</code>. Note that any nested DTO values in the event data must also be
-        copied if they are to be mutated.</para>
+        event data into a new DTO instance. Note that any nested DTO values in the event data must also 
+        be copied if they are to be mutated.</para>
       </section>
       <section>
         <title>Untyped Event Mutability</title>
@@ -407,6 +382,35 @@ public class ExampleEventSource {
     }
 }</programlisting>
     </section>
+    <section>
+        <title>Thread Safety</title>
+        <para>The <code>TypedEventBus</code> implementation must thread safe and allow for
+        simultaneous event publication from multiple threads. For any given source 
+        thread events must be delivered in the same order as they were published by that
+        thread. Events published by different threads, however, may be delivered in a 
+        different order from the one in which they were published.</para>
+        
+        <para> For example, if thread 
+        <emphasis>A</emphasis> publishes events <emphasis>1</emphasis>, <emphasis>2</emphasis>
+        and <emphasis>3</emphasis>, while thread <emphasis>B</emphasis> publishes events
+        <emphasis>4</emphasis>, <emphasis>5</emphasis> and <emphasis>6</emphasis>, then
+        the events may be delivered:</para>
+        
+        <itemizedlist>
+          <listitem><para><emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>3</emphasis>,
+            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>6</emphasis></para>
+          </listitem>
+          
+          <listitem><para><emphasis>4</emphasis>, <emphasis>1</emphasis>, <emphasis>2</emphasis>,
+            <emphasis>5</emphasis>, <emphasis>6</emphasis>, <emphasis>3</emphasis></para>
+          </listitem>
+          <listitem><para>and so on</para>
+          </listitem>
+          
+        </itemizedlist>
+        <para>but events will never be delivered <emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>6</emphasis>,
+            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
+      </section>
   </section>
   
   <section>
