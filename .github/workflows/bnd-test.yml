@@ -8,7 +8,7 @@ on:
 env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: -Dorg.gradle.parallel=false
-  ORG_GRADLE_PROJECT_bnd_version: 5.2.0-SNAPSHOT
+  ORG_GRADLE_PROJECT_bnd_version: 5.3.0-SNAPSHOT
 
 defaults:
   run:
