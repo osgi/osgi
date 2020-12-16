@@ -534,7 +534,7 @@
 
       <para>The component class looks like:</para>
 
-      <programlisting>public class USBConnectionImpl implements USBConnection {
+      <programlisting>public class USBConnectionImpl {
     private void activate(Map&lt;String, ?&gt; properties) {
      ...
     }
