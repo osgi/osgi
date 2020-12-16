@@ -29,7 +29,7 @@
  * @author $Id$
  */
 
-@Version("1.5.3")
+@Version("1.5.4")
 package org.osgi.util.tracker;
 
 import org.osgi.annotation.versioning.Version;
