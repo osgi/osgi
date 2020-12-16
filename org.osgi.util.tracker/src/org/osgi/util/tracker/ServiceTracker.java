@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2020). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.AllServiceListener;
@@ -484,7 +485,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @throws IllegalArgumentException If the value of timeout is negative.
 	 */
 	public T waitForService(long timeout) throws InterruptedException {
-		if (timeout < 0) {
+		if (timeout < 0L) {
 			throw new IllegalArgumentException("timeout value is negative");
 		}
 
@@ -492,8 +493,8 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		if (object != null) {
 			return object;
 		}
-
-		final long endTime = (timeout == 0) ? 0 : (System.currentTimeMillis() + timeout);
+		final long timebound = timeout;
+		final long startTime = System.nanoTime();
 		do {
 			final Tracked t = tracked();
 			if (t == null) { /* if ServiceTracker is not open */
@@ -505,9 +506,10 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 				}
 			}
 			object = getService();
-			if (endTime > 0) { // if we have a timeout
-				timeout = endTime - System.currentTimeMillis();
-				if (timeout <= 0) { // that has expired
+			if (timebound > 0L) { // if we have a time bound
+				final long elapsed = System.nanoTime() - startTime;
+				timeout = timebound - TimeUnit.NANOSECONDS.toMillis(elapsed);
+				if (timeout <= 0L) { // time bound has expired
 					break;
 				}
 			}
