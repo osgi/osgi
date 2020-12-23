@@ -643,6 +643,14 @@
             </row>
 
             <row>
+              <entry><code>AArch64</code></entry>
+
+              <entry><code>ARM64</code></entry>
+
+              <entry>64-bit extension of the ARM architecture</entry>
+            </row>
+
+            <row>
               <entry><code>ARM</code></entry>
 
               <entry/>
