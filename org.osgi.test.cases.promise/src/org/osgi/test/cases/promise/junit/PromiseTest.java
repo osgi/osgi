@@ -17,7 +17,6 @@
 package org.osgi.test.cases.promise.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,6 +36,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -1921,12 +1921,8 @@ public class PromiseTest {
 		final CompletionStage<String> c = p.toCompletionStage();
 		assertThat(c).isNotCompleted();
 		d.resolve(value);
-		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
-				.handleAsync((v, f) -> null, factory.executor());
-		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
-				.doesNotThrowAnyException();
-		assertThat(c).isCompletedWithValueMatching(v -> v == value,
-				"same value");
+		assertThat(c).succeedsWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.isSameAs(value);
 	}
 
 	@Test
@@ -1934,12 +1930,8 @@ public class PromiseTest {
 		final String value = new String("success");
 		final Promise<String> p = factory.resolved(value);
 		final CompletionStage<String> c = p.toCompletionStage();
-		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
-				.handleAsync((v, f) -> null, factory.executor());
-		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
-				.doesNotThrowAnyException();
-		assertThat(c).isCompletedWithValueMatching(v -> v == value,
-				"same value");
+		assertThat(c).succeedsWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.isSameAs(value);
 	}
 
 	@Test
@@ -1950,12 +1942,9 @@ public class PromiseTest {
 		final CompletionStage<String> c = p.toCompletionStage();
 		assertThat(c).isNotCompleted();
 		d.fail(failure);
-		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
-				.handleAsync((v, f) -> null, factory.executor());
-		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
-				.doesNotThrowAnyException();
-		assertThat(c).isCompletedExceptionally()
-				.hasFailedWithThrowableThat()
+		assertThat(c).failsWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.withThrowableOfType(ExecutionException.class)
+				.havingCause()
 				.isSameAs(failure);
 	}
 
@@ -1964,12 +1953,9 @@ public class PromiseTest {
 		final Throwable failure = new Exception("failed");
 		final Promise<String> p = factory.failed(failure);
 		final CompletionStage<String> c = p.toCompletionStage();
-		CompletableFuture<Object> doesComplete = c.toCompletableFuture()
-				.handleAsync((v, f) -> null, factory.executor());
-		assertThatCode(() -> doesComplete.get(WAIT_TIME, TimeUnit.SECONDS))
-				.doesNotThrowAnyException();
-		assertThat(c).isCompletedExceptionally()
-				.hasFailedWithThrowableThat()
+		assertThat(c).failsWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.withThrowableOfType(ExecutionException.class)
+				.havingCause()
 				.isSameAs(failure);
 	}
 
