@@ -2058,14 +2058,9 @@ should be discarded -->
   <fo:block xsl:use-attribute-sets="verso.properties">
     <fo:block xsl:use-attribute-sets="verso.copyright.properties">
       <xsl:text>Copyright &#xA9; </xsl:text>
-      <xsl:value-of select="d:info/d:copyright/d:holder"/>
-      <xsl:text> (</xsl:text>
       <xsl:value-of select="$copyright.year"/>
-      <xsl:text>).</xsl:text>
-
-      <fo:block>
-        <xsl:text>All Rights Reserved.</xsl:text>
-      </fo:block>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="d:info/d:copyright/d:holder"/>
     </fo:block>
 
     <fo:block xsl:use-attribute-sets="verso.frontmatter.properties">

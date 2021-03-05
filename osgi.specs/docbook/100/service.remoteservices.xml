@@ -897,7 +897,7 @@ tracker.open();</programlisting>
     provided. For example, a hypothetical configuration type could use a
     service property to hold a URL for the RMI naming registry.</para>
 
-    <para>Configuration types that are not defined by the OSGi Alliance should
+    <para>Configuration types that are not defined by the OSGi Working Group should
     use a name that follows the reverse <code>capabilities</code> domain name
     scheme defined in <xref linkend="i1721171"/> for Java packages. For
     example, <code>com.acme.wsdl</code> would be the proprietary way for the

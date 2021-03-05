@@ -6,5 +6,5 @@
 	 xml:space="preserve">
 <text transform="matrix(0.6403 -0.7716 0.7596 0.6504 163.4929 596.0945)" fill="#D1D3D4" font-family="'ProductusBold'" font-size="191.3584">DRAFT</text>
 <text transform="matrix(0.6401 -0.7717 0.7598 0.6502 78.2566 488.9822)" fill="#D1D3D4" font-family="'ProductusBold'" font-size="68.8852">PROPOSED FINAL</text>
-<text transform="matrix(0.641 -0.7676 0.7676 0.641 154.1257 632.3513)" fill="#D1D3D4" font-family="'ProductusBook'" font-size="12">Licensed under the OSGi Distribution and Feedback License, Version 2.0. Copyright © OSGi Alliance. All Rights Reserved.</text>
+<text transform="matrix(0.641 -0.7676 0.7676 0.641 154.1257 632.3513)" fill="#D1D3D4" font-family="'ProductusBook'" font-size="12">Licensed under the Eclipse Foundation Specification License – v1.0. Copyright © Contributors to the Eclipse Foundation.</text>
 </svg>

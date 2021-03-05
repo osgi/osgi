@@ -294,7 +294,7 @@ properties  ::= property ( ',' property )*</programlisting>
       full stop (<code>'.' \u002E</code>) and a string whose interpretation is
       determined by that organization.</para>
 
-      <para>MBeans specified by the OSGi Alliance have domains that start with
+      <para>MBeans specified by the OSGi Working Group have domains that start with
       <code>osgi</code>.</para>
     </section>
 

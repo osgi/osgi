@@ -12,7 +12,7 @@
     <title>OSGi Core</title>
 
     <author>
-      <orgname>The OSGi Alliance</orgname>
+      <orgname>OSGi Working Group</orgname>
     </author>
 
     <releaseinfo xml:id="core.book-release">Release 8</releaseinfo>
@@ -22,13 +22,11 @@
     <copyright>
       <year>2000, 2020</year>
 
-      <holder>OSGi Alliance</holder>
+      <holder>Eclipse Foundation</holder>
     </copyright>
   </info>
 
-  <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
-
-  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
+  <xi:include href="../license/eclipse.foundation.specification.license.1.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 

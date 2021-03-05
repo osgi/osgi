@@ -181,7 +181,7 @@
 
       <section xml:id="framework.module-bundle-developers">
         <title>Bundle-Developers: pkriens; email=pkriens@osgi.org; name="Peter
-        Kriens"; organization="OSGi Alliance"</title>
+        Kriens"; organization="OSGi Working Group"</title>
 
         <para>The Bundle-Developers header provides an optional machine
         readable form of information about the developers of the bundle. This
@@ -476,7 +476,7 @@ tag                  ::= 'tag' '=' argument</programlisting>
       </section>
 
       <section>
-        <title>Bundle-Vendor: OSGi Alliance</title>
+        <title>Bundle-Vendor: OSGi Working Group</title>
 
         <para>The Bundle-Vendor header contains a human-readable description
         of the bundle vendor.</para>
@@ -565,17 +565,17 @@ tag                  ::= 'tag' '=' argument</programlisting>
       <title>Custom Headers</title>
 
       <para>The manifest is an excellent place to provide metadata belonging
-      to a bundle. This is true for the OSGi Alliance but it is also valid for
-      other organizations. For historic reasons, the OSGi Alliance claims the
+      to a bundle. This is true for the OSGi Working Group but it is also valid for
+      other organizations. For historic reasons, the OSGi Working Group claims the
       default namespace, specifically headers that indicate OSGi related
       matters like names that contain Bundle, Import, Export, etc.
       Organizations that want to use headers that do not clash with OSGi
-      Alliance defined names or bundle header names from other organizations
+      Working Group defined names or bundle header names from other organizations
       should prefix custom headers with <code>x-</code>, for example
       <code>x-LazyStart</code>.</para>
 
-      <para>Organizations external to the OSGi Alliance can request header
-      names in the OSGi namespace. The OSGi Alliance maintains a registry of
+      <para>Organizations external to the OSGi Working Group can request header
+      names in the OSGi namespace. The OSGi Working Group maintains a registry of
       such names at <xref linkend="i3215677"/>.</para>
 
       <para>The <xref linkend="org.osgi.annotation.bundle.Header"
@@ -1069,14 +1069,14 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     <para>The purpose of a Namespace is to create an attribute/directive based
     language that describes a dependency in a generic way unrelated to the
     specific dependency type. A number of Namespaces have been defined by the
-    OSGi Alliance in this and other specifications. OSGi namespaces start with
+    OSGi Working Group in this and other specifications. OSGi namespaces start with
     the reserved <code>osgi.</code> prefix. For example, the
     <code>osgi.ee</code> namespace defines a capability for specifying an
     execution environment. A Namespace can also be defined by other
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <xref linkend="framework.module.namespace-registry"/> to
+    Working Group, see <xref linkend="framework.module.namespace-registry"/> to
     prevent clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
@@ -1409,7 +1409,7 @@ requirement        ::= name-space ( ';' directive | typed-attr )*</programlistin
           or <code>effective:=resolve</code>. Other requirements can be
           considered by an external agent. Additional names for the
           <code>effective</code> directive should be registered with the OSGi
-          Alliance.</para>
+          Working Group.</para>
         </listitem>
 
         <listitem>

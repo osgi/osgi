@@ -1338,7 +1338,7 @@ if (deviceSRefs != null) {
             The value type is <code>java.lang.String</code>.</para>
 
             <para>Organizations that want to use function types that do not
-            clash with OSGi Alliance defined types should prefix their types
+            clash with OSGi Working Group defined types should prefix their types
             in own namespace.</para>
           </listitem>
 
@@ -1802,7 +1802,7 @@ if (deviceSRefs != null) {
             linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
             xrefstyle="hyperlink"/> result map and can depend on the given
             unit. Organizations that want to use custom keys that do not clash
-            with OSGi Alliance defined should prefix their keys in own
+            with OSGi Working Group defined should prefix their keys in own
             namespace.</para>
           </listitem>
         </itemizedlist></para>

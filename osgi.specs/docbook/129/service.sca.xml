@@ -659,7 +659,7 @@ service.exported.intents = protected</programlisting>
       <para>This specification does not define any attributes or directives
       for this header, implementations of this specification must ignore
       unrecognized attributes and directives. Implementations can provide
-      proprietary parameters that should be registered with the OSGi Alliance
+      proprietary parameters that should be registered with the OSGi Working Group
       to prevent name collisions. The non-localized version of the
       SCA-Configuration header must be used.</para>
 

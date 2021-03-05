@@ -249,7 +249,7 @@
       filter string to narrow the search.</para>
 
       <para>Many service interfaces are defined and specified by organizations
-      such as the OSGi Alliance. A service interface that has been accepted as
+      such as the OSGi Working Group. A service interface that has been accepted as
       a standard can be implemented and used by any number of bundle
       developers.</para>
     </section>

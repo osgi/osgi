@@ -1409,7 +1409,7 @@ client.installBundle({
     <para>This specification describes a REST-based management interface for
     Core Framework functionality. Other services in the framework might also
     benefit from management access through REST. This can involve services
-    specified by the OSGi Alliance as part of the Core Framework, Compendium,
+    specified by the OSGi Working Group as part of the Core Framework, Compendium,
     or Enterprise Specifications but also application-specific functionality
     provided by the developer. It is desirable to expose such management
     services as extensions of the REST Management Service.</para>

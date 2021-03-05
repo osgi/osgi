@@ -2262,7 +2262,7 @@ public class UI {
   <section>
     <title>ZigBee Exception</title>
 
-    <para>Some error codes are specified by the OSGi Alliance:</para>
+    <para>Some error codes are specified by the OSGi Working Group:</para>
 
     <itemizedlist>
       <listitem>
@@ -2608,7 +2608,7 @@ public class UI {
       <bibliomixed
       xml:id="service.zigbee-ref-whiteboard-pattern"><title>Listeners
       considered harmful: The whiteboard pattern</title>Peter Kriens, BJ
-      Hargrave for the OSGi Alliance, Technical Whitepaper, August
+      Hargrave for the OSGi Working Group, Technical Whitepaper, August
       2004.<?line-break ?><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 

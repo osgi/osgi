@@ -39,8 +39,8 @@
     <xsl:param name="chunk.first.sections" select="1"/>
     <xsl:param name="chunk.section.depth" select="3"/>
     <xsl:param name="use.id.as.filename" select="1"/>
-    <xsl:param name="branding">OSGi Alliance</xsl:param>
-    <xsl:param name="brandname">OSGi Alliance</xsl:param>
+    <xsl:param name="branding">OSGi Working Group</xsl:param>
+    <xsl:param name="brandname">OSGi Working Group</xsl:param>
     <xsl:param name="release.version"></xsl:param>
 
     <xsl:param name="section.label.includes.component.label" select="1"/>

@@ -152,7 +152,7 @@
             <entry><para>A symbolic name for the extender. These names are
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
-            <code>org.acme.foo</code>. The OSGi Alliance reserves names that
+            <code>org.acme.foo</code>. The OSGi Working Group reserves names that
             start with "<code>osgi.</code>".</para></entry>
           </row>
 
@@ -674,7 +674,7 @@ DynamicImport-Package:
             <entry><para><code>symbolic-name</code></para></entry>
 
             <entry><para>The symbolic name of the specification or contract.
-            The OSGi Alliance reserves names that start with
+            The OSGi Working Group reserves names that start with
             "<code>osgi.</code>".</para></entry>
           </row>
 

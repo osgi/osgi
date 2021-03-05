@@ -4096,7 +4096,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
     Exceptions whenever an operation fails. The <code>DmtException</code>
     class contains numeric error codes which describe the cause of the error.
     Some of the error codes correspond to the codes described by the OMA DM
-    spec, while some are introduced by the OSGi Alliance. The documentation of
+    spec, while some are introduced by the OSGi Working Group. The documentation of
     each method describes what codes could potentially be used for that
     method.</para>
 
@@ -5042,7 +5042,7 @@ SESSION_CLOSED {
     <section xml:id="service.dmt.protocolmapping">
       <title>Protocol Mapping</title>
 
-      <para>The OSGi Alliance specifies an Execution Environment that can be
+      <para>The OSGi Working Group specifies an Execution Environment that can be
       used as a basis for residential gateways, mobiles, or other devices.
       This raises the issue how to expose the manageability of an OSGi device
       and the <emphasis>objects</emphasis>, the units of manageability, that
