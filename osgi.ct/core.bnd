@@ -3,6 +3,5 @@
 Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Compliance Tests
 
 -resourceonly: true
--includeresource: {legal}
 
 -ctpack: ${build.core.tests},${jar.core.tests}

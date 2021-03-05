@@ -1,4 +1,4 @@
-###############################################################################
+#*******************************************************************************
 # Copyright (c) Contributors to the Eclipse Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,15 @@
 # limitations under the License.
 #
 # SPDX-License-Identifier: Apache-2.0 
-###############################################################################
+#*******************************************************************************
 
-# JVM args to run gradle
-org.gradle.jvmargs=-Xms1g -Xmx3g
+# GitHub Dependabot configuration file
 
-# cnf project name
-bnd_cnf=cnf
+version: 2
+updates:
 
-# bnd_version is the version of the Bnd Gradle plugin
-bnd_version=5.3.0
-
-# The URL to the snapshot repo for the Bnd Gradle plugin
-bnd_snapshots=https://bndtools.jfrog.io/bndtools/libs-snapshot-local
-
-# bnd_build can be set to the name of a primary project whose dependencies will seed the set of projects to build.
-bnd_build=osgi.build
-
-# Default gradle task to build
-bnd_defaultTask=assemble
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"

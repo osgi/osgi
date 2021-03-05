@@ -3,6 +3,5 @@
 Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Reference Implementation
 
 -resourceonly: true
--includeresource: {legal}
 
 -pack: ${build.core.impls},${jar.core.impls}

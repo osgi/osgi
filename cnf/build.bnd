@@ -57,8 +57,8 @@ base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddHHmm}
 
 copyright.year = ${tstamp;yyyy}
-copyright = Copyright (c) OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
-copyright.html = Copyright &copy; OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
+copyright = Copyright (c) Contributors to the Eclipse Foundation
+copyright.html = ${replace;${copyright};[(]c[)];&copy\\;}
 
 osgi.release				= 8
 osgi.version.major			= ${osgi.release}
@@ -73,25 +73,28 @@ osgi.annotation.version=7.0.0
 # Documentation
 -groupid: org.osgi
 Bundle-Copyright: ${copyright}
-Bundle-Vendor:    OSGi Alliance https://www.osgi.org/
+Bundle-Vendor:    Eclipse Foundation
 # To build the non-snapshot version, see the packaging bnd files for -snapshot.
 Bundle-Version:   ${build.version}-SNAPSHOT
-Bundle-DocURL:    https://www.osgi.org/
+Bundle-DocURL:    https://docs.osgi.org/
 Git-Descriptor:   ${system-allow-fail;git describe --dirty --always --abbrev=9}
 Git-SHA:          ${system-allow-fail;git rev-list -1 --no-abbrev-commit HEAD}
-Bundle-SCM:       url=https://osgi.org/gitweb/build.git, \
-                  connection=scm:git:https://osgi.org/git/build.git, \
-                  developerConnection=scm:git:https://osgi.org/git/build.git, \
+Bundle-SCM:       url=https://github.com/osgi/osgi, \
+                  connection=scm:git:https://github.com/osgi/osgi.git, \
+                  developerConnection=scm:git:git@github.com:osgi/osgi.git, \
                   tag=${Git-Descriptor}
 Bundle-Developers: osgi; \
-                  email=info@osgi.org; \
-                  name="OSGi Alliance"; \
-                  organization="OSGi Alliance"; \
-                  organizationUrl=https://www.osgi.org/
+                  email=osgi-wg@eclipse.org; \
+                  name="OSGi Working Group"; \
+                  organization="Eclipse Foundation"; \
+                  organizationUrl="https://www.osgi.org/"
 
 -reproducible: true
 -noextraheaders: true
--removeheaders = Include-Resource, Private-Package, Conditional-Package
+-removeheaders: Private-Package
+-includeresource.legal:\
+ "META-INF/=${project.workspace}/LICENSE",\
+ "META-INF/=${project.workspace}/NOTICE"
 
 -runfw = org.osgi.impl.framework; version=latest
 

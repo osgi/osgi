@@ -9,7 +9,6 @@ Bundle-License: Apache-2.0; \
 Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}
 Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
--includeresource.legal: {${project.workspace}/osgi.companion/legal/jar}
 
 -buildrepo: Local
 -releaserepo: Release

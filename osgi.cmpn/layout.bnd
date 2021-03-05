@@ -5,7 +5,6 @@ osgi.cmpn.specs: ${osgi.cmpn.projects}
 osgi.cmpn.packages: ${replace;${osgi.cmpn.specs};$;.*}
 
 osgi.cmpn.resources: \
- {${project.workspace}/osgi.companion/legal/jar}, \
  xmlns/app=${project.workspace}/xmlns/app, \
  xmlns/metatype=${project.workspace}/xmlns/metatype, \
  xmlns/rsa=${project.workspace}/xmlns/rsa, \

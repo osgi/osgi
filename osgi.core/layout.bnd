@@ -4,5 +4,4 @@ osgi.core.specs: ${osgi.core.projects}
 
 osgi.core.packages: ${replace;${osgi.core.specs};$;.*}
 
-osgi.core.resources: \
- {${project.workspace}/osgi.companion/legal/jar}
+osgi.core.resources:

@@ -1,7 +1,6 @@
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -368,31 +367,6 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 				return false;
 		}
 		return true;
-	}
-
-	private void addNotice(StringBuilder sb) {
-		sb.append("# Copyright (c) OSGi Alliance (")
-				.append(Calendar.getInstance().get(Calendar.YEAR))
-				.append("). All Rights Reserved.\n");
-		sb.append("#\n");
-		sb.append(
-				"# Licensed under the Apache License, Version 2.0 (the \"License\");\n");
-		sb.append(
-				"# you may not use this file except in compliance with the License.\n");
-		sb.append("# You may obtain a copy of the License at\n");
-		sb.append("#\n");
-		sb.append("#      https://www.apache.org/licenses/LICENSE-2.0\n");
-		sb.append("#\n");
-		sb.append(
-				"# Unless required by applicable law or agreed to in writing, software\n");
-		sb.append(
-				"# distributed under the License is distributed on an \"AS IS\" BASIS,\n");
-		sb.append(
-				"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n");
-		sb.append(
-				"# See the License for the specific language governing permissions and\n");
-		sb.append("# limitations under the License.\n");
-		sb.append("\n");
 	}
 
 	private void escapeSingleQuotes(StringBuilder sb, String value) {

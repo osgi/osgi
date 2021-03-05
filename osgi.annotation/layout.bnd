@@ -4,5 +4,4 @@ osgi.annotation.specs: ${osgi.annotation.projects}
 
 osgi.annotation.packages: ${replace;${osgi.annotation.specs};$;.*}
 
-osgi.annotation.resources: \
- {${project.workspace}/osgi.companion/legal/jar}
+osgi.annotation.resources:
