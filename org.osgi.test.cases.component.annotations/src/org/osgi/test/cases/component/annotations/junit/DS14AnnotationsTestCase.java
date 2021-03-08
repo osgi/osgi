@@ -134,7 +134,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasPropertyValue("service.description", "String",
 						"Test case for Component Property Type annotations")
 				.hasPropertyValue("service.ranking", "Integer", "42")
-				.hasPropertyValue("service.vendor", "String", "OSGi Alliance")
+				.hasPropertyValue("service.vendor", "String", "OSGi TCK")
 				.doesNotContain("property[@name='ignored']");
 	}
 

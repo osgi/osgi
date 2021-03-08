@@ -61,7 +61,7 @@ import org.osgi.service.component.propertytypes.ServiceVendor;
 @Component(name = "testComponentPropertyTypes")
 @NameMappingComponentPropertyType(myProperty143 = "specified.myProperty143", $new = "specified.new", my$$prop = "specified.my$prop", dot_prop = "specified.dot.prop", another__prop = "specified.another_prop", three___prop = "specified.three_.prop", four_$__prop = "specified.four._prop", five_$_prop = "specified.five..prop", six$_$prop = "specified.six-prop", seven$$_$prop = "specified.seven$.prop")
 @ServiceDescription("Test case for Component Property Type annotations")
-@ServiceVendor("OSGi Alliance")
+@ServiceVendor("OSGi TCK")
 @ServiceRanking(42)
 @IgnoredAnnotation
 public class ComponentPropertyTypes {

@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-SymbolicName: ${p}.wmtw4
 Bundle-Name: ${p}.wmtw4
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 4 with manifest pre-specified

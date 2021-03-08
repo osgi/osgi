@@ -139,7 +139,7 @@ public class TW1Test extends WebContainerTestBundleControl {
     }
 
     public void testBasic008() throws Exception {
-        final String request = this.warContextPath + "/images/osgi.gif";
+		final String request = this.warContextPath + "/images/osgi.png";
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
@@ -147,7 +147,7 @@ public class TW1Test extends WebContainerTestBundleControl {
                 log(conn.getContentType());
             }
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "image/gif");
+			assertEquals(conn.getContentType(), "image/png");
         } finally {
             conn.disconnect();
         }

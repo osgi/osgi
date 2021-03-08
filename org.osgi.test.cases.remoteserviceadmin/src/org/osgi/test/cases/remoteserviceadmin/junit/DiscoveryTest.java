@@ -530,7 +530,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.remoteserviceadmin.testbundle");
 		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_MANIFESTVERSION), "2");
 		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_VERSION),	"1.0.0");
-		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_VENDOR), "OSGi Alliance");
+		attrs.put(
+				new Attributes.Name(org.osgi.framework.Constants.BUNDLE_VENDOR),
+				"OSGi TCK");
 		attrs.put(new Attributes.Name("Remote-Service"), "endpoint.xml");
 
 		JarOutputStream jos = new JarOutputStream(new FileOutputStream(bundle), manifest);

@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: ${p}.fragment.tw8
 Bundle-Name: ${p}.fragment.tw8

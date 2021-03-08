@@ -36,7 +36,7 @@ public class ConstantsUtil {
 	public static final String	ERROR404JSP				= "<html><head><title>404.jsp</title></head><body>"
             + "<P>Error: 404</P><P>Customized Error Page Test - JSP page</P>";
     public static final String IMAGEHTML = "<html><head><title>TestWar1 Image</title></head>"
-            + "<body>This is the OSGi Alliance logo <img src=\"images/osgi.gif\" alt=\"OSGi Alliance\"/></html>";
+			+ "<body>This is the OSGi logo <img src=\"images/osgi.png\" alt=\"OSGi\"/></html>";
 
 
     public static final String EMAIL = "Email";

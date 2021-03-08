@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: ${p}.wmtw1
 Bundle-Name: ${p}.wmtw1

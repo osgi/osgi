@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-Name: ${p}.wm3tw5
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with manifest Bundle-Classpath pre-specified
 

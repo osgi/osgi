@@ -34,7 +34,9 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String[] EXPORTS2 = {"org.osgi.test.cases.webcontainer.tw2;version=1.0", "org.osgi.test.cases.webcontainer.util;version=1.0"}; 
     protected static final String[] EXPORTS3 = {"org.osgi.test.cases.webcontainer.tw3;version=1.0", "org.osgi.test.cases.webcontainer.util;version=1.0"}; 
     protected static final String[] EXPORTS4 = {"org.osgi.test.cases.webcontainer.tw4;version=1.0"}; 
-    protected static final String[] EXPORTS5 = {"org.osgi.test.cases.webcontainer.tw5;version=1.0;company=\"OSGi Alliance\";security=false;mandatory:=security"};  
+	protected static final String[]	EXPORTS5			= {
+			"org.osgi.test.cases.webcontainer.tw5;version=1.0;company=\"OSGi TCK\";security=false;mandatory:=security"
+	};
     
 	protected static final String[]	CLASSPATH1			= {"WEB-INF/lib/log.jar"};
 	protected static final String[]	CLASSPATH2			= {

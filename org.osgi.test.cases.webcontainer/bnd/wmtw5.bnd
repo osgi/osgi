@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wmtw5
 Bundle-Name: org.osgi.test.cases.webcontainer.wmtw5
