@@ -29,7 +29,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * specified namespaces.
  * 
  * <p>
- * The OSGi Alliance reserves the right to extend the set of directives and
+ * The OSGi Working Group reserves the right to extend the set of directives and
  * attributes which have specified semantics for all of the specified
  * namespaces.
  * 

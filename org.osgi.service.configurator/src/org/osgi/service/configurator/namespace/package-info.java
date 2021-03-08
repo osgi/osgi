@@ -21,7 +21,7 @@
  * <p>
  * Bundles should not need to import this package at runtime since all the types
  * in this package just contain constants for capability and requirement
- * namespaces specified by the OSGi Alliance.
+ * namespaces specified by the OSGi Working Group.
  * 
  * @author $Id$
  */

@@ -29,7 +29,7 @@ package org.osgi.framework;
  * the exception type for future extendability.
  * 
  * <p>
- * OSGi Alliance reserves the right to extend the set of types.
+ * OSGi Working Group reserves the right to extend the set of types.
  * 
  * <p>
  * This exception conforms to the general purpose exception chaining mechanism.

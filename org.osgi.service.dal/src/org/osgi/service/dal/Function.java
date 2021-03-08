@@ -202,7 +202,7 @@ public interface Function {
 	 * temperature, pressure, etc. The value type is {@code java.lang.String}.
 	 * <p>
 	 * Organizations that want to use function types that do not clash with OSGi
-	 * Alliance defined types should prefix their types in own namespace.
+	 * Working Group defined types should prefix their types in own namespace.
 	 * <p>
 	 * The type doesn't mandate specific function interface. It can be used with
 	 * different functions.

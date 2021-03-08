@@ -32,7 +32,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * to identify the event type for future extendability.
  * 
  * <p>
- * OSGi Alliance reserves the right to extend the set of event types.
+ * OSGi Working Group reserves the right to extend the set of event types.
  * 
  * @Immutable
  * @see FrameworkListener

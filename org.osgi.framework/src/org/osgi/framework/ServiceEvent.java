@@ -29,7 +29,7 @@ import java.util.EventObject;
  * A type code is used to identify the event type for future extendability.
  * 
  * <p>
- * OSGi Alliance reserves the right to extend the set of types.
+ * OSGi Working Group reserves the right to extend the set of types.
  * 
  * @Immutable
  * @see ServiceListener
