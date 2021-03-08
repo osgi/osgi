@@ -114,3 +114,15 @@ jobs:
         name: JDK${{ matrix.java }}_${{ matrix.os }}-Core_TCK-reports
         path: |
           osgi.ct/generated/osgi.ct.core/reports/
+    - name: Cmpn TCK
+      id: tck_cmpn
+      if: (steps.build.outcome == 'success')
+      run: |
+        ./.github/scripts/ct.sh ct.cmpn
+    - name: Upload Cmpn TCK Test Reports
+      if: (steps.tck_cmpn.outcome == 'success') || (steps.tck_cmpn.outcome == 'failure')
+      uses: actions/upload-artifact@v2
+      with:
+        name: JDK${{ matrix.java }}_${{ matrix.os }}-Cmpn_TCK-reports
+        path: |
+          osgi.ct/generated/osgi.ct.cmpn/reports/
