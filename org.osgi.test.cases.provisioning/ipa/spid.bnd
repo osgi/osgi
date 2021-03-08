@@ -2,8 +2,15 @@
 # This ipa is used to check if we get a Service Platform
 # identifier
 # 
--nomanifest: true
--sources:								false
--resourceonly:                           true
--includeresource:                        spid.ipa;literal='true';extra='text/plain;charset=utf-8', \
-   load-status;literal='spid.ipa';extra='text/plain;charset=utf-8'
+-sources: false
+-resourceonly: true
+-includeresource.legal:
+-includeresource: \
+ spid.ipa;literal='true',\
+ load-status;literal='spid.ipa'
+
+InitialProvisioning-Entries: \
+ spid.ipa;type=text,\
+ load-status;type=text
+
+XEOM: End of manifest

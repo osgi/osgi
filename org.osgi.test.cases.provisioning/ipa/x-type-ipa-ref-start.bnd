@@ -4,6 +4,7 @@
 #
 -sources:								false
 -resourceonly:                           true
+-includeresource.legal:
 -includeresource: \
  x-type-ipa-ref-start.ipa;literal='true', \
  load-status;literal='x-type-ipa-ref-start.ipa', \
