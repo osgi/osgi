@@ -102,8 +102,15 @@ jobs:
       with:
         name: OSGi-Generated-Repo
         path: cnf/generated/repo/
-    - name: Core CT
-      id: ct_core
+    - name: Core TCK
+      id: tck_core
       if: (steps.build.outcome == 'success')
       run: |
         ./.github/scripts/ct.sh ct.core
+    - name: Upload Core TCK Test Reports
+      if: (steps.tck_core.outcome == 'success') || (steps.tck_core.outcome == 'failure')
+      uses: actions/upload-artifact@v2
+      with:
+        name: JDK${{ matrix.java }}_${{ matrix.os }}-Core_TCK-reports
+        path: |
+          osgi.ct/generated/osgi.ct.core/reports/
