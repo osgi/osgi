@@ -15,7 +15,7 @@ Before starting the CT the tester **MUST**:
 
 This file allows to define a subset of the clusters used inside the ZigBee device(s) 
 used for the test(s). The *zcl.xml* file provided with the CT contains only 
-fake clusters definitions, because for licensing issues, OSGi Alliance 
+fake clusters definitions, because for licensing issues, OSGi Working Group 
 cannot disclosure any ZCL commands specification details.
  
 Only the clusters referenced by the *zigbee-ct-template.xml*file (see next section) 

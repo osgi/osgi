@@ -1,16 +1,31 @@
 #
 # Should get the test-1.jar bundle from the remote system
 # 
--nomanifest: true
--sources:								false
--resourceonly:                           true
--includeresource:                        ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
-   load-status;literal='ref.ipa';extra='text/plain;charset=utf-8', \
-   test-0-prov.jar=test-0-prov.jar;extra='application/x-osgi-bundle', \
-   test-1-prov.jar;literal=director:test-1-prov.jar;extra='text/x-osgi-bundle-url', \
-   test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE';extra='text/x-osgi-bundle;charset=utf-8', \
-   provisioning.start.bundle;literal='test-0-prov.jar';extra='text/plain;charset=utf-8', \
-   text-1;literal='TEST1';extra='text/plain;charset=utf-8', \
-   text-2;literal='TEST2';extra='text/plain;charset=utf-8', \
-   /text-3;literal='TEST3';extra='text/plain;charset=utf-8', \
-   osgi.cert=osgi.cert;extra='application/octet-stream'
+-sources: false
+-resourceonly: true
+-includeresource.legal:
+-includeresource: \
+ ref.ipa;literal='true',\
+ load-status;literal='ref.ipa',\
+ test-0-prov.jar=test-0-prov.jar,\
+ test-1-prov.jar;literal=director:test-1-prov.jar,\
+ test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE',\
+ provisioning.start.bundle;literal='test-0-prov.jar',\
+ text-1;literal='TEST1',\
+ text-2;literal='TEST2',\
+ /text-3;literal='TEST3',\
+ osgi.cert=osgi.cert
+
+InitialProvisioning-Entries: \
+ ref.ipa;type=text,\
+ load-status;type=text,\
+ test-0-prov.jar;type=bundle,\
+ test-1-prov.jar;type=bundle-url,\
+ test-2-prov.jar;type=bundle,\
+ provisioning.start.bundle;type=text,\
+ text-1;type=text,\
+ text-2;type=text,\
+ text-3;type=text,\
+ osgi.cert;type=binary
+
+XEOM: End of manifest

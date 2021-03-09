@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) Contributors to the Eclipse Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0 
+ *******************************************************************************/
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
@@ -186,5 +203,30 @@ public class Packaging implements AnalyzerPlugin {
 			}
 		}
 		return file;
+	}
+
+	protected void addNotice(StringBuilder sb) {
+		sb.append("# Copyright (c) Contributors to the Eclipse Foundation\n");
+		sb.append("#\n");
+		sb.append(
+				"# Licensed under the Apache License, Version 2.0 (the \"License\");\n");
+		sb.append(
+				"# you may not use this file except in compliance with the License.\n");
+		sb.append("# You may obtain a copy of the License at\n");
+		sb.append("#\n");
+		sb.append("#      https://www.apache.org/licenses/LICENSE-2.0\n");
+		sb.append("#\n");
+		sb.append(
+				"# Unless required by applicable law or agreed to in writing, software\n");
+		sb.append(
+				"# distributed under the License is distributed on an \"AS IS\" BASIS,\n");
+		sb.append(
+				"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n");
+		sb.append(
+				"# See the License for the specific language governing permissions and\n");
+		sb.append("# limitations under the License.\n");
+		sb.append("#\n");
+		sb.append("# SPDX-License-Identifier: Apache-2.0\n");
+		sb.append("\n");
 	}
 }

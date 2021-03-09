@@ -1,7 +1,7 @@
 Bundle-Name: ${p}.div.tb13
 Bundle-SymbolicName: ${p}.div.tb13
 Bundle-Version: 1.0
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Fragment-Host: ${p}.div.tb10
 -privatepackage: ${p}.div.tb13
 

@@ -1,4 +1,3 @@
-Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: ${p}.wm2tw5
 Bundle-Name: ${p}.wm2tw5

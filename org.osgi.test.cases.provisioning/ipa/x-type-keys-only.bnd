@@ -1,5 +1,6 @@
 -sources:								false
 -resourceonly:                           true
+-includeresource.legal:
 -includeresource: \
  x-type-keys-only.ipa;literal='true', \
  load-status;literal='x-type-keys-only.ipa', \

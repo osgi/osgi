@@ -3,6 +3,5 @@
 Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Reference Implementations
 
 -resourceonly: true
--includeresource: {legal}
 
 -pack: ${build.cmpn.impls},${jar.cmpn.impls}

@@ -3,6 +3,5 @@
 Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Compliance Tests
 
 -resourceonly: true
--includeresource: {legal}
 
 -ctpack: ${build.cmpn.tests},${jar.cmpn.tests}

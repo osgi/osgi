@@ -1,5 +1,6 @@
 -sources:								false
 -resourceonly:                           true
+-includeresource.legal:
 -includeresource: \
  x-type-unicode.ipa;literal='true', \
  load-status;literal='x-type-unicode.ipa', \

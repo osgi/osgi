@@ -4,5 +4,4 @@ osgi.promise.specs: ${osgi.promise.projects}
 
 osgi.promise.packages: ${replace;${osgi.promise.specs};$;.*}
 
-osgi.promise.resources: \
- {${project.workspace}/osgi.companion/legal/jar}
+osgi.promise.resources:

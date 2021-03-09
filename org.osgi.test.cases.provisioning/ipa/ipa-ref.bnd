@@ -1,9 +1,17 @@
 #
 # Simple reference to simple.ipa on the director
 #
--nomanifest: true
--sources:								false
--resourceonly:                           true
--includeresource:                        ipa-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
-   load-status;literal='ipa-ref.ipa';extra='text/plain;charset=utf-8', \
-   provisioning.reference;literal='director:simple.ipa';extra='text/plain;charset=utf-8'
+-sources: false
+-resourceonly: true
+-includeresource.legal:
+-includeresource: \
+ ipa-ref.ipa;literal='true',\
+ load-status;literal='ipa-ref.ipa',\
+ provisioning.reference;literal='director:simple.ipa'
+
+InitialProvisioning-Entries: \
+ ipa-ref.ipa;type=text,\
+ load-status;type=text,\
+ provisioning.reference;type=text
+
+XEOM: End of manifest

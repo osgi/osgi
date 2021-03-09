@@ -1,6 +1,14 @@
--nomanifest: true
--sources:								false
--resourceonly:                           true
--includeresource:                        unicode.ipa;literal='true';extra='text/plain;charset=utf-8', \
-   load-status;literal='unicode.ipa';extra='text/plain;charset=utf-8', \
-   unicode.string;literal='v\u00D0\u00D9v';extra='text/plain;charset=utf-8'
+-sources: false
+-resourceonly: true
+-includeresource.legal:
+-includeresource: \
+ unicode.ipa;literal='true',\
+ load-status;literal='unicode.ipa',\
+ unicode.string;literal='v\u00D0\u00D9v'
+
+InitialProvisioning-Entries: \
+ unicode.ipa;type=text,\
+ load-status;type=text,\
+ unicode.string;type=text
+
+XEOM: End of manifest

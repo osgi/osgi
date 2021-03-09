@@ -1,18 +1,20 @@
-/*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+/*******************************************************************************
+ * Copyright (c) Contributors to the Eclipse Foundation
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *
+ * SPDX-License-Identifier: Apache-2.0 
+ *******************************************************************************/
 
 package org.osgi.test.cases.webcontainer.util;
 
@@ -34,7 +36,7 @@ public class ConstantsUtil {
 	public static final String	ERROR404JSP				= "<html><head><title>404.jsp</title></head><body>"
             + "<P>Error: 404</P><P>Customized Error Page Test - JSP page</P>";
     public static final String IMAGEHTML = "<html><head><title>TestWar1 Image</title></head>"
-            + "<body>This is the OSGi Alliance logo <img src=\"images/osgi.gif\" alt=\"OSGi Alliance\"/></html>";
+			+ "<body>This is the OSGi logo <img src=\"images/osgi.png\" alt=\"OSGi\"/></html>";
 
 
     public static final String EMAIL = "Email";

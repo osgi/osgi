@@ -5,15 +5,3 @@ Bundle-Activator: 						${t}.StandaloneDriverTestDevice
 Bundle-Version:                         4.2
 -privatepackage:                        ${t}.*
 Bundle-Description: basic device implementation
-
-#Manifest-Version: 1.0
-#Bundle-Vendor: ProSyst
-#Bundle-Version: 1.0.0
-#Bundle-Activator: org.osgi.test.cases.device.dev2.StandaloneDriverTestDevice
-#Bundle-DocUrl: http://www.prosyst.bg
-#Bundle-Name: test.cases.device.dev2
-#Import-Package:  org.osgi.framework
-
-
-
-

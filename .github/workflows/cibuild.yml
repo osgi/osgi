@@ -1,63 +1,113 @@
+#*******************************************************************************
+# Copyright (c) Contributors to the Eclipse Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0 
+#*******************************************************************************
+
 name: CI Build
 
 on:
   push:
+    branches-ignore:
+    - 'dependabot/**'
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
     - 'LICENSE'
+    - 'NOTICE'
   pull_request:
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
     - 'LICENSE'
+    - 'NOTICE'
 
 env:
   LC_ALL: en_US.UTF-8
-  GRADLE_OPTS: -Dorg.gradle.parallel=false
+  GRADLE_OPTS: >-
+    -Dorg.gradle.parallel=true
+  canonical: ${{ (github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
+  java_version: 8
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  Build_Matrix:
-    strategy:
-      matrix:
-        include:
-        - os: ubuntu-latest
-          java: 8
-          canonical: ${{ (github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
-    name: JDK${{ matrix.java }} ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  build:
+    name: Artifacts
+    runs-on: ubuntu-latest
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Git Unshallow
-      if: (matrix.canonical)
+      if: ${{ env.canonical == 'true' }}
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
-    - name: Set up Java ${{ matrix.java }}
+    - name: Set up Java
       uses: actions/setup-java@v1
       with:
-        java-version: ${{ matrix.java }}
+        java-version: ${{ env.java_version }}
     - name: Build
       id: build
       run: |
         ./.github/scripts/build.sh
+    - name: Upload TCK
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-TCK
+        path: |
+          osgi.ri/generated/*.jar
+          osgi.ct/generated/*.jar
     - name: Release
       id: release
-      if: (matrix.canonical && (steps.build.outcome == 'success'))
+      if: ${{ env.canonical == 'true' }}
       run: |
         ./.github/scripts/publish.sh
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+    - name: Upload Generated Repo
+      if: ${{ env.canonical == 'true' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Generated-Repo
+        path: |
+          cnf/generated/repo/
+
+  spec:
+    name: Specification
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+    - name: Gradle Wrapper Validation
+      uses: gradle/wrapper-validation-action@v1
+    - name: Set up Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ env.java_version }}
+    - name: Build
+      id: build
+      run: |
+        ./.github/scripts/spec.sh
     - name: Publish Specification HTML  
-      if: (steps.release.outcome == 'success')
+      if: ${{ env.canonical == 'true' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.DRAFT_DEPLOY_KEY }}
@@ -66,25 +116,49 @@ jobs:
         publish_dir: osgi.specs/generated/html
         force_orphan: true
     - name: Upload Specification HTML
-      if: (steps.release.outcome == 'success')
+      if: ${{ env.canonical == 'true' }}
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-HTML
-        path: osgi.specs/generated/html/
+        path: |
+          osgi.specs/generated/html/
     - name: Upload Specification PDF
-      if: (steps.release.outcome == 'success')
+      if: ${{ env.canonical == 'true' }}
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-PDF
-        path: osgi.specs/generated/*.pdf
-    - name: Upload Generated Repo
-      if: (steps.release.outcome == 'success')
+        path: |
+          osgi.specs/generated/*.pdf
+
+  tck:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        tck: [ core, cmpn ]
+    name: TCK ${{ matrix.tck }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+    - name: Gradle Wrapper Validation
+      uses: gradle/wrapper-validation-action@v1
+    - name: Set up Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ env.java_version }}
+    - name: Download TCK
+      uses: actions/download-artifact@v2
+      with:
+        name: OSGi-TCK
+    - name: Run TCK
+      id: tck
+      run: |
+        ./.github/scripts/tck.sh ct.${{ matrix.tck }}
+    - name: Upload TCK Test Reports
+      if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
       uses: actions/upload-artifact@v2
       with:
-        name: OSGi-Generated-Repo
-        path: cnf/generated/repo/
-    - name: Core CT
-      id: ct_core
-      if: (steps.build.outcome == 'success')
-      run: |
-        ./.github/scripts/ct.sh ct.core
+        name: TCK-${{ matrix.tck }}-reports
+        path: |
+          osgi.ct/generated/osgi.ct.${{ matrix.tck }}/reports/

@@ -4,6 +4,7 @@
 # 
 -sources:								false
 -resourceonly:                           true
+-includeresource.legal:
 -includeresource: \
  x-type-spid.ipa;literal='true', \
  load-status;literal='x-type-spid.ipa'
