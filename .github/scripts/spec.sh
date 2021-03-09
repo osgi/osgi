@@ -18,4 +18,4 @@
 #*******************************************************************************
 
 ./gradlew --no-daemon -Dmaven.repo.local=cnf/generated/m2 --version
-./gradlew --no-daemon -Dmaven.repo.local=cnf/generated/m2 --continue :install "$@"
+./gradlew --no-daemon -Dmaven.repo.local=cnf/generated/m2 --continue :osgi.specs:specifications "$@"

@@ -64,6 +64,7 @@ tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
         dependsOn tasks.named("prepct.${book}")
         doLast {
           javaexec {
+            errorOutput = standardOutput // send stderr to stdout
             workingDir file(destinationDirectory)
             main = '-jar' // first arg must be the bnd jar
             args file(destinationDirectory.file('jar/bnd.jar'))

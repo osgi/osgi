@@ -27,6 +27,7 @@ env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
+  java_version: 8
   ORG_GRADLE_PROJECT_bnd_version: 5.4.0-SNAPSHOT
 
 defaults:
@@ -34,10 +35,10 @@ defaults:
     shell: bash
 
 jobs:
-  JDK8_Linux:
-    name: JDK8 ubuntu-latest
+  build:
+    name: Build and TCK core
     runs-on: ubuntu-latest
-    if: (github.repository == 'osgi/osgi')
+    if: ${{ github.repository == 'osgi/osgi' }}
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
@@ -46,13 +47,19 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v1
       with:
-        java-version: 8
+        java-version: ${{ env.java_version }}
     - name: Build
       id: build
       run: |
         ./.github/scripts/build.sh :buildscriptDependencies
-    - name: Core CT
-      id: ct_core
-      if: (steps.build.conclusion == 'success')
+    - name: Run TCK
+      id: tck
       run: |
-        ./.github/scripts/ct.sh ct.core
+        ./.github/scripts/tck.sh ct.core
+    - name: Upload TCK Test Reports on failure
+      if: ${{ always() && (steps.tck.outcome == 'failure') }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: TCK-core-reports
+        path: |
+          osgi.ct/generated/osgi.ct.core/reports/

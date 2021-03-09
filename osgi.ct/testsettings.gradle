@@ -27,3 +27,12 @@ gradle.rootProject {
   layout.buildDirectory.value(layout.projectDirectory.dir('generated'))
   ext.riBuildDir = file('../osgi.ri/generated')
 }
+
+if (Boolean.parseBoolean(System.getenv('GITHUB_ACTIONS'))) {
+  gradle.taskGraph.beforeTask { Task task ->
+    println "::group::Task ${task.name}"
+  }
+  gradle.taskGraph.afterTask { Task task, TaskState state ->
+    println '::endgroup::'
+  }
+}
