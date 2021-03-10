@@ -107,11 +107,10 @@ jobs:
       run: |
         ./.github/scripts/spec.sh
     - name: Publish Specification HTML  
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ (env.canonical == 'true') || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
       uses: peaceiris/actions-gh-pages@v3
       with:
-        deploy_key: ${{ secrets.DRAFT_DEPLOY_KEY }}
-        external_repository: osgi/draft
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: osgi.specs/generated/html
         force_orphan: true
