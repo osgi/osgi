@@ -32,7 +32,7 @@ import org.osgi.test.cases.enocean.utils.Utils;
  * - testManualDeviceRegistration, tests initial device registration from a raw
  * Radio teach-in packet that doesn’t contain any profile data, and that is
  * triggered through the step service. This test thus requires the end-user
- * involvement. Finally, the CT checks that the device's profile has been
+ * involvement. Finally, the TCK checks that the device's profile has been
  * properly updated.
  * 
  * @author $Id$

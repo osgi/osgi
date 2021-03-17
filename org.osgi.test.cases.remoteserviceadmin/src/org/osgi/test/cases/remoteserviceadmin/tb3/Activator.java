@@ -55,10 +55,10 @@ public class Activator implements BundleActivator, ServiceListener {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.tck.timeout",
 				300000L);
 		factor = OSGiTestCaseProperties.getIntegerProperty(
-				"rsa.ct.timeout.factor", 3);
+				"rsa.tck.timeout.factor", 3);
 		test();
 	}
 

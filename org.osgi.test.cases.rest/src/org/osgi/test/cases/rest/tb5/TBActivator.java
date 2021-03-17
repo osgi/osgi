@@ -38,7 +38,7 @@ public class TBActivator extends ServerResource implements BundleActivator, Rest
   public void start(BundleContext context) throws Exception {
     Dictionary<String, Object> properties = new Hashtable<String, Object>();
     properties.put(RestApiExtension.URI_PATH, "contributions/extension");
-    properties.put(RestApiExtension.NAME, "REST CT Extension");
+    properties.put(RestApiExtension.NAME, "REST TCK Extension");
     properties.put("restlet", TBActivator.class);
 
 		sReg = context.registerService(RestApiExtension.class, this,

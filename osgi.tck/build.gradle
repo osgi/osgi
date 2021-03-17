@@ -17,15 +17,15 @@
  */
 
 /*
- * osgi.ct Gradle build script
+ * osgi.tck Gradle build script
  */
 
 ext.riBuildDir = parent.file("osgi.ri/${bnd('target-dir')}")
 
 apply from: file('test.gradle')
 
-tasks.register('ct') {
-  description 'Run all the CTs.'
+tasks.register('tck') {
+  description 'Run all the TCKs.'
   group 'verification'
-  dependsOn 'ct.core', 'ct.cmpn'
+  dependsOn 'tck.core', 'tck.cmpn'
 }

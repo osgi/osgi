@@ -109,12 +109,12 @@ public abstract class RestTestUtils extends OSGiTestCase {
 	protected void setUp() throws Exception {
     super.setUp();
 
-    baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
-    debugOn = getBooleanProperty("rest.ct.debug", true);
-    notAcceptableCheck = getBooleanProperty("rest.ct.not_acceptable.check", false);
-    validateXMLRepresentations = getBooleanProperty("rest.ct.validate.xmls", false);
+    baseURI = getProperty("rest.tck.base.uri", "http://localhost:8888/");
+    debugOn = getBooleanProperty("rest.tck.debug", true);
+    notAcceptableCheck = getBooleanProperty("rest.tck.not_acceptable.check", false);
+    validateXMLRepresentations = getBooleanProperty("rest.tck.validate.xmls", false);
 
-    String mediaType = getProperty("rest.ct.non.supported.media.type");
+    String mediaType = getProperty("rest.tck.non.supported.media.type");
     if (mediaType != null) {
       NON_SUPPORTED_MEDIA_TYPE = mediaType;
     }
@@ -275,7 +275,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   protected void debug(String message, Throwable cause) {
     if (debugOn) {
       if (message != null) {
-        System.out.println("[REST CT] " + message);
+        System.out.println("[REST TCK] " + message);
       }
 
       if (cause != null) {

@@ -73,7 +73,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
 	@Override
 	public String getShortDescription() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
 	@Override
 	public boolean isPartOfAScene() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	@Override

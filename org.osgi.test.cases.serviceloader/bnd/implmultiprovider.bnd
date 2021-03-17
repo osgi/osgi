@@ -8,9 +8,9 @@ Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.reg
         
 Provide-Capability:\
  osgi.serviceloader; osgi.serviceloader="${p}.spi.ColorProvider";\
-   uses:="${p}.spi"; provider="CT"; .hint="by TIBCO"; type="one"; register:="org.osgi.test.cases.serviceloader.impl.ColorProviderImpl",\
+   uses:="${p}.spi"; provider="TCK"; .hint="by TIBCO"; type="one"; register:="org.osgi.test.cases.serviceloader.impl.ColorProviderImpl",\
  osgi.serviceloader; osgi.serviceloader="${p}.spi.ColorProvider";\
-   uses:="${p}.spi"; provider="CT"; .hint="by TIBCO"; type="two"; register:="org.osgi.test.cases.serviceloader.impl.ColorProviderImpl2"
+   uses:="${p}.spi"; provider="TCK"; .hint="by TIBCO"; type="two"; register:="org.osgi.test.cases.serviceloader.impl.ColorProviderImpl2"
  
 
 -includeresource = \

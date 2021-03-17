@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * This class is loading the ZCL profile used by the CT. This file contains the
+ * This class is loading the ZCL profile used by the TCK. This file contains the
  * description of the profile, and of the clusters that belongs to it.
  * 
  * @author $id$

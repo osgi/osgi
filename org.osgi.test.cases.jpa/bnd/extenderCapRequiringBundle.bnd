@@ -5,4 +5,4 @@ Meta-Persistence: <<EMPTY>>
 -includeresource = \
     META-INF/persistence.xml = resources/capTestingEMFBundle/META-INF/persistence.xml
 
-Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.jpa)(!(vendor=osgi.ct))(version>=1.1)(!(version>=2)))"
+Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.jpa)(!(vendor=osgi.tck))(version>=1.1)(!(version>=2)))"

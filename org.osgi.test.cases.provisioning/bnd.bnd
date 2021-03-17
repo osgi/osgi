@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \

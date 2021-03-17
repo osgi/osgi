@@ -17,8 +17,8 @@
     SPDX-License-Identifier: Apache-2.0 
  -->
 
-<configuration xmlns="http://org.osgi/zigbee-ct" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://org.osgi/zigbee-ct zigbee-ct.xsd">
+<configuration xmlns="http://org.osgi/zigbee-tck" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://org.osgi/zigbee-tck zigbee-tck.xsd">
   <frame headerMaxSize="5" headerMinSize="3" />
   <host panId="0x0033" channel="16" securityLevel="0" ieeeAddress="30DE8600004000F4" discoveryTimeout="1000" invokeTimeout="3000">
     <nodeDescriptor type="2" frequencyBand="868" manufacturerCode="0x0045" maxBufferSize="36"

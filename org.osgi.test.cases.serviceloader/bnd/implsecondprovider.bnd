@@ -6,7 +6,7 @@ Bundle-Version:                          1.0.0
 
 Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.registrar)"
         
-Provide-Capability: osgi.serviceloader;provider="CT";.hint="by TIBCO";type="two";osgi.serviceloader="${p}.spi.ColorProvider"
+Provide-Capability: osgi.serviceloader;provider="TCK";.hint="by TIBCO";type="two";osgi.serviceloader="${p}.spi.ColorProvider"
 
 -includeresource = \
  {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider2}

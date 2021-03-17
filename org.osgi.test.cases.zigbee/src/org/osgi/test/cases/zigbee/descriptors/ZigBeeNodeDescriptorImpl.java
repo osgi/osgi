@@ -25,7 +25,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
 
 /**
  * Mocked implementation of a ZigBeeNodeDescriptor. Only the fields that are
- * actually tested by the CT are returning a meaningful value.
+ * actually tested by the TCK are returning a meaningful value.
  * 
  * @author $Id$
  */
@@ -60,23 +60,23 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	}
 
 	public int getMaxIncomingTransferSize() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public int getMaxOutgoingTransferSize() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public ZigBeeServerMask getServerMask() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isExtendedActiveEndpointListAvailable() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isExtendedSimpleDescriptorListAvailable() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isComplexDescriptorAvailable() {
@@ -92,6 +92,6 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	}
 
 	public ZigBeeMacCapabiliyFlags getMacCapabilityFlags() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 }

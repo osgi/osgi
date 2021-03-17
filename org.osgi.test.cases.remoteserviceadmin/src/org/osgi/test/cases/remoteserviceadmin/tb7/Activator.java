@@ -210,7 +210,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			}
 		}
 
-		String timeout = context.getProperty("rsa.ct.timeout");
+		String timeout = context.getProperty("rsa.tck.timeout");
 
 		try {
 			assertTrue("no interested EndpointEventListener found",

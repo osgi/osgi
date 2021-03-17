@@ -158,7 +158,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
 
 		// Removed this check, because there can be extended namespaces as well.
-		// These CT's only handles namespaces described in Residential spec. but should not fail 
+		// These TCK's only handles namespaces described in Residential spec. but should not fail 
 		// on addional namespaces (see BUG 2402)
 //		// check that only allowed namespaces are used as children of the Wires node
 //		for (String bundleKey : bundleKeys) {

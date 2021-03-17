@@ -34,21 +34,21 @@ public class TestStepLauncher {
 	private static TestStepLauncher	instance;
 
 	/**
-	 * The CT asks to the user to pair with the RI all the devices that have
+	 * The TCK asks to the user to pair with the RI all the devices that have
 	 * been described in the configuration file (see configFilename constant)
 	 */
 	static public final String		ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
 
 	/**
-	 * The CT asks to the user to add the device that is described in the
+	 * The TCK asks to the user to add the device that is described in the
 	 * configuration file that contains at least one reportable attribute. Once
-	 * the user presses Enter, the CT tries to register a
+	 * the user presses Enter, the TCK tries to register a
 	 * {@link ZCLEventListener} and check if the RI is sending the attribute
 	 * reporting events accordingly.
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String		configFilename			= System.getProperty("org.osgi.test.cases.zigbee.template", "zigbee-ct-template.xml");
+	private static final String		configFilename			= System.getProperty("org.osgi.test.cases.zigbee.template", "zigbee-tck-template.xml");
 
 	private ConfigurationFileReader	confReader;
 	private static TestStepProxy	tproxy;
@@ -63,7 +63,7 @@ public class TestStepLauncher {
 
 		/*
 		 * Loads the configuration file from the filesystem. This file is
-		 * located in the CT project but it is not a bnd resource and so it is
+		 * located in the TCK project but it is not a bnd resource and so it is
 		 * not stored in the bundle but in the filesystem.
 		 */
 		InputStream is = new FileInputStream(configFilename);

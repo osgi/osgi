@@ -145,7 +145,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath009_2() throws Exception {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
-        options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi CT test wmtw4");
+		options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi TCK test wmtw4");
         try {
             this.b = super.installWar(options, "wmtw4.war", true);
             fail("install bundle should fail");
@@ -179,7 +179,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     public void testWebContextPath010_2() throws Exception {
         // wmtw5.war is not a wab since it doesn't have Import-Package
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
-        options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi CT test wmtw5");
+		options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi TCK test wmtw5");
         try {
             this.b = super.installWar(options, "wmtw5.war", false);
             fail("install bundle should fail");
@@ -196,7 +196,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     public void testWebContextPath010_3() throws Exception {
         // wmtw5.war is not a wab since it doesn't have Import-Package
         final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi CT test wmtw5");
+		options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi TCK test wmtw5");
         try {
             this.b = super.installWar(options, "wmtw5.war", false);
             fail("install should fail because Web-contextPath url param is not specified");

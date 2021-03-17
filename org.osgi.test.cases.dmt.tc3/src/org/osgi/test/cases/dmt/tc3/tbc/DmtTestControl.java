@@ -389,7 +389,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 // steffen.druesedow@telekom.de:  
-//	Tests of individual Management Objects are out of scope here. This will be done in the RFC149 CT's.
+//	Tests of individual Management Objects are out of scope here. This will be done in the RFC149 TCK's.
 //
 //	// TreeStructure test cases
 //	public void testTreeStructureLog() {

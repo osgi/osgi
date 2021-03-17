@@ -87,7 +87,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = getLongProperty("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.tck.timeout", 300000L);
 	}
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()

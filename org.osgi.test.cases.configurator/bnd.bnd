@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/osgi.ct.promise.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/osgi.tck.promise.bnd, ${build}/cmpn.bnd
 
 Bundle-Description                  : A test case for the event generic mechanism implementation.
 
@@ -38,4 +38,4 @@ Import-Package: *
 
 -runproperties = ${runproperties},\
     ${p}.storageroot=${target-dir}/${p}.testStorageRoot,\
-    ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest}}"

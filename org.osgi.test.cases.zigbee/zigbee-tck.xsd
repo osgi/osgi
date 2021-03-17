@@ -1,4 +1,4 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://org.osgi/zigbee-ct"
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://org.osgi/zigbee-tck"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 
@@ -91,7 +91,7 @@
       <xs:documentation>
         This element represents a ZigBee Endpoint Simple Descriptor. It does not define all the attributes actually
         specified by the ZigBee Specification, but only those that will be actually checked by the
-        CT.
+        TCK.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -110,7 +110,7 @@
   <xs:element name="cluster">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:command" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:command" xmlns:zb="http://org.osgi/zigbee-tck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -124,8 +124,8 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:simpleDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
-        <xs:element ref="zb:clusters" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:simpleDescriptor" xmlns:zb="http://org.osgi/zigbee-tck" />
+        <xs:element ref="zb:clusters" xmlns:zb="http://org.osgi/zigbee-tck" />
       </xs:sequence>
       <xs:attribute type="EndpointID" name="id" />
       <xs:attribute type="xs:unsignedInt" name="inputClustersNumber" use="required" />
@@ -140,12 +140,12 @@
         The total number of this
         active endpoints must be assigned to the 'activeEndpointsNumber' attribute.
         On the other hand the list itself must not be
-        exhaustive, because the CT will only try to check only the first one.
+        exhaustive, because the TCK will only try to check only the first one.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:endpoint" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="unbounded" />
+        <xs:element ref="zb:endpoint" xmlns:zb="http://org.osgi/zigbee-tck" minOccurs="1" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -178,7 +178,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct">
+        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-tck">
           <xs:annotation>
             <xs:documentation>All the discovery tests will be done on this node. Please ensure that the simpleDescriptor tag is
               fully filled (the server and client clusters number must be filled accordingly). At least one attribute must be read
@@ -186,8 +186,8 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element ref="zb:powerDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
-        <xs:element ref="zb:endpoints" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:powerDescriptor" xmlns:zb="http://org.osgi/zigbee-tck" />
+        <xs:element ref="zb:endpoints" xmlns:zb="http://org.osgi/zigbee-tck" />
       </xs:sequence>
       <xs:attribute type="IEEEAddress" name="ieeeAddress" use="required" />
       <xs:attribute type="IEEEAddress" name="hostIeeeAddress" use="required" />
@@ -199,7 +199,7 @@
   <xs:element name="host">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-tck" />
       </xs:sequence>
       <xs:attribute type="UnsignedInt16HexDec" name="panId" use="required" />
       <xs:attribute type="xs:unsignedShort" name="channel" use="required" />
@@ -213,7 +213,7 @@
   <xs:element name="nodes">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:node" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="unbounded" />
+        <xs:element ref="zb:node" xmlns:zb="http://org.osgi/zigbee-tck" minOccurs="1" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -231,7 +231,7 @@
     <xs:annotation>
       <xs:documentation>
         This configuration file describes the ZigBee device that the tester is going
-        to use to run the CT against a
+        to use to run the TCK against a
         RI. It must be filled properly, according to the ZigBee
         devices that will be actually used for the compliant tests. This
         template version is useful
@@ -243,9 +243,9 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="zb:frame" xmlns:zb="http://org.osgi/zigbee-ct" />
-        <xs:element ref="zb:host" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
-        <xs:element ref="zb:nodes" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="zb:frame" xmlns:zb="http://org.osgi/zigbee-tck" />
+        <xs:element ref="zb:host" xmlns:zb="http://org.osgi/zigbee-tck" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="zb:nodes" xmlns:zb="http://org.osgi/zigbee-tck" minOccurs="1" maxOccurs="1" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

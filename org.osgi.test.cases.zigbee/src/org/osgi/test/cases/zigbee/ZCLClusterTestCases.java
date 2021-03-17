@@ -75,19 +75,19 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Locates an endpoint that have a at least one server cluster
 		 */
 		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
 		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
 
 		/*
-		 * Get the first cluster present in the CT configuration file.
+		 * Get the first cluster present in the TCK configuration file.
 		 */
 		ZCLCluster[] clusters = endpoint.getServerClusters();
 		assertNotNull(context + ": getServerClusters() must never return null", clusters);
 
 		if (clusters.length == 0) {
-			fail(context + " the CT configuration file states that ZigBeeEndpoint service " + printScope(expectedEndpoint) + " contains at least one server cluster");
+			fail(context + " the TCK configuration file states that ZigBeeEndpoint service " + printScope(expectedEndpoint) + " contains at least one server cluster");
 		}
 
 		ZCLCluster cluster = clusters[0];
@@ -129,14 +129,14 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		assertPromiseFailure(p, context + ": passing a map argument that contains a mix of not and maufacturer specific attributes.", IllegalArgumentException.class);
 
 		/*
-		 * Find a CharacterString writable attribute inside the CT configuration
+		 * Find a CharacterString writable attribute inside the TCK configuration
 		 * file.
 		 */
 		AttributeCoordinates attributeCoordinates = conf.findAttribute(
 				Boolean.valueOf(true), null,
 				ZigBeeUnsignedInteger16.getInstance());
 
-		assertNotNull("unable to find in the CT file a CharacterSting writable attribute", attributeCoordinates);
+		assertNotNull("unable to find in the TCK file a CharacterSting writable attribute", attributeCoordinates);
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
@@ -155,12 +155,12 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		}
 
 		/*
-		 * Find a read only boolean attribute inside the CT configuration file.
+		 * Find a read only boolean attribute inside the TCK configuration file.
 		 */
 		attributeCoordinates = conf.findAttribute(Boolean.valueOf(false), null,
 				ZigBeeBoolean.getInstance());
 
-		assertNotNull("unable to find in the CT configuration file a Boolean read-only attribute", attributeCoordinates);
+		assertNotNull("unable to find in the TCK configuration file a Boolean read-only attribute", attributeCoordinates);
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
@@ -225,7 +225,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * <p>
 	 * To test this method and the behavior of its implementation, the test case
-	 * needs to locate in the node element of the CT configuration file one
+	 * needs to locate in the node element of the TCK configuration file one
 	 * endpoint that have a cluster that specifies an unsupported attribute
 	 * identifier (that is an 'unsupportedAttributeId' attribute in the
 	 * <cluster> element).
@@ -244,7 +244,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * to read.
 		 */
 		AttributeCoordinates attributeCoord = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
-		assertNotNull("The CT configuration file must contain at least one server cluster with an attribute of boolean data type", attributeCoord);
+		assertNotNull("The TCK configuration file must contain at least one server cluster with an attribute of boolean data type", attributeCoord);
 
 		ZigBeeEndpointConfig expectedEndpoint = attributeCoord.expectedEndpoint;
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
@@ -612,7 +612,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 				/*
 				 * locates in the returned array the presence of the server side
-				 * commandId defined in the CT configuration file.
+				 * commandId defined in the TCK configuration file.
 				 */
 
 				ZCLCommandDescription[] receivedCommandDescriptions = expectedCluster.getReceivedCommandDescriptions();
@@ -626,7 +626,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 						}
 					}
 					if (!found) {
-						fail("ZigBeeEndpoint.getCommandIds() do not contain one of the expected commandIds defined in the CT configuration file commandId=" + receivedCommandDescriptions[j].getId());
+						fail("ZigBeeEndpoint.getCommandIds() do not contain one of the expected commandIds defined in the TCK configuration file commandId=" + receivedCommandDescriptions[j].getId());
 					}
 				}
 			} else {
@@ -705,7 +705,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * <li>ZCLCluster.invoke(ZCLFrame, String PID);
 	 * </ul>
 	 * 
-	 * It does that on the CT configuration file endpoint that contains the
+	 * It does that on the TCK configuration file endpoint that contains the
 	 * command that defines the reeuestFrame and the responseFrame elements.
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
@@ -720,7 +720,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Locates an endpoint that have a at least one server cluster
 		 */
 		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
 		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
@@ -758,10 +758,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		log(TAG, "test " + context + ": issuing a command and check the response, received on endpoint " + printScope(expectedEndpoint));
 
 		CommandCoordinates commandCoordinates = conf.findCommand(true);
-		assertNotNull(context + " unable to find in the CT configuration file a cluster with a server command defined.", commandCoordinates);
+		assertNotNull(context + " unable to find in the TCK configuration file a cluster with a server command defined.", commandCoordinates);
 
 		expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
 		endpoint = getZigBeeEndpointService(expectedEndpoint);
 		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);

@@ -1,13 +1,13 @@
 javac.profile=compact2
 
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
 	${p}.*
 
-# These packages are needed in the CT, but we don't pull in the whole
+# These packages are needed in the TCK, but we don't pull in the whole
 # API bundle as it requires JPA, which we don't want now
 Export-Package: org.osgi.service.transaction.control, \
  org.osgi.service.transaction.control.recovery

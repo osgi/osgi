@@ -75,7 +75,7 @@ public class Activator implements BundleActivator, A {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.tck.timeout",
 				300000L);
 
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();

@@ -234,18 +234,18 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		if (requestCommand == null) {
 			throw new RuntimeException(
-					"CT configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+					"TCK configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
 		}
 
 		byte[] rawRequestFrame = ((ZCLCommandDescriptionImpl) requestCommand).getFrame();
 		if (rawRequestFrame == null) {
-			throw new RuntimeException("CT configuration error. Unable to find a raw frame for commmand id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+			throw new RuntimeException("TCK configuration error. Unable to find a raw frame for commmand id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
 
 		}
 
 		if (responseCommand == null) {
 			throw new RuntimeException(
-					"CT configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+					"TCK configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
 		}
 
 		@SuppressWarnings("unused")

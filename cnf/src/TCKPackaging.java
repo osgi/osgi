@@ -53,16 +53,16 @@ import aQute.libg.generics.Create;
  * included to make the tess self contained.
  */
 
-public class CTPackaging extends Packaging implements AnalyzerPlugin {
-	private final static String	CTPACK	= "-ctpack";
+public class TCKPackaging extends Packaging implements AnalyzerPlugin {
+	private final static String TCKPACK = "-tckpack";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
 		if (!(analyzer instanceof ProjectBuilder))
 			return false;
 
-		// Make sure -ctpack is set in the actual file or one of its includes
-		String ctpack = analyzer.getProperty(CTPACK);
-		if (ctpack == null)
+		// Make sure -tckpack is set in the actual file or one of its includes
+		String tckpack = analyzer.getProperty(TCKPACK);
+		if (tckpack == null)
 			return false;
 
 		Map<String,String> fileToPath = Create.map();
@@ -72,7 +72,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		Jar jar = analyzer.getJar();
 
 		// For each param listed ...
-		Parameters params = analyzer.parseHeader(ctpack);
+		Parameters params = analyzer.parseHeader(tckpack);
 		if (params.isEmpty()) {
 			analyzer.warning("No items to pack");
 			return false;

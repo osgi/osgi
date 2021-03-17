@@ -56,19 +56,19 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	}
 
 	public boolean isDisposableBatteryAvailable() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isRechargableBatteryAvailable() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isMainsPower() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isDisposableBattery() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isRechargableBattery() {

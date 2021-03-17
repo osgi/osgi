@@ -41,7 +41,7 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.tck.timeout",
 				300000L);
 		test();
 	}

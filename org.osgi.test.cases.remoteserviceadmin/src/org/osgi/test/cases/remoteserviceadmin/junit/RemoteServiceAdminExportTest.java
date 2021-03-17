@@ -78,7 +78,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		super.setUp();
 
-		timeout = getLongProperty("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.tck.timeout", 300000L);
 
 		// Wait for the RSA service to be registered before beginning
 		ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin> tracker = new ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin>(

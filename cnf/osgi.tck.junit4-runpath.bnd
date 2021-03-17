@@ -1,6 +1,6 @@
 # -include for testing with junit 3/4 with JUnit on classpath
 
--buildpath.osgi.ct: biz.aQute.junit;version=latest
+-buildpath.osgi.tck: biz.aQute.junit;version=latest
 
 -tester: biz.aQute.junit;version=latest
 

@@ -394,18 +394,18 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     bundle.start();
 
     xmlExtensions = getXMLObject(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
-    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"})/* name, path*/, 1);
+    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension"})/* name, path*/, 1);
 
     bundle = getTestBundle(TB6_TEST_BUNDLE_SYMBOLIC_NAME, TB6);
     bundle.start();
 
     xmlExtensions = getXMLObject(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
-    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension",
+    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension",
         "REST Extension full URI", "http://127.0.0.1/ct/rest/extension"})/* name, path, name, path*/, 2);
 
     bundle.stop();
     xmlExtensions = getXMLObject(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
-    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"}), 1);
+    assertExtensions(xmlExtensions, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension"}), 1);
 
     bundle = getTestBundle(TB5_TEST_BUNDLE_SYMBOLIC_NAME, TB5);
     bundle.stop();

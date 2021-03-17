@@ -17,9 +17,9 @@
  *******************************************************************************/
 
  
-                    Remote Service Admin Compliance Test README
+                    Remote Service Admin Technology Compatibility Kit README
  
- This README describes the compliance tests for Remote Service Admin (RSA) and documents
+ This README describes the tests for Remote Service Admin (RSA) and documents
  additional settings and procedures to follow when using the test suite against
  your own implementation of RSA.
  
@@ -38,23 +38,21 @@
   This setup requires support from the RI to run multiple times within the same JVM. The current RI
   does support this.
  
- II. Properties to be set in the bnd.bnd file to configure the CT tests:
-  - osgi.console=1111 - console port for the OSGi framework. The CT Tests configure the console
+ II. Properties to be set in the bnd.bnd file to configure the TCK tests:
+  - osgi.console=1111 - console port for the OSGi framework. The TCK Tests configure the console
                         port for the second framework that is launched to be osgi.console+1
-  - rsa.ct.timeout=300000 - in positive test cases there is no good time limit for allowing the
-                            registration of a service to happen. It can't be enforced by the CT.
+  - rsa.tck.timeout=300000 - in positive test cases there is no good time limit for allowing the
+                            registration of a service to happen. It can't be enforced by the TCK.
                             However, in order to make the tests useful in an automated build, this
-                            timeout can be set (in milliseconds) for the CT tests to wait for
+                            timeout can be set (in milliseconds) for the TCK tests to wait for
                             completion of the operation.
-  - rsa.ct.timeout.factor=3 - this factor is applied to the rsa.ct.timeout timeout value for negative
+  - rsa.tck.timeout.factor=3 - this factor is applied to the rsa.tck.timeout timeout value for negative
                               tests, in which a condition is tested that must NOT happen. This can
-                              not really be enforced by the CT, so a reasonable factor is given to
+                              not really be enforced by the TCK, so a reasonable factor is given to
                               allow for automated tests to complete in a reasonable time.
   - ${p}.bundles="" - list of bundles that need to be installed in the child framework. This list
                       is specific to the RI.
-  - ${p}.serverconfig="service.exported.configs" - RI specific properties that can be read by the CT tests.
+  - ${p}.serverconfig="service.exported.configs" - RI specific properties that can be read by the TCK tests.
   - service.exported.configs="" - list of supported configuration types of the RI. This list is RI specific.
                                   This list is required for cases where the supported list cannot be obtained
                                   programmatically, e.g. in Remote Services (chapter 13)
-                                  
-                                  

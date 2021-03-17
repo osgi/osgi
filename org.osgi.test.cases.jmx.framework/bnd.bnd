@@ -1,6 +1,6 @@
 javac.profile=compact3
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 -noee = true
 
 -conditionalpackage                 = org.osgi.test.support.*
@@ -33,7 +33,7 @@ Import-Package: ${-signaturetest}, *
 
 -runproperties = ${runproperties}, \
     ${p}.system.packages.extra="", \
-    ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
 #   osgi.console=1111
 
 -fixupmessages.host: "Host * for this fragment"

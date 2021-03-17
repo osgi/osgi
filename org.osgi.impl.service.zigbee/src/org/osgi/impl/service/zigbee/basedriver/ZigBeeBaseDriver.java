@@ -86,13 +86,13 @@ public class ZigBeeBaseDriver {
 	/**
 	 * Loads the configuration file. This file contains information about
 	 * 'simulated' devices. The file contains information that have to be filled
-	 * by whom is running the CT against its own implementation of this
+	 * by whom is running the TCK against its own implementation of this
 	 * specification. These information must be aligned with the ZigBee
 	 * characteristics of the real ZigBee devices used to test a real
 	 * implementation.
 	 * 
 	 * <p>
-	 * The root directory of the CT project contains a template of this file
+	 * The root directory of the TCK project contains a template of this file
 	 * that is also passed to this method.
 	 * 
 	 * @param is The InputStream where to read the configuration file.

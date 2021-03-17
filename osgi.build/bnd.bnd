@@ -2,4 +2,4 @@
 
 -nobundles = true
 
--dependson = osgi.companion, osgi.ri, osgi.ct
+-dependson = osgi.companion, osgi.ri, osgi.tck

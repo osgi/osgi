@@ -1,0 +1,7 @@
+-include: ${build}/core.bnd
+
+Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Technology Compatibility Kit
+
+-resourceonly: true
+
+-tckpack: ${build.core.tests},${jar.core.tests}

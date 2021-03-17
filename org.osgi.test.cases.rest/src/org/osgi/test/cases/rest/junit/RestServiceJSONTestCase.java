@@ -476,18 +476,18 @@ public class RestServiceJSONTestCase extends RestTestUtils {
     bundle.start();
 
     result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
-    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"})/* name, path*/, 1);
+    assertExtensions(result, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension"})/* name, path*/, 1);
 
     bundle = getTestBundle(TB6_TEST_BUNDLE_SYMBOLIC_NAME, TB6);
     bundle.start();
 
     result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
-    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension",
+    assertExtensions(result, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension",
             "REST Extension full URI", "http://127.0.0.1/ct/rest/extension"})/* name, path, name, path*/, 2);
 
     bundle.stop();
     result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
-    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"}), 1);
+    assertExtensions(result, Arrays.asList(new String[]{"REST TCK Extension", "contributions/extension"}), 1);
 
     Object notSupportedResult = getNonSupportedMediaTypeObject(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON,
       HttpURLConnection.HTTP_NOT_ACCEPTABLE);

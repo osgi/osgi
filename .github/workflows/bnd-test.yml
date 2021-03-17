@@ -55,11 +55,11 @@ jobs:
     - name: Run TCK
       id: tck
       run: |
-        ./.github/scripts/tck.sh ct.core
+        ./.github/scripts/tck.sh tck.core
     - name: Upload TCK Test Reports on failure
       if: ${{ always() && (steps.tck.outcome == 'failure') }}
       uses: actions/upload-artifact@v2
       with:
         name: TCK-core-reports
         path: |
-          osgi.ct/generated/osgi.ct.core/reports/
+          osgi.tck/generated/osgi.tck.core/reports/

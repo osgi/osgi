@@ -68,7 +68,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public String getShortDescription() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public boolean isMandatory() {
@@ -80,7 +80,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isPartOfAScene() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		throw new UnsupportedOperationException("this field is not checked by the TCK.");
 	}
 
 	public String toString() {

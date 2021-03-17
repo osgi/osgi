@@ -79,7 +79,7 @@ public class ServiceLoaderSecureTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals("only one implementation should have been registered", 1, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 
 			Bundle client = install("clientosgi.jar");
@@ -210,7 +210,7 @@ public class ServiceLoaderSecureTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals("only one implementation should have been registered", 1, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 
 			Bundle client = install("clientosgi_noperm.jar");
@@ -278,7 +278,7 @@ public class ServiceLoaderSecureTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals("only one implementation should have been registered", 1, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 
 			Bundle client = install("client.jar");
@@ -347,7 +347,7 @@ public class ServiceLoaderSecureTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals("only one implementation should have been registered", 1, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 
 			Bundle client = install("client_noperm.jar");
