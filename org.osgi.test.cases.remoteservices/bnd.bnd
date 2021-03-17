@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
 Bundle-Description					: Remote Services test cases.
 
@@ -29,12 +29,12 @@ Export-Package 					= ${p}.common;version=1.0.0
 -runvm = -Xmx512m
 
 -runproperties = ${runproperties}, \
-	rsa.ct.timeout=30000,\
-	rsa.ct.timeout.factor=3,\
+	rsa.tck.timeout=30000,\
+	rsa.tck.timeout.factor=3,\
 	configurator.initial='{":configurator:resource-version": 1, ":configurator:version":"1", ":configurator:symbolic-name":"dummy", "org.apache.aries.rsa.discovery.zookeeper" : {}, "org.apache.aries.rsa.discovery.zookeeper.server" : {}}',\
 	server.configurator.initial='{":configurator:resource-version": 1, ":configurator:version":"1", ":configurator:symbolic-name":"dummy", "org.apache.aries.rsa.discovery.zookeeper" : {}}',\
 	${p}.framework.properties="",\
 	${p}.system.packages.extra="", \
     ${p}.serverconfig="service.exported.configs", \
     service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo.osgi.ct.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.util.function;latest},${repo;org.osgi.util.promise;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.util.function;latest},${repo;org.osgi.util.promise;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"

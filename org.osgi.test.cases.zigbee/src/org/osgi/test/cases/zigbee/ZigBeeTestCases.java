@@ -101,7 +101,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		conf = launcher.getConfiguration();
 
 		/*
-		 * Initialize timeout constants relevant for the CT with the values read
+		 * Initialize timeout constants relevant for the TCK with the values read
 		 * from the ZigBee configuration file.
 		 */
 		INVOKE_TIMEOUT = conf.getInvokeTimeout();
@@ -265,7 +265,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 			return getContext().getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
-			fail("CT internal error", e);
+			fail("TCK internal error", e);
 		}
 
 		fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
@@ -297,7 +297,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 			return getContext().getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
-			fail("CT internal error", e);
+			fail("TCK internal error", e);
 		}
 
 		fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
@@ -372,7 +372,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		try {
 			value = p.getValue();
 		} catch (InvocationTargetException e) {
-			fail("internal CT error. The promise must never fail here.");
+			fail("internal TCK error. The promise must never fail here.");
 		}
 
 		if (value != null && !clazz.isInstance(value)) {
@@ -463,7 +463,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 			Map<String, ? > properties, String parameterName, boolean required,
 			Class<V> want) {
 		if (properties == null) {
-			throw new NullPointerException("CT internal errror, passing null 'properties' argument");
+			throw new NullPointerException("TCK internal errror, passing null 'properties' argument");
 		}
 
 		Object value = properties.get(parameterName);

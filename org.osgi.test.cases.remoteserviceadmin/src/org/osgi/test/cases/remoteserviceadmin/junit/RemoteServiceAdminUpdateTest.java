@@ -59,7 +59,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 			configuration.put("osgi.console", "" + console + 1);
 		}
 
-		m_timeout = getLongProperty("rsa.ct.timeout", 300000L);
+		m_timeout = getLongProperty("rsa.tck.timeout", 300000L);
 
 		return configuration;
 	}

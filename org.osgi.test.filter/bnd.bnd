@@ -4,7 +4,7 @@
 Bundle-Activator: 		${p}.Activator
 -privatepackage: 		${p}.*
 
-Bundle-Description: 	OSGi Test Filter. Filters out services that are not meant to be used by the CT.
+Bundle-Description: 	OSGi Test Filter. Filters out services that are not meant to be used by the TCK.
 
 -buildpath = \
 	osgi.core;maven-scope=provided;version=4.3.1

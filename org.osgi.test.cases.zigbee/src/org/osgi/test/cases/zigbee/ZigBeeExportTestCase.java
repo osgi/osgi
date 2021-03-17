@@ -42,7 +42,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	 * {@code ZigBeeEndpoint.notExported()} method. The exported ZigBeeEndpoint
 	 * cannot rely on a call to this method from the ZigBee implementation to
 	 * state that it has been actually exported or not, but we expect it to be
-	 * called within a short time (in the CT the amount in milliseconds is the
+	 * called within a short time (in the TCK the amount in milliseconds is the
 	 * discovery timeout configuration property), if all the following
 	 * conditions are met:
 	 * <ul>

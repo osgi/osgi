@@ -1,4 +1,4 @@
-Service Loader Mediator (V 1.0.0) CT Security Test Plan:
+Service Loader Mediator (V 1.0.0) TCK Security Test Plan:
 
 Setup:
  * Full permissions on the mediator bundle 

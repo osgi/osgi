@@ -137,7 +137,7 @@ public class ConfigurationFileReader {
 	/**
 	 * Return the minimum ZCL Header Size, that is the ZCL Header size when the
 	 * ZCLFrame is not manufacturer specific. This information is avaiable in
-	 * the ZCL specification and must be written in the CT configuration file.
+	 * the ZCL specification and must be written in the TCK configuration file.
 	 * 
 	 * @return the requested information.
 	 */
@@ -149,7 +149,7 @@ public class ConfigurationFileReader {
 	/**
 	 * Return the maximum ZCL Header Size, that is the ZCL Header size when the
 	 * ZCLFrame is manufacturer specific. This information is avaiable in the
-	 * ZCL specification and must be written in the CT configuration file.
+	 * ZCL specification and must be written in the TCK configuration file.
 	 * 
 	 * @return the requested information.
 	 */
@@ -228,7 +228,7 @@ public class ConfigurationFileReader {
 			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, nodeDescriptor, powerDescriptor, "");
 		}
 
-		throw new Exception("host element not found in the zigbee-ct configuration xml file");
+		throw new Exception("host element not found in the zigbee-tck configuration xml file");
 	}
 
 	/**
@@ -454,6 +454,6 @@ public class ConfigurationFileReader {
 	}
 
 	private void parserError(String message) throws Exception {
-		throw new Exception("CT parser: " + message);
+		throw new Exception("TCK parser: " + message);
 	}
 }

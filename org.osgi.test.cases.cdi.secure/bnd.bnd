@@ -1,7 +1,7 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
-Bundle-Description: Secure CT for the OSGi/CDI integration
+Bundle-Description: Secure TCK for the OSGi/CDI integration
 -conditionalpackage: org.osgi.test.support.*
 
 -privatepackage: ${p}.junit.*

@@ -155,7 +155,7 @@ public class Activator implements BundleActivator, A, B {
 
 		tracker.open();
 		
-		String timeout = context.getProperty("rsa.ct.timeout");
+		String timeout = context.getProperty("rsa.tck.timeout");
 		
 		assertTrue("no interested EndpointListener found", semaphore
 				.tryAcquire(Long.parseLong(timeout != null ? timeout

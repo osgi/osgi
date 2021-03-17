@@ -73,7 +73,7 @@ jobs:
         name: OSGi-TCK
         path: |
           osgi.ri/generated/*.jar
-          osgi.ct/generated/*.jar
+          osgi.tck/generated/*.jar
     - name: Release
       id: release
       if: ${{ env.canonical == 'true' }}
@@ -153,11 +153,11 @@ jobs:
     - name: Run TCK
       id: tck
       run: |
-        ./.github/scripts/tck.sh ct.${{ matrix.tck }}
+        ./.github/scripts/tck.sh tck.${{ matrix.tck }}
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
       uses: actions/upload-artifact@v2
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |
-          osgi.ct/generated/osgi.ct.${{ matrix.tck }}/reports/
+          osgi.tck/generated/osgi.tck.${{ matrix.tck }}/reports/

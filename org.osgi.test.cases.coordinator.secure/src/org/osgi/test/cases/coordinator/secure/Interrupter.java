@@ -18,7 +18,7 @@
 package org.osgi.test.cases.coordinator.secure;
 
 /**
- * Used to prevent the CT from becoming blocked due to unexpected behavior from
+ * Used to prevent the TCK from becoming blocked due to unexpected behavior from
  * an implementation.
  */
 public class Interrupter extends Thread {

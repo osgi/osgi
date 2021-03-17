@@ -1,11 +1,11 @@
 # -include for testing with junit-platform
 
--runbundles.osgi.ct: osgi.ct.junit-platform;version=latest
+-runbundles.osgi.tck: osgi.tck.junit-platform;version=latest
 
--buildpath.osgi.ct: osgi.ct.junit-platform;version=latest,\
+-buildpath.osgi.tck: osgi.tck.junit-platform;version=latest,\
  org.apiguardian:apiguardian-api;version=latest
 
-repo.osgi.ct: ${repo;osgi.ct.junit-platform;latest}
+repo.osgi.tck: ${repo;osgi.tck.junit-platform;latest}
 
 -tester: biz.aQute.tester.junit-platform;version=latest
 

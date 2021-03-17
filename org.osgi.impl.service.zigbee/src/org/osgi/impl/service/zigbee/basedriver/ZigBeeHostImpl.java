@@ -317,11 +317,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	@Override
 	public void createGroupService(int groupAddress) throws Exception {
-		new UnsupportedOperationException("This method is not implemented because cannot be tested by the CT.");
+		new UnsupportedOperationException("This method is not implemented because cannot be tested by the TCK.");
 	}
 
 	public void removeGroupService(int groupAddress) throws Exception {
-		new UnsupportedOperationException("This method is not implemented because cannot be tested by the CT.");
+		new UnsupportedOperationException("This method is not implemented because cannot be tested by the TCK.");
 	}
 
 	@Override
@@ -334,7 +334,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		 * Operation Exception and ending it
 		 */
 
-		stream.handleResponse(new ZCLCommandResponseImpl(Promises.failed(new UnsupportedOperationException("This method is not implemented because cannot be tested by the CT."))));
+		stream.handleResponse(new ZCLCommandResponseImpl(Promises.failed(new UnsupportedOperationException("This method is not implemented because cannot be tested by the TCK."))));
 		stream.handleResponse(new EndResponse());
 		return stream;
 	}
@@ -502,7 +502,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 							ZigBeeEndpoint service) {
 						/*
 						 * It should check if the service, since the service
-						 * properties are changed can now be exported. In our CT
+						 * properties are changed can now be exported. In our TCK
 						 * we do not issue this check (modify the service
 						 * properties) so we do not have to implement this
 						 * method.

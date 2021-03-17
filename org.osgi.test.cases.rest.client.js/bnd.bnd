@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
 Bundle-Description = Rest JavaScript Client Service test cases.
 
@@ -34,10 +34,10 @@ Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;
 
 -runproperties = ${runproperties}, \
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
-    rest.ct.debug=false
-#  rest.ct.not_acceptable.check=false,\
-#  rest.ct.validate.xmls=false,\
-#  rest.ct.base.uri="http://localhost:8888,\
-#  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+    rest.tck.debug=false
+#  rest.tck.not_acceptable.check=false,\
+#  rest.tck.validate.xmls=false,\
+#  rest.tck.base.uri="http://localhost:8888,\
+#  rest.tck.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
 
 -fixupmessages.extends: While traversing the type tree while searching EXTENDS

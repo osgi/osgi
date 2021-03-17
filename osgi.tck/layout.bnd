@@ -6,7 +6,7 @@ osgi.cmpn.projects: ${sort;${filter;${projectswhere;packaging;*cmpn*};org\\.osgi
 jar.core.tests: \
     ${repo;org.apache.servicemix.bundles.bcel;latest},\
     ${repo;org.osgi.impl.service.cm;latest},\
-    ${repo;osgi.ct.junit-platform;latest}
+    ${repo;osgi.tck.junit-platform;latest}
 
 build.core.tests: ${osgi.core.projects}
 
@@ -14,7 +14,7 @@ jar.cmpn.tests: \
     ${repo;org.osgi.impl.service.jdbc.support;latest},\
     ${repo;org.osgi.impl.service.rest.support;latest},\
     ${repo;org.osgi.test.filter;latest},\
-    ${repo;osgi.ct.junit-platform;latest},\
-    ${repo;osgi.ct.promise;latest}
+    ${repo;osgi.tck.junit-platform;latest},\
+    ${repo;osgi.tck.promise;latest}
 
 build.cmpn.tests: ${osgi.cmpn.projects}

@@ -31,7 +31,7 @@ import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
 
 /**
- * Service Hooks to exclude services from use by the CT.
+ * Service Hooks to exclude services from use by the TCK.
  */
 class ServiceHooks implements FindHook, EventListenerHook {
 	private final Filter	serviceExcludeFilter;

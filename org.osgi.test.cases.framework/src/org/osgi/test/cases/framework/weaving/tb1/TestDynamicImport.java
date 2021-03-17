@@ -19,7 +19,7 @@ package org.osgi.test.cases.framework.weaving.tb1;
 
 /**
  * This class is used as a basic weavable entity that
- * adds a new package dependency. The CT changes the 
+ * adds a new package dependency. The TCK changes the 
  * value of the constant passed to {@link #doDynamicImport(String)}
  * to be the name of a class which is then dynamically loaded.
  * 

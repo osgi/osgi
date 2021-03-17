@@ -10,5 +10,5 @@ Export-Package:  				org.osgi.test.support.*
     osgi.core;maven-scope=provided;version=4.3.1, \
     osgi.cmpn; version=4.3.1, \
     org.osgi.util.converter; version=latest,\
-    osgi.ct.junit-platform;version=latest,\
+    osgi.tck.junit-platform;version=latest,\
     org.apiguardian:apiguardian-api;version=latest

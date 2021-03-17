@@ -184,8 +184,8 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals(2, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
-			assertEquals("public property must be registered with the service", "CT", refs[1].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[1].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 			assertNull("private properties must not be registered with the service", refs[1].getProperty(".hint"));
 			
@@ -202,8 +202,8 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			assertNotNull("no services registered", refs);
 			assertEquals(2, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
-			assertEquals("public property must be registered with the service", "CT", refs[1].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[1].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 			assertNull("private properties must not be registered with the service", refs[1].getProperty(".hint"));
 
@@ -249,7 +249,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			assertNotNull(refs);
 			assertEquals("only one implementation should have been registered", 1, refs.length);
 			assertEquals("expecting serviceloader.mediator property to contain id of mediator bundle", mediatorBundle.getBundleId(), refs[0].getProperty("serviceloader.mediator"));
-			assertEquals("public property must be registered with the service", "CT", refs[0].getProperty("provider"));
+			assertEquals("public property must be registered with the service", "TCK", refs[0].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 
 			implBundle.stop();

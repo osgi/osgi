@@ -74,7 +74,7 @@ public class Activator implements BundleActivator, A, B {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.tck.timeout",
 				300000L);
 		rsaTracker = new ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin>(context, RemoteServiceAdmin.class,
 				null);

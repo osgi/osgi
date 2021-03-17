@@ -38,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  *
- * This is the base class for the TR069Connector Service CT's.
+ * This is the base class for the TR069Connector Service TCK's.
  *
  * It defines a number of variables and implements a default behavior of the
  * setUp() and tearDown() methods.

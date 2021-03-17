@@ -1,2 +1,2 @@
-Provide-Capability: osgi.extender;osgi.extender=osgi.jpa;version:Version=1.1;vendor=osgi.ct
+Provide-Capability: osgi.extender;osgi.extender=osgi.jpa;version:Version=1.1;vendor=osgi.tck
 -fixupmessages.empty: The JAR is empty

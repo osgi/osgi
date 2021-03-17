@@ -95,7 +95,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.bctx = context;
-		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.tck.timeout",
 				300000L);
 
 		Hashtable<String, String> dictionary = createBasicServiceProperties();

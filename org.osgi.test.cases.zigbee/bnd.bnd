@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.ct.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
 
 Bundle-Description					= ZigBee Test Bundle
 
@@ -38,7 +38,7 @@ Import-Package: \
 
 -runproperties = ${runproperties}, \
     comm.rxtx.disable=true, \
-	org.osgi.test.cases.zigbee.template=${.}/zigbee-ct-template.xml, \
+	org.osgi.test.cases.zigbee.template=${.}/zigbee-tck-template.xml, \
 	org.osgi.impl.service.zigbee.zcl=${.}/zcl.xml, \
 	org.osgi.service.zigbee.host.path=:testcase:, \
 	org.osgi.service.zigbee.loglevel.debug=true, \

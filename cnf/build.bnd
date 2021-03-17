@@ -34,9 +34,9 @@ workspacepluginpath     = ${build}/${bin}
     Packaging; \
         path:="${workspacepluginpath}"; \
         command:=-pack, \
-    CTPackaging; \
+    TCKPackaging; \
         path:="${workspacepluginpath}"; \
-        command:=-ctpack, \
+        command:=-tckpack, \
     SignatureTest; \
         path:="${workspacepluginpath}"; \
         command:="-signaturetest"
@@ -47,9 +47,9 @@ workspacepluginpath     = ${build}/${bin}
 -workingset = \
   Build;member=${filter;${p};cnf|licensed|osgi\\..*}, \
   Companion;member=${filterout;${p};cnf|licensed|osgi\\..*|org\\.osgi\\.(impl|test)\\..*}, \
-  ReferenceImplementation;member=${filter;${p};org\\.osgi\\.impl\\..*}, \
-  ComplianceTests;member=${filter;${p};org\\.osgi\\.test\\..*}
-  
+  Implementations;member=${filter;${p};org\\.osgi\\.impl\\..*}, \
+  TCKs;member=${filter;${p};org\\.osgi\\.test\\..*}
+
 # Time options
 # base.modified is used by bnd to not make when files are not changed
 base.modified			= ${fmodified;${build}/build.bnd,${project}/bnd.bnd,${project}/build.gradle}

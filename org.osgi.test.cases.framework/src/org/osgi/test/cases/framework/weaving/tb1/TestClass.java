@@ -19,7 +19,7 @@ package org.osgi.test.cases.framework.weaving.tb1;
 
 /**
  * This class is used as a basic weavable entity. The
- * CT changes the value of the constant returned by
+ * TCK changes the value of the constant returned by
  * {@link #toString()}.
  * 
  * @author IBM

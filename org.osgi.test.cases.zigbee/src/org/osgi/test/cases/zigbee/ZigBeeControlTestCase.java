@@ -79,7 +79,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 	/**
 	 * Tests any registered ZigBeeNode service. For those services that are also
-	 * defined in the CT configuration file more deeper checks are issued.
+	 * defined in the TCK configuration file more deeper checks are issued.
 	 * 
 	 * @throws Exception
 	 */
@@ -209,7 +209,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 	/**
 	 * Gets the ZigBeeHost service that corresponds to the one that is defined
-	 * in the CT configuration file.
+	 * in the TCK configuration file.
 	 * 
 	 * @return A ZigBeeHost service instance.
 	 */
@@ -350,7 +350,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	 * possible to do with the provided information. In particular:
 	 * <ul>
 	 * <li>If the hostConfig (that is the node ZigBeeHostConfig object created
-	 * by reading the CT configuration file, its content is compared with the
+	 * by reading the TCK configuration file, its content is compared with the
 	 * ZigBee host values returned by the ZigBeeHost interface methods.
 	 * <li>Compares the ZigBeeHost service properties with the information
 	 * retrieved by the ZigBeeHost interface methods.
@@ -564,7 +564,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		BigInteger ieeeAddress = host.getIEEEAddress();
 
 		assertNotNull(context + ": cannot return null", ieeeAddress);
-		assertEquals(context + ": returned IEEEAddress differs from the CT configuration one", ieeeAddress, hostConfig.getIEEEAddress());
+		assertEquals(context + ": returned IEEEAddress differs from the TCK configuration one", ieeeAddress, hostConfig.getIEEEAddress());
 
 		context = name + ".getExtendedPanId()";
 		log(TAG, "testing " + context);
@@ -655,7 +655,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	 * possible to do with the provided information. In particular:
 	 * <ul>
 	 * <li>If the nodeConfig (that is the node ZigBeeNodeConfig object created
-	 * by reading the CT configuration file, its content is compared with the
+	 * by reading the TCK configuration file, its content is compared with the
 	 * ZigBee node values returned by the ZigBeeNode interface methods.
 	 * <li>Compares the ZigBeeNode service properties with the information
 	 * retrieved by the ZigBeeNode interface methods.
@@ -907,7 +907,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		BigInteger ieeeAddress = node.getIEEEAddress();
 
 		assertNotNull(context + ": cannot return null", ieeeAddress);
-		assertEquals(context + ": returned IEEEAddress differs from the CT configuration one", ieeeAddress, nodeConfig.getIEEEAddress());
+		assertEquals(context + ": returned IEEEAddress differs from the TCK configuration one", ieeeAddress, nodeConfig.getIEEEAddress());
 
 		context = name + ".getExtendedPanId()";
 		log(TAG, "testing " + context);
@@ -1059,7 +1059,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		BigInteger ieeeAddress = node.getIEEEAddress();
 
 		assertNotNull(context + ": cannot return null", ieeeAddress);
-		assertEquals(context + ": returned IEEEAddress differs from the CT configuration one", ieeeAddress, endpoint.getNodeAddress());
+		assertEquals(context + ": returned IEEEAddress differs from the TCK configuration one", ieeeAddress, endpoint.getNodeAddress());
 
 		/*
 		 * Checks the ZigBeeEndpoint service properties.
@@ -1576,7 +1576,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		/*
 		 * Checks if the number of clusters retrieved by the
 		 * ZigBeeEndpoint.get<Side>Clusters() matches the expectedClustersNumber
-		 * read from the CT configuration file.
+		 * read from the TCK configuration file.
 		 */
 
 		int expectedClustersNumber = -1;
@@ -1600,7 +1600,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			assertEquals(context + ": returned clusters array length.", expectedClusters.length, clusters.length);
 		}
 		if (expectedEndpoint != null) {
-			assertEquals(context + ": returned clusters array size differs from what it is written in the CT configuration file ", expectedClustersNumber, clusters.length);
+			assertEquals(context + ": returned clusters array size differs from what it is written in the TCK configuration file ", expectedClustersNumber, clusters.length);
 		}
 
 		/*
@@ -1625,7 +1625,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		}
 
 		/*
-		 * Checks if the clusters defined in the ZigBee CT configuration file
+		 * Checks if the clusters defined in the ZigBee TCK configuration file
 		 * are actually provided by the ZigBeeEndpoint
 		 */
 
@@ -1633,7 +1633,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			boolean containsExpectedCluster = clusterIdsSet
 					.contains(Integer.valueOf(expectedClusters[i].getId()));
 			if (!containsExpectedCluster) {
-				fail(context + " do not return the cluster ids that are defined in the CT configuration file.");
+				fail(context + " do not return the cluster ids that are defined in the TCK configuration file.");
 			}
 		}
 
@@ -1716,7 +1716,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			 * that is not supported.
 			 */
 
-			fail(context + ": CT internal error: unable to find a non existent cluster");
+			fail(context + ": TCK internal error: unable to find a non existent cluster");
 		}
 	}
 
@@ -1733,13 +1733,13 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	public void testEventing() throws InterruptedException {
 
 		/*
-		 * Find in the CT configuration file an endpoint that has a reportable
+		 * Find in the TCK configuration file an endpoint that has a reportable
 		 * attribute of data type ZigBeeBoolean
 		 */
 		AttributeCoordinates attributeCoordinates = conf.findAttribute(null,
 				Boolean.valueOf(true), null);
 
-		assertNotNull("unable to find in the CT a ZigBee reportable attribute of Boolean ZCL data type.");
+		assertNotNull("unable to find in the TCK a ZigBee reportable attribute of Boolean ZCL data type.");
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 		assertNotNull("service not found " + this.printScope(attributeCoordinates.expectedEndpoint));

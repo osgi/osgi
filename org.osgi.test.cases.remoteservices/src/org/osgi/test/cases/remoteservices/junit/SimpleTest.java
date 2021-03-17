@@ -105,7 +105,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = getLongProperty("rsa.ct.timeout", 30000L);
+		timeout = getLongProperty("rsa.tck.timeout", 30000L);
 	}
 
 	/**

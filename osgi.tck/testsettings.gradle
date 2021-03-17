@@ -17,10 +17,10 @@
  */
 
 /*
- * osgi.ct Gradle test settings script
+ * osgi.tck Gradle test settings script
  */
 
-rootProject.name = 'osgi.ct'
+rootProject.name = 'osgi.tck'
 rootProject.setBuildFileName('test.gradle')
 
 gradle.rootProject {

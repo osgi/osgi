@@ -2727,7 +2727,7 @@ public class CMControl extends DefaultTestBundleControl {
 			/*
 			 * The spec seems unclear whether the ManagedService registered by
 			 * the newly bound bundle should be called back with null or not
-			 * called back. The implementator of this CT (Ikuo) thinks CT should
+			 * called back. The implementator of this TCK (Ikuo) thinks TCK should
 			 * accept either case of (a) No callback. (b) callback with null.
 			 * Otherwise, it fails. Spec of version 1.3
 			 */
@@ -2831,7 +2831,7 @@ public class CMControl extends DefaultTestBundleControl {
 			/*
 			 * XXX Felix and Ikuo think the ManagedService registered by the
 			 * newly bound bundle should be called back with the props. However,
-			 * BJ thinks no. The implementator of this CT (Ikuo) thinks CT
+			 * BJ thinks no. The implementator of this TCK (Ikuo) thinks TCK
 			 * should not check it because it is unclear in the spec of version
 			 * 1.3.
 			 */
@@ -2868,7 +2868,7 @@ public class CMControl extends DefaultTestBundleControl {
 			/*
 			 * XXX Felix and Ikuo think the ManagedService registered by the
 			 * newly bound bundle should be called back with null. However, BJ
-			 * thinks no. The implementator of this CT (Ikuo) thinks CT should
+			 * thinks no. The implementator of this TCK (Ikuo) thinks TCK should
 			 * not check it strictly because it is unclear in the spec of
 			 * version 1.3.
 			 */
@@ -2949,7 +2949,7 @@ public class CMControl extends DefaultTestBundleControl {
 			/*
 			 * XXX Felix and Ikuo think the ManagedService registered by the
 			 * newly bound bundle should be called back with null. However, BJ
-			 * thinks no. The implementator of this CT (Ikuo) thinks CT should
+			 * thinks no. The implementator of this TCK (Ikuo) thinks TCK should
 			 * not check it strictly because it is unclear in the spec of
 			 * version 1.3.
 			 */

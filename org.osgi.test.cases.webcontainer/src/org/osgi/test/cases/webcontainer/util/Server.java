@@ -52,7 +52,7 @@ public class Server {
         return this.port;
     }
 
-    // TODO: the http CT has this method impl that we may be able to borrow
+    // TODO: the http TCK has this method impl that we may be able to borrow
     // here.
 	int guessHttpPort(BundleContext context) {
         // Try to find the HTTP port.

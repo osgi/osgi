@@ -7,7 +7,7 @@ Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.reg
         
 Provide-Capability: osgi.serviceloader; \
  uses:="${p}.spi"; \
- provider="CT"; \
+ provider="TCK"; \
  .hint="by TIBCO"; \
  osgi.serviceloader="${p}.spi.ColorProvider"; \
  register:=""

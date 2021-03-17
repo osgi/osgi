@@ -50,7 +50,7 @@ import org.osgi.test.support.OSGiTestCase;
 public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 
 	/**
-	 * Project name. Used as a namespace for CT (child) framework specific run
+	 * Project name. Used as a namespace for TCK (child) framework specific run
 	 * properties.
 	 */
 	private static final String PROJECT_NAME = "org.osgi.test.cases.remoteservices";

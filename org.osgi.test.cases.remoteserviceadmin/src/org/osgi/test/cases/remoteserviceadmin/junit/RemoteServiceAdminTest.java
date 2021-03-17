@@ -71,7 +71,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = getLongProperty("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.tck.timeout", 300000L);
 	}
 	
 	/**

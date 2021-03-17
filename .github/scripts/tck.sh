@@ -17,4 +17,4 @@
 # SPDX-License-Identifier: Apache-2.0 
 #*******************************************************************************
 
-./gradlew --no-daemon --no-parallel --continue --settings-file osgi.ct/testsettings.gradle "$@"
+./gradlew --no-daemon --no-parallel --continue --settings-file osgi.tck/testsettings.gradle "$@"

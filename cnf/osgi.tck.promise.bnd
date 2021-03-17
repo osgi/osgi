@@ -1,0 +1,8 @@
+# -include for testing promises and promise asserts
+# Must be included with osgi.tck.junit-platform.bnd
+
+-runbundles.osgi.tck.promise: osgi.tck.promise;version=latest
+
+-buildpath.osgi.tck.promise: osgi.tck.promise;version=latest
+
+repo.osgi.tck.promise: ${repo;osgi.tck.promise;latest}

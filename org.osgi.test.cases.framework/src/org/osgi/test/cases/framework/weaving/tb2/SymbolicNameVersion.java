@@ -22,7 +22,7 @@ import org.osgi.framework.FrameworkUtil;
 
 /**
  * This class is used to identify the bundle from which it
- * was loaded. This allows the CT to verify that various
+ * was loaded. This allows the TCK to verify that various
  * constrained Dynamic-Import additions are followed correctly
  * 
  * @author IBM
