@@ -101,6 +101,25 @@
     </section>
   </section>
 
+  <section>
+    <title>Implementation Requirements</title>
+
+    <para>An implementation of a Specification: (i) must fully implement the
+    Specification including all its required interfaces and functionality;
+    (ii) must not modify, subset, superset or otherwise extend the OSGi Name
+    Space, or include any public or protected packages, classes, Java
+    interfaces, fields or methods within the OSGi Name Space other than those
+    required and authorized by the Specification. An implementation that does
+    not satisfy limitations (i)-(ii) is not considered an implementation of
+    the Specification and must not be described as an implementation of the
+    Specification. "OSGi Name Space" shall mean the public class or interface
+    declarations whose names begin with "org.osgi" or any recognized
+    successors or replacements thereof. An implementation of a Specification
+    must not claim to be a compatible implementation of the Specification
+    unless it passes the Technology Compatibility Kit ("TCK") for the
+    Specification.</para>
+  </section>
+
   <section role="feedback">
     <title>Feedback</title>
 
