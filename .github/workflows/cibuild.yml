@@ -25,14 +25,10 @@ on:
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
-    - 'LICENSE'
-    - 'NOTICE'
   pull_request:
     paths-ignore:
     - 'README.md'
     - 'CONTRIBUTING.md'
-    - 'LICENSE'
-    - 'NOTICE'
 
 env:
   LC_ALL: en_US.UTF-8
