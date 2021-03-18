@@ -16,8 +16,8 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
-<preface revision="$Id$" role="frontmatter" version="5.0"
+<preface revision="$Id$"
+         role="frontmatter" version="5.0"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -25,12 +25,12 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <?dbhtml filename="index.html" ?>
+  <?dbhtml filename="LICENSE.html" ?>
 
-  <title>Eclipse Foundation Specification License – v1.0</title>
+  <title>LICENSE</title>
 
   <section>
-    <title>License</title>
+    <title>Eclipse Foundation Specification License – v1.0</title>
 
     <para>By using and/or copying this document, or the Eclipse Foundation
     document from which this statement is linked, you (the licensee) agree
@@ -76,29 +76,29 @@
     <para>"Copyright © [$date-of-document] Eclipse Foundation. This software
     or document includes material copied from or derived from [title and URI
     of the Eclipse Foundation specification document]."</para>
-  </section>
 
-  <section>
-    <title>Disclaimers</title>
+    <section>
+      <title>Disclaimers</title>
 
-    <para>THIS DOCUMENT IS PROVIDED "AS IS," AND THE COPYRIGHT HOLDERS AND THE
-    ECLIPSE FOUNDATION MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
-    IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE
-    CONTENTS OF THE DOCUMENT ARE SUITABLE FOR ANY PURPOSE; NOR THAT THE
-    IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
-    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</para>
+      <para>THIS DOCUMENT IS PROVIDED "AS IS," AND THE COPYRIGHT HOLDERS AND
+      THE ECLIPSE FOUNDATION MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+      IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY,
+      FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE
+      CONTENTS OF THE DOCUMENT ARE SUITABLE FOR ANY PURPOSE; NOR THAT THE
+      IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY THIRD PARTY
+      PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</para>
 
-    <para>THE COPYRIGHT HOLDERS AND THE ECLIPSE FOUNDATION WILL NOT BE LIABLE
-    FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
-    ANY USE OF THE DOCUMENT OR THE PERFORMANCE OR IMPLEMENTATION OF THE
-    CONTENTS THEREOF.</para>
+      <para>THE COPYRIGHT HOLDERS AND THE ECLIPSE FOUNDATION WILL NOT BE
+      LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES
+      ARISING OUT OF ANY USE OF THE DOCUMENT OR THE PERFORMANCE OR
+      IMPLEMENTATION OF THE CONTENTS THEREOF.</para>
 
-    <para>The name and trademarks of the copyright holders or the Eclipse
-    Foundation may NOT be used in advertising or publicity pertaining to this
-    document or its contents without specific, written prior permission. Title
-    to copyright in this document will at all times remain with copyright
-    holders.</para>
+      <para>The name and trademarks of the copyright holders or the Eclipse
+      Foundation may NOT be used in advertising or publicity pertaining to
+      this document or its contents without specific, written prior
+      permission. Title to copyright in this document will at all times remain
+      with copyright holders.</para>
+    </section>
   </section>
 
   <section role="feedback">
