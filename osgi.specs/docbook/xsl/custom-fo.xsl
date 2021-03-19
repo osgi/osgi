@@ -51,9 +51,6 @@ book toc,title
 <xsl:param name="page.width.portrait">18.898cm</xsl:param>
 <xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
-<xsl:param name="copyright.year">
-  <xsl:value-of select="/d:book/d:info/d:copyright/d:year"/>
-</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="xep.extensions" select="0"/>
 <xsl:param name="front.logo.image">../graphics/OSGi_Alliance.svg</xsl:param>
@@ -2058,7 +2055,11 @@ should be discarded -->
   <fo:block xsl:use-attribute-sets="verso.properties">
     <fo:block xsl:use-attribute-sets="verso.copyright.properties">
       <xsl:text>Copyright &#xA9; </xsl:text>
-      <xsl:value-of select="$copyright.year"/>
+      <xsl:call-template name="copyright.years">
+        <xsl:with-param name="years" select="d:info/d:copyright/d:year"/>
+        <xsl:with-param name="print.ranges" select="$make.year.ranges"/>
+        <xsl:with-param name="single.year.ranges" select="$make.single.year.ranges"/>
+      </xsl:call-template>
       <xsl:text> </xsl:text>
       <xsl:value-of select="d:info/d:copyright/d:holder"/>
     </fo:block>

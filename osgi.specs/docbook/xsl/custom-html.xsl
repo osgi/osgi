@@ -54,9 +54,6 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 
 <xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="draft.watermark.image">draft.png</xsl:param>
-<xsl:param name="copyright.year">
-  <xsl:value-of select="/d:book/d:info/d:copyright/d:year"/>
-</xsl:param>
 
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
 <xsl:param name="description.bullet" select="'&#x25A1;'" />
@@ -778,16 +775,5 @@ example before
     </xsl:message>
   </xsl:if>
 </xsl:template>
-
-  <xsl:template match="d:copyright" mode="titlepage.mode">
-    <p>
-      <xsl:apply-templates select="." mode="common.html.attributes"/>
-      <xsl:call-template name="id.attribute"/>
-      <xsl:text>Copyright &#xA9; </xsl:text>
-      <xsl:value-of select="$copyright.year"/>
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="d:holder" mode="titlepage.mode"/>
-    </p>
-  </xsl:template>
 
 </xsl:stylesheet>
