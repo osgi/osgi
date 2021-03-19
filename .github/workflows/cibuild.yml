@@ -23,10 +23,14 @@ on:
     branches-ignore:
     - 'dependabot/**'
     paths-ignore:
+    - '.design/**'
+    - '.github/*.yml'
     - 'README.md'
     - 'CONTRIBUTING.md'
   pull_request:
     paths-ignore:
+    - '.design/**'
+    - '.github/*.yml'
     - 'README.md'
     - 'CONTRIBUTING.md'
 
