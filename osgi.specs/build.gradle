@@ -122,6 +122,7 @@ books.forEach { book ->
       ext.bookxml = destinationDirectory.file(name)
       def stylesheet = file('docbook/xsl/custom-profile.xsl')
       def watermark = bnd("${book}.draft", 'no')
+      def copyrightyear = "2000, ${bnd('copyright.year')}"
       ext.draftmode = (watermark != 'no') ? 'yes' : 'no'
       inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
       inputs.files javadoc, xmlns
@@ -129,6 +130,7 @@ books.forEach { book ->
         inputs.files rdmtsummary
       }
       inputs.property 'draft.mode', draftmode
+      inputs.property 'copyright.year', copyrightyear
 
       outputs.file bookxml
       doFirst {
@@ -150,6 +152,7 @@ books.forEach { book ->
           }
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
           param('name': 'draft.mode', 'expression': draftmode)
+          param('name': 'copyright.year', 'expression': copyrightyear)
         }
         javaexec {
           classpath sourceSets.main.runtimeClasspath
@@ -257,7 +260,6 @@ books.forEach { book ->
       def htmlResources = file('docbook/xsl/html-resources')
       def licensedResources = file("${bnd.licensed}/webresources")
       def watermark = bnd("${book}.draft", 'no')
-      def copyright_year = bnd('copyright.year')
       def release_version = bnd('osgi.release')
       ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("html/${book}"))
 
@@ -265,7 +267,6 @@ books.forEach { book ->
       inputs.dir htmlResources
       inputs.dir licensedResources
       inputs.property 'watermark', watermark
-      inputs.property 'copyright_year', copyright_year
       inputs.property 'release_version', release_version
       outputs.dir destinationDirectory
 
@@ -279,7 +280,6 @@ books.forEach { book ->
           'out': new File(temporaryDir, 'book.txt')) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'copyright.year', 'expression': "2000, ${copyright_year}")
           param('name': 'draft.mode', 'expression': booktask.get().draftmode)
           if (booktask.get().draftmode != 'no') {
             param('name': 'draft.watermark.image', 'expression': "images/${watermark}.png")
@@ -336,11 +336,9 @@ private Closure fotaskConfiguration(bookName, xmltask) {
       ext.bookfo = destinationDirectory.file(name)
       def stylesheet = file('docbook/xsl/custom-fo.xsl')
       def watermark = bnd("${bookName}.draft", 'no')
-      def copyright_year = bnd('copyright.year')
 
       inputs.files xmltask, stylesheet
       inputs.property 'watermark', watermark
-      inputs.property 'copyright_year', copyright_year
       outputs.file bookfo
       doFirst {
         project.mkdir(destinationDirectory)
@@ -355,7 +353,6 @@ private Closure fotaskConfiguration(bookName, xmltask) {
           if (xmltask.get().draftmode != 'no') {
             param('name': 'draft.watermark.image', 'expression': "docbook/graphics/${watermark}.svg")
           }
-          param('name': 'copyright.year', 'expression': "2000, ${copyright_year}")
         }
       }
     }
