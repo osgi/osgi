@@ -16,9 +16,9 @@ Issues can be reported in the [GitHub issue tracker](https://github.com/osgi/osg
 
 The only thing you need to build OSGi is Java.
 We require Java 8.
-If your main JDK is higher then 8 you can set it on each run by adding `-Dorg.gradle.java.home=<pathToYourJDK8>` to the Gradle command.
+If your main JDK is higher than 8 you can set it on each run by adding `-Dorg.gradle.java.home=<pathToYourJDK8>` to the Gradle command.
 
-We use Gradle to build and the repo includes `gradlew`.
+We use Gradle to build and the repository includes `gradlew`.
 
 - `./gradlew :build` - Builds and releases the artifacts into `cnf/generated/repo`.
 - `./gradlew :osgi.specs:specifications` - Builds the specifications into `osgi.specs/generated`.
@@ -47,51 +47,53 @@ Prerequisites are Eclipse ("Eclipse IDE for Java Developers") and [Bndtools](htt
 Before importing the project into Eclipse, it is recommended to do a full build as described above.
 Then use `Import...` > `Existing Projects into Workspace` in Eclipse.
 
-### Run / Debug a TCK in Eclipse
+### Run / Debug a TCK
 
-The TCK tests for a project can be run using Run As "Bnd OSGi Test Launcher (JUnit)".
+In Eclipse, the TCK tests for a project can be run using `Run As` >  `Bnd OSGi Test Launcher (JUnit)` or debugged using `Debug As`/`Debug As` >  `Bnd OSGi Test Launcher (JUnit)`.
 
-### Running a TCK from the command line
-
-For example, to run the TCK for Remote Service Admin in development mode, run this command:
+From the command line, you use the `testOSGi` Gradle task of the project. For example, run the TCK for Remote Service Admin using this command:
 
 ```script
-./gradlew :org.osgi.test.cases.remoteserviceadmin:check
+./gradlew :org.osgi.test.cases.remoteserviceadmin:testOSGi
 ```
+
+When running the TCK from the TCK project folder, you are running the TCK in git working directory while the TCK must run, for compatibility testing purposes, outside of the development environment.
+The `osgi.tck` project packages the TCKs into the form for which users will be expected to run the TCKs.
+The CI build will execute the TCKs using the packaged form built by the `osgi.tck` project rather than running the `testOSGi` tasks.
 
 ## Workflow
 
 We use [git triangular workflow](https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/).
-This means you should not push contributions directly into the [main OSGi repo](https://github.com/osgi/osgi).
+This means you should not push contributions directly into the [main OSGi repository](https://github.com/osgi/osgi).
 All contributions should come in through pull requests.
-So each contributor will need to [fork the main OSGi repo](https://github.com/osgi/osgi/fork) on GitHub.
+So each contributor will need to [fork the main OSGi repository](https://github.com/osgi/osgi/fork) on GitHub.
 All contributions are made as commits to your fork.
-Then you submit a pull request to have them considered for merging into the main OSGi repo.
+Then you submit a pull request to have them considered for merging into the main OSGi repository.
 
 ### Setting up the triangular workflow
 
-After forking the main OSGi repo on GitHub, you can clone the main repo to your system:
+After forking the main OSGi repository on GitHub, you can clone the main repository to your system:
 
 ```script
 git clone https://github.com/osgi/osgi.git
 ```
 
-This will clone the main repo to a local repo on your disk and set up the `origin` remote in Git.
-Next you will set up the the second side of the triangle to your fork repo.
+This will clone the main repository to a local repository on your disk and set up the `origin` remote in Git.
+Next you will set up the the second side of the triangle to your fork repository.
 
 ```script
 cd osgi
 git remote add fork git@github.com:github-user/osgi.git
 ```
 
-Make sure to replace the URL with the SSH URL to your fork repo on GitHub.
-Then we configure the local repo to push your commits to the fork repo.
+Make sure to replace the URL with the SSH URL to your fork repository on GitHub.
+Then we configure the local repository to push your commits to the fork repository.
 
 ```script
 git config remote.pushdefault fork
 ```
 
-So now you will pull from `origin`, the main repo, and push to `fork`, your fork repo.
+So now you will pull from `origin`, the main repository, and push to `fork`, your fork repository.
 This option requires at least Git 1.8.4
 It is also recommended that you configure
 
@@ -101,13 +103,99 @@ git config push.default simple
 
 unless you are already using Git 2.0 where it is the default.
 
-Finally, the third side of the triangle is pull requests from your fork repo to the
-main repo.
+Finally, the third side of the triangle is pull requests from your fork repository to the
+main repository.
 
 ## Contribution guidelines
 
+For the development of non-trivial new features, this project will first undertake a requirements discussion and, if the requirements discussion concludes successfully, then a design discussion.
+By _new feature_, we mean a new specification or a non-trivial enhancement to an existing specification.
 
+Requirements discussions and design discussions should be used whenever there is a benefit to the project for the clarity gained by such discussions.
+For a minor enhancement to an existing specification, we can sometimes skip the requirements discussion and include the requirements in the design discussion.
 
+If the design discussion concludes successfully, we can then move to integrate the new feature into the project which requires specification writing and API and TCK development as well as coordination with the development of a [compatible implementation](https://www.eclipse.org/projects/handbook/#specifications-implementations).
+Each discussion will occur in its own branch of the git repository (see below for specific details).
+This allows the discussion document along with any supporting code to be committed in the branch and for contributors to the discussion to make pull requests against the branch to suggest changes.
+
+The requirement discussion and design discussion documents are stored in the `.design` folder of the repository.
+This is done so the folder is at the top of the GitHub repository web page to make it easy to find while generally keeping the folder out of sight during normal development.
+From time-to-time, generally when making a specification release, the `.design` folder will be cleaned up to remove older documents whose purpose has been served.
+
+### Requirements discussion
+
+The purpose of the requirements discussion is to engage the project committers in the discussion about the new feature and to more properly understand the terminology, purpose, use cases, and requirements for the new feature.
+A new requirements discussion must be started by first opening a new tracking [issue](https://github.com/osgi/osgi/issues) and labeling the issue with the [`requirements`](https://github.com/osgi/osgi/labels/requirements) label.
+Then a new branch should be created from the tip of the `main` branch with the branch name _requirements/XXX_ where _XXX_ is the number of the created tracking issue.
+
+In this new branch, create a `requirements-XXX.md` (or `requirements-XXX.adoc`) requirements document in the `.design` folder.
+
+```script
+git checkout -b requirements/XXX main
+vi .design/requirements-XXX.md
+git add .design/requirements-XXX.md
+git commit -s -m "First draft of requirements for new Widget specification"
+```
+
+The requirements document should include the following items for the requirements discussion:
+
+- Terminology - The new feature may use terminology new to the project committers or that may have multiple meanings.
+- Problem Description - What problem or problems will the new feature address or solve?
+- Use Cases - Provide several use cases which can demonstrate the actors and how they will use the new feature to address the problem(s).
+- Requirements - This is a list of requirements the new feature is to address.
+
+Once your _requirements/XXX_ branch has your commit with the new requirements document, push this branch your fork and make a pull request to the [main OSGi repository](https://github.com/osgi/osgi).
+This pull request will be used to confirm you have signed the [ECA](#legal-considerations) and will be used as the basis for creating the _requirements/XXX_ branch in the main OSGi repository.
+A project committer must [create the new _requirements/XXX_ branch](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository#creating-a-branch) in the main OSGi repository and then [change the base branch of the pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/changing-the-base-branch-of-a-pull-request) to the newly created _requirements/XXX_ branch in the main OSGi repository.
+At this point, the pull request can be merged into the main OSGi repository.
+
+Discussion on the requirements document can take place in the created issue and updates to the requirements document can be made via additional pull requests against the _requirements/XXX_ branch.
+
+To successfully conclude the requirements discussion, the project committers must call a [lazy consensus vote](https://community.apache.org/committers/lazyConsensus.html) of the project committers via an email to the `osgi-dev@eclipse.org` mail list.
+The lazy consensus vote must remain open for at least 72 hours.
+
+If the requirements discussion successfully concludes, the _requirements/XXX_ branch is merged into the `main` branch, the tracking issue _XXX_ is closed, and work can then proceed to a design discussion.
+
+### Design discussion
+
+The purpose of the design discussion is to engage the project committers in the discussion about the design for a new feature and its place in the overall OSGi architecture.
+We want to ensure that sufficient up-front discussion of a new feature design is done in a branch before committing work to the `main` branch.
+A new design discussion must be started by first opening a new tracking [issue](https://github.com/osgi/osgi/issues) and labeling the issue with the [`design`](https://github.com/osgi/osgi/labels/design) label.
+Then a new branch should be created from the tip of the `main` branch with the branch name _design/XXX_ where _XXX_ is the number of the created design tracking issue.
+
+In this new branch, create a `design-XXX.md` (or `design-XXX.adoc`) design document in the `.design` folder.
+
+```script
+git checkout -b design/XXX main
+vi .design/design-XXX.md
+git add .design/design-XXX.md
+git commit -s -m "First draft of design for new Widget specification"
+```
+
+The design document should include the following items for the design discussion:
+
+- Requirements - This is a list of requirements the new feature is to address.
+This can be a reference to a previously created requirements document or a list of requirements that the design will address.
+- Technical Solution - What is the design?
+This should explain the design and how it works and fits into the OSGi architecture.
+This is mainly for discussion within the project and is not necessarily the text that would go in the final specification.
+But it is the starting point for that.
+- Data Transfer Objects - DTOs are defined and used in many specifications.
+Should this new design define any DTOs?
+
+Once your _design/XXX_ branch has your commit with the new design document, along with any supporting API, code, etc., push this branch your fork and make a pull request to the [main OSGi repository](https://github.com/osgi/osgi).
+This pull request will be used to confirm you have signed the [ECA](#legal-considerations) and will be used as the basis for creating the _design/XXX_ branch in the main OSGi repository.
+A project committer must [create the new _design/XXX_ branch](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository#creating-a-branch) in the main OSGi repository and then [change the base branch of the pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/changing-the-base-branch-of-a-pull-request) to the newly created _design/XXX_ branch in the main OSGi repository.
+At this point, the pull request can be merged into the main OSGi repository.
+
+Discussion on the design document can take place in the created issue and updates to the design document and any supporting code can be made via additional pull requests against the _design/XXX_ branch.
+
+To successfully conclude the design discussion, the project committers must call a vote of the project committers via an email to the `osgi-dev@eclipse.org` mail list.
+The vote must remain open for at least 72 hours.
+To succeed, the vote must have at least 3 votes with more `+1` than `-1`.
+Any `-1` vote must be accompanied by an explanation of the vote.
+
+If the design discussion successfully concludes, the _design/XXX_ branch is merged into the `main` branch, the tracking issue _XXX_ is closed, and work can then proceed to specification writing and API and TCK development as well as coordinating the development of a compatible implementation.
 
 ### Create issues
 
@@ -126,10 +214,11 @@ If there's a problem with the implementation, hopefully you received feedback on
 
 ### Conventions
 
-Fork the repo and make changes on your fork in a feature branch:
+Fork the repository and make changes on your fork in a feature branch:
 
-- If it's a bugfix branch, name it issues/XXX where XXX is the number of the issue
-- If it's a feature branch, create an enhancement issue to announce your intentions, and name it issues/XXX where XXX is the number of the issue.
+- If it's a bug fix branch, name it _issues/XXX_ where XXX is the number of the issue.
+- If it's a requirements branch, name it _requirements/XXX_ where XXX is the number of the requirements tracking issue.
+- If it's a design branch, name it _design/XXX_ where XXX is the number of the design tracking issue.
 
 Write clean code.
 Universally formatted code promotes ease of writing, reading, and maintenance.
@@ -176,7 +265,7 @@ It is important that you read and understand the legal considerations found belo
 
 ### Merge approval
 
-The maintainers will review your pull request and, if approved, will merge into the main repo.
+The maintainers will review your pull request and, if approved, will merge into the main repository.
 
 If your pull request was originally a draft, don't forget to remove the draft status to signal to the maintainers that it is ready for review.
 
