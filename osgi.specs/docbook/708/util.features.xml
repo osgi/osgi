@@ -178,11 +178,8 @@ Features may have dependencies on other Features. Features inherit the capabilit
     </para>
 
     <para>
-      Once created, a Feature is immutable. Its definition cannot be modified. However another Feature with a different identity can be created which is based on a given Feature using the prototype mechanism. 
-    </para>
-
-    <para>
-      Additionally it’s possible to record caching related information in a Feature through transient extensions, however this cached content is not significant for the definition of the Feature or part of its identity.
+      Once created, a Feature is immutable. Its definition cannot be modified. However it’s possible to record caching related information in a Feature through transient extensions.
+      This cached content is not significant for the definition of the Feature or part of its identity.
     </para>
 
     <section xml:id="util.feature-identifiers">
@@ -208,11 +205,13 @@ Features may have dependencies on other Features. Features inherit the capabilit
       <title>Feature Identifier</title>
       <para>
         Each Feature has a unique identifier. Apart from providing a persistent handle to the Feature it also provides enough information to find the Feature in an artifact repository. This identifier is defined using the format described in 
-        <xref linkend="util.feature-identifiers"/>.
-As Features are immutable, a given Feature identifier always refers to the same Feature.
-
-    <remark>Mention the Maven artifact packaging type: osgifeature</remark>
+        <xref linkend="util.feature-identifiers"/>. As Features are immutable, a given Feature identifier always refers to the same Feature.
       </para>
+      
+      <section>
+	      <title>Identifier type</title>
+	      <para>Features use as identifier type the value <code>osgifeature</code>.</para>
+      </section>
     </section>
     
     <section>
@@ -254,13 +253,6 @@ As Features are immutable, a given Feature identifier always refers to the same 
               <entry>boolean</entry>
               <entry>Optional, defaults to <code>false</code></entry>
               <entry>Completeness of the Feature. A Feature is complete when it has no external dependencies.</entry>
-            </row>
-
-            <row>
-              <entry>isFinal</entry>
-              <entry>boolean</entry>
-              <entry>Optional, defaults to <code>false</code></entry>
-              <entry>If the Feature is final. A final Feature cannot be used as a prototype for another Feature.</entry>
             </row>
 
             <row>
@@ -441,7 +433,8 @@ Feature f = builder.build();</programlisting>
     </para>
 
     <para>
-      It is an error to define the same PID (or Factory PID) twice in a single Feature.
+      It is an error to define the same PID twice in a single Feature. An entity 
+      processing the feature must fail in this case.
     </para>
     
     <para>
@@ -466,7 +459,6 @@ Feature f = builder.build();</programlisting>
       The Launcher must be able to satisfy the specified properties. 
       If it cannot ensure that these are present in the running Framework the launcher must fail.      
     </para>
-    <remark>TODO to specify failure behavior in all sections.</remark>
 
     <para>
       Example:
@@ -814,11 +806,21 @@ Feature f = builder.build();</programlisting>
         "org.acme.ddlfiles": {
             "kind": "mandatory",
             "type": "artifacts",
-            "artifacts": ["org.acme:appddl:1.2.1"]
+            "artifacts": [
+              "org.acme:appddl:1.2.1", 
+              {
+                "id": "org.acme:appddl-custom:1.0.3",
+                "org.acme.target": "custom-db"
+              }
+           ]
         }
     }
 }</programlisting>
-<remark>Do we want to support metadata for artifacts?</remark>
+        As with bundle identifiers, custom artifacts can be listed as ID only, or they can be 
+        specified in an object in the artifacts list with an explicit <code>id</code> and 
+        optional additional metadata. The keys of the metadata should use a reverse DNS
+        naming pattern to avoid clashes and supported values are only of type <code>String</code>.
+        Keys that do not use reverse DNS as a prefix are reserved for OSGi use. 
       </para>
         
     </section>
@@ -833,13 +835,6 @@ Feature f = builder.build();</programlisting>
   
   <section>
     <title>Security</title>
-
-    <para>
-    ...</para>
-  </section>
-
-  <section>
-    <title>JSON Schema</title>
 
     <para>
     ...</para>
