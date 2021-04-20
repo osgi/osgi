@@ -1,0 +1,7 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd, ${build}/cmpn.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath = \
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
