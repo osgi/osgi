@@ -44,7 +44,9 @@
     </copyright>
   </info>
 
-  <xi:include href="../license/eclipse.foundation.specification.license.1.0.xml"/>
+  <xi:include href="../preface/eclipse.foundation.specification.license.1.0.xml"/>
+
+  <xi:include href="../preface/preface.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 
