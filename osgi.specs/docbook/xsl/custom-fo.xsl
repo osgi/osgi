@@ -53,7 +53,7 @@ book toc,title
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="xep.extensions" select="0"/>
-<xsl:param name="front.logo.image">../graphics/OSGi_Alliance.svg</xsl:param>
+<xsl:param name="front.logo.image">../graphics/OSGi.svg</xsl:param>
 
 <xsl:param name="body.font.family">Proforma-Book</xsl:param>
 <xsl:param name="title.font.family">ProductusSemibold</xsl:param>
