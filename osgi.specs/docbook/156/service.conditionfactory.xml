@@ -145,7 +145,7 @@
 
   <section xml:id="service.conditionfactory.security">
     <title>Security</title>
-    <para>Requires <xref linkend="framework.security.impliedpermissions"/> to register and get Conditions</para>
+    <para>Requires permission to register and get Conditions</para>
     <para>Requires permission to use the config Admin?</para>
   </section>
 
