@@ -136,8 +136,6 @@
 
   <xi:include href="../155/tr157softwaremodules.xml"/>
 
-  <xi:include href="../156/service.condition.factory.xml"/>
-
   <xi:include href="../157/service.typedevent.xml"/>
 
   <xi:include href="../158/service.log.stream.xml"/>

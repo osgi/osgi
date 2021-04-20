@@ -29,4 +29,7 @@
   </xsl:copy>
 </xsl:template>
 
+<xsl:template match="comment()" mode="profile">
+</xsl:template>
+
 </xsl:stylesheet>
