@@ -257,7 +257,7 @@ basic format:
         <div class="menu-top-container"></div>
         <div id="shadow-block">
             <a class="logo" href="index.html">
-                <img src='images/logo.svg' alt="{$brandname} Documentation"/>
+                <img src='images/OSGi.svg' alt="{$brandname} Documentation"/>
 
                 <h1>
                     <xsl:apply-templates select="/*[1]" mode="title.markup"/>&#160;Release&#160;<xsl:value-of select="$release.version"/>
