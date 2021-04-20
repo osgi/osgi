@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="112"
          revision="$Id$"
          version="5.0" xml:id="service.component"
@@ -1914,7 +1913,8 @@ public class MyComponent {
       control, via the configuration of component properties, whether a
       component configuration can be satisfied. That is, it can be a way to
       "enable" or "disable" a component configuration through its
-      configuration. See <xref linkend="service.condition.factory"/> for
+      configuration. See <emphasis>Condition Service Specification</emphasis>
+      of <xref linkend="intro.core.release" xrefstyle="template:%t"/> for
       additional information on Conditions.</para>
     </section>
   </section>
