@@ -21,89 +21,89 @@
  */
 
 def jar = tasks.named('jar') {
-  def docsDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir(project.provider({ ->
-    return project.docsDirName
-  })))
-  ext.javadocIncludes = docsDirectory.file('javadocIncludes.txt')
-  outputs.file javadocIncludes
-  doLast {
-    File javadocIncludesFile = file(javadocIncludes)
-    project.mkdir(javadocIncludesFile.parent)
-    javadocIncludesFile.text = bnd.project.getExports().collect { packageRef, attrs ->
-       "${packageRef.getBinary()}/*.java"
-    }.join(',')
-  }
-  ext.javadocVersion = docsDirectory.file('javadocVersion.txt')
-  outputs.file javadocVersion
-  doLast {
-    File javadocVersionFile = file(javadocVersion)
-    project.mkdir(javadocVersionFile.parent)
-    def version = bnd.project.getVersion(project.name)
-    javadocVersionFile.text = bnd.project.getReplacer().process("\${versionmask;===s;${version}}", bnd.project)
-  }
+	def docsDirectory = objects.directoryProperty().value(layout.buildDirectory.dir(provider({-> project.docsDirName})))
+	ext.javadocIncludes = docsDirectory.file('javadocIncludes.txt')
+	ext.javadocVersion = docsDirectory.file('javadocVersion.txt')
+	def projectName = project.name
+	def bndProject = bnd.project
+
+	outputs.file(javadocIncludes).withPropertyName('javadocIncludes')
+	outputs.file(javadocVersion).withPropertyName('javadocVersion')
+
+	doLast('javadoc-info') { t ->
+		File javadocIncludesFile = javadocIncludes.get().getAsFile()
+		javadocIncludesFile.text = bndProject.getExports().collect { packageRef, attrs ->
+			"${packageRef.getBinary()}/*.java"
+		}.join(',')
+		File javadocVersionFile = javadocVersion.get().getAsFile()
+		def version = bndProject.getVersion(projectName)
+		javadocVersionFile.text = bndProject.getReplacer().process("\${versionmask;===s;${version}}", bndProject)
+	}
 }
 
 def javadoc = tasks.named('javadoc') {
-  inputs.files jar
-  source bnd.allSrcDirs
-  ext.javadocTitle = bnd('javadoc.title', project.name)
-  configure(options) {
-    bottom = "${bnd.copyright_html} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
-    memberLevel = JavadocMemberLevel.PROTECTED
-    charSet = 'UTF-8'
-    encoding = 'UTF-8'
-    docEncoding = 'UTF-8'
-    version = false
-    use = true
-    splitIndex = true
-    author = false
-    noDeprecated = false
-    noDeprecatedList = false
-    noIndex = false
-    noNavBar = false
-    noTree = false
-    noTimestamp = JavaVersion.current().isJava9Compatible()
-    tags = ['Immutable:t:"Immutable"',
-            'ThreadSafe:t:"ThreadSafe"',
-            'NotThreadSafe:t:"NotThreadSafe"',
-            'GuardedBy:mf:"Guarded By:"',
-            'security:m:"Required Permissions"',
-            'noimplement:t:"Consumers of this API must not implement this interface"']
-    links('http://docs.oracle.com/javase/8/docs/api/')
-  }
-  // compute dependencies on other javadoc builds based upon the classpath
-  def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
-  def linkProjects = sourceSets.main.compileClasspath.findResults {
-    def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
-    def matcher = pattern.matcher(entry)
-    matcher ? parent.project(matcher[0][1]) : null
-  }
-  linkProjects.each { linkProject ->
-    dependsOn linkProject.absoluteProjectPath('javadoc')
-  }
-  /* Turn off javadoc 8 overly pedantic lint checking */
-  if (JavaVersion.current().isJava8Compatible()) {
-    options.addStringOption('Xdoclint:none', '-quiet') 
-  }
-  doFirst {
-    File javadocVersion = file(jar.get().javadocVersion)
-    File javadocIncludes = file(jar.get().javadocIncludes)
-    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${javadocVersion.text}"
-    options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
-    options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
-    options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
-    include javadocIncludes.text.tokenize(',')
-    linkProjects.each { linkProject ->
-      File linkJavadocVersion = file(linkProject.tasks.getByName('jar').javadocVersion)
-      File linkDestinationDir = file(linkProject.tasks.getByName('javadoc').destinationDir)
-      options.linksOffline("../../${linkProject.name}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
-    }
-    logger.info 'Title         : {}', options.windowTitle
-    logger.info 'Packages      : {}', includes
-    logger.info 'Destdir       : {}', destinationDir
-  }
+	inputs.files(jar).withPropertyName('jar')
+	source bnd.allSrcDirs
+	def javadocTitle = bnd('javadoc.title', project.name)
+	configure(options) {
+		bottom = "${bnd.copyright_html} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
+		memberLevel = JavadocMemberLevel.PROTECTED
+		charSet = 'UTF-8'
+		encoding = 'UTF-8'
+		docEncoding = 'UTF-8'
+		version = false
+		use = true
+		splitIndex = true
+		author = false
+		noDeprecated = false
+		noDeprecatedList = false
+		noIndex = false
+		noNavBar = false
+		noTree = false
+		noTimestamp = JavaVersion.current().isJava9Compatible()
+		tags = [
+			'Immutable:t:"Immutable"',
+			'ThreadSafe:t:"ThreadSafe"',
+			'NotThreadSafe:t:"NotThreadSafe"',
+			'GuardedBy:mf:"Guarded By:"',
+			'security:m:"Required Permissions"',
+			'noimplement:t:"Consumers of this API must not implement this interface"'
+		]
+		links('http://docs.oracle.com/javase/8/docs/api/')
+	}
+	// compute dependencies on other javadoc builds based upon the classpath
+	def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
+	def linkProjects = sourceSets.main.compileClasspath.findResults {
+		def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
+		def matcher = pattern.matcher(entry)
+		matcher ? parent.project(matcher[0][1]) : null
+	}
+	linkProjects.each { linkProject ->
+		dependsOn linkProject.absoluteProjectPath('javadoc')
+	}
+	/* Turn off javadoc 8 overly pedantic lint checking */
+	if (JavaVersion.current().isJava8Compatible()) {
+		options.addStringOption('Xdoclint:none', '-quiet')
+	}
+	doFirst('configuration') { t ->
+		File javadocVersion = jar.flatMap({it.javadocVersion}).get().getAsFile()
+		File javadocIncludes = jar.flatMap({it.javadocIncludes}).get().getAsFile()
+		def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${javadocVersion.text}"
+		options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
+		options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
+		options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
+		include javadocIncludes.text.tokenize(',')
+		linkProjects.each { linkProject ->
+			File linkJavadocVersion = linkProject.tasks.named('jar').flatMap({it.javadocVersion}).get().getAsFile()
+			File linkDestinationDir = linkProject.tasks.named('javadoc').map({it.destinationDir}).get()
+			options.linksOffline("../../${linkProject.name}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
+		}
+		logger.info 'Title         : {}', options.windowTitle
+		logger.info 'Packages      : {}', includes
+		logger.info 'Destdir       : {}', destinationDir
+	}
 }
 
 tasks.named('release') {
-  dependsOn javadoc
+	dependsOn javadoc
 }

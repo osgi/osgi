@@ -21,400 +21,453 @@
  */
 import org.apache.tools.ant.filters.ReplaceTokens
 
+interface Injected {
+	@Inject ExecOperations getExec()
+	@Inject FileSystemOperations getFs()
+}
+
 version bnd('osgi.version')
 
 ext.fop_home = file("${bnd.licensed}/fop")
 ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
-  fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
+fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
+
+def compileJava = tasks.named('compileJava')
 
 def javadoc = tasks.named('javadoc') {
-  description 'Build the docbook flavored javadoc.'
-  group 'documentation'
-  destinationDir = file(project.layout.buildDirectory.dir('javadoc'))
-  ext.javadocxml = new File(destinationDir, 'javadoc.xml')
-  ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
-  classpath = sourceSets.main.compileClasspath
-  inputs.files tasks.named('compileJava'), classpath, stylesheet
-  source bnd.allSrcDirs
-  bnd.javadoc_specs.split(/\s*,\s*/).each {
-    include it.replace('.','/')+'/**/*.java'
-  }
-  configure(options) {
-    memberLevel = JavadocMemberLevel.PROTECTED
-    encoding = 'UTF-8'
-    noTimestamp = JavaVersion.current().isJava9Compatible()
-    title = ''
-    doclet 'org.osgi.tools.xmldoclet.XmlDoclet'
-    docletpath sourceSets.main.java.outputDir
-  }
-  doLast {
-    ant.xslt('style': stylesheet,
-      'in': javadocxml,
-      'out': "${destinationDir}/docbook/javadoc.txt") {
-      classpath('location': bnd.saxon)
-      factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-      param('name': 'destdir', 'expression': "${destinationDir}/docbook")
-      param('name': 'ddf.only', 'expression': '0')
-    }
-    ant.xslt('style': stylesheet,
-      'in': javadocxml,
-      'out': "${destinationDir}/docbook/ddf.txt") {
-      classpath('location': bnd.saxon)
-      factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-      param('name': 'destdir', 'expression': "${destinationDir}/docbook")
-      param('name': 'ddf.only', 'expression': '1')
-    }
-  }
+	description 'Build the docbook flavored javadoc.'
+	group 'documentation'
+	destinationDir = file(layout.buildDirectory.dir('javadoc'))
+	def javadocxml = new File(destinationDir, 'javadoc.xml')
+	def stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
+	classpath = sourceSets.main.compileClasspath
+	source = bnd.allSrcDirs
+	bnd.javadoc_specs.split(/\s*,\s*/).each {
+		include it.replace('.','/')+'/**/*.java'
+	}
+	title = ''
+	options.memberLevel = JavadocMemberLevel.PROTECTED
+	options.encoding = 'UTF-8'
+	options.noTimestamp = JavaVersion.current().isJava9Compatible()
+	options.doclet = 'org.osgi.tools.xmldoclet.XmlDoclet'
+	options.docletpath sourceSets.main.java.classesDirectory.get().getAsFile()
+
+	inputs.files(compileJava).withPropertyName(compileJava.name)
+	inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
+
+	doLast('xslt') { t ->
+		ant.xslt('style': stylesheet,
+		'in': javadocxml,
+		'out': "${destinationDir}/docbook/javadoc.txt") {
+			classpath('location': bnd.saxon)
+			factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+			param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+			param('name': 'ddf.only', 'expression': '0')
+		}
+		ant.xslt('style': stylesheet,
+		'in': javadocxml,
+		'out': "${destinationDir}/docbook/ddf.txt") {
+			classpath('location': bnd.saxon)
+			factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+			param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+			param('name': 'ddf.only', 'expression': '1')
+		}
+	}
 }
 
 def rdmtsummary = tasks.register('rdmtsummary') {
-  description 'Build the docbook flavored Residential DMT summary.'
-  group 'documentation'
-  ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('residentialdmt'))
-  ext.treesummaryxml = destinationDirectory.file('treesummary.xml')
-  inputs.files parent.project('dmforest').sourceSets.main.allJava, sourceSets.main.runtimeClasspath
-  outputs.dir destinationDirectory
-  doFirst {
-    project.mkdir(destinationDirectory)
-  }
-  doLast {
-    file(treesummaryxml).withOutputStream { os ->
-      javaexec {
-        classpath sourceSets.main.runtimeClasspath
-        main = 'org.osgi.tools.dmt.TreeSummary'
-        standardOutput new BufferedOutputStream(os)
-        args 'org.osgi.dmt.residential.$'
-      }.assertNormalExitValue()
-    }
-  }
+	description 'Build the docbook flavored Residential DMT summary.'
+	group 'documentation'
+	def runtimeClasspath = sourceSets.main.runtimeClasspath
+	def treesummaryxml = layout.buildDirectory.file('residentialdmt/treesummary.xml')
+
+	inputs.files(parent.project('dmforest').sourceSets.main.allJava).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('dmforest')
+	inputs.files(runtimeClasspath).withNormalizer(ClasspathNormalizer.class).withPropertyName('runtimeClasspath')
+	outputs.file(treesummaryxml).withPropertyName('treesummaryxml')
+
+	def injected = objects.newInstance(Injected)
+	doLast('rdmtsummary') { t ->
+		treesummaryxml.get().getAsFile().withOutputStream { os ->
+			injected.exec.javaexec {
+				classpath runtimeClasspath
+				main = 'org.osgi.tools.dmt.TreeSummary'
+				standardOutput new BufferedOutputStream(os)
+				args 'org.osgi.dmt.residential.$'
+			}.assertNormalExitValue()
+		}
+	}
 }
 
 def xmlns = tasks.register('xmlns', Copy.class) {
-  description 'Build the docbook flavored schemas.'
-  group 'documentation'
-  from parent.file('xmlns')
-  into project.layout.buildDirectory.dir('xmlns')
-  include '**/*.xsd'
-  includeEmptyDirs = false
-  doLast {
-    ant.replaceregexp('match': /.*(<(\w+:)?schema)/,
-      'replace': /\1/,
-      'flags': 's',
-      'encoding': 'UTF-8') {
-      fileset('dir': destinationDir, 'includes': '**/*.xsd')
-    }
-  }
+	description 'Build the docbook flavored schemas.'
+	group 'documentation'
+	from parent.file('xmlns')
+	into layout.buildDirectory.dir('xmlns')
+	include '**/*.xsd'
+	includeEmptyDirs = false
+	doLast('strip-comments') { t ->
+		ant.replaceregexp('match': /.*(<(\w+:)?schema)/,
+		'replace': /\1/,
+		'flags': 's',
+		'encoding': 'UTF-8') {
+			fileset('dir': destinationDir, 'includes': '**/*.xsd')
+		}
+	}
 }
 
 def specifications = tasks.register('specifications') {
-  description 'Generates all the specifications.'
-  group 'documentation'
+	description 'Generates all the specifications.'
+	group 'documentation'
 }
 defaultTasks += absoluteProjectPath(specifications.name)
 
 def books = ['core', 'cmpn']
 
 books.forEach { book ->
-    def booktask = tasks.register("${book}.xml") {
-      description "Generate the docbook xml file for the book ${book}."
-      group 'documentation'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('book'))
-      ext.bookxml = destinationDirectory.file(name)
-      def stylesheet = file('docbook/xsl/custom-profile.xsl')
-      def watermark = bnd("${book}.draft", 'no')
-      def copyrightyear = "2000, ${bnd('copyright.year')}"
-      ext.draftmode = (watermark != 'no') ? 'yes' : 'no'
-      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
-      inputs.files javadoc, xmlns
-      if (book != 'core') {
-        inputs.files rdmtsummary
-      }
-      inputs.property 'draft.mode', draftmode
-      inputs.property 'copyright.year', copyrightyear
+	def booktask = tasks.register("${book}.xml") {
+		description "Generate the docbook xml file for the book ${book}."
+		group 'documentation'
+		ext.bookxml = layout.buildDirectory.file("book/${name}")
+		def watermark = bnd("${book}.draft", 'no')
+		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
+		def stylesheet = file('docbook/xsl/custom-profile.xsl')
+		def xmlFiles = objects.fileTree().from('docbook').include('**/*.xml')
+		def copyrightyear = "2000, ${bnd('copyright.year')}"
+		def runtimeClasspath = sourceSets.main.runtimeClasspath
+		def docbookxsd = file("${bnd.licensed}/docbook-xsd/docbook.xsd")
 
-      outputs.file bookxml
-      doFirst {
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        ant.xslt('style': stylesheet,
-          'in': "docbook/${book}/book.xml",
-          'out': file(bookxml),
-          'force': true) {
-          sysproperty('key': 'org.apache.xerces.xni.parser.XMLParserConfiguration',
-            'value': 'org.apache.xerces.parsers.XIncludeParserConfiguration')
-          classpath {
-            fileset('dir': "${fop_home}/lib") {
-              include('name': 'xercesImpl*.jar')
-              include('name': 'xml-apis*.jar')
-            }
-            pathelement('location': bnd.saxon)
-          }
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.mode', 'expression': draftmode)
-          param('name': 'copyright.year', 'expression': copyrightyear)
-        }
-        javaexec {
-          classpath sourceSets.main.runtimeClasspath
-          main = 'org.osgi.tools.xmlvalidation.XmlValidator'
-          args file("${bnd.licensed}/docbook-xsd/docbook.xsd")
-          args file(bookxml)
-        }.assertNormalExitValue()
-      }
-    }
+		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
+		inputs.files(xmlFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('xmlFiles')
+		inputs.files(runtimeClasspath).withNormalizer(ClasspathNormalizer.class).withPropertyName('runtimeClasspath')
+		inputs.files(javadoc).withPropertyName(javadoc.name)
+		inputs.files(xmlns).withPropertyName(xmlns.name)
+		if (book != 'core') {
+			inputs.files(rdmtsummary).withPropertyName(rdmtsummary.name)
+		}
+		inputs.property('draft.mode', draftmode)
+		inputs.property('copyright.year', copyrightyear)
+		inputs.file(docbookxsd).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('docbookxsd')
+		outputs.file(bookxml).withPropertyName('bookxml')
 
-    def bookdifftask = tasks.register("${book}-diff.xml") {
-      description "Generate the docbook diff xml file for the book ${book}."
-      group 'documentation'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('book'))
-      ext.bookxml = destinationDirectory.file(name)
-      def stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
-      ext.baselinexml = file("baseline/${book}.xml")
-      inputs.files booktask, stylesheet, baselinexml
-      outputs.file bookxml
-      doFirst {
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        def tmpxml = new File(temporaryDir, 'diff.xml')
-        javaexec {
-          classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
-          main = 'net.sf.diffmk.DiffMk'
-          minHeapSize = '1g'
-          maxHeapSize = '2g'
-          args '--verbose'
-          args '1'
-          args '--words'
-          args baselinexml
-          args file(booktask.get().bookxml)
-          args tmpxml
-        }.assertNormalExitValue()
-        ant.xslt('style': stylesheet,
-          'in': tmpxml,
-          'out': file(bookxml)) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-        }
-      }
-    }
+		def injected = objects.newInstance(Injected)
+		doLast('xml') { t ->
+			def bookxmlFile = bookxml.get().getAsFile()
+			ant.xslt('style': stylesheet,
+			'in': "docbook/${book}/book.xml",
+			'out': bookxmlFile,
+			'force': true) {
+				sysproperty('key': 'org.apache.xerces.xni.parser.XMLParserConfiguration',
+				'value': 'org.apache.xerces.parsers.XIncludeParserConfiguration')
+				classpath {
+					fileset('dir': "${fop_home}/lib") {
+						include('name': 'xercesImpl*.jar')
+						include('name': 'xml-apis*.jar')
+					}
+					pathelement('location': bnd.saxon)
+				}
+				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+				param('name': 'draft.mode', 'expression': draftmode.get())
+				param('name': 'copyright.year', 'expression': copyrightyear)
+			}
+			injected.exec.javaexec {
+				classpath runtimeClasspath
+				main = 'org.osgi.tools.xmlvalidation.XmlValidator'
+				args docbookxsd
+				args bookxmlFile
+			}.assertNormalExitValue()
+		}
+	}
 
-    def fotask = tasks.register("${book}.fo", fotaskConfiguration(book, booktask))
-    def fodifftask = tasks.register("${book}-diff.fo", fotaskConfiguration("${book}-diff", bookdifftask))
+	def bookdifftask = tasks.register("${book}-diff.xml") {
+		description "Generate the docbook diff xml file for the book ${book}."
+		group 'documentation'
+		ext.bookxml = layout.buildDirectory.file("book/${name}")
+		def watermark = bnd("${book}.draft", 'no')
+		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
+		def stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
+		def baselinexml = file("baseline/${book}.xml")
+		def booktaskXml = booktask.flatMap({it.bookxml})
+		inputs.files(booktask).withPropertyName(booktask.name)
+		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
+		inputs.file(baselinexml).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('baselinexml')
+		outputs.file(bookxml).withPropertyName('bookxml')
+		def injected = objects.newInstance(Injected)
+		doLast('xml-diff') { t ->
+			def tmpxml = new File(temporaryDir, 'diff.xml')
+			injected.exec.javaexec {
+				classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
+				main = 'net.sf.diffmk.DiffMk'
+				minHeapSize = '1g'
+				maxHeapSize = '2g'
+				args '--verbose'
+				args '1'
+				args '--words'
+				args baselinexml
+				args booktaskXml.get().getAsFile()
+				args tmpxml
+			}.assertNormalExitValue()
+			ant.xslt('style': stylesheet,
+			'in': tmpxml,
+			'out': bookxml.get().getAsFile()) {
+				classpath('location': bnd.saxon)
+				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+			}
+		}
+	}
 
-    def pdftask = tasks.register("${book}.pdf", pdftaskConfiguration(book, book, fotask))
-    tasks.register("${book}-diff.pdf", pdftaskConfiguration(book, "${book}-diff", fodifftask))
+	def fotask = tasks.register("${book}.fo", fotaskConfiguration(book, booktask))
+	def fodifftask = tasks.register("${book}-diff.fo", fotaskConfiguration("${book}-diff", bookdifftask))
 
-    def rasterizetask = tasks.register("${book}.rasterize") {
-      description "Rasterize SVGs for the book ${book}."
-      group 'documentation'
+	def pdftask = tasks.register("${book}.pdf", pdftaskConfiguration(book, book, fotask))
+	tasks.register("${book}-diff.pdf", pdftaskConfiguration(book, "${book}-diff", fodifftask))
 
-      def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("images/${book}"))
-      def watermark = bnd("${book}.draft", 'no')
+	def rasterizelisttask = tasks.register("${book}.rasterizelist") {
+		description "Generate list of SVGs to rasterize for the book ${book}."
+		group 'documentation'
 
-      inputs.files booktask, imagesXSL, fileTree('dir': 'docbook', 'include': '**/*.svg'), sourceSets.main.runtimeClasspath
-      inputs.property 'watermark', watermark
-      outputs.dir destinationDirectory
+		def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
+		ext.imagesFile = layout.buildDirectory.file("images/${book}.txt")
+		def watermark = bnd("${book}.draft", 'no')
+		def booktaskXml = booktask.flatMap({it.bookxml})
+		def booktaskDraftmode = booktask.flatMap({it.draftmode})
+		inputs.files(booktask).withPropertyName(booktask.name)
+		inputs.file(imagesXSL).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('imagesXSL')
+		inputs.property('watermark', watermark)
+		outputs.file(imagesFile).withPropertyName('imagesFile')
+		doLast('xslt') { t ->
+			ant.xslt('style': imagesXSL,
+			'in': booktaskXml.get().getAsFile(),
+			'out': imagesFile.get().getAsFile()) {
+				classpath('location': bnd.saxon)
+				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
+				if (booktaskDraftmode.get() != 'no') {
+					param('name': 'draft.watermark.image', 'expression': "../graphics/${watermark}.svg")
+				}
+			}
+		}
+	}
 
-      doFirst {
-        project.delete(destinationDirectory)
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        def imagesFile = new File(temporaryDir, 'images.txt')
-        ant.xslt('style': imagesXSL,
-          'in': file(booktask.get().bookxml),
-          'out': imagesFile) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.mode', 'expression': booktask.get().draftmode)
-          if (booktask.get().draftmode != 'no') {
-            param('name': 'draft.watermark.image', 'expression': "../graphics/${watermark}.svg")
-          }
-        }
+	def rasterizetask = tasks.register("${book}.rasterize") {
+		description "Rasterize SVGs for the book ${book}."
+		group 'documentation'
 
-        def svgFiles = imagesFile.collect { line ->
-          file("docbook/${book}/${line}")
-        }
+		def svgFiles = objects.fileTree().from('docbook').include('**/*.svg')
+		def bookFolder = layout.projectDirectory.dir("docbook/${book}")
+		def imagesFile = rasterizelisttask.flatMap({it.imagesFile}).map({it.getAsFile()})
+		def imageFiles = objects.fileCollection().from(imagesFile.map({f -> f.collect({bookFolder.file(it)})}))
+		def runtimeClasspath = sourceSets.main.runtimeClasspath
+		def destinationDirectory = layout.buildDirectory.dir("images/${book}")
 
-        javaexec {
-          systemProperty('scale', '2')
-          systemProperty('dpi', '300')
-          systemProperty('JAVA_FONTS', file('fonts'))
-          classpath sourceSets.main.runtimeClasspath
-          main = 'org.osgi.tools.rasterizer.RasterizerMain'
-          minHeapSize = '1g'
-          maxHeapSize = '2g'
-          args file(destinationDirectory)
-          args svgFiles
-        }.assertNormalExitValue()
-      }
-    }
+		inputs.files(rasterizelisttask).withPropertyName(rasterizelisttask.name)
+		inputs.files(svgFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('svgFiles')
+		inputs.files(runtimeClasspath).withNormalizer(ClasspathNormalizer.class).withPropertyName('runtimeClasspath')
+		outputs.dir(destinationDirectory).withPropertyName('destinationDirectory')
 
-    def htmltask = tasks.register("${book}.html") {
-      description "Generate the docbook html files for the book ${book}."
-      group 'documentation'
+		def injected = objects.newInstance(Injected)
+		def outputFiles = objects.fileTree().from(destinationDirectory)
+		doFirst('clean') { t ->
+			injected.fs.delete {
+				delete outputFiles
+			}
+		}
+		doLast('exec') { t ->
+			injected.exec.javaexec {
+				systemProperty('scale', '2')
+				systemProperty('dpi', '300')
+				systemProperty('JAVA_FONTS', file('fonts'))
+				classpath runtimeClasspath
+				main = 'org.osgi.tools.rasterizer.RasterizerMain'
+				minHeapSize = '1g'
+				maxHeapSize = '2g'
+				args destinationDirectory.get().getAsFile()
+				args imageFiles.getFiles()
+			}.assertNormalExitValue()
+		}
+	}
 
-      def stylesheet = file('docbook/xsl/custom-html.xsl')
-      def commonXSL = file('docbook/xsl/custom-html-common.xsl')
-      def htmlResources = file('docbook/xsl/html-resources')
-      def licensedResources = file("${bnd.licensed}/webresources")
-      def watermark = bnd("${book}.draft", 'no')
-      def release_version = bnd('osgi.release')
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("html/${book}"))
+	def htmltask = tasks.register("${book}.html") {
+		description "Generate the docbook html files for the book ${book}."
+		group 'documentation'
 
-      inputs.files booktask, rasterizetask, stylesheet, commonXSL
-      inputs.dir htmlResources
-      inputs.dir licensedResources
-      inputs.property 'watermark', watermark
-      inputs.property 'release_version', release_version
-      outputs.dir destinationDirectory
+		def stylesheet = file('docbook/xsl/custom-html.xsl')
+		def commonXSL = file('docbook/xsl/custom-html-common.xsl')
+		def htmlResources = file('docbook/xsl/html-resources')
+		def licensedResources = file("${bnd.licensed}/webresources")
+		def watermark = bnd("${book}.draft", 'no')
+		def release_version = bnd('osgi.release')
+		def destinationDirectory = layout.buildDirectory.dir("html/${book}")
+		def booktaskXml = booktask.flatMap({it.bookxml})
+		def booktaskDraftmode = booktask.flatMap({it.draftmode})
 
-      doFirst {
-        project.delete(destinationDirectory)
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        ant.xslt('style': stylesheet,
-          'in': file(booktask.get().bookxml),
-          'out': new File(temporaryDir, 'book.txt')) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.mode', 'expression': booktask.get().draftmode)
-          if (booktask.get().draftmode != 'no') {
-            param('name': 'draft.watermark.image', 'expression': "images/${watermark}.png")
-          }
-          param('name': 'webhelp.base.dir', 'expression': file(destinationDirectory))
-          param('name': 'webhelp.default.topic', 'expression': 'index.html')
-          param('name': 'release.version', 'expression': release_version)
-        }
+		inputs.files(booktask).withPropertyName(booktask.name)
+		inputs.files(rasterizetask).withPropertyName(rasterizetask.name)
+		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
+		inputs.file(commonXSL).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('commonXSL')
+		inputs.dir(htmlResources).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('htmlResources')
+		inputs.dir(licensedResources).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('licensedResources')
+		inputs.property('watermark', watermark)
+		inputs.property('release_version', release_version)
+		outputs.dir(destinationDirectory).withPropertyName('destinationDirectory')
 
-        copy {
-          into destinationDirectory
-          from htmlResources
-          from (licensedResources) {
-            include '**/*.js'
-            into 'js'
-            eachFile { fcd ->
-              fcd.path = "js/${fcd.name}"
-            }
-          }
-          from (licensedResources) {
-            include '**/*.css'
-            into 'css'
-            eachFile { fcd ->
-              fcd.path = "css/${fcd.name}"
-            }
-          }
-          from (rasterizetask) {
-            into 'images'
-          }
-          includeEmptyDirs = false
-        }
-      }
-    }
+		def injected = objects.newInstance(Injected)
+		def outputFiles = objects.fileTree().from(destinationDirectory)
+		doFirst('clean') { t ->
+			injected.fs.delete {
+				delete outputFiles
+			}
+		}
+		doLast('xslt') { t ->
+			ant.xslt('style': stylesheet,
+			'in': booktaskXml.get().getAsFile(),
+			'out': new File(temporaryDir, 'book.txt')) {
+				classpath('location': bnd.saxon)
+				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
+				if (booktaskDraftmode.get() != 'no') {
+					param('name': 'draft.watermark.image', 'expression': "images/${watermark}.png")
+				}
+				param('name': 'webhelp.base.dir', 'expression': destinationDirectory.get().getAsFile())
+				param('name': 'webhelp.default.topic', 'expression': 'index.html')
+				param('name': 'release.version', 'expression': release_version)
+			}
 
-    def ziptask = tasks.register("${book}.zip", Zip.class) {
-      description "Generate a ZIP archive of the docbook html for the book ${book}."
-      group 'documentation'
-      destinationDirectory = project.layout.buildDirectory
-      archiveBaseName = "osgi.${book}"
-      archiveClassifier = 'html'
-      from htmltask
-    }
+			injected.fs.copy {
+				into destinationDirectory
+				from htmlResources
+				from (licensedResources) {
+					include '**/*.js'
+					into 'js'
+					eachFile { fcd ->
+						fcd.path = "js/${fcd.name}"
+					}
+				}
+				from (licensedResources) {
+					include '**/*.css'
+					into 'css'
+					eachFile { fcd ->
+						fcd.path = "css/${fcd.name}"
+					}
+				}
+				from (rasterizetask) {
+					into 'images'
+				}
+				includeEmptyDirs = false
+			}
+		}
+	}
 
-    specifications.configure {
-        dependsOn pdftask, ziptask
-    }
+	def ziptask = tasks.register("${book}.zip", Zip.class) {
+		description "Generate a ZIP archive of the docbook html for the book ${book}."
+		group 'documentation'
+		destinationDirectory = layout.buildDirectory
+		archiveBaseName = "osgi.${book}"
+		archiveClassifier = 'html'
+		from htmltask
+	}
+
+	specifications.configure {
+		dependsOn pdftask, ziptask
+	}
 }
 
 private Closure fotaskConfiguration(bookName, xmltask) {
-  return {
-      description "Generate the docbook fo file for the book ${bookName}."
-      group 'documentation'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir('fo'))
-      ext.bookfo = destinationDirectory.file(name)
-      def stylesheet = file('docbook/xsl/custom-fo.xsl')
-      def watermark = bnd("${bookName}.draft", 'no')
+	return {
+		description "Generate the docbook fo file for the book ${bookName}."
+		group 'documentation'
+		ext.bookfo = layout.buildDirectory.file("fo/${name}")
+		def stylesheet = file('docbook/xsl/custom-fo.xsl')
+		def watermark = bnd("${bookName}.draft", 'no')
+		def booktaskXml = xmltask.flatMap({it.bookxml})
+		def booktaskDraftmode = xmltask.flatMap({it.draftmode})
 
-      inputs.files xmltask, stylesheet
-      inputs.property 'watermark', watermark
-      outputs.file bookfo
-      doFirst {
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        ant.xslt('style': stylesheet,
-          'in': file(xmltask.get().bookxml),
-          'out': file(bookfo)) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'draft.mode', 'expression': xmltask.get().draftmode)
-          if (xmltask.get().draftmode != 'no') {
-            param('name': 'draft.watermark.image', 'expression': "docbook/graphics/${watermark}.svg")
-          }
-        }
-      }
-    }
+		inputs.files(xmltask).withPropertyName(xmltask.name)
+		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
+		inputs.property('watermark', watermark)
+		outputs.file(bookfo).withPropertyName('bookfo')
+		doLast('xslt') { t ->
+			ant.xslt('style': stylesheet,
+			'in': booktaskXml.get().getAsFile(),
+			'out': bookfo.get().getAsFile()) {
+				classpath('location': bnd.saxon)
+				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
+				if (booktaskDraftmode.get() != 'no') {
+					param('name': 'draft.watermark.image', 'expression': "docbook/graphics/${watermark}.svg")
+				}
+			}
+		}
+	}
 }
 
 private Closure pdftaskConfiguration(basebook, bookName, fotask) {
-  return {
-      description "Generate the docbook pdf file for the book ${bookName}."
-      group 'documentation'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory)
-      ext.bookpdf = destinationDirectory.file("osgi.${bookName}-${version}.pdf")
-      def fontbasedir = file('fonts')
-      def fopxconf = file('docbook/fop/fop-osgi.xconf')
-      def log4jprops = file('docbook/fop/log4j.properties')
-      inputs.files fotask, fopxconf, log4jprops, fileTree('dir': 'docbook', 'include': '**/*.svg')
-      inputs.dir fontbasedir
-      outputs.file bookpdf
-      doFirst {
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        copy {
-          from fopxconf
-          into temporaryDir
-          filter(ReplaceTokens,
-            'tokens': ['book.base.url': file("docbook/${basebook}").toURI().toString(),
-              'font.base.url': fontbasedir.toURI().toString(),
-              'font.base.dir': fontbasedir.absolutePath])
-        }
-        javaexec {
-          systemProperty('java.awt.headless', 'true')
-          systemProperty('JAVA_FONTS', fontbasedir)
-          systemProperty('log4j.configuration', log4jprops.toURI())
-          classpath compileJava.destinationDir
-          classpath bnd.log4j
-          classpath fop_classpath
-          main = 'org.osgi.tools.fop.FOPMain'
-          minHeapSize = '1g'
-          maxHeapSize = '3g'
-          args '-c', new File(temporaryDir, fopxconf.name)
-          args '-fo', file(fotask.get().bookfo)
-          args '-pdf', file(bookpdf)
-        }.assertNormalExitValue()
-      }
-    }
+	return {
+		description "Generate the docbook pdf file for the book ${bookName}."
+		group 'documentation'
+		def bookpdf = layout.buildDirectory.file("osgi.${bookName}-${version}.pdf")
+		def fontbasedir = file('fonts')
+		def basebookdir = file("docbook/${basebook}")
+		def fopxconf = file('docbook/fop/fop-osgi.xconf')
+		def log4jprops = file('docbook/fop/log4j.properties')
+		def svgFiles = objects.fileTree().from('docbook').include('**/*.svg')
+		def booktaskFo = fotask.flatMap({it.bookfo})
+		def classesDirectory = sourceSets.main.java.classesDirectory
+
+		inputs.files(fotask).withPropertyName(fotask.name)
+		inputs.file(fopxconf).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('fopxconf')
+		inputs.file(log4jprops).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('log4jprops')
+		inputs.dir(fontbasedir).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('fontbasedir')
+		inputs.files(svgFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('svgFiles')
+		outputs.file(bookpdf).withPropertyName('bookpdf')
+
+		def injected = objects.newInstance(Injected)
+		doLast('exec') { t ->
+			injected.fs.copy {
+				from fopxconf
+				into temporaryDir
+				filter(ReplaceTokens,
+				'tokens': ['book.base.url': basebookdir.toURI().toString(),
+					'font.base.url': fontbasedir.toURI().toString(),
+					'font.base.dir': fontbasedir.absolutePath])
+			}
+			injected.exec.javaexec {
+				systemProperty('java.awt.headless', 'true')
+				systemProperty('JAVA_FONTS', fontbasedir)
+				systemProperty('log4j.configuration', log4jprops.toURI())
+				classpath classesDirectory.get().getAsFile()
+				classpath bnd.log4j
+				classpath fop_classpath
+				main = 'org.osgi.tools.fop.FOPMain'
+				minHeapSize = '1g'
+				maxHeapSize = '3g'
+				args '-c', new File(temporaryDir, fopxconf.name)
+				args '-fo', booktaskFo.get().getAsFile()
+				args '-pdf', bookpdf.get().getAsFile()
+			}.assertNormalExitValue()
+		}
+	}
 }
 
 tasks.register('fontmetrics') {
-  description 'Build the font metrics.'
-  group 'documentation'
-  inputs.files fileTree('dir': file('fonts'), 'include': '*.ttf')
-  outputs.files inputs.files.collect {
-    it.absolutePath.replaceAll(/\.ttf$/, /.xml/)
-  }
-  doLast {
-    inputs.files.each { ttf ->
-      javaexec {
-        classpath fop_classpath
-        main = 'org.apache.fop.fonts.apps.TTFReader'
-        args ttf.absolutePath
-        args ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/)
-      }.assertNormalExitValue()
-    }
-  }
+	description 'Build the font metrics.'
+	group 'documentation'
+	def tffs = objects.fileTree().from('fonts').include('*.ttf')
+	def xmls = objects.fileCollection().from(tffs.collect {
+		it.absolutePath.replaceAll(/\.ttf$/, /.xml/)
+	})
+
+	inputs.files(tffs).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('tffs')
+	outputs.files(xmls).withPropertyName('xmls')
+
+	def injected = objects.newInstance(Injected)
+	doLast('exec') { t ->
+		tffs.forEach { ttf ->
+			injected.exec.javaexec {
+				classpath fop_classpath
+				main = 'org.apache.fop.fonts.apps.TTFReader'
+				args ttf.absolutePath
+				args ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/)
+			}.assertNormalExitValue()
+		}
+	}
 }

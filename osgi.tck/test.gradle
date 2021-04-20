@@ -20,62 +20,75 @@
  * osgi.tck Gradle test execution script
  */
 
+interface Injected {
+	@Inject ExecOperations getExec()
+	@Inject FileSystemOperations getFs()
+	@Inject ArchiveOperations getArchive()
+}
+
 tasks.addRule('Pattern: preptck.<name>: Prepare the TCK for <name>.') { taskName ->
-  if (taskName.startsWith('preptck.')) {
-    tasks.create(taskName) {
-      ext.book = taskName - 'preptck.'
-      description "Prepare the TCK for ${book}."
-      group 'verification'
-      ext.destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.tck.${book}"))
-      inputs.files fileTree(riBuildDir).include('osgi.ri.core.jar', "osgi.ri.${book}.jar")
-      inputs.files project.layout.buildDirectory.file("osgi.tck.${book}.jar")
-      doFirst {
-        project.delete(destinationDirectory)
-        project.mkdir(destinationDirectory)
-      }
-      doLast {
-        inputs.files.each { jar ->
-          copy {
-            from zipTree(jar)
-            into destinationDirectory
-          }
-        }
-      }
-    }
-  }
+	if (taskName.startsWith('preptck.')) {
+		tasks.create(taskName) {
+			def book = taskName - 'preptck.'
+			description "Prepare the TCK for ${book}."
+			group 'verification'
+			def jars = objects.fileCollection()
+			jars.from(fileTree(riBuildDir).include('osgi.ri.core.jar', "osgi.ri.${book}.jar"))
+			jars.from(layout.buildDirectory.file("osgi.tck.${book}.jar"))
+			inputs.files(jars).withPropertyName('jars')
+			def injected = objects.newInstance(Injected)
+			def destinationDirectory = layout.buildDirectory.dir("osgi.tck.${book}")
+			def outputFiles = objects.fileTree().from(destinationDirectory)
+			doFirst('clean') { t ->
+				injected.fs.delete {
+					delete outputFiles
+				}
+			}
+			doLast('prep') { t ->
+				jars.forEach { jar ->
+					injected.fs.copy {
+						from injected.archive.zipTree(jar)
+						into destinationDirectory
+					}
+				}
+			}
+		}
+	}
 }
 
 tasks.addRule('Pattern: tck.<name>: Run the TCK for <name>.') { taskName ->
-  if (taskName.startsWith('tck.')) {
-    def book = taskName - 'tck.'
-    def destinationDirectory = project.objects.directoryProperty().value(project.layout.buildDirectory.dir("osgi.tck.${book}"))
-    def tcks = zipTree(project.layout.buildDirectory.file("osgi.tck.${book}.jar")).matching {
-      include '*.bnd'
-    }
-    def tcktask = tasks.create(taskName) {
-      description "Run the TCK for ${book}."
-      group 'verification'
-    }
-    tcks.forEach { bndFile ->
-      def bndName = bndFile.name - '.bnd'
-      tcktask.dependsOn tasks.create("${taskName}.${bndName}") {
-        description "Run the ${bndName} TCK for ${book}."
-        group 'verification'
-        dependsOn tasks.named("preptck.${book}")
-        doLast {
-          javaexec {
-            errorOutput = standardOutput // send stderr to stdout
-            workingDir file(destinationDirectory)
-            main = '-jar' // first arg must be the bnd jar
-            args file(destinationDirectory.file('jar/bnd.jar'))
-            args '--exceptions'
-            args 'runtests'
-            args '--title', name
-            args '--reportdir', "reports/${bndName}"
-            args bndFile.name
-          }.assertNormalExitValue()
-        }
-      }
-    }
-  }
+	if (taskName.startsWith('tck.')) {
+		def book = taskName - 'tck.'
+		def destinationDirectory = objects.directoryProperty().value(layout.buildDirectory.dir("osgi.tck.${book}"))
+		def bndjar = destinationDirectory.file('jar/bnd.jar')
+		def tcks = zipTree(layout.buildDirectory.file("osgi.tck.${book}.jar")).matching {
+			include('*.bnd')
+		}
+		def tcktask = tasks.create(taskName) {
+			description "Run the TCK for ${book}."
+			group 'verification'
+		}
+		tcks.forEach { bndFile ->
+			def bndName = bndFile.name - '.bnd'
+			tcktask.dependsOn tasks.create("${taskName}.${bndName}") {
+				description "Run the ${bndName} TCK for ${book}."
+				group 'verification'
+				dependsOn tasks.named("preptck.${book}")
+				def injected = objects.newInstance(Injected)
+				doLast('exec') { t ->
+					injected.exec.javaexec {
+						errorOutput = standardOutput // send stderr to stdout
+						workingDir destinationDirectory.get().getAsFile()
+						main = '-jar' // first arg must be the bnd jar
+						args bndjar.get().getAsFile()
+						args '--exceptions'
+						args 'runtests'
+						args '--title', name
+						args '--reportdir', "reports/${bndName}"
+						args bndFile.name
+					}.assertNormalExitValue()
+				}
+			}
+		}
+	}
 }
