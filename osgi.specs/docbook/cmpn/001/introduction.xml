@@ -661,16 +661,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.condition.factory"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code>-</code></entry>
-
-              <entry><code><xref endterm="service.condition.factory-version"
-              linkend="service.condition.factory"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.typedevent"
               xrefstyle="template:%n %t"/></entry>
 
@@ -788,11 +778,6 @@
     <title>Changes</title>
 
     <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="service.condition.factory"
-        xrefstyle="template:%t"/> as Chapter 156.</para>
-      </listitem>
-
       <listitem>
         <para>Added <xref linkend="service.jmx" xrefstyle="template:%t"/> from
         the OSGi Enterprise Specification.</para>
