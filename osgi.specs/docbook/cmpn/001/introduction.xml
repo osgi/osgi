@@ -209,18 +209,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.provisioning"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.provisioning"/></code></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.provisioning-version"
-              linkend="service.provisioning"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.upnp"
               xrefstyle="template:%n %t"/></entry>
 
@@ -295,17 +283,6 @@
 
               <entry><code><xref endterm="service.jta-version"
               linkend="service.jta"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.jmx"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.jmx"/></code><superscript>1</superscript></entry>
-
-              <entry><code><xref endterm="org.osgi.jmx-version"
-              linkend="service.jmx"/></code></entry>
             </row>
 
             <row>
@@ -644,7 +621,7 @@
               xrefstyle="template:%n %t"/></entry>
 
               <entry><code><xref
-              linkend="org.osgi.dmt.residential"/></code><superscript>2</superscript></entry>
+              linkend="org.osgi.dmt.residential"/></code><superscript>1</superscript></entry>
 
               <entry><code><xref endterm="org.osgi.dmt.residential-version"
               linkend="dmtree.residential"/></code></entry>
@@ -753,11 +730,6 @@
 
       <orderedlist>
         <listitem>
-          <para>The <code>org.osgi.jmx</code> sub-packages are individually
-          versioned to be aligned with the service they manage.</para>
-        </listitem>
-
-        <listitem>
           <para>This is not a Java package but contains DMT Types.</para>
         </listitem>
       </orderedlist>
@@ -778,11 +750,6 @@
     <title>Changes</title>
 
     <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="service.jmx" xrefstyle="template:%t"/> from
-        the OSGi Enterprise Specification.</para>
-      </listitem>
-
       <listitem>
         <para>Added <xref linkend="service.cdi" xrefstyle="template:%t"/> from
         the OSGi Enterprise Specification.</para>

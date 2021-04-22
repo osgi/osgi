@@ -1,9 +1,0 @@
-Bundle-Description: test-bundle for PermissionAdminMBeanTestCase
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Activator: ${p}.tb2.Activator
-Bundle-Vendor: SAP
-Export-Package: 		${p}.tb2.api;version="4.2.0.${project.build}" 
--privatepackage						= \
-	${p}.tb2.*
-
-

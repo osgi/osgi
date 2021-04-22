@@ -1,9 +1,0 @@
-javac.profile=compact3
-# Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd, ${build}/cmpn.bnd
-
-Export-Package: ${p}.*; -split-package:=first
-
-# Remarkably, this project MUST not have the OSGi libs!
--buildpath = \
-    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}

@@ -66,8 +66,6 @@
 
   <xi:include href="../108/service.wireadmin.xml"/>
 
-  <xi:include href="../110/service.provisioning.xml"/>
-
   <xi:include href="../111/service.upnp.xml"/>
 
   <xi:include href="../112/service.component.xml"/>
@@ -79,8 +77,6 @@
   <xi:include href="../122/service.remoteserviceadmin.xml"/>
 
   <xi:include href="../123/service.jta.xml"/>
-
-  <xi:include href="../124/service.jmx.xml"/>
 
   <xi:include href="../125/service.jdbc.xml"/>
 

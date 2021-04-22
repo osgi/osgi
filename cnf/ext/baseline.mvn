@@ -2,7 +2,6 @@ org.osgi:org.osgi.annotation.bundle:1.0.0
 org.osgi:org.osgi.annotation.versioning:1.0.0
 org.osgi:org.osgi.dto:1.1.0
 org.osgi:org.osgi.framework:1.9.0
-org.osgi:org.osgi.jmx:1.1.0
 org.osgi:org.osgi.namespace.contract:1.0.0
 org.osgi:org.osgi.namespace.extender:1.0.1
 org.osgi:org.osgi.namespace.implementation:1.0.0
@@ -37,7 +36,6 @@ org.osgi:org.osgi.service.networkadapter:1.0.0
 org.osgi:org.osgi.service.packageadmin:1.2.0
 org.osgi:org.osgi.service.permissionadmin:1.2.0
 org.osgi:org.osgi.service.prefs:1.1.1
-org.osgi:org.osgi.service.provisioning:1.2.0
 org.osgi:org.osgi.service.remoteserviceadmin:1.1.0
 org.osgi:org.osgi.service.repository:1.1.0
 org.osgi:org.osgi.service.resolver:1.1.0
