@@ -35,10 +35,13 @@ fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.j
 def compileJava = tasks.named('compileJava')
 
 def javadoc = tasks.named('javadoc') {
-	description 'Build the docbook flavored javadoc.'
-	group 'documentation'
-	destinationDir = file(layout.buildDirectory.dir('javadoc'))
-	def javadocxml = new File(destinationDir, 'javadoc.xml')
+	description = 'Build the docbook flavored javadoc.'
+	group = 'documentation'
+
+	def destinationDirectory = objects.directoryProperty().convention(layout.buildDirectory.dir('javadoc'))
+	destinationDir = file(destinationDirectory)
+	def javadocxml = destinationDirectory.file('javadoc.xml')
+	def docbookDir = destinationDirectory.dir('docbook')
 	def stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
 	classpath = sourceSets.main.compileClasspath
 	source = bnd.allSrcDirs
@@ -56,28 +59,33 @@ def javadoc = tasks.named('javadoc') {
 	inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
 
 	doLast('xslt') { t ->
+		def javadocxmlFile = javadocxml.get().getAsFile()
+		def docbookDirFile = docbookDir.get().getAsFile()
 		ant.xslt('style': stylesheet,
-		'in': javadocxml,
-		'out': "${destinationDir}/docbook/javadoc.txt") {
+		'in': javadocxmlFile,
+		'out': new File(temporaryDir, 'javadoc.txt'),
+		'force': true) {
 			classpath('location': bnd.saxon)
 			factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-			param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+			param('name': 'destdir', 'expression': docbookDirFile)
 			param('name': 'ddf.only', 'expression': '0')
 		}
 		ant.xslt('style': stylesheet,
-		'in': javadocxml,
-		'out': "${destinationDir}/docbook/ddf.txt") {
+		'in': javadocxmlFile,
+		'out': new File(temporaryDir, 'ddf.txt'),
+		'force': true) {
 			classpath('location': bnd.saxon)
 			factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-			param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+			param('name': 'destdir', 'expression': docbookDirFile)
 			param('name': 'ddf.only', 'expression': '1')
 		}
 	}
 }
 
 def rdmtsummary = tasks.register('rdmtsummary') {
-	description 'Build the docbook flavored Residential DMT summary.'
-	group 'documentation'
+	description = 'Build the docbook flavored Residential DMT summary.'
+	group = 'documentation'
+
 	def runtimeClasspath = sourceSets.main.runtimeClasspath
 	def treesummaryxml = layout.buildDirectory.file('residentialdmt/treesummary.xml')
 
@@ -99,12 +107,14 @@ def rdmtsummary = tasks.register('rdmtsummary') {
 }
 
 def xmlns = tasks.register('xmlns', Copy.class) {
-	description 'Build the docbook flavored schemas.'
-	group 'documentation'
+	description = 'Build the docbook flavored schemas.'
+	group = 'documentation'
+
 	from parent.file('xmlns')
 	into layout.buildDirectory.dir('xmlns')
 	include '**/*.xsd'
 	includeEmptyDirs = false
+
 	doLast('strip-comments') { t ->
 		ant.replaceregexp('match': /.*(<(\w+:)?schema)/,
 		'replace': /\1/,
@@ -116,8 +126,8 @@ def xmlns = tasks.register('xmlns', Copy.class) {
 }
 
 def specifications = tasks.register('specifications') {
-	description 'Generates all the specifications.'
-	group 'documentation'
+	description = 'Generates all the specifications.'
+	group = 'documentation'
 }
 defaultTasks += absoluteProjectPath(specifications.name)
 
@@ -125,8 +135,9 @@ def books = ['core', 'cmpn']
 
 books.forEach { book ->
 	def booktask = tasks.register("${book}.xml") {
-		description "Generate the docbook xml file for the book ${book}."
-		group 'documentation'
+		description = "Generate the docbook xml file for the book ${book}."
+		group = 'documentation'
+
 		ext.bookxml = layout.buildDirectory.file("book/${name}")
 		def watermark = bnd("${book}.draft", 'no')
 		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
@@ -179,18 +190,21 @@ books.forEach { book ->
 	}
 
 	def bookdifftask = tasks.register("${book}-diff.xml") {
-		description "Generate the docbook diff xml file for the book ${book}."
-		group 'documentation'
+		description = "Generate the docbook diff xml file for the book ${book}."
+		group = 'documentation'
+
 		ext.bookxml = layout.buildDirectory.file("book/${name}")
 		def watermark = bnd("${book}.draft", 'no')
 		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
 		def stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
 		def baselinexml = file("baseline/${book}.xml")
 		def booktaskXml = booktask.flatMap({it.bookxml})
+
 		inputs.files(booktask).withPropertyName(booktask.name)
 		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
 		inputs.file(baselinexml).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('baselinexml')
 		outputs.file(bookxml).withPropertyName('bookxml')
+
 		def injected = objects.newInstance(Injected)
 		doLast('xml-diff') { t ->
 			def tmpxml = new File(temporaryDir, 'diff.xml')
@@ -208,7 +222,8 @@ books.forEach { book ->
 			}.assertNormalExitValue()
 			ant.xslt('style': stylesheet,
 			'in': tmpxml,
-			'out': bookxml.get().getAsFile()) {
+			'out': bookxml.get().getAsFile(),
+			'force': true) {
 				classpath('location': bnd.saxon)
 				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
 			}
@@ -222,22 +237,25 @@ books.forEach { book ->
 	tasks.register("${book}-diff.pdf", pdftaskConfiguration(book, "${book}-diff", fodifftask))
 
 	def rasterizelisttask = tasks.register("${book}.rasterizelist") {
-		description "Generate list of SVGs to rasterize for the book ${book}."
-		group 'documentation'
+		description = "Generate list of SVGs to rasterize for the book ${book}."
+		group = 'documentation'
 
 		def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
 		ext.imagesFile = layout.buildDirectory.file("images/${book}.txt")
 		def watermark = bnd("${book}.draft", 'no')
 		def booktaskXml = booktask.flatMap({it.bookxml})
 		def booktaskDraftmode = booktask.flatMap({it.draftmode})
+
 		inputs.files(booktask).withPropertyName(booktask.name)
 		inputs.file(imagesXSL).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('imagesXSL')
 		inputs.property('watermark', watermark)
 		outputs.file(imagesFile).withPropertyName('imagesFile')
+
 		doLast('xslt') { t ->
 			ant.xslt('style': imagesXSL,
 			'in': booktaskXml.get().getAsFile(),
-			'out': imagesFile.get().getAsFile()) {
+			'out': imagesFile.get().getAsFile(),
+			'force': true) {
 				classpath('location': bnd.saxon)
 				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
 				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
@@ -249,8 +267,8 @@ books.forEach { book ->
 	}
 
 	def rasterizetask = tasks.register("${book}.rasterize") {
-		description "Rasterize SVGs for the book ${book}."
-		group 'documentation'
+		description = "Rasterize SVGs for the book ${book}."
+		group = 'documentation'
 
 		def svgFiles = objects.fileTree().from('docbook').include('**/*.svg')
 		def bookFolder = layout.projectDirectory.dir("docbook/${book}")
@@ -287,8 +305,8 @@ books.forEach { book ->
 	}
 
 	def htmltask = tasks.register("${book}.html") {
-		description "Generate the docbook html files for the book ${book}."
-		group 'documentation'
+		description = "Generate the docbook html files for the book ${book}."
+		group = 'documentation'
 
 		def stylesheet = file('docbook/xsl/custom-html.xsl')
 		def commonXSL = file('docbook/xsl/custom-html-common.xsl')
@@ -320,7 +338,8 @@ books.forEach { book ->
 		doLast('xslt') { t ->
 			ant.xslt('style': stylesheet,
 			'in': booktaskXml.get().getAsFile(),
-			'out': new File(temporaryDir, 'book.txt')) {
+			'out': new File(temporaryDir, 'book.txt'),
+			'force': true) {
 				classpath('location': bnd.saxon)
 				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
 				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
@@ -358,8 +377,9 @@ books.forEach { book ->
 	}
 
 	def ziptask = tasks.register("${book}.zip", Zip.class) {
-		description "Generate a ZIP archive of the docbook html for the book ${book}."
-		group 'documentation'
+		description = "Generate a ZIP archive of the docbook html for the book ${book}."
+		group = 'documentation'
+
 		destinationDirectory = layout.buildDirectory
 		archiveBaseName = "osgi.${book}"
 		archiveClassifier = 'html'
@@ -373,8 +393,9 @@ books.forEach { book ->
 
 private Closure fotaskConfiguration(bookName, xmltask) {
 	return {
-		description "Generate the docbook fo file for the book ${bookName}."
-		group 'documentation'
+		description = "Generate the docbook fo file for the book ${bookName}."
+		group = 'documentation'
+
 		ext.bookfo = layout.buildDirectory.file("fo/${name}")
 		def stylesheet = file('docbook/xsl/custom-fo.xsl')
 		def watermark = bnd("${bookName}.draft", 'no')
@@ -385,10 +406,12 @@ private Closure fotaskConfiguration(bookName, xmltask) {
 		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('stylesheet')
 		inputs.property('watermark', watermark)
 		outputs.file(bookfo).withPropertyName('bookfo')
+
 		doLast('xslt') { t ->
 			ant.xslt('style': stylesheet,
 			'in': booktaskXml.get().getAsFile(),
-			'out': bookfo.get().getAsFile()) {
+			'out': bookfo.get().getAsFile(),
+			'force': true) {
 				classpath('location': bnd.saxon)
 				factory('name': 'com.icl.saxon.TransformerFactoryImpl')
 				param('name': 'draft.mode', 'expression': booktaskDraftmode.get())
@@ -402,8 +425,9 @@ private Closure fotaskConfiguration(bookName, xmltask) {
 
 private Closure pdftaskConfiguration(basebook, bookName, fotask) {
 	return {
-		description "Generate the docbook pdf file for the book ${bookName}."
-		group 'documentation'
+		description = "Generate the docbook pdf file for the book ${bookName}."
+		group = 'documentation'
+
 		def bookpdf = layout.buildDirectory.file("osgi.${bookName}-${version}.pdf")
 		def fontbasedir = file('fonts')
 		def basebookdir = file("docbook/${basebook}")
@@ -449,12 +473,13 @@ private Closure pdftaskConfiguration(basebook, bookName, fotask) {
 }
 
 tasks.register('fontmetrics') {
-	description 'Build the font metrics.'
-	group 'documentation'
+	description = 'Build the font metrics.'
+	group = 'documentation'
+
 	def tffs = objects.fileTree().from('fonts').include('*.ttf')
-	def xmls = objects.fileCollection().from(tffs.collect {
-		it.absolutePath.replaceAll(/\.ttf$/, /.xml/)
-	})
+	def xmls = objects.fileCollection().from(tffs.getElements().map({ set ->
+		set.collect { it.getAsFile().getAbsolutePath().replaceAll(/\.ttf$/, /.xml/) }
+	}))
 
 	inputs.files(tffs).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('tffs')
 	outputs.files(xmls).withPropertyName('xmls')

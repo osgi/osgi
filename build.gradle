@@ -27,65 +27,65 @@ import aQute.lib.io.IO
 
 /* Configure the subprojects */
 subprojects {
-  if (plugins.hasPlugin('biz.aQute.bnd')) {
-    if (bndis('companion.code')) {
-      apply from: cnf.file('gradle/companion.gradle')
-    }
-    tasks.withType(JavaCompile).configureEach {
-      options.compilerArgs.add('-Xlint:unchecked')
-    }
-    tasks.named('test') {
-      useJUnitPlatform()
-      testLogging {
-        exceptionFormat 'full'
-      }
-      if (!logger.isInfoEnabled()) {
-        def stdOut = [:]
-        def stdErr = [:]
-        onOutput { descriptor, event ->
-          if (event.destination == TestOutputEvent.Destination.StdErr) {
-            stdErr.get(descriptor, []).add(event)
-          } else {
-            stdOut.get(descriptor, []).add(event)
-          }
-        }
-        afterTest { descriptor, result ->
-          def stdErrEvents = stdErr.remove(descriptor)
-          def stdOutEvents = stdOut.remove(descriptor)
-          if (result.resultType == TestResult.ResultType.FAILURE) {
-            if (stdErrEvents && !stdErrEvents.empty) {
-              logger.lifecycle('\n{} > {} STANDARD_ERROR', descriptor.className, descriptor.name)
-              stdErrEvents.each { event ->
-                logger.lifecycle('    {}', event.message.trim())
-              }
-            }
-            if (stdOutEvents && !stdOutEvents.empty) {
-              logger.lifecycle('\n{} > {} STANDARD_OUT', descriptor.className, descriptor.name)
-              stdOutEvents.each { event ->
-                logger.lifecycle('    {}', event.message.trim())
-              }
-            }
-          }
-        }
-      }
-      if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
-        jvmArgs '-XX:+ShowCodeDetailsInExceptionMessages'
-      }
-      systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', gradle.startParameter.logLevel.name()
-      if (System.properties['maven.repo.local']) {
-        systemProperty 'maven.repo.local', IO.getFile(gradle.startParameter.currentDir, System.properties['maven.repo.local'])
-      }
-    }
-  }
+	if (plugins.hasPlugin('biz.aQute.bnd')) {
+		if (bndis('companion.code')) {
+			apply from: cnf.file('gradle/companion.gradle')
+		}
+		tasks.withType(JavaCompile).configureEach {
+			options.compilerArgs.add('-Xlint:unchecked')
+		}
+		tasks.named('test') {
+			useJUnitPlatform()
+			testLogging {
+				exceptionFormat 'full'
+			}
+			if (!logger.isInfoEnabled()) {
+				def stdOut = [:]
+				def stdErr = [:]
+				onOutput { descriptor, event ->
+					if (event.destination == TestOutputEvent.Destination.StdErr) {
+						stdErr.get(descriptor, []).add(event)
+					} else {
+						stdOut.get(descriptor, []).add(event)
+					}
+				}
+				afterTest { descriptor, result ->
+					def stdErrEvents = stdErr.remove(descriptor)
+					def stdOutEvents = stdOut.remove(descriptor)
+					if (result.resultType == TestResult.ResultType.FAILURE) {
+						if (stdErrEvents && !stdErrEvents.empty) {
+							logger.lifecycle('\n{} > {} STANDARD_ERROR', descriptor.className, descriptor.name)
+							stdErrEvents.each { event ->
+								logger.lifecycle('    {}', event.message.trim())
+							}
+						}
+						if (stdOutEvents && !stdOutEvents.empty) {
+							logger.lifecycle('\n{} > {} STANDARD_OUT', descriptor.className, descriptor.name)
+							stdOutEvents.each { event ->
+								logger.lifecycle('    {}', event.message.trim())
+							}
+						}
+					}
+				}
+			}
+			if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
+				jvmArgs '-XX:+ShowCodeDetailsInExceptionMessages'
+			}
+			systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', gradle.startParameter.logLevel.name()
+			if (System.properties['maven.repo.local']) {
+				systemProperty 'maven.repo.local', IO.getFile(gradle.startParameter.currentDir, System.properties['maven.repo.local'])
+			}
+		}
+	}
 }
 
 tasks.named('wrapper') {
-  jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
+	jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }
 
 tasks.register('buildscriptDependencies') {
-  doLast {
-    println "bnd_version: ${bnd_version}"
-    println "bnd_snapshots: ${bnd_snapshots}"
-  }
+	doLast {
+		println "bnd_version: ${bnd_version}"
+		println "bnd_snapshots: ${bnd_snapshots}"
+	}
 }

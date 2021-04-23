@@ -30,8 +30,8 @@ tasks.addRule('Pattern: preptck.<name>: Prepare the TCK for <name>.') { taskName
 	if (taskName.startsWith('preptck.')) {
 		tasks.create(taskName) {
 			def book = taskName - 'preptck.'
-			description "Prepare the TCK for ${book}."
-			group 'verification'
+			description = "Prepare the TCK for ${book}."
+			group = 'verification'
 			def jars = objects.fileCollection()
 			jars.from(fileTree(riBuildDir).include('osgi.ri.core.jar', "osgi.ri.${book}.jar"))
 			jars.from(layout.buildDirectory.file("osgi.tck.${book}.jar"))
@@ -65,14 +65,14 @@ tasks.addRule('Pattern: tck.<name>: Run the TCK for <name>.') { taskName ->
 			include('*.bnd')
 		}
 		def tcktask = tasks.create(taskName) {
-			description "Run the TCK for ${book}."
-			group 'verification'
+			description = "Run the TCK for ${book}."
+			group = 'verification'
 		}
 		tcks.forEach { bndFile ->
 			def bndName = bndFile.name - '.bnd'
 			tcktask.dependsOn tasks.create("${taskName}.${bndName}") {
-				description "Run the ${bndName} TCK for ${book}."
-				group 'verification'
+				description = "Run the ${bndName} TCK for ${book}."
+				group = 'verification'
 				dependsOn tasks.named("preptck.${book}")
 				def injected = objects.newInstance(Injected)
 				doLast('exec') { t ->
