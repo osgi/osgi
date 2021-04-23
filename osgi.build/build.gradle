@@ -24,24 +24,24 @@ def buildProject = project
 
 /* Configure the workspace project */
 configure(parent) {
-  layout.buildDirectory.value(buildProject.layout.buildDirectory)
+	layout.buildDirectory.value(buildProject.layout.buildDirectory)
 
-  def install = tasks.register('install') {
-    dependsOn buildProject.absoluteProjectPath('jar')
-    description "Assembles the ${buildProject.name} project."
-    group 'build'
-  }
+	def install = tasks.register('install') {
+		dependsOn buildProject.absoluteProjectPath('jar')
+		description = "Assembles the ${buildProject.name} project."
+		group = 'build'
+	}
 
-  def deploy = tasks.register('deploy') {
-    dependsOn buildProject.absoluteProjectPath('releaseNeeded')
-    description "Releases the ${buildProject.name} project."
-    group 'build'
-  }
+	def deploy = tasks.register('deploy') {
+		dependsOn buildProject.absoluteProjectPath('releaseNeeded')
+		description = "Releases the ${buildProject.name} project."
+		group = 'build'
+	}
 
-  def build = tasks.register('build') {
-    dependsOn install, deploy
-    description "Assembles and releases the ${buildProject.name} project."
-    group 'build'
-  }
-  defaultTasks += absoluteProjectPath(build.name)
+	def build = tasks.register('build') {
+		dependsOn install, deploy
+		description = "Assembles and releases the ${buildProject.name} project."
+		group = 'build'
+	}
+	defaultTasks += absoluteProjectPath(build.name)
 }

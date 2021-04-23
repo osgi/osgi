@@ -25,7 +25,7 @@ ext.riBuildDir = parent.file("osgi.ri/${bnd('target-dir')}")
 apply from: file('test.gradle')
 
 tasks.register('tck') {
-  description 'Run all the TCKs.'
-  group 'verification'
-  dependsOn 'tck.core', 'tck.cmpn'
+	description = 'Run all the TCKs.'
+	group = 'verification'
+	dependsOn 'tck.core', 'tck.cmpn'
 }
