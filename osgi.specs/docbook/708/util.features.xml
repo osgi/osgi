@@ -827,13 +827,6 @@ Feature f = builder.build();</programlisting>
   </section>
   
   <section>
-    <title>Merging Features</title>
-    <para>
-      ...
-    </para>
-  </section>
-  
-  <section>
     <title>Security</title>
 
     <para>
