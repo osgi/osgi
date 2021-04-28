@@ -18,12 +18,12 @@
 
 package org.osgi.test.cases.serviceloader.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import junit.framework.AssertionFailedError;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
@@ -33,6 +33,8 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.support.OSGiTestCase;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * TODO Test cases to write:
@@ -213,7 +215,9 @@ public class ServiceLoaderServiceClientTest extends OSGiTestCase {
     				wires = rev.getWiring().getRequiredWires("osgi.serviceloader");
     				assertNotNull(wires);
 
-    				assertEquals("There are two providers so there should be two wires", 2, wires.size());
+					assertThat(wires).as(
+							"There should be 2 wires as there are 2 providers, but 1 wire is also allowed since cardinality:=multiple is not guaranteed to provide all wires")
+							.hasSizeBetween(1, 2);
 
     				Collection<ServiceReference<TestBridge>> refs = getContext().getServiceReferences(TestBridge.class, "(test=client)");
     				assertNotNull(refs);
