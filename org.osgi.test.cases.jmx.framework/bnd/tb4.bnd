@@ -1,9 +1,0 @@
-Bundle-SymbolicName: tb4;singleton:=true
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Activator: ${p}.tb4.Activator
-Require-Bundle: ${p}.tb1
-Import-Package: ${p}.tb2.api;version="[999, 1000)";resolution:=mandatory, *
--privatepackage						= \
-	${p}.tb4.*
-
-

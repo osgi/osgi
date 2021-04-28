@@ -1,8 +1,0 @@
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Activator: ${p}.tb3.Activator
-Require-Bundle: ${p}.tb1;resolution:=optional
-Import-Package: org.osgi.foo.bar.nonexistent;version="[1.0, 1.1)";resolution:=optional,*
--privatepackage						= \
-	${p}.tb3.*
-
-

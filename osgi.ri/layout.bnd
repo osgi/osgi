@@ -25,7 +25,6 @@ build.cmpn.impls: \
 jar.cmpn.impls: \
 	${repo;org.osgi.impl.bundle.cdi;latest},\
 	${repo;org.osgi.impl.bundle.derby;latest},\
-	${repo;org.osgi.impl.bundle.jmx;latest},\
 	${repo;org.osgi.impl.bundle.serviceloader;latest},\
 	${repo;org.osgi.impl.bundle.webcontainer;latest},\
 	${repo;org.osgi.impl.service.clusterinfo;latest},\
@@ -40,7 +39,6 @@ jar.cmpn.impls: \
 	${repo;org.osgi.impl.service.jpa;latest},\
 	${repo;org.osgi.impl.service.log.stream;latest},\
 	${repo;org.osgi.impl.service.metatype;latest},\
-	${repo;org.osgi.impl.service.provisioning;latest},\
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest},\
     ${repo;org.osgi.impl.service.repository;latest},\
 	${repo;org.osgi.impl.service.transaction.control;latest},\
