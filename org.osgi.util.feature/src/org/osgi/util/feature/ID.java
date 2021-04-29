@@ -55,7 +55,7 @@ public class ID {
     public static ID fromMavenID(String mavenID) {
         String[] parts = mavenID.split(":");
 
-        if (parts.length < 3 && parts.length > 5)
+        if (parts.length < 3 || parts.length > 5)
             throw new IllegalArgumentException("Not a valid maven ID" + mavenID);
 
         String gid = parts[0];
