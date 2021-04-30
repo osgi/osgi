@@ -32,6 +32,10 @@ public class Features {
 	private static final Features /* Impl */ IMPL = null;// new
 														// FeatureServiceImpl();
 
+	// Remove public constructor.
+	private Features() {
+	}
+
     /**
      * Get a factory which can be used to build feature model entities.
      * @return A builder factory.
@@ -58,17 +62,5 @@ public class Features {
      */
     public static void writeFeature(Feature feature, Writer jsonWriter) throws IOException {
         IMPL.writeFeature(feature, jsonWriter);
-    }
-
-    /**
-     * Merge two features into a new feature.
-     * @param targetID The ID of the new feature.
-     * @param f1 The first feature
-     * @param f2 The second feature
-     * @param ctx The merge context to use for the merge operation.
-     * @return The merged feature.
-     */
-    public static Feature mergeFeatures(ID targetID, Feature f1, Feature f2, MergeContext ctx) {
-        return IMPL.mergeFeatures(targetID, f1, f2, ctx);
     }
 }
