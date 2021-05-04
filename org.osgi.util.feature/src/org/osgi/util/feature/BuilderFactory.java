@@ -62,10 +62,4 @@ public interface BuilderFactory {
      * @return The builder.
      */
     FeatureExtensionBuilder newExtensionBuilder(String name, FeatureExtension.Type type, FeatureExtension.Kind kind);
-
-    /**
-     * Obtain a new builder for MergeContext objects.
-     * @return The builder.
-     */
-    MergeContextBuilder newMergeContextBuilder();
 }
