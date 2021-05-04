@@ -703,7 +703,6 @@ Feature f = builder.build();</programlisting>
       <para>
         Text extensions support the addition of custom text content to the Feature. 
         The text is provided as a JSON string value or as a JSON array of strings.
-        <remark>update the API to report text as an array</remark>
       </para>
       
       <para>
