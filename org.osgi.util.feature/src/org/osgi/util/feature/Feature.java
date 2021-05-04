@@ -17,8 +17,6 @@
  *******************************************************************************/
 package org.osgi.util.feature;
 
-import java.net.URI;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +39,7 @@ public interface Feature extends FeatureArtifact {
 	 * 
 	 * @return The categories.
 	 */
-	Collection<String> getCategories();
+	List<String> getCategories();
 
 	/**
 	 * Get the copyright.
@@ -62,7 +60,7 @@ public interface Feature extends FeatureArtifact {
 	 * 
 	 * @return The documentation URL.
 	 */
-	URI getDocURL();
+	String getDocURL();
 
     /**
      * Get the vendor.

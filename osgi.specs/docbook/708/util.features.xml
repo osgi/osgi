@@ -258,7 +258,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
             
             <row>
               <entry>docURL</entry>
-              <entry>URI</entry>
+              <entry>String</entry>
               <entry>Optional</entry>
               <entry>A location where documentation can be found for the Feature.</entry>
             </row>

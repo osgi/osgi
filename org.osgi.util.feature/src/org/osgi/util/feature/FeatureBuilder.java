@@ -17,7 +17,6 @@
  *******************************************************************************/
 package org.osgi.util.feature;
 
-import java.net.URI;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -66,7 +65,7 @@ public interface FeatureBuilder {
 	 * @param docURL The Documentation URL.
 	 * @return This builder.
 	 */
-	FeatureBuilder setDocURL(URI docURL);
+	FeatureBuilder setDocURL(String docURL);
 
     /**
      * Set the Feature Name.
