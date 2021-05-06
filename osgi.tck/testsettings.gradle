@@ -25,7 +25,7 @@ rootProject.setBuildFileName('test.gradle')
 
 gradle.rootProject {
 	layout.buildDirectory.value(layout.projectDirectory.dir('generated'))
-	ext.riBuildDir = file('../osgi.ri/generated')
+	ext.implBuildDir = file('../osgi.impl/generated')
 }
 
 if (Boolean.parseBoolean(System.getenv('GITHUB_ACTIONS'))) {

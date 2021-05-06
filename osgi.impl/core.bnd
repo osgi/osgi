@@ -1,0 +1,7 @@
+-include: ${build}/core.bnd
+
+Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Implementations
+
+-resourceonly: true
+
+-pack: ${build.core.impls},${jar.core.impls}

@@ -33,7 +33,7 @@ tasks.addRule('Pattern: preptck.<name>: Prepare the TCK for <name>.') { taskName
 			description = "Prepare the TCK for ${book}."
 			group = 'verification'
 			def jars = objects.fileCollection()
-			jars.from(fileTree(riBuildDir).include('osgi.ri.core.jar', "osgi.ri.${book}.jar"))
+			jars.from(fileTree(implBuildDir).include('osgi.impl.core.jar', "osgi.impl.${book}.jar"))
 			jars.from(layout.buildDirectory.file("osgi.tck.${book}.jar"))
 			inputs.files(jars).withPropertyName('jars')
 			def injected = objects.newInstance(Injected)

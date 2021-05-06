@@ -1,7 +1,0 @@
--include: ${build}/cmpn.bnd
-
-Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Reference Implementations
-
--resourceonly: true
-
--pack: ${build.cmpn.impls},${jar.cmpn.impls}

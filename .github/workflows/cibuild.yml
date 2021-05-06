@@ -73,7 +73,7 @@ jobs:
       with:
         name: OSGi-TCK
         path: |
-          osgi.ri/generated/*.jar
+          osgi.impl/generated/*.jar
           osgi.tck/generated/*.jar
     - name: Release
       id: release
