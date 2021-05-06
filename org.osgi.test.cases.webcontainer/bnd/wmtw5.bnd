@@ -18,6 +18,7 @@ Web-ContextPath: /wmtw5
  !Bundle-Description, \
  !Web-ContextPath, \
  *
+-pom=false
 
 -includeresource = \
 	WEB-INF/lib/log.jar=log.jar, \

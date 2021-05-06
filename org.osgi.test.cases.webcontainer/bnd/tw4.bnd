@@ -5,3 +5,4 @@
 -wab: resources/tw4
 -resourceonly=true
 -removeheaders: !Manifest-Version, *
+-pom=false

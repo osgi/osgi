@@ -11,6 +11,7 @@ Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with ma
  !Bundle-Name, \
  !Bundle-Description, \
  *
+-pom=false
 
 -includeresource = \
 	WEB-INF/lib2/log.jar=log.jar, \

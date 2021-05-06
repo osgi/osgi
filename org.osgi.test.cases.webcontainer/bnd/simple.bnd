@@ -4,4 +4,5 @@
 -privatepackage: ${p}.simple.*
 -resourceonly=true
 -removeheaders: !Manifest-Version, !Class-Path, *
+-pom=false
 Class-Path: ../lib2/log.jar

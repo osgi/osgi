@@ -3,3 +3,4 @@
 -failok=true
 -includeresource = META-INF/MANIFEST.MF=resources/div.tb6/MANIFEST.MF
 -privatepackage:                         ${p}.div.tb6
+-pom=false

@@ -6,6 +6,7 @@ Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 8's fragm
 Fragment-Host: ${p}.tw8
 
 -sources=false
+-pom=false
 
 -includeresource = \
 	resources/fragment.tw8

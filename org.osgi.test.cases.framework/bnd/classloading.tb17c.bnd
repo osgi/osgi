@@ -3,3 +3,4 @@
 -failok=true
 -includeresource = {META-INF/MANIFEST.MF=resources/classloading.tb17c/MANIFEST.MF}
 -privatepackage:                         ${p}.classloading.tb17c
+-pom=false

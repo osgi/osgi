@@ -5,6 +5,7 @@
 -wab: resources/tw8
 -resourceonly=true
 -removeheaders: !Manifest-Version, *
+-pom=false
 
 -includeresource = \
 	WEB-INF/lib/log.jar=log.jar, \

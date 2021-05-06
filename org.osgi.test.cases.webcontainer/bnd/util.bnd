@@ -3,3 +3,4 @@ Bundle-Name:                            ${p}.util
 Bundle-Version:                         4.2
 -privatepackage:                        ${p}.util
 Export-Package:                         ${p}.util;version=1.0
+-pom=false
