@@ -1,17 +1,11 @@
 # Set javac settings from JDT prefs
 -include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/annotation.bnd
 
-Bundle-License: Apache-2.0; \
-                link="https://www.apache.org/licenses/LICENSE-2.0"; \
-                description="Apache License, Version 2.0"
 Bundle-Description: \
     OSGi Annotation Release ${versionmask;=;${build.version}}, \
     Annotations for use in compiling bundles
-Bundle-Name: ${-groupid}:${bsn}
--pom: version=${versionmask;===s;${@version}}
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--buildrepo: Local
--releaserepo: Release
 -releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning

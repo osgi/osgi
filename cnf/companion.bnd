@@ -3,18 +3,10 @@ spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}
 spec.version = ${versionmask;===;${if;${spec.package.versionattr};${spec.package.versionattr};0}}
 build.version = ${spec.version}.${project.build}
 Automatic-Module-Name: ${bsn}
-Bundle-License: Apache-2.0; \
-                link="https://www.apache.org/licenses/LICENSE-2.0"; \
-                description="Apache License, Version 2.0"
 Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}
-Bundle-Name: ${-groupid}:${bsn}
--pom: version=${versionmask;===s;${@version}}
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--buildrepo: Local
--releaserepo: Release
 -releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
-# Don't baseline Bundle-Version
--diffignore: Bundle-Version
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true

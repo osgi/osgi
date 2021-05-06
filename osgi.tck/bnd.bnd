@@ -2,10 +2,6 @@
 -dependson          : osgi.companion, ${build.tests}
 -resourceonly       : true
 
--releaserepo: Release
--maven-release: javadoc;path=NONE,sources;path=NONE
-Bundle-Name: ${-groupid}:${bsn}
--pom: version=${versionmask;===s;${@version}}
 -includeresource.legal:\
  "META-INF/=${project.dir}/LICENSE",\
  "META-INF/=${project.workspace}/NOTICE"
