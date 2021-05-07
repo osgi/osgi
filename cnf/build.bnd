@@ -12,6 +12,7 @@ javac.source = 1.8
 javac.target  = 1.8
 javac.profile = compact1
 -eeprofile = auto
+-noimportjava = true
 
 # Include the gradle.properties to get the values of bnd_* which are used
 # for the bnd build repository.
