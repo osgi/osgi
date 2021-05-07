@@ -10,5 +10,4 @@ Export-Service				= org.osgi.service.template.ProvisioningService
 Export-Package				= org.osgi.service.template;-split-package:=first
 
 -buildpath 					= \
-	org.osgi.service.template; 	version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1
+	org.osgi.service.template;version=project

@@ -7,8 +7,8 @@ Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -buildpath = \
-    osgi.core;maven-scope=provided;version=5, \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
     org.osgi.namespace.extender;version=1.0.1,\
     org.osgi.namespace.implementation;version=1.0, \
     org.osgi.service.metatype; version=project

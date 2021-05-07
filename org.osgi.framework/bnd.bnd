@@ -5,7 +5,7 @@ Export-Package: ${p}.*; -split-package:=first; -noimport:=true
 
 -buildpath = \
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
-	org.osgi.dto; version=project, \
-	org.osgi.resource; version=project
+	org.osgi.dto;maven-scope=provided;version=1.0, \
+	org.osgi.resource;maven-scope=provided;version=1.0
 
 -runfw =
