@@ -11,6 +11,6 @@ Bundle-Description: 	OSGi JDBC Service Reference Implementation by Oracle Corpor
 Bundle-Category: 		osgi
 
 -buildpath = \
-	org.osgi.service.jdbc; 	version=project, \
+	org.osgi.service.jdbc;version=latest, \
 	org.osgi.impl.bundle.derby; version=latest, \
-	osgi.core;maven-scope=provided;version=4.3.1
+	org.osgi.framework;maven-scope=provided;version=1.8

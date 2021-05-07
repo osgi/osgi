@@ -10,6 +10,7 @@ Provide-Capability: osgi.service; \
   uses:="org.osgi.service.rest.client"
 
 -buildpath						= \
-	org.osgi.service.rest;		version=project, \
-	osgi.core;maven-scope=provided;version=6.0, \
-	org.osgi.impl.service.rest.support; version=6.0
+	org.osgi.service.rest;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+	org.osgi.impl.service.rest.support; version=latest

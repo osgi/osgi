@@ -12,8 +12,12 @@ Export-Package      = \
 	${p}.*
 
 -buildpath:  \
-	org.osgi.service.enocean;version=project,\
+	org.osgi.service.enocean;version=latest,\
 	org.osgi.test.support;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.service.cm;version=1.5,\
+    org.osgi.service.device;version=1.1,\
+    org.osgi.service.event;version=1.3
 

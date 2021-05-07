@@ -9,7 +9,8 @@ Import-Service = org.osgi.service.log.LogService
 -privatepackage = ${p}.*
 
 -buildpath = \
-	org.osgi.service.tr069todmt;version=project, \
-	org.osgi.service.dmt;version=project, \
-	osgi.cmpn; version=4.3.1, \
-	osgi.core;maven-scope=provided;version=4.3.1
+	org.osgi.service.tr069todmt;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5.1, \
+	org.osgi.service.dmt;version=2.0, \
+	org.osgi.service.log;version=1.3

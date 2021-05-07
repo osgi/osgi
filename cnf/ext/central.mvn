@@ -13,6 +13,7 @@ org.osgi:org.osgi.dto:1.0.0
 org.osgi:org.osgi.resource:1.0.0
 org.osgi:org.osgi.framework:1.8.0
 org.osgi:org.osgi.service.permissionadmin:1.2.0
+org.osgi:org.osgi.util.tracker:1.5.1
 
 # Core R7
 org.osgi:org.osgi.framework:1.9.0
@@ -30,8 +31,10 @@ org.osgi:org.osgi.service.cm:1.5.0
 org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.device:1.1.0
 org.osgi:org.osgi.service.event:1.3.1
+org.osgi:org.osgi.service.http:1.2.1
 org.osgi:org.osgi.service.jdbc:1.0.0
 org.osgi:org.osgi.service.jpa:1.0.0
+org.osgi:org.osgi.service.log:1.3.0
 org.osgi:org.osgi.util.function:1.0.0
 org.osgi:org.osgi.util.promise:1.0.0
 
