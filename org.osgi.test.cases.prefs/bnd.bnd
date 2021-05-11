@@ -10,12 +10,13 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.prefs
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-    org.osgi.service.prefs;                 version=project , \
-	osgi.core;maven-scope=provided;version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.service.prefs;version=latest
 
--runbundles							= \
+-runbundles = \
+    org.osgi.service.prefs;version=latest, \
 	org.osgi.impl.service.prefs; version=latest
 
 -runproperties = ${runproperties}

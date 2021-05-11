@@ -4,3 +4,4 @@
 -privatepackage: ${p}.log.*
 -resourceonly=true
 -removeheaders: !Manifest-Version, *
+-pom=false

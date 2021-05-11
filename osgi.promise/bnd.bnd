@@ -2,17 +2,11 @@
 -include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/promise.bnd
 
 Automatic-Module-Name: ${bsn}
-Bundle-License: Apache-2.0; \
-                link="https://www.apache.org/licenses/LICENSE-2.0"; \
-                description="Apache License, Version 2.0"
 Bundle-Description: \
     OSGi Promise API Release ${versionmask;=;${build.version}} \
     for use inside and outside of OSGi environments
-Bundle-Name: ${-groupid}:${bsn}
--pom: version=${versionmask;===s;${@version}}
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--buildrepo: Local
--releaserepo: Release
 -releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
@@ -24,7 +18,8 @@ Export-Package: ${osgi.promise.packages}
 
 -dependson = ${osgi.promise.specs} 
 
--buildpath = ${replace;${osgi.promise.specs};$;\\;version=project}, \
-    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
+-buildpath = \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    ${template;osgi.promise.specs;${@};version=project}
 
 javadoc.title = Promise

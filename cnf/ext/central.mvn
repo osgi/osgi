@@ -1,26 +1,50 @@
 # OSGi artifacts
-org.osgi:osgi.annotation:7.0.0
-org.osgi:osgi.core:4.3.1
-org.osgi:osgi.core:5.0.0
-org.osgi:osgi.core:6.0.0
-org.osgi:osgi.core:7.0.0
-org.osgi:osgi.cmpn:4.3.1
-org.osgi:osgi.cmpn:5.0.0
-org.osgi:osgi.cmpn:6.0.0
+org.osgi:osgi.annotation:8.0.0
+
+# Core R6
 org.osgi:org.osgi.dto:1.0.0
+org.osgi:org.osgi.resource:1.0.1
+org.osgi:org.osgi.framework:1.8.0
+org.osgi:org.osgi.service.condpermadmin:1.1.2
+org.osgi:org.osgi.service.permissionadmin:1.2.1
+org.osgi:org.osgi.service.startlevel:1.1.1
+org.osgi:org.osgi.util.tracker:1.5.3
+
+# Core R7
 org.osgi:org.osgi.framework:1.9.0
+org.osgi:org.osgi.dto:1.1.1
+
+# Core R8
+org.osgi:org.osgi.framework:1.10.0
+org.osgi:org.osgi.service.condition:1.0.0
+org.osgi:org.osgi.service.log:1.5.0
+
+# Cmpn R6
+org.osgi:org.osgi.namespace.contract:1.0.0
 org.osgi:org.osgi.namespace.extender:1.0.1
 org.osgi:org.osgi.namespace.implementation:1.0.0
 org.osgi:org.osgi.namespace.service:1.0.0
-org.osgi:org.osgi.resource:1.0.0
 org.osgi:org.osgi.service.cm:1.5.0
-org.osgi:org.osgi.service.component.annotations:1.4.0
+org.osgi:org.osgi.service.coordinator:1.0.2
 org.osgi:org.osgi.service.dmt:2.0.2
+org.osgi:org.osgi.service.device:1.1.0
+org.osgi:org.osgi.service.event:1.3.1
+org.osgi:org.osgi.service.http:1.2.1
 org.osgi:org.osgi.service.jdbc:1.0.0
-org.osgi:org.osgi.service.log:1.4.0
+org.osgi:org.osgi.service.jpa:1.0.0
+org.osgi:org.osgi.service.log:1.3.0
 org.osgi:org.osgi.util.function:1.0.0
-org.osgi:org.osgi.util.function:1.1.0
 org.osgi:org.osgi.util.promise:1.0.0
+
+# Cmpn R7
+org.osgi:org.osgi.service.cm:1.6.0
+org.osgi:org.osgi.service.component.annotations:1.4.0
+org.osgi:org.osgi.service.dal:1.0.1
+org.osgi:org.osgi.service.event:1.4.0
+org.osgi:org.osgi.service.log:1.4.0
+org.osgi:org.osgi.service.jpa:1.1.0
+org.osgi:org.osgi.util.converter:1.0.1
+org.osgi:org.osgi.util.function:1.1.0
 org.osgi:org.osgi.util.promise:1.1.1
 org.osgi:org.osgi.util.pushstream:1.0.1
 
@@ -54,17 +78,17 @@ org.osgi:org.osgi.test.junit5.cm:${osgi-test.version}
 javax.ejb:javax.ejb-api:3.2
 javax.transaction:javax.transaction-api:1.2
 
-org.apache.aries:org.apache.aries.util:1.1.1
-org.apache.aries.cdi:org.apache.aries.cdi.extender:1.1.2
-org.apache.aries.cdi:org.apache.aries.cdi.extension.spi:1.1.2
-org.apache.aries.cdi:org.apache.aries.cdi.extra:1.1.2
-org.apache.aries.cdi:org.apache.aries.cdi.spi:1.1.2
-org.apache.aries.cdi:org.apache.aries.cdi.weld:1.1.2
+org.apache.aries:org.apache.aries.util:1.1.3
+org.apache.aries.cdi:org.apache.aries.cdi.extender:1.1.3
+org.apache.aries.cdi:org.apache.aries.cdi.extension.spi:1.1.3
+org.apache.aries.cdi:org.apache.aries.cdi.extra:1.1.3
+org.apache.aries.cdi:org.apache.aries.cdi.spi:1.1.3
+org.apache.aries.cdi:org.apache.aries.cdi.weld:1.1.3
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:1.0.4
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
 org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:1.0.4
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
-org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.2.4
+org.apache.aries.spifly:org.apache.aries.spifly.dynamic.framework.extension:1.3.3
 org.apache.aries.rsa:org.apache.aries.rsa.core:1.13.0
 org.apache.aries.rsa:org.apache.aries.rsa.spi:1.13.0
 org.apache.aries.rsa:org.apache.aries.rsa.topology-manager:1.13.0
@@ -72,11 +96,11 @@ org.apache.aries.rsa.discovery:org.apache.aries.rsa.discovery.local:1.13.0
 org.apache.aries.rsa.discovery:org.apache.aries.rsa.discovery.zookeeper:1.13.0
 org.apache.aries.rsa.provider:org.apache.aries.rsa.provider.tcp:1.13.0
 
-org.apache.felix:org.apache.felix.configadmin:1.9.12
+org.apache.felix:org.apache.felix.configadmin:1.9.22
 org.apache.felix:org.apache.felix.configurator:1.0.8
-org.apache.felix:org.apache.felix.converter:1.0.12
+org.apache.felix:org.apache.felix.converter:1.0.14
 org.apache.felix:org.apache.felix.http.servlet-api:1.1.2
-org.apache.felix:org.apache.felix.http.jetty:4.0.8
+org.apache.felix:org.apache.felix.http.jetty:4.1.8
 # Temporarily replaced by licensed/repo/org.apache.felix.scr/org.apache.felix.scr-2.1.20.jar
 #org.apache.felix:org.apache.felix.scr:2.1.20
 
@@ -112,7 +136,9 @@ commons-logging:commons-logging:1.2
 org.apache.httpcomponents:httpcore-osgi:4.4.6
 org.apache.httpcomponents:httpclient-osgi:4.5.3
 
-org.eclipse.platform:org.eclipse.osgi:3.13.0
+org.eclipse.ecf:org.json:1.0.0.v201011060100
+
+org.eclipse.platform:org.eclipse.osgi:3.16.200
 org.eclipse.platform:org.eclipse.equinox.coordinator:1.3.500
 org.eclipse.platform:org.eclipse.equinox.event:1.5.0
 org.eclipse.platform:org.eclipse.equinox.log.stream:1.0.100

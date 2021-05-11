@@ -6,16 +6,14 @@ Bundle-Activator			= org.osgi.impl.service.upnp.cp.UPnPBundleActivator
 Bundle-Description			= The UPnP bundle with Control Point stack
 
 Export-Package				= \
-	org.osgi.service.upnp; -split-package:=first; provide:=true, \
   	org.osgi.impl.service.upnp.cp.description;version=1.0;-split-package:=first,\
   	org.osgi.impl.service.upnp.cp.util;version=1.0;-split-package:=first
 
 -privatepackage 			= ${p}.*;-split-package:=first
 
 -buildpath = \
-	org.osgi.service.upnp; 			version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1, \
-	osgi.cmpn;						version=4.3.1, \
+	org.osgi.service.upnp;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+    org.osgi.service.http;version=1.2, \
 	org.osgi.impl.bundle.servlet; 	version=2.1
-
--fixupmessages.version: "Version for package * is set to different values"

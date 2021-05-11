@@ -51,14 +51,22 @@ Import-Package: ${-signaturetest}, *
  org.osgi.service.component.runtime, \
  org.osgi.service.component.runtime.dto
 
--buildpath							= \
-    org.osgi.test.support;                  version=project, \
-    org.osgi.service.component;             version=project, \
-    org.osgi.service.log;             version=latest, \
-	osgi.core;maven-scope=provided;version=7.0.0,\
-	osgi.cmpn;version=6.0.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.9,\
+    org.osgi.dto;maven-scope=provided;version=1.1,\
+    org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+    org.osgi.namespace.extender;version=1.0,\
+    org.osgi.namespace.service;version=1.0,\
+    org.osgi.service.component;version=latest, \
+    org.osgi.service.coordinator;version=1.0,\
+    org.osgi.service.cm;version=1.4,\
+    org.osgi.service.log;version=1.4, \
+    org.osgi.util.function;version=1.0, \
+    org.osgi.util.promise;version=1.0
 
--runbundles							= \
+-runbundles = \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \

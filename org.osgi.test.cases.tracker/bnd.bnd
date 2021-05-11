@@ -7,19 +7,18 @@
 Import-Package: ${-signaturetest}, *
 Export-Package						= ${p}.service
 
--buildpath							= \
+-buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-	org.osgi.framework;						version=project, \
-	org.osgi.util.tracker;					version=project, \
-	org.osgi.test.support;					version=project
+	org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.util.tracker;version=latest
 	
+# The following tests the tracker code from the org.osgi.util.tracker 
+# project instead of the one in the framework RI.
+-runpath = org.osgi.util.tracker;version=latest
 -runbundles = 
 
 -runproperties						= ${runproperties}
-
-# The following tests the tracker code from the org.osgi.util.tracker 
-# project instead of the one in the framework RI.
--runpath = org.osgi.util.tracker; version=latest
 
 -signaturetest                      = org.osgi.util.tracker
 

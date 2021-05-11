@@ -12,8 +12,8 @@ javac.profile=compact2
     org.osgi.test.support;                  version=project , \
     org.osgi.annotation.bundle; version=latest, \
     org.osgi.annotation.versioning; version=latest, \
-	osgi.core;maven-scope=provided;version=6.0.0, \
-	osgi.cmpn;version=6.0.0
+	org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.resource;maven-scope=provided;version=1.0
 
 -runbundles = \
     org.osgi.impl.bundle.annotations;version=latest

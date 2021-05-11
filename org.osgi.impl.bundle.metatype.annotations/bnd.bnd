@@ -9,11 +9,9 @@ Bundle-Description			= Metatype Annotations Test Bundle
 -metatypeannotations: ${p}.*
 
 -buildpath 					= \
-	org.osgi.service.component.annotations; version=latest, \
-	org.osgi.service.metatype.annotations; 	version=latest, \
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
-	osgi.core;maven-scope=provided;version=6.0, \
-	osgi.cmpn;					version=6.0
+	org.osgi.service.component.annotations; version=latest, \
+	org.osgi.service.metatype.annotations; 	version=latest
 
 -runbundles							= \
 	org.osgi.impl.service.component; version=latest, \

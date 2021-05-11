@@ -20,7 +20,7 @@
  * osgi.tck Gradle build script
  */
 
-ext.riBuildDir = parent.file("osgi.ri/${bnd('target-dir')}")
+ext.implBuildDir = parent.file("osgi.impl/${bnd('target-dir')}")
 
 apply from: file('test.gradle')
 

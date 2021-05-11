@@ -17,12 +17,18 @@ Import-Package: \
  org.osgi.service.enocean, \
  org.osgi.service.enocean.descriptions
 
--buildpath: org.osgi.test.support;version=project,\
-	org.osgi.service.enocean;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1
+-buildpath: \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+    org.osgi.test.support;version=project,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.service.startlevel;maven-scope=provided;version=1.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+	org.osgi.service.device;version=1.1, \
+	org.osgi.service.event;version=1.3, \
+	org.osgi.service.enocean;version=latest
 
 -runbundles: \
+	org.osgi.service.enocean;version=latest,\
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\

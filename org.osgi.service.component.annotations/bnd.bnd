@@ -8,9 +8,10 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 
 -buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
-    osgi.core;maven-scope=provided;version=6.0, \
-    org.osgi.service.condition;maven-scope=provided;version=latest,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+    org.osgi.service.condition;maven-scope=provided;version=1.0,\
+    org.osgi.namespace.extender;version=1.0.1, \
     org.osgi.util.function;version=1.0,\
     org.osgi.util.promise;version=1.0, \
-    org.osgi.namespace.extender;version=1.0.1, \
     org.osgi.service.component;version=project

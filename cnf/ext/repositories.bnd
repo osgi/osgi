@@ -42,6 +42,7 @@
 publishrepo: ${if;${env;OSSRH_USERNAME};OSGiNexus}
 -connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
 
--releaserepo:
+-buildrepo: Local
+-releaserepo: Release
 -baselinerepo: Baseline
--maven-release: javadoc;path=${target}/docs/javadoc
+-maven-release: pom;path=JAR,javadoc;path=NONE,sources;path=NONE

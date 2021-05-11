@@ -11,4 +11,4 @@ osgi.companion.jars: \
  ${project.workspace}/osgi.cmpn/layout.bnd,\
  ${project.workspace}/osgi.promise/layout.bnd
 
-osgi.companion.specs: ${uniq;${map;def;${replace;${osgi.companion.jars};$;.specs}}}
+osgi.companion.specs: ${uniq;${map;def;${template;osgi.companion.jars;${@}.specs}}}

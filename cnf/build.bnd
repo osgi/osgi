@@ -12,6 +12,7 @@ javac.source = 1.8
 javac.target  = 1.8
 javac.profile = compact1
 -eeprofile = auto
+-noimportjava = true
 
 # Include the gradle.properties to get the values of bnd_* which are used
 # for the bnd build repository.
@@ -68,10 +69,12 @@ osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.mic
 
 build.version				= ${osgi.version}.${project.build}
 
-osgi.annotation.version=7.0.0
+osgi.annotation.version=8.0.0
 
 # Documentation
 -groupid: org.osgi
+-pom: version=${versionmask;===s;${@version}}
+Bundle-Name: ${-groupid}:${bsn}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    Eclipse Foundation
 # To build the non-snapshot version, see the packaging bnd files for -snapshot.
@@ -88,6 +91,10 @@ Bundle-Developers: osgi; \
                   name="OSGi Working Group"; \
                   organization="Eclipse Foundation"; \
                   organizationUrl="https://www.osgi.org/"
+SPDX-License-Identifier: Apache-2.0
+Bundle-License: ${SPDX-License-Identifier};\
+                description="This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0.";\
+                link="https://opensource.org/licenses/Apache-2.0"
 
 -reproducible: true
 -noextraheaders: true
@@ -95,6 +102,9 @@ Bundle-Developers: osgi; \
 -includeresource.legal:\
  "META-INF/=${project.workspace}/LICENSE",\
  "META-INF/=${project.workspace}/NOTICE"
+
+# Don't baseline Bundle-Version
+-diffignore: Bundle-Version
 
 -runfw = org.osgi.impl.framework; version=latest
 

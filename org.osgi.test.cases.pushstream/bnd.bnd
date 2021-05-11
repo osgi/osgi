@@ -10,12 +10,12 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest = org.osgi.util.pushstream
 
--buildpath: \
-	osgi.core;maven-scope=provided;version=5.0,\
+-buildpath = \
 	org.osgi.test.support;version=project,\
-	org.osgi.util.pushstream;version=project
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.util.pushstream;version=latest
 
--runbundles: \
+-runbundles = \
 	org.osgi.util.pushstream;version=latest
 
 -runproperties = ${runproperties}

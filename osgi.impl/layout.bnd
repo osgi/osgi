@@ -1,0 +1,37 @@
+build.impls: ${uniq;${build.core.impls},${build.cmpn.impls}}
+
+osgi.core.projects: ${sort;${filter;${projectswhere;packaging;*core*};org\\.osgi\\.impl\\..*}}
+osgi.cmpn.projects: ${sort;${filter;${projectswhere;packaging;*cmpn*};org\\.osgi\\.impl\\..*}}
+
+build.core.impls:${osgi.core.projects}
+
+jar.core.impls: \
+    org.osgi.impl.framework,\
+    org.osgi.impl.service.log,\
+    org.osgi.impl.service.resolver
+
+build.cmpn.impls: ${osgi.cmpn.projects}
+
+jar.cmpn.impls: \
+	org.osgi.impl.bundle.cdi,\
+	org.osgi.impl.bundle.derby,\
+	org.osgi.impl.bundle.serviceloader,\
+	org.osgi.impl.bundle.webcontainer,\
+	org.osgi.impl.service.clusterinfo,\
+	org.osgi.impl.service.cm,\
+	org.osgi.impl.service.component,\
+	org.osgi.impl.service.configurator,\
+	org.osgi.impl.service.coordinator,\
+	org.osgi.impl.service.event,\
+	org.osgi.impl.service.http,\
+	org.osgi.impl.service.http.whiteboard,\
+	org.osgi.impl.service.jaxrs,\
+	org.osgi.impl.service.jpa,\
+	org.osgi.impl.service.log.stream,\
+	org.osgi.impl.service.metatype,\
+	org.osgi.impl.service.remoteserviceadmin,\
+    org.osgi.impl.service.repository,\
+	org.osgi.impl.service.transaction.control,\
+	org.osgi.impl.service.transaction.control.jdbc,\
+	org.osgi.impl.service.transaction.control.jpa,\
+	org.osgi.impl.service.wireadmin

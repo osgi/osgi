@@ -5,13 +5,12 @@
 -privatepackage						=  \
 	${p}.junit
 
--buildpath							= \
-	org.osgi.test.support; 	version=project, \
-    org.osgi.service.coordinator;           version=project , \
-    osgi.core;maven-scope=provided;version=4.3.1   , \
-    osgi.cmpn;                              version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.service.coordinator;version=latest
 
--runbundles						= \
+-runbundles = \
     org.osgi.impl.service.coordinator; version=latest, \
     org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \

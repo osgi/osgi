@@ -9,20 +9,17 @@ Bundle-Activator				= ${p}.Activator
 
 Import-Package					= !net.sf.cglib.asm.util, *
 
-Export-Package					= org.osgi.service.async; -split-package:=first; provide:=true,\
-								  org.osgi.service.async.delegate; -split-package:=first,\
-								  org.osgi.util.promise; -split-package:=first,\
-								  org.osgi.util.function; -split-package:=first
-
 -includeresource: OSGI-INF/=permissions
 
 Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.async.Async";uses:="org.osgi.service.async",\
 	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async,org.osgi.service.async.delegate"
 
 -buildpath:  \
-	org.osgi.service.async;version=project,\
-	org.osgi.util.function;version=project,\
-	org.osgi.util.promise;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1,\
+	org.osgi.service.async;version=latest,\
+	org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+	org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+	org.osgi.util.function;version=1.0,\
+	org.osgi.util.promise;version=1.0,\
+	org.osgi.service.log;version=1.3,\
 	com.springsource.net.sf.cglib

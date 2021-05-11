@@ -23,11 +23,11 @@ Bundle-Category: osgi,test
     implregister.jar,\
     implregister_noperm.jar
 	
--buildpath							= \
-	org.osgi.test.support;			version=project, \
-    org.osgi.service.serviceloader; version=project , \
-	osgi.core;maven-scope=provided;version=6.0,\
-	osgi.cmpn;         				version=5.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.service.serviceloader;version=latest
 
 -runbundles = \
 	org.osgi.impl.bundle.serviceloader;version=latest

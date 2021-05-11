@@ -5,11 +5,8 @@ Bundle-Activator				= ${p}.Activator
 Import-Service					= org.osgi.service.log.LogService
 
 -privatepackage					= ${p}.*
-Export-Package					= org.osgi.service.device; -split-package:=first; provide:=true
 
 -buildpath						= \
-    org.osgi.service.device;	version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1, \
-	osgi.cmpn;						version=4.3.1
-
--fixupmessages.version: "Version for package * is set to different values"
+    org.osgi.service.device;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.service.log;version=1.3

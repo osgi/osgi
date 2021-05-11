@@ -24,13 +24,14 @@ Bundle-Category: osgi,test
 	tb_importer_noperm.jar=tb_importer_noperm.jar, \
 	tb_reader_noperm.jar=tb_reader_noperm.jar
 	
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.remoteserviceadmin;	version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-    osgi.cmpn;           				version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.service.remoteserviceadmin;version=latest
 
--runbundles							= \
+-runbundles = \
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \

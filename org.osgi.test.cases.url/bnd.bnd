@@ -10,11 +10,11 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.url
 
--buildpath							= \
+-buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.url;					version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.service.url;maven-scope=provided;version=latest
 
 -runbundles =
 

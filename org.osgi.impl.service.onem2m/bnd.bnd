@@ -6,9 +6,10 @@ Bundle-Activator: ${p}.Activator
 -buildpath: \
 	slf4j.api,\
 	org.osgi.service.onem2m;version=latest,\
-	osgi.core;maven-scope=provided;version=6.0,\
-	org.osgi.util.promise;version=latest,\
-	org.osgi.util.function;version=latest
+	org.osgi.framework;maven-scope=provided;version=1.8,\
+	org.osgi.dto;maven-scope=provided;version=1.0,\
+	org.osgi.util.promise;version=1.0,\
+	org.osgi.util.function;version=1.0
 
 -privatepackage     = \
     ${p}.*

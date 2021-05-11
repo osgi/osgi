@@ -19,18 +19,24 @@ Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;
   tb11.jar, \
   tb2.jar
 
--buildpath: org.osgi.test.support;version=project,\
-  org.osgi.service.rest;version=project,\
-  osgi.core;maven-scope=provided;version=6.0.0,\
-  osgi.cmpn;version=6.0.0,\
-  net.sourceforge.htmlunit;version=2.15.0
+-buildpath = \
+    org.osgi.test.support;version=project,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.service.startlevel;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+    org.osgi.namespace.implementation;version=1.0, \
+    org.osgi.service.rest;version=latest,\
+    net.sourceforge.htmlunit;version=2.15.0
 
 -fixupmessages.traversing: "While traversing the type tree for"
 
--runbundles            = \
-  org.osgi.impl.service.rest; version=latest, \
-  org.osgi.impl.service.rest.client.js; version=latest, \
-  org.osgi.impl.service.rest.support; version=latest
+-runbundles = \
+    org.osgi.service.rest;version=latest,\
+    org.osgi.impl.service.rest; version=latest, \
+    org.osgi.impl.service.rest.client.js; version=latest, \
+    org.osgi.impl.service.rest.support; version=latest
 
 -runproperties = ${runproperties}, \
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \

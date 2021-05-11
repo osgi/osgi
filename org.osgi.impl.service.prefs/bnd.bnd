@@ -8,8 +8,7 @@ Bundle-Vendor				= Sun Microsystems, Inc.
 Export-Service				= org.osgi.service.prefs.PreferencesService
 
 -privatepackage 			= ${p}.*
-Export-Package				= org.osgi.service.prefs; -split-package:=first; provide:=true
 
 -buildpath = \
-	org.osgi.service.prefs; 	version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1
+	org.osgi.service.prefs;version=latest, \
+	org.osgi.framework;maven-scope=provided;version=1.8

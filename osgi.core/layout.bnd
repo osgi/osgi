@@ -2,6 +2,6 @@ osgi.core.projects: ${sort;${filterout;${projectswhere;packaging;*core*};org\\.o
 
 osgi.core.specs: ${osgi.core.projects}
 
-osgi.core.packages: ${replace;${osgi.core.specs};$;.*}
+osgi.core.packages: ${template;osgi.core.specs;${@}.*}
 
 osgi.core.resources:

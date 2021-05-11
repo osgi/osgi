@@ -2,7 +2,7 @@ osgi.cmpn.projects: ${sort;${filterout;${projectswhere;packaging;*cmpn*};org\\.o
 
 osgi.cmpn.specs: ${osgi.cmpn.projects}
 
-osgi.cmpn.packages: ${replace;${osgi.cmpn.specs};$;.*}
+osgi.cmpn.packages: ${template;osgi.cmpn.specs;${@}.*}
 
 osgi.cmpn.resources: \
  xmlns/app=${project.workspace}/xmlns/app, \

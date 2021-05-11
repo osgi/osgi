@@ -4,9 +4,8 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-    osgi.core;maven-scope=provided;version=6.0, \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
-    org.osgi.util.function;version=1.0,\
+    org.osgi.util.function;version=1.0, \
     org.osgi.util.promise;version=1.0, \
     org.osgi.service.log;version=1.4.0, \
     org.osgi.util.pushstream;version=1.0.1

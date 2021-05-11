@@ -180,15 +180,19 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append("\\\n    ");
 			sb.append(path);
 			sb.append(";version=file");
-			for (Map.Entry<String,String> entry : map.entrySet()) {
-				if (!entry.getKey().equals("version")) {
-					sb.append(";");
-					sb.append(entry.getKey());
-					sb.append("=\"");
-					sb.append(entry.getValue());
-					sb.append("\"");
+			map.forEach((key, value) -> {
+				if (key.equals("version")) {
+					return;
 				}
-			}
+				if (key.startsWith("maven-")) {
+					return;
+				}
+				sb.append(";");
+				sb.append(key);
+				sb.append("=\"");
+				sb.append(value);
+				sb.append("\"");
+			});
 			sb.append(", ");
 		}
 	}

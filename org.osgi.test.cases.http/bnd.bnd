@@ -13,16 +13,16 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.http
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-    org.osgi.service.http;                  version=project , \
-	org.osgi.impl.bundle.servlet;			version=2.1, \
-	osgi.core;maven-scope=provided;version=5.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+    org.osgi.service.http;version=latest, \
+	org.osgi.impl.bundle.servlet;version=2.1
 
--runbundles							= \
+-runbundles = \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.http; version=latest
-
 
 -runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \

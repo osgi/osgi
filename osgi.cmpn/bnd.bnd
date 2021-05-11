@@ -1,38 +1,32 @@
 # Set javac settings from JDT prefs
 -include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/cmpn.bnd
 
-Bundle-License: Apache-2.0; \
-                link="https://www.apache.org/licenses/LICENSE-2.0"; \
-                description="Apache License, Version 2.0"
 Bundle-Description: \
 	OSGi Compendium Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles
-Bundle-Name: ${-groupid}:${bsn}
--pom: version=${versionmask;===s;${@version}}
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--buildrepo: Local
--releaserepo: Release
 -releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
 
-Import-Package					: *; resolution:=optional
+Import-Package: *; resolution:=optional
 
-Export-Package 					: ${replace;${osgi.cmpn.packages};$;\\;-split-package:=first}
+Export-Package: ${template;osgi.cmpn.packages;${@};-split-package:=first}
 -fixupmessages.export: Unused Export-Package instructions
 
--includeresource 				: ${osgi.cmpn.resources}
+-includeresource = ${osgi.cmpn.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
--dependson 					=  \
+-dependson =  \
 	${osgi.cmpn.specs}
 
--buildpath 					= \
-	${replace;${osgi.cmpn.specs};$;\\;version=project}, \
+-buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+	${template;osgi.cmpn.specs;${@};version=project}, \
     osgi.core;maven-scope=provided;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \

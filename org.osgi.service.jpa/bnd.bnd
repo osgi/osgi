@@ -5,8 +5,9 @@ Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
-    osgi.core;maven-scope=provided;version=5.0.0, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
     org.osgi.namespace.extender;version=1.0.1, \
-    org.eclipse.persistence.jpa_spec; version=2.0; packages=javax.persistence.*
+    org.eclipse.persistence.jpa_spec;maven-scope=provided;version=2.0;packages=javax.persistence.*
 
 -fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values

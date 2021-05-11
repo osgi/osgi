@@ -4,4 +4,5 @@ Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Te
 
 -resourceonly: true
 
--tckpack: ${build.cmpn.tests},${jar.cmpn.tests}
+-tckpack: ${build.cmpn.tests},\
+    ${uniq;${map;repo;${template;jar.cmpn.tests;${@};latest}}}

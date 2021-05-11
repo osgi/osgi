@@ -8,18 +8,21 @@ Import-Package: ${-signaturetest}, *
 
 -includeresource: 
 
--buildpath							= \
-    org.osgi.test.support;          version=project , \
-	org.osgi.service.upnp;			version=project	, \
-	org.osgi.impl.bundle.servlet;	version=2.1, \
-	osgi.core;maven-scope=provided;version=4.3.1		, \
-	osgi.cmpn;						version=4.3.1
+-buildpath = \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+    org.osgi.test.support;version=project , \
+	org.osgi.impl.bundle.servlet;version=2.1, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.service.upnp;version=latest, \
+	org.osgi.service.http;version=1.2
 
--runbundles						= \
-	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.http; version=latest, \
-	org.osgi.impl.service.upnp.cd; version=latest, \
-	org.osgi.impl.service.upnp.cp; version=latest
+-runbundles = \
+	org.osgi.service.upnp;version=latest, \
+	org.osgi.impl.service.log;version=latest, \
+	org.osgi.impl.service.http;version=latest, \
+	org.osgi.impl.service.upnp.cd;version=latest, \
+	org.osgi.impl.service.upnp.cp;version=latest
 
 -runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \

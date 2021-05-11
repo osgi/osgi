@@ -5,7 +5,6 @@ javac.profile=compact2
 Bundle-Activator				= ${p}.Activator
 
 -privatepackage 				= ${p}.*
-Export-Package					= org.osgi.service.rest; -split-package:=first
 Provide-Capability: osgi.implementation; \
   osgi.implementation="osgi.rest"; \
   version:Version="1.0.0"; \
@@ -15,9 +14,11 @@ Provide-Capability: osgi.implementation; \
   ${project.workspace}/xmlns/rest/v1.0.0/rest.xsd
 
 -buildpath = \
-	org.osgi.service.rest;		version=project, \
-	osgi.core;maven-scope=provided;version=6.0, \
-	org.osgi.impl.service.rest.support; version=6.0
+	org.osgi.service.rest;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.impl.service.rest.support;version=latest
 	
 -runbundles = \
 	org.osgi.impl.service.rest.support; version=latest

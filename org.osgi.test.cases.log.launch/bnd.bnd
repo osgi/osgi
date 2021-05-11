@@ -8,12 +8,10 @@ Bundle-Description					: Framework test cases.
 	${p}.junit
 	
 	
--buildpath: \
+-buildpath = \
 	org.osgi.test.support;version=project,\
-	org.osgi.resource;version=project,\
-	org.osgi.framework;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
 	org.osgi.service.log;version=latest
 
 -runbundles:

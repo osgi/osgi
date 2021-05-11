@@ -8,11 +8,10 @@ Bundle-Description			= DS Annotations Test Bundle
 -dsannotations: ${p}.*
 
 -buildpath 					= \
-	org.osgi.service.component;	version=latest, \
-	org.osgi.service.component.annotations;	version=latest, \
-	org.osgi.service.log;	version=latest, \
-	osgi.core;maven-scope=provided;version=6.0, \
-	osgi.cmpn;					version=6.0
+	org.osgi.service.component;version=latest, \
+	org.osgi.service.component.annotations;version=latest, \
+	org.osgi.service.log;version=1.4, \
+	org.osgi.framework;maven-scope=provided;version=1.8
 
 -includeresource: \
  OSGI-INF/vendor.properties;literal="vendor=impl"

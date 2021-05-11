@@ -1,0 +1,8 @@
+-include: ${build}/cmpn.bnd
+
+Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Implementations
+
+-resourceonly: true
+
+-pack: ${build.cmpn.impls},\
+    ${uniq;${map;repo;${template;jar.cmpn.impls;${@};latest}}}

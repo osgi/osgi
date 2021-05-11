@@ -6,9 +6,15 @@ javac.profile=compact2
 Bundle-Description: 			General Support for OSGi JUnit based testing
 Export-Package:  				org.osgi.test.support.*
 
--buildpath:   \
-    osgi.core;maven-scope=provided;version=4.3.1, \
-    osgi.cmpn; version=4.3.1, \
-    org.osgi.util.converter; version=latest,\
+-buildpath = \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+    org.osgi.service.log;version=1.3, \
+    org.osgi.util.converter;version=1.0,\
     osgi.tck.junit-platform;version=latest,\
     org.apiguardian:apiguardian-api;version=latest
+
+# This project is for -conditionalpackage use only
+-buildrepo:
+-releaserepo:

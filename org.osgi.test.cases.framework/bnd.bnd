@@ -284,13 +284,12 @@ Bundle-ClassPath: .,div.tb6.jar
 
 -fixupmessages.host: "Host * for this fragment"
 
--buildpath							= \
-	org.osgi.dto;							version=project	, \
-	org.osgi.resource;						version=project	, \
-	org.osgi.framework;						version=project	, \
-	osgi.cmpn;								version=4.3.1	, \
-	org.apache.servicemix.bundles.bcel;     version=5.2 , \
-    org.osgi.test.support;                  version=project
+-buildpath = \
+    org.osgi.test.support;version=project, \
+	org.osgi.dto;maven-scope=provided;version=latest, \
+	org.osgi.resource;maven-scope=provided;version=latest, \
+	org.osgi.framework;maven-scope=provided;version=latest, \
+	org.apache.servicemix.bundles.bcel;version=5.2
 
 -signaturetest                      = \
     org.osgi.dto, \
@@ -308,8 +307,8 @@ Bundle-ClassPath: .,div.tb6.jar
     org.osgi.framework.wiring, \
     org.osgi.framework.wiring.dto
 
--runbundles						= \
-	org.apache.servicemix.bundles.bcel;         version=5.2 
+-runbundles = \
+	org.apache.servicemix.bundles.bcel;version=5.2 
 
 -runproperties = ${runproperties}, \
 	${p}.div.tb12=abc, \
