@@ -26,9 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.osgi.annotation.bundle.Referenced;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.service.zigbee.types.ZigBeeBoolean;
 import org.w3c.dom.Element;
 
+// Reference the org.osgi.service.zigbee.types package to make sure we import it
+@Referenced(ZigBeeBoolean.class)
 public class ParserUtils {
 
 	/**

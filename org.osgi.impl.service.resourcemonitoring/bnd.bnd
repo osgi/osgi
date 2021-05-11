@@ -7,11 +7,9 @@ Bundle-Description			= The Resource Monitoring reference implementation bundle.
 
 Export-Service				= org.osgi.service.resourcemonitoring.ResourceMonitoringService
 
-Export-Package              = \
-    org.osgi.service.resourcemonitoring.*; -split-package:=first; provide:=true
 -privatepackage: ${p}.*
 
 -buildpath:  \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
 	org.osgi.service.resourcemonitoring;version=latest

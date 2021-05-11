@@ -18,12 +18,12 @@ Bundle-Activator = org.osgi.util.xml.XMLParserActivator
 
 -signaturetest                      = org.osgi.util.xml
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.util.xml;						version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.util.xml;version=latest
 
--runbundles							= \
+-runbundles = \
     org.osgi.util.xml; version=latest
 
 -runproperties = ${runproperties}

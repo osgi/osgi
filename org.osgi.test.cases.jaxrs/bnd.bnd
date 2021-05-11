@@ -12,29 +12,30 @@ Import-Package: ${-signaturetest},\
  org.apache.avalon.framework.logger;resolution:=optional,\
  org.apache.log;resolution:=optional,\
  org.apache.log4j;resolution:=optional,\
- !javax.servlet.*,\
+ javax.servlet.*;version=!;resolution:=dynamic,\
  *
-
-DynamicImport-Package: javax.servlet.*
 
 -contract: JavaJAXRS
 
--buildpath: \
+-buildpath = \
 	org.osgi.test.support;version=project,\
-	org.osgi.service.jaxrs;version=project,\
-	org.apache.aries.javax.jax.rs-api;version=latest,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.namespace.implementation;version=1.0,\
+	org.osgi.namespace.service;version=1.0,\
+	org.osgi.namespace.contract;version=1.0,\
+	org.osgi.service.jaxrs;version=latest,\
+	org.apache.aries.javax.jax.rs-api;version=1.0,\
 	org.apache.geronimo.specs.geronimo-servlet_3.0_spec;version=1.0,\
     org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
-	org.apache.httpcomponents.httpclient;version=4.5.3,\
-	osgi.core;maven-scope=provided;version=6.0.0,\
-	org.osgi.namespace.implementation;version=latest,\
-	org.osgi.namespace.service;version=latest,\
-	org.osgi.namespace.contract;version=latest
+	org.apache.httpcomponents.httpclient;version=4.5.3
 
--runbundles                     = \
-    org.osgi.impl.service.cm;                   version=latest,\
-    org.osgi.impl.service.jaxrs;                version=latest
+-runbundles = \
+    org.osgi.impl.service.cm;version=latest,\
+    org.osgi.impl.service.jaxrs;version=latest
 
 -runproperties                  = ${runproperties}
 

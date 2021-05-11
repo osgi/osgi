@@ -26,15 +26,18 @@ Bundle-Category: osgi,test
 
 -signaturetest                      = org.osgi.service.remoteserviceadmin
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.remoteserviceadmin;	version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-    osgi.cmpn;           					version=4.3.1
+-buildpath = \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.service.event;version=1.3, \
+	org.osgi.service.remoteserviceadmin;version=latest
 
 -fixupmessages.private: "Export * has * private references"
 
--runbundles							= \
+-runbundles = \
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \

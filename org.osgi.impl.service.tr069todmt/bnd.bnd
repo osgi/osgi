@@ -2,7 +2,6 @@
 -include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Activator = ${p}.TR069ConnectorFactoryImpl
-Export-Package = org.osgi.service.tr069todmt; -split-package:=first; provide:=true
 Export-Service = org.osgi.service.tr069todmt.TR069ConnectorFactory
 Import-Service = org.osgi.service.log.LogService
 
@@ -11,6 +10,6 @@ Import-Service = org.osgi.service.log.LogService
 -buildpath = \
 	org.osgi.service.tr069todmt;version=latest, \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
 	org.osgi.service.dmt;version=2.0, \
 	org.osgi.service.log;version=1.3

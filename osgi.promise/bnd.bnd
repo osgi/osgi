@@ -18,7 +18,8 @@ Export-Package: ${osgi.promise.packages}
 
 -dependson = ${osgi.promise.specs} 
 
--buildpath = ${replace;${osgi.promise.specs};$;\\;version=project}, \
-    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
+-buildpath = \
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    ${template;osgi.promise.specs;${@};version=project}
 
 javadoc.title = Promise

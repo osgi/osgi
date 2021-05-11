@@ -6,17 +6,14 @@ Bundle-Vendor				= Orange and TIM
 Bundle-Activator			= ${p}.ZigBeeBundleActivator
 Bundle-Description			= The ZigBee bundle with Control Point stack
 
-Export-Package: \
-	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
-
 -privatepackage = ${p}.*
 
 -buildpath: \
-    com.icl.saxon;version=latest,\
+    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
 	org.osgi.service.zigbee;version=latest,\
 	org.osgi.test.support;version=project,\
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
     org.osgi.service.device;version=1.1, \
     org.osgi.service.http;version=1.2, \
     org.osgi.util.function;version=1.0,\

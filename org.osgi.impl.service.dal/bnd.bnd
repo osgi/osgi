@@ -7,13 +7,12 @@ Bundle-Activator	= ${p}.Activator
 -privatepackage		= ${p}.*
 
 Export-Package		= \
-    org.osgi.service.dal.*; -split-package:=first; provide:=true, \
     org.osgi.impl.service.dal.simulator; -split-package:=first; provide:=true
 
 -buildpath			= \
     org.osgi.service.dal;version=latest, \
     org.osgi.service.dal.functions;version=latest, \
 	org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
     org.osgi.service.device;version=1.1,\
     org.osgi.service.event;version=1.3

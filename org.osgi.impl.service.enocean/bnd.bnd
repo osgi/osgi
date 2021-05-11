@@ -5,9 +5,6 @@ Bundle-Vendor		= Orange
 Bundle-Activator	= org.osgi.impl.service.enocean.EnOceanBundleActivator
 Bundle-Description	= The EnOcean reference implementation bundle.
 
-Export-Package      = \
-    org.osgi.service.enocean.*; -split-package:=first; provide:=true
-
 -privatepackage		= \
 	${p}.*
 
@@ -16,7 +13,7 @@ Export-Package      = \
 	org.osgi.test.support;version=project,\
     org.osgi.framework;maven-scope=provided;version=1.8, \
     org.osgi.resource;maven-scope=provided;version=1.0, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
     org.osgi.service.cm;version=1.5,\
     org.osgi.service.device;version=1.1,\
     org.osgi.service.event;version=1.3

@@ -5,7 +5,6 @@ Bundle-Activator				= ${p}.Activator
 Import-Service					= org.osgi.service.log.LogService
 
 -privatepackage					= ${p}.*
-Export-Package					= org.osgi.service.device; -split-package:=first; provide:=true
 
 -buildpath						= \
     org.osgi.service.device;version=latest, \

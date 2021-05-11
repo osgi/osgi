@@ -7,7 +7,6 @@ Bundle-Description			= Template for a Reference Implementation.
 Export-Service				= org.osgi.service.template.ProvisioningService
 
 -privatepackage 			= ${p}.*
-Export-Package				= org.osgi.service.template;-split-package:=first
 
 -buildpath 					= \
-	org.osgi.service.template;version=project
+	org.osgi.service.template;version=latest

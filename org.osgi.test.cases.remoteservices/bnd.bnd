@@ -9,14 +9,15 @@ Export-Package 					= ${p}.common;version=1.0.0
 -privatepackage						=  \
 	${p}.*
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-	osgi.cmpn;								version=4.3.1	, \
-	org.osgi.util.function;                 version=1.0.0   , \
-	org.osgi.util.promise;                  version=1.0.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.util.function;version=1.0, \
+	org.osgi.util.promise;version=1.0
 
--runbundles							= \
+-runbundles = \
     org.osgi.impl.service.log;                version=latest, \
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \

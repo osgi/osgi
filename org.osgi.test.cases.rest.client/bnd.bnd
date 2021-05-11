@@ -22,15 +22,19 @@ Bundle-Category: osgi,test
 
 -signaturetest          = org.osgi.service.rest.client
 
--buildpath: org.osgi.test.support;version=project,\
-  org.osgi.service.rest;version=project,\
-  osgi.core;maven-scope=provided;version=6.0.0,\
-  osgi.cmpn;version=6.0.0
+-buildpath = \
+    org.osgi.test.support;version=project,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.service.startlevel;maven-scope=provided;version=1.0, \
+    org.osgi.service.rest;version=latest
 
--runbundles            = \
-  org.osgi.impl.service.rest; version=latest, \
-  org.osgi.impl.service.rest.support; version=latest, \
-  org.osgi.impl.service.rest.client; version=latest
+-runbundles = \
+    org.osgi.service.rest;version=latest, \
+    org.osgi.impl.service.rest;version=latest, \
+    org.osgi.impl.service.rest.support;version=latest, \
+    org.osgi.impl.service.rest.client;version=latest
 
 -runproperties = ${runproperties}, \
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \

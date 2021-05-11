@@ -3,7 +3,6 @@ javac.profile=compact2
 -include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 -privatepackage 				= ${p}.*
-Export-Package					= org.osgi.service.rest.client; -split-package:=first
 Bundle-Activator: org.osgi.impl.service.rest.client.Activator
 Provide-Capability: osgi.service; \
   objectClass:List<String>="org.osgi.service.rest.client.RestClientFactory"; \

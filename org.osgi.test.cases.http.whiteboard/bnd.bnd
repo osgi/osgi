@@ -20,20 +20,27 @@ Export-Package: ${p}.junit.mock
 	tb1.jar,\
 	tb2.jar
 
--buildpath: \
+-buildpath = \
+	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
 	org.osgi.test.support;version=project,\
-	org.osgi.util.converter;version=project,\
-	org.osgi.util.function;version=project,\
-	org.osgi.service.http.whiteboard;version=project,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.dto;maven-scope=provided;version=1.0, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.namespace.contract;version=1.0,\
+	org.osgi.namespace.implementation;version=1.0,\
+	org.osgi.namespace.service;version=1.0,\
+	org.osgi.service.http;version=1.2,\
+	org.osgi.service.http.whiteboard;version=latest,\
+	org.osgi.util.converter;version=1.0,\
+	org.osgi.util.function;version=1.0,\
 	org.apache.felix.http.servlet-api;version=1.1,\
 	org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
-	org.apache.httpcomponents.httpclient;version=4.5.3,\
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-	osgi.core;maven-scope=provided;version=6.0.0,\
-	osgi.cmpn;version=6.0.0
+	org.apache.httpcomponents.httpclient;version=4.5.3
 
--runbundles						= \
+-runbundles = \
+    org.osgi.util.function;version=latest, \
     org.osgi.impl.service.http.whiteboard;version=latest
 
 -runproperties = ${runproperties}, \

@@ -16,5 +16,5 @@ Bundle-Activator	= ${p}.Activator
     org.osgi.test.cases.dal.functions;	version=project, \
     org.osgi.test.cases.dal.secure;		version=project, \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
     org.osgi.service.device;version=1.1

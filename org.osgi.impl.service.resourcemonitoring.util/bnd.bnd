@@ -11,5 +11,5 @@ Export-Package: ${p}
 
 -buildpath:  \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
 	org.osgi.service.resourcemonitoring;version=latest

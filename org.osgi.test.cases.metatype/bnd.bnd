@@ -22,13 +22,18 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.metatype
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-    org.osgi.service.metatype;              version=latest , \
-	osgi.core;maven-scope=provided;version=6.0	, \
-	osgi.cmpn;								version=6.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+    org.osgi.namespace.extender;version=1.0, \
+    org.osgi.namespace.implementation;version=1.0, \
+    org.osgi.namespace.service;version=1.0, \
+    org.osgi.service.cm;version=1.5, \
+    org.osgi.service.metatype;version=latest
 
--runbundles							= \
+-runbundles = \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest

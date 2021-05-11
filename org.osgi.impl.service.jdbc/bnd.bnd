@@ -3,8 +3,6 @@ javac.profile=
 -include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
 
 Bundle-Activator: 		${p}.Activator
-Export-Package: 		org.osgi.service.jdbc; -split-package:=first; provide:=true
-#Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
 -privatepackage: 		${p}.*
 
 Bundle-Description: 	OSGi JDBC Service Reference Implementation by Oracle Corporation.

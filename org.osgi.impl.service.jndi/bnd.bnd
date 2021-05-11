@@ -6,9 +6,8 @@ Bundle-Activator			= org.osgi.impl.service.jndi.Activator
 Bundle-Description			= OSGi JNDI Reference Implementation by Oracle Corporation.
 
 -privatepackage 			= ${p}.*
-Export-Package				= org.osgi.service.jndi; -split-package:=first; provide:=true
 
 -buildpath 					= \
 	org.osgi.service.jndi;version=latest, \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1
+    org.osgi.util.tracker;maven-scope=provided;version=1.5

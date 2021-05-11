@@ -25,13 +25,16 @@ Import-Package: *
    tb11b.jar ,\
    init_config.json=configs/init_config.json
 
--buildpath                          = \
-    org.osgi.test.support;                  version=project , \
-    org.osgi.service.configurator;          version=project , \
-    osgi.core;maven-scope=provided;version=6.0.0,\
-    org.osgi.service.cm;version=1.5.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+    org.osgi.service.cm;version=1.5, \
+    org.osgi.service.configurator;version=latest , \
+    org.osgi.util.function;version=1.1, \
+    org.osgi.util.promise;version=1.1
 
--runbundles                         = \
+-runbundles = \
     org.osgi.impl.service.cm; version=latest , \
     org.osgi.impl.service.configurator; version=latest , \
     org.osgi.impl.service.log; version=latest

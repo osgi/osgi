@@ -11,17 +11,19 @@ javac.profile=compact2
 
 -contract: JavaJPA
 
--buildpath: \
-	org.osgi.test.support;version=project,\
-	org.osgi.service.transaction.control;version=project,\
-	org.osgi.service.jpa;version=project,\
-	org.osgi.service.jdbc;version=project,\
-	org.apache.aries.jpa.javax.persistence_2.1,\
+-buildpath = \
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-	osgi.core;maven-scope=provided;version=6.0.0,\
+	org.osgi.test.support;version=project,\
+	org.apache.aries.jpa.javax.persistence_2.1,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.service.transaction.control;version=latest,\
+	org.osgi.service.jpa;version=1.1,\
+	org.osgi.service.jdbc;version=1.0,\
     org.h2; version="[1.4.193,2)"
 
--runbundles						= \
+-runbundles = \
     org.osgi.impl.service.jpa; version=latest, \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest,\
 	org.osgi.impl.service.transaction.control.jpa; version=latest, \

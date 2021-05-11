@@ -1,20 +1,25 @@
 build.tests: ${uniq;org.osgi.test.filter,${build.core.tests},${build.cmpn.tests}}
 
 osgi.core.projects: ${sort;${filter;${projectswhere;packaging;*core*};org\\.osgi\\.test\\..*}}
+osgi.core.api: ${sort;${filterout;${projectswhere;packaging;*core*};(org\\.osgi\\.(impl|test)|osgi)\\..*}}
+
 osgi.cmpn.projects: ${sort;${filter;${projectswhere;packaging;*cmpn*};org\\.osgi\\.test\\..*}}
+osgi.cmpn.api: ${sort;${filterout;${projectswhere;packaging;*cmpn*};(org\\.osgi\\.(impl|test)|osgi)\\..*}}
 
 jar.core.tests: \
-    ${repo;org.apache.servicemix.bundles.bcel;latest},\
-    ${repo;org.osgi.impl.service.cm;latest},\
-    ${repo;osgi.tck.junit-platform;latest}
+    ${osgi.core.api},\
+    org.apache.servicemix.bundles.bcel,\
+    org.osgi.impl.service.cm,\
+    osgi.tck.junit-platform
 
 build.core.tests: ${osgi.core.projects}
 
 jar.cmpn.tests: \
-    ${repo;org.osgi.impl.service.jdbc.support;latest},\
-    ${repo;org.osgi.impl.service.rest.support;latest},\
-    ${repo;org.osgi.test.filter;latest},\
-    ${repo;osgi.tck.junit-platform;latest},\
-    ${repo;osgi.tck.promise;latest}
+    ${osgi.cmpn.api},\
+    org.osgi.impl.service.jdbc.support,\
+    org.osgi.impl.service.rest.support,\
+    org.osgi.test.filter,\
+    osgi.tck.junit-platform,\
+    osgi.tck.promise
 
 build.cmpn.tests: ${osgi.cmpn.projects}

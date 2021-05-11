@@ -9,11 +9,10 @@ Import-Service				= org.osgi.service.upnp.UPnPDevice
 Export-Service				= org.osgi.service.upnp.UPnPListener
 
 -privatepackage 			= ${p}.*
-Export-Package				= org.osgi.service.upnp; -split-package:=first; provide:=true
 
 -buildpath = \
 	org.osgi.service.upnp;version=latest, \
     org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
     org.osgi.service.http;version=1.2, \
 	org.osgi.impl.bundle.servlet; 	version=2.1

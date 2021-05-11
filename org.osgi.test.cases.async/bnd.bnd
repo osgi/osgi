@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/osgi.tck.promise.bnd, ${build}/cmpn.bnd
 
 -conditionalpackage					= org.osgi.test.support.*
 -privatepackage						=  \
@@ -12,14 +12,15 @@ Import-Package: ${-signaturetest}, *
 	tb1.jar
 
 -buildpath: org.osgi.test.support;version=project,\
-	org.osgi.service.async;version=project,\
-	osgi.core;maven-scope=provided;version=6.0.0,\
-	osgi.cmpn;version=4.3.1,\
-    org.osgi.util.function;version=1.0,\
-    org.osgi.util.promise;version=1.0
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+	org.osgi.service.async;version=latest,\
+    org.osgi.service.log;version=1.3
 
 -runbundles						= \
-	org.osgi.impl.service.async; version=latest
+	org.osgi.service.async;version=latest,\
+	org.osgi.impl.service.async;version=latest
 
 -runproperties = ${runproperties}
 

@@ -7,4 +7,4 @@ Bundle-Activator: 		${p}.Activator
 Bundle-Description: 	OSGi Test Filter. Filters out services that are not meant to be used by the TCK.
 
 -buildpath = \
-	osgi.core;maven-scope=provided;version=4.3.1
+    org.osgi.framework;maven-scope=provided;version=1.8

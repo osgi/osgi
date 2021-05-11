@@ -8,11 +8,10 @@ javac.profile=compact2
 -includeresource					= resources, \
  OSGI-INF/impl-src=${project.workspace}/org.osgi.impl.bundle.metatype.annotations/src
 
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.component.annotations;		version=latest, \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-	osgi.cmpn;									version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+	org.osgi.service.metatype;version=latest
 
 -runbundles = \
     org.osgi.impl.bundle.metatype.annotations; version=latest, \

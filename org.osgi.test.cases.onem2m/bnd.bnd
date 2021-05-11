@@ -12,8 +12,9 @@ Bundle-Description: Tests the service layer bundle
 -signaturetest                      = org.osgi.service.onem2m, org.osgi.service.onem2m.dto
 
 -buildpath: \
-	osgi.core;maven-scope=provided;version=6,\
-	org.osgi.test.support;version=latest,\
+	org.osgi.test.support;version=project,\
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.dto;maven-scope=provided;version=1.0,\
 	slf4j.api;version=1.7.7,\
 	org.osgi.service.onem2m;version=latest
 

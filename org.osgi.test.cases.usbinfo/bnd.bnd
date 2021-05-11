@@ -11,13 +11,16 @@ Import-Package: ${-signaturetest}, *
 
 -buildpath:  \
 	org.osgi.test.support;version=project,\
-	org.osgi.service.usbinfo;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+	org.osgi.service.device;version=1.1, \
+	org.osgi.service.usbinfo;version=latest
 
 -signaturetest                      = org.osgi.service.usbinfo
 
 -runbundles:  \
+	org.osgi.service.device;version=latest, \
+	org.osgi.service.usbinfo;version=latest, \
 	org.osgi.impl.service.usbinfo;version=latest,\
 	org.osgi.impl.service.device.manager;version=latest,\
 	org.osgi.impl.service.event;version=latest

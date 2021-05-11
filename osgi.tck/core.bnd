@@ -4,4 +4,5 @@ Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Technolo
 
 -resourceonly: true
 
--tckpack: ${build.core.tests},${jar.core.tests}
+-tckpack: ${build.core.tests},\
+    ${uniq;${map;repo;${template;jar.core.tests;${@};latest}}}

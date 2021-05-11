@@ -9,15 +9,17 @@ Export-Package:  \
 	org.osgi.test.support.step
 Import-Package: ${-signaturetest}, *
 
--buildpath:  \
+-buildpath = \
 	org.osgi.test.support;version=project,\
-	org.osgi.service.serial;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	osgi.cmpn;version=4.3.1
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
+	org.osgi.service.serial;version=latest, \
+	org.osgi.service.device;version=1.1
 
 -signaturetest						= org.osgi.service.serial
 
--runbundles:  \
+-runbundles = \
+	org.osgi.service.serial;version=latest,\
 	org.osgi.impl.service.serial;version=latest,\
 	org.osgi.impl.service.event;version=latest
 

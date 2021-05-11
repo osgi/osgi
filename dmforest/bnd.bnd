@@ -3,4 +3,4 @@
 
 -nobundles=true
 
--buildpath: org.osgi.service.dmt; version=project
+-buildpath: org.osgi.service.dmt;version=latest

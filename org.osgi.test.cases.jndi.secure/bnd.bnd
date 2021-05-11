@@ -21,11 +21,12 @@ Import-Package 						= \
 	inaccessibleBundleContext.jar
 
 -buildpath = \
-	org.osgi.service.jndi;					version=project, \
-    org.osgi.test.support;                  version=project, \
-	osgi.core;maven-scope=provided;version=4.3.1
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.service.jndi;version=latest
 
 -runbundles = \
+    org.osgi.service.jndi;version=latest, \
 	org.osgi.impl.service.jndi; version=latest
 
 -runproperties = ${runsecureproperties}, \

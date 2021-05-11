@@ -14,12 +14,11 @@ Bundle-Description					: Framework test cases.
 	fragments.tb18.jar, \
     launch.secure.tb1.jar
 	
--buildpath							= \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.resource;						version=project	, \
-	org.osgi.framework;						version=project	, \
-	osgi.core;maven-scope=provided;version=4.3.1	, \
-	osgi.cmpn;								version=4.3.1
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.dto;maven-scope=provided;version=latest, \
+    org.osgi.resource;maven-scope=provided;version=latest, \
+    org.osgi.framework;maven-scope=provided;version=latest
 
 -fixupmessages.host: "Host * for this fragment"
 

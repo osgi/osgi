@@ -10,16 +10,13 @@ Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Export-Package 					= \
-    org.osgi.service.dmt.*; -split-package:=first; provide:=true, \
-    org.osgi.service.event; -split-package:=first
 -privatepackage					= ${p}.*
 
 -buildpath						= \
     org.osgi.service.dmt;version=latest, \
     org.osgi.framework;maven-scope=provided;version=1.8, \
     org.osgi.service.permissionadmin;maven-scope=provided;version=1.2,\
-    org.osgi.util.tracker;maven-scope=provided;version=1.5.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
     org.osgi.service.cm;version=1.5,\
     org.osgi.service.log;version=1.3,\
     org.osgi.service.event;version=1.3

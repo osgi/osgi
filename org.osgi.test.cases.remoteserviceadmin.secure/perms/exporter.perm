@@ -16,6 +16,7 @@ ${permissions;packages}
 (org.osgi.framework.ServicePermission "org.osgi.service.*" "register")
 (org.osgi.framework.ServicePermission "*" "get")
 (org.osgi.framework.AdminPermission "*" "metadata")
+(org.osgi.framework.AdaptPermission "*" "adapt")
 
 (java.net.SocketPermission "*" "listen")
 (java.lang.RuntimePermission "*")    

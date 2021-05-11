@@ -49,14 +49,14 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.resolver
 
--buildpath							= \
+-buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-    org.osgi.test.support;                  version=project  , \
-    org.osgi.service.resolver;              version=project , \
-	osgi.core;maven-scope=provided;version=5.0		, \
-	osgi.cmpn;	        					version=5.0
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.service.resolver;version=latest
 
--runbundles							= \
+-runbundles = \
 	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}

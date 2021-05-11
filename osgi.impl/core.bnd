@@ -4,4 +4,5 @@ Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Implemen
 
 -resourceonly: true
 
--pack: ${build.core.impls},${jar.core.impls}
+-pack: ${build.core.impls},\
+    ${uniq;${map;repo;${template;jar.core.impls;${@};latest}}}

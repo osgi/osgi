@@ -1,33 +1,31 @@
 # OSGi artifacts
 org.osgi:osgi.annotation:8.0.0
-org.osgi:osgi.core:4.3.1
-org.osgi:osgi.core:5.0.0
-org.osgi:osgi.core:6.0.0
-org.osgi:osgi.core:7.0.0
-org.osgi:osgi.cmpn:4.3.1
-org.osgi:osgi.cmpn:5.0.0
-org.osgi:osgi.cmpn:6.0.0
 
 # Core R6
 org.osgi:org.osgi.dto:1.0.0
-org.osgi:org.osgi.resource:1.0.0
+org.osgi:org.osgi.resource:1.0.1
 org.osgi:org.osgi.framework:1.8.0
-org.osgi:org.osgi.service.permissionadmin:1.2.0
-org.osgi:org.osgi.util.tracker:1.5.1
+org.osgi:org.osgi.service.condpermadmin:1.1.2
+org.osgi:org.osgi.service.permissionadmin:1.2.1
+org.osgi:org.osgi.service.startlevel:1.1.1
+org.osgi:org.osgi.util.tracker:1.5.3
 
 # Core R7
 org.osgi:org.osgi.framework:1.9.0
-org.osgi:org.osgi.dto:1.1.0
+org.osgi:org.osgi.dto:1.1.1
 
 # Core R8
 org.osgi:org.osgi.framework:1.10.0
 org.osgi:org.osgi.service.condition:1.0.0
+org.osgi:org.osgi.service.log:1.5.0
 
 # Cmpn R6
+org.osgi:org.osgi.namespace.contract:1.0.0
 org.osgi:org.osgi.namespace.extender:1.0.1
 org.osgi:org.osgi.namespace.implementation:1.0.0
 org.osgi:org.osgi.namespace.service:1.0.0
 org.osgi:org.osgi.service.cm:1.5.0
+org.osgi:org.osgi.service.coordinator:1.0.2
 org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.device:1.1.0
 org.osgi:org.osgi.service.event:1.3.1
@@ -39,9 +37,13 @@ org.osgi:org.osgi.util.function:1.0.0
 org.osgi:org.osgi.util.promise:1.0.0
 
 # Cmpn R7
+org.osgi:org.osgi.service.cm:1.6.0
 org.osgi:org.osgi.service.component.annotations:1.4.0
 org.osgi:org.osgi.service.dal:1.0.1
+org.osgi:org.osgi.service.event:1.4.0
 org.osgi:org.osgi.service.log:1.4.0
+org.osgi:org.osgi.service.jpa:1.1.0
+org.osgi:org.osgi.util.converter:1.0.1
 org.osgi:org.osgi.util.function:1.1.0
 org.osgi:org.osgi.util.promise:1.1.1
 org.osgi:org.osgi.util.pushstream:1.0.1

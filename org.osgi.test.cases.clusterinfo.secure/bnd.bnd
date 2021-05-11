@@ -14,14 +14,16 @@ Import-Package: ${-signaturetest}, *
 
 -signaturetest                      = org.osgi.service.clusterinfo
 
--buildpath                          = \
-    org.osgi.test.support;                  version=project , \
-    org.osgi.service.clusterinfo;           version=project , \
-    osgi.core;maven-scope=provided;version=6.0.0   , \
-    osgi.cmpn;                              version=6.0.0
+-buildpath = \
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.dto;maven-scope=provided;version=1.1,\
+    org.osgi.service.startlevel;maven-scope=provided;version=1.1,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+    org.osgi.service.clusterinfo;version=latest
 
--runbundles                         = \
-    org.osgi.impl.service.clusterinfo; version=latest, \
-    org.osgi.impl.service.log; version=latest
+-runbundles = \
+    org.osgi.impl.service.clusterinfo;version=latest, \
+    org.osgi.impl.service.log;version=latest
 
 -runproperties = ${runsecureproperties}

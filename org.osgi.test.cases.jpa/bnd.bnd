@@ -35,18 +35,19 @@ Import-Package						= \
 
 -buildpath: \
 	org.osgi.test.support;version=project,\
-	org.osgi.service.jpa;version=project,\
-	org.osgi.service.jdbc;version=project,\
-	osgi.core;maven-scope=provided;version=4.3.1,\
-	org.osgi.util.tracker;version=latest,\
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.util.tracker;maven-scope=provided;version=1.5,\
+	org.osgi.service.jpa;version=latest,\
+	org.osgi.service.jdbc;version=1.0,\
 	org.eclipse.persistence.jpa_spec;version=2.0;packages=javax.persistence.*,\
-	org.osgi.namespace.extender;version=latest,\
-	org.osgi.namespace.contract;version=latest,\
-	org.osgi.resource;version=latest
+	org.osgi.namespace.extender;version=1.0,\
+	org.osgi.namespace.contract;version=1.0
 
 # If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
 # Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
+	org.osgi.service.jpa;version=latest,\
 	org.osgi.impl.service.jpa; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 

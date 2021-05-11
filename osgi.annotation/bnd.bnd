@@ -13,15 +13,15 @@ companion.code = true
 
 Export-Package: ${osgi.annotation.packages}
 
--includeresource: ${osgi.annotation.resources}
+-includeresource = ${osgi.annotation.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
--dependson =  \
+-dependson = \
     ${osgi.annotation.specs} 
 
 -buildpath = \
-    ${replace;${osgi.annotation.specs};$;\\;version=project}
+    ${template;osgi.annotation.specs;${@};version=project}
 
 javadoc.title = Annotation

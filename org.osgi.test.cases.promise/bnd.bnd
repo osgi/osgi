@@ -11,7 +11,7 @@ Import-Package: ${-signaturetest}, *
 -signaturetest = org.osgi.util.function, org.osgi.util.promise
 
 -buildpath = \
-    osgi.core;maven-scope=provided;version=5.0, \
-    org.osgi.test.support; version=project
+    org.osgi.test.support;version=project, \
+    org.osgi.framework;maven-scope=provided;version=1.8
 
 -runproperties = ${runproperties}

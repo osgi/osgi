@@ -2,6 +2,6 @@ osgi.promise.projects: ${sort;${filterout;${projectswhere;packaging;*promise*};o
 
 osgi.promise.specs: ${osgi.promise.projects}
 
-osgi.promise.packages: ${replace;${osgi.promise.specs};$;.*}
+osgi.promise.packages: ${template;osgi.promise.specs;${@}.*}
 
 osgi.promise.resources:

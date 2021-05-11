@@ -12,15 +12,14 @@ Import-Package: ${-signaturetest}, *
 
 -buildpath: \
 	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
-	osgi.core;maven-scope=provided;version=5.0,\
 	org.osgi.test.support;version=project,\
-	org.osgi.util.converter;version=project,\
-	org.osgi.util.function;version=1.0.0,\
-	org.osgi.dto;version=1.0.0
+    org.osgi.framework;maven-scope=provided;version=1.8,\
+    org.osgi.dto;maven-scope=provided;version=1.0,\
+	org.osgi.util.converter;version=latest,\
+	org.osgi.util.function;version=1.0
 
 -runbundles: \
 	org.osgi.util.converter;version=latest, \
-    org.osgi.util.function;version=latest, \
-    org.osgi.dto;version=latest
+    org.osgi.util.function;version=latest
 
 -runproperties = ${runproperties}

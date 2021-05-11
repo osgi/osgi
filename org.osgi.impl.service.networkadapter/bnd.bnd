@@ -5,8 +5,6 @@ Bundle-Activator			= ${p}.Activator
 Bundle-Description			= Network Interface Information Service for a Reference Implementation.
 
 -privatepackage 			= ${p}.*
-Export-Package				= \
-    org.osgi.service.networkadapter.*; -split-package:=first; provide:=true
 
 -buildpath:  \
 	org.osgi.service.networkadapter;version=latest,\
