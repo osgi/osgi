@@ -121,9 +121,11 @@ public class ControlPoint extends Thread {
 		BufferedReader br = new BufferedReader(new StringReader(resp));
 		String ll = br.readLine();
 		ll = br.readLine();
-		while (!ll.equals(" ")) {
-			if (ll.substring(0, ll.indexOf(':')).equals("LOCATION")) {
-				loc = ll.substring(ll.indexOf(':') + 2, ll.length());
+		while ((ll != null) && !ll.equals(" ")) {
+			int index = ll.indexOf(':');
+			if ((index >= 0)
+					&& ll.substring(0, index).equals("LOCATION")) {
+				loc = ll.substring(index + 2, ll.length());
 				break;
 			}
 			else {
