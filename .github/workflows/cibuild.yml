@@ -58,7 +58,7 @@ jobs:
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
     - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
+      uses: gradle/wrapper-validation-action@v1.0.3
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
@@ -98,7 +98,7 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
+      uses: gradle/wrapper-validation-action@v1.0.3
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
@@ -143,7 +143,7 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
+      uses: gradle/wrapper-validation-action@v1.0.3
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
