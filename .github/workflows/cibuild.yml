@@ -110,7 +110,7 @@ jobs:
         ./.github/scripts/spec.sh
     - name: Publish Specification HTML  
       if: ${{ (env.canonical == 'true') || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v3.8.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
