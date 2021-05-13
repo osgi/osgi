@@ -224,6 +224,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
         <title>Feature Attributes</title>
 
         <tgroup cols="4">
+          <colspec colnum="4" colwidth="2.5*"/>
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -240,12 +241,26 @@ Features may have dependencies on other Features. Features inherit the capabilit
               <entry>Optional</entry>
               <entry>The short descriptive name of the Feature.</entry>
             </row>
+            
+            <row>
+              <entry>categories</entry>
+              <entry>Array of String</entry>
+              <entry>Optional, defaults to an empty array</entry>
+              <entry>The categories this Feature belongs to. The values are user-defined.</entry>
+            </row>
 
             <row>
               <entry>description</entry>
               <entry>String</entry>
               <entry>Optional</entry>
               <entry>A longer description of the Feature.</entry>
+            </row>
+            
+            <row>
+              <entry>docURL</entry>
+              <entry>String</entry>
+              <entry>Optional</entry>
+              <entry>A location where documentation can be found for the Feature.</entry>
             </row>
 
             <row>
@@ -259,7 +274,18 @@ Features may have dependencies on other Features. Features inherit the capabilit
               <entry>license</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>The license of the Feature.</entry>
+              <entry>The license of the Feature. The license only relates to the Feature itself and not to any
+              artifacts that might be referenced by the Feature. The license follows the <code>Bundle-License</code>
+              format as specified in the Core specification.</entry>
+            </row>
+            
+            <row>
+              <entry>SCM</entry>
+              <entry>String</entry>
+              <entry>Optional</entry>
+              <entry>the SCM information relating to the feature. The syntax of the value
+	          follows the Bundle-SCM format. See the 'Bundle Manifest Headers' section
+	          in the OSGi Core specification.</entry>
             </row>
 
             <row>

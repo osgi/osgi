@@ -35,10 +35,32 @@ public interface Feature extends FeatureArtifact {
     String getName();
 
     /**
-     * Get the description.
-     * @return The description.
-     */
+	 * Get the categories.
+	 * 
+	 * @return The categories.
+	 */
+	List<String> getCategories();
+
+	/**
+	 * Get the copyright.
+	 * 
+	 * @return The copyright.
+	 */
+	String getCopyright();
+
+	/**
+	 * Get the description.
+	 * 
+	 * @return The description.
+	 */
     String getDescription();
+
+	/**
+	 * Get the documentation URL.
+	 * 
+	 * @return The documentation URL.
+	 */
+	String getDocURL();
 
     /**
      * Get the vendor.
@@ -47,22 +69,28 @@ public interface Feature extends FeatureArtifact {
     String getVendor();
 
     /**
-     * Get the license.
-     * @return The license.
-     */
+	 * Get the license of this Feature. The syntax of the value follows the
+	 * Bundle-License header syntax. See the 'Bundle Manifest Headers' section
+	 * in the OSGi Core specification.
+	 * 
+	 * @return The license.
+	 */
     String getLicense();
+
+	/**
+	 * Get the SCM information relating to the feature. The syntax of the value
+	 * follows the Bundle-SCM format. See the 'Bundle Manifest Headers' section
+	 * in the OSGi Core specification.
+	 * 
+	 * @return The SCM information.
+	 */
+	String getSCM();
 
     /**
      * Get whether the feature is complete or not.
      * @return Completeness value.
      */
     boolean isComplete();
-
-    /**
-     * Get whether the feature is final or not.
-     * @return Final value.
-     */
-    boolean isFinal();
 
     /**
      * Get the bundles.

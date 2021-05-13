@@ -27,6 +27,45 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface FeatureBuilder {
+	/**
+	 * Adds a category to the Feature.
+	 * 
+	 * @param category The Category.
+	 * @return This builder.
+	 */
+	FeatureBuilder addCategory(String category);
+
+	/**
+	 * Set the Feature Complete flag.
+	 * 
+	 * @param complete If the feature is complete.
+	 * @return This builder.
+	 */
+	FeatureBuilder setComplete(boolean complete);
+
+	/**
+	 * Sets the Copyright.
+	 * 
+	 * @param copyright The Copyright for the feature.
+	 * @return This builder.
+	 */
+	FeatureBuilder setCopyright(String copyright);
+
+	/**
+	 * Set the Feature Description.
+	 * 
+	 * @param description The description.
+	 * @return This builder.
+	 */
+	FeatureBuilder setDescription(String description);
+
+	/**
+	 * Set the documentation URL.
+	 * 
+	 * @param docURL The Documentation URL.
+	 * @return This builder.
+	 */
+	FeatureBuilder setDocURL(String docURL);
 
     /**
      * Set the Feature Name.
@@ -36,39 +75,27 @@ public interface FeatureBuilder {
     FeatureBuilder setName(String name);
 
     /**
-     * Set the Vendor.
-     * @param vendor The Vendor.
-     * @return This builder.
-     */
-    FeatureBuilder setVendor(String vendor);
-
-    /**
      * Set the License.
      * @param license The License.
      * @return This builder.
      */
-    FeatureBuilder setLicense(String license); // TODO do we need this one?
+	FeatureBuilder setLicense(String license);
+
+	/**
+	 * Set the SCM information.
+	 * 
+	 * @param scm The SCM information.
+	 * @return This builder.
+	 */
+	FeatureBuilder setSCM(String scm);
 
     /**
-     * Set the Feature Complete flag.
-     * @param complete If the feature is complete.
-     * @return This builder.
-     */
-    FeatureBuilder setComplete(boolean complete);
-
-    /**
-     * Set the Feature is Final flag.
-     * @param isFinal If the feature is final.
-     * @return This builder.
-     */
-    FeatureBuilder setFinal(boolean isFinal);
-
-    /**
-     * Set the Feature Description.
-     * @param description The description.
-     * @return This builder.
-     */
-    FeatureBuilder setDescription(String description);
+	 * Set the Vendor.
+	 * 
+	 * @param vendor The Vendor.
+	 * @return This builder.
+	 */
+	FeatureBuilder setVendor(String vendor);
 
     /**
      * Add Bundles to the Feature.
