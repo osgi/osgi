@@ -103,10 +103,12 @@ public interface FeatureExtension {
     String getJSON();
 
     /**
-     * Get the Text from this extension.
-     * @return The Text, or {@code null} if this is not a Text extension.
-     */
-    String getText();
+	 * Get the Text from this extension.
+	 * 
+	 * @return The Text line by line, or {@code null} if this is not a Text
+	 *         extension.
+	 */
+	List<String> getText();
 
     /**
      * Get the Artifacts from this extension.

@@ -27,8 +27,8 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface FeatureExtensionBuilder {
 
     /**
-	 * Add text to the extension. Can only be called for extensions of type
-	 * {@link FeatureExtension.Type#TEXT}.
+	 * Add a line of text to the extension. Can only be called for extensions of
+	 * type {@link FeatureExtension.Type#TEXT}.
 	 * 
 	 * @param text The text to be added.
 	 * @return This builder.
