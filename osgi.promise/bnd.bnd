@@ -7,7 +7,6 @@ Bundle-Description: \
     for use inside and outside of OSGi environments
 -maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
