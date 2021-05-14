@@ -6,7 +6,6 @@ Bundle-Description: \
 	Interfaces and Classes for use in compiling bundles
 -maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
 
--releaserepo.publish: ${def;-snapshot;${publishrepo}}
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
