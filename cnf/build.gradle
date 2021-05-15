@@ -28,27 +28,30 @@ def refresh = tasks.register('refresh', WriteProperties.class) {
 	onlyIf {
 		compileJava.get().didWork || processResources.get().didWork
 	}
-	inputs.files(compileJava).withPropertyName('compileJava')
-	inputs.files(processResources).withPropertyName('processResources')
+	inputs.files(compileJava).withPropertyName(compileJava.name)
+	inputs.files(processResources).withPropertyName(processResources.name)
 	outputFile = layout.buildDirectory.file('refresh.properties')
 	property('refreshed', System.currentTimeMillis())
 	doFirst('refresh') { t ->
-		logger.info 'Refresh bnd Projects after building bnd plugins in {}', project.name
-		bnd.project.refresh()
-		parent.subprojects {
-			if (project != cnf) {
-				bnd.project.refresh()
+		logger.info 'Refresh Bnd workspace after building Bnd plugins in {}', project.name
+		if (!bndWorkspace.refresh()) {
+			parent.subprojects {
+				if (plugins.hasPlugin('biz.aQute.bnd')) {
+					bnd.project.propertiesChanged()
+				}
 			}
 		}
+		bndWorkspace.getPlugins() // reload workspace plugins
 	}
 }
 
-
-/* bnd plugins influence bundle contents, so add cnf output to jar inputs */
+/* Bnd plugins influence bundle contents, so add cnf output to jar inputs */
 parent.subprojects {
-	if (project != cnf) {
-		tasks.named('jar') {
-			inputs.files(refresh).withPropertyName(refresh.name)
+	if (plugins.hasPlugin('biz.aQute.bnd')) {
+		if (project != cnf) {
+			tasks.named('jar') {
+				inputs.files(refresh).withPropertyName(refresh.name)
+			}
 		}
 	}
 }
