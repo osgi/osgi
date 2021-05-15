@@ -1056,6 +1056,90 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void factory_resolved_with_success1() throws Exception {
+		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(2);
+		try {
+			Integer value = Integer.valueOf(42);
+			final Deferred<Integer> d1 = factory.deferred();
+			final Promise<Integer> p1 = d1.getPromise();
+			PromiseFactory factory2 = new PromiseFactory(newFixedThreadPool,
+					factory.scheduledExecutor(),
+					PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD);
+			final Promise<Integer> p2 = factory2.resolvedWith(p1);
+			assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+			d1.resolve(value);
+			assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+					.hasSameValue(value);
+		} finally {
+			newFixedThreadPool.shutdown();
+		}
+	}
+
+	@Test
+	public void factory_resolved_with_success2() throws Exception {
+		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(2);
+		try {
+			Integer value = Integer.valueOf(42);
+			PromiseFactory factory2 = new PromiseFactory(newFixedThreadPool,
+					factory.scheduledExecutor(),
+					PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD);
+			final Promise<Integer> p2 = factory2
+					.resolvedWith(factory.resolved(value));
+			assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+					.hasSameValue(value);
+		} finally {
+			newFixedThreadPool.shutdown();
+		}
+	}
+
+	@Test
+	public void factory_resolved_with_failure1() throws Exception {
+		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(2);
+		try {
+			Throwable failure = new RuntimeException();
+			final Deferred<Integer> d1 = factory.deferred();
+			final Promise<Integer> p1 = d1.getPromise();
+			PromiseFactory factory2 = new PromiseFactory(newFixedThreadPool,
+					factory.scheduledExecutor(),
+					PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD);
+			final Promise<Integer> p2 = factory2.resolvedWith(p1);
+			assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+			d1.fail(failure);
+			assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+					.hasFailedWithThrowableThat()
+					.isSameAs(failure);
+		} finally {
+			newFixedThreadPool.shutdown();
+		}
+	}
+
+	@Test
+	public void factory_resolved_with_failure2() throws Exception {
+		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(2);
+		try {
+			Throwable failure = new RuntimeException();
+			PromiseFactory factory2 = new PromiseFactory(newFixedThreadPool,
+					factory.scheduledExecutor(),
+					PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD);
+			final Promise<Integer> p2 = factory2
+					.resolvedWith(factory.failed(failure));
+			assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+					.hasFailedWithThrowableThat()
+					.isSameAs(failure);
+		} finally {
+			newFixedThreadPool.shutdown();
+		}
+	}
+
+	@Test
+	public void factory_resolved_with_null() throws Exception {
+		assertThatNullPointerException()
+				.isThrownBy(() -> factory.resolvedWith(null));
+	}
+
+	@Test
 	public void testResolveWithNull() throws Exception {
 		Deferred<String> d = factory.deferred();
 		assertThatNullPointerException().isThrownBy(() -> d.resolveWith(null));

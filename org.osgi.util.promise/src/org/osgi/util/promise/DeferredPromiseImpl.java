@@ -319,7 +319,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class Chain implements Runnable {
+	final class Chain implements Runnable {
 		private final Promise< ? extends T> promise;
 
 		Chain(Promise< ? extends T> promise) {

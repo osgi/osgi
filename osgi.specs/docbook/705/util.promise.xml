@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="705"
          revision="$Id$"
          version="5.0" xml:id="util.promise"
@@ -670,6 +669,11 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     returning Promises which use the implementation default executors.</para>
 
     <programlisting>  return getTimeConsumingAnswer().fallbackTo(factory.resolved("Fallback Value"));</programlisting>
+
+    <para>The <xref
+    linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-Promise-"
+    xrefstyle="hyperlink"/> method can be used to return a new Promise that
+    will be resolved with the specified promise.</para>
 
     <para>The <xref
     linkend="org.osgi.util.promise.PromiseFactory.submit-Callable-"
