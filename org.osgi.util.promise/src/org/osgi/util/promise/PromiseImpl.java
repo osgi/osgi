@@ -98,12 +98,28 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * Marker interface for internal callbacks which do not call user code and
+	 * should be run on the current thread for an already resolved promise. Such
+	 * internal callbacks should be directly called to resolve a
+	 * DeferredPromiseImpl so that its {@link DeferredPromiseImpl#orDone()}
+	 * method can convert it to a resolved {@link PromiseImpl} type for
+	 * efficiency.
+	 * 
+	 * @since 1.2
+	 */
+	interface InlineCallback {
+		// Internal callback that should be called inline for a resolved
+		// promise.
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Promise<T> onResolve(Runnable callback) {
 		requireNonNull(callback);
-		if (factory.allowCurrentThread() && isDone()) {
+		if (isDone() && ((callback instanceof InlineCallback)
+				|| factory.allowCurrentThread())) {
 			try {
 				callback.run();
 			} catch (Throwable t) {

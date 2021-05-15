@@ -244,7 +244,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class ResolveWith<P> implements Runnable {
+	private final class ResolveWith<P> implements Runnable, InlineCallback {
 		private final Promise< ? extends P>		promise;
 		private final DeferredPromiseImpl<P>	target;
 
@@ -319,7 +319,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Chain implements Runnable {
+	final class Chain implements Runnable, InlineCallback {
 		private final Promise< ? extends T> promise;
 
 		Chain(Promise< ? extends T> promise) {
@@ -339,7 +339,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class ChainImpl implements Runnable {
+	private final class ChainImpl implements Runnable, InlineCallback {
 		private final PromiseImpl<T> promise;
 
 		ChainImpl(PromiseImpl<T> promise) {
@@ -546,7 +546,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class FallbackTo implements Runnable {
+	final class FallbackTo implements Runnable, InlineCallback {
 		private final PromiseImpl<T>		promise;
 		private final Promise< ? extends T>	fallback;
 
@@ -572,7 +572,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class FallbackChain implements Runnable {
+	private final class FallbackChain implements Runnable, InlineCallback {
 		private final Promise< ? extends T>	fallback;
 		private final Throwable				failure;
 
@@ -598,7 +598,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Timeout implements Runnable {
+	final class Timeout implements Runnable, InlineCallback {
 		private final PromiseImpl<T>		promise;
 		private final ScheduledFuture< ? > future;
 
@@ -629,7 +629,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Delay implements Runnable {
+	final class Delay implements Runnable, InlineCallback {
 		private final Runnable	operation;
 		private final long		millis;
 
