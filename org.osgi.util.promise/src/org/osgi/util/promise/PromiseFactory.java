@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.util.promise.PromiseImpl.InlineCallback;
 import org.osgi.util.promise.PromiseImpl.Result;
 
 /**
@@ -356,7 +357,8 @@ public class PromiseFactory {
 	 * 
 	 * @ThreadSafe
 	 */
-	private static final class All<T, S extends T> implements Runnable {
+	private static final class All<T, S extends T>
+			implements Runnable, InlineCallback {
 		private final DeferredPromiseImpl<List<T>>	chained;
 		private final List<Promise<S>>				promises;
 		private final AtomicInteger					promiseCount;
