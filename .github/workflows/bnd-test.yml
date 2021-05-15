@@ -28,7 +28,7 @@ env:
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
   java_version: 8
-  ORG_GRADLE_PROJECT_bnd_version: 5.4.0-SNAPSHOT
+  ORG_GRADLE_PROJECT_bnd_version: 6.0.0-SNAPSHOT
 
 defaults:
   run:
