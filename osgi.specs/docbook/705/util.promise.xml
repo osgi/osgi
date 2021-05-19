@@ -765,6 +765,13 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
           promise may be immediately called on the caller's thread to avoid a
           thread context switch.</para>
         </listitem>
+
+        <listitem>
+          <para>Added the <xref
+          linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-Promise-"
+          xrefstyle="hyperlink"/> method which can be used to return a new
+          Promise that will be resolved with a specified promise.</para>
+        </listitem>
       </itemizedlist></para>
   </section>
 </chapter>
