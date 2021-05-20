@@ -5,9 +5,8 @@ osgi.cmpn.specs: ${osgi.cmpn.projects}
 osgi.cmpn.packages: ${template;osgi.cmpn.specs;${@}.*}
 
 osgi.cmpn.resources: \
- xmlns/app=${project.workspace}/xmlns/app, \
  xmlns/metatype=${project.workspace}/xmlns/metatype, \
- xmlns/rsa=${project.workspace}/xmlns/rsa, \
  xmlns/repository=${project.workspace}/xmlns/repository, \
  xmlns/rest=${project.workspace}/xmlns/rest, \
+ xmlns/rsa=${project.workspace}/xmlns/rsa, \
  xmlns/scr=${project.workspace}/xmlns/scr
