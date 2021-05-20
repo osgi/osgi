@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="105"
          revision="$Id$"
          version="5.0" xml:id="service.metatype"
@@ -1782,34 +1781,5 @@ public class MyComponent {
       Specification, Java SE 8 Edition</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="service.metatype-ad.annotation"/> is updated to
-        add support for mapping to hyphen-minus in component property names,
-        to add special handling for the mapping of the value method in
-        component property types which are single-element annotations, and to
-        add support for PREFIX_.</para>
-      </listitem>
-
-      <listitem>
-        <para>The special value "$" can be used in the pid and factoryPid
-        elements of the ObjectClassDefinition annotation. Tools must replace
-        "$" with the fully qualified name of the type annotated by the
-        ObjectClassDefinition annotation.</para>
-      </listitem>
-
-      <listitem>
-        <para>The <xref
-        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeExtender"
-        xrefstyle="hyperlink"/> and <xref
-        linkend="org.osgi.service.metatype.annotations.RequireMetaTypeImplementation"
-        xrefstyle="hyperlink"/> annotations were added.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

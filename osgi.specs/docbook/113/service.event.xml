@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="113"
          revision="$Id$"
          version="5.0" xml:id="service.event"
@@ -1253,21 +1252,4 @@ UNREGISTERING</programlisting>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.event.annotations.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.event.propertytypes.xml"/>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="org.osgi.service.event.annotations"
-        xrefstyle="hyperlink"/> and <xref
-        linkend="org.osgi.service.event.propertytypes" xrefstyle="hyperlink"/>
-        packages.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.event-capabilities"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
