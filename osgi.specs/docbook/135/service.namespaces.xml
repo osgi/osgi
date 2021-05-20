@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="135"
          revision="$Id$"
          version="5.0" xml:id="service.namespaces"
@@ -170,8 +169,8 @@
             <entry><para>A symbolic name for the extender. These names are
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
-            <code>org.acme.foo</code>. The OSGi Working Group reserves names that
-            start with "<code>osgi.</code>".</para></entry>
+            <code>org.acme.foo</code>. The OSGi Working Group reserves names
+            that start with "<code>osgi.</code>".</para></entry>
           </row>
 
           <row>
@@ -803,16 +802,5 @@ DynamicImport-Package:
       Versioning</title>OSGi Core, Chapter 3, Semantic
       Versioning</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref
-        linkend="service.namespaces-osgi.unresolvable.namespace"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="127"
          revision="$Id$"
          version="5.0" xml:id="service.jpa"
@@ -822,9 +821,9 @@ spath            ::= path   // must not start with solidus ('/' \u002F)</program
       in the bundle. Paths may optionally be prefixed with the solidus
       (<code>'/' \u002F</code>) character. The JPA Provider must always
       include the <code>META-INF/persistence.xml</code> first if it is not one
-      of the listed paths. Wildcards in directories are not supported.
-      The <code>META-INF/persistence.xml</code> is therefore the default
-      location for an empty header.</para>
+      of the listed paths. Wildcards in directories are not supported. The
+      <code>META-INF/persistence.xml</code> is therefore the default location
+      for an empty header.</para>
 
       <para>For example:</para>
 
@@ -1436,9 +1435,9 @@ suffix:     META-INF/persistence.xml</programlisting>
   filter:="(&amp;(osgi.extender=osgi.jpa)(version&gt;=<xref
           endterm="org.osgi.service.jpa-version.number"
           linkend="org.osgi.service.jpa"/>)(!(version&gt;=2.0)))"</programlisting>
-          
-      <para>This requirement can be easily generated using the 
-      <xref linkend="org.osgi.service.jpa.annotations.RequireJPAExtender"
+
+      <para>This requirement can be easily generated using the <xref
+      linkend="org.osgi.service.jpa.annotations.RequireJPAExtender"
       xrefstyle="hyperlink"/> annotation.</para>
 
       <para>The JPA extender must only process a persistence bundle's
@@ -1597,26 +1596,27 @@ Require-Capability: osgi.contract;
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jpa.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jpa.annotations.xml"/>
 
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="i3075794"><title>JPA
-      1.0</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3075794"><title>JPA 1.0</title><biblioid
+      class="uri"><link
       xlink:href="http://jcp.org/en/jsr/summary?id=220"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3075842"><title>JPA
-      2.0</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3075842"><title>JPA 2.0</title><biblioid
+      class="uri"><link
       xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3075842.1"><title>JPA
-      2.1</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3075842.1"><title>JPA 2.1</title><biblioid
+      class="uri"><link
       xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="i3091015"><title>Java EE
-      5</title><biblioid class="uri"><link
+      <bibliomixed xml:id="i3091015"><title>Java EE 5</title><biblioid
+      class="uri"><link
       xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed
@@ -1624,46 +1624,5 @@ Require-Capability: osgi.contract;
       Contract Definitions</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for <xref linkend="i3075842.1"/> in the
-        API.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for standard <xref linkend="i3075842.1"/>
-        configuration properties when using the <xref
-        linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
-        xrefstyle="hyperlink"/>. See <xref
-        linkend="service.jpa-std.config.props" /></para>
-      </listitem>
-
-      <listitem>
-        <para>Added methods to the <xref
-        linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
-        xrefstyle="hyperlink"/> so that users can query which JPA Provider
-        bundle is being used to create the <code>EntityManagerFactory</code>.
-        See <xref linkend="i3095031"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Required that configuration overrides passed to the <xref
-        linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
-        xrefstyle="hyperlink"/> result in service property updates to any
-        related <code>EntityManagerFactory</code> service. See <xref
-        linkend="i3097403"/></para>
-      </listitem>
-
-      <listitem>
-        <para>A number of <xref linkend="service.jpa-capabilities"/> have been
-        defined to make it simpler to assemble and deploy JPA
-        applications.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

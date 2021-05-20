@@ -16,10 +16,10 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="104"
          revision="$Id$"
-         version="5.0" xml:id="service.cm" xmlns="http://docbook.org/ns/docbook"
+         version="5.0" xml:id="service.cm"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -2702,55 +2702,4 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.annotations.xml"/>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Support for named factory configurations is added. See <xref
-        linkend="i1761778"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New method <code>Configuration.updateIfDifferent</code> is
-        added.. See <xref
-        linkend="service.cm-updating.configuration"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Attributes are added to configuration objects and a
-        <code>READ_ONLY</code> attribute is defined. See <xref
-        linkend="service.cm-configuration.attributes"/> and <xref
-        linkend="i1693439"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Call order and handling of <code>ConfigurationPlugin</code>
-        services is clarified. See <xref
-        linkend="service.cm-plugin.order"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A way to manually call Configuration Plugin services is added.
-        See <xref linkend="service.cm-plugin.manual"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Configuration Admin must support implicit coordinations. See
-        <xref linkend="service.cm-coordinatorsupport"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Service and implementation capabilities are added. See <xref
-        linkend="service.cm-capabilities"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>The <xref
-        linkend="org.osgi.service.cm.annotations.RequireConfigurationAdmin"
-        xrefstyle="hyperlink"/> annotation is added.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

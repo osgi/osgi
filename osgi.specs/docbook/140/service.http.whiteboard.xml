@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="140"
          revision="$Id$"
          version="5.0" xml:id="service.http.whiteboard"
@@ -203,13 +202,13 @@
 
     <para>Some environments may use <xref
     linkend="service.http.whiteboard-service.hook.ref"/> to isolate
-    <code>ServletContextHelper</code> service registrations.
-    The Whiteboard implementation must
-    check that the bundle registering the Whiteboard service has the ability
-    to find the <code>ServletContextHelper</code> service before allowing the
-    Whiteboard service to bind to the Servlet Context Helper. This can be done
-    by calling one of the <code>getServiceReferences</code> methods on the
-    Bundle Context of bundle that registered the Whiteboard service.</para>
+    <code>ServletContextHelper</code> service registrations. The Whiteboard
+    implementation must check that the bundle registering the Whiteboard
+    service has the ability to find the <code>ServletContextHelper</code>
+    service before allowing the Whiteboard service to bind to the Servlet
+    Context Helper. This can be done by calling one of the
+    <code>getServiceReferences</code> methods on the Bundle Context of bundle
+    that registered the Whiteboard service.</para>
 
     <table pgwide="1"
            xml:id="service.http.whiteboard.servletcontext.helper.properties">
@@ -2709,51 +2708,5 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Hooks</title>OSGi Core, Chapter 55 Service Hook Service
       Specification</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref
-        linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
-        xrefstyle="hyperlink"/> to the Servlet Context Helper.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added Servlet support for Multipart Configuration Handling. See
-        <xref
-        linkend="service.http.whiteboard.servlet.properties.table"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref
-        linkend="service.http.whiteboard.servlet.preprocessors"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>service.changecount</code> service property to Http
-        Service Runtime Service. See <xref
-        linkend="service.http.whiteboard.httpserviceruntime.properties.table"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref
-        linkend="service.http.whiteboard.httpservice.integration"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added component property types and annotations, see <xref
-        linkend="org.osgi.service.http.whiteboard.propertytypes"
-        xrefstyle="hyperlink"/> in the API section.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added the <xref
-        linkend="org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard"
-        xrefstyle="hyperlink"/> annotation.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="132"
          revision="$Id$"
          version="5.0" xml:id="service.repository"
@@ -1363,8 +1362,8 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
 
       <bibliomixed
       xml:id="service.repository-resolving.relative.uris"><title>XML Base
-      (Second Edition), Resolving Relative
-      URIs</title><biblioid class="uri"><link
+      (Second Edition), Resolving Relative URIs</title><biblioid
+      class="uri"><link
       xlink:href="https://www.w3.org/TR/xmlbase/#resolution"/></biblioid></bibliomixed>
 
       <bibliomixed
@@ -1372,17 +1371,5 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
       Specification</title>OSGi Core, Chapter 58 Resolver Service
       Specification</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified that any relative URIs in a Repository XML file must
-        be resolved as specified in <xref
-        linkend="service.repository-resolving.relative.uris"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="100"
          revision="$Id$"
          version="5.0" xml:id="service.remoteservices"
@@ -915,11 +914,11 @@ tracker.open();</programlisting>
     provided. For example, a hypothetical configuration type could use a
     service property to hold a URL for the RMI naming registry.</para>
 
-    <para>Configuration types that are not defined by the OSGi Working Group should
-    use a name that follows the reverse <code>capabilities</code> domain name
-    scheme defined in <xref linkend="i1721171"/> for Java packages. For
-    example, <code>com.acme.wsdl</code> would be the proprietary way for the
-    ACME company to specify a WSDL configuration type.</para>
+    <para>Configuration types that are not defined by the OSGi Working Group
+    should use a name that follows the reverse <code>capabilities</code>
+    domain name scheme defined in <xref linkend="i1721171"/> for Java
+    packages. For example, <code>com.acme.wsdl</code> would be the proprietary
+    way for the ACME company to specify a WSDL configuration type.</para>
 
     <section>
       <title>Configuration Type Properties</title>
@@ -1408,17 +1407,5 @@ com.acme.rmi.path = service-id/24</programlisting>
       Specification</title><biblioid class="uri"><link
       xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code>,
-        <code>osgi.confidential</code>, and <code>osgi.private</code>. See
-        <xref linkend="i1693415"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
