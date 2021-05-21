@@ -20,6 +20,8 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.CompletionStage;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -176,5 +178,42 @@ public class Deferred<T> {
 	@Override
 	public String toString() {
 		return promise.toString();
+	}
+
+	/**
+	 * Resolve the Promise associated with this Deferred with the specified
+	 * CompletionStage.
+	 * <p>
+	 * If the specified CompletionStage is completed normally, the associated
+	 * Promise is resolved with the value of the specified CompletionStage. If
+	 * the specified CompletionStage is completed exceptionally, the associated
+	 * Promise is resolved with the failure of the specified CompletionStage.
+	 * <p>
+	 * After the associated Promise is resolved with the specified
+	 * CompletionStage, all registered {@link Promise#onResolve(Runnable)
+	 * callbacks} are called and any {@link Promise#then(Success, Failure)
+	 * chained} Promises are resolved. This may occur asynchronously to this
+	 * method.
+	 * <p>
+	 * Resolving the associated Promise <i>happens-before</i> any registered
+	 * callback is called. That is, in a registered callback,
+	 * {@link Promise#isDone()} must return {@code true} and
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
+	 * 
+	 * @param with A CompletionStage whose result must be used to resolve the
+	 *            associated Promise. Must not be {@code null}.
+	 * @return A Promise that is resolved only when the associated Promise is
+	 *         resolved by the specified CompletionStage. The returned Promise
+	 *         must be successfully resolved with the value {@code null}, if the
+	 *         associated Promise was resolved by the specified CompletionStage.
+	 *         The returned Promise must be resolved with a failure of
+	 *         {@link IllegalStateException}, if the associated Promise was
+	 *         already resolved when the specified CompletionStage was
+	 *         completed.
+	 * @since 1.2
+	 */
+	public Promise<Void> resolveWith(CompletionStage< ? extends T> with) {
+		return promise.resolveWith(with);
 	}
 }

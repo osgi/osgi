@@ -74,7 +74,7 @@ public class PromiseFactory {
 	public enum Option {
 		/**
 		 * Run callbacks on an executor thread. If this option is not set,
-		 * callbacks added to a resolved promise may be immediately called on
+		 * callbacks added to a resolved Promise may be immediately called on
 		 * the caller's thread to avoid a thread context switch.
 		 */
 		CALLBACKS_EXECUTOR_THREAD
@@ -226,40 +226,6 @@ public class PromiseFactory {
 	 */
 	public <T> Promise<T> resolved(T value) {
 		return new ResolvedPromiseImpl<>(value, this);
-	}
-
-	/**
-	 * Returns a new Promise that will be resolved with the specified Promise.
-	 * <p>
-	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseFactory object.
-	 * <p>
-	 * If the specified Promise is successfully resolved, the returned Promise
-	 * is resolved with the value of the specified Promise. If the specified
-	 * Promise is resolved with a failure, the returned Promise is resolved with
-	 * the failure of the specified Promise.
-	 * <p>
-	 * After the returned Promise is resolved with the specified Promise, all
-	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
-	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
-	 * This may occur asynchronously to this method.
-	 * <p>
-	 * Resolving the returned Promise <i>happens-before</i> any registered
-	 * callback is called. That is, in a registered callback,
-	 * {@link Promise#isDone()} must return {@code true} and
-	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
-	 * block.
-	 * 
-	 * @param <T> The value type associated with the returned Promise.
-	 * @param with A Promise whose value or failure must be used to resolve the
-	 *            returned Promise. Must not be {@code null}.
-	 * @return A Promise that is resolved with the specified Promise.
-	 * @since 1.2
-	 */
-	public <T> Promise<T> resolvedWith(Promise< ? extends T> with) {
-		DeferredPromiseImpl<T> chained = new DeferredPromiseImpl<>(this);
-		with.onResolve(chained.new Chain(with));
-		return chained.orDone();
 	}
 
 	/**
@@ -584,18 +550,67 @@ public class PromiseFactory {
 	 * The returned Promise uses the callback executor and scheduled executor of
 	 * this PromiseFactory object.
 	 * <p>
+	 * If the specified CompletionStage is completed normally, the returned
+	 * Promise is resolved with the value of the specified CompletionStage. If
+	 * the specified CompletionStage is completed exceptionally, the returned
+	 * Promise is resolved with the exception of the specified CompletionStage.
+	 * <p>
+	 * After the returned Promise is resolved with the specified
+	 * CompletionStage, all registered {@link Promise#onResolve(Runnable)
+	 * callbacks} are called and any {@link Promise#then(Success, Failure)
+	 * chained} Promises are resolved. This may occur asynchronously to this
+	 * method.
+	 * <p>
+	 * Resolving the returned Promise <i>happens-before</i> any registered
+	 * callback is called. That is, in a registered callback,
+	 * {@link Promise#isDone()} must return {@code true} and
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
 	 * 
 	 * @param <T> The value type associated with the returned Promise.
-	 * @param completionStage The CompletionStage whose result will be used to
-	 *            resolve the returned promise. Must not be {@code null}.
+	 * @param with A CompletionStage whose result will be used to resolve the
+	 *            returned Promise. Must not be {@code null}.
 	 * @return A new Promise that will be resolved with the result of the
 	 *         specified CompletionStage.
 	 * @since 1.2
 	 */
-	public <T> Promise<T> promiseFrom(
-			CompletionStage< ? extends T> completionStage) {
+	public <T> Promise<T> resolvedWith(CompletionStage< ? extends T> with) {
 		DeferredPromiseImpl<T> chained = new DeferredPromiseImpl<>(this);
-		completionStage.whenCompleteAsync(chained::tryResolve, executor());
+		with.whenComplete(chained::tryResolve);
+		return chained.orDone();
+	}
+
+	/**
+	 * Returns a new Promise that will be resolved with the specified Promise.
+	 * <p>
+	 * The returned Promise uses the callback executor and scheduled executor of
+	 * this PromiseFactory object.
+	 * <p>
+	 * If the specified Promise is successfully resolved, the returned Promise
+	 * is resolved with the value of the specified Promise. If the specified
+	 * Promise is resolved with a failure, the returned Promise is resolved with
+	 * the failure of the specified Promise.
+	 * <p>
+	 * After the returned Promise is resolved with the specified Promise, all
+	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
+	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
+	 * This may occur asynchronously to this method.
+	 * <p>
+	 * Resolving the returned Promise <i>happens-before</i> any registered
+	 * callback is called. That is, in a registered callback,
+	 * {@link Promise#isDone()} must return {@code true} and
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
+	 * 
+	 * @param <T> The value type associated with the returned Promise.
+	 * @param with A Promise whose value or failure must be used to resolve the
+	 *            returned Promise. Must not be {@code null}.
+	 * @return A new Promise that is resolved with the specified Promise.
+	 * @since 1.2
+	 */
+	public <T> Promise<T> resolvedWith(Promise< ? extends T> with) {
+		DeferredPromiseImpl<T> chained = new DeferredPromiseImpl<>(this);
+		with.onResolve(chained.new Chain(with));
 		return chained.orDone();
 	}
 }

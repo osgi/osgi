@@ -922,6 +922,25 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void resolve_with_completionstage_success() throws Exception {
+		final CompletableFuture<Integer> c = new CompletableFuture<>();
+		final Deferred<Number> d2 = factory.deferred();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Integer value = Integer.valueOf(42);
+		c.complete(value);
+		assertThat(c).isCompleted();
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(null);
+	}
+
+	@Test
 	public void testResolveWithFailure() throws Exception {
 		final Deferred<Integer> d1 = factory.deferred();
 		final Promise<Integer> p1 = d1.getPromise();
@@ -939,6 +958,28 @@ public class PromiseTest {
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p1.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+		assertThat(catchThrowableOfType(() -> p2.getValue(),
+				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasValue(null);
+	}
+
+	@Test
+	public void resolve_with_completionstage_failure() throws Exception {
+		final CompletableFuture<Integer> c = new CompletableFuture<>();
+		final Deferred<Number> d2 = factory.deferred();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Throwable failure = new RuntimeException();
+		c.completeExceptionally(failure);
+		assertThat(c).isCompletedExceptionally();
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
@@ -972,6 +1013,62 @@ public class PromiseTest {
 				.isSameAs(failure);
 		assertThat(catchThrowableOfType(() -> p1.getValue(),
 				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isInstanceOf(IllegalStateException.class);
+		assertThatThrownBy(() -> p3.getValue())
+				.isInstanceOf(InvocationTargetException.class)
+				.hasCauseInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	public void resolve_with_completionstage_already_success()
+			throws Exception {
+		final CompletableFuture<Integer> c = new CompletableFuture<>();
+		final Deferred<Number> d2 = factory.deferred();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Integer value = Integer.valueOf(42);
+		d2.resolve(value);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Throwable failure = new RuntimeException();
+		c.completeExceptionally(failure);
+		assertThat(c).isCompletedExceptionally();
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isInstanceOf(IllegalStateException.class);
+		assertThatThrownBy(() -> p3.getValue())
+				.isInstanceOf(InvocationTargetException.class)
+				.hasCauseInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	public void resolve_with_completionstage_already_failed() throws Exception {
+		final CompletableFuture<Integer> c = new CompletableFuture<>();
+		final Deferred<Number> d2 = factory.deferred();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(c);
+		assertThat(c).isNotCompleted();
+		assertThat(p2).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Throwable value = new RuntimeException("42");
+		d2.fail(value);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(value);
+		assertThat(p3).doesNotResolveWithin(WAIT_TIME, TimeUnit.SECONDS);
+
+		Throwable failure = new RuntimeException();
+		c.completeExceptionally(failure);
+		assertThat(c).isCompletedExceptionally();
 		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isInstanceOf(IllegalStateException.class);
@@ -1136,13 +1233,18 @@ public class PromiseTest {
 	@Test
 	public void factory_resolved_with_null() throws Exception {
 		assertThatNullPointerException()
-				.isThrownBy(() -> factory.resolvedWith(null));
+				.isThrownBy(() -> factory.resolvedWith((Promise< ? >) null));
+		assertThatNullPointerException().isThrownBy(
+				() -> factory.resolvedWith((CompletionStage< ? >) null));
 	}
 
 	@Test
 	public void testResolveWithNull() throws Exception {
 		Deferred<String> d = factory.deferred();
-		assertThatNullPointerException().isThrownBy(() -> d.resolveWith(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> d.resolveWith((Promise<String>) null));
+		assertThatNullPointerException().isThrownBy(
+				() -> d.resolveWith((CompletionStage<String>) null));
 	}
 
 	@Test
@@ -2049,7 +2151,7 @@ public class PromiseTest {
 	public void testPromiseFromSuccess1() throws Exception {
 		final String value = new String("success");
 		final CompletableFuture<String> c = new CompletableFuture<>();
-		final Promise<String> p = factory.promiseFrom(c);
+		final Promise<String> p = factory.resolvedWith(c);
 		assertThat(c).isNotCompleted();
 		assertThat(p).isNotDone();
 		c.complete(value);
@@ -2063,7 +2165,7 @@ public class PromiseTest {
 		final CompletableFuture<String> c = CompletableFuture
 				.completedFuture(value);
 		assertThat(c).isCompleted();
-		final Promise<String> p = factory.promiseFrom(c);
+		final Promise<String> p = factory.resolvedWith(c);
 		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value);
 	}
@@ -2072,7 +2174,7 @@ public class PromiseTest {
 	public void testPromiseFromFailed1() throws Exception {
 		final Throwable failure = new Exception("failed");
 		final CompletableFuture<String> c = new CompletableFuture<>();
-		final Promise<String> p = factory.promiseFrom(c);
+		final Promise<String> p = factory.resolvedWith(c);
 		assertThat(c).isNotCompleted();
 		assertThat(p).isNotDone();
 		c.completeExceptionally(failure);
@@ -2087,7 +2189,7 @@ public class PromiseTest {
 		final CompletableFuture<String> c = new CompletableFuture<>();
 		c.completeExceptionally(failure);
 		assertThat(c).isCompletedExceptionally();
-		final Promise<String> p = factory.promiseFrom(c);
+		final Promise<String> p = factory.resolvedWith(c);
 		assertThat(p).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);

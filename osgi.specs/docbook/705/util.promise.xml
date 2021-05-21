@@ -257,6 +257,9 @@
     <para>A Deferred object can also be used to resolve the associated Promise
     with the eventual result of another Promise by calling <xref
     linkend="org.osgi.util.promise.Deferred.resolveWith-Promise-"
+    xrefstyle="hyperlink"/> or the result of a CompletionStage by calling
+    <xref
+    linkend="org.osgi.util.promise.Deferred.resolveWith-CompletionStage-"
     xrefstyle="hyperlink"/>.</para>
 
     <programlisting>private void doTask(Deferred&lt;String&gt; deferred) {
@@ -673,7 +676,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     <para>The <xref
     linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-Promise-"
     xrefstyle="hyperlink"/> method can be used to return a new Promise that
-    will be resolved with the specified promise.</para>
+    will be resolved with the specified Promise.</para>
 
     <para>The <xref
     linkend="org.osgi.util.promise.PromiseFactory.submit-Callable-"
@@ -690,14 +693,10 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     xrefstyle="hyperlink"/> class returning a Promise which uses the
     implementation default executors.</para>
 
-    <para>For interoperation with CompletableFutures, two methods are
-    provided. The <xref
-    linkend="org.osgi.util.promise.PromiseFactory.promiseFrom-CompletionStage-"
+    <para>Interoperation with CompletionStage is supported. The <xref
+    linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-CompletionStage-"
     xrefstyle="hyperlink"/> method returns a Promise that is resolved by the
-    specified CompletionStage using the <xref
-    linkend="org.osgi.util.promise.PromiseFactory" xrefstyle="hyperlink"/>
-    <xref linkend="org.osgi.util.promise.PromiseFactory.executor--"
-    xrefstyle="hyperlink"/>. The <xref
+    specified CompletionStage. The <xref
     linkend="org.osgi.util.promise.Promise.toCompletionStage--"
     xrefstyle="hyperlink"/> method returns a CompletionStage that is resolved
     by the receiving Promise.</para>
@@ -725,11 +724,11 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
       <bibliomixed xml:id="util.promise-ref.javascript"><title>JavaScript
       Promises</title><biblioid class="uri"><link
-      xlink:href="http://www.html5rocks.com/en/tutorials/es6/promises/"/></biblioid></bibliomixed>
+      xlink:href="https://web.dev/promises/"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>ECMAScript 6 drafts</title><biblioid
-      class="uri"><link
-      xlink:href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts"/></biblioid></bibliomixed>
+      <bibliomixed><title>ECMAScript® 2022 Language
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://tc39.es/ecma262/#sec-promise-objects"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="util.promise-ref.monad"><title>Monad</title><biblioid
@@ -748,9 +747,15 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <para><itemizedlist>
         <listitem>
-          <para>Added support for creating a Promise resolved by a
-          CompletionStage and creating a CompletionStage resolved by a
-          Promise.</para>
+          <para>Added support for resolving a Promise with a CompletionStage,
+          <xref
+          linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-CompletionStage-"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.promise.Deferred.resolveWith-CompletionStage-"
+          xrefstyle="hyperlink"/>, and creating a CompletionStage resolved by
+          a Promise, <xref audience=""
+          linkend="org.osgi.util.promise.Promise.toCompletionStage--"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>

@@ -28,6 +28,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
@@ -234,36 +235,79 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	Promise<Void> resolveWith(Promise< ? extends T> with) {
 		DeferredPromiseImpl<Void> chained = deferred();
-		with.onResolve(chained.new ResolveWith<>(with, this));
+		with.onResolve(new ResolveWith(with, chained));
+		return chained.orDone();
+	}
+
+	/**
+	 * Resolve this Promise with the specified CompletionStage.
+	 * <p>
+	 * If the specified CompletionStage is completed normally, this Promise is
+	 * resolved with the value of the specified CompletionStage. If the
+	 * specified CompletionStage is completed exceptionally, this Promise is
+	 * resolved with the failure of the specified CompletionStage.
+	 * 
+	 * @param with A CompletionStage whose result will be used to resolve this
+	 *            Promise. Must not be {@code null}.
+	 * @return A Promise that is resolved only when this Promise is resolved by
+	 *         the specified CompletionStage. The returned Promise must be
+	 *         successfully resolved with the value {@code null}, if this
+	 *         Promise was resolved by the specified CompletionStage. The
+	 *         returned Promise must be resolved with a failure of
+	 *         {@link IllegalStateException}, if this Promise was already
+	 *         resolved when the specified CompletionStage was completed.
+	 * @since 1.2
+	 */
+	Promise<Void> resolveWith(CompletionStage< ? extends T> with) {
+		DeferredPromiseImpl<Void> chained = deferred();
+		with.whenComplete(new ResolveWith(chained));
 		return chained.orDone();
 	}
 
 	/**
 	 * A callback used to resolve a Promise with another Promise for the
-	 * {@link #resolveWith(Promise)} method.
+	 * {@link #resolveWith(Promise)} method or with another CompletionStage for
+	 * the {@link #resolveWith(CompletionStage)} method.
 	 * 
 	 * @Immutable
 	 */
-	private final class ResolveWith<P> implements Runnable, InlineCallback {
-		private final Promise< ? extends P>		promise;
-		private final DeferredPromiseImpl<P>	target;
+	private final class ResolveWith
+			implements Runnable, InlineCallback, BiConsumer<T,Throwable> {
+		private final Promise< ? extends T>		with;
+		private final DeferredPromiseImpl<Void>	promise;
 
-		ResolveWith(Promise< ? extends P> promise,
-				DeferredPromiseImpl<P> target) {
+		/**
+		 * For {@link #resolveWith(Promise)}
+		 */
+		ResolveWith(Promise< ? extends T> with,
+				DeferredPromiseImpl<Void> promise) {
+			this.with = requireNonNull(with);
 			this.promise = requireNonNull(promise);
-			this.target = requireNonNull(target);
+		}
+
+		/**
+		 * For {@link #resolveWith(CompletionStage)}
+		 */
+		ResolveWith(DeferredPromiseImpl<Void> promise) {
+			this.with = null; // CompletionStage
+			this.promise = requireNonNull(promise);
 		}
 
 		@Override
 		public void run() {
-			Throwable f = null;
-			Result<P> result = collect(promise);
+			Result<T> result = collect(with);
+			accept(result.value, result.fail);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
 			try {
-				target.resolve(result.value, result.fail);
+				resolve(v, f);
+				f = null; // resolve completed
 			} catch (Throwable e) {
 				f = e; // propagate new exception
 			}
-			tryResolve(null, f);
+			promise.tryResolve(null, f);
 		}
 	}
 
@@ -671,9 +715,9 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	@Override
 	public CompletionStage<T> toCompletionStage() {
-		CompletableFuture<T> completionStage = new CompletableFuture<>();
-		onResolve(new ToCompletionStage(completionStage));
-		return completionStage;
+		CompletableFuture<T> completableFuture = new CompletableFuture<>();
+		onResolve(new ToCompletionStage(completableFuture));
+		return completableFuture;
 	}
 
 	/**
@@ -683,19 +727,19 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * @since 1.2
 	 */
 	private final class ToCompletionStage implements Runnable {
-		private final CompletableFuture<T> completionStage;
+		private final CompletableFuture<T> completableFuture;
 
-		ToCompletionStage(CompletableFuture<T> completionStage) {
-			this.completionStage = requireNonNull(completionStage);
+		ToCompletionStage(CompletableFuture<T> completableFuture) {
+			this.completableFuture = requireNonNull(completableFuture);
 		}
 
 		@Override
 		public void run() {
 			Result<T> result = collect();
 			if (result.fail == null) {
-				completionStage.complete(result.value);
+				completableFuture.complete(result.value);
 			} else {
-				completionStage.completeExceptionally(result.fail);
+				completableFuture.completeExceptionally(result.fail);
 			}
 		}
 	}
