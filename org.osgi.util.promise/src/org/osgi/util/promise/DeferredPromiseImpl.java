@@ -143,15 +143,13 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	Result<T> collect() {
+	void result(Result< ? super T> consumer) {
 		// ensure latch open before reading state
 		if (!isDone()) {
-			return new Result<T>(new AssertionError("promise not resolved"));
+			consumer.accept(null, new AssertionError("promise not resolved"));
+			return;
 		}
-		if (fail == null) {
-			return new Result<T>(value);
-		}
-		return new Result<T>(fail);
+		consumer.accept(value, fail);
 	}
 
 	@Override
@@ -272,7 +270,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * @Immutable
 	 */
 	private final class ResolveWith
-			implements Runnable, InlineCallback, BiConsumer<T,Throwable> {
+			implements Runnable, InlineCallback, Result<T>,
+			BiConsumer<T,Throwable> {
 		private final Promise< ? extends T>		with;
 		private final DeferredPromiseImpl<Void>	promise;
 
@@ -295,8 +294,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect(with);
-			accept(result.value, result.fail);
+			result(with, this);
 		}
 
 		@Override
@@ -317,7 +315,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Then<P> implements Runnable {
+	final class Then<P> implements Runnable, Result<P> {
 		private final PromiseImpl<P>			promise;
 		private final Success<P, ? extends T>	success;
 		private final Failure					failure;
@@ -332,13 +330,17 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<P> result = promise.collect();
-			if (result.fail != null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(P v, Throwable f) {
+			if (f != null) {
 				if (failure != null) {
 					try {
 						failure.fail(promise);
 					} catch (Throwable e) {
-						result.fail = e; // propagate new exception
+						f = e; // propagate new exception
 					}
 				}
 			} else if (success != null) {
@@ -346,14 +348,14 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 				try {
 					returned = success.call(promise);
 				} catch (Throwable e) {
-					result.fail = e; // propagate new exception
+					f = e; // propagate new exception
 				}
 				if (returned != null) {
 					returned.onResolve(new Chain(returned));
 					return;
 				}
 			}
-			tryResolve(null, result.fail);
+			tryResolve(null, f);
 		}
 	}
 
@@ -372,8 +374,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect(promise);
-			tryResolve(result.value, result.fail);
+			result(promise, DeferredPromiseImpl.this::tryResolve);
 		}
 	}
 
@@ -392,8 +393,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			tryResolve(result.value, result.fail);
+			promise.result(DeferredPromiseImpl.this::tryResolve);
 		}
 	}
 
@@ -402,7 +402,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class ThenAccept implements Runnable {
+	final class ThenAccept implements Runnable, Result<T> {
 		private final PromiseImpl<T>		promise;
 		private final Consumer< ? super T>	consumer;
 
@@ -413,15 +413,19 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			if (result.fail == null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
 				try {
-					consumer.accept(result.value);
+					consumer.accept(v);
 				} catch (Throwable e) {
-					result.fail = e;
+					f = e;
 				}
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(v, f);
 		}
 	}
 
@@ -430,7 +434,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Filter implements Runnable {
+	final class Filter implements Runnable, Result<T> {
 		private final PromiseImpl<T>		promise;
 		private final Predicate< ? super T>	predicate;
 
@@ -441,17 +445,21 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			if (result.fail == null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
 				try {
-					if (!predicate.test(result.value)) {
-						result.fail = new NoSuchElementException();
+					if (!predicate.test(v)) {
+						f = new NoSuchElementException();
 					}
 				} catch (Throwable e) { // propagate new exception
-					result.fail = e;
+					f = e;
 				}
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(v, f);
 		}
 	}
 
@@ -460,7 +468,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Map<P> implements Runnable {
+	final class Map<P> implements Runnable, Result<P> {
 		private final PromiseImpl<P>					promise;
 		private final Function< ? super P, ? extends T>	mapper;
 
@@ -471,16 +479,20 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<P> result = promise.collect();
-			T v = null;
-			if (result.fail == null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(P v, Throwable f) {
+			T map = null;
+			if (f == null) {
 				try {
-					v = mapper.apply(result.value);
+					map = mapper.apply(v);
 				} catch (Throwable e) { // propagate new exception
-					result.fail = e;
+					f = e;
 				}
 			}
-			tryResolve(v, result.fail);
+			tryResolve(map, f);
 		}
 	}
 
@@ -489,7 +501,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class FlatMap<P> implements Runnable {
+	final class FlatMap<P> implements Runnable, Result<P> {
 		private final PromiseImpl<P>								promise;
 		private final Function< ? super P,Promise< ? extends T>>	mapper;
 
@@ -501,20 +513,24 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<P> result = promise.collect();
-			if (result.fail == null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(P v, Throwable f) {
+			if (f == null) {
 				Promise< ? extends T> flatmap = null;
 				try {
-					flatmap = mapper.apply(result.value);
+					flatmap = mapper.apply(v);
 				} catch (Throwable e) { // propagate new exception
-					result.fail = e;
+					f = e;
 				}
 				if (flatmap != null) {
 					flatmap.onResolve(new Chain(flatmap));
 					return;
 				}
 			}
-			tryResolve(null, result.fail);
+			tryResolve(null, f);
 		}
 	}
 
@@ -523,7 +539,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Recover implements Runnable {
+	final class Recover implements Runnable, Result<T> {
 		private final PromiseImpl<T>						promise;
 		private final Function<Promise< ? >, ? extends T>	recovery;
 
@@ -535,19 +551,22 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			if (result.fail != null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f != null) {
 				try {
-					T v = recovery.apply(promise);
+					v = recovery.apply(promise);
 					if (v != null) {
-						result.value = v;
-						result.fail = null;
+						f = null;
 					}
 				} catch (Throwable e) { // propagate new exception
-					result.fail = e;
+					f = e;
 				}
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(v, f);
 		}
 	}
 
@@ -556,7 +575,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class RecoverWith implements Runnable {
+	final class RecoverWith implements Runnable, Result<T> {
 		private final PromiseImpl<T>								promise;
 		private final Function<Promise< ? >,Promise< ? extends T>>	recovery;
 
@@ -568,20 +587,24 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			if (result.fail != null) {
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f != null) {
 				Promise< ? extends T> recovered = null;
 				try {
 					recovered = recovery.apply(promise);
 				} catch (Throwable e) { // propagate new exception
-					result.fail = e;
+					f = e;
 				}
 				if (recovered != null) {
 					recovered.onResolve(new Chain(recovered));
 					return;
 				}
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(v, f);
 		}
 	}
 
@@ -590,7 +613,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class FallbackTo implements Runnable, InlineCallback {
+	final class FallbackTo
+			implements Runnable, InlineCallback, Result<T> {
 		private final PromiseImpl<T>		promise;
 		private final Promise< ? extends T>	fallback;
 
@@ -601,12 +625,16 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			if (result.fail != null) {
-				fallback.onResolve(new FallbackChain(fallback, result.fail));
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f != null) {
+				fallback.onResolve(new FallbackChain(fallback, f));
 				return;
 			}
-			tryResolve(result.value, null);
+			tryResolve(v, null);
 		}
 	}
 
@@ -616,7 +644,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class FallbackChain implements Runnable, InlineCallback {
+	private final class FallbackChain
+			implements Runnable, InlineCallback, Result<T> {
 		private final Promise< ? extends T>	fallback;
 		private final Throwable				failure;
 
@@ -627,11 +656,15 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect(fallback);
-			if (result.fail != null) {
-				result.fail = failure;
+			result(fallback, this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f != null) {
+				f = failure;
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(v, f);
 		}
 	}
 
@@ -659,8 +692,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = promise.collect();
-			tryResolve(result.value, result.fail);
+			promise.result(DeferredPromiseImpl.this::tryResolve);
 			if (future != null) {
 				future.cancel(false);
 			}
@@ -726,7 +758,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * @Immutable
 	 * @since 1.2
 	 */
-	private final class ToCompletionStage implements Runnable {
+	private final class ToCompletionStage
+			implements Runnable, Result<T> {
 		private final CompletableFuture<T> completableFuture;
 
 		ToCompletionStage(CompletableFuture<T> completableFuture) {
@@ -735,11 +768,15 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect();
-			if (result.fail == null) {
-				completableFuture.complete(result.value);
+			result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
+				completableFuture.complete(v);
 			} else {
-				completableFuture.completeExceptionally(result.fail);
+				completableFuture.completeExceptionally(f);
 			}
 		}
 	}

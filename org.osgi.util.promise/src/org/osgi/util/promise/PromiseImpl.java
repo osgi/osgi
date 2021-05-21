@@ -215,7 +215,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private final class OnSuccess implements Runnable {
+	private final class OnSuccess implements Runnable, Result<T> {
 		private final Consumer< ? super T> success;
 
 		OnSuccess(Consumer< ? super T> success) {
@@ -224,10 +224,14 @@ abstract class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect();
-			if (result.fail == null) {
+			result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
 				try {
-					success.accept(result.value);
+					success.accept(v);
 				} catch (Throwable e) {
 					uncaughtException(e);
 				}
@@ -249,7 +253,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private final class OnFailure implements Runnable {
+	private final class OnFailure implements Runnable, Result<T> {
 		private final Consumer< ? super Throwable> failure;
 
 		OnFailure(Consumer< ? super Throwable> failure) {
@@ -258,10 +262,14 @@ abstract class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = collect();
-			if (result.fail != null) {
+			result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f != null) {
 				try {
-					failure.accept(result.fail);
+					failure.accept(f);
 				} catch (Throwable e) {
 					uncaughtException(e);
 				}
@@ -380,60 +388,52 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * A holder of the result of a Promise.
+	 * A consumer of the result of a Promise.
 	 * 
-	 * @NotThreadSafe
-	 * @since 1.1
+	 * @since 1.2
 	 */
-	static final class Result<P> {
-		P			value;
-		Throwable	fail;
-	
-		Result(P value) {
-			this.value = value;
-			this.fail = null;
-		}
-	
-		Result(Throwable fail) {
-			this.value = null;
-			this.fail = fail;
-		}
+	interface Result<R> {
+		void accept(R value, Throwable fail);
 	}
 
 	/**
-	 * Return a holder of the result of this PromiseImpl.
+	 * Accept the result of this PromiseImpl.
 	 * 
-	 * @since 1.1
+	 * @since 1.2
 	 */
-	abstract Result<T> collect();
+	abstract void result(Result< ? super T> consumer);
 
 	/**
-	 * Return a holder of the result of the specified Promise.
+	 * Accept the result of the specified Promise.
 	 * 
-	 * @since 1.1
+	 * @since 1.2
 	 */
-	static <R> Result<R> collect(Promise< ? extends R> promise) {
+	static <R> void result(Promise< ? extends R> promise,
+			Result< ? super R> consumer) {
 		if (promise instanceof PromiseImpl) {
-			@SuppressWarnings("unchecked")
-			PromiseImpl<R> impl = (PromiseImpl<R>) promise;
-			return impl.collect();
+			PromiseImpl< ? extends R> impl = (PromiseImpl< ? extends R>) promise;
+			impl.result(consumer);
+			return;
 		}
 		if (!promise.isDone()) {
-			return new Result<R>(new AssertionError("promise not resolved"));
+			consumer.accept(null, new AssertionError("promise not resolved"));
+			return;
 		}
+		R value = null;
+		Throwable fail = null;
 		final boolean interrupted = Thread.interrupted();
 		try {
-			Throwable fail = promise.getFailure();
+			fail = promise.getFailure();
 			if (fail == null) {
-				return new Result<R>(promise.getValue());
+				value = promise.getValue();
 			}
-			return new Result<R>(fail);
 		} catch (Throwable e) {
-			return new Result<R>(e); // propagate new exception
+			fail = e; // propagate new exception
 		} finally {
 			if (interrupted) { // restore interrupt status
 				Thread.currentThread().interrupt();
 			}
 		}
+		consumer.accept(value, fail);
 	}
 }

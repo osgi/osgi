@@ -82,8 +82,8 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	Result<T> collect() {
-		return new Result<T>(value);
+	void result(Result< ? super T> consumer) {
+		consumer.accept(value, null);
 	}
 
 	@Override

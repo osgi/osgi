@@ -84,8 +84,8 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	Result<T> collect() {
-		return new Result<T>(fail);
+	void result(Result< ? super T> consumer) {
+		consumer.accept(null, fail);
 	}
 
 	@Override

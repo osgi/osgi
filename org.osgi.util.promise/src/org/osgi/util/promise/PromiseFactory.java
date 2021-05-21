@@ -45,7 +45,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.util.promise.PromiseImpl.InlineCallback;
-import org.osgi.util.promise.PromiseImpl.Result;
 
 /**
  * Promise factory to create Deferred and Promise objects.
@@ -342,21 +341,24 @@ public class PromiseFactory {
 			}
 			List<T> value = new ArrayList<>(promises.size());
 			List<Promise< ? >> failed = new ArrayList<>(promises.size());
-			Throwable cause = null;
 			for (Promise<S> p : promises) {
-				Result<S> result = PromiseImpl.collect(p);
-				if (result.fail != null) {
-					failed.add(p);
-					if (cause == null) {
-						cause = result.fail;
+				PromiseImpl.result(p, (v, f) -> {
+					if (f != null) {
+						failed.add(p);
+					} else {
+						value.add(v);
 					}
-				} else {
-					value.add(result.value);
-				}
+				});
 			}
 			if (failed.isEmpty()) {
 				chained.tryResolve(value, null);
 			} else {
+				Throwable cause;
+				try {
+					cause = failed.get(0).getFailure();
+				} catch (Throwable e) {
+					cause = e;
+				}
 				chained.tryResolve(null,
 						new FailedPromisesException(failed, cause));
 			}
