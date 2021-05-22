@@ -365,7 +365,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Chain implements Runnable, InlineCallback {
+	final class Chain implements Runnable, InlineCallback, Result<T> {
 		private final Promise< ? extends T> promise;
 
 		Chain(Promise< ? extends T> promise) {
@@ -374,7 +374,12 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			result(promise, DeferredPromiseImpl.this::tryResolve);
+			result(promise, this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			tryResolve(v, f);
 		}
 	}
 
@@ -384,7 +389,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class ChainImpl implements Runnable, InlineCallback {
+	private final class ChainImpl
+			implements Runnable, InlineCallback, Result<T> {
 		private final PromiseImpl<T> promise;
 
 		ChainImpl(PromiseImpl<T> promise) {
@@ -393,7 +399,12 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			promise.result(DeferredPromiseImpl.this::tryResolve);
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			tryResolve(v, f);
 		}
 	}
 
@@ -675,7 +686,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class Timeout implements Runnable, InlineCallback {
+	final class Timeout implements Runnable, InlineCallback, Result<T> {
 		private final PromiseImpl<T>		promise;
 		private final ScheduledFuture< ? > future;
 
@@ -692,7 +703,12 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
-			promise.result(DeferredPromiseImpl.this::tryResolve);
+			promise.result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			tryResolve(v, f);
 			if (future != null) {
 				future.cancel(false);
 			}
