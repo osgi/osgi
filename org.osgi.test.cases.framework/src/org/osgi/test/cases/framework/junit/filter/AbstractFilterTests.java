@@ -39,8 +39,8 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.junit4.AbstractOSGiTestCase;
+import org.osgi.test.support.mock.MockFactory;
 
 public abstract class AbstractFilterTests extends AbstractOSGiTestCase {
 

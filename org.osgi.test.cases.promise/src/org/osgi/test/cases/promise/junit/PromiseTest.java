@@ -28,6 +28,7 @@ import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,6 +54,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.osgi.test.support.mock.MockFactory;
 import org.osgi.util.function.Consumer;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.FailedPromisesException;
@@ -2194,4 +2196,30 @@ public class PromiseTest {
 				.hasFailedWithThrowableThat()
 				.isSameAs(failure);
 	}
+
+	@Test
+	public void foreign_promise_success() throws Exception {
+		Integer value = Integer.valueOf(42);
+		Promise<Integer> p0 = factory.resolved(value);
+		@SuppressWarnings("unchecked")
+		Promise<Integer> p1 = MockFactory.newMock(Promise.class, p0);
+		assertThat(p1).isInstanceOf(Proxy.class);
+		Promise<Integer> p2 = factory.resolvedWith(p1);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value);
+	}
+
+	@Test
+	public void foreign_promise_failure() throws Exception {
+		Throwable failure = new RuntimeException();
+		Promise<Integer> p0 = factory.failed(failure);
+		@SuppressWarnings("unchecked")
+		Promise<Integer> p1 = MockFactory.newMock(Promise.class, p0);
+		assertThat(p1).isInstanceOf(Proxy.class);
+		Promise<Integer> p2 = factory.resolvedWith(p1);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+	}
+
 }

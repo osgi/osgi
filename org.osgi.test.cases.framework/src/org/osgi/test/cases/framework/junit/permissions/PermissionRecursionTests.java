@@ -33,8 +33,8 @@ import org.osgi.framework.CapabilityPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.PermissionTestCase;
+import org.osgi.test.support.mock.MockFactory;
 
 public class PermissionRecursionTests extends PermissionTestCase {
 

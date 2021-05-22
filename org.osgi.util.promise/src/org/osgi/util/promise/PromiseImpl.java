@@ -20,6 +20,8 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledFuture;
@@ -388,6 +390,44 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CompletionStage<T> toCompletionStage() {
+		CompletableFuture<T> completableFuture = new CompletableFuture<>();
+		onResolve(new ToCompletionStage(completableFuture));
+		return completableFuture;
+	}
+
+	/**
+	 * A callback used for the {@link #toCompletionStage()} method.
+	 * 
+	 * @Immutable
+	 * @since 1.2
+	 */
+	private final class ToCompletionStage implements Runnable, Result<T> {
+		private final CompletableFuture<T> completableFuture;
+
+		ToCompletionStage(CompletableFuture<T> completableFuture) {
+			this.completableFuture = requireNonNull(completableFuture);
+		}
+
+		@Override
+		public void run() {
+			result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
+				completableFuture.complete(v);
+			} else {
+				completableFuture.completeExceptionally(f);
+			}
+		}
+	}
+
+	/**
 	 * A consumer of the result of a Promise.
 	 * 
 	 * @since 1.2
@@ -419,16 +459,15 @@ abstract class PromiseImpl<T> implements Promise<T> {
 			consumer.accept(null, new AssertionError("promise not resolved"));
 			return;
 		}
-		R value = null;
-		Throwable fail = null;
+		R value;
+		Throwable fail;
 		final boolean interrupted = Thread.interrupted();
 		try {
 			fail = promise.getFailure();
-			if (fail == null) {
-				value = promise.getValue();
-			}
+			value = (fail == null) ? promise.getValue() : null;
 		} catch (Throwable e) {
 			fail = e; // propagate new exception
+			value = null;
 		} finally {
 			if (interrupted) { // restore interrupt status
 				Thread.currentThread().interrupt();
