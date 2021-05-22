@@ -47,6 +47,7 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.mock.MockFactory;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;

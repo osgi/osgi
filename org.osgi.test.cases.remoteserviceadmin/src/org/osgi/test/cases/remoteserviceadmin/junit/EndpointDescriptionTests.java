@@ -36,7 +36,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
-import org.osgi.test.support.MockFactory;
+import org.osgi.test.support.mock.MockFactory;
 
 import junit.framework.TestCase;
 

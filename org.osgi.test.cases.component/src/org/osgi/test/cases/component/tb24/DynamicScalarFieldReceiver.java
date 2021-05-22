@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
-import org.osgi.test.support.MockFactory;
+import org.osgi.test.support.mock.MockFactory;
 
 public class DynamicScalarFieldReceiver extends AbstractFieldReceiver implements ScalarFieldTestService<BaseService> {
 	private volatile BaseService									service;
