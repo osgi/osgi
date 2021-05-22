@@ -750,11 +750,16 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void run() {
+			T v;
+			Throwable f;
 			try {
-				tryResolve(task.call(), null);
-			} catch (Throwable t) {
-				tryResolve(null, t);
+				v = task.call();
+				f = null;
+			} catch (Throwable e) {
+				f = e;
+				v = null;
 			}
+			tryResolve(v, f);
 		}
 	}
 

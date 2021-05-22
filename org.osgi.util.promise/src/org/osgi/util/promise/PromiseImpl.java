@@ -419,16 +419,15 @@ abstract class PromiseImpl<T> implements Promise<T> {
 			consumer.accept(null, new AssertionError("promise not resolved"));
 			return;
 		}
-		R value = null;
-		Throwable fail = null;
+		R value;
+		Throwable fail;
 		final boolean interrupted = Thread.interrupted();
 		try {
 			fail = promise.getFailure();
-			if (fail == null) {
-				value = promise.getValue();
-			}
+			value = (fail == null) ? promise.getValue() : null;
 		} catch (Throwable e) {
 			fail = e; // propagate new exception
+			value = null;
 		} finally {
 			if (interrupted) { // restore interrupt status
 				Thread.currentThread().interrupt();
