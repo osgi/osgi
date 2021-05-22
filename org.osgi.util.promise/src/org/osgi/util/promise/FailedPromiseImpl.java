@@ -84,8 +84,8 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	Result<T> collect() {
-		return new Result<T>(fail);
+	void result(Result< ? super T> consumer) {
+		consumer.accept(null, fail);
 	}
 
 	@Override
@@ -174,8 +174,8 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	@Override
 	public CompletionStage<T> toCompletionStage() {
-		CompletableFuture<T> completionStage = new CompletableFuture<>();
-		completionStage.completeExceptionally(fail);
-		return completionStage;
+		CompletableFuture<T> completableFuture = new CompletableFuture<>();
+		completableFuture.completeExceptionally(fail);
+		return completableFuture;
 	}
 }
