@@ -20,6 +20,8 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledFuture;
@@ -385,6 +387,44 @@ abstract class PromiseImpl<T> implements Promise<T> {
 		DeferredPromiseImpl<T> chained = deferred();
 		onResolve(chained.new Delay(this, millis));
 		return chained.orDone();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CompletionStage<T> toCompletionStage() {
+		CompletableFuture<T> completableFuture = new CompletableFuture<>();
+		onResolve(new ToCompletionStage(completableFuture));
+		return completableFuture;
+	}
+
+	/**
+	 * A callback used for the {@link #toCompletionStage()} method.
+	 * 
+	 * @Immutable
+	 * @since 1.2
+	 */
+	private final class ToCompletionStage implements Runnable, Result<T> {
+		private final CompletableFuture<T> completableFuture;
+
+		ToCompletionStage(CompletableFuture<T> completableFuture) {
+			this.completableFuture = requireNonNull(completableFuture);
+		}
+
+		@Override
+		public void run() {
+			result(this);
+		}
+
+		@Override
+		public void accept(T v, Throwable f) {
+			if (f == null) {
+				completableFuture.complete(v);
+			} else {
+				completableFuture.completeExceptionally(f);
+			}
+		}
 	}
 
 	/**
