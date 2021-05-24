@@ -48,6 +48,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 import org.assertj.core.api.AbstractListAssert;
 import org.junit.jupiter.api.AfterEach;
@@ -773,6 +774,36 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void collector_success() throws Exception {
+		final Deferred<Integer> d1 = factory.deferred();
+		final Promise<Integer> p1 = d1.getPromise();
+		final Deferred<Integer> d2 = factory.deferred();
+		final Promise<Integer> p2 = d2.getPromise();
+		final Promise<List<Number>> latched = Stream.of(p1, p2)
+				.collect(factory.toPromise());
+		assertThat(p1).isNotDone();
+		assertThat(p2).isNotDone();
+		assertThat(latched).isNotDone();
+		Integer value1 = Integer.valueOf(12);
+		d1.resolve(value1);
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value1);
+		assertThat(p2).isNotDone();
+		assertThat(latched).isNotDone();
+		Integer value2 = Integer.valueOf(24);
+		d2.resolve(value2);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value2);
+		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+						.hasValueThat()
+						.asList()
+						.containsExactly(value1, value2);
+		listAssert.element(0).isSameAs(value1);
+		listAssert.element(1).isSameAs(value2);
+	}
+
+	@Test
 	public void testAllSuccess3() throws Exception {
 		final Deferred<Number> d1 = factory.deferred();
 		final Promise<Number> p1 = d1.getPromise();
@@ -844,6 +875,47 @@ public class PromiseTest {
 		final Deferred<Long> d3 = factory.deferred();
 		final Promise<Long> p3 = d3.getPromise();
 		final Promise<List<Number>> latched = Promises.all(p1, p2, p3);
+		assertThat(p1).isNotDone();
+		assertThat(p2).isNotDone();
+		assertThat(p3).isNotDone();
+		assertThat(latched).isNotDone();
+		Throwable f1 = new Exception("fail1");
+		d1.fail(f1);
+		assertThat(p1).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(f1);
+		assertThat(p2).isNotDone();
+		assertThat(latched).isNotDone();
+		Long value2 = Long.valueOf(24);
+		d2.resolve(value2);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value2);
+		assertThat(latched).isNotDone();
+		Throwable f3 = new Exception("fail3");
+		d3.fail(f3);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(f3);
+		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isInstanceOf(FailedPromisesException.class);
+		assertThat(((FailedPromisesException) latched.getFailure())
+				.getFailedPromises()).containsExactlyInAnyOrder(p1, p3);
+		assertThatThrownBy(() -> latched.getValue())
+				.isInstanceOf(InvocationTargetException.class)
+				.hasCauseInstanceOf(FailedPromisesException.class);
+	}
+
+	@Test
+	public void collector_fail() throws Exception {
+		final Deferred<Long> d1 = factory.deferred();
+		final Promise<Long> p1 = d1.getPromise();
+		final Deferred<Long> d2 = factory.deferred();
+		final Promise<Long> p2 = d2.getPromise();
+		final Deferred<Long> d3 = factory.deferred();
+		final Promise<Long> p3 = d3.getPromise();
+		final Promise<List<Number>> latched = Stream.of(p1, p2, p3)
+				.collect(factory.toPromise());
 		assertThat(p1).isNotDone();
 		assertThat(p2).isNotDone();
 		assertThat(p3).isNotDone();

@@ -688,10 +688,17 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
     xrefstyle="hyperlink"/> method returns a Promise that is a latch on the
     specified Promises. The returned Promise must resolve only when all of the
-    specified Promises have resolved. This method also exists as a static
-    method on the <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class returning a Promise which uses the
-    implementation default executors.</para>
+    specified Promises have resolved. The <xref
+    linkend="org.osgi.util.promise.PromiseFactory.toPromise--"
+    xrefstyle="hyperlink"/> method returns a <code>Collector</code> which can
+    be used on a <code>Stream</code> of Promises to collect the results of the
+    Promises into a latch using the <xref
+    linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
+    xrefstyle="hyperlink"/> method as the finisher. The <code>all</code>
+    method also exists as a static method on the <xref
+    linkend="org.osgi.util.promise.Promises" xrefstyle="hyperlink"/> class
+    returning a Promise which uses the implementation default
+    executors.</para>
 
     <para>Interoperation with CompletionStage is supported. The <xref
     linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-CompletionStage-"
@@ -776,6 +783,17 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
           linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-Promise-"
           xrefstyle="hyperlink"/> method which can be used to return a new
           Promise that will be resolved with a specified promise.</para>
+        </listitem>
+
+        <listitem>
+          <para>Added the <xref
+          linkend="org.osgi.util.promise.PromiseFactory.toPromise--"
+          xrefstyle="hyperlink"/> method which returns a
+          <code>Collector</code> which can be used on a <code>Stream</code> of
+          Promises to collect the results of the Promises into a latch using
+          the <xref
+          linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
+          xrefstyle="hyperlink"/> method as the finisher.</para>
         </listitem>
       </itemizedlist></para>
   </section>

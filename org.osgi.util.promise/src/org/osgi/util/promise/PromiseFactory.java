@@ -42,6 +42,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collector;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.util.promise.PromiseImpl.InlineCallback;
@@ -282,8 +283,7 @@ public class PromiseFactory {
 	 * 
 	 * @param <T> The value type of the List value associated with the returned
 	 *            Promise.
-	 * @param <S> A subtype of the value type of the List value associated with
-	 *            the returned Promise.
+	 * @param <S> The value type of the specified Promises.
 	 * @param promises The Promises which must be resolved before the returned
 	 *            Promise must be resolved. Must not be {@code null} and all of
 	 *            the elements in the collection must not be {@code null}.
@@ -614,5 +614,26 @@ public class PromiseFactory {
 		DeferredPromiseImpl<T> chained = new DeferredPromiseImpl<>(this);
 		with.onResolve(chained.new Chain(with));
 		return chained.orDone();
+	}
+
+	/**
+	 * Returns a {@code Collector} that accumulates the results of the input
+	 * Promises into a new {@link #all(Collection)} Promise.
+	 * 
+	 * @param <T> The value type of the List value result of the collected
+	 *            {@link #all(Collection)} Promise.
+	 * @param <S> The value type of the input Promises.
+	 * @return A {@code Collector} which accumulates the results of all the
+	 *         input Promises into a new {@link #all(Collection)} Promise.
+	 * @since 1.2
+	 */
+	public <T, S extends T> Collector<Promise<S>, ? ,Promise<List<T>>> toPromise() {
+		return Collector.of(ArrayList<Promise<S>>::new, List::add,
+				PromiseFactory::combiner, this::all);
+	}
+
+	private static <E, C extends Collection<E>> C combiner(C t, C u) {
+		t.addAll(u);
+		return t;
 	}
 }
