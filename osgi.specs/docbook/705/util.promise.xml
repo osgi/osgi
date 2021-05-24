@@ -643,14 +643,16 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     functional interface arguments and so are suitable for use with lambda
     expressions and method references in Java 8.</para>
 
-    <para>Three of these functional interfaces are <xref
+    <para>Four of these functional interfaces are <xref
     linkend="org.osgi.util.function.Function" xrefstyle="hyperlink"/>, <xref
-    linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, and
+    linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.util.function.Supplier" xrefstyle="hyperlink"/>, and
     <xref linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>.
     These are equivalent to functional interfaces which are part of the
-    <code>java.util.function</code> package introduced in Java 8. OSGi defines
-    these interfaces to allow throwing checked exceptions which can be
-    propagated in a chain of Promises.</para>
+    <code>java.util.function</code> package introduced in Java 8 with
+    additional static methods to support interoperation. OSGi defines these
+    interfaces to allow throwing checked exceptions which can be propagated in
+    a chain of Promises.</para>
   </section>
 
   <section>
@@ -688,10 +690,17 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
     xrefstyle="hyperlink"/> method returns a Promise that is a latch on the
     specified Promises. The returned Promise must resolve only when all of the
-    specified Promises have resolved. This method also exists as a static
-    method on the <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class returning a Promise which uses the
-    implementation default executors.</para>
+    specified Promises have resolved. The <xref
+    linkend="org.osgi.util.promise.PromiseFactory.toPromise--"
+    xrefstyle="hyperlink"/> method returns a <code>Collector</code> which can
+    be used on a <code>Stream</code> of Promises to collect the results of the
+    Promises into a latch using the <xref
+    linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
+    xrefstyle="hyperlink"/> method as the finisher. The <code>all</code>
+    method also exists as a static method on the <xref
+    linkend="org.osgi.util.promise.Promises" xrefstyle="hyperlink"/> class
+    returning a Promise which uses the implementation default
+    executors.</para>
 
     <para>Interoperation with CompletionStage is supported. The <xref
     linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-CompletionStage-"
@@ -776,6 +785,26 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
           linkend="org.osgi.util.promise.PromiseFactory.resolvedWith-Promise-"
           xrefstyle="hyperlink"/> method which can be used to return a new
           Promise that will be resolved with a specified promise.</para>
+        </listitem>
+
+        <listitem>
+          <para>Added the <xref
+          linkend="org.osgi.util.promise.PromiseFactory.toPromise--"
+          xrefstyle="hyperlink"/> method which returns a
+          <code>Collector</code> which can be used on a <code>Stream</code> of
+          Promises to collect the results of the Promises into a latch using
+          the <xref
+          linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
+          xrefstyle="hyperlink"/> method as the finisher.</para>
+        </listitem>
+
+        <listitem>
+          <para>Updated <xref linkend="org.osgi.util.function"
+          xrefstyle="hyperlink"/> package to add <xref
+          linkend="org.osgi.util.function.Supplier" xrefstyle="hyperlink"/>
+          interface as well as a number of static methods to support
+          interoperation with the <code>java.util.function</code>
+          equivalents.</para>
         </listitem>
       </itemizedlist></para>
   </section>
