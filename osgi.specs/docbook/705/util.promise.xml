@@ -643,14 +643,16 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     functional interface arguments and so are suitable for use with lambda
     expressions and method references in Java 8.</para>
 
-    <para>Three of these functional interfaces are <xref
+    <para>Four of these functional interfaces are <xref
     linkend="org.osgi.util.function.Function" xrefstyle="hyperlink"/>, <xref
-    linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, and
+    linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.util.function.Supplier" xrefstyle="hyperlink"/>, and
     <xref linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>.
     These are equivalent to functional interfaces which are part of the
-    <code>java.util.function</code> package introduced in Java 8. OSGi defines
-    these interfaces to allow throwing checked exceptions which can be
-    propagated in a chain of Promises.</para>
+    <code>java.util.function</code> package introduced in Java 8 with
+    additional static methods to support interoperation. OSGi defines these
+    interfaces to allow throwing checked exceptions which can be propagated in
+    a chain of Promises.</para>
   </section>
 
   <section>
@@ -794,6 +796,15 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
           the <xref
           linkend="org.osgi.util.promise.PromiseFactory.all-Collection-"
           xrefstyle="hyperlink"/> method as the finisher.</para>
+        </listitem>
+
+        <listitem>
+          <para>Updated <xref linkend="org.osgi.util.function"
+          xrefstyle="hyperlink"/> package to add <xref
+          linkend="org.osgi.util.function.Supplier" xrefstyle="hyperlink"/>
+          interface as well as a number of static methods to support
+          interoperation with the <code>java.util.function</code>
+          equivalents.</para>
         </listitem>
       </itemizedlist></para>
   </section>
