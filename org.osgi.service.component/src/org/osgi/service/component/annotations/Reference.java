@@ -88,23 +88,30 @@ public @interface Reference {
 	 * <ul>
 	 * <li>Annotated method - The type of the service is the type of the first
 	 * parameter of the method.</li>
-	 * <li>Annotated field - The type of the service is based upon the type of
-	 * the field being annotated and the cardinality of the reference. If the
-	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or
-	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the field
+	 * <li>Annotated field - The type of the service is based upon the
+	 * cardinality of the reference and the type of the field being annotated.
+	 * If the cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n},
+	 * or {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the field
 	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
-	 * subtype of {@code java.util.Collection} so the type of the service is the
-	 * generic type of the collection. Otherwise, the type of the service is the
-	 * type of the field.</li>
+	 * subtype of {@code java.util.Collection}, so the type of the service is
+	 * the generic type of the collection. If the cardinality is either
+	 * {@link ReferenceCardinality#OPTIONAL 0..1} or
+	 * {@link ReferenceCardinality#MANDATORY 1..1}, and the type of the field is
+	 * {@code java.util.Optional}, the type of the service is the generic type
+	 * of the {@code java.util.Optional}. Otherwise, the type of the service is
+	 * the type of the field.</li>
 	 * <li>Annotated constructor parameter - The type of the service is based
-	 * upon the type of the parameter being annotated and the cardinality of the
-	 * reference. If the cardinality is either
+	 * upon the cardinality of the reference and the type of the parameter being
+	 * annotated. If the cardinality is either
 	 * {@link ReferenceCardinality#MULTIPLE 0..n}, or
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the parameter
-	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
-	 * subtype of {@code java.util.Collection} so the type of the service is the
-	 * generic type of the collection. Otherwise, the type of the service is the
-	 * type of the parameter.</li>
+	 * must be one of {@code java.util.Collection} or {@code java.util.List}, so
+	 * the type of the service is the generic type of the collection. If the
+	 * cardinality is either {@link ReferenceCardinality#OPTIONAL 0..1} or
+	 * {@link ReferenceCardinality#MANDATORY 1..1}, and the type of the
+	 * parameter is {@code java.util.Optional}, the type of the service is the
+	 * generic type of the {@code java.util.Optional}. Otherwise, the type of
+	 * the service is the type of the parameter.</li>
 	 * </ul>
 	 * 
 	 * @see "The interface attribute of the reference element of a Component Description."
@@ -123,15 +130,16 @@ public @interface Reference {
 	 * <li>Annotated field - The cardinality is based on the type of the field.
 	 * If the type is either {@code java.util.Collection},
 	 * {@code java.util.List}, or a subtype of {@code java.util.Collection}, the
-	 * cardinality is {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the
-	 * cardinality is {@link ReferenceCardinality#MANDATORY 1..1}.</li>
-	 * <li>{@link Component#reference()} element - The cardinality is
+	 * cardinality is {@link ReferenceCardinality#MULTIPLE 0..n}. If the type is
+	 * {@code java.util.Optional}, the cardinality is
+	 * {@link ReferenceCardinality#OPTIONAL 0..1}. Otherwise the cardinality is
 	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
 	 * <li>Annotated constructor parameter - The cardinality is based on the
-	 * type of the parameter. If the type is either
-	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
-	 * {@code java.util.Collection}, the cardinality is
-	 * {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the cardinality is
+	 * type of the parameter. If the type is either {@code java.util.Collection}
+	 * or {@code java.util.List}, the cardinality is
+	 * {@link ReferenceCardinality#MULTIPLE 0..n}. If the type is
+	 * {@code java.util.Optional}, the cardinality is
+	 * {@link ReferenceCardinality#OPTIONAL 0..1}. Otherwise the cardinality is
 	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
 	 * <li>{@link Component#reference()} element - The cardinality is
 	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
@@ -376,17 +384,25 @@ public @interface Reference {
 	 * <ul>
 	 * <li>Annotated method - There is no collection type.</li>
 	 * <li>Annotated field - The collection type is based upon the cardinality
-	 * of the reference and the generic type of the field. If the cardinality is
+	 * of the reference and the type of the field. If the cardinality is either
 	 * {@link ReferenceCardinality#MULTIPLE 0..n} or
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection type is
-	 * inferred from the generic type of the list or collection. Otherwise,
-	 * there is no collection type</li>
+	 * inferred from the generic type of the {@code java.util.Collection}. If
+	 * the cardinality is either {@link ReferenceCardinality#OPTIONAL 0..1} or
+	 * {@link ReferenceCardinality#MANDATORY 1..1}, and the type of the field is
+	 * {@code java.util.Optional}, the collection type is inferred from the
+	 * generic type of the {@code java.util.Optional}. Otherwise, there is no
+	 * collection type</li>
 	 * <li>Annotated constructor method parameter - The collection type is based
-	 * upon the cardinality of the reference and the generic type of the
-	 * parameter. If the cardinality is {@link ReferenceCardinality#MULTIPLE
-	 * 0..n} or {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection
-	 * type is inferred from the generic type of the list or collection.
-	 * Otherwise, there is no collection type</li>
+	 * upon the cardinality of the reference and the type of the parameter. If
+	 * the cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n} or
+	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection type is
+	 * inferred from the generic type of the {@code java.util.Collection}. If
+	 * the cardinality is either {@link ReferenceCardinality#OPTIONAL 0..1} or
+	 * {@link ReferenceCardinality#MANDATORY 1..1}, and the type of the
+	 * parameter is {@code java.util.Optional}, the collection type is inferred
+	 * from the generic type of the {@code java.util.Optional}. Otherwise, there
+	 * is no collection type</li>
 	 * <li>{@link Component#reference()} element - There is no collection
 	 * type.</li>
 	 * </ul>
