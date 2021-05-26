@@ -40,7 +40,7 @@ public interface TypedEventBus {
 	 * type name for the supplied event object.
 	 * <p>
 	 * Logically equivalent to calling
-	 * {@code deliver(event.getClass().getName(), event)}
+	 * {@code deliver(event.getClass().getName().replace('.', '/'), event)}
 	 * 
 	 * @param event The event to send to all listeners which subscribe to the
 	 *            topic of the event.
