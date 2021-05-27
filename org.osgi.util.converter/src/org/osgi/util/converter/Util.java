@@ -55,7 +55,8 @@ class Util {
 		boxedClasses = Collections.unmodifiableMap(m);
 	}
 
-	private Util() {} // prevent instantiation
+	private Util() {
+	} // prevent instantiation
 
 	static Type primitiveToBoxed(Type type) {
 		if (type instanceof Class)
@@ -208,11 +209,11 @@ class Util {
 		boolean valueFound = false;
 		// All annotation methods must be public
 		for (Method md : ann.getMethods()) {
-			if(md.getDeclaringClass() != ann) {
+			if (md.getDeclaringClass() != ann) {
 				// Ignore Object methods and Annotation methods
 				continue;
 			}
-			
+
 			if ("value".equals(md.getName())) {
 				valueFound = true;
 				continue;
@@ -326,14 +327,23 @@ class Util {
 		return md.invoke(obj);
 	}
 
-	private static final int PUBLIC_STATIC_FINAL = Modifier.PUBLIC
-			| Modifier.FINAL | Modifier.STATIC;
 	static String getPrefix(Class< ? > cls) {
 		try {
-			Field prefixField = cls.getDeclaredField("PREFIX_");
-			if (prefixField.getType().equals(String.class)) {
-				if ((prefixField.getModifiers()
-						& PUBLIC_STATIC_FINAL) == PUBLIC_STATIC_FINAL) {
+			// We can use getField as the PREFIX must be public (see spec
+			// erratum)
+			Field prefixField = cls.getField("PREFIX_");
+			if (prefixField.getDeclaringClass() == cls
+					&& prefixField.getType().equals(String.class)) {
+				int modifiers = prefixField.getModifiers();
+				// We need to be final *and* static
+				if (Modifier.isFinal(modifiers)
+						&& Modifier.isStatic(modifiers)) {
+
+					if (!prefixField.isAccessible()) {
+						// Should we log that we have to do this?
+						prefixField.setAccessible(true);
+					}
+
 					return (String) prefixField.get(null);
 				}
 			}

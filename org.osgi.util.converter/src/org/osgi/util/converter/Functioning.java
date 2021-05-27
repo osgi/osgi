@@ -37,6 +37,7 @@ public interface Functioning extends Specifying<Functioning> {
 	 * Specify the target object type for the conversion as a class object.
 	 *
 	 * @param cls The class to convert to.
+	 * @param <T> The type to convert to.
 	 * @return A function that can perform the conversion.
 	 */
 	<T> Function<Object,T> to(Class<T> cls);
@@ -46,6 +47,7 @@ public interface Functioning extends Specifying<Functioning> {
 	 *
 	 * @param type A Type object to represent the target type to be converted
 	 *            to.
+	 * @param <T> The type to convert to.
 	 * @return A function that can perform the conversion.
 	 */
 	<T> Function<Object,T> to(Type type);
@@ -58,10 +60,12 @@ public interface Functioning extends Specifying<Functioning> {
 	 *
 	 * <pre>
 	 * List&lt;String&gt; result = converter.function()
-	 * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
+	 * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {
+	 * 		});
 	 * </pre>
 	 *
 	 * @param ref A type reference to the object being converted to.
+	 * @param <T> The type to convert to.
 	 * @return A function that can perform the conversion.
 	 */
 	<T> Function<Object,T> to(TypeReference<T> ref);

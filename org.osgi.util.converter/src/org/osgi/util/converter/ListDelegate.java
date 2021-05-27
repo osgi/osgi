@@ -34,26 +34,30 @@ class ListDelegate<T> implements List<T> {
 	private volatile List<T>		delegate;
 	private volatile boolean		cloned;
 	private final ConvertingImpl	convertingImpl;
+	private final InternalConverter	converter;
 
 	@SuppressWarnings({
 			"unchecked", "rawtypes"
 	})
-	static <T> List<T> forArray(Object arr, ConvertingImpl converting) {
-		return new ListDelegate<T>(new ArrayDelegate(arr), converting);
+	static <T> List<T> forArray(Object arr, ConvertingImpl converting,
+			InternalConverter c) {
+		return new ListDelegate<T>(new ArrayDelegate(arr), converting, c);
 	}
 
 	static <T> List<T> forCollection(Collection<T> object,
-			ConvertingImpl converting) {
+			ConvertingImpl converting, InternalConverter c) {
 		if (object instanceof List) {
-			return new ListDelegate<T>((List<T>) object, converting);
+			return new ListDelegate<T>((List<T>) object, converting, c);
 		}
-		return new ListDelegate<T>(new CollectionDelegate<>(object),
-				converting);
+		return new ListDelegate<T>(new CollectionDelegate<>(object), converting,
+				c);
 	}
 
-	private ListDelegate(List<T> del, ConvertingImpl conv) {
+	private ListDelegate(List<T> del, ConvertingImpl conv,
+			InternalConverter c) {
 		delegate = del;
 		convertingImpl = conv;
+		converter = c;
 	}
 
 	// Whenever a modification is made, the delegate is cloned and detached.
@@ -173,7 +177,8 @@ class ListDelegate<T> implements List<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(int index) {
-		return (T) convertingImpl.convertCollectionValue(delegate.get(index));
+		return (T) convertingImpl.convertCollectionValue(delegate.get(index),
+				converter);
 	}
 
 	@Override

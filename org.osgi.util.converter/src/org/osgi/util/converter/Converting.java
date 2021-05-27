@@ -35,6 +35,7 @@ public interface Converting extends Specifying<Converting> {
 	 * Specify the target object type for the conversion as a class object.
 	 *
 	 * @param cls The class to convert to.
+	 * @param <T> The type to convert to.
 	 * @return The converted object.
 	 */
 	<T> T to(Class<T> cls);
@@ -44,6 +45,7 @@ public interface Converting extends Specifying<Converting> {
 	 *
 	 * @param type A Type object to represent the target type to be converted
 	 *            to.
+	 * @param <T> The type to convert to.
 	 * @return The converted object.
 	 */
 	<T> T to(Type type);
@@ -56,10 +58,12 @@ public interface Converting extends Specifying<Converting> {
 	 *
 	 * <pre>
 	 * List&lt;String&gt; result = converter.convert(Arrays.asList(1, 2, 3))
-	 * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
+	 * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {
+	 * 		});
 	 * </pre>
 	 *
 	 * @param ref A type reference to the object being converted to.
+	 * @param <T> The type to convert to.
 	 * @return The converted object.
 	 */
 	<T> T to(TypeReference<T> ref);
