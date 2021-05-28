@@ -17,9 +17,9 @@
     SPDX-License-Identifier: Apache-2.0 
  -->
 
-<chapter label="708"
+<chapter label="159"
          revision="$Id$"
-         version="5.0" xml:id="util.features"
+         version="5.0" xml:id="service.features"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -27,11 +27,11 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Features Specification</title>
+  <title>Features Service Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.util.feature-version"
-    linkend="org.osgi.util.feature"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.feature-version"
+    linkend="org.osgi.service.feature"/></releaseinfo>
   </info>
 
   <section>
@@ -169,7 +169,7 @@
 
     <para>
       Features are defined by declaring JSON documents or by using the
-      <link linkend="org.osgi.util.feature" xrefstyle="hyperlink">Feature API</link>.
+      <link linkend="org.osgi.service.feature" xrefstyle="hyperlink">Feature API</link>.
       Each Feature has a unique ID which includes a version. It can hold a number of entities, including a list of bundles, configurations, capabilities, requirements and others. Features are extensible, that is a Feature can also hold any number of custom entities which are related to the Feature.
     </para>
 
@@ -182,7 +182,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
       This cached content is not significant for the definition of the Feature or part of its identity.
     </para>
 
-    <section xml:id="util.feature-identifiers">
+    <section xml:id="service.feature-identifiers">
       <title>Identifiers</title>
 
       <para>
@@ -195,7 +195,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
           <listitem><para>Type (optional)</para></listitem>
           <listitem><para>Classifier (optional)</para></listitem>
         </itemizedlist>
-        For more information see <xref linkend="util.features-mvnpom.ref"/>.
+        For more information see <xref linkend="service.features-mvnpom.ref"/>.
         The format used to specify identifiers is as follows:
         <programlisting>group-id ':' artifact-id [ ':' type [ ':' classifier ] ] ':' version</programlisting>
       </para>
@@ -205,7 +205,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
       <title>Feature Identifier</title>
       <para>
         Each Feature has a unique identifier. Apart from providing a persistent handle to the Feature it also provides enough information to find the Feature in an artifact repository. This identifier is defined using the format described in 
-        <xref linkend="util.feature-identifiers"/>. As Features are immutable, a given Feature identifier always refers to the same Feature.
+        <xref linkend="service.feature-identifiers"/>. As Features are immutable, a given Feature identifier always refers to the same Feature.
       </para>
       
       <section>
@@ -326,7 +326,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
       <para>
         A builder is used to create a single entity and cannot be re-used to create a second one.
         Builders are obtained from the
-        <xref linkend="org.osgi.util.feature.BuilderFactory" xrefstyle="hyperlink"/>
+        <xref linkend="org.osgi.service.feature.BuilderFactory" xrefstyle="hyperlink"/>
       </para> 
       
       <programlisting>BuilderFactory factory = // ... from Service Registry ...
@@ -344,7 +344,7 @@ Feature f = builder.build();</programlisting>
   <section>
     <title>Comments</title>
       <para>Comments in the form of <xref
-      linkend="util.features-jsmin.ref"/> comments are supported, that
+      linkend="service.features-jsmin.ref"/> comments are supported, that
       is, any text on the same line after <code>//</code> is ignored and any
       text between <code>/* */</code> is ignored.</para>
   </section>
@@ -361,7 +361,7 @@ Feature f = builder.build();</programlisting>
     </para>
     <para>
       Bundles are referenced using the identifier format described in 
-      <xref linkend="util.feature-identifiers"/>.
+      <xref linkend="service.feature-identifiers"/>.
       This means that Bundles are referenced using their Maven coordinates. The <code>bundles</code> array can either contain
       <code>String</code> values referencing the bundles directly by their identifier, or JSON objects which can contain the bundle
       IDs with additional metadata. 
@@ -858,21 +858,21 @@ Feature f = builder.build();</programlisting>
     ...</para>
   </section>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.util.feature.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.xml"/>
 
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="util.features-json.ref"><title>JSON
+      <bibliomixed xml:id="service.features-json.ref"><title>JSON
       (JavaScript Object Notation) </title><biblioid class="uri"><link
       xlink:href="https://www.json.org"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="util.features-jsmin.ref"><title>JSMin (The
+      <bibliomixed xml:id="service.features-jsmin.ref"><title>JSMin (The
       JavaScript Minifier) </title><biblioid class="uri"><link
       xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>
       
-      <bibliomixed xml:id="util.features-mvnpom.ref"><title>Apache Maven Pom 
+      <bibliomixed xml:id="service.features-mvnpom.ref"><title>Apache Maven Pom 
       Reference </title><biblioid class="uri"><link
       xlink:href="https://maven.apache.org/pom.html"/></biblioid></bibliomixed>
     </bibliolist>

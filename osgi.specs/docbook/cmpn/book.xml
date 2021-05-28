@@ -138,6 +138,8 @@
 
   <xi:include href="../158/service.log.stream.xml"/>
 
+  <xi:include href="../159/service.features.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../705/util.promise.xml"/>
@@ -145,6 +147,4 @@
   <xi:include href="../706/util.pushstream.xml"/>
 
   <xi:include href="../707/util.converter.xml"/>
-
-  <xi:include href="../708/util.features.xml"/>
 </book>

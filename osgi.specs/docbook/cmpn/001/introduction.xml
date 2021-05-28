@@ -663,6 +663,17 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.features"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.feature"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.feature-version"
+              linkend="service.features"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -704,17 +715,6 @@
 
               <entry><code><xref endterm="org.osgi.util.converter-version"
               linkend="util.converter"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="util.features"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.util.feature"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.util.feature-version"
-              linkend="util.features"/></code></entry>
             </row>
           </tbody>
         </tgroup>
@@ -828,8 +828,8 @@
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="util.features"
-        xrefstyle="template:%t"/> as Chapter 708.</para>
+        <para>Added <xref linkend="service.features"
+        xrefstyle="template:%t"/> as Chapter 159.</para>
       </listitem>
     </itemizedlist>
   </section>
