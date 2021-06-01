@@ -18,6 +18,9 @@
 
 package org.osgi.test.cases.converter.junit;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
@@ -33,13 +37,11 @@ import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.TypeReference;
 import org.osgi.util.function.Function;
 
-import junit.framework.TestCase;
-
 
 /**
  * 707 Converter specification
  */
-public class ArrayAndCollectionConversionComplianceTest extends TestCase {
+public class ArrayAndCollectionConversionComplianceTest {
 
 	/**
 	 * Section 707.4.3 : Arrays and Collections
@@ -56,6 +58,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * Exceptions: Converting a String to a char[] or Character[] will result in
 	 * an array with characters representing the characters in the String.
 	 */
+	@Test
 	public void testConversionFromScalar() {
 		Converter converter = Converters.standardConverter();
 
@@ -94,6 +97,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * <code>String</code> results in a String where each character represents
 	 * the elements of the character array.
 	 */
+	@Test
 	public void testConversionToScalar() {
 		Converter converter = Converters.standardConverter();
 		List<Long> longList = Arrays.asList(5l, 8l, 10l);
@@ -231,6 +235,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * Map.Entry before inserting in the target.</li>
 	 * </ul>
 	 */
+	@Test
 	public void testConversionToArrayOrCollection() {
 		int[] backingObject = new int[] {
 				1, 2, 3
@@ -284,6 +289,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * Conversion to a map-like structure from an Array or Collection is not
 	 * supported by the Standard Converter.
 	 */
+	@Test
 	public void testToMapConversion() {
 		Converter converter = Converters.standardConverter();
 		List<Integer> list = new ArrayList<Integer>();
@@ -293,5 +299,41 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 			converter.convert(list).to(new TypeReference<Map<String,Integer>>() {});
 			fail("Conversion to a map-like structure from an Array or Collection is not supported by the Standard Converter");
 		} catch (ConversionException e) {}
+	}
+
+	/**
+	 * 707.4.3.1 - null becomes an empty array
+	 */
+	@Test
+	public void testNullToArrayConversion() {
+
+		checkArray(String[].class);
+		checkArray(boolean[].class);
+		checkArray(byte[].class);
+		checkArray(short[].class);
+		checkArray(char[].class);
+		checkArray(int[].class);
+		checkArray(float[].class);
+		checkArray(long[].class);
+		checkArray(double[].class);
+
+		checkArray(String[][][][][].class);
+		checkArray(boolean[][][].class);
+		checkArray(byte[][].class);
+		checkArray(short[][][][].class);
+		checkArray(char[][].class);
+		checkArray(int[][].class);
+		checkArray(float[][][].class);
+		checkArray(long[][][].class);
+		checkArray(double[][].class);
+	}
+
+	private void checkArray(Class< ? > arrayType) {
+		assertTrue(arrayType.isArray());
+
+		Converter converter = Converters.standardConverter();
+		Object array = converter.convert(null).to(arrayType);
+		assertEquals(0, Array.getLength(array));
+		assertTrue(arrayType.isInstance(array));
 	}
 }
