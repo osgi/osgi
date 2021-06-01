@@ -17,7 +17,7 @@
     SPDX-License-Identifier: Apache-2.0 
  -->
 
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0" name="org.osgi.test.cases.component.tb27.ConstructorInjection" init="25">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0" name="org.osgi.test.cases.component.tb27.ConstructorInjection" init="26">
   <property name="prop" type="String" value="default.prop"/>
   <reference name="atleastone" cardinality="1..n" interface="org.osgi.service.log.LogService" field-collection-type="service" parameter="8"/>
   <reference name="bundle" interface="org.osgi.service.log.LogService" scope="bundle" parameter="13"/>
@@ -30,6 +30,7 @@
   <reference name="mandatory" cardinality="1..1" interface="org.osgi.service.log.LogService" parameter="5"/>
   <reference name="multiple" cardinality="0..n" interface="org.osgi.service.log.LogService" field-collection-type="service" parameter="7"/>
   <reference name="optional" cardinality="0..1" interface="org.osgi.service.log.LogService" parameter="6"/>
+  <reference name="optionalNull" cardinality="0..1" interface="org.osgi.service.log.LogService" target="(no=match)" parameter="25"/>
   <reference name="properties" interface="org.osgi.service.log.LogService" parameter="18"/>
   <reference name="prototype" interface="org.osgi.service.log.LogService" scope="prototype" parameter="14"/>
   <reference name="reference" interface="org.osgi.service.log.LogService" parameter="16"/>
