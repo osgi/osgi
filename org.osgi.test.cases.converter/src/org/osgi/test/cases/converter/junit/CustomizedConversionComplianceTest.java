@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.converter.junit;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
 import org.osgi.test.cases.converter.junit.MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest.MappingBean;
 import org.osgi.util.converter.ConversionException;
@@ -38,10 +41,8 @@ import org.osgi.util.converter.TypeReference;
 import org.osgi.util.converter.TypeRule;
 import org.osgi.util.function.Function;
 
-import junit.framework.TestCase;
 
-
-public class CustomizedConversionComplianceTest extends TestCase {
+public class CustomizedConversionComplianceTest {
 
 	public static class MyBean {
 		private Date	startDate;
@@ -101,6 +102,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testRepeatedOrDeferredConversion() throws Exception {
 		Converter c = Converters.standardConverter();
 		Function<Object,Integer> cf = c.function().defaultValue(999).to(
@@ -135,6 +137,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 * of a map or other enclosing object
 	 * 
 	 */
+	@Test
 	public void testCustomizedConversion()
 	{
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
@@ -213,6 +216,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 * that it cannot handle the conversion by returning the CANNOT_HANDLE constant. 
 	 * Rules targeting specific types are evaluated before catch-all rules. 
 	 */
+	@Test
 	public void testCustomizedChainConversion()
 	{
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
@@ -341,6 +345,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 *   value other than org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE
 	 */
 	// @SuppressWarnings("unchecked")
+	@Test
 	public void testErrorHandler()
 	{
 		final AtomicInteger countError = new AtomicInteger(0);	

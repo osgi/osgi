@@ -18,6 +18,7 @@
 package org.osgi.test.cases.converter.junit;
 
 import static java.util.Collections.singletonMap;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,17 +30,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.dto.DTO;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 
-import junit.framework.TestCase;
-
 /**
  * 
  */
-public class StandardConverterComplianceTest extends TestCase{
+public class StandardConverterComplianceTest {
 
 	/**
 	 * Section 707.4 : Conversions
@@ -54,6 +54,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * type. This copy can be owned and optionally further modified by the
 	 * caller.
 	 */
+	@Test
 	public void testUnecessaryConversion()
 	{
 		BigDecimal bd = new BigDecimal(5);
@@ -96,6 +97,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * c.convert("123").to(new TypeReference<List<Long>>()); // list will
 	 * contain the Long value 123L
 	 */
+	@Test
 	public void testGenericConversion() {
 		Converter converter = Converters.standardConverter();
 		List<String> list = converter.convert(Arrays.<Integer> asList(1, 2, 3))
@@ -113,6 +115,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * When converting to a target type with generic fields the converter should
 	 * convert the nested data as necessary
 	 */
+	@Test
 	public void testGenericFieldConversion() {
 		Converter converter = Converters.standardConverter();
 		GenericFieldDto dto = converter
@@ -136,6 +139,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * When converting to a target type with parameterized fields the converter
 	 * should convert the nested data as defined by the {@link TypeReference}
 	 */
+	@Test
 	public void testParameterizedGenericFieldConversion() {
 		Converter converter = Converters.standardConverter();
 		ParameterizedFieldDto<String> dto = converter
@@ -167,6 +171,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * When converting to a target type which reifies parameterized fields the
 	 * converter should convert the nested data as defined by the type variables
 	 */
+	@Test
 	public void testReifiedGenericFieldConversion() {
 		Converter converter = Converters.standardConverter();
 		ReifiedFieldDto dto = converter
@@ -187,6 +192,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * converter should convert the nested data as defined by the type variables
 	 * This test looks at a subclass that indirectly binds a type variable
 	 */
+	@Test
 	public void testReifiedGenericFieldConversionSubclass() {
 		Converter converter = Converters.standardConverter();
 		ReifiedFieldDtoSub dto = converter
@@ -211,6 +217,7 @@ public class StandardConverterComplianceTest extends TestCase{
 	 * converter should convert the nested data as defined by the type variables
 	 * This test looks at a subclass that indirectly binds a type variable
 	 */
+	@Test
 	public void testWildcardGenerics() {
 
 		HashSet<Character> charSet = new HashSet<>(
