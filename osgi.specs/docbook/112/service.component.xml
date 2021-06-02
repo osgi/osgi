@@ -1799,6 +1799,7 @@ public class HttpResourceImpl {
         interface=
             "org.osgi.service.component.AnyService"
         target="(osgi.jaxrs.extension=true)"
+        cardinality="0..n"
     /&gt;
 &lt;/scr:component&gt;</programlisting>
       </section>
