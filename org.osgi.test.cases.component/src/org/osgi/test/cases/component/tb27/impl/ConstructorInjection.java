@@ -91,7 +91,9 @@ public class ConstructorInjection implements NamedService {
 
 			Collection<Map<String,Object>> fieldServiceM,
 
-			Collection<ServiceReference<LogService>> fieldServiceReferencesM) {
+			Collection<ServiceReference<LogService>> fieldServiceReferencesM,
+
+			LogService fieldOptionalNull) {
 		/**/
 		System.out.println("constructed");
 		name = configNames.prop();
@@ -103,6 +105,7 @@ public class ConstructorInjection implements NamedService {
 		assertThat(configNames).isNotNull();
 		assertThat(fieldStatic).isNotNull();
 		assertThat(fieldMandatory).isNotNull();
+		assertThat(fieldOptional).isNotNull();
 		assertThat(fieldMultiple).doesNotContainNull();
 		assertThat(fieldAtLeastOne).isNotEmpty().doesNotContainNull();
 		assertThat(fieldGreedy).isNotNull();
@@ -123,6 +126,8 @@ public class ConstructorInjection implements NamedService {
 		assertThat(fieldTupleM).doesNotContainNull();
 		assertThat(fieldServiceM).doesNotContainNull();
 		assertThat(fieldServiceReferencesM).doesNotContainNull();
+		assertThat(fieldOptionalNull).isNull();
+
 	}
 
 	@Override
