@@ -5,7 +5,7 @@ Bundle-Description = A test case for Converter.
 
 -conditionalpackage = org.osgi.test.support.*
 -privatepackage =  \
-    ${p}.junit
+    ${p}.*
 Import-Package: ${-signaturetest}, *
 
 -signaturetest = org.osgi.util.converter

@@ -6,3 +6,7 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
     org.osgi.util.function; version=1.0
+
+-testpath: \
+ osgi.tck.junit-platform;version=latest,\
+ org.apiguardian:apiguardian-api;version=latest
