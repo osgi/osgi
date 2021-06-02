@@ -18,10 +18,13 @@
 
 package org.osgi.test.cases.component.junit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.dto.BundleDTO;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.service.component.runtime.dto.ReferenceDTO;
 
@@ -46,7 +49,7 @@ public class DTOUtil {
 		dto.immediate = immediate;
 		dto.serviceInterfaces = serviceInterfaces;
 		dto.properties = properties;
-		dto.references = references;
+		dto.references = addTrueConditionRef(references);
 		dto.activate = activate;
 		dto.deactivate = deactivate;
 		dto.modified = modified;
@@ -56,6 +59,30 @@ public class DTOUtil {
 		dto.activationFields = activationFields;
 		dto.init = init;
 		return dto;
+	}
+
+	private static ReferenceDTO[] addTrueConditionRef(
+			ReferenceDTO[] references) {
+		if (references != null) {
+			for (ReferenceDTO referenceDTO : references) {
+				if (ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION
+						.equals(referenceDTO.name)) {
+					return references;
+				}
+			}
+		}
+		List<ReferenceDTO> result = new ArrayList<>();
+		if (references != null) {
+			for (ReferenceDTO referenceDTO : references) {
+				result.add(referenceDTO);
+			}
+		}
+		result.add(newReferenceDTO(
+				ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION,
+				"org.osgi.service.condition.Condition", "1..1", "dynamic",
+				"reluctant", "(osgi.condition.id=true)", null, null, null, null,
+				null, "bundle", null, null));
+		return result.toArray(new ReferenceDTO[0]);
 	}
 
 	public static BundleDTO newBundleDTO(Bundle b) {

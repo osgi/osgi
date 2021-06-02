@@ -3262,7 +3262,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				.usingRecursiveComparison()
 				.isEqualTo(description1);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
-		assertEquals("wrong number of satisfiedReferences", 0, configuration1.satisfiedReferences.length);
+		assertEquals("wrong number of satisfiedReferences", 1, configuration1.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration1.unsatisfiedReferences.length);
 		assertEquals("wrong component name", description1.name,
 				configuration1.properties.get(ComponentConstants.COMPONENT_NAME));
@@ -3287,7 +3287,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				.usingRecursiveComparison()
 				.isEqualTo(description3);
 		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration3.state);
-		assertEquals("wrong number of satisfiedReferences", 2, configuration3.satisfiedReferences.length);
+		assertEquals("wrong number of satisfiedReferences", 3,
+				configuration3.satisfiedReferences.length);
 		assertEquals("wrong number of unsatisfiedReferences", 0, configuration3.unsatisfiedReferences.length);
 		assertEquals("wrong component name", description3.name,
 				configuration3.properties.get(ComponentConstants.COMPONENT_NAME));
