@@ -27,10 +27,10 @@ import org.osgi.util.function.Function;
  */
 class FunctioningImpl extends AbstractSpecifying<Functioning>
 		implements Functioning {
-	InternalConverter converter;
+	InternalConverter initialConverter;
 
-	FunctioningImpl(InternalConverter converterImpl) {
-		converter = converterImpl;
+	FunctioningImpl(InternalConverter converter) {
+		initialConverter = converter;
 	}
 
 	@Override
@@ -49,32 +49,32 @@ class FunctioningImpl extends AbstractSpecifying<Functioning>
 		return new Function<Object,T>() {
 			@Override
 			public T apply(Object t) {
-				InternalConverting ic = converter.convert(t);
-				return applyModifiers(ic).to(type);
+				InternalConverting converter = initialConverter.convert(t);
+				return applyModifiers(converter).to(type);
 			}
 		};
 	}
 
-	InternalConverting applyModifiers(InternalConverting ic) {
+	InternalConverting applyModifiers(InternalConverting converter) {
 		if (hasDefault)
-			ic.defaultValue(defaultValue);
+			converter.defaultValue(defaultValue);
 		if (liveView)
-			ic.view();
+			converter.view();
 		if (keysIgnoreCase)
-			ic.keysIgnoreCase();
+			converter.keysIgnoreCase();
 		if (sourceAsClass != null)
-			ic.sourceAs(sourceAsClass);
+			converter.sourceAs(sourceAsClass);
 		if (sourceAsDTO)
-			ic.sourceAsDTO();
+			converter.sourceAsDTO();
 		if (sourceAsJavaBean)
-			ic.sourceAsBean();
+			converter.sourceAsBean();
 		if (targetAsClass != null)
-			ic.targetAs(targetAsClass);
+			converter.targetAs(targetAsClass);
 		if (targetAsDTO)
-			ic.targetAsBean();
+			converter.targetAsBean();
 		if (targetAsJavaBean)
-			ic.targetAsBean();
+			converter.targetAsBean();
 
-		return ic;
+		return converter;
 	}
 }

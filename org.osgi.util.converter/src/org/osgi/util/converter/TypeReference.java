@@ -32,7 +32,8 @@ import org.osgi.annotation.versioning.ConsumerType;
  *
  * <pre>
  * List&lt;String&gt; result = converter.convert(Arrays.asList(1, 2, 3))
- * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
+ * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {
+ * 		});
  * </pre>
  *
  * @param <T> The target type for the conversion.
@@ -45,7 +46,8 @@ public class TypeReference<T> {
 	 * A {@link TypeReference} cannot be directly instantiated. To use it, it
 	 * has to be extended, typically as an anonymous inner class.
 	 */
-	protected TypeReference() {}
+	protected TypeReference() {
+	}
 
 	/**
 	 * Return the actual type of this Type Reference

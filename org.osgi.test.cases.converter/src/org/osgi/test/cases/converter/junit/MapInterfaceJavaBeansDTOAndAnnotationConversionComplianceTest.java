@@ -19,9 +19,11 @@
 package org.osgi.test.cases.converter.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -44,6 +46,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.dto.DTO;
 import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
 import org.osgi.util.converter.ConversionException;
@@ -52,14 +55,11 @@ import org.osgi.util.converter.ConverterFunction;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 
-import junit.framework.TestCase;
-
 
 /**
  * 707 Converter specification
  */
-public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
-		extends TestCase {
+public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface AnnotationInterface {
@@ -478,6 +478,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * Conversions from a scalar to a map-like type are not supported by the
 	 * standard converter.
 	 */
+	@Test
 	public void testFromScalarConversion() {
 		Converter converter = Converters.standardConverter();
 		try {
@@ -498,6 +499,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * <p/>
 	 * An empty map results in a null scalar value.
 	 */
+	@Test
 	public void testToScalarConversion() {
 		Converter converter = Converters.standardConverter();
 		
@@ -527,6 +529,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * called Arrays and Collections and the section called Map.Entry.
 	 * @throws ParseException 
 	 */
+	@Test
 	public void testToArrayOrCollectionConversion() throws ParseException {
 				
 		TimeZone tz = TimeZone.getTimeZone("UTC");			
@@ -608,6 +611,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * available, key-value pairs are used in the map as-is
 	 */
 	@SuppressWarnings("unchecked")
+	@Test
 	public void testMapConversion() {
 		Converter converter = Converters.standardConverter();
 		DTOLike dtolike = new DTOLike();
@@ -674,6 +678,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * target type information for Dictionaries can be provided via a
 	 * TypeReference.
 	 */
+	@Test
 	public void testDictionaryConversion() {
 		Converter converter = Converters.standardConverter();
 		DTOLike dtolike = new DTOLike();
@@ -759,6 +764,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * using the sourceAs(Class) modifier.
 	 */
 	@SuppressWarnings("unchecked")
+	@Test
 	public void testInterfaceConversion() {
 
 		DTOLike dtolike = new DTOLike();
@@ -847,6 +853,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * Similar to interfaces, conversions to and from annotations also follow
 	 * the Key Mapping section for annotation element names.
 	 */
+	@Test
 	public void testAnnotationConversion() {
 
 		DTOLike dtolike = new DTOLike();
@@ -928,6 +935,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * Note: the getClass() method of the java.lang.Object class is not
 	 * considered an accessor.
 	 */
+	@Test
 	public void testJavaBeanConversion() {
 
 		ConversionComplianceTest.ExtObject embedded = new ConversionComplianceTest.ExtObject();
@@ -1003,6 +1011,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * methods, the converter can be instructed to do this using the
 	 * sourceAsDTO() and targetAsDTO() modifiers.
 	 */
+	@Test
 	public void testDTOConversion() {
 		Converter converter = Converters.standardConverter();
 
@@ -1071,6 +1080,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * Note: this mechanism can only be used to convert to another type. The
 	 * reverse is not supported
 	 */
+	@Test
 	public void testTypesWithGetPropertiesConversion() {
 
 		Converter converter = Converters.standardConverter();
@@ -1152,6 +1162,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * prefixed with the value of the <code>PREFIX_</code> field.</li>
 	 * </ul>
 	 */
+	@Test
 	public void testKeyMapping() {
 
 		Map<String,String> resultmap = new HashMap<String,String>();
@@ -1266,7 +1277,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(bean.getSpecial$prop(), resultbean.getSpecial$prop());
 		assertEquals(bean.getSpecial$$prop(), resultbean.getSpecial$$prop());
 		assertEquals(bean.getSpecial_prop(), resultbean.getSpecial_prop());
-		// assertEquals(bean.get_specialprop(), resultbean.get_specialprop());
 		assertEquals(bean.getSpecial__prop(), resultbean.getSpecial__prop());
 		assertEquals(bean.getSpecial___prop(), resultbean.getSpecial___prop());
 		assertEquals(bean.getSpecial_$__prop(),
@@ -1360,6 +1370,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(inter.special$$_$prop(), resultinter.special$$_$prop());
 	}
 
+	@Test
 	public void testMapToDTOWithGenerics() {
 		Map<String,Object> dto = new HashMap<>();
 
@@ -1410,6 +1421,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		}
 	}
 
+	@Test
 	public void testMapToDTOWithGenericVariables() {
 		Map<String,Object> dto = new HashMap<>();
 		dto.put("set", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
@@ -1427,6 +1439,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				converted.set);
 	}
 
+	@Test
 	public void testMapToInterfaceWithGenerics() {
 		Map<String,Object> dto = new HashMap<>();
 		dto.put("charSet", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
@@ -1438,6 +1451,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				converted.charSet());
 	}
 
+	@Test
 	public void testMapToInterfaceWithErrorHandler() {
 		Map<String,Object> dto = new HashMap<>();
 		final Object BAD = new Object();
@@ -1469,6 +1483,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				'o');
 	}
 
+	@Test
 	public void testMapToInterfaceWithGenericVariables() {
 		Map<String,Object> dto = new HashMap<>();
 		dto.put("set", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
@@ -1487,6 +1502,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				converted.set());
 	}
 
+	@Test
 	public void testConvertMarkerAnnotation() {
 		Converter converter = Converters.standardConverter();
 
@@ -1521,6 +1537,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals("true", m2.get("my.marker.annotation"));
 	}
 
+	@Test
 	public void testConvertSingleElementAnnotation() {
 		Converter converter = Converters.standardConverter();
 
@@ -1550,6 +1567,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(Long.valueOf(456L), m3.get("single.element.annotation"));
 	}
 
+	@Test
 	public void testSingleElementAnnotationPrefix() {
 		Map<String,String> m = new HashMap<>();
 		m.put("org.foo.bar.single.element.annotation.prefix", "-999");
@@ -1559,5 +1577,75 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		SingleElementAnnotationPrefix ann = converter.convert(m)
 				.to(SingleElementAnnotationPrefix.class);
 		assertEquals(-999L, ann.value());
+	}
+
+	static interface EmptyInterface {
+	}
+
+	static interface EmptyInterface2 extends EmptyInterface {
+	}
+
+	static interface NonEmptyInterface {
+		int a();
+	}
+
+	static interface EmptyInterface3 extends NonEmptyInterface {
+	}
+
+	@Test
+	public void testMapToEmptyInterface() throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("a", "b");
+		EmptyInterface i = Converters.standardConverter()
+				.convert(map)
+				.to(EmptyInterface.class);
+		assertThat(i).isInstanceOf(EmptyInterface.class);
+
+		EmptyInterface2 j = Converters.standardConverter()
+				.convert(map)
+				.to(EmptyInterface2.class);
+		assertThat(j).isInstanceOf(EmptyInterface2.class);
+
+		EmptyInterface3 k = Converters.standardConverter()
+				.convert(map)
+				.to(EmptyInterface3.class);
+		assertThat(k).isInstanceOf(EmptyInterface3.class);
+	}
+
+	public static interface InterfaceWithDefaultMethod {
+		public static final String RESULT = "r";
+
+		public default String defaultMethod() {
+			return RESULT;
+		}
+	}
+
+	@Test
+	public void testDefaultInterfaceMethod() throws Throwable {
+		Class< ? > clazz = InterfaceWithDefaultMethod.class;
+		InterfaceWithDefaultMethod i = (InterfaceWithDefaultMethod) Converters
+				.standardConverter()
+				.convert(new HashMap<String,Object>())
+				.to(clazz);
+		assertEquals(InterfaceWithDefaultMethod.RESULT, i.defaultMethod());
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface PrefixMarkerAnnotation {
+		static final String PREFIX_ = "org.foo.bar.";
+	}
+
+	@Test
+	@PrefixMarkerAnnotation
+	public void testMarkerAnnotationPrefixToMap() throws Exception {
+		final Converter converter = Converters.standardConverter();
+		Method method = getClass().getMethod("testMarkerAnnotationPrefixToMap");
+		PrefixMarkerAnnotation annotation = method
+				.getDeclaredAnnotation(PrefixMarkerAnnotation.class);
+		Map<String,Object> map = converter.convert(annotation)
+				.to(new TypeReference<Map<String,Object>>() {
+				});
+		assertTrue(map.containsKey("org.foo.bar.prefix.marker.annotation"));
+		assertTrue((Boolean) map.get("org.foo.bar.prefix.marker.annotation"));
 	}
 }

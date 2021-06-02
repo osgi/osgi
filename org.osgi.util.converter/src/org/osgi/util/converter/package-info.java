@@ -31,10 +31,10 @@
  * Example import for providers implementing the API in this package:
  * <p>
  * {@code  Import-Package: org.osgi.util.converter; version="[1.0,1.1)"}
- * 
+ *
  * @author $Id$
  */
-@Version("1.0.2")
+@Version("1.0.8")
 package org.osgi.util.converter;
 
 import org.osgi.annotation.versioning.Version;

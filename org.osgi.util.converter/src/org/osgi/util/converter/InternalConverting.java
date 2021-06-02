@@ -18,19 +18,28 @@
 
 package org.osgi.util.converter;
 
+import java.lang.reflect.Type;
+
 /**
  * This interface is the same as the {@link Converting} interface with the
  * addition that the current converter (which may include custom rules) can be
  * set on it. This allows the converter to be re-entrant and use itself for
  * sub-conversions if applicable.
- * 
+ *
  * @author $Id$
  */
 interface InternalConverting extends Converting {
 	/**
-	 * Set the current converter.
-	 * 
-	 * @param c The current converter.
+	 * Invoke the conversion while passing the top-level converter. The
+	 * top-level converter is needed when performing embedded conversions such
+	 * as in map elements. When using a custom converter, the top converter must
+	 * be used for this.
+	 *
+	 * @param type A Type object to represent the target type to be converted
+	 *            to.
+	 * @param <T> The type to convert to.
+	 * @param converter Internal converter
+	 * @return The converted object.
 	 */
-	void setConverter(Converter c);
+	<T> T to(Type type, InternalConverter converter);
 }

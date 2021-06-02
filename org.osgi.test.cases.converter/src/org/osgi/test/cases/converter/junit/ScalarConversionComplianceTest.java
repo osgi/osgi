@@ -18,19 +18,21 @@
 
 package org.osgi.test.cases.converter.junit;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-//import java.time.Duration;
-//import java.time.Instant;
-//import java.time.LocalDate;
-//import java.time.LocalDateTime;
-//import java.time.LocalTime;
-//import java.time.MonthDay;
-//import java.time.OffsetDateTime;
-//import java.time.OffsetTime;
-//import java.time.Year;
-//import java.time.YearMonth;
-//import java.time.ZonedDateTime;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,18 +42,17 @@ import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 
-import junit.framework.TestCase;
-
 
 /**
  * 707 Converter specification
  */
-public class ScalarConversionComplianceTest extends TestCase {
+public class ScalarConversionComplianceTest {
 
 	/**
 	 * Section 707.4.2 - Scalars
@@ -79,6 +80,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * </tr>
 	 * </table>
 	 */
+	@Test
 	public void testScalarConversionFromBoolean() {
 		Converter converter = Converters.standardConverter();
 
@@ -133,6 +135,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * </tr>
 	 * </table>
 	 */
+	@Test
 	public void testScalarConversionFromCharacter() {
 		Converter converter = Converters.standardConverter();
 
@@ -187,6 +190,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * </tr>
 	 * </table>
 	 */
+	@Test
 	public void testScalarConversionFromNumber() {
 		Converter converter = Converters.standardConverter();
 
@@ -241,6 +245,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * </tr>
 	 * </table>
 	 */
+	@Test
 	public void testScalarConversionFromNull() {
 		Converter converter = Converters.standardConverter();
 
@@ -265,6 +270,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * <p/>
 	 * A null object results in a null String value
 	 */
+	@Test
 	public void testScalarConversionToString() {
 
 		boolean fstToBeConverted = true;
@@ -298,6 +304,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * 2. public constructor taking a single String argument
 	 * <p/>
 	 */
+	@Test
 	public void testScalarConversionFromString() {
 		String fstToBeConverted = "myObject";
 		String sndToBeConverted = "9";
@@ -394,6 +401,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * </tr>
 	 * </table>
 	 */
+	@Test
 	public void testScalarConversionFromStringSpecial() {
 		Converter converter = Converters.standardConverter();
 
@@ -406,56 +414,56 @@ public class ScalarConversionComplianceTest extends TestCase {
 		assertEquals('A', c);
 
 		// java 1.8 data structures
-//		String duration = "PT10H";
-//		Duration d = converter.convert(duration).to(Duration.class);
-//		assertEquals(Duration.parse("PT10H"), d);
-//
-//		String instant = "2013-05-30T23:38:23.085Z";
-//		Instant i = converter.convert(instant).to(Instant.class);
-//		assertEquals(Instant.parse("2013-05-30T23:38:23.085Z"), i);
-//
-//		String localDateStr = "2013-11-24";
-//		LocalDate localDate = LocalDate.parse(localDateStr);
-//		LocalDate localDateConverted = converter.convert(localDateStr)
-//				.to(LocalDate.class);
-//		assertEquals(0, localDate.compareTo(localDateConverted));
-//
-//		String localDateTimeStr = "2013-11-24T07:21:00";
-//		LocalDateTime localDateTime = converter.convert(localDateTimeStr)
-//				.to(LocalDateTime.class);
-//		assertEquals(LocalDateTime.parse(localDateTimeStr), localDateTime);
-//
-//		String localTimeStr = "07:21:00";
-//		LocalTime localTime = converter.convert(localTimeStr)
-//				.to(LocalTime.class);
-//		assertEquals(LocalTime.parse(localTimeStr), localTime);
-//
-//		String monthDay = "--11-24";
-//		MonthDay md = converter.convert(monthDay).to(MonthDay.class);
-//		assertEquals(MonthDay.parse(monthDay), md);
-//
-//		String offsetTimeStr = "07:21:00+01:00";
-//		OffsetTime offsetTime = converter.convert(offsetTimeStr)
-//				.to(OffsetTime.class);
-//		assertEquals(OffsetTime.parse(offsetTimeStr), offsetTime);
-//
-//		String offsetDateTimeStr = "2007-12-03T10:15:30+01:00";
-//		OffsetDateTime offsetDateTime = converter.convert(offsetDateTimeStr)
-//				.to(OffsetDateTime.class);
-//		assertEquals(OffsetDateTime.parse(offsetTimeStr), offsetDateTime);
-//
-//		String year = "2017";
-//		Year y = converter.convert(year).to(Year.class);
-//		assertEquals(Year.parse(year), y);
-//
-//		String yearMonth = "2017-11";
-//		YearMonth ym = converter.convert(yearMonth).to(YearMonth.class);
-//		assertEquals(YearMonth.parse(yearMonth), y);
-//
-//		String zonedDateTimeStr = "2013-11-24T07:21:00+01:00 Europe/Paris";
-//		ZonedDateTime zonedDateTime = converter.convert(zonedDateTimeStr)
-//				.to(ZonedDateTime.class);
-//		assertEquals(ZonedDateTime.parse(zonedDateTimeStr), zonedDateTime);
+		String duration = "PT10H";
+		Duration d = converter.convert(duration).to(Duration.class);
+		assertEquals(Duration.parse("PT10H"), d);
+
+		String instant = "2013-05-30T23:38:23.085Z";
+		Instant i = converter.convert(instant).to(Instant.class);
+		assertEquals(Instant.parse("2013-05-30T23:38:23.085Z"), i);
+
+		String localDateStr = "2013-11-24";
+		LocalDate localDate = LocalDate.parse(localDateStr);
+		LocalDate localDateConverted = converter.convert(localDateStr)
+				.to(LocalDate.class);
+		assertEquals(0, localDate.compareTo(localDateConverted));
+
+		String localDateTimeStr = "2013-11-24T07:21:00";
+		LocalDateTime localDateTime = converter.convert(localDateTimeStr)
+				.to(LocalDateTime.class);
+		assertEquals(LocalDateTime.parse(localDateTimeStr), localDateTime);
+
+		String localTimeStr = "07:21:00";
+		LocalTime localTime = converter.convert(localTimeStr)
+				.to(LocalTime.class);
+		assertEquals(LocalTime.parse(localTimeStr), localTime);
+
+		String monthDay = "--11-24";
+		MonthDay md = converter.convert(monthDay).to(MonthDay.class);
+		assertEquals(MonthDay.parse(monthDay), md);
+
+		String offsetTimeStr = "07:21:00+01:00";
+		OffsetTime offsetTime = converter.convert(offsetTimeStr)
+				.to(OffsetTime.class);
+		assertEquals(OffsetTime.parse(offsetTimeStr), offsetTime);
+
+		String offsetDateTimeStr = "2007-12-03T10:15:30+01:00";
+		OffsetDateTime offsetDateTime = converter.convert(offsetDateTimeStr)
+				.to(OffsetDateTime.class);
+		assertEquals(OffsetDateTime.parse(offsetDateTimeStr), offsetDateTime);
+
+		String year = "2017";
+		Year y = converter.convert(year).to(Year.class);
+		assertEquals(Year.parse(year), y);
+
+		String yearMonth = "2017-11";
+		YearMonth ym = converter.convert(yearMonth).to(YearMonth.class);
+		assertEquals(YearMonth.parse(yearMonth), ym);
+
+		String zonedDateTimeStr = "2013-11-24T07:21:00+01:00[Europe/Paris]";
+		ZonedDateTime zonedDateTime = converter.convert(zonedDateTimeStr)
+				.to(ZonedDateTime.class);
+		assertEquals(ZonedDateTime.parse(zonedDateTimeStr), zonedDateTime);
 
 		String uuidStr = "0-0-0-0-FF";
 		UUID convertedUUID = converter.convert(uuidStr).to(UUID.class);
@@ -488,6 +496,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * setting the time in the Calendar object via setTime().
 	 * <p/>
 	 */
+	@Test
 	public void testScalarConversionDateAndCalendar() {
 		Converter converter = Converters.standardConverter();
 		TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -549,6 +558,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * Primitives are boxed before conversion is done. Other source types are
 	 * converted to String before converting to Enum.
 	 */
+	@Test
 	public void testScalarConversionEnum() {
 		Converter converter = Converters.standardConverter();
 		Number fstToBeConverted = 4l;
@@ -601,6 +611,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 	 * <p/>
 	 * Conversion to Map.Entry from a scalar is not supported.
 	 */
+	@Test
 	public void testScalarConversionMapEntryKeyOrValueSameType() {
 		Converter converter = Converters.standardConverter();
 
@@ -694,5 +705,22 @@ public class ScalarConversionComplianceTest extends TestCase {
 					.to(new TypeReference<Map.Entry<String,String>>() {});
 			fail("ConversionException expected");
 		} catch (ConversionException e) {}
+	}
+
+	@Test
+	public void testConvertBooleanToNumber() {
+		Converter converter = Converters.standardConverter();
+		assertEquals(Byte.valueOf((byte) 1),
+				converter.convert(Boolean.TRUE).to(Byte.class));
+		assertEquals(Short.valueOf((short) 1),
+				converter.convert(Boolean.TRUE).to(Short.class));
+		assertEquals(Integer.valueOf(1),
+				converter.convert(Boolean.TRUE).to(Integer.class));
+		assertEquals(Long.valueOf(1),
+				converter.convert(Boolean.TRUE).to(Long.class));
+		assertEquals(Float.valueOf(1.0f),
+				converter.convert(Boolean.TRUE).to(Float.class));
+		assertEquals(Double.valueOf(1.0d),
+				converter.convert(Boolean.TRUE).to(Double.class));
 	}
 }

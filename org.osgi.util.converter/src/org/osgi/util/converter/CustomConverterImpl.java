@@ -18,9 +18,6 @@
 
 package org.osgi.util.converter;
 
-import static java.lang.invoke.MethodHandles.publicLookup;
-
-import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -33,11 +30,11 @@ import java.util.Map;
 /**
  * A custom converter wraps another converter by adding rules and/or error
  * handlers.
- * 
+ *
  * @author $Id$
  */
 class CustomConverterImpl implements InternalConverter {
-	private final InternalConverter					delegate;
+	final InternalConverter					delegate;
 	final Map<Type,List<ConverterFunction>>	typeRules;
 	final List<ConverterFunction>			allRules;
 	final List<ConverterFunction>			errorHandlers;
@@ -55,8 +52,7 @@ class CustomConverterImpl implements InternalConverter {
 	@Override
 	public InternalConverting convert(Object obj) {
 		InternalConverting converting = delegate.convert(obj);
-		converting.setConverter(this);
-		return new ConvertingWrapper(obj, converting);
+		return new ConvertingWrapper(obj, converting, this);
 	}
 
 	@Override
@@ -70,14 +66,17 @@ class CustomConverterImpl implements InternalConverter {
 	}
 
 	private class ConvertingWrapper implements InternalConverting {
+		private final InternalConverter		initialConverter;
 		private final InternalConverting	del;
 		private final Object				object;
 		private volatile Object				defaultValue;
 		private volatile boolean			hasDefault;
 
-		ConvertingWrapper(Object obj, InternalConverting c) {
+		ConvertingWrapper(Object obj, InternalConverting delegate,
+				InternalConverter converter) {
+			initialConverter = converter;
 			object = obj;
-			del = c;
+			del = delegate;
 		}
 
 		@Override
@@ -98,11 +97,6 @@ class CustomConverterImpl implements InternalConverter {
 		public Converting keysIgnoreCase() {
 			del.keysIgnoreCase();
 			return this;
-		}
-
-		@Override
-		public void setConverter(Converter c) {
-			del.setConverter(c);
 		}
 
 		@Override
@@ -152,9 +146,14 @@ class CustomConverterImpl implements InternalConverter {
 			return to(ref.getType());
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public <T> T to(Type type) {
+			return to(type, initialConverter);
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T> T to(Type type, InternalConverter converter) {
 			List<ConverterFunction> tr = typeRules.get(Util.baseType(type));
 			if (tr == null)
 				tr = Collections.emptyList();
@@ -181,15 +180,15 @@ class CustomConverterImpl implements InternalConverter {
 					}
 				}
 
-				T result = del.to(type);
+				Object result = del.to(type, converter);
 				if (result != null && Proxy.isProxyClass(result.getClass())
-						&& errorHandlers.size() > 0) {
-					return wrapErrorHandling(result);
+						&& getErrorHandlers(converter).size() > 0) {
+					return (T) wrapErrorHandling(result, converter);
 				} else {
-					return result;
+					return (T) result;
 				}
 			} catch (Exception ex) {
-				for (ConverterFunction eh : errorHandlers) {
+				for (ConverterFunction eh : getErrorHandlers(converter)) {
 					try {
 						Object handled = eh.apply(object, type);
 						if (handled != ConverterFunction.CANNOT_HANDLE)
@@ -206,10 +205,26 @@ class CustomConverterImpl implements InternalConverter {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
-		private <T> T wrapErrorHandling(final T wrapped) {
+		List<ConverterFunction> getErrorHandlers(Converter converter) {
+			List<ConverterFunction> handlers = new ArrayList<>();
+
+			if (converter instanceof CustomConverterImpl) {
+				CustomConverterImpl cconverter = (CustomConverterImpl) converter;
+				handlers.addAll(cconverter.errorHandlers);
+
+				Converter nextDel = cconverter.delegate;
+				handlers.addAll(getErrorHandlers(nextDel));
+			}
+
+			handlers.addAll(errorHandlers);
+
+			return handlers;
+		}
+
+		private Object wrapErrorHandling(final Object wrapped,
+				final InternalConverter converter) {
 			final Class< ? > cls = wrapped.getClass();
-			return (T) Proxy.newProxyInstance(cls.getClassLoader(),
+			return Proxy.newProxyInstance(cls.getClassLoader(),
 					cls.getInterfaces(), new InvocationHandler() {
 						@Override
 						public Object invoke(Object proxy, Method method,
@@ -232,12 +247,12 @@ class CustomConverterImpl implements InternalConverter {
 														+ cls);
 								}
 							}
-							MethodHandle mh = publicLookup().unreflect(method);
+
 							try {
-								return mh.bindTo(wrapped)
-										.invokeWithArguments(args);
+								return method.invoke(wrapped, args);
 							} catch (Exception ex) {
-								for (ConverterFunction eh : errorHandlers) {
+								for (ConverterFunction eh : getErrorHandlers(
+										converter)) {
 									try {
 										Object handled = eh.apply(wrapped,
 												method.getGenericReturnType());
@@ -255,7 +270,7 @@ class CustomConverterImpl implements InternalConverter {
 					});
 		}
 
-        @Override
+		@Override
 		public String toString() {
 			return to(String.class);
 		}
