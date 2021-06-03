@@ -26,13 +26,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.feature; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.feature; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.feature; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.serivice.feature; version="[1.0,1.1)"}
  */
 @Version("1.0.0")
-package org.osgi.util.feature;
+package org.osgi.service.feature;
 
 import org.osgi.annotation.versioning.Version;

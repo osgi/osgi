@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.util.feature;
+package org.osgi.service.feature;
 
 import java.util.List;
 

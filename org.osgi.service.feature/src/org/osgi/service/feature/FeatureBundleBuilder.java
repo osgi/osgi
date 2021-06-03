@@ -15,41 +15,40 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
-package org.osgi.util.feature;
+package org.osgi.service.feature;
 
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * A builder for Feature Model {@link FeatureConfiguration} objects.
+ * A builder for Feature Model {@link FeatureBundle} objects.
  * @NotThreadSafe
  */
 @ProviderType
-public interface FeatureConfigurationBuilder {
+public interface FeatureBundleBuilder {
 
     /**
-     * Add a configuration value for this Configuration object. If a
-     * value with the same key was previously provided the previous value is
-     * overwritten.
-     * @param key The configuration key.
-     * @param value The configuration value. Acceptable data types are: TODO list
+     * Add metadata for this Bundle.
+     * @param key Metadata key.
+     * @param value Metadata value.
      * @return This builder.
      */
-    FeatureConfigurationBuilder addValue(String key, Object value);
+    FeatureBundleBuilder addMetadata(String key, Object value);
 
     /**
-     * Add a map of configuration values for this Configuration object. All values
-     * will be added to any previously provided configuration values.
-     * @param cfg
+     * Add metadata for this Bundle by providing a map. All
+     * metadata in the map is added to any previously provided
+     * metadata.
+     * @param md The map with metadata.
      * @return This builder.
      */
-    FeatureConfigurationBuilder addValues(Map<String, Object> cfg);
+    FeatureBundleBuilder addMetadata(Map<String, Object> md);
 
     /**
-     * Build the Configuration object. Can only be called once on a builder. After
+     * Build the Bundle object. Can only be called once on a builder. After
      * calling this method the current builder instance cannot be used any more.
-     * @return The Configuration.
+     * @return The Bundle.
      */
-    FeatureConfiguration build();
+    FeatureBundle build();
 }
