@@ -77,6 +77,8 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.framework.Version;
 import org.osgi.test.cases.converter.felix.MyDTO.Count;
 import org.osgi.test.cases.converter.felix.MyEmbeddedDTO.Alpha;
@@ -429,38 +431,44 @@ public class ConverterTest {
 	/**
 	 * 707.4.3.1 - null becomes an empty array
 	 */
-	@Test
-	public void testNullToArrayConversion() {
+	@ParameterizedTest(name = "arrayType=\"{0}\"")
+	@ValueSource(classes = {
+			String[].class, //
+			boolean[].class, //
+			byte[].class, //
+			short[].class, //
+			char[].class, //
+			int[].class, //
+			float[].class, //
+			long[].class, //
+			double[].class, //
 
-		checkArray(String[].class);
-		checkArray(boolean[].class);
-		checkArray(byte[].class);
-		checkArray(short[].class);
-		checkArray(char[].class);
-		checkArray(int[].class);
-		checkArray(float[].class);
-		checkArray(long[].class);
-		checkArray(double[].class);
+			String[][].class, //
+			boolean[][].class, //
+			byte[][].class, //
+			short[][].class, //
+			char[][].class, //
+			int[][].class, //
+			float[][].class, //
+			long[][].class, //
+			double[][].class, //
 
-		checkArray(String[][].class);
-		checkArray(boolean[][].class);
-		checkArray(byte[][].class);
-		checkArray(short[][].class);
-		checkArray(char[][].class);
-		checkArray(int[][].class);
-		checkArray(float[][].class);
-		checkArray(long[][].class);
-		checkArray(double[][].class);
+			String[][][].class, //
+			boolean[][][].class, //
+			byte[][][].class, //
+			short[][][].class, //
+			char[][][].class, //
+			int[][][].class, //
+			float[][][].class, //
+			long[][][].class, //
+			double[][][].class //
+	})
+	public void testNullToArrayConversion(Class< ? > arrayType) {
+		assertTrue(arrayType.isArray());
 
-		checkArray(String[][][].class);
-		checkArray(boolean[][][].class);
-		checkArray(byte[][][].class);
-		checkArray(short[][][].class);
-		checkArray(char[][][].class);
-		checkArray(int[][][].class);
-		checkArray(float[][][].class);
-		checkArray(long[][][].class);
-		checkArray(double[][][].class);
+		Object array = converter.convert(null).to(arrayType);
+		assertEquals(0, Array.getLength(array));
+		assertTrue(arrayType.isInstance(array));
 	}
 
 	@Test
@@ -494,14 +502,6 @@ public class ConverterTest {
 		} catch (ConversionException e) {
 			// good
 		}
-	}
-
-	private void checkArray(Class< ? > arrayType) {
-		assertTrue(arrayType.isArray());
-
-		Object array = converter.convert(null).to(arrayType);
-		assertEquals(0, Array.getLength(array));
-		assertTrue(arrayType.isInstance(array));
 	}
 
 	@Test

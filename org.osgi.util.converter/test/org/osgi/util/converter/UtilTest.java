@@ -19,49 +19,46 @@ package org.osgi.util.converter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-/**
- */
+@SuppressWarnings("javadoc")
 public class UtilTest {
-	/**
-	 */
-    @Test
-    public void testMangling() {
-        assertMangle("", "");
-        assertMangle("a", "a");
-        assertMangle("ab", "ab");
-        assertMangle("abc", "abc");
-        assertMangle("a\u0008bc", "a\bbc");
+	@ParameterizedTest(name = "methodName=\"{0}\", key=\"{1}\"")
+	@CsvSource({
+			"'',''", //
+			"a,a", //
+			"ab,ab", //
+			"abc,abc", //
+			"a\u0008bc,a\bbc", //
 
-        assertMangle("$_$", "-");
-        assertMangle("$_", ".");
-        assertMangle("_$", ".");
-        assertMangle("x$_$", "x-");
-        assertMangle("$_$x", "-x");
-        assertMangle("abc$_$abc", "abc-abc");
-        assertMangle("$$_$x", "$.x");
-        assertMangle("$_$$", "-");
-        assertMangle("$_$$$", "-$");
-        assertMangle("$", "");
-        assertMangle("$$", "$");
-        assertMangle("_", ".");
-        assertMangle("$_", ".");
+			"$_$,-", //
+			"$_,.", //
+			"_$,.", //
+			"x$_$,x-", //
+			"$_$x,-x", //
+			"abc$_$abc,abc-abc", //
+			"$$_$x,$.x", //
+			"$_$$,-", //
+			"$_$$$,-$", //
+			"$,''", //
+			"$$,$", //
+			"_,.", //
+			"$_,.", //
 
-        assertMangle("myProperty143", "myProperty143");
-        assertMangle("$new", "new");
-        assertMangle("n$ew", "new");
-        assertMangle("new$", "new");
-        assertMangle("my$$prop", "my$prop");
-        assertMangle("dot_prop", "dot.prop");
-        assertMangle("_secret", ".secret");
-        assertMangle("another__prop", "another_prop");
-        assertMangle("three___prop", "three_.prop");
-        assertMangle("four_$__prop", "four._prop");
-        assertMangle("five_$_prop", "five..prop");
-    }
-
-    private void assertMangle(String methodName, String key) {
+			"myProperty143,myProperty143", //
+			"$new,new", //
+			"n$ew,new", //
+			"new$,new", //
+			"my$$prop,my$prop", //
+			"dot_prop,dot.prop", //
+			"_secret,.secret", //
+			"another__prop,another_prop", //
+			"three___prop,three_.prop", //
+			"four_$__prop,four._prop", //
+			"five_$_prop,five..prop" //
+	})
+	public void testMangling(String methodName, String key) {
 		assertThat(Util.unMangleName(methodName)).isEqualTo(key);
     }
 }
