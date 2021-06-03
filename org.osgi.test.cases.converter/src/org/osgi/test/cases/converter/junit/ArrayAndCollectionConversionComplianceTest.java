@@ -20,7 +20,6 @@ package org.osgi.test.cases.converter.junit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -301,39 +300,4 @@ public class ArrayAndCollectionConversionComplianceTest {
 		} catch (ConversionException e) {}
 	}
 
-	/**
-	 * 707.4.3.1 - null becomes an empty array
-	 */
-	@Test
-	public void testNullToArrayConversion() {
-
-		checkArray(String[].class);
-		checkArray(boolean[].class);
-		checkArray(byte[].class);
-		checkArray(short[].class);
-		checkArray(char[].class);
-		checkArray(int[].class);
-		checkArray(float[].class);
-		checkArray(long[].class);
-		checkArray(double[].class);
-
-		checkArray(String[][][][][].class);
-		checkArray(boolean[][][].class);
-		checkArray(byte[][].class);
-		checkArray(short[][][][].class);
-		checkArray(char[][].class);
-		checkArray(int[][].class);
-		checkArray(float[][][].class);
-		checkArray(long[][][].class);
-		checkArray(double[][].class);
-	}
-
-	private void checkArray(Class< ? > arrayType) {
-		assertTrue(arrayType.isArray());
-
-		Converter converter = Converters.standardConverter();
-		Object array = converter.convert(null).to(arrayType);
-		assertEquals(0, Array.getLength(array));
-		assertTrue(arrayType.isInstance(array));
-	}
 }
