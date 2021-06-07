@@ -168,7 +168,7 @@ int t = mi.timeout(); // t=700</programlisting></para>
       is necessary to capture these to instruct the converter to produce the
       correct parameterized type. This can be achieved with the
       <code>TypeReference</code> based APIs, for example: <programlisting>Converter c = Converters.standardConverter();
-List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt;&gt;());
+List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt;&gt;(){});
 // list will contain the Long value 123L</programlisting></para>
     </section>
 
@@ -793,13 +793,13 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></pa
   List&lt;String&gt; result;
     
   // This result will be ["hi", "2", "ho"]
-  result = c.convert(map).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+  result = c.convert(map).to(new TypeReference&lt;List&lt;String&gt;&gt;(){})
 
   // This result will be ["1", "2", "3"]
-  result = c.convert(map.keySet()).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+  result = c.convert(map.keySet()).to(new TypeReference&lt;List&lt;String&gt;&gt;(){})
 
   // This result will be ["hi", null, "ho"]
-  result = c.convert(map.values()).to(new TypeReference&lt;List&lt;String&gt;&gt;())
+  result = c.convert(map.values()).to(new TypeReference&lt;List&lt;String&gt;&gt;(){})
 </programlisting></para>
       </section>
 
