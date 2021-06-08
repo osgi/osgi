@@ -331,12 +331,9 @@ public class ExampleEventSource {
       \u002F</code>). More precisely, the topic must conform to the following
       grammar:</para>
 
-      <remark> This grammar is more lenient than it might be to allow full compatiblity with Event Admin.
-      Just using  "topic ::= identifier ( '/' identifier ) *" would be simpler but disallow "-" in tokens
-      </remark>
       <programlisting>  // For further information see General Syntax Definitions in Core
 
-      topictoken  :: ( jletterordigit | '_' | '-' ) +
+      topictoken  :: ( jletterordigit | '-' ) +
       
       topic       ::= topictoken ( '/' topictoken ) *</programlisting>
 
