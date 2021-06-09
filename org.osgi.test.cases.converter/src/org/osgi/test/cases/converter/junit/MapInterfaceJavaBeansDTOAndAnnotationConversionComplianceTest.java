@@ -875,14 +875,28 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest {
 		// use default value
 		assertEquals("value3", annotationInterface.prop3());
 
-		// still use default
+		// use the given null
 		dtolike.prop2 = null;
-		assertEquals("value2", annotationInterface.prop2());
+		assertEquals(null, annotationInterface.prop2());
 
 		try {
 			annotationInterface.prop4();
 			fail("ConversionException expected : undefined in DTOLike and no default ");
 		} catch (ConversionException e) {}
+
+		Map<String,String> map = new HashMap<>();
+		map.put("prop1", "value1");
+		map.put("prop2", "value2");
+		AnnotationInterface annotationInterfaceFromMap = converter.convert(map)
+				.to(AnnotationInterface.class);
+
+		assertEquals("value1", annotationInterfaceFromMap.prop1());
+		assertEquals("value2", annotationInterfaceFromMap.prop2());
+		map.put("prop2", null);
+		assertEquals(null, annotationInterfaceFromMap.prop2());
+		map.remove("prop2");
+		// still use default
+		assertEquals("value2", annotationInterfaceFromMap.prop2());
 
 		AnnotationInterface annotation = AnnotatedMappingClass.class
 				.getAnnotation(AnnotationInterface.class);
@@ -1042,6 +1056,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest {
 		assertEquals(notDtoLike.prop3, annotationConverted.prop3());
 		notDtoLike.generateProp3();
 		assertEquals(notDtoLike.prop3, annotationConverted.prop3());
+
 		try {
 			annotationConverted.prop4();
 			fail("ConversionException expected for undefined field");

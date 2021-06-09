@@ -22,4 +22,14 @@ public interface InterfaceWithDefaultMethod {
 	public default String defaultMethod() {
 		return RESULT;
 	}
+
+	public default String defaultMethodNull() {
+		return null;
+	}
+
+	public default String defaultMethodException() {
+		throw new RuntimeException();
+	}
+
+	public String nonDefault();
 }

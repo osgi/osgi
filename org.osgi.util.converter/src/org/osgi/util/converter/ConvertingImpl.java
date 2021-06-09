@@ -807,59 +807,80 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 
 				String propName = Util.getInterfacePropertyName(method,
 						Util.getSingleElementAnnotationKey(cls, proxy), proxy);
-				if (propName == null)
-					return null;
-
-				Object val = data.get(propName);
-				if (val == null && keysIgnoreCase) {
+				if (propName == null) {
+					throw new ConversionException(
+							"Can not convert. Calculated propertyName is `null` method: "
+									+ method);
+				}
+				Object val = null;
+				boolean handled = false;
+				if (data.containsKey(propName)) {
+					val = data.get(propName);
+					handled = true;
+				} else if (val == null && keysIgnoreCase) {
 					// try in a case-insensitive way
 					for (Iterator< ? > it = data.keySet().iterator(); it
 							.hasNext() && val == null;) {
 						String k = it.next().toString();
 						if (propName.equalsIgnoreCase(k)) {
 							val = data.get(k);
+							handled = true;
+							break;
 						}
 					}
 				}
 
 				// If no value is available take the default if specified
-				if (val == null) {
+				if (!handled) {
 					if (cls.isAnnotation()) {
 						val = method.getDefaultValue();
+						// still handled=false, annotations could not return
+						// null
 					} else if (method.isDefault()) {
-						double javaVersion = Double.parseDouble(
-								System.getProperty("java.class.version"));
-						double java8 = 52.0d;
-						if (javaVersion > java8) {
-							val = MethodHandles.lookup()
-									.findSpecial(method.getDeclaringClass(),
-											method.getName(),
-											MethodType.methodType(
-													method.getReturnType(),
-													new Class[] {}),
-											method.getDeclaringClass())
-									.bindTo(proxy)
-									.invokeWithArguments(args);
-						} else {
-							Constructor<Lookup> constructor = Lookup.class
-									.getDeclaredConstructor(Class.class);
-							if (!constructor.isAccessible()) {
-								constructor.setAccessible(true);
+						try {
+							double javaVersion = Double.parseDouble(
+									System.getProperty("java.class.version"));
+							double java8 = 52.0d;
+							if (javaVersion > java8) {
+								val = MethodHandles.lookup()
+										.findSpecial(method.getDeclaringClass(),
+												method.getName(),
+												MethodType.methodType(
+														method.getReturnType(),
+														new Class[] {}),
+												method.getDeclaringClass())
+										.bindTo(proxy)
+										.invokeWithArguments(args);
+								handled = true;
+							} else {
+								Constructor<Lookup> constructor = Lookup.class
+										.getDeclaredConstructor(Class.class);
+								if (!constructor.isAccessible()) {
+									constructor.setAccessible(true);
+								}
+								val = constructor.newInstance(cls)
+										.in(cls)
+										.unreflectSpecial(method, cls)
+										.bindTo(proxy)
+										.invokeWithArguments(args);
+								handled = true;
 							}
-							val = constructor.newInstance(cls)
-									.in(cls)
-									.unreflectSpecial(method, cls)
-									.bindTo(proxy)
-									.invokeWithArguments(args);
+						} catch (Exception e) {
+							throw new ConversionException(
+									"Can not convert. Exception is thrown in default method: "
+											+ method,
+									e);
 						}
 					}
 
-					if (val == null) {
-						if (args != null && args.length == 1) {
-							val = args[0];
-						} else {
-							throw new ConversionException(
-									"No value for property: " + propName);
+					if (!handled) {
+						if (val == null) {
+							if (args != null && args.length == 1) {
+								val = args[0];
+							} else {
+								throw new ConversionException(
+										"No value for property: " + propName);
+							}
 						}
 					}
 				}

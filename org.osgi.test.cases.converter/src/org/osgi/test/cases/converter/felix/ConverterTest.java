@@ -73,6 +73,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -633,8 +634,9 @@ public class ConverterTest {
 		ConverterBuilder cb = converter.newConverterBuilder();
 		Converter adapted = cb.errorHandler(func).build();
 
-		assertEquals(new Integer(12), adapted.convert("12").to(Integer.class));
-		assertEquals(new Integer(-1),
+		assertEquals(Integer.valueOf(12),
+				adapted.convert("12").to(Integer.class));
+		assertEquals(Integer.valueOf(-1),
 				adapted.convert("hello").to(Integer.class));
 		assertNull(adapted.convert("goodbye").to(Integer.class));
 
@@ -1711,6 +1713,32 @@ public class ConverterTest {
 		assertNotNull(k);
 	}
 
+	@interface AnnType {
+		boolean a();
+
+		String b();
+	}
+
+	interface Interf {
+		default Boolean a() {
+			return null;
+		}
+
+		default Boolean b() {
+			return null;
+		}
+	}
+
+	@Test
+	public void testDefaultInterfaceToAnnotationType() throws Throwable {
+		AnnType a = Converters.standardConverter().convert(new Interf() {
+		}).to(AnnType.class);
+		assertThat(a.a()).isFalse();
+		assertThat(a.b()).isNull();
+
+
+	}
+
 	@Test
 	public void testDefaultInterfaceMethod() throws Throwable {
 		Class< ? > clazz = InterfaceWithDefaultMethod.class;
@@ -1719,6 +1747,28 @@ public class ConverterTest {
 				.convert(new HashMap<String,Object>())
 				.to(clazz);
 		assertEquals(InterfaceWithDefaultMethod.RESULT, i.defaultMethod());
+		assertNull(i.defaultMethodNull());
+		Assertions.assertThatExceptionOfType(ConversionException.class)
+				.isThrownBy(() -> i.defaultMethodException());
+
+		ConverterFunction errHandler = new ConverterFunction() {
+			@Override
+			public Object apply(Object obj, Type targetType) throws Exception {
+				return "ok";
+			}
+		};
+		ConverterBuilder cb = converter.newConverterBuilder();
+		Converter c = cb.errorHandler(errHandler).build();
+
+		Map< ? , ? > m = new HashMap<>();
+
+		InterfaceWithDefaultMethod ie = c.convert(m)
+				.to(InterfaceWithDefaultMethod.class);
+		assertEquals("ok", ie.defaultMethodException());
+
+		Assertions.assertThatExceptionOfType(ConversionException.class)
+				.isThrownBy(() -> i.nonDefault());
+
 	}
 
 	@Test
