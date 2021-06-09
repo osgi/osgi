@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.service.feature;
 
-import java.util.Map;
-
 import org.osgi.annotation.versioning.ProviderType;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents an OSGi Configuration in the Feature Model.
@@ -37,7 +38,7 @@ public interface FeatureConfiguration {
      * Get the Factory PID from the configuration, if any.
      * @return The Factory PID, or {@code null} if there is none.
      */
-    String getFactoryPid();
+    Optional<String> getFactoryPid();
 
     /**
      * Get the configuration key-value map.

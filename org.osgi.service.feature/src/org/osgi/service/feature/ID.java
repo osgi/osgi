@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.service.feature;
 
-import java.util.Objects;
-
 import org.osgi.annotation.versioning.ProviderType;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * ID used to denote an artifact. This could be a feature model, a bundle which is part of the feature model
@@ -48,7 +49,7 @@ public class ID {
 	 * syntax:
 	 * <p>
 	 * {@code group-id ':' artifact-id [ ':' [type] [ ':' classifier ] ] ':' version}
-	 * 
+	 *
 	 * @param mavenID
 	 * @return The ID
 	 */
@@ -121,16 +122,16 @@ public class ID {
      * Get the type identifier.
      * @return The type identifier.
      */
-    public String getType() {
-        return type;
+    public Optional<String> getType() {
+        return Optional.ofNullable(type);
     }
 
     /**
      * Get the classifier.
      * @return The classifier.
      */
-    public String getClassifier() {
-        return classifier;
+    public Optional<String> getClassifier() {
+        return Optional.ofNullable(classifier);
     }
 
     @Override

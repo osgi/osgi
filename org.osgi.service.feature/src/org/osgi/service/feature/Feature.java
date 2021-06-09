@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.service.feature;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -32,59 +33,59 @@ public interface Feature extends FeatureArtifact {
      * Get the name.
      * @return The name.
      */
-    String getName();
+    Optional<String> getName();
 
     /**
 	 * Get the categories.
-	 * 
+	 *
 	 * @return The categories.
 	 */
 	List<String> getCategories();
 
 	/**
 	 * Get the copyright.
-	 * 
+	 *
 	 * @return The copyright.
 	 */
-	String getCopyright();
+	Optional<String> getCopyright();
 
 	/**
 	 * Get the description.
-	 * 
+	 *
 	 * @return The description.
 	 */
-    String getDescription();
+    Optional<String> getDescription();
 
 	/**
 	 * Get the documentation URL.
-	 * 
+	 *
 	 * @return The documentation URL.
 	 */
-	String getDocURL();
+    Optional<String> getDocURL();
 
     /**
      * Get the vendor.
      * @return The vendor.
      */
-    String getVendor();
+    Optional<String> getVendor();
 
     /**
 	 * Get the license of this Feature. The syntax of the value follows the
 	 * Bundle-License header syntax. See the 'Bundle Manifest Headers' section
 	 * in the OSGi Core specification.
-	 * 
+	 *
 	 * @return The license.
 	 */
-    String getLicense();
+    Optional<String> getLicense();
 
 	/**
 	 * Get the SCM information relating to the feature. The syntax of the value
 	 * follows the Bundle-SCM format. See the 'Bundle Manifest Headers' section
 	 * in the OSGi Core specification.
-	 * 
+	 *
 	 * @return The SCM information.
 	 */
-	String getSCM();
+    Optional<String> getSCM();
 
     /**
      * Get whether the feature is complete or not.
