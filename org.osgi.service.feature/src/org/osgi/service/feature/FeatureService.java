@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.service.feature;
 
@@ -24,25 +24,16 @@ import java.io.Writer;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The Features class is the primary entry point for interacting with the feature model.
+ * The Features service is the primary entry point for interacting with the feature model.
  * @ThreadSafe
  */
 @ProviderType
-public class Features {
-	private static final Features /* Impl */ IMPL = null;// new
-														// FeatureServiceImpl();
-
-	// Remove public constructor.
-	private Features() {
-	}
-
+public interface FeatureService {
     /**
      * Get a factory which can be used to build feature model entities.
      * @return A builder factory.
      */
-    public static BuilderFactory getBuilderFactory() {
-        return IMPL.getBuilderFactory();
-    }
+    public BuilderFactory getBuilderFactory();
 
     /**
      * Read a Feature from JSON
@@ -50,9 +41,7 @@ public class Features {
      * @return The Feature represented by the JSON
      * @throws IOException When reading fails
      */
-    public static Feature readFeature(Reader jsonReader) throws IOException {
-        return IMPL.readFeature(jsonReader);
-    }
+    public Feature readFeature(Reader jsonReader) throws IOException;
 
     /**
      * Write a Feature Model to JSON
@@ -60,7 +49,5 @@ public class Features {
      * @param jsonWriter A Writer to which the Feature should be written.
      * @throws IOException When writing fails.
      */
-    public static void writeFeature(Feature feature, Writer jsonWriter) throws IOException {
-        IMPL.writeFeature(feature, jsonWriter);
-    }
+    public void writeFeature(Feature feature, Writer jsonWriter) throws IOException;
 }
