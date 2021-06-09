@@ -165,6 +165,12 @@
       methods, all static fields, and any non public instance fields of an event object must be 
       ignored by the Typed Event Service when processing the Event data.</para>
       
+      <para>Some implementations of the Typed Event Service may support Type Safe Event classes 
+      that do not conform to the DTO rules, transforming them as needed in an implementation
+      specific way. This is permitted by this specification, however consumers which rely on
+      this behaviour may not be portable between different implementations of this specification.
+      </para>
+      
       <section>
         <title>Nested Data Structures</title>
         <para>OSGi DTOs are permitted to have data values which are also DTOs, allowing nested data
