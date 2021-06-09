@@ -28,14 +28,6 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface FeatureBuilder {
 	/**
-	 * Adds a category to the Feature.
-	 * 
-	 * @param category The Category.
-	 * @return This builder.
-	 */
-	FeatureBuilder addCategory(String category);
-
-	/**
 	 * Set the Feature Complete flag.
 	 * 
 	 * @param complete If the feature is complete.
@@ -105,10 +97,19 @@ public interface FeatureBuilder {
     FeatureBuilder addBundles(FeatureBundle ... bundles);
 
     /**
-     * Add Configurations to the Feature.
-     * @param configs The Configurations to add.
-     * @return This builder.
-     */
+	 * Adds one or more categories to the Feature.
+	 *
+	 * @param categories The Categories.
+	 * @return This builder.
+	 */
+	FeatureBuilder addCategories(String... categories);
+
+	/**
+	 * Add Configurations to the Feature.
+	 *
+	 * @param configs The Configurations to add.
+	 * @return This builder.
+	 */
     FeatureBuilder addConfigurations(FeatureConfiguration ... configs);
 
     /**
