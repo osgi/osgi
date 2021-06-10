@@ -1,4 +1,4 @@
 junit-jupiter.version=5.7.1
 junit-platform.version=1.7.1
 assertj.version=3.19.0
-osgi-test.version=0.10.0
+osgi-test.version=1.0.0-SNAPSHOT

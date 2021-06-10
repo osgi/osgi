@@ -44,6 +44,8 @@ Import-Package: ${-signaturetest}, *
 	tb27.jar, \
 	tb28.jar, \
 	tb29.jar, \
+	tb30.jar, \
+	tb31.jar, \
 	tbf1.jar
 	
 -signaturetest = \
@@ -74,4 +76,6 @@ Import-Package: ${-signaturetest}, *
 
 -runproperties = ${runproperties}, \
     org.osgi.service.log.admin.loglevel=WARN,\
-	scr.bundle.name=org.apache.felix.scr
+	scr.bundle.name=org.apache.felix.scr,\
+    eclipse.consoleLog=true,\
+    eclipse.log.level=DEBUG

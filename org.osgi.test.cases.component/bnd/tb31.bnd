@@ -1,0 +1,2 @@
+-privatepackage: ${p}.tb31.*
+Service-Component: org/osgi/test/cases/component/tb31/components.xml
