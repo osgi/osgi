@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +38,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentServiceObjects;
+import org.osgi.test.assertj.dictionary.DictionaryAssert;
 import org.osgi.test.assertj.dictionary.DictionarySoftAssertions;
-import org.osgi.test.assertj.dictionary.ProxyableDictionaryAssert;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.common.annotation.InjectBundleContext;
@@ -279,76 +278,123 @@ public class DS15TestCase {
 		bs.waitForService(SLEEP);
 
 		assertThat(bs.getService()).isNotNull();
-		Dictionary<String,Object> properties = bs.getService().getProperties();
-		ProxyableDictionaryAssert<String,Object> assertion = softly
-				.assertThat(properties);
-		assertion
-				.extractingByKey("serviceParam",
-						InstanceOfAssertFactories.optional(TestObject.class))
-				.containsSame(service);
-		assertion
-				.extractingByKey("srParam",
-						InstanceOfAssertFactories
-								.optional(ServiceReference.class))
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("soParam",
-						InstanceOfAssertFactories
-								.optional(ComponentServiceObjects.class))
-				.map(ComponentServiceObjects::getServiceReference)
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("propsParam",
-						InstanceOfAssertFactories.optional(Map.class))
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
-		assertion
-				.extractingByKey("tupleParam",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> (TestObject) entry.getValue())
-				.containsSame(service);
-		assertion
-				.extractingByKey("tupleParam",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> entry.getKey())
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
 
-		assertion
-				.extractingByKey("serviceField",
-						InstanceOfAssertFactories.optional(TestObject.class))
-				.containsSame(service);
-		assertion
-				.extractingByKey("srField",
-						InstanceOfAssertFactories
-								.optional(ServiceReference.class))
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("soField",
-						InstanceOfAssertFactories
-								.optional(ComponentServiceObjects.class))
-				.map(ComponentServiceObjects::getServiceReference)
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("propsField",
-						InstanceOfAssertFactories.optional(Map.class))
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
-		assertion
-				.extractingByKey("tupleField",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> (TestObject) entry.getValue())
-				.containsSame(service);
-		assertion
-				.extractingByKey("tupleField",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> entry.getKey())
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceParam",
+							InstanceOfAssertFactories
+									.optional(TestObject.class))
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srParam",
+							InstanceOfAssertFactories
+									.optional(ServiceReference.class))
+					.containsInstanceOf(ServiceReference.class)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soParam",
+							InstanceOfAssertFactories
+									.optional(ComponentServiceObjects.class))
+					.containsInstanceOf(ComponentServiceObjects.class)
+					.map(ComponentServiceObjects::getServiceReference)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsParam",
+							InstanceOfAssertFactories.optional(Map.class))
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getValue())
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getKey())
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceField",
+							InstanceOfAssertFactories
+									.optional(TestObject.class))
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srField",
+							InstanceOfAssertFactories
+									.optional(ServiceReference.class))
+					.containsInstanceOf(ServiceReference.class)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soField",
+							InstanceOfAssertFactories
+									.optional(ComponentServiceObjects.class))
+					.containsInstanceOf(ComponentServiceObjects.class)
+					.map(ComponentServiceObjects::getServiceReference)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsField",
+							InstanceOfAssertFactories.optional(Map.class))
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getValue())
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getKey())
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+
 	}
 
 	@Test
@@ -361,42 +407,83 @@ public class DS15TestCase {
 		bs.waitForService(SLEEP);
 
 		assertThat(bs.getService()).isNotNull();
-		Dictionary<String,Object> properties = bs.getService().getProperties();
-		ProxyableDictionaryAssert<String,Object> assertion = softly
-				.assertThat(properties);
-		assertion
-				.extractingByKey("serviceParam",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion.extractingByKey("srParam", InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion.extractingByKey("soParam", InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion
-				.extractingByKey("propsParam",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion
-				.extractingByKey("tupleParam",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
 
-		assertion
-				.extractingByKey("serviceField",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion.extractingByKey("srField", InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion.extractingByKey("soField", InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion
-				.extractingByKey("propsField",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
-		assertion
-				.extractingByKey("tupleField",
-						InstanceOfAssertFactories.OPTIONAL)
-				.isEmpty();
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.OPTIONAL)
+					.isEmpty();
+		});
 	}
 
 	@Test
@@ -417,76 +504,122 @@ public class DS15TestCase {
 		bs.waitForService(SLEEP);
 
 		assertThat(bs.getService()).isNotNull();
-		Dictionary<String,Object> properties = bs.getService().getProperties();
-		ProxyableDictionaryAssert<String,Object> assertion = softly
-				.assertThat(properties);
-		assertion
-				.extractingByKey("serviceParam",
-						InstanceOfAssertFactories.optional(TestObject.class))
-				.containsSame(service);
-		assertion
-				.extractingByKey("srParam",
-						InstanceOfAssertFactories
-								.optional(ServiceReference.class))
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("soParam",
-						InstanceOfAssertFactories
-								.optional(ComponentServiceObjects.class))
-				.map(ComponentServiceObjects::getServiceReference)
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("propsParam",
-						InstanceOfAssertFactories.optional(Map.class))
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
-		assertion
-				.extractingByKey("tupleParam",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> (TestObject) entry.getValue())
-				.containsSame(service);
-		assertion
-				.extractingByKey("tupleParam",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> entry.getKey())
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
 
-		assertion
-				.extractingByKey("serviceField",
-						InstanceOfAssertFactories.optional(TestObject.class))
-				.containsSame(service);
-		assertion
-				.extractingByKey("srField",
-						InstanceOfAssertFactories
-								.optional(ServiceReference.class))
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("soField",
-						InstanceOfAssertFactories
-								.optional(ComponentServiceObjects.class))
-				.map(ComponentServiceObjects::getServiceReference)
-				.map(sr -> (String) sr.getProperty("testName"))
-				.contains(testName);
-		assertion
-				.extractingByKey("propsField",
-						InstanceOfAssertFactories.optional(Map.class))
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
-		assertion
-				.extractingByKey("tupleField",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> (TestObject) entry.getValue())
-				.containsSame(service);
-		assertion
-				.extractingByKey("tupleField",
-						InstanceOfAssertFactories.optional(Map.Entry.class))
-				.map(entry -> entry.getKey())
-				.get(InstanceOfAssertFactories.map(String.class, Object.class))
-				.containsEntry("testName", testName);
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceParam",
+							InstanceOfAssertFactories
+									.optional(TestObject.class))
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srParam",
+							InstanceOfAssertFactories
+									.optional(ServiceReference.class))
+					.containsInstanceOf(ServiceReference.class)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soParam",
+							InstanceOfAssertFactories
+									.optional(ComponentServiceObjects.class))
+					.containsInstanceOf(ComponentServiceObjects.class)
+					.map(ComponentServiceObjects::getServiceReference)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsParam",
+							InstanceOfAssertFactories.optional(Map.class))
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getValue())
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleParam",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getKey())
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceField",
+							InstanceOfAssertFactories
+									.optional(TestObject.class))
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("srField",
+							InstanceOfAssertFactories
+									.optional(ServiceReference.class))
+					.containsInstanceOf(ServiceReference.class)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("soField",
+							InstanceOfAssertFactories
+									.optional(ComponentServiceObjects.class))
+					.containsInstanceOf(ComponentServiceObjects.class)
+					.map(ComponentServiceObjects::getServiceReference)
+					.map(sr -> sr.getProperty("testName"))
+					.contains(testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("propsField",
+							InstanceOfAssertFactories.optional(Map.class))
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getValue())
+					.containsInstanceOf(TestObject.class)
+					.containsSame(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tupleField",
+							InstanceOfAssertFactories.optional(Map.Entry.class))
+					.containsInstanceOf(Map.Entry.class)
+					.map(entry -> entry.getKey())
+					.containsInstanceOf(Map.class)
+					.get(InstanceOfAssertFactories.map(String.class,
+							Object.class))
+					.containsEntry("testName", testName);
+		});
 	}
-
 }
