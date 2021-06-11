@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
 
 /**
  * The Feature Model Feature.
@@ -99,6 +101,13 @@ public interface Feature extends FeatureArtifact {
      */
     List<FeatureBundle> getBundles();
 
+	/**
+	 * Get the capabilities as explicitly declared on the Feature.
+	 * 
+	 * @return The capabilities.
+	 */
+	List<Capability> getCapabilities();
+
     /**
      * Get the configurations.
      * @return The configurations.
@@ -111,6 +120,13 @@ public interface Feature extends FeatureArtifact {
      */
     Map<String, FeatureExtension> getExtensions();
 
+	/**
+	 * Get the requirements as explicitly declared on the Features.
+	 * 
+	 * @return The requirements.
+	 */
+	List<Requirement> getRequirements();
+
     /**
      * Get the variables.
      * @return The variables.
@@ -118,9 +134,6 @@ public interface Feature extends FeatureArtifact {
     Map<String, String> getVariables();
 
 	// TODO
-    // add prototype
-    // add requirements
-    // add capabilities
     // add framework properties
 
 }
