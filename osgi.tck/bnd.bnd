@@ -10,3 +10,7 @@
 -sub       = !layout.bnd, *.bnd
 -buildpath = \
     osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}
+
+# Used by GitHub Actions build to set the TCK test matrix
+json-matrix-elements: ${template;build.${1}.tests;{"book":"${1}","tck":"${@}"}}
+tck-matrix: {"include":[${map;json-matrix-elements;core;cmpn}]}

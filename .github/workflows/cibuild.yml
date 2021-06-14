@@ -49,11 +49,13 @@ jobs:
   build:
     name: Artifacts
     runs-on: ubuntu-latest
+    outputs:
+      tck-matrix: ${{ steps.build.outputs.tck-matrix }}
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
     - name: Git Unshallow
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ fromJSON(env.canonical) }}
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
@@ -72,19 +74,20 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-TCK
+        if-no-files-found: error
         path: |
-          osgi.impl/generated/*.jar
-          osgi.tck/generated/*.jar
+          osgi.tck/generated/osgi.tck.*/
+          !osgi.tck/generated/osgi.tck.*.jar
     - name: Release
       id: release
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ fromJSON(env.canonical) }}
       run: |
         ./.github/scripts/publish.sh
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Generated-Repo
@@ -109,7 +112,7 @@ jobs:
       run: |
         ./.github/scripts/spec.sh
     - name: Publish Specification HTML
-      if: ${{ (env.canonical == 'true') || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
+      if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -117,14 +120,14 @@ jobs:
         publish_dir: osgi.specs/generated/html
         force_orphan: true
     - name: Upload Specification HTML
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-HTML
         path: |
           osgi.specs/generated/html/
     - name: Upload Specification PDF
-      if: ${{ env.canonical == 'true' }}
+      if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@v2
       with:
         name: OSGi-Specification-PDF
@@ -135,15 +138,10 @@ jobs:
     needs: build
     strategy:
       fail-fast: false
-      matrix:
-        tck: [ core, cmpn ]
+      matrix: ${{ fromJSON(needs.build.outputs.tck-matrix) }}
     name: TCK ${{ matrix.tck }}
     runs-on: ubuntu-latest
     steps:
-    - name: Git Checkout
-      uses: actions/checkout@v2
-    - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
@@ -156,11 +154,12 @@ jobs:
     - name: Run TCK
       id: tck
       run: |
-        ./.github/scripts/tck.sh tck.${{ matrix.tck }}
+        cd osgi.tck.${{ matrix.book }}
+        java -jar jar/bnd.jar --exceptions runtests --title ${{ matrix.tck }} --reportdir reports/${{ matrix.tck }} ${{ matrix.tck }}.bnd
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
       uses: actions/upload-artifact@v2
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |
-          osgi.tck/generated/osgi.tck.${{ matrix.tck }}/reports/
+          osgi.tck.${{ matrix.book }}/reports/
