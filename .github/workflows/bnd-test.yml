@@ -52,13 +52,9 @@ jobs:
     - name: Build
       id: build
       run: |
-        ./.github/scripts/build.sh :buildscriptDependencies
-    - name: Run TCK
-      id: tck
-      run: |
-        ./.github/scripts/tck.sh tck.core
+        ./.github/scripts/build.sh :osgi.tck:tck.core :buildscriptDependencies
     - name: Upload TCK Test Reports on failure
-      if: ${{ always() && (steps.tck.outcome == 'failure') }}
+      if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
         name: TCK-core-reports
