@@ -400,10 +400,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 */
 	public void testStartStopSCR() throws Exception {
 		Bundle scr = getSCRBundle();
-		assertNotNull(
-				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
-				scr);
-
 		ServiceReference< ? > refs[];
 		BundleContext bc = getContext();
 		String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
@@ -438,9 +434,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	public void testSCRExtenderCapability() throws Exception {
 		Bundle scr = getSCRBundle();
-		assertNotNull(
-				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
-				scr);
 		BundleWiring wiring = scr.adapt(BundleWiring.class);
 		assertNotNull("No BundleWiring available for SCR bundle", wiring);
 		boolean found = false;
@@ -477,9 +470,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	public void testSCRServiceCapability() throws Exception {
 		Bundle scr = getSCRBundle();
-		assertNotNull(
-				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
-				scr);
 		BundleWiring wiring = scr.adapt(BundleWiring.class);
 		assertNotNull("No BundleWiring available for SCR bundle", wiring);
 		boolean found = false;
@@ -655,18 +645,18 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	private Bundle getSCRBundle() {
-		String bundleName = getProperty("scr.bundle.name");
-		if (bundleName != null) {
-			Bundle[] bundles = getContext().getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				Bundle current = bundles[i];
-				String name = current.getSymbolicName();
-				if (bundleName.equals(name)) {
-					return current;
-				}
-			}
+		ServiceComponentRuntime scr = getService(ServiceComponentRuntime.class);
+		assertThat(scr).as("ServiceComponentRuntime service").isNotNull();
+		try {
+			ServiceReference< ? > ref = getServiceReference(scr);
+			assertThat(ref).as("ServiceComponentRuntime service reference")
+					.isNotNull();
+			Bundle bundle = ref.getBundle();
+			assertThat(bundle).as("ServiceComponentRuntime bundle").isNotNull();
+			return bundle;
+		} finally {
+			ungetService(scr);
 		}
-		return null;
 	}
 
 	// helper for testDynamicBind

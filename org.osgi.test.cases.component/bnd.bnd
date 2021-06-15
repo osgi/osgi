@@ -78,6 +78,5 @@ Import-Package: ${-signaturetest}, *
 
 -runproperties = ${runproperties}, \
     org.osgi.service.log.admin.loglevel=WARN,\
-	scr.bundle.name=org.apache.felix.scr,\
     eclipse.consoleLog=true,\
     eclipse.log.level=DEBUG
