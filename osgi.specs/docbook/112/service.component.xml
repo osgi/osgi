@@ -1887,7 +1887,7 @@ public class MyComponent {
 
       <programlisting>&lt;reference name="osgi.ds.satisfying.condition"
     interface="org.osgi.service.condition.Condition"
-    target="(osgi.conditon.id=true)"
+    target="(osgi.condition.id=true)"
     policy="dynamic"
 /&gt;</programlisting>
 
@@ -1902,7 +1902,7 @@ public class MyComponent {
       the satisfying condition. This allows a component configuration to be
       configured to select which Condition service is the satisfying
       condition. The implicit reference defaults to the target property value
-      of <code>(osgi.conditon.id=true)</code> which targets the True
+      of <code>(osgi.condition.id=true)</code> which targets the True
       Condition, that is always registered by the OSGi Framework, and thus the
       implicit reference, using the default target property value, can always
       be satisfied.</para>
@@ -1915,7 +1915,7 @@ public class MyComponent {
       ready.</para>
 
       <programlisting>@Component
-@SatisfyingConditionTarget("(osgi.conditon.id=my.subsystem.ready)")
+@SatisfyingConditionTarget("(osgi.condition.id=my.subsystem.ready)")
 public class MyComponent {
   ...
 }</programlisting>
@@ -4949,7 +4949,7 @@ public class MacSpeech implements Speech {
       linkend="org.osgi.service.component.annotations.Deactivate"
       xrefstyle="hyperlink"/> annotations. If the component wants to be
       updated for changes in the configuration properties then it can also
-      indicated the modified method with the <xref
+      indicate the modified method with the <xref
       linkend="org.osgi.service.component.annotations.Modified"
       xrefstyle="hyperlink"/> annotation. For example:</para>
 
@@ -6404,6 +6404,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         field and constructor injection. This is primarily for optional (0..1)
         cardinality but can also be used with mandatory (1..1)
         cardinality.</para>
+      </listitem>
+
+      <listitem>
+        <para>Component properties from <code>property</code> and
+        <code>properties</code> elements take precedence over the
+        <code>target</code> attributes of <code>reference</code> elements. See
+        <xref linkend="service.component-component.properties"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
