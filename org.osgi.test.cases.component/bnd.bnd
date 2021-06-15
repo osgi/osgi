@@ -46,6 +46,7 @@ Import-Package: ${-signaturetest}, *
 	tb29.jar, \
 	tb30.jar, \
 	tb31.jar, \
+	tb32.jar, \
 	tbf1.jar
 	
 -signaturetest = \
@@ -58,6 +59,7 @@ Import-Package: ${-signaturetest}, *
     org.osgi.framework;maven-scope=provided;version=1.9,\
     org.osgi.dto;maven-scope=provided;version=1.1,\
     org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.service.condition;maven-scope=provided;version=1.0,\
     org.osgi.util.tracker;maven-scope=provided;version=1.5,\
     org.osgi.namespace.extender;version=1.0,\
     org.osgi.namespace.service;version=1.0,\

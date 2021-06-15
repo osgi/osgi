@@ -1,0 +1,2 @@
+-privatepackage: ${p}.tb32.*
+Service-Component: org/osgi/test/cases/component/tb32/components.xml

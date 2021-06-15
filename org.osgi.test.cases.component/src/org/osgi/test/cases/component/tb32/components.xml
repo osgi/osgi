@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+
+<components>
+
+    <!-- default Condition reference (dynamic/required), NS 1.5.0 -->
+    <component
+        name="org.osgi.test.cases.component.tb32.condition.default"
+        activate="activate"
+        xmlns="http://www.osgi.org/xmlns/scr/v1.5.0">
+        <implementation
+            class="org.osgi.test.cases.component.tb32.ConditionReferenceImpl" />
+        <service>
+            <provide
+                interface="org.osgi.test.cases.component.service.BaseService" />
+        </service>
+        <property name="type" value="condition_default_reference" />
+    </component>
+
+    <!-- true Condition reference (static/required), NS 1.5.0 -->
+    <component
+        name="org.osgi.test.cases.component.tb32.condition.true"
+        init="1"
+        activate="activate"
+        xmlns="http://www.osgi.org/xmlns/scr/v1.5.0">
+        <implementation
+            class="org.osgi.test.cases.component.tb32.ConditionReferenceImpl" />
+        <service>
+            <provide
+                interface="org.osgi.test.cases.component.service.BaseService" />
+        </service>
+        <property name="type" value="condition_true_reference" />
+        <reference name="osgi.ds.satisfying.condition"
+          interface="org.osgi.service.condition.Condition"
+          target="(osgi.condition.id=true)"
+          policy="static"
+          field="serviceField"
+          parameter="0"/>
+    </component>
+
+    <!-- custom Condition reference (dynamic/required), NS 1.5.0 -->
+    <component
+        name="org.osgi.test.cases.component.tb32.condition.custom"
+        xmlns="http://www.osgi.org/xmlns/scr/v1.5.0">
+        <implementation
+            class="org.osgi.test.cases.component.tb32.ConditionReferenceImpl" />
+        <service>
+            <provide
+                interface="org.osgi.test.cases.component.service.BaseService" />
+        </service>
+        <property name="type" value="condition_custom_reference" />
+        <!-- This property takes precedence over the target attribute of the reference -->
+        <property name="osgi.ds.satisfying.condition.target" value="(osgi.condition.id=condition_custom_reference)" />
+        <reference name="osgi.ds.satisfying.condition"
+          interface="org.osgi.service.condition.Condition"
+          target="(osgi.condition.id=true)"
+          policy="dynamic"
+          field="serviceField"/>
+    </component>
+
+</components>

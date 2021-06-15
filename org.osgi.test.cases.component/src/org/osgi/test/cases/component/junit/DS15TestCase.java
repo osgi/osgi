@@ -21,11 +21,13 @@ package org.osgi.test.cases.component.junit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.ObjectArrayAssert;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -38,6 +40,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentServiceObjects;
+import org.osgi.service.component.runtime.ServiceComponentRuntime;
+import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
+import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
+import org.osgi.service.component.runtime.dto.SatisfiedReferenceDTO;
+import org.osgi.service.component.runtime.dto.UnsatisfiedReferenceDTO;
+import org.osgi.service.condition.Condition;
 import org.osgi.test.assertj.dictionary.DictionaryAssert;
 import org.osgi.test.assertj.dictionary.DictionarySoftAssertions;
 import org.osgi.test.cases.component.service.BaseService;
@@ -620,6 +628,196 @@ public class DS15TestCase {
 					.get(InstanceOfAssertFactories.map(String.class,
 							Object.class))
 					.containsEntry("testName", testName);
+		});
+	}
+
+	@Test
+	public void condition_default_reference(@InjectInstalledBundle("tb32.jar")
+	Bundle tb,
+			@InjectService(filter = "(type=condition_default_reference)", cardinality = 0)
+			ServiceAware<BaseService> bs,
+			@InjectService(filter = "(osgi.condition.id=true)")
+			Condition trueCondition, @InjectService
+			ServiceComponentRuntime scr) throws Exception {
+		tb.start();
+
+		bs.waitForService(SLEEP);
+
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceComponent",
+							InstanceOfAssertFactories.type(Condition.class))
+					.isSameAs(trueCondition);
+		});
+
+		softly.check(() -> {
+			ComponentDescriptionDTO componentDescriptionDTO = scr
+					.getComponentDescriptionDTO(tb,
+							"org.osgi.test.cases.component.tb32.condition.default");
+
+			assertThat(componentDescriptionDTO).isNotNull();
+			Collection<ComponentConfigurationDTO> componentConfigurationDTOs = scr
+					.getComponentConfigurationDTOs(componentDescriptionDTO);
+
+			ObjectArrayAssert<SatisfiedReferenceDTO> satisfied = assertThat(
+					componentConfigurationDTOs).hasSize(1)
+							.element(0)
+							.extracting("satisfiedReferences",
+									InstanceOfAssertFactories.array(
+											SatisfiedReferenceDTO[].class))
+							.hasSize(1);
+			satisfied.extracting("name", String.class)
+					.containsOnly("osgi.ds.satisfying.condition");
+		});
+
+	}
+
+	@Test
+	public void condition_true_reference(@InjectInstalledBundle("tb32.jar")
+	Bundle tb,
+			@InjectService(filter = "(type=condition_true_reference)", cardinality = 0)
+			ServiceAware<BaseService> bs,
+			@InjectService(filter = "(osgi.condition.id=true)")
+			Condition trueCondition, @InjectService
+			ServiceComponentRuntime scr) throws Exception {
+		tb.start();
+
+		bs.waitForService(SLEEP);
+
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceParam",
+							InstanceOfAssertFactories.type(Condition.class))
+					.isSameAs(trueCondition);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceField",
+							InstanceOfAssertFactories.type(Condition.class))
+					.isSameAs(trueCondition);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceComponent",
+							InstanceOfAssertFactories.type(Condition.class))
+					.isSameAs(trueCondition);
+		});
+
+		softly.check(() -> {
+			ComponentDescriptionDTO componentDescriptionDTO = scr
+					.getComponentDescriptionDTO(tb,
+							"org.osgi.test.cases.component.tb32.condition.true");
+
+			assertThat(componentDescriptionDTO).isNotNull();
+			Collection<ComponentConfigurationDTO> componentConfigurationDTOs = scr
+					.getComponentConfigurationDTOs(componentDescriptionDTO);
+
+			ObjectArrayAssert<SatisfiedReferenceDTO> satisfied = assertThat(
+					componentConfigurationDTOs).hasSize(1)
+							.element(0)
+							.extracting("satisfiedReferences",
+									InstanceOfAssertFactories.array(
+											SatisfiedReferenceDTO[].class))
+							.hasSize(1);
+			satisfied.extracting("name", String.class)
+					.containsOnly("osgi.ds.satisfying.condition");
+			satisfied.extracting("target", String.class)
+					.containsOnly("(osgi.condition.id=true)");
+		});
+
+	}
+
+	@Test
+	public void condition_custom_reference(@InjectInstalledBundle("tb32.jar")
+	Bundle tb,
+			@InjectService(filter = "(type=condition_custom_reference)", cardinality = 0)
+			ServiceAware<BaseService> bs, @InjectService
+			ServiceComponentRuntime scr) throws Exception {
+		tb.start();
+
+		bs.waitForService(SLEEP);
+
+		softly.assertThat(bs.size()).isZero();
+
+		Condition service = new Condition() {
+		};
+
+		ServiceRegistration<Condition> registration = context.registerService(
+				Condition.class, service,
+				Dictionaries.dictionaryOf(Condition.CONDITION_ID, testName));
+
+		bs.waitForService(SLEEP);
+
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
+
+		softly.check(() -> {
+			assertion
+					.extractingByKey("serviceField",
+							InstanceOfAssertFactories.type(Condition.class))
+					.isSameAs(service);
+		});
+
+		softly.check(() -> {
+			ComponentDescriptionDTO componentDescriptionDTO = scr
+					.getComponentDescriptionDTO(tb,
+							"org.osgi.test.cases.component.tb32.condition.custom");
+
+			assertThat(componentDescriptionDTO).isNotNull();
+			Collection<ComponentConfigurationDTO> componentConfigurationDTOs = scr
+					.getComponentConfigurationDTOs(componentDescriptionDTO);
+
+			ObjectArrayAssert<SatisfiedReferenceDTO> satisfied = assertThat(
+					componentConfigurationDTOs).hasSize(1)
+							.element(0)
+							.extracting("satisfiedReferences",
+									InstanceOfAssertFactories.array(
+											SatisfiedReferenceDTO[].class))
+							.hasSize(1);
+			satisfied.extracting("name", String.class)
+					.containsOnly("osgi.ds.satisfying.condition");
+			satisfied.extracting("target", String.class)
+					.containsOnly("(osgi.condition.id=" + testName + ")");
+		});
+
+		registration.unregister();
+
+		Sleep.sleep(SLEEP * 3);
+
+		softly.assertThat(bs.size()).isZero();
+
+		softly.check(() -> {
+			ComponentDescriptionDTO componentDescriptionDTO = scr
+					.getComponentDescriptionDTO(tb,
+							"org.osgi.test.cases.component.tb32.condition.custom");
+
+			assertThat(componentDescriptionDTO).isNotNull();
+			Collection<ComponentConfigurationDTO> componentConfigurationDTOs = scr
+					.getComponentConfigurationDTOs(componentDescriptionDTO);
+
+			ObjectArrayAssert<UnsatisfiedReferenceDTO> unsatisfied = assertThat(
+					componentConfigurationDTOs).hasSize(1)
+							.element(0)
+							.extracting("unsatisfiedReferences",
+									InstanceOfAssertFactories.array(
+											UnsatisfiedReferenceDTO[].class))
+							.hasSize(1);
+			unsatisfied.extracting("name", String.class)
+					.containsOnly("osgi.ds.satisfying.condition");
+			unsatisfied.extracting("target", String.class)
+					.containsOnly("(osgi.condition.id=" + testName + ")");
 		});
 	}
 }
