@@ -4949,7 +4949,7 @@ public class MacSpeech implements Speech {
       linkend="org.osgi.service.component.annotations.Deactivate"
       xrefstyle="hyperlink"/> annotations. If the component wants to be
       updated for changes in the configuration properties then it can also
-      indicated the modified method with the <xref
+      indicate the modified method with the <xref
       linkend="org.osgi.service.component.annotations.Modified"
       xrefstyle="hyperlink"/> annotation. For example:</para>
 
