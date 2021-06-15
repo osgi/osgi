@@ -6405,6 +6405,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         cardinality but can also be used with mandatory (1..1)
         cardinality.</para>
       </listitem>
+
+      <listitem>
+        <para>Component properties from <code>property</code> and
+        <code>properties</code> elements take precedence over the
+        <code>target</code> attributes of <code>reference</code> elements. See
+        <xref linkend="service.component-component.properties"/>.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>
