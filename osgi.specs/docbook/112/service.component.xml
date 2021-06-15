@@ -1887,7 +1887,7 @@ public class MyComponent {
 
       <programlisting>&lt;reference name="osgi.ds.satisfying.condition"
     interface="org.osgi.service.condition.Condition"
-    target="(osgi.conditon.id=true)"
+    target="(osgi.condition.id=true)"
     policy="dynamic"
 /&gt;</programlisting>
 
@@ -1902,7 +1902,7 @@ public class MyComponent {
       the satisfying condition. This allows a component configuration to be
       configured to select which Condition service is the satisfying
       condition. The implicit reference defaults to the target property value
-      of <code>(osgi.conditon.id=true)</code> which targets the True
+      of <code>(osgi.condition.id=true)</code> which targets the True
       Condition, that is always registered by the OSGi Framework, and thus the
       implicit reference, using the default target property value, can always
       be satisfied.</para>
@@ -1915,7 +1915,7 @@ public class MyComponent {
       ready.</para>
 
       <programlisting>@Component
-@SatisfyingConditionTarget("(osgi.conditon.id=my.subsystem.ready)")
+@SatisfyingConditionTarget("(osgi.condition.id=my.subsystem.ready)")
 public class MyComponent {
   ...
 }</programlisting>
