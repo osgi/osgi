@@ -17,19 +17,36 @@
  *******************************************************************************/
 package org.osgi.test.cases.component.junit;
 
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentServiceObjects;
+import org.osgi.test.assertj.dictionary.DictionaryAssert;
+import org.osgi.test.assertj.dictionary.DictionarySoftAssertions;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectInstalledBundle;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.dictionary.Dictionaries;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.test.junit5.context.InstalledBundleExtension;
+import org.osgi.test.junit5.service.ServiceExtension;
 import org.osgi.test.support.sleep.Sleep;
 
 /**
@@ -39,30 +56,42 @@ import org.osgi.test.support.sleep.Sleep;
  *
  * @author $Id$
  */
-@SuppressWarnings("unchecked")
-public class FieldInjectionControl extends DefaultTestBundleControl {
+@ExtendWith(SoftAssertionsExtension.class)
+@ExtendWith(BundleContextExtension.class)
+@ExtendWith(InstalledBundleExtension.class)
+@ExtendWith(ServiceExtension.class)
+public class FieldInjectionControl {
 
-	private static int			SLEEP			= 1000;
+	private int					SLEEP	= 1000;
 
+	@InjectBundleContext
+	BundleContext				context;
 
-	protected void setUp() throws Exception {
-		String sleepTimeString = getProperty("osgi.tc.component.sleeptime");
+	String						testName;
+
+	@InjectSoftAssertions
+	DictionarySoftAssertions	softly;
+
+	@BeforeEach
+	void setUp(TestInfo testInfo) throws Exception {
+		testName = testInfo.getTestMethod().map(Method::getName).get();
+		assertThat(context).isNotNull();
+		String sleepTimeString = context
+				.getProperty("osgi.tc.component.sleeptime");
 		int sleepTime = SLEEP;
 		if (sleepTimeString != null) {
 			try {
 				sleepTime = Integer.parseInt(sleepTimeString);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				System.out
-						.println("Error while parsing sleep value! The default one will be used : "
+				System.out.println(
+						"Error while parsing sleep value! The default one will be used : "
 								+ SLEEP);
 			}
 			if (sleepTime < 100) {
 				System.out.println("The sleep value is too low : " + sleepTime
 						+ " ! The default one will be used : " + SLEEP);
-			}
-			else {
+			} else {
 				SLEEP = sleepTime;
 			}
 		}
@@ -73,31 +102,28 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFIStaticUnaryReference() throws Exception {
+	@Test
+	public void testFIStaticUnaryReference(@InjectInstalledBundle("tbf1.jar")
+	Bundle tb, @InjectService(filter = "(type=static)", cardinality = 0)
+	ServiceAware<BaseService> bs) throws Exception {
 		final TestObject service = new TestObject();
 
-		final Bundle tb = installBundle("tbf1.jar", false);
-		try {
-			this.registerService(TestObject.class.getName(), service, null);
+		ServiceRegistration<TestObject> registration = context
+				.registerService(TestObject.class, service, null);
 
-			tb.start();
+		tb.start();
 
-			final BaseService bs = this.getService(
-					BaseService.class, "(type=static)");
-			assertNotNull(bs.getProperties());
-			assertEquals(service, bs.getProperties().get("service"));
-			this.ungetService(bs);
+		bs.waitForService(SLEEP);
 
-			this.unregisterService(service);
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert.assertThat(bs.getService().getProperties())
+				.containsEntry("service", service);
 
-			Sleep.sleep(SLEEP * 3);
+		registration.unregister();
 
-			assertNull(getContext().getServiceReferences(
-					BaseService.class.getName(), "(type=static)"));
-		} finally {
-			uninstallBundle(tb);
-			this.unregisterAllServices();
-		}
+		Sleep.sleep(SLEEP * 3);
+
+		assertThat(bs.size()).isZero();
 	}
 
 	/**
@@ -105,37 +131,40 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFIDynamicUnaryReference() throws Exception {
-		final Bundle tb = installBundle("tbf1.jar", true);
-		try {
-			final TestObject service = new TestObject();
+	@Test
+	public void testFIDynamicUnaryReference(
+			@InjectInstalledBundle(value = "tbf1.jar", start = true)
+			Bundle tb,
+			@InjectService(filter = "(type=dynamic)", cardinality = 0)
+			ServiceAware<BaseService> bs) throws Exception {
+		final TestObject service = new TestObject();
 
-			// ref not available
-			BaseService bs = this.getService(
-					BaseService.class, "(type=dynamic)");
-			assertNotNull(bs.getProperties());
-			assertNull(bs.getProperties().get("service"));
-			ungetService(bs);
+		// ref not available
+		bs.waitForService(SLEEP);
 
-			// register ref and wait
-			this.registerService(TestObject.class.getName(), service, null);
-			Sleep.sleep(SLEEP * 3);
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert.assertThat(bs.getService().getProperties())
+				.doesNotContainKey("service");
 
-			bs = this.getService(BaseService.class,
-					"(type=dynamic)");
-			assertNotNull(bs.getProperties());
-			assertEquals(service, bs.getProperties().get("service"));
+		// register ref and wait
+		ServiceRegistration<TestObject> registration = context
+				.registerService(TestObject.class, service, null);
+		Sleep.sleep(SLEEP * 3);
 
-			// unregister ref again and wait
-			this.unregisterService(service);
-			Sleep.sleep(SLEEP * 3);
+		bs.waitForService(SLEEP);
 
-			assertNotNull(bs.getProperties());
-			assertNull(bs.getProperties().get("service"));
-		} finally {
-			uninstallBundle(tb);
-			this.unregisterAllServices();
-		}
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert.assertThat(bs.getService().getProperties())
+				.containsEntry("service", service);
+
+		// unregister ref again and wait
+		registration.unregister();
+
+		Sleep.sleep(SLEEP * 3);
+
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert.assertThat(bs.getService().getProperties())
+				.doesNotContainKey("service");
 	}
 
 	/**
@@ -146,26 +175,21 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFIFailingUnaryReference() throws Exception {
-		final Bundle tb = installBundle("tbf1.jar", true);
-		try {
-			// we get the reference just to be sure that
-			// component.xml is processed
-			getService(BaseService.class, "(type=dynamic)");
+	@Test
+	public void testFIFailingUnaryReference(
+			@InjectInstalledBundle(value = "tbf1.jar", start = true)
+			Bundle tb,
+			@InjectService(filter = "(type=dynamic)", cardinality = 0)
+			ServiceAware<BaseService> bs,
+			@InjectService(filter = "(type=failed)", cardinality = 0)
+			ServiceAware<BaseService> failed) throws Exception {
+		// we get the reference just to be sure that
+		// component.xml is processed
+		assertThat(bs.waitForService(SLEEP)).isNotNull();
 
-			// we get the reference and the service as it's not activated
-			// due to a non volatile field
-			final Collection<ServiceReference<BaseService>> refs = getContext()
-					.getServiceReferences(BaseService.class, "(type=failed)");
-			assertNotNull(refs);
-			assertFalse(refs.isEmpty());
-			final Object service = getContext()
-					.getService(refs.iterator().next());
-			assertNotNull(service);
-		} finally {
-			ungetAllServices();
-			uninstallBundle(tb);
-		}
+		// we get the reference and the service as it's not activated
+		// due to a non volatile field
+		assertThat(failed.waitForService(SLEEP)).isNotNull();
 	}
 
 	/**
@@ -173,53 +197,77 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFITypeUnaryReference() throws Exception {
+	@Test
+	public void testFITypeUnaryReference(@InjectInstalledBundle("tbf1.jar")
+	Bundle tb, @InjectService(filter = "(type=type)", cardinality = 0)
+	ServiceAware<BaseService> bs) throws Exception {
 		final TestObject service = new TestObject();
-		final Bundle tb = installBundle("tbf1.jar", false);
-		try {
-			this.registerService(TestObject.class.getName(), service, null);
-			final ServiceReference<TestObject> ref = this.getContext()
-					.getServiceReference(TestObject.class);
+		context.registerService(TestObject.class, service,
+				Dictionaries.dictionaryOf("testName", testName));
 
-			tb.start();
+		tb.start();
 
-			final BaseService bs = this.getService(
-					BaseService.class, "(type=type)");
-			assertNotNull(bs.getProperties());
+		bs.waitForService(SLEEP);
 
-			// service
-			assertEquals(service, bs.getProperties().get("service"));
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
 
-			// service reference
-			assertEquals(0, ref.compareTo(bs.getProperties().get("ref")));
+		// service
+		softly.check(() -> {
+			assertion
+					.extractingByKey("service",
+							InstanceOfAssertFactories.type(TestObject.class))
+					.isSameAs(service);
+		});
+		// service reference
+		softly.check(() -> {
+			assertion
+					.extractingByKey("ref",
+							InstanceOfAssertFactories
+									.type(ServiceReference.class))
+					.extracting(sr -> sr.getProperty("testName"))
+					.isEqualTo(testName);
+		});
 
-			// for the properties map we just check the service id
-			final Map<String,Object> props = (Map<String,Object>) bs
-					.getProperties().get("map");
-			assertNotNull(props);
-			assertEquals(ref.getProperty(Constants.SERVICE_ID),
-					props.get(Constants.SERVICE_ID));
+		// properties map
+		softly.check(() -> {
+			assertion
+					.extractingByKey("map",
+							InstanceOfAssertFactories.map(String.class,
+									Object.class))
+					.containsEntry("testName", testName);
+		});
 
-			// tuple
-			final Map.Entry<Map<String,Object>,TestObject> tuple = (Map.Entry<Map<String,Object>,TestObject>) bs
-					.getProperties().get("tuple");
-			final Map<String,Object> serviceProps = tuple.getKey();
-			assertEquals(ref.getProperty(Constants.SERVICE_ID),
-					serviceProps.get(Constants.SERVICE_ID));
-			assertEquals(service, tuple.getValue());
+		// tuple
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tuple",
+							InstanceOfAssertFactories.type(Map.Entry.class))
+					.extracting(entry -> entry.getValue())
+					.isSameAs(service);
+		});
+		softly.check(() -> {
+			assertion
+					.extractingByKey("tuple",
+							InstanceOfAssertFactories.type(Map.Entry.class))
+					.extracting(entry -> entry.getKey(),
+							InstanceOfAssertFactories.map(String.class,
+									Object.class))
+					.containsEntry("testName", testName);
+		});
 
-			// service objects
-			final ComponentServiceObjects<TestObject> objects = (ComponentServiceObjects<TestObject>) bs
-					.getProperties()
-					.get("objects");
-			assertNotNull(objects);
-			assertEquals(ref.getProperty(Constants.SERVICE_ID), objects
-					.getServiceReference().getProperty(Constants.SERVICE_ID));
-		} finally {
-			ungetAllServices();
-			unregisterAllServices();
-			uninstallBundle(tb);
-		}
+		// service objects
+		softly.check(() -> {
+			assertion
+					.extractingByKey("objects",
+							InstanceOfAssertFactories
+									.type(ComponentServiceObjects.class))
+					.extracting(ComponentServiceObjects::getServiceReference)
+					.extracting(sr -> sr.getProperty("testName"))
+					.isEqualTo(testName);
+		});
 	}
 
 	/**
@@ -227,38 +275,37 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFIStaticMultipleReference() throws Exception {
+	@Test
+	public void testFIStaticMultipleReference(@InjectInstalledBundle("tbf1.jar")
+	Bundle tb,
+			@InjectService(filter = "(type=multiple-required)", cardinality = 0)
+			ServiceAware<BaseService> bs) throws Exception {
 		final TestObject service = new TestObject();
+		ServiceRegistration<TestObject> registration = context.registerService(
+				TestObject.class, service,
+				Dictionaries.dictionaryOf("testName", testName));
 
-		final Bundle tb = installBundle("tbf1.jar", false);
-		try {
-			this.registerService(TestObject.class.getName(), service, null);
+		tb.start();
 
-			tb.start();
+		bs.waitForService(SLEEP);
 
-			final BaseService bs = this.getService(
-					BaseService.class, "(type=multiple-required)");
-			assertNotNull(bs.getProperties());
-			assertNotNull(bs.getProperties().get("services"));
-			assertEquals(1,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.size());
-			assertEquals(service,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.get(0));
+		assertThat(bs.getService()).isNotNull();
+		DictionaryAssert<String,Object> assertion = DictionaryAssert
+				.assertThat(bs.getService().getProperties())
+				.isNotNull();
 
-			this.ungetService(bs);
+		softly.check(() -> {
+			assertion
+					.extractingByKey("services",
+							InstanceOfAssertFactories.list(TestObject.class))
+					.containsOnly(service);
+		});
 
-			this.unregisterService(service);
+		registration.unregister();
 
-			Sleep.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
-			assertNull(getContext().getServiceReferences(
-					BaseService.class.getName(), "(type=multiple-required)"));
-		} finally {
-			uninstallBundle(tb);
-			this.unregisterAllServices();
-		}
+		assertThat(bs.size()).isZero();
 	}
 
 	/**
@@ -266,59 +313,45 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFIDynamicMultipleReference() throws Exception {
+	@Test
+	public void testFIDynamicMultipleReference(
+			@InjectInstalledBundle("tbf1.jar")
+			Bundle tb,
+			@InjectService(filter = "(type=multiple-dynamic)", cardinality = 0)
+			ServiceAware<BaseService> bs) throws Exception {
 		final TestObject service1 = new TestObject();
 		final TestObject service2 = new TestObject();
 		final TestObject service3 = new TestObject();
 
-		final Dictionary<String,Object> props1 = new Hashtable<>();
-		props1.put(Constants.SERVICE_RANKING, Integer.valueOf(5));
-		final Dictionary<String,Object> props2 = new Hashtable<>();
-		props2.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
-		final Dictionary<String,Object> props3 = new Hashtable<>();
-		props3.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
+		tb.start();
 
-		final Bundle tb = installBundle("tbf1.jar", false);
-		try {
-			tb.start();
+		bs.waitForService(SLEEP);
 
-			final BaseService bs = this.getService(
-					BaseService.class, "(type=multiple-dynamic)");
-			assertNotNull(bs.getProperties());
-			assertNotNull(bs.getProperties().get("services"));
-			assertEquals(0,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.size());
+		assertThat(bs.getService()).isNotNull();
+		softly.check(() -> {
+			DictionaryAssert.assertThat(bs.getService().getProperties())
+					.isNotNull()
+					.extractingByKey("services",
+							InstanceOfAssertFactories.list(TestObject.class))
+					.isEmpty();
+		});
 
-			this.registerService(TestObject.class.getName(), service1, props1);
-			this.registerService(TestObject.class.getName(), service3, props3);
-			this.registerService(TestObject.class.getName(), service2, props2);
+		context.registerService(TestObject.class, service1, Dictionaries
+				.dictionaryOf(Constants.SERVICE_RANKING, Integer.valueOf(5)));
+		context.registerService(TestObject.class, service3, Dictionaries
+				.dictionaryOf(Constants.SERVICE_RANKING, Integer.valueOf(15)));
+		context.registerService(TestObject.class, service2, Dictionaries
+				.dictionaryOf(Constants.SERVICE_RANKING, Integer.valueOf(10)));
 
-			// unfortunately there is no event we can wait for
-			Sleep.sleep(SLEEP);
+		// unfortunately there is no event we can wait for
+		Sleep.sleep(SLEEP);
 
-			assertEquals(3,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.size());
-			assertEquals(service1,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.get(0));
-			assertEquals(service2,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.get(1));
-			assertEquals(service3,
-					((List<TestObject>) bs.getProperties().get("services"))
-							.get(2));
-
-			this.ungetService(bs);
-
-			this.unregisterService(service3);
-			this.unregisterService(service2);
-			this.unregisterService(service1);
-
-		} finally {
-			uninstallBundle(tb);
-			this.unregisterAllServices();
-		}
+		softly.check(() -> {
+			DictionaryAssert.assertThat(bs.getService().getProperties())
+					.isNotNull()
+					.extractingByKey("services",
+							InstanceOfAssertFactories.list(TestObject.class))
+					.containsExactly(service1, service2, service3);
+		});
 	}
 }
