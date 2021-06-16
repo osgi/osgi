@@ -34,11 +34,11 @@ tasks.register('tck') {
 	dependsOn 'tck.core', 'tck.cmpn'
 }
 
-tasks.addRule('Pattern: preptck.<name>: Prepare the TCK for <name>.') { taskName ->
+tasks.addRule('Pattern: preptck.<name>: Prepare the TCKs for <name>.') { taskName ->
 	if (taskName.startsWith('preptck.')) {
 		tasks.create(taskName) {
 			def book = taskName - 'preptck.'
-			description = "Prepare the TCK for ${book}."
+			description = "Prepare the TCKs for ${book}."
 			group = 'verification'
 			def implJarTask = parent.project('osgi.impl').tasks.named('jar')
 			def implBuildDir = implJarTask.flatMap({it.destinationDirectory})
@@ -67,22 +67,19 @@ tasks.addRule('Pattern: preptck.<name>: Prepare the TCK for <name>.') { taskName
 	}
 }
 
-tasks.addRule('Pattern: tck.<name>: Run the TCK for <name>.') { taskName ->
+tasks.addRule('Pattern: tck.<name>: Run the TCKs for <name>.') { taskName ->
 	if (taskName.startsWith('tck.')) {
 		def book = taskName - 'tck.'
 		def destinationDirectory = objects.directoryProperty().value(layout.buildDirectory.dir("osgi.tck.${book}"))
 		def bndjar = destinationDirectory.file('jar/bnd.jar')
-		def tcks = zipTree(layout.buildDirectory.file("osgi.tck.${book}.jar")).matching {
-			include('*.bnd')
-		}
-		def tcktask = tasks.create(taskName) {
-			description = "Run the TCK for ${book}."
+		def tcks = bnd("build.${book}.tests").tokenize(',')
+		def booktask = tasks.create(taskName) {
+			description = "Run the TCKs for ${book}."
 			group = 'verification'
 		}
-		tcks.forEach { bndFile ->
-			def bndName = bndFile.name - '.bnd'
-			tcktask.dependsOn tasks.create("${taskName}.${bndName}") {
-				description = "Run the ${bndName} TCK for ${book}."
+		tcks.forEach { bndName ->
+			def tcktask = tasks.create("${taskName}.${bndName}") {
+				description = "Run the ${bndName} TCK."
 				group = 'verification'
 				dependsOn tasks.named("preptck.${book}")
 				def injected = objects.newInstance(Injected)
@@ -94,12 +91,13 @@ tasks.addRule('Pattern: tck.<name>: Run the TCK for <name>.') { taskName ->
 						args bndjar.get().getAsFile()
 						args '--exceptions'
 						args 'runtests'
-						args '--title', name
+						args '--title', bndName
 						args '--reportdir', "reports/${bndName}"
-						args bndFile.name
+						args "${bndName}.bnd"
 					}.assertNormalExitValue()
 				}
 			}
+			booktask.dependsOn tcktask
 		}
 	}
 }
