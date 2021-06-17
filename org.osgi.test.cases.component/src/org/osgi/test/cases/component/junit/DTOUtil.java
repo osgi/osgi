@@ -19,6 +19,7 @@
 package org.osgi.test.cases.component.junit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class DTOUtil {
 		dto.defaultEnabled = defaultEnabled;
 		dto.immediate = immediate;
 		dto.serviceInterfaces = serviceInterfaces;
-		dto.properties = properties;
+		dto.properties = addTrueConditionTargetProp(references, properties);
 		dto.references = addTrueConditionRef(references);
 		dto.activate = activate;
 		dto.deactivate = deactivate;
@@ -59,6 +60,32 @@ public class DTOUtil {
 		dto.activationFields = activationFields;
 		dto.init = init;
 		return dto;
+	}
+
+	private static Map<String,Object> addTrueConditionTargetProp(
+			ReferenceDTO[] references, Map<String,Object> properties) {
+		if (references != null) {
+			for (ReferenceDTO referenceDTO : references) {
+				if (ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION
+						.equals(referenceDTO.name)) {
+					return properties;
+				}
+			}
+		}
+		if (properties != null && properties.containsKey(
+				ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION
+						+ ComponentConstants.REFERENCE_TARGET_SUFFIX)) {
+			return properties;
+		}
+		Map<String,Object> result = new HashMap<>();
+		if (properties != null) {
+			result.putAll(properties);
+		}
+		result.put(
+				ComponentConstants.REFERENCE_NAME_SATISFYING_CONDITION
+						+ ComponentConstants.REFERENCE_TARGET_SUFFIX,
+				"(osgi.condition.id=true)");
+		return result;
 	}
 
 	private static ReferenceDTO[] addTrueConditionRef(
