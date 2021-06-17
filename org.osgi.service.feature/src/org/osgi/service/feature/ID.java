@@ -17,16 +17,16 @@
  *******************************************************************************/
 package org.osgi.service.feature;
 
-import org.osgi.annotation.versioning.ProviderType;
-
 import java.util.Objects;
 import java.util.Optional;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
- * ID used to denote an artifact. This could be a feature model, a bundle which is part of the feature model
- * or some other artifact. <p>
- *
- * Artifact IDs follow the Maven convention of having:
+ * ID used to denote an artifact. This could be a feature model, a bundle which
+ * is part of the feature model or some other artifact.
+ * <p>
+ * IDs follow the Maven convention of having:
  * <ul>
  * <li>A group ID
  * <li>An artifact ID
@@ -34,6 +34,7 @@ import java.util.Optional;
  * <li>A type identifier (optional)
  * <li>A classifier (optional)
  * </ul>
+ * 
  * @ThreadSafe
  */
 @ProviderType
@@ -45,15 +46,16 @@ public class ID {
     private final String classifier;
 
     /**
-	 * Construct an Artifact ID from a Maven ID. Maven IDs have the following
-	 * syntax:
+	 * Construct an ID from a Maven ID. Maven IDs have the following syntax:
 	 * <p>
 	 * {@code group-id ':' artifact-id [ ':' [type] [ ':' classifier ] ] ':' version}
 	 *
 	 * @param mavenID
 	 * @return The ID
+	 * @throws IllegalArgumentException if the mavenID does not match the Syntax
 	 */
-    public static ID fromMavenID(String mavenID) {
+	public static ID fromMavenID(String mavenID)
+			throws IllegalArgumentException {
         String[] parts = mavenID.split(":");
 
         if (parts.length < 3 || parts.length > 5)
@@ -61,37 +63,109 @@ public class ID {
 
         String gid = parts[0];
         String aid = parts[1];
-        String ver = parts[2];
-        String t = parts.length > 3 ? parts[3] : null;
-        String c = parts.length > 4 ? parts[4] : null;
+		String ver = null;
+		String t = null;
+		String c = null;
 
+		if (parts.length == 3) {
+			ver = parts[2];
+		} else if (parts.length == 4) {
+			t = parts[2];
+			ver = parts[3];
+		} else {
+			t = parts[2];
+			c = parts[3];
+			ver = parts[4];
+		}
         return new ID(gid, aid, ver, t, c);
     }
 
     /**
-     * Construct an Artifact ID
-     * @param groupId The group ID.
-     * @param artifactId The artifact ID.
-     * @param version The version.
-     */
-    public ID(String groupId, String artifactId, String version) {
+	 * Construct an ID
+	 * 
+	 * @param groupId The group ID.
+	 * @param artifactId The artifact ID.
+	 * @param version The version.
+	 * @throws NullPointerException if one of the parameters (groupId,
+	 *             artifactId, version) is null.
+	 * @throws IllegalArgumentException if one of the parameters is empty or
+	 *             contains an colon `:` or if a classifier is used without a
+	 *             type.
+	 */
+	public ID(String groupId, String artifactId, String version)
+			throws NullPointerException, IllegalArgumentException {
         this(groupId, artifactId, version, null, null);
     }
 
     /**
-     * Construct an Artifact ID
-     * @param groupId The group ID.
-     * @param artifactId The artifact ID.
-     * @param version The version.
-     * @param type The type identifier.
-     * @param classifier The classifier.
-     */
-    public ID(String groupId, String artifactId, String version, String type, String classifier) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        this.type = type;
-        this.classifier = classifier;
+	 * Construct an ID
+	 * 
+	 * @param groupId The group ID.
+	 * @param artifactId The artifact ID.
+	 * @param version The version.
+	 * @param type The type identifier.
+	 * @param classifier The classifier.
+	 * @throws NullPointerException if one of the parameters (groupId,
+	 *             artifactId, version) is null.
+	 * @throws IllegalArgumentException if one of the parameters is empty or
+	 *             contains an colon `:` or if a classifier is used without a
+	 *             type.
+	 */
+	public ID(String groupId, String artifactId, String version, String type,
+			String classifier)
+			throws NullPointerException, IllegalArgumentException {
+
+		Objects.requireNonNull(groupId, "groupId");
+		Objects.requireNonNull(artifactId, "artifact");
+		Objects.requireNonNull(version, "version");
+
+		if (groupId.isEmpty()) {
+			throw new IllegalArgumentException("groupId must not be empty");
+		}
+		if (artifactId.isEmpty()) {
+			throw new IllegalArgumentException("artifactId must not be empty");
+		}
+		if (version.isEmpty()) {
+			throw new IllegalArgumentException("version must not be empty");
+		}
+
+		if (type != null && type.isEmpty()) {
+			throw new IllegalArgumentException("type must not be empty");
+		}
+
+		if (classifier != null && classifier.isEmpty()) {
+			throw new IllegalArgumentException("classifier must not be empty");
+		}
+
+		if (groupId.contains(":")) {
+			throw new IllegalArgumentException(
+					"groupId must not contain a colon `:`");
+		}
+		if (artifactId.contains(":")) {
+			throw new IllegalArgumentException(
+					"artifactId must not contain a colon `:`");
+		}
+		if (version.contains(":")) {
+			throw new IllegalArgumentException(
+					"version must not contain a colon `:`");
+		}
+		if (type != null && type.contains(":")) {
+			throw new IllegalArgumentException(
+					"type must not contain a colon `:`");
+		}
+		if (classifier != null && classifier.contains(":")) {
+			throw new IllegalArgumentException(
+					"classifier must not contain a colon `:`");
+		}
+		if (type == null && classifier != null) {
+			throw new IllegalArgumentException(
+					"type must not be `null` if a classifier is set");
+		}
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+		this.version = version;
+		this.type = type;
+		this.classifier = classifier;
     }
 
     /**
@@ -151,8 +225,24 @@ public class ID {
                 && Objects.equals(version, other.version);
     }
 
+	/**
+	 * Returns the the mavenID. Maven IDs have the following syntax:
+	 * <p>
+	 * {@code group-id ':' artifact-id [ ':' [type] [ ':' classifier ] ] ':' version}
+	 * 
+	 * @return the mavenID.
+	 */
     @Override
     public String toString() {
-        return groupId + ":" + artifactId + ":" + version;
+		StringBuilder sb = new StringBuilder(groupId).append(":")
+				.append(artifactId);
+
+		if (type != null) {
+			sb = sb.append(":").append(type);
+			if (classifier != null) {
+				sb = sb.append(":").append(classifier);
+			}
+		}
+		return sb.append(":").append(version).toString();
     }
 }
