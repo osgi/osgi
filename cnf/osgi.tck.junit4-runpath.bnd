@@ -1,6 +1,9 @@
 # -include for testing with junit 3/4 with JUnit on classpath
 
--buildpath.osgi.tck: biz.aQute.junit;version=latest
+-runpath.osgi.tck: assertj-core;version=latest
+
+-buildpath.osgi.tck: assertj-core;version=latest,\
+ biz.aQute.junit;version=latest
 
 -tester: biz.aQute.junit;version=latest
 
