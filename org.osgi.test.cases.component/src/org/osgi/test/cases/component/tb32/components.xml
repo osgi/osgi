@@ -65,13 +65,13 @@
                 interface="org.osgi.test.cases.component.service.BaseService" />
         </service>
         <property name="type" value="condition_custom_reference" />
-        <!-- This property takes precedence over the target attribute of the reference -->
-        <property name="osgi.ds.satisfying.condition.target" value="(osgi.condition.id=condition_custom_reference)" />
         <reference name="osgi.ds.satisfying.condition"
           interface="org.osgi.service.condition.Condition"
           target="(osgi.condition.id=true)"
           policy="dynamic"
           field="serviceField"/>
+        <!-- This property takes precedence over the target attribute of the reference -->
+        <property name="osgi.ds.satisfying.condition.target" value="(osgi.condition.id=condition_custom_reference)" />
     </component>
 
 </components>
