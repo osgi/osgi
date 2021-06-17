@@ -50,7 +50,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.AbstractListAssert;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -732,10 +733,10 @@ public class PromiseTest {
 		d2.resolve(value2);
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
-		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+		ListAssert<Number> listAssert = assertThat(
 				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-						.hasValueThat()
-						.asList()
+						.hasValueThat(
+								InstanceOfAssertFactories.list(Number.class))
 						.containsExactly(value1, value2);
 		listAssert.element(0).isSameAs(value1);
 		listAssert.element(1).isSameAs(value2);
@@ -764,10 +765,10 @@ public class PromiseTest {
 		d2.resolve(value2);
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
-		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+		ListAssert<Number> listAssert = assertThat(
 				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-						.hasValueThat()
-						.asList()
+						.hasValueThat(
+								InstanceOfAssertFactories.list(Number.class))
 						.containsExactly(value1, value2);
 		listAssert.element(0).isSameAs(value1);
 		listAssert.element(1).isSameAs(value2);
@@ -794,10 +795,10 @@ public class PromiseTest {
 		d2.resolve(value2);
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
-		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+		ListAssert<Number> listAssert = assertThat(
 				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-						.hasValueThat()
-						.asList()
+						.hasValueThat(
+								InstanceOfAssertFactories.list(Number.class))
 						.containsExactly(value1, value2);
 		listAssert.element(0).isSameAs(value1);
 		listAssert.element(1).isSameAs(value2);
@@ -824,10 +825,10 @@ public class PromiseTest {
 		d2.resolve(value2);
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
-		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+		ListAssert<Number> listAssert = assertThat(
 				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-						.hasValueThat()
-						.asList()
+						.hasValueThat(
+								InstanceOfAssertFactories.list(Number.class))
 						.containsExactly(value1, value2);
 		listAssert.element(0).isSameAs(value1);
 		listAssert.element(1).isSameAs(value2);
@@ -857,10 +858,10 @@ public class PromiseTest {
 		d2.resolve(value2);
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
-		AbstractListAssert< ? ,List< ? >,Object, ? > listAssert = assertThat(
+		ListAssert<Number> listAssert = assertThat(
 				latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-						.hasValueThat()
-						.asList()
+						.hasValueThat(
+								InstanceOfAssertFactories.list(Number.class))
 						.containsExactly(value1, value2);
 		listAssert.element(0).isSameAs(value1);
 		listAssert.element(1).isSameAs(value2);
@@ -952,8 +953,7 @@ public class PromiseTest {
 		Collection<Promise<String>> promises = Collections.emptyList();
 		final Promise<List<String>> latched = factory.all(promises);
 		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-				.hasValueThat()
-				.asList()
+				.hasValueThat(InstanceOfAssertFactories.LIST)
 				.isEmpty();
 	}
 
@@ -961,8 +961,7 @@ public class PromiseTest {
 	public void testAllEmptyVarargs() throws Exception {
 		final Promise<List<Object>> latched = Promises.all();
 		assertThat(latched).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
-				.hasValueThat()
-				.asList()
+				.hasValueThat(InstanceOfAssertFactories.LIST)
 				.isEmpty();
 	}
 
