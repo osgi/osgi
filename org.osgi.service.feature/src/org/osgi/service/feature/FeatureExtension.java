@@ -114,5 +114,5 @@ public interface FeatureExtension {
      * Get the Artifacts from this extension.
      * @return The Artifacts, or {@code null} if this is not an Artifacts extension.
      */
-    List<ID> getArtifacts();
+    List<FeatureArtifact> getArtifacts();
 }
