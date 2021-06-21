@@ -121,7 +121,7 @@ public interface Feature extends FeatureArtifact {
     Map<String, FeatureExtension> getExtensions();
 
 	/**
-	 * Get the requirements as explicitly declared on the Features.
+	 * Get the requirements as explicitly declared on the Feature.
 	 * 
 	 * @return The requirements.
 	 */
