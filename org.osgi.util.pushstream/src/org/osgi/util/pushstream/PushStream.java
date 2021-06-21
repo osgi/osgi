@@ -514,11 +514,16 @@ public interface PushStream<T> extends AutoCloseable {
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
-	 * @param generator
+	 * @param <A> The element type of the resulting array.
+	 * @param generator A function which returns an array into which the
+	 *            payloads are stored.
 	 * @return A promise that is resolved with all the payloads received over
-	 *         the channel
+	 *         the channel. The promise will be failed with an
+	 *         ArrayStoreException if the runtime type of the array returned by
+	 *         the array generator is not a supertype of the runtime type of
+	 *         every payload in the channel.
 	 */
-	<A extends T> Promise<A[]> toArray(IntFunction<A[]> generator);
+	<A> Promise<A[]> toArray(IntFunction<A[]> generator);
 
 	/**
 	 * Standard reduce, see Stream. The returned promise will be resolved when

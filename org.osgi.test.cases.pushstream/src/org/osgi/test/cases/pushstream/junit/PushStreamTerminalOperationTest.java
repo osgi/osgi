@@ -196,6 +196,23 @@ public class PushStreamTerminalOperationTest {
 		assertThat(gen.fixedBackPressure()).isTrue();
 	}
 
+	@Test
+	public void toarray_invalid_array_type() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		Promise<String[]> p = ps.toArray(String[]::new);
+
+		gen.getExecutionThread().join();
+
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.isInstanceOf(ArrayStoreException.class);
+
+		assertThat(gen.fixedBackPressure()).isTrue();
+	}
+
 	/**
 	 * 706.3.1.3 : Terminal Operations
 	 * <p/>

@@ -1359,7 +1359,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	}
 
 	@Override
-	public <A extends T> Promise<A[]> toArray(IntFunction<A[]> generator) {
+	public <A> Promise<A[]> toArray(IntFunction<A[]> generator) {
 		return collect(Collectors.toList())
 				.map(l -> l.toArray(generator.apply(l.size())));
 	}
