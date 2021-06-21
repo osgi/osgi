@@ -19,7 +19,8 @@
 
 package org.osgi.test.cases.jaxrs.junit;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.PAYMENT_REQUIRED;
 

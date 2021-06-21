@@ -18,8 +18,9 @@
 
 package org.osgi.test.cases.dal;
 
-import junit.framework.TestCase;
 import org.osgi.service.dal.SIUnits;
+
+import junit.framework.TestCase;
 
 /**
  * Validates the values of {@link SIUnits} constants.

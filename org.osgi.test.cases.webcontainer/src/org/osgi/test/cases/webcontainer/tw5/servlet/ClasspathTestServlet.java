@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.webcontainer.tw5.servlet;
 
-import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.ABLEGETLOG;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.ABLEGETSIMPLEHELLO;
 
 import java.io.IOException;
 import java.io.PrintWriter;

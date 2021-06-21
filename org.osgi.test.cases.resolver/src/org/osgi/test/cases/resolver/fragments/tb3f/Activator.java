@@ -18,7 +18,8 @@
 
 package org.osgi.test.cases.resolver.fragments.tb3f;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * A bundle that registers a service with the marker interface

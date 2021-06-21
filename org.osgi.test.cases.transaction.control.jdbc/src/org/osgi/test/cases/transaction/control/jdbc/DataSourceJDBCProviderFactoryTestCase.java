@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.transaction.control.jdbc;
 
-import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.*;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.LOCAL_ENLISTMENT_ENABLED;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.XA_ENLISTMENT_ENABLED;
 
 import java.sql.SQLException;
 import java.util.Map;

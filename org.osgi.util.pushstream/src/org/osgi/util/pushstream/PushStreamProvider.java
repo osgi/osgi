@@ -20,7 +20,8 @@ package org.osgi.util.pushstream;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
-import static org.osgi.util.pushstream.PushEvent.*;
+import static org.osgi.util.pushstream.PushEvent.data;
+import static org.osgi.util.pushstream.PushEvent.error;
 import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 

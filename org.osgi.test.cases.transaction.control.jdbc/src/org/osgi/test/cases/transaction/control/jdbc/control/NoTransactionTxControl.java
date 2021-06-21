@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.transaction.control.jdbc.control;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.osgi.service.transaction.control.TransactionStatus.NO_TRANSACTION;
 
 import java.util.ArrayList;

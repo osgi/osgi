@@ -26,7 +26,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -42,6 +42,8 @@ import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
 import org.osgi.test.support.OSGiTestCase;
+
+import junit.framework.AssertionFailedError;
 
 @SuppressWarnings("deprecation")
 public class ServiceHookTests extends OSGiTestCase {

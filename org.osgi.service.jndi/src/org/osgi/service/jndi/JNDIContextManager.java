@@ -19,6 +19,7 @@
 package org.osgi.service.jndi;
 
 import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;

@@ -20,7 +20,8 @@ package org.osgi.test.cases.bundle.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.framework.namespace.PackageNamespace.CAPABILITY_VERSION_ATTRIBUTE;
-import static org.osgi.resource.Namespace.*;
+import static org.osgi.resource.Namespace.CAPABILITY_EFFECTIVE_DIRECTIVE;
+import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
 
 import java.util.Arrays;
 import java.util.Map;

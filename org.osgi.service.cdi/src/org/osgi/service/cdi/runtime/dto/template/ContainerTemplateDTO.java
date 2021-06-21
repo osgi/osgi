@@ -19,6 +19,7 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
+
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.ComponentType;
 

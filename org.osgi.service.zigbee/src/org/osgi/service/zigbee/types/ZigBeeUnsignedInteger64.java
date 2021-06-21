@@ -20,6 +20,7 @@ package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;

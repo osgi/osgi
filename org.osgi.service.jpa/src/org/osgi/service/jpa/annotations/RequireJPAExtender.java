@@ -19,7 +19,8 @@
 package org.osgi.service.jpa.annotations;
 
 import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
-import static org.osgi.service.jpa.EntityManagerFactoryBuilder.*;
+import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_CAPABILITY_NAME;
+import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

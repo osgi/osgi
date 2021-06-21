@@ -17,7 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.transaction.control.jpa.control;
 
-import static org.osgi.service.transaction.control.TransactionStatus.*;
+import static org.osgi.service.transaction.control.TransactionStatus.ACTIVE;
+import static org.osgi.service.transaction.control.TransactionStatus.COMMITTED;
+import static org.osgi.service.transaction.control.TransactionStatus.COMMITTING;
+import static org.osgi.service.transaction.control.TransactionStatus.MARKED_ROLLBACK;
+import static org.osgi.service.transaction.control.TransactionStatus.ROLLED_BACK;
+import static org.osgi.service.transaction.control.TransactionStatus.ROLLING_BACK;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

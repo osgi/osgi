@@ -18,10 +18,12 @@
 
 package org.osgi.service.cdi.annotations;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.PACKAGE;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
-import static org.osgi.service.cdi.CDIConstants.*;
+import static org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME;
+import static org.osgi.service.cdi.CDIConstants.CDI_SPECIFICATION_VERSION;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

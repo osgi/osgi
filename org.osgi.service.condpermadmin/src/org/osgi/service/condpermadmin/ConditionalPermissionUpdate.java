@@ -19,6 +19,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.List;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

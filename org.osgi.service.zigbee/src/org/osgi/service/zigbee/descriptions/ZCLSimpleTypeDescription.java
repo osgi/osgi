@@ -20,6 +20,7 @@ package org.osgi.service.zigbee.descriptions;
 
 import java.io.EOFException;
 import java.io.IOException;
+
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 

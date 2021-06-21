@@ -23,7 +23,8 @@
  */
 package org.osgi.test.cases.permissionadmin.tb2;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 
 public class Activator implements BundleActivator {

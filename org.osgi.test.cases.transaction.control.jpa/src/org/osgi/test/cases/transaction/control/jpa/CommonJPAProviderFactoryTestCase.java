@@ -18,7 +18,8 @@
 package org.osgi.test.cases.transaction.control.jpa;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -17,13 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.dmt.tc4.tb1.nodes;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.BaseMetaNode;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.LeafNode;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.Node;

@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.secure.tb.reader_noperm;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.util.Collection;
 

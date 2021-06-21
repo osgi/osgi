@@ -18,7 +18,8 @@
 
 package org.osgi.test.cases.framework.junit.wiring;
 
-import static org.osgi.test.support.OSGiTestCaseProperties.*;
+import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
+import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
 
 import java.util.Arrays;
 import java.util.Collection;

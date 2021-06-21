@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.wireadmin.junit;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

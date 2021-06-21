@@ -18,7 +18,9 @@
 
 package org.osgi.test.cases.framework.activationpolicy.tblazy6;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 

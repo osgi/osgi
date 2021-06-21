@@ -19,6 +19,7 @@
 package org.osgi.service.repository;
 
 import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;

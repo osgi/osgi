@@ -19,6 +19,7 @@
 package org.osgi.service.http;
 
 import java.util.Dictionary;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 

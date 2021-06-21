@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.classpath.tb1;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the ImportUninstalledCode test.

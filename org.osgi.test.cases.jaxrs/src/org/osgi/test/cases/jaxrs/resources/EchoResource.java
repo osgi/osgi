@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.jaxrs.resources;
 
-import static javax.ws.rs.core.MediaType.*;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;

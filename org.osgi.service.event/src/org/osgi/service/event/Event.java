@@ -19,6 +19,7 @@
 package org.osgi.service.event;
 
 import static org.osgi.service.event.EventConstants.EVENT_TOPIC;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Filter;
 
 /**

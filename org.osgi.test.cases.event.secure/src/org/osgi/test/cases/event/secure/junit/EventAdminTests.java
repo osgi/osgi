@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.event.secure.junit;
 
-import static org.osgi.test.support.OSGiTestCaseProperties.*;
+import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
+import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
 
 import java.util.Collections;
 import java.util.List;

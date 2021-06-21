@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.test.cases.webcontainer.tw4.servlet;
 
-import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.HTMLRESPONSE;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.PLAINRESPONSE;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.TW4BASIC;
 
 import java.io.IOException;
 import java.io.InputStream;

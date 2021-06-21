@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.tb3;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;

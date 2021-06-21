@@ -19,6 +19,7 @@
 package org.osgi.framework.hooks.resolver;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.namespace.BundleNamespace;

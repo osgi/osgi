@@ -17,7 +17,7 @@
  *******************************************************************************/
 package org.osgi.impl.service.upnp.cp.event;
 
-import org.osgi.impl.service.upnp.cp.util.*;
+import org.osgi.impl.service.upnp.cp.util.UPnPListener;
 
 public class SendSubscription extends GenaSocket implements Runnable {
 	private String			publisherpath;

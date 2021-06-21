@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.secure.serviceregistry.tb1;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

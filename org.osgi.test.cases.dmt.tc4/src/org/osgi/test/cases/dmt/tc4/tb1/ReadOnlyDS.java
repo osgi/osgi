@@ -17,13 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.dmt.tc4.tb1;
 
+import java.util.Date;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.ReadableDataSession;
-
-import java.util.Date;
-
 import org.osgi.test.cases.dmt.tc4.tb1.intf.Node;
 
 public class ReadOnlyDS implements ReadableDataSession {

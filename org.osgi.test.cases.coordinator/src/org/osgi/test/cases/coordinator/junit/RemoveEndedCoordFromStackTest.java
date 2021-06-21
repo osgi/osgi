@@ -17,11 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.coordinator.junit;
 
-import junit.framework.AssertionFailedError;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
-import java.util.concurrent.atomic.AtomicReference;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Coordinations can only be removed from the thread local stack by calling the

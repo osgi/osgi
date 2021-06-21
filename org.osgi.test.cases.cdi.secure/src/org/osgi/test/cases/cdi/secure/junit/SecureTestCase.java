@@ -31,7 +31,10 @@
 
 package org.osgi.test.cases.cdi.secure.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.security.AccessControlContext;
 import java.security.AccessControlException;

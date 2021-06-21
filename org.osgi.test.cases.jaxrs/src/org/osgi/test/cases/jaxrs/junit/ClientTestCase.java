@@ -18,7 +18,8 @@
 package org.osgi.test.cases.jaxrs.junit;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static org.osgi.framework.Constants.*;
+import static org.osgi.framework.Constants.SCOPE_PROTOTYPE;
+import static org.osgi.framework.Constants.SERVICE_SCOPE;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

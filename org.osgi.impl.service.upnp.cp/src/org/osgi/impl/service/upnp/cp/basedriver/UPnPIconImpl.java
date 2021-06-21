@@ -17,11 +17,12 @@
  *******************************************************************************/
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.net.URL;
-import java.io.InputStream;
 import java.io.IOException;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cp.description.*;
+import java.io.InputStream;
+import java.net.URL;
+
+import org.osgi.impl.service.upnp.cp.description.Icon;
+import org.osgi.service.upnp.UPnPIcon;
 
 
 public class UPnPIconImpl implements UPnPIcon {

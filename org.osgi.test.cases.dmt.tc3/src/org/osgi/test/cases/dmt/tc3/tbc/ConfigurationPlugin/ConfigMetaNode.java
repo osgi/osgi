@@ -17,10 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
+import java.util.Arrays;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
-
-import java.util.Arrays;
 
 class ConfigMetaNode implements MetaNode {
     static final boolean CAN_ADD        = true;

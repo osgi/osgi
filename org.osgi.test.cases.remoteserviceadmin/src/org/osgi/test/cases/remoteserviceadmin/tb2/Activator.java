@@ -17,7 +17,11 @@
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.tb2;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.util.Collection;
 import java.util.HashSet;

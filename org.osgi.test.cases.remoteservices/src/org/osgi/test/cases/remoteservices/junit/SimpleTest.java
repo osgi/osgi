@@ -18,7 +18,9 @@
 package org.osgi.test.cases.remoteservices.junit;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.osgi.framework.Constants.*;
+import static org.osgi.framework.Constants.BUNDLE_MANIFESTVERSION;
+import static org.osgi.framework.Constants.BUNDLE_SYMBOLICNAME;
+import static org.osgi.framework.Constants.IMPORT_PACKAGE;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -31,7 +31,8 @@
 
 package org.osgi.test.cases.cdi.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Set;
 

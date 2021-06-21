@@ -21,6 +21,7 @@ package org.osgi.service.resolver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
 import org.osgi.resource.Requirement;
 
 /**

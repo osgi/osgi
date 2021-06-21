@@ -21,6 +21,7 @@ package org.osgi.service.jdbc;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;

@@ -20,6 +20,7 @@ package org.osgi.framework;
 
 import java.util.Dictionary;
 import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.classpath.tb4a;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * The exporting bundle of the ImportGone test.

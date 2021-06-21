@@ -19,9 +19,11 @@ package org.osgi.test.cases.jaxrs.junit;
 
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
-import static org.osgi.namespace.contract.ContractNamespace.*;
+import static org.osgi.namespace.contract.ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE;
+import static org.osgi.namespace.contract.ContractNamespace.CONTRACT_NAMESPACE;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
-import static org.osgi.namespace.service.ServiceNamespace.*;
+import static org.osgi.namespace.service.ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE;
+import static org.osgi.namespace.service.ServiceNamespace.SERVICE_NAMESPACE;
 import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
 import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 

@@ -17,7 +17,11 @@
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.secure.tb.exporter;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

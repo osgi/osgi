@@ -28,12 +28,16 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import org.osgi.service.dmt.*;
-
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
-import org.osgi.test.cases.dmt.tc3.tbc.Plugins.*;
+import org.osgi.test.cases.dmt.tc3.tbc.Plugins.FatalExceptionDataPlugin;
+import org.osgi.test.cases.dmt.tc3.tbc.Plugins.FatalExceptionDataPluginActivator;
+import org.osgi.test.cases.dmt.tc3.tbc.Plugins.NewDataPlugin;
+import org.osgi.test.cases.dmt.tc3.tbc.Plugins.NewDataPluginActivator;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 import junit.framework.TestCase;

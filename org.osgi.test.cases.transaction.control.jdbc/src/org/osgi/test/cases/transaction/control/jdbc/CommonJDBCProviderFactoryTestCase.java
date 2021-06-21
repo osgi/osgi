@@ -18,8 +18,11 @@
 package org.osgi.test.cases.transaction.control.jdbc;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.CONNECTION_POOLING_ENABLED;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.MAX_CONNECTIONS;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.MIN_CONNECTIONS;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

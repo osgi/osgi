@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.tb1;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.util.HashMap;
 import java.util.Hashtable;

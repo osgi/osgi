@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.impl.service.upnp.cp;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.upnp.cp.basedriver.UPnPBaseDriver;
 
 public class UPnPBundleActivator implements BundleActivator {

@@ -17,10 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.dmt.tc4.ext.util;
 
+import java.util.Date;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
-
-import java.util.Date;
 
 public class TestNode {
 

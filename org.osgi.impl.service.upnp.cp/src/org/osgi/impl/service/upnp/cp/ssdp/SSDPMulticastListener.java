@@ -18,7 +18,9 @@
 package org.osgi.impl.service.upnp.cp.ssdp;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 
 // This class listenes on multicast channel for NOTIFY messages 
 public class SSDPMulticastListener extends Thread implements SSDPConstants {

@@ -19,6 +19,7 @@
 package org.osgi.framework.wiring.dto;
 
 import java.util.Set;
+
 import org.osgi.dto.DTO;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.dto.WiringDTO;

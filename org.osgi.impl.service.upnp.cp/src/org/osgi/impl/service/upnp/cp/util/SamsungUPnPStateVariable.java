@@ -17,7 +17,7 @@
  *******************************************************************************/
 package org.osgi.impl.service.upnp.cp.util;
 
-import org.osgi.service.upnp.*;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 public abstract interface SamsungUPnPStateVariable extends UPnPStateVariable {
 	public abstract void setChangedValue(String value);

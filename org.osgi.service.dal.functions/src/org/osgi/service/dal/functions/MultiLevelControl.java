@@ -19,6 +19,7 @@
 package org.osgi.service.dal.functions;
 
 import java.math.BigDecimal;
+
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.LevelData;

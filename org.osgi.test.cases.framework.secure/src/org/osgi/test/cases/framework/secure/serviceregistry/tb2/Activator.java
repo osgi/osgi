@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.secure.serviceregistry.tb2;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.fail;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -17,7 +17,7 @@
  *******************************************************************************/
 package org.osgi.impl.service.upnp.cp.util;
 
-import org.osgi.impl.service.upnp.cp.description.*;
+import org.osgi.impl.service.upnp.cp.description.RootDevice;
 
 public interface UPnPDeviceListener {
 	public void addDevice(String uuid, RootDevice deviceinfo);

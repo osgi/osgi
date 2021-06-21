@@ -17,20 +17,25 @@
  *******************************************************************************/
 package org.osgi.test.cases.pushstream.junit;
 
-import static java.util.Arrays.asList;
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.util.pushstream.PushStreamProvider;
 import org.osgi.util.pushstream.SimplePushEventSource;
 
-import junit.framework.TestCase;
+public class SimplePushEventSourceTest {
 
-public class SimplePushEventSourceTest extends TestCase {
-
+	@Test
 	public void testSimplePushEventSource() throws Exception {
 		
 		PushStreamProvider psp = new PushStreamProvider();
@@ -61,7 +66,7 @@ public class SimplePushEventSourceTest extends TestCase {
 
 		Semaphore latch = new Semaphore(0);
 
-		long startTime = System.currentTimeMillis();
+		long startTime = System.nanoTime();
 
 		spes.open(pe -> {
 			if (pe.isTerminal()) {
@@ -76,10 +81,10 @@ public class SimplePushEventSourceTest extends TestCase {
 		publisher.join();
 
 		// The publisher should run for 3 seconds
-		long publishTime = System.currentTimeMillis() - startTime;
+		long publishTime = System.nanoTime() - startTime;
 
-		assertTrue(publishTime > 2500);
-		assertTrue(publishTime < 4000);
+		assertThat(NANOSECONDS.toMillis(publishTime))
+				.isStrictlyBetween(2500L, 4000L);
 
 		// The receiver should not yet be done!
 		assertEquals(0, latch.availablePermits());
@@ -87,10 +92,9 @@ public class SimplePushEventSourceTest extends TestCase {
 		// The receiver should finish after another 4.5 seconds
 		assertTrue(latch.tryAcquire(6, SECONDS));
 
-		assertEquals(
-				asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-						17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30),
-				received);
+		assertThat(received).containsExactly(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+				12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
+				28, 29, 30);
 
 		received.clear();
 

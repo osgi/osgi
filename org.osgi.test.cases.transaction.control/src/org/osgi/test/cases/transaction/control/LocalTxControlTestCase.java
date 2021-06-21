@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.transaction.control;
 
-import static org.osgi.service.transaction.control.TransactionStatus.*;
+import static org.osgi.service.transaction.control.TransactionStatus.COMMITTING;
+import static org.osgi.service.transaction.control.TransactionStatus.ROLLING_BACK;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;

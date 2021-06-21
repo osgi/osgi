@@ -19,6 +19,7 @@
 package org.osgi.resource;
 
 import java.util.List;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

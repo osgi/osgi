@@ -20,8 +20,13 @@ package org.osgi.util.pushstream;
 
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
-import static org.osgi.util.pushstream.PushEventConsumer.*;
+import static java.util.stream.Collector.Characteristics.CONCURRENT;
+import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.BUILDING;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.STARTED;
+import static org.osgi.util.pushstream.PushEventConsumer.ABORT;
+import static org.osgi.util.pushstream.PushEventConsumer.CONTINUE;
 
 import java.time.Duration;
 import java.util.AbstractQueue;
@@ -1354,14 +1359,16 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Object[]> toArray() {
-		return collect(Collectors.toList())
-				.map(List::toArray);
+		Collector<T, ? ,Object[]> collector = Collectors
+				.collectingAndThen(Collectors.toList(), List::toArray);
+		return collect(collector);
 	}
 
 	@Override
-	public <A extends T> Promise<A[]> toArray(IntFunction<A[]> generator) {
-		return collect(Collectors.toList())
-				.map(l -> l.toArray(generator.apply(l.size())));
+	public <A> Promise<A[]> toArray(IntFunction<A[]> generator) {
+		Collector<T, ? ,A[]> collector = Collectors.collectingAndThen(
+				Collectors.toList(), l -> l.toArray(generator.apply(0)));
+		return collect(collector);
 	}
 
 	@Override
@@ -1459,8 +1466,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		Deferred<R> d = promiseFactory.deferred();
 		PushEventConsumer<T> consumer;
 
-		if (collector.characteristics()
-				.contains(Collector.Characteristics.CONCURRENT)) {
+		if (collector.characteristics().contains(CONCURRENT)) {
 			consumer = event -> {
 				try {
 					switch (event.getType()) {
@@ -1468,7 +1474,22 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 							accumulator.accept(result, event.getData());
 							return CONTINUE;
 						case CLOSE :
-							d.resolve(collector.finisher().apply(result));
+							if (collector.characteristics()
+									.contains(IDENTITY_FINISH)) {
+								@SuppressWarnings("unchecked")
+								R finished = (R) result;
+								d.resolve(finished);
+							} else {
+								R finished;
+								try {
+									finished = collector.finisher()
+											.apply(result);
+								} catch (Exception e) {
+									d.fail(e);
+									break;
+								}
+								d.resolve(finished);
+							}
 							break;
 						case ERROR :
 							d.fail(event.getFailure());
@@ -1491,7 +1512,22 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 							}
 							return CONTINUE;
 						case CLOSE :
-							d.resolve(collector.finisher().apply(result));
+							if (collector.characteristics()
+									.contains(IDENTITY_FINISH)) {
+								@SuppressWarnings("unchecked")
+								R finished = (R) result;
+								d.resolve(finished);
+							} else {
+								R finished;
+								try {
+									finished = collector.finisher()
+											.apply(result);
+								} catch (Exception e) {
+									d.fail(e);
+									break;
+								}
+								d.resolve(finished);
+							}
 							break;
 						case ERROR :
 							d.fail(event.getFailure());
