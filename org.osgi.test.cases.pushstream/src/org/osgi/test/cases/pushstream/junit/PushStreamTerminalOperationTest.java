@@ -17,12 +17,20 @@
  *******************************************************************************/
 package org.osgi.test.cases.pushstream.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
+import static org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.PROMISE_RESOLVE_DURATION;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collector;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Test;
+import org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.ExtGenerator;
+import org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.ExtGeneratorStatus;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
@@ -30,11 +38,8 @@ import org.osgi.util.pushstream.PushStreamProvider;
 /**
  * Section 706.3 The Push Stream
  */
-public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
+public class PushStreamTerminalOperationTest {
 	
-	
-	int done;
-
 	/**
 	 * 706.3.1.3 : Terminal Operations
 	 * <p/>
@@ -43,24 +48,22 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testTerminalOperationForEach() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
 
-		this.done = 0;
+		AtomicInteger done = new AtomicInteger();
 		Promise<Void> p = ps.forEach(i -> {
-			done++;
+			done.incrementAndGet();
 		});
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION);
 
-		assertTrue(p.isDone());
-		assertEquals(5, done);
+		assertThat(done).hasValue(5);
 	}
 
 	/**
@@ -71,6 +74,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testTerminalOperationForEachException() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -84,12 +88,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertSame(re, p.getFailure());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.isSameAs(re);
 	}
 
 	/**
@@ -99,30 +100,28 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * in the stream. If negative back pressure is returned then the stream will
 	 * be closed
 	 */
+	@Test
 	public void testTerminalOperationForEachEvent() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
 
-		this.done = 0;
+		AtomicInteger done = new AtomicInteger();
 		Promise<Long> p = ps.forEachEvent(i -> {
 			if (!i.isTerminal())
-			done++;
+				done.incrementAndGet();
 			return 5;
 		});
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION);
 
 		@SuppressWarnings("unused")
 		ExtGeneratorStatus status = gen.status();
 
-		assertTrue(p.isDone());
-		assertEquals(5, done);
-		assertTrue(gen.fixedBackPressure());
+		assertThat(done).hasValue(5);
+		assertThat(gen.fixedBackPressure()).isTrue();
 		// what becomes the returned back pressure ?
 		// assertEquals(5, status.bp);
 	}
@@ -134,6 +133,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * in the stream. If negative back pressure is returned then the stream will
 	 * be closed
 	 */
+	@Test
 	public void testTerminalOperationForEachEventException() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -147,14 +147,12 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertSame(re, p.getFailure());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.isSameAs(re);
 	}
 
+	@Test
 	public void testTerminalOperationForEachEventException2() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -170,12 +168,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertSame(re, p.getFailure());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.isSameAs(re);
 	}
 
 	/**
@@ -184,22 +179,21 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * toArray collects together all the event data in a single array which is
 	 * used to resolve the returned promise
 	 */
+	@Test
 	public void testTerminalOperationToArray() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
 
-		Promise<Object[]> p = ps.toArray();
+		Promise<Integer[]> p = ps.toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 1, 2, 3, 4);
 
-		assertTrue(gen.fixedBackPressure());
-		assertEquals(Arrays.asList(0, 1, 2, 3, 4),
-				Arrays.asList(p.getValue()));
+		assertThat(gen.fixedBackPressure()).isTrue();
 	}
 
 	/**
@@ -209,6 +203,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * single object. The promise is resolved with the final result when the
 	 * stream finishes
 	 */
+	@Test
 	public void testTerminalOperationReduce() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -220,12 +215,11 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(10);
 
-		assertTrue(gen.fixedBackPressure());
-		assertEquals(10, (int) p.getValue().get());
+		assertThat(gen.fixedBackPressure()).isTrue();
 	}
 
 	/**
@@ -235,6 +229,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * single object. The promise is resolved with the final result when the
 	 * stream finishes
 	 */
+	@Test
 	public void testTerminalOperationReduceBis() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -252,12 +247,11 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.STRING)
+				.isEqualTo("abcde");
 
-		assertTrue(gen.fixedBackPressure());
-		assertEquals("abcde", p.getValue());
+		assertThat(gen.fixedBackPressure()).isTrue();
 	}
 
 	/**
@@ -266,6 +260,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * collect uses the Java Collector API to collect the data from events into
 	 * a single Collection, Map, or other type
 	 */
+	@Test
 	public void testTerminalOperationCollect() throws Exception {
 		
 		ExtGenerator gen = new ExtGenerator(5);
@@ -283,12 +278,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(Arrays.asList(0, 1, 2, 3, 4), p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.containsExactly(0, 1, 2, 3, 4);
 	}
 
 	/**
@@ -300,6 +292,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testTerminalOperationMin() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -312,12 +305,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(0, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(0);
 	}
 
 	/**
@@ -327,6 +317,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * data. The promise is resolved with the final result when the stream
 	 * finishes
 	 */
+	@Test
 	public void testTerminalOperationMax() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -339,12 +330,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(4, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(4);
 	}
 
 	/**
@@ -353,6 +341,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * count operation counts the number of events that reach the end of the
 	 * stream pipeline
 	 */
+	@Test
 	public void testTerminalOperationCount() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -362,12 +351,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(5l, (long) p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.LONG)
+				.isEqualTo(5L);
 	}
 
 	/**
@@ -378,6 +364,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * without any data that doesn't match the predicate then the promise
 	 * resolves with true
 	 */
+	@Test
 	public void testTerminalOperationAllMatch() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -389,12 +376,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertFalse(p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.BOOLEAN)
+				.isFalse();
 
 		p = ps.allMatch(i -> {
 			return i.intValue() > -1;
@@ -402,12 +386,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertTrue(p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.BOOLEAN)
+				.isTrue();
 	}
 
 	/**
@@ -420,6 +401,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testTerminalOperationAnyMatch() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -431,12 +413,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertTrue(p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.BOOLEAN)
+				.isTrue();
 	}
 
 	/**
@@ -444,6 +423,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * <p/>
 	 * Not really specified
 	 */
+	@Test
 	public void testTerminalOperationNoneMatch() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -455,12 +435,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertFalse(p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.BOOLEAN)
+				.isFalse();
 
 		p = ps.noneMatch(i -> {
 			return i.intValue() < 0;
@@ -468,12 +445,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertTrue(p.getValue());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.BOOLEAN)
+				.isTrue();
 	}
 
 	/**
@@ -484,6 +458,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	 * any data reaching the end of the pipeline then the promise resolves with
 	 * an empty Optional
 	 */
+	@Test
 	public void testTerminalOperationFindFirst() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -493,12 +468,9 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(0, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(0);
 
 		gen = new ExtGenerator(0);
 		ps = new PushStreamProvider().createStream(gen);
@@ -507,11 +479,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 
 		gen.getExecutionThread().join();
 
-		timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertFalse(p.getValue().isPresent());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.isEmpty();
 	}
 }

@@ -18,9 +18,11 @@
 package org.osgi.test.cases.pushstream.junit;
 
 import static java.time.Duration.ofSeconds;
-import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.*;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
+import static org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.PROMISE_RESOLVE_DURATION;
 import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 
@@ -36,6 +38,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushEvent;
 import org.osgi.util.pushstream.PushEventConsumer;
@@ -43,9 +48,7 @@ import org.osgi.util.pushstream.PushEventSource;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
 
-import junit.framework.TestCase;
-
-public class PushStreamTest extends TestCase {
+public class PushStreamTest {
 
 	static class Generator implements PushEventSource<Integer> {
 		int count = 10;
@@ -99,7 +102,7 @@ public class PushStreamTest extends TestCase {
 	
 	PushStreamProvider impl;
 	
-	@Override
+	@BeforeEach
 	public void setUp() {
 		impl = new PushStreamProvider();
 	}
@@ -111,36 +114,47 @@ public class PushStreamTest extends TestCase {
 				.build();
 	}
 	
+	@Test
 	public void testSimple() throws Exception {
 		doTestSimple(impl.createStream(new Generator()));
 	}
 
+	@Test
 	public void testSimpleWithLessBackPressure() throws Exception {
 		doTestSimple(withLessBackPressure(new Generator()));
 	}
 
 	private void doTestSimple(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		assertEquals(Long.valueOf(5L), es
-				.filter((x) -> (x&1) == 0)
-				.count().getValue());
+		assertThat(es.filter((x) -> (x & 1) == 0).count())
+				.resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.LONG)
+				.isEqualTo(5L);
 		
 		es = impl.createStream(new Generator());
-		assertEquals(Integer.valueOf(9),
-				es.max(Integer::compare).getValue().get());
+		assertThat(es.max(Integer::compare))
+				.resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(9);
 		
 		es = impl.createStream(new Generator());
-		assertEquals(Integer.valueOf(0), es.findFirst().getValue().get());
+		assertThat(es.findFirst()).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(0);
 		
 		es = impl.createStream(new Generator());
-		assertEquals(Integer.valueOf(45),
-				es.reduce(0, (a, b) -> a + b).getValue());
+		assertThat(es.reduce(0, (a, b) -> a + b))
+				.resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.INTEGER)
+				.isEqualTo(45);
 	}
 	
+	@Test
 	public void testFork() throws Exception {
 		doTestFork(impl.createStream(new Generator()));
 	}
 
+	@Test
 	public void testForkWithLessBackPressure() throws Exception {
 		doTestFork(withLessBackPressure(new Generator()));
 	}
@@ -149,17 +163,21 @@ public class PushStreamTest extends TestCase {
 			throws InvocationTargetException, InterruptedException {
 		ExecutorService e = Executors.newCachedThreadPool();
 		try {
-			assertEquals(Integer.valueOf(45),
-				es.fork(4, 0, e).reduce(0, (a, b) -> a + b).getValue());
+			assertThat(es.fork(4, 0, e).reduce(0, (a, b) -> a + b))
+					.resolvesWithin(PROMISE_RESOLVE_DURATION)
+					.hasValueThat(InstanceOfAssertFactories.INTEGER)
+					.isEqualTo(45);
 		} finally {
 			e.shutdown();
 		}
 	}
 	
+	@Test
 	public void testCoalesce() throws Exception {
 		doTestCoalesce(impl.createStream(new Generator(50)));
 	}
 
+	@Test
 	public void testCoalesceWithLessBackPressure() throws Exception {
 		doTestCoalesce(withLessBackPressure(new Generator(50)));
 	}
@@ -169,7 +187,7 @@ public class PushStreamTest extends TestCase {
 		AtomicInteger sum = new AtomicInteger();
 		AtomicInteger counter = new AtomicInteger();
 		
-		List<Integer> list = es.sequential().coalesce( (element) -> {
+		Promise<List<Integer>> list = es.sequential().coalesce((element) -> {
 			int s = sum.accumulateAndGet(element.intValue(), (a, b) -> a + b);
 			if ( (counter.incrementAndGet() % 3) == 0) {
 				sum.set(0);
@@ -177,97 +195,118 @@ public class PushStreamTest extends TestCase {
 			}
 			else
 				return Optional.empty();
-		}).collect(toList()).getValue();
-		
-		assertEquals(asList(3,12,21,30,39,48,57,66,75,84,93,102,111,120,129,138),list);
+		}).collect(toList());
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.containsExactly(3, 12, 21, 30, 39, 48, 57, 66, 75, 84,
+				93, 102, 111, 120, 129, 138);
 	}
 
+	@Test
 	public void testCoalesce2() throws Exception {
 		doTestCoalesce2(impl.createStream(new Generator(50)));
 	}
 
+	@Test
 	public void testCoalesce2WithLessBackPressure() throws Exception {
 		doTestCoalesce2(withLessBackPressure(new Generator(50)));
 	}
 
 	private void doTestCoalesce2(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		List<Integer> list = es.coalesce(3, (elements) -> {
+		Promise<List<Integer>> list = es.coalesce(3, (elements) -> {
 			int sum = 0;
 			for(Integer i : elements) {
 				sum += i.intValue();
 			}
 			return Integer.valueOf(sum);
-		}).collect(toList()).getValue();
+		}).collect(toList());
 		
-		assertEquals(asList(3,12,21,30,39,48,57,66,75,84,93,102,111,120,129,138,97),list);
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.containsExactly(3, 12, 21, 30, 39, 48, 57, 66, 75, 84,
+				93, 102, 111, 120, 129, 138, 97);
 	}
 
+	@Test
 	public void testCoalesce3() throws Exception {
 		doTestCoalesce3(impl.createStream(new Generator(50)));
 	}
 
+	@Test
 	public void testCoalesce3WithLessBackPressure() throws Exception {
 		doTestCoalesce3(withLessBackPressure(new Generator(50)));
 	}
 
 	private void doTestCoalesce3(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		List<Integer> list = es.sequential().coalesce(3, 
+		Promise<List<Integer>> list = es.sequential()
+				.coalesce(3,
 				(elements) -> elements.stream().reduce(0, (a,b) -> a + b))
-				.collect(toList()).getValue();
+				.collect(toList());
 		
-		assertEquals(asList(3,12,21,30,39,48,57,66,75,84,93,102,111,120,129,138,97),list);
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.containsExactly(3, 12, 21, 30, 39, 48, 57, 66, 75, 84,
+				93, 102, 111, 120, 129, 138, 97);
 	}
 
+	@Test
 	public void testWindow() throws Exception {
 		doTestWindow(impl.createStream(new Generator(50)));
 	}
 
+	@Test
 	public void testWindowWithLessBackPressure() throws Exception {
 		doTestWindow(withLessBackPressure(new Generator(50)));
 	}
 
 	private void doTestWindow(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		List<Integer> list = es.window(Duration.ofMillis(200), Collection::size)
-			.collect(toList()).getValue();
+		Promise<List<Integer>> list = es
+				.window(Duration.ofMillis(200), Collection::size)
+				.collect(toList());
 		
-		assertFalse("List is too big: " + list, list.size() > 10);
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.hasSizeLessThanOrEqualTo(10);
 		
-		assertEquals(list.toString(), Integer.valueOf(50), list.stream().reduce(0, (a,b) -> a + b));
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat()
+				.extracting(l -> l.stream().reduce(0, (a, b) -> a + b),
+						InstanceOfAssertFactories.INTEGER)
+				.isEqualTo(50);
 	}
 
+	@Test
 	public void testWindow2() throws Exception {
 		doTestWindow2(impl.createStream(new Generator(50)));
 	}
 
+	@Test
 	public void testWindow2WithLessBackPressure() throws Exception {
 		doTestWindow2(withLessBackPressure(new Generator(50)));
 	}
 
 	private void doTestWindow2(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		List<Integer> list = es.adjustBackPressure(l -> 1)
+		Promise<List<Integer>> list = es.adjustBackPressure(l -> 1)
 				.window(() -> Duration.ofMillis(200), () -> 5,
 						(t, c) -> c.size())
-				.collect(toList())
-				.getValue();
+				.collect(toList());
 		
-		assertTrue("List is too small: " + list, list.size() > 9);
-		assertFalse("List is too big: " + list, list.size() > 14);
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.hasSizeBetween(10, 14);
 		
-		try {
-			assertEquals(list.toString(), Integer.valueOf(50), list.stream().reduce(0, 
-					(a,b) -> {
-						System.out.println("" + a + " " + b);
-								return Integer.valueOf(a + b);
-					}));
-		} catch (Exception e) {
-			System.out.println(list);
-		}
+		assertThat(list).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat()
+				.extracting(l -> l.stream().reduce(0, (a, b) -> a + b),
+						InstanceOfAssertFactories.INTEGER)
+				.isEqualTo(50);
 	}
 
+	@Test
 	public void testWindowClosing() throws Exception {
 		CountDownLatch latch = new CountDownLatch(1);
 
@@ -300,11 +339,13 @@ public class PushStreamTest extends TestCase {
 				.collect(toList());
 
 		assertTrue(latch.await(3, SECONDS));
-		assertTrue(counts.isDone());
-		assertEquals(2, counts.getValue().size());
+		assertThat(counts).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.list(Integer.class))
+				.hasSize(2);
 
 	}
 
+	@Test
 	public void testFindFirstClosing() throws Exception {
 		CountDownLatch latch = new CountDownLatch(1);
 
@@ -334,11 +375,12 @@ public class PushStreamTest extends TestCase {
 		Promise<Optional<Integer>> counts = impl.createStream(pes).findFirst();
 
 		assertTrue(latch.await(500, MILLISECONDS));
-		assertTrue(counts.isDone());
-		assertEquals(Integer.valueOf(0), counts.getValue().get());
-
+		assertThat(counts).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(0);
 	}
 
+	@Test
 	public void testClosePropagatesInBothDirections() throws Exception {
 		Semaphore s = new Semaphore(0);
 
@@ -375,17 +417,18 @@ public class PushStreamTest extends TestCase {
 		Promise<String> aggregate = midway.reduce("", String::concat);
 
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
-		assertFalse(aggregate.isDone());
+		assertThat(aggregate).isNotDone();
 
 		midway.close();
 
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
 
-		assertTrue(aggregate.isDone());
-		assertEquals("12", aggregate.getValue());
-
+		assertThat(aggregate).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.STRING)
+				.isEqualTo("12");
 	}
 
+	@Test
 	public void testClosePropagatesInBothDirectionsThroughABuffer()
 			throws Exception {
 		Semaphore s = new Semaphore(0);
@@ -421,10 +464,13 @@ public class PushStreamTest extends TestCase {
 
 		Promise<String> aggregate = midway.limit(2).reduce("", String::concat);
 
-		assertEquals("12", aggregate.getValue());
+		assertThat(aggregate).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.STRING)
+				.isEqualTo("12");
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
 	}
 
+	@Test
 	public void testClosePropagatesBackwardsFromTimeout() throws Exception {
 		Semaphore s = new Semaphore(0);
 
@@ -455,10 +501,12 @@ public class PushStreamTest extends TestCase {
 				.map(Object::toString)
 				.reduce("", String::concat);
 
-		assertNotNull(aggregate.getFailure());
+		assertThat(aggregate).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailed();
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
 	}
 
+	@Test
 	public void testClosePropagatesBackwardsFromFork() throws Exception {
 		Semaphore s = new Semaphore(0);
 
@@ -494,11 +542,14 @@ public class PushStreamTest extends TestCase {
 				.map(Object::toString)
 				.reduce("", String::concat);
 
-		assertEquals("12", aggregate.getValue());
+		assertThat(aggregate).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.STRING)
+				.isEqualTo("12");
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
 
 	}
 
+	@Test
 	public void testClosePropagatesBackwardsFromWindow() throws Exception {
 		Semaphore s = new Semaphore(0);
 
@@ -534,11 +585,14 @@ public class PushStreamTest extends TestCase {
 						.reduce("", String::concat))
 				.findFirst();
 
-		assertEquals("12", aggregate.getValue().get());
+		assertThat(aggregate).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(String.class))
+				.contains("12");
 		assertTrue(s.tryAcquire(500, MILLISECONDS));
 
 	}
 
+	@Test
 	public void testClosePropagatesBackwardsToBothMergedStreams()
 			throws Exception {
 		Semaphore s = new Semaphore(0);
@@ -573,7 +627,9 @@ public class PushStreamTest extends TestCase {
 		
 		merged.close();
 
-		assertEquals(0, totalEvents.getValue().intValue());
+		assertThat(totalEvents).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.LONG)
+				.isEqualTo(0L);
 		assertTrue(s.tryAcquire(2, 500, MILLISECONDS));
 
 	}

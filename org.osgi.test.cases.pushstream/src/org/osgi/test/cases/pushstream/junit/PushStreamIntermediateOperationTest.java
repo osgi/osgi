@@ -17,12 +17,16 @@
  *******************************************************************************/
 package org.osgi.test.cases.pushstream.junit;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;
+import static org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.PROMISE_RESOLVE_DURATION;
+
 import java.io.Closeable;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -31,8 +35,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.ExtGenerator;
+import org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.ExtGeneratorStatus;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.TimeoutException;
@@ -47,17 +55,15 @@ import org.osgi.util.pushstream.QueuePolicyOption;
 /**
  * Section 706.3 The Push Stream
  */
-@SuppressWarnings({
-		"rawtypes", "unchecked"
-})
-public class PushStreamIntermediateOperationTest
-		extends PushStreamComplianceTest {
+@SuppressWarnings("unchecked")
+public class PushStreamIntermediateOperationTest {
 
 	/**
 	 * checks push event source behavior before the operation tests
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testTestingTools() throws Exception {
 
 		// push data till the end
@@ -74,7 +80,7 @@ public class PushStreamIntermediateOperationTest
 
 		assertNotNull(status);
 		assertTrue(status.failure == null);
-		assertTrue(status.bp == 0);
+		assertThat(status.bp).isEqualTo(0L);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
 		// close method called
@@ -93,7 +99,7 @@ public class PushStreamIntermediateOperationTest
 
 		assertNotNull(status);
 		assertTrue(status.failure == null);
-		assertTrue(status.bp == 0);
+		assertThat(status.bp).isEqualTo(0L);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
 		// throw Exception
@@ -113,7 +119,7 @@ public class PushStreamIntermediateOperationTest
 
 		assertNotNull(status);
 		assertTrue(status.failure != null);
-		assertTrue(status.bp == 0);
+		assertThat(status.bp).isEqualTo(0L);
 		assertEquals(PushEvent.EventType.ERROR, status.event.getType());
 		assertEquals(message, status.event.getFailure().getMessage());
 
@@ -131,12 +137,12 @@ public class PushStreamIntermediateOperationTest
 
 		assertNotNull(status);
 		assertTrue(status.failure == null);
-		assertTrue(status.bp < 0);
+		assertThat(status.bp).isLessThan(0L);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
 		// returned positive back pressure
 		gen = new ExtGenerator(5);
-		long start = System.currentTimeMillis();
+		long start = System.nanoTime();
 		closeable = gen.open(e -> {
 			if (e.isTerminal()) {
 				return 0;
@@ -144,14 +150,15 @@ public class PushStreamIntermediateOperationTest
 			return 200;
 		});
 		gen.getExecutionThread().join();
-		long end = System.currentTimeMillis();
+		long end = System.nanoTime();
 		status = gen.status();
 		// System.out.println(status);
 
 		assertNotNull(status);
 		assertTrue(status.failure == null);
-		assertTrue(status.bp == 200);
-		assertTrue(end - start >= 1000);
+		assertThat(status.bp).isEqualTo(200L);
+		assertThat(TimeUnit.NANOSECONDS.toMillis(end - start))
+				.isGreaterThanOrEqualTo(1000L);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
 	}
@@ -164,6 +171,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws InterruptedException
 	 */
+	@Test
 	public void testUnableToChainNewOperationWhileIntermediateOperationRunning()
 			throws InterruptedException {
 
@@ -180,14 +188,10 @@ public class PushStreamIntermediateOperationTest
 			return i % 3 == 0;
 		}).toArray();
 
-		try {
-			ps.map((i) -> {
-				return i * 2;
-			}).toArray();
+		assertThatIllegalStateException().isThrownBy(() -> ps.map((i) -> {
+			return i * 2;
+		}).toArray());
 
-			fail("IllegalStateException expected");
-
-		} catch (IllegalStateException e) {}
 		gen.getExecutionThread().join();
 	}
 
@@ -198,15 +202,20 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationMapping() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
-		Promise<Object[]> p = ps.map(e -> {
+		Promise<Character[]> p = ps.map(e -> {
 			return (char) ('a' + e);
-		}).toArray();
+		}).toArray(Character[]::new);
 
-		assertEquals("[a, b, c, d, e]", Arrays.toString(p.getValue()));
+		assertThat(p)
+				.resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(
+						InstanceOfAssertFactories.array(Character[].class))
+				.containsExactly('a', 'b', 'c', 'd', 'e');
 	}
 
 	/**
@@ -221,6 +230,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationMappingError() throws Exception {
 		
 		String message = "Check error processing";
@@ -238,8 +248,9 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 
 		// the error is propagate down the stream by the way of an error event
-		assertTrue(prm.getFailure() != null);
-		assertEquals(message, prm.getFailure().getMessage());
+		assertThat(prm).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.hasMessage(message);
 
 		// the error is propagate upstream by the way of an negative
 		// backpressure
@@ -262,20 +273,24 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationFlatMapping() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.flatMap(e -> {
+		Promise<Character[]> p = ps.flatMap(e -> {
 			return new PushStreamProvider().createStream(new ExtGenerator(e));
 		}).map(e -> {
 			return (char) ('a' + e);
-		}).toArray();
+		}).toArray(Character[]::new);
 		// expect ('a' + 0), ('a' + 0 ,'a' + 1) ,('a' + 0 ,'a' + 1 , 'a' + 2 ),
 		// ('a' + 0 ,'a' + 1 , 'a' + 2, 'a' + 3)
-		assertEquals("[a, a, b, a, b, c, a, b, c, d]",
-				Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(
+						InstanceOfAssertFactories.array(Character[].class))
+				.containsExactly('a', 'a', 'b', 'a', 'b', 'c', 'a', 'b', 'c',
+						'd');
 	}
 
 	/**
@@ -288,6 +303,7 @@ public class PushStreamIntermediateOperationTest
 	 * propagated back upstream to the Event Source by returning negative back
 	 * pressure
 	 */
+	@Test
 	public void testIntermediateOperationFlatMappingError() throws Exception {
 
 		String message = "Check error processing";
@@ -306,8 +322,9 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 
 		// the error is propagate down the stream by the way of an error event
-		assertTrue(prm.getFailure() != null);
-		assertEquals(message, prm.getFailure().getMessage());
+		assertThat(prm).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.hasMessage(message);
 
 		// the error is propagate upstream by the way of an negative
 		// backpressure
@@ -330,17 +347,21 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationFiltering() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.filter(e -> {
+		Promise<Number[]> p = ps.filter(e -> {
 			return e % 2 == 0;
-		}).toArray();
+		}).toArray(Number[]::new);
 
-		assertEquals("[0, 2, 4]",
-				Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(
+						InstanceOfAssertFactories.array(Number[].class))
+				.containsExactly(Integer.valueOf(0), Integer.valueOf(2),
+						Integer.valueOf(4));
 	}
 
 	/**
@@ -355,6 +376,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationFilteringError() throws Exception {
 
 		String message = "Check error processing";
@@ -371,8 +393,9 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 
 		// the error is propagate down the stream by the way of an error event
-		assertTrue(prm.getFailure() != null);
-		assertEquals(message, prm.getFailure().getMessage());
+		assertThat(prm).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasFailedWithThrowableThat()
+				.hasMessage(message);
 
 		// the error is propagate upstream by the way of an negative
 		// backpressure
@@ -392,16 +415,19 @@ public class PushStreamIntermediateOperationTest
 	 * element which has previously been seen then it will be dropped. This
 	 * stateful operation must remember all data that has been seen
 	 */
+	@Test
 	public void testIntermediateOperationDistinct() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.map(e -> {
+		Promise<Integer[]> p = ps.map(e -> {
 			return e % 2;
-		}).distinct().toArray();
+		}).distinct().toArray(Integer[]::new);
 
-		assertEquals("[0, 1]", Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 1);
 	}
 
 	/**
@@ -411,6 +437,7 @@ public class PushStreamIntermediateOperationTest
 	 * point the data in the stream will be propagated to the next stage of the
 	 * stream, in the order defined by the Comparator
 	 */
+	@Test
 	public void testIntermediateOperationSorted() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -418,14 +445,17 @@ public class PushStreamIntermediateOperationTest
 				.createStream(gen);
 
 		// reverse order
-		Comparator< ? extends Integer> comparator = (e1, e2) -> {
+		Comparator<Integer> comparator = (e1, e2) -> {
 			int compare = e1.compareTo(e2);
 			return compare == 0 ? 0 : ((compare < 0) ? 1 : -1);
 		};
-		Promise<Object[]> p = ps
-				.sorted((Comparator< ? super Integer>) comparator).toArray();
+		Promise<Integer[]> p = ps
+				.sorted(comparator)
+				.toArray(Integer[]::new);
 
-		assertEquals("[4, 3, 2, 1, 0]", Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(4, 3, 2, 1, 0);
 
 	}
 
@@ -436,32 +466,28 @@ public class PushStreamIntermediateOperationTest
 	 * point the data in the stream will be propagated to the next stage of the
 	 * stream, in the order defined by the Comparator
 	 */
+	@Test
 	public void testIntermediateOperationSortedNaturalOrder() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(gen);
 
-		Comparator< ? extends Integer> comparator = (e1, e2) -> {
+		Comparator<Integer> comparator = (e1, e2) -> {
 			// reverse order
 			int compare = e1.compareTo(e2);
 			return compare == 0 ? 0 : ((compare < 0) ? 1 : -1);
 		};
 
-		Promise<Object[]> p = ps
-				.sorted((Comparator< ? super Integer>) comparator)
+		Promise<Integer[]> p = ps.sorted(comparator)
 				.sorted()
-				.toArray();
+				.toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
-
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 1, 2, 3, 4);
 	}
 
 	/**
@@ -471,6 +497,7 @@ public class PushStreamIntermediateOperationTest
 	 * elements. Once that number of elements are received then a close event is
 	 * propagated to the next stage of the stream
 	 */
+	@Test
 	public void testIntermediateOperationLimit() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -478,13 +505,15 @@ public class PushStreamIntermediateOperationTest
 				.unbuffered()
 				.build();
 
-		Promise<Object[]> p = ps.limit(2l).toArray();
+		Promise<Integer[]> p = ps.limit(2l).toArray(Integer[]::new);
 
 		// do not wait for the complete source events processing as we expect
 		// a close event when the limit is reached
 		// gen.getExecutionThread().join();
 
-		assertEquals("[0, 1]", Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 1);
 		gen.thread.join();
 
 		assertTrue(gen.closeCalled);
@@ -505,6 +534,7 @@ public class PushStreamIntermediateOperationTest
 	 * duration limits the time for which the stream is open, closing it after
 	 * the duration has elapsed
 	 */
+	@Test
 	public void testIntermediateOperationLimitWithDuration() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(10000);
@@ -538,6 +568,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationTimeout()
 			throws InterruptedException, InvocationTargetException {
 
@@ -584,6 +615,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationSplitOneFilter() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
@@ -592,9 +624,11 @@ public class PushStreamIntermediateOperationTest
 		PushStream<Integer>[] p = ps.split(e -> {
 			return e % 2 == 0;
 		});
-		assertEquals(1, p.length);
-		Promise<Object[]> even = p[0].toArray();
-		assertEquals("[0, 2, 4]", Arrays.toString(even.getValue()));
+		assertThat(p).hasSize(1);
+		Promise<Integer[]> even = p[0].toArray(Integer[]::new);
+		assertThat(even).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 2, 4);
 	}
 
 	/**
@@ -606,6 +640,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationSplitTwoFilters() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
@@ -617,16 +652,18 @@ public class PushStreamIntermediateOperationTest
 			return e % 2 == 1;
 		});
 		
-		assertEquals(2, p.length);
+		assertThat(p).hasSize(2);
 		
-		Promise<Object[]> even = p[0].toArray();
-		Promise<Object[]> odd = p[1].toArray();
+		Promise<Integer[]> even = p[0].toArray(Integer[]::new);
+		Promise<Integer[]> odd = p[1].toArray(Integer[]::new);
 
-		assertEquals("[0, 2, 4]",
-				Arrays.toString(even.getValue()));
+		assertThat(even).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 2, 4);
 
-		assertEquals("[1, 3]",
-				Arrays.toString(odd.getValue()));
+		assertThat(odd).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(1, 3);
 
 	}
 
@@ -639,6 +676,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationSplitTwoFiltersOverlapping()
 			throws Exception {
 
@@ -651,14 +689,18 @@ public class PushStreamIntermediateOperationTest
 			return e % 3 == 0;
 		});
 
-		assertEquals(2, p.length);
+		assertThat(p).hasSize(2);
 
-		Promise<Object[]> odd = p[0].toArray();
-		Promise<Object[]> modulo3 = p[1].toArray();
+		Promise<Integer[]> odd = p[0].toArray(Integer[]::new);
+		Promise<Integer[]> modulo3 = p[1].toArray(Integer[]::new);
 
-		assertEquals("[1, 3]", Arrays.toString(odd.getValue()));
-		assertEquals("[0, 3]", Arrays.toString(modulo3.getValue()));
+		assertThat(odd).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(1, 3);
 
+		assertThat(modulo3).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 3);
 	}
 
 	/**
@@ -670,6 +712,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationSplitOneFilterWithoutMatch()
 			throws Exception {
 
@@ -680,11 +723,14 @@ public class PushStreamIntermediateOperationTest
 			return e % 2 == 2;
 		});
 
-		assertEquals(1, p.length);
+		assertThat(p).hasSize(1);
 		Promise<Object[]> empty = p[0].toArray();
 
 		// which of this two behaviors is expected ?
-		assertTrue(empty.getValue().length == 0);
+		assertThat(empty).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.ARRAY)
+				.isEmpty();
+		;
 	}
 
 	/**
@@ -693,13 +739,16 @@ public class PushStreamIntermediateOperationTest
 	 * skip drops the supplied number of data events from the stream and then
 	 * forwards any further data events
 	 */
+	@Test
 	public void testIntermediateOperationSkip() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.skip(3).toArray();
-		assertEquals("[3, 4]", Arrays.toString(p.getValue()));
+		Promise<Integer[]> p = ps.skip(3).toArray(Integer[]::new);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(3, 4);
 	}
 
 	/**
@@ -708,13 +757,16 @@ public class PushStreamIntermediateOperationTest
 	 * skip drops the supplied number of data events from the stream and then
 	 * forwards any further data events
 	 */
+	@Test
 	public void testIntermediateOperationSkipAll() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.skip(5).toArray();
-		assertEquals("[]", Arrays.toString(p.getValue()));
+		Promise<Integer[]> p = ps.skip(5).toArray(Integer[]::new);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.isEmpty();
 	}
 
 	/**
@@ -723,13 +775,16 @@ public class PushStreamIntermediateOperationTest
 	 * skip drops the supplied number of data events from the stream and then
 	 * forwards any further data events
 	 */
+	@Test
 	public void testIntermediateOperationSkipNone() throws Exception {
 
 		PushStream<Integer> ps = new PushStreamProvider()
 				.createStream(new ExtGenerator(5));
 
-		Promise<Object[]> p = ps.skip(0).toArray();
-		assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
+		Promise<Integer[]> p = ps.skip(0).toArray(Integer[]::new);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0, 1, 2, 3, 4);
 	}
 
 	/**
@@ -740,6 +795,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationFork() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(10);
@@ -793,19 +849,16 @@ public class PushStreamIntermediateOperationTest
 		Promise<Optional<Integer>> p = ps.fork(5, 15, executor).reduce(bo);
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(45, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 		// multi-threading
-		assertTrue(executor.getLargestPoolSize() > 1);
-		// no blocking threads in fork
-		assertTrue(executor.getLargestPoolSize() <= 5);
-		assertTrue(gen.fixedBackPressure());
+		assertThat(executor.getLargestPoolSize()).isGreaterThan(1)
+				// no blocking threads in fork
+				.isLessThanOrEqualTo(5);
+		assertThat(gen.fixedBackPressure()).isTrue();
 		// thread overlapping in reduce
-		assertTrue(threadCount.get() > 0);
+		assertThat(threadCount).hasPositiveValue();
 	}
 
 	/**
@@ -820,6 +873,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationForkWithBlockingThreads()
 			throws Exception {
 
@@ -873,22 +927,19 @@ public class PushStreamIntermediateOperationTest
 		Promise<Optional<Integer>> p = ps.fork(5, 15, executor).reduce(bo);
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(45, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 		// if threads have been blocked the back pressure must have
 		// been changed during processing
-		assertFalse(gen.fixedBackPressure());
+		assertThat(gen.fixedBackPressure()).isFalse();
 		// n+1 seems to be OK and n not
 		// assertEquals(6, executor.getLargestPoolSize());
-		assertEquals(5, executor.getLargestPoolSize());
+		assertThat(executor.getLargestPoolSize()).isBetween(5, 6);
 		ExtGeneratorStatus status = gen.status();
-		assertTrue(status.bp > 0);
+		assertThat(status.bp).isGreaterThan(0L);
 		// thread overlapping in reduce
-		assertTrue(threadCount.get() > 0);
+		assertThat(threadCount).hasPositiveValue();
 	}
 
 	/**
@@ -900,6 +951,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationMergeStreams() throws Exception {
 
 		ExtGenerator gen_first = new ExtGenerator(5);
@@ -915,31 +967,34 @@ public class PushStreamIntermediateOperationTest
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 100)
 				.build();
 
-		Promise<Object[]> p = ps_first.merge(ps_second).toArray();
+		Promise<Integer[]> p = ps_first.merge(ps_second)
+				.toArray(Integer[]::new);
 		
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.hasSize(10);
 		// Keep the ordering
-		LinkedHashSet<Object> one = new LinkedHashSet<>();
-		LinkedHashSet<Object> two = new LinkedHashSet<>();
+		LinkedHashSet<Integer> one = new LinkedHashSet<>();
+		LinkedHashSet<Integer> two = new LinkedHashSet<>();
 
-		for (Object o : p.getValue()) {
+		for (Integer o : p.getValue()) {
 			if (!one.add(o)) {
-				assertTrue("Object " + o + " was present three times",
-						two.add(o));
+				assertTrue(two.add(o),
+						"Object " + o + " was present three times");
 			}
 		}
 
 		// The two sets of events should be in order, even though they were
 		// interleaved
-		assertEquals(Arrays.asList(0, 1, 2, 3, 4),
-				one.stream().collect(Collectors.toList()));
-		assertEquals(Arrays.asList(0, 1, 2, 3, 4),
-				two.stream().collect(Collectors.toList()));
+		assertThat(one).containsExactly(0, 1, 2, 3, 4);
+		assertThat(two).containsExactly(0, 1, 2, 3, 4);
 
 		// The two sets of events should be interleaved as they have a 100 ms
 		// delay after each event, giving time for the other stream to run
-		assertFalse("The two streams were processed sequentially",
-				Arrays.asList(0, 1, 2, 3, 4, 0, 1, 2, 3, 4)
-						.equals(Arrays.asList(p.getValue())));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.as("The two streams were processed sequentially")
+				.doesNotContainSequence(0, 1, 2, 3, 4, 0, 1, 2, 3, 4);
 	}
 
 	/**
@@ -951,6 +1006,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationMergeStreamAndSource()
 			throws Exception {
 
@@ -960,19 +1016,14 @@ public class PushStreamIntermediateOperationTest
 		PushStream<Integer> ps_first = new PushStreamProvider()
 				.createStream(gen_first);
 
-		Promise<Object[]> p = ps_first.merge(gen_second).toArray();
+		Promise<Integer[]> p = ps_first.merge(gen_second).toArray(Integer[]::new);
 
 		gen_first.getExecutionThread().join();
 		gen_second.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
-		assertEquals(
-				new HashSet(Arrays.asList(0, 0, 1, 1, 2, 2, 3, 3, 4, 4)),
-				new HashSet(Arrays.asList(p.getValue())));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsOnly(0, 1, 2, 3, 4);
 	}
 
 	/**
@@ -983,6 +1034,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws InterruptedException
 	 */
+	@Test
 	public void testIntermediateOperationSequential() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(10);
@@ -1038,13 +1090,9 @@ public class PushStreamIntermediateOperationTest
 				.reduce(bo);
 		gen.getExecutionThread().join();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION);
 		// no thread overlapping in reduce
-		assertEquals(0, threadCount.get());
+		assertThat(threadCount).hasValue(0);
 	}
 
 	/**
@@ -1062,6 +1110,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferFixedBackPressureDiscardOldestQueue()
 			throws Exception {
 
@@ -1114,15 +1163,13 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 		ExtGeneratorStatus status = gen.status();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.get(InstanceOfAssertFactories.INTEGER)
+				.isLessThan(45);
 		// because we must receive a -1 back pressure value
-		assertTrue(gen.fixedBackPressure());
-		assertEquals(150, status.bp);
-		assertTrue(45 > p.getValue().get());
+		assertThat(gen.fixedBackPressure()).isTrue();
+		assertThat(status.bp).isEqualTo(150L);
 	}
 
 	/**
@@ -1139,6 +1186,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferFixedBackPressureFailQueue()
 			throws Exception {
 
@@ -1191,16 +1239,11 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 		ExtGeneratorStatus status = gen.status();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
-
-		assertTrue(p.isDone());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION).hasFailed();
 		// because we must receive a -1 back pressure value
-		assertFalse(gen.fixedBackPressure());
-		assertEquals(-1, status.bp);
-		assertEquals(150, gen.maxBackPressure());
-		assertTrue(p.getFailure() != null);
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(status.bp).isEqualTo(-1L);
+		assertThat(gen.maxBackPressure()).isEqualTo(150L);
 	}
 
 	/**
@@ -1222,6 +1265,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferFixedBackPressure()
 			throws Exception {
 
@@ -1274,14 +1318,12 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 		ExtGeneratorStatus status = gen.status();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 
-		assertTrue(p.isDone());
-		assertTrue(gen.fixedBackPressure());
-		assertEquals(150, status.bp);
-		assertEquals(45, (int) p.getValue().get());
+		assertThat(gen.fixedBackPressure()).isTrue();
+		assertThat(status.bp).isEqualTo(150L);
 
 	}
 
@@ -1301,6 +1343,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferLinearBackPressure()
 			throws Exception {
 
@@ -1354,15 +1397,12 @@ public class PushStreamIntermediateOperationTest
 		@SuppressWarnings("unused")
 		ExtGeneratorStatus status = gen.status();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 
-		assertTrue(p.isDone());
-		assertFalse(gen.fixedBackPressure());
-		assertEquals(250, gen.maxBackPressure());
-		assertEquals(45, (int) p.getValue().get());
-
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.maxBackPressure()).isEqualTo(250L);
 	}
 
 	/**
@@ -1379,6 +1419,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferOnFullFixedBackPressure()
 			throws Exception {
 
@@ -1428,12 +1469,13 @@ public class PushStreamIntermediateOperationTest
 				.build()
 				.reduce(bo);
 
-		assertEquals(45, (int) p.getValue().get());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 
-		assertTrue(p.isDone());
-		assertFalse(gen.fixedBackPressure());
-		assertEquals(250, gen.maxBackPressure());
-		assertEquals(0, gen.minBackPressure());
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.maxBackPressure()).isEqualTo(250L);
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
 	}
 
 	/**
@@ -1452,6 +1494,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationBufferOnFullExponentialBackPressure()
 			throws Exception {
 
@@ -1506,14 +1549,12 @@ public class PushStreamIntermediateOperationTest
 		@SuppressWarnings("unused")
 		ExtGeneratorStatus status = gen.status();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(45);
 
-		assertTrue(p.isDone());
-		assertFalse(gen.fixedBackPressure());
-		assertEquals(0, gen.minBackPressure());
-		assertEquals(45, (int) p.getValue().get());
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
 	}
 
 	/**
@@ -1531,6 +1572,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationCoalesce()
 			throws InterruptedException, InvocationTargetException {
 
@@ -1540,23 +1582,25 @@ public class PushStreamIntermediateOperationTest
 		AtomicInteger current = new AtomicInteger();
 
 		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
-		Promise<Object[]> pr = ps.<Integer> coalesce((c) -> {
-			current.set(current.get() + c);
-			if (current.get() > 10) {
-				Optional<Integer> opt = Optional.of(current.get());
+		Promise<Integer[]> pr = ps.coalesce((c) -> {
+			int value = current.addAndGet(c);
+			if (value > 10) {
 				current.set(0);
-				return opt;
+				return Optional.of(value);
 			}
 			return Optional.empty();
-		}).toArray();
+		}).toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
 		ExtGeneratorStatus status = gen.status;
 		assertNotNull(status);
 		// [15, 13, 17, 21, 12, 13, 14, 15, 16, 17, 18, 19] expected
-		assertTrue(pr.getValue().length == 12);
-		assertTrue(gen.closeCalled);
+		assertThat(pr).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(15, 13, 17, 21, 12, 13, 14, 15, 16, 17, 18,
+						19);
+		assertThat(gen.closeCalled).isTrue();
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 
@@ -1573,6 +1617,8 @@ public class PushStreamIntermediateOperationTest
 	 * partially filled then the partially filled buffer will be passed to the
 	 * handler function.
 	 */
+	@Test
+	@Disabled("unimplemented")
 	public void testIntermediateOperationCoalesceUsingBuffer() {
 
 	}
@@ -1587,6 +1633,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationWindowNoEvent()
 			throws InterruptedException, InvocationTargetException {
 
@@ -1594,20 +1641,21 @@ public class PushStreamIntermediateOperationTest
 		PushStreamProvider psp = new PushStreamProvider();
 
 		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
-		Promise<Object[]> pr = ps.filter((i) -> {
+		Promise<Integer[]> pr = ps.filter((i) -> {
 			return i > 10;
 		}).window(Duration.ofMillis(1000), (c) -> {
 			return c.size();
-		}).toArray();
+		}).toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
 		ExtGeneratorStatus status = gen.status;
 		assertNotNull(status);
 
-		assertEquals(1l, pr.getValue().length);
-		assertEquals(0, pr.getValue()[0]);
-		assertTrue(gen.closeCalled);
+		assertThat(pr).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.containsExactly(0);
+		assertThat(gen.closeCalled).isTrue();
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 
@@ -1625,6 +1673,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationWindowEvents()
 			throws InterruptedException, InvocationTargetException {
 
@@ -1632,19 +1681,21 @@ public class PushStreamIntermediateOperationTest
 		PushStreamProvider psp = new PushStreamProvider();
 
 		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
-		Promise<Object[]> pr = ps.window(Duration.ofMillis(10), (c) -> {
+		Promise<Integer[]> pr = ps.window(Duration.ofMillis(10), (c) -> {
 			return c.size();
-		}).toArray();
+		}).toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
 		ExtGeneratorStatus status = gen.status;
 		assertNotNull(status);
 
-		assertEquals(0l, gen.maxBackPressure);
-		assertTrue(pr.getValue().length > 0);
+		assertThat(gen.maxBackPressure).isEqualTo(0L);
+		assertThat(pr).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.isNotEmpty();
 		System.out.println(Arrays.toString(pr.getValue()));
-		assertTrue(gen.closeCalled);
+		assertThat(gen.closeCalled).isTrue();
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 
@@ -1663,6 +1714,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationWindowEventsBuffered()
 			throws InterruptedException, InvocationTargetException {
 
@@ -1670,28 +1722,29 @@ public class PushStreamIntermediateOperationTest
 		PushStreamProvider psp = new PushStreamProvider();
 
 		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
-		Promise<Object[]> pr = ps.window(() -> {
+		Promise<Integer[]> pr = ps.window(() -> {
 			return Duration.ofMillis(200);
 		}, () -> {
 			return 5;
 		}, (t, u) -> {
 			return u.size();
-		}).toArray();
+		}).toArray(Integer[]::new);
 
 		gen.getExecutionThread().join();
 
 		ExtGeneratorStatus status = gen.status;
 		assertNotNull(status);
 
-		assertEquals(0l, gen.minBackPressure);
+		assertThat(gen.minBackPressure).isEqualTo(0L);
 		// We should get a max back pressure close to, but no more than 200
-		assertTrue("Max backpressure was " + gen.maxBackPressure,
-				gen.maxBackPressure > 160l && gen.maxBackPressure <= 200);
-		Object[] values = pr.getValue();
+		assertThat(gen.maxBackPressure).isLessThanOrEqualTo(200L)
+				.isGreaterThan(160L);
 		// There must be at least 100 entries as we allow a maximum of 5 per
 		// window
-		assertTrue("Not enough values " + values.length, values.length >= 100);
-		assertTrue(gen.closeCalled);
+		assertThat(pr).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.array(Integer[].class))
+				.hasSizeGreaterThanOrEqualTo(100);
+		assertThat(gen.closeCalled).isTrue();
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 
@@ -1703,6 +1756,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationAdjustBackPressure()
 			throws InterruptedException, InvocationTargetException {
 		ExtGenerator gen = new ExtGenerator(5);
@@ -1711,8 +1765,10 @@ public class PushStreamIntermediateOperationTest
 				.build();
 		Promise<Long> p = ps.adjustBackPressure(l -> 10).count();
 
-		assertEquals(5L, p.getValue().longValue());
-		assertEquals(10, gen.maxBackPressure());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.LONG)
+				.isEqualTo(5L);
+		assertThat(gen.maxBackPressure).isEqualTo(10L);
 	}
 
 	/**
@@ -1723,6 +1779,7 @@ public class PushStreamIntermediateOperationTest
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
+	@Test
 	public void testIntermediateOperationAdjustBackPressure2()
 			throws InterruptedException, InvocationTargetException {
 		ExtGenerator gen = new ExtGenerator(5);
@@ -1731,8 +1788,10 @@ public class PushStreamIntermediateOperationTest
 				.build();
 		Promise<Long> p = ps.adjustBackPressure((d, l) -> 10 + d).count();
 
-		assertEquals(5L, p.getValue().longValue());
-		assertEquals(14, gen.maxBackPressure());
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.LONG)
+				.isEqualTo(5L);
+		assertThat(gen.maxBackPressure).isEqualTo(14L);
 	}
 
 	/**
@@ -1742,6 +1801,7 @@ public class PushStreamIntermediateOperationTest
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testIntermediateOperationAsyncMapping() throws Exception {
 
 		ExtGenerator gen = new ExtGenerator(5);
@@ -1749,17 +1809,19 @@ public class PushStreamIntermediateOperationTest
 				.unbuffered()
 				.build();
 
-		Promise<Object[]> p = ps.asyncMap(2, 110, e -> {
+		Promise<Character[]> p = ps.asyncMap(2, 110, e -> {
 			return Promises.resolved((char) ('a' + e)).delay(e * 100);
-		}).toArray();
+		}).toArray(Character[]::new);
 
-		assertEquals("[a, b, c, d, e]", Arrays.toString(p.getValue()));
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(
+						InstanceOfAssertFactories.array(Character[].class))
+				.containsExactly('a', 'b', 'c', 'd', 'e');
 
 		gen.getExecutionThread().join();
 
-		assertFalse(gen.fixedBackPressure());
-		assertEquals(0, gen.minBackPressure());
-		assertEquals(110, gen.maxBackPressure());
-		assertFalse(gen.fixedBackPressure());
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
+		assertThat(gen.maxBackPressure()).isEqualTo(110L);
 	}
 }

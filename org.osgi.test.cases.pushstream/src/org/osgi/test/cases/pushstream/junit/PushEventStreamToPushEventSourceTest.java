@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.pushstream.junit;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +27,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.jupiter.api.Test;
+import org.osgi.test.cases.pushstream.junit.PushStreamComplianceTest.ExtGenerator;
 import org.osgi.util.pushstream.PushEvent.EventType;
 import org.osgi.util.pushstream.PushEventConsumer;
 import org.osgi.util.pushstream.PushEventSource;
@@ -32,9 +36,9 @@ import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
 import org.osgi.util.pushstream.PushbackPolicyOption;
 
-public class PushEventStreamToPushEventSourceTest
-		extends PushStreamComplianceTest {
+public class PushEventStreamToPushEventSourceTest {
 
+	@Test
 	public void testPushStreamToSource() throws Exception {
 		
 		PushStreamProvider psp = new PushStreamProvider();
@@ -88,6 +92,7 @@ public class PushEventStreamToPushEventSourceTest
 		assertEquals(20, generator.maxBackPressure());
 	}
 
+	@Test
 	public void testPushStreamToSourceDoesNotAutoClose() throws Exception {
 
 		PushStreamProvider psp = new PushStreamProvider();
@@ -146,6 +151,7 @@ public class PushEventStreamToPushEventSourceTest
 		assertNull(failure.get());
 	}
 
+	@Test
 	public void testPushStreamToSourceMultiplexing() throws Exception {
 
 		PushStreamProvider psp = new PushStreamProvider();

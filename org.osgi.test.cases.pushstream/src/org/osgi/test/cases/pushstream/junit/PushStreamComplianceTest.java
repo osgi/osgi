@@ -18,12 +18,11 @@
 package org.osgi.test.cases.pushstream.junit;
 
 import java.io.Closeable;
+import java.time.Duration;
 
 import org.osgi.util.pushstream.PushEvent;
 import org.osgi.util.pushstream.PushEventConsumer;
 import org.osgi.util.pushstream.PushEventSource;
-
-import junit.framework.TestCase;
 
 
 /**
@@ -32,7 +31,13 @@ import junit.framework.TestCase;
 @SuppressWarnings({
 		"rawtypes", "unchecked"
 })
-public abstract class PushStreamComplianceTest extends TestCase {
+public final class PushStreamComplianceTest {
+
+	public static final Duration PROMISE_RESOLVE_DURATION = Duration
+			.ofSeconds(5L);
+
+	private PushStreamComplianceTest() {
+	}
 
 	static class ExtGeneratorStatus {
 		public final long		bp;
