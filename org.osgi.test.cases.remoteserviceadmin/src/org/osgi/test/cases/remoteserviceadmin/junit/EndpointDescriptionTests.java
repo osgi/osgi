@@ -18,11 +18,15 @@
 
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
-import static org.osgi.framework.Constants.*;
+import static org.osgi.framework.Constants.OBJECTCLASS;
 import static org.osgi.framework.Constants.SERVICE_EXPORTED_CONFIGS;
+import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.framework.Constants.SERVICE_IMPORTED_CONFIGS;
 import static org.osgi.framework.Constants.SERVICE_INTENTS;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_PACKAGE_VERSION_;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID;
 
 import java.util.Arrays;
 import java.util.HashMap;

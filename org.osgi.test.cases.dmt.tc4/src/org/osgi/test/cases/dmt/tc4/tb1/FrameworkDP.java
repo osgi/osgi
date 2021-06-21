@@ -17,14 +17,13 @@
  *******************************************************************************/
 package org.osgi.test.cases.dmt.tc4.tb1;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
-
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.Node;
 import org.osgi.test.cases.dmt.tc4.tb1.nodes.Framework;
 

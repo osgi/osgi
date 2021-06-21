@@ -17,7 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.classpath.tb3;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the Reinstall test.

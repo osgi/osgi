@@ -18,7 +18,8 @@
 
 package org.osgi.service.remoteserviceadmin;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
 
 import java.io.IOException;
 import java.io.NotSerializableException;

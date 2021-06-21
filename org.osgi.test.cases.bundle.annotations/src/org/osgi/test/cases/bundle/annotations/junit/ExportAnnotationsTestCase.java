@@ -20,8 +20,11 @@ package org.osgi.test.cases.bundle.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.framework.namespace.AbstractWiringNamespace.CAPABILITY_BUNDLE_VERSION_ATTRIBUTE;
-import static org.osgi.framework.namespace.PackageNamespace.*;
-import static org.osgi.resource.Namespace.*;
+import static org.osgi.framework.namespace.PackageNamespace.CAPABILITY_BUNDLE_SYMBOLICNAME_ATTRIBUTE;
+import static org.osgi.framework.namespace.PackageNamespace.CAPABILITY_VERSION_ATTRIBUTE;
+import static org.osgi.framework.namespace.PackageNamespace.PACKAGE_NAMESPACE;
+import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
+import static org.osgi.resource.Namespace.REQUIREMENT_FILTER_DIRECTIVE;
 
 import java.util.Arrays;
 import java.util.Map;

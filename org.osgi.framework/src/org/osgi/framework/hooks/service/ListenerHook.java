@@ -19,6 +19,7 @@
 package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.BundleContext;

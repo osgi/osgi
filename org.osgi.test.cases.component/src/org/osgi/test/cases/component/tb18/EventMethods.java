@@ -17,7 +17,27 @@
  *******************************************************************************/
 package org.osgi.test.cases.component.tb18;
 
-import static org.osgi.test.cases.component.service.DSTestConstants.*;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_1;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_2;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_3;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_4;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_5;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_6;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_7;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_8;
+import static org.osgi.test.cases.component.service.DSTestConstants.ERROR_1;
+import static org.osgi.test.cases.component.service.DSTestConstants.ERROR_2;
+import static org.osgi.test.cases.component.service.DSTestConstants.ERROR_5;
+import static org.osgi.test.cases.component.service.DSTestConstants.ERROR_7;
+import static org.osgi.test.cases.component.service.DSTestConstants.ERROR_8;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_1;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_2;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_3;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_4;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_5;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_6;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_7;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_8;
 
 import java.util.Dictionary;
 import java.util.Enumeration;

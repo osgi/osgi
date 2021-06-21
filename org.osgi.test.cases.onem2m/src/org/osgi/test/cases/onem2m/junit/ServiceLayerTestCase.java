@@ -17,8 +17,13 @@
  *******************************************************************************/
 package org.osgi.test.cases.onem2m.junit;
 
-import static org.junit.Assert.*;
-import static org.osgi.service.onem2m.dto.Constants.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.osgi.service.onem2m.dto.Constants.RT_AE;
+import static org.osgi.service.onem2m.dto.Constants.RT_CSEBase;
+import static org.osgi.service.onem2m.dto.Constants.RT_container;
+import static org.osgi.service.onem2m.dto.Constants.RT_subscription;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

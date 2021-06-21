@@ -19,6 +19,7 @@
 package org.osgi.service.url;
 
 import java.net.URL;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

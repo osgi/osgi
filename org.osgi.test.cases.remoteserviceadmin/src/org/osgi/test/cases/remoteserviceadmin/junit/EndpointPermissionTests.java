@@ -19,7 +19,9 @@
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
 import static org.osgi.framework.Constants.OBJECTCLASS;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS;
 
 import java.security.Permission;
 import java.security.PermissionCollection;

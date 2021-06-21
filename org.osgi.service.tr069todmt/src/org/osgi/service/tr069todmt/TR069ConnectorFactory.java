@@ -18,7 +18,7 @@
 
 package org.osgi.service.tr069todmt;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtSession;
 
 /**
  * A service that can create TR069 Connector

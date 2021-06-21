@@ -18,7 +18,9 @@
 package org.osgi.test.cases.transaction.control.jdbc;
 
 import static java.util.Collections.singleton;
-import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.*;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.LOCAL_ENLISTMENT_ENABLED;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.OSGI_RECOVERY_IDENTIFIER;
+import static org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory.XA_ENLISTMENT_ENABLED;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -20,6 +20,7 @@ package org.osgi.framework.hooks.weaving;
 
 import java.security.ProtectionDomain;
 import java.util.List;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.wiring.BundleWiring;
 

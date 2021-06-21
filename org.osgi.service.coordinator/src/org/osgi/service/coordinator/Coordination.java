@@ -20,6 +20,7 @@ package org.osgi.service.coordinator;
 
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 

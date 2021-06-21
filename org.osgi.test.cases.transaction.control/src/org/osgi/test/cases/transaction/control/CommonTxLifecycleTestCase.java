@@ -18,7 +18,11 @@
 package org.osgi.test.cases.transaction.control;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.osgi.service.transaction.control.TransactionStatus.*;
+import static org.osgi.service.transaction.control.TransactionStatus.ACTIVE;
+import static org.osgi.service.transaction.control.TransactionStatus.COMMITTED;
+import static org.osgi.service.transaction.control.TransactionStatus.MARKED_ROLLBACK;
+import static org.osgi.service.transaction.control.TransactionStatus.NO_TRANSACTION;
+import static org.osgi.service.transaction.control.TransactionStatus.ROLLED_BACK;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;

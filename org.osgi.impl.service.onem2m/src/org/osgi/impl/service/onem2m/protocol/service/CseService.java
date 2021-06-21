@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.impl.service.onem2m.protocol.service;
 
-import static org.osgi.service.onem2m.dto.Constants.*;
+import static org.osgi.service.onem2m.dto.Constants.RT_AE;
+import static org.osgi.service.onem2m.dto.Constants.RT_CSEBase;
+import static org.osgi.service.onem2m.dto.Constants.RT_subscription;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

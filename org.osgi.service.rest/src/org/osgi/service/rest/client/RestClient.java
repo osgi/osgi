@@ -21,6 +21,7 @@ package org.osgi.service.rest.client;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;

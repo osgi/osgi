@@ -18,7 +18,9 @@
 
 package org.osgi.util.pushstream;
 
-import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.BUILDING;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.STARTED;
 
 import org.osgi.util.promise.PromiseFactory;
 

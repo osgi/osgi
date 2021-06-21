@@ -32,7 +32,10 @@
 package org.osgi.test.cases.cdi.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.osgi.framework.Constants.SERVICE_RANKING;
 
 import java.util.Map;

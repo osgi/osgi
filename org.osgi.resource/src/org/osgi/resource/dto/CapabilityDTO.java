@@ -19,6 +19,7 @@
 package org.osgi.resource.dto;
 
 import java.util.Map;
+
 import org.osgi.dto.DTO;
 import org.osgi.resource.Capability;
 

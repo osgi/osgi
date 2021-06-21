@@ -19,6 +19,7 @@
 package org.osgi.framework.wiring;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;

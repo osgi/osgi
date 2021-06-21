@@ -22,8 +22,8 @@ package org.osgi.test.support.signature;
  * Verify the signatures of all methods in the spec. Check that there no more
  * and less fields, methods, end constructors that are visible.
  */
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;

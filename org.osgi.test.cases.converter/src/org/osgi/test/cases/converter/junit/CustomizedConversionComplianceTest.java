@@ -17,7 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.converter.junit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

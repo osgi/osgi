@@ -19,6 +19,7 @@
 package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

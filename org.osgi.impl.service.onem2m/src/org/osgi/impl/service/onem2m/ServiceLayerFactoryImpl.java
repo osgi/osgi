@@ -20,12 +20,11 @@ package org.osgi.impl.service.onem2m;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.onem2m.protocol.ServiceLayerUtil;
 import org.osgi.impl.service.onem2m.protocol.service.ServiceLayerImplService;
-import org.osgi.framework.BundleContext;
-
 import org.osgi.service.onem2m.ServiceLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -20,9 +20,13 @@ package org.osgi.util.pushstream;
 
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static java.util.stream.Collector.Characteristics.*;
-import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
-import static org.osgi.util.pushstream.PushEventConsumer.*;
+import static java.util.stream.Collector.Characteristics.CONCURRENT;
+import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.BUILDING;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.STARTED;
+import static org.osgi.util.pushstream.PushEventConsumer.ABORT;
+import static org.osgi.util.pushstream.PushEventConsumer.CONTINUE;
 
 import java.time.Duration;
 import java.util.AbstractQueue;

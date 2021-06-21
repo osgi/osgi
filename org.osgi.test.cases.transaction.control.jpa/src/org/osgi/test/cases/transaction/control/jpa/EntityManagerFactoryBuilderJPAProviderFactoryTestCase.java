@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.test.cases.transaction.control.jpa;
 
-import static org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory.*;
+import static org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory.CONNECTION_POOLING_ENABLED;
+import static org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory.MAX_CONNECTIONS;
+import static org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory.MIN_CONNECTIONS;
 
 import java.util.HashMap;
 import java.util.Map;

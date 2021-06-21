@@ -18,7 +18,7 @@
 
 package org.osgi.service.dmt.notification.spi;
 
-import org.osgi.service.dmt.notification.*;
+import org.osgi.service.dmt.notification.AlertItem;
 
 /**
  * The RemoteAlertSender can be used to send notifications to (remote) entities

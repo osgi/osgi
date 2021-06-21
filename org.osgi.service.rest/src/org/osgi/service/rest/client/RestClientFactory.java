@@ -19,6 +19,7 @@
 package org.osgi.service.rest.client;
 
 import java.net.URI;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

@@ -20,6 +20,7 @@ package org.osgi.service.resourcemonitoring.monitor;
 
 import java.net.DatagramSocket;
 import java.net.Socket;
+
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;

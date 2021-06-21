@@ -20,11 +20,23 @@ package org.osgi.test.cases.jaxrs.junit;
 
 import static java.lang.Boolean.TRUE;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static org.osgi.framework.Constants.SERVICE_ID;
-import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.*;
-import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.*;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_DUPLICATE_NAME;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_NOT_AN_EXTENSION_TYPE;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_SERVICE_NOT_GETTABLE;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE;
+import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_VALIDATION_FAILED;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_NAME;
+import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_RESOURCE;
 
 import java.io.IOException;
 import java.util.Dictionary;

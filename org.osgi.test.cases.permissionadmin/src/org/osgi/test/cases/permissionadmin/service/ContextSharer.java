@@ -19,7 +19,7 @@ package org.osgi.test.cases.permissionadmin.service;
 
 import java.lang.reflect.Method;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
 
 public interface ContextSharer  {
 

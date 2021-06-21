@@ -19,6 +19,7 @@
 package org.osgi.service.repository;
 
 import java.io.InputStream;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Resource;
 

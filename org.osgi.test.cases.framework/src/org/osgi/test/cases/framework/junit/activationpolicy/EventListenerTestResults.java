@@ -17,7 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.junit.activationpolicy;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 
 public class EventListenerTestResults extends TestResults implements BundleListener, FrameworkListener {
 	private int	mask;

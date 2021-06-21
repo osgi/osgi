@@ -21,12 +21,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.cases.serviceloader.spi.ColorProvider;
+
+import junit.framework.TestCase;
 
 /**
  * A client using the {@link ServiceLoader} API directly to gain access to multiple service provider types.

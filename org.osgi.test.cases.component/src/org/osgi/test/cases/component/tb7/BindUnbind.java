@@ -17,7 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.component.tb7;
 
-import static org.osgi.test.cases.component.service.DSTestConstants.*;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_1;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_2;
+import static org.osgi.test.cases.component.service.DSTestConstants.BIND_3;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_1;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_2;
+import static org.osgi.test.cases.component.service.DSTestConstants.UNBIND_3;
 
 import java.util.Dictionary;
 import java.util.Enumeration;

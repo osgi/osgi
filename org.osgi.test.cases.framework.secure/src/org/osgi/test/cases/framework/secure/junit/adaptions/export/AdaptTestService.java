@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.secure.junit.adaptions.export;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import org.osgi.framework.Bundle;
 

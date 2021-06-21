@@ -19,9 +19,11 @@
 
 package org.osgi.test.support.wiring;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.fail;
 import static org.osgi.test.support.OSGiTestCase.fail;
-import static org.osgi.test.support.OSGiTestCaseProperties.*;
+import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
+import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
 
 import java.util.ArrayList;
 import java.util.Arrays;

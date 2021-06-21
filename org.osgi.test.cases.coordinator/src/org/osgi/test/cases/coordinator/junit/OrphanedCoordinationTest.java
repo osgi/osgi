@@ -20,6 +20,7 @@ package org.osgi.test.cases.coordinator.junit;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -27,7 +28,6 @@ import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
-import java.util.concurrent.atomic.AtomicReference;
 import org.osgi.test.support.sleep.Sleep;
 
 /**

@@ -21,6 +21,7 @@ package org.osgi.service.url;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

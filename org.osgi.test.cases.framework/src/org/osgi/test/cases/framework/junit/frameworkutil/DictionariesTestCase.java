@@ -17,7 +17,11 @@
  *******************************************************************************/
 package org.osgi.test.cases.framework.junit.frameworkutil;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;

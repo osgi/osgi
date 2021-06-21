@@ -22,6 +22,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 

@@ -19,6 +19,7 @@
 package org.osgi.service.remoteserviceadmin;
 
 import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 

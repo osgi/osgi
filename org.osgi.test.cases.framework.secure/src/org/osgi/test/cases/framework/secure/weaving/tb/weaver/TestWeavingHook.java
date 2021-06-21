@@ -23,13 +23,13 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClass;
 import org.osgi.test.cases.framework.secure.junit.hooks.weaving.export.TestConstants;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
 public class TestWeavingHook implements WeavingHook {
 	private volatile boolean called;

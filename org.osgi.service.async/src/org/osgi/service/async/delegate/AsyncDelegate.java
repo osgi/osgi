@@ -19,6 +19,7 @@
 package org.osgi.service.async.delegate;
 
 import java.lang.reflect.Method;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.util.promise.Promise;
 

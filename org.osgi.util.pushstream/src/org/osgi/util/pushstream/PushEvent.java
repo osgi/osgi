@@ -18,7 +18,9 @@
 
 package org.osgi.util.pushstream;
 
-import static org.osgi.util.pushstream.PushEvent.EventType.*;
+import static org.osgi.util.pushstream.PushEvent.EventType.CLOSE;
+import static org.osgi.util.pushstream.PushEvent.EventType.DATA;
+import static org.osgi.util.pushstream.PushEvent.EventType.ERROR;
 
 import org.osgi.annotation.versioning.ProviderType;
 

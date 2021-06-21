@@ -19,7 +19,8 @@
 
 package org.osgi.test.cases.framework.junit.frameworkutil;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;

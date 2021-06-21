@@ -18,7 +18,8 @@
 package org.osgi.test.cases.pushstream.junit;
 
 import static java.time.Duration.ofSeconds;
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.osgi.test.assertj.promise.PromiseAssert.assertThat;

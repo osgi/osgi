@@ -18,7 +18,9 @@
 package org.osgi.test.cases.component.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.osgi.test.cases.component.junit.DTOUtil.*;
+import static org.osgi.test.cases.component.junit.DTOUtil.newBundleDTO;
+import static org.osgi.test.cases.component.junit.DTOUtil.newComponentDescriptionDTO;
+import static org.osgi.test.cases.component.junit.DTOUtil.newReferenceDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;

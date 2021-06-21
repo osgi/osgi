@@ -17,7 +17,9 @@
  *******************************************************************************/
 package org.osgi.test.cases.webcontainer.util.validate;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.net.URL;
 import java.util.ArrayList;

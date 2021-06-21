@@ -19,6 +19,7 @@
 package org.osgi.service.coordinator;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

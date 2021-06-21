@@ -20,13 +20,13 @@ package org.osgi.test.cases.serviceloader.secure.client;
 
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.serviceloader.secure.export.TestBridge;
 import org.osgi.test.cases.serviceloader.secure.spi.ColorProvider;
+
+import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>

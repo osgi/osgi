@@ -20,7 +20,12 @@ package org.osgi.test.cases.bundle.annotations.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.framework.namespace.PackageNamespace.CAPABILITY_VERSION_ATTRIBUTE;
-import static org.osgi.resource.Namespace.*;
+import static org.osgi.resource.Namespace.CARDINALITY_MULTIPLE;
+import static org.osgi.resource.Namespace.REQUIREMENT_CARDINALITY_DIRECTIVE;
+import static org.osgi.resource.Namespace.REQUIREMENT_EFFECTIVE_DIRECTIVE;
+import static org.osgi.resource.Namespace.REQUIREMENT_FILTER_DIRECTIVE;
+import static org.osgi.resource.Namespace.REQUIREMENT_RESOLUTION_DIRECTIVE;
+import static org.osgi.resource.Namespace.RESOLUTION_OPTIONAL;
 
 import java.util.Arrays;
 import java.util.Map;

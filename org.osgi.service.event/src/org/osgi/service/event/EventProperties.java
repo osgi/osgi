@@ -19,6 +19,7 @@
 package org.osgi.service.event;
 
 import static org.osgi.service.event.EventConstants.EVENT_TOPIC;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;

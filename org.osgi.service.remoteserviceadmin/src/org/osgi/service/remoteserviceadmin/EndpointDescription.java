@@ -18,7 +18,13 @@
 
 package org.osgi.service.remoteserviceadmin;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_PACKAGE_VERSION_;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
