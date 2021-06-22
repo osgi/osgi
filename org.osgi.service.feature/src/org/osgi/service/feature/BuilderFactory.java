@@ -18,9 +18,14 @@
 package org.osgi.service.feature;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
 
 /**
  * The Builder Factory can be used to obtain builders for the various entities.
+ * An instance can be obtained from the {@link FeatureService}.
+ * 
+ * @ThreadSafe
  */
 @ProviderType
 public interface BuilderFactory {
@@ -30,6 +35,24 @@ public interface BuilderFactory {
      * @return The builder.
      */
     FeatureBundleBuilder newBundleBuilder(ID id);
+
+	/**
+	 * Obtain a new builder for a Feature Capability.
+	 * 
+	 * @param ns The namespace for the capability;
+	 * @return The builder.
+	 */
+	FeatureCapabilityBuilder newCapabilityBuilder(String ns);
+
+	/**
+	 * Obtain a new builder for a Feature Capability based on an existing
+	 * capability.
+	 * 
+	 * @param cap The existing capability to use as a starting point for the new
+	 *            capability.
+	 * @return The builder.
+	 */
+	FeatureCapabilityBuilder newCapabilityBuilder(Capability cap);
 
     /**
      * Obtain a new builder for Configuration objects.
@@ -55,11 +78,30 @@ public interface BuilderFactory {
     FeatureBuilder newFeatureBuilder(ID id);
 
     /**
-     * Obtain a new builder for Feature objects.
-     * @param name The extension name.
-     * @param type The type of extension: JSON, Text or Artifacts.
-     * @param kind The kind of extension: Mandatory, Optional or Transient.
-     * @return The builder.
-     */
+	 * Obtain a new builder for Feature Extension objects.
+	 * 
+	 * @param name The extension name.
+	 * @param type The type of extension: JSON, Text or Artifacts.
+	 * @param kind The kind of extension: Mandatory, Optional or Transient.
+	 * @return The builder.
+	 */
     FeatureExtensionBuilder newExtensionBuilder(String name, FeatureExtension.Type type, FeatureExtension.Kind kind);
+
+	/**
+	 * Obtain a new builder for a Feature Requirement.
+	 * 
+	 * @param ns The namespace for the requirement.
+	 * @return The builder.
+	 */
+	FeatureRequirementBuilder newRequirementBuilder(String ns);
+
+	/**
+	 * Obtain a new builder for a Feature Requirement based on an existing
+	 * requirement.
+	 * 
+	 * @param req The existing requirement to use as a starting point for the
+	 *            new requirement.
+	 * @return The builder.
+	 */
+	FeatureRequirementBuilder newRequirementBuilder(Requirement req);
 }

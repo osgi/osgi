@@ -20,8 +20,6 @@ package org.osgi.service.feature;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.resource.Capability;
-import org.osgi.resource.Requirement;
 
 /**
  * A builder for {@link Feature} Models.
@@ -112,7 +110,7 @@ public interface FeatureBuilder {
 	 * @param capabilities The Capabilities to add.
 	 * @return This builder.
 	 */
-	FeatureBuilder addCapabilities(Capability... capabilities);
+	FeatureBuilder addCapabilities(FeatureCapability... capabilities);
 
 	/**
 	 * Add Configurations to the Feature.
@@ -135,7 +133,7 @@ public interface FeatureBuilder {
 	 * @param requirements The Requirements to add.
 	 * @return This builder.
 	 */
-	FeatureBuilder addRequirements(Requirement... requirements);
+	FeatureBuilder addRequirements(FeatureRequirement... requirements);
 
     /**
      * Add a variable to the Feature. If a variable with the specified key
