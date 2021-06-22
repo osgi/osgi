@@ -24,16 +24,17 @@ import java.util.EventObject;
 /**
  * An event from the Framework describing a service lifecycle change.
  * <p>
- * {@code ServiceEvent} objects are delivered to {@code ServiceListener}s and
- * {@code AllServiceListener}s when a change occurs in this service's lifecycle.
- * A type code is used to identify the event type for future extendability.
- * 
+ * {@code ServiceEvent} objects are delivered to {@code ServiceListener}s,
+ * {@code AllServiceListener}s and {@code UnfilteredServiceListener}s when a
+ * change occurs in this service's lifecycle. A type code is used to identify
+ * the event type for future extendability.
  * <p>
  * OSGi Working Group reserves the right to extend the set of types.
  * 
  * @Immutable
  * @see ServiceListener
  * @see AllServiceListener
+ * @see UnfilteredServiceListener
  * @author $Id$
  */
 
