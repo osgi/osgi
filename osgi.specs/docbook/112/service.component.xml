@@ -1927,6 +1927,9 @@ public class MyComponent {
       configuration. See <emphasis>Condition Service Specification</emphasis>
       of <xref linkend="intro.core.release" xrefstyle="template:%t"/> for
       additional information on Conditions.</para>
+
+      <para>SCR must support the satisfying condition for all components even
+      those with component descriptions in older namespaces.</para>
     </section>
   </section>
 
@@ -4379,27 +4382,19 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para>Properties specified in the component description. Properties
+        <para>Properties specified in the component description via
+        <code>property</code> and <code>properties</code> elements. Properties
         specified later in the component description override properties that
-        have the same name specified earlier. Properties can be specified in
-        the component description in the following ways (in order of
-        precedence):</para>
+        have the same name specified earlier. See <xref
+        linkend="service.component-property.properties.elements"/>.</para>
+      </listitem>
 
-        <orderedlist>
-          <listitem>
-            <para><code>property</code> and <code>properties</code> elements -
-            See <xref
-            linkend="service.component-property.properties.elements"/>.</para>
-          </listitem>
-
-          <listitem>
-            <para><code>target</code> attribute of <code>reference</code>
-            elements - Sets the target property of the reference. See <xref
-            linkend="service.component-target.property"/>. The value of the
-            <code>target</code> attribute is used for the value of a target
-            property.</para>
-          </listitem>
-        </orderedlist>
+      <listitem>
+        <para>Target properties specified in the component description via the
+        <code>target</code> attribute of <code>reference</code> elements. See
+        <xref linkend="service.component-target.property"/>. The value of the
+        <code>target</code> attribute is used for the value of a target
+        property.</para>
       </listitem>
     </orderedlist>
 
