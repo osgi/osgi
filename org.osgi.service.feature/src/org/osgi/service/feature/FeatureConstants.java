@@ -16,23 +16,26 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-/**
- * Converter Package Version 1.0.
- * <p>
- * Bundles wishing to use this package must list the package in the
- * Import-Package header of the bundle's manifest. This package has two types of
- * users: the consumers that use the API in this package and the providers that
- * implement the API in this package.
- * <p>
- * Example import for consumers using the API in this package:
- * <p>
- * {@code  Import-Package: org.osgi.service.feature; version="[1.0,2.0)"}
- * <p>
- * Example import for providers implementing the API in this package:
- * <p>
- * {@code  Import-Package: org.osgi.serivice.feature; version="[1.0,1.1)"}
- */
-@Version(FeatureConstants.FEATURE_SPECIFICATION_VERSION)
 package org.osgi.service.feature;
 
-import org.osgi.annotation.versioning.Version;
+/**
+ * Defines standard constants for the Feature services.
+ * 
+ * @author $Id$
+ */
+public final class FeatureConstants {
+	private FeatureConstants() {
+		// non-instantiable
+	}
+
+	/**
+	 * The name of the implementation capability for the Feature specification
+	 */
+	public static final String	FEATURE_IMPLEMENTATION			= "osgi.feature";
+
+	/**
+	 * The version of the implementation capability for the Feature
+	 * specification
+	 */
+	public static final String FEATURE_SPECIFICATION_VERSION = "1.0.0";
+}

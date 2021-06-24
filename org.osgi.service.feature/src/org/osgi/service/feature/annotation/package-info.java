@@ -17,22 +17,21 @@
  *******************************************************************************/
 
 /**
- * Converter Package Version 1.0.
+ * Feature Annotations Package Version 1.0.
  * <p>
- * Bundles wishing to use this package must list the package in the
- * Import-Package header of the bundle's manifest. This package has two types of
- * users: the consumers that use the API in this package and the providers that
- * implement the API in this package.
+ * This package contains annotations that can be used to require the
+ * Feature-Service implementation.
  * <p>
- * Example import for consumers using the API in this package:
+ * Bundles should not normally need to import this package as the annotations
+ * are only used at build-time.
  * <p>
- * {@code  Import-Package: org.osgi.service.feature; version="[1.0,2.0)"}
- * <p>
- * Example import for providers implementing the API in this package:
- * <p>
- * {@code  Import-Package: org.osgi.serivice.feature; version="[1.0,1.1)"}
+ * 
+ * @author $Id$
  */
+
 @Version(FeatureConstants.FEATURE_SPECIFICATION_VERSION)
-package org.osgi.service.feature;
+package org.osgi.service.feature.annotation;
 
 import org.osgi.annotation.versioning.Version;
+import org.osgi.service.feature.FeatureConstants;
+

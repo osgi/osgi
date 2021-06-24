@@ -663,14 +663,14 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.features"
+              <entry><xref linkend="service.feature"
               xrefstyle="template:%n %t"/></entry>
 
               <entry><code><xref
               linkend="org.osgi.service.feature"/></code></entry>
 
               <entry><code><xref endterm="org.osgi.service.feature-version"
-              linkend="service.features"/></code></entry>
+              linkend="service.feature"/></code></entry>
             </row>
 
             <row>
@@ -828,7 +828,7 @@
       </listitem>
 
       <listitem>
-        <para>Added <xref linkend="service.features"
+        <para>Added <xref linkend="service.feature"
         xrefstyle="template:%t"/> as Chapter 159.</para>
       </listitem>
     </itemizedlist>
