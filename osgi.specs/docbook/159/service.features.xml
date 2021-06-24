@@ -125,10 +125,6 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Capabilities</emphasis> and <emphasis>Requirements</emphasis> - A Feature can declare additional capabilities and requirements.</para>
-        </listitem>
-
-        <listitem>
           <para><emphasis>Configuration</emphasis> - A Feature can contain configurations for the Configuration Admin service.</para>
         </listitem>
 
@@ -170,11 +166,11 @@
     <para>
       Features are defined by declaring JSON documents or by using the
       <link linkend="org.osgi.service.feature" xrefstyle="hyperlink">Feature API</link>.
-      Each Feature has a unique ID which includes a version. It can hold a number of entities, including a list of bundles, configurations, capabilities, requirements and others. Features are extensible, that is a Feature can also hold any number of custom entities which are related to the Feature.
+      Each Feature has a unique ID which includes a version. It can hold a number of entities, including a list of bundles, configurations and others. Features are extensible, that is a Feature can also hold any number of custom entities which are related to the Feature.
     </para>
 
     <para>
-Features may have dependencies on other Features. Features inherit the capabilities and requirements from all bundles listed in the Feature, and can also have additional capabilities and requirements declared on the Feature level. 
+Features may have dependencies on other Features. Features inherit the capabilities and requirements from all bundles listed in the Feature. 
     </para>
 
     <para>
@@ -544,124 +540,7 @@ Feature f = builder.build();</programlisting>
       If no variable exist with the given name, then the <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
       must be retained in the value.
     </para>
-  </section>
- 
-  <section>
-    <title>Capabilities &amp; Requirements</title>
-    <para>
-      Features inherit all capabilities and requirements from their bundles. Additional capabilities and requirements can be added 
-      to the Feature directly.
-    </para>
-    
-    <para>
-      For example, a Feature can declare a set of bundles and configurations which together
-      may provide an <code>osgi.implementation</code> capability, meaning that sum of these provide the implementation of a specification.
-      Any kind of capability can be declared to be provided by the Feature. These capabilities can be used as part of the resolution 
-      process when a number of Features are resolved together.
-    </para>
-    
-    <para>
-      Additional requirements can mean that a Feature is only complete, when these requirements are also satisfied, in addition 
-      to the requirements provided in the bundles that are part of the Feature.
-    </para>
-    
-    <para>
-      Example:
-      <programlisting>{
-  "id": "org.acme:acmeapp:osgifeature:capreq:1.0.0",
-  
-  // Requirements over and above the requirements in the bundles 
-  // referenced by the Feature.
-  "requirements": [
-    {
-      "namespace": "osgi.contract",
-      "directives": {
-        "filter": "(&amp;(osgi.contract=JavaServlet)(version=3.1))"
-      }
-    }
-  ],
-
-  // Capabilities over and above the capabilities provided by the 
-  // bundles referenced by the Feature.
-  "capabilities": [
-    {
-      "namespace": "osgi.service",
-      "attributes": {
-        "objectClass:List&lt;String&gt;": 
-          "org.osgi.service.http.runtime.HttpServiceRuntime"
-      }
-    }
-  ]
-}</programlisting>      
-    </para>
-  </section>
-
-  <!--
-  <section>
-    <title>Prototype</title>
-    <para>
-      If a Feature is similar to another Feature but not exactly the same, it can use the other Feature as its prototype. Entities can be 
-      removed from the prototype and additional entities can be added in the resulting Feature. Prototypes can be used to create variants 
-      of existing Features. The newly created Features must have a different ID than the prototype they’re based on. 
-    </para>
-    
-    <para>
-      If a Feature has a prototype, the prototype Feature is declared by ID in the <code>prototype</code> section along with any 
-      potential removals. This means that the listed entities will not be in the new Feature that uses the prototype as its base. 
-      Listed removals have no effect on the Feature that serves as the prototype itself.
-    </para>
-    
-    <para>
-      The following entities can be declared in the <code>removals</code> section:
-      
-      <itemizedlist>
-        <listitem>
-          <para>
-            <code>bundles</code> - an array of bundle IDs that will not be included from the prototype Feature. 
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <code>configurations</code> - an array of configuration PIDs that will not be included from the prototype.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <code>framework-properties</code> - an arrays of Framework Property names that will not be included from the prototype. 
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-    
-    
-    <remark>TODO we need to capture more detail on the behaviour here.</remark>
-    
-    <para>
-      Example:
-      <programlisting>{
-  "id": "org.acme:acmeapptwo:1.0.0",
-  "prototype": {
-    "id": "org.acme:acmeapp:1.1.0",
-    "removals": {
-      "bundles": [
-        // We don't need the email bundle
-        "org.apache.commons:commons-email"        
-      ],
-      "configurations": [
-        // Don't set this configuration PID
-        "org.acme.EmailConfig"
-      ]
-    }
-  },
-  "bundles": [
-    "org.acme:apptwobundle:1.0.0"
-  ]
-}</programlisting>
-    </para>
-  </section>
-  -->
+  </section> 
     
   <section>
     <title>Extensions</title>
