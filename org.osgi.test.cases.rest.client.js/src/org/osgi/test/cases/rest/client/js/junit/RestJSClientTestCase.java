@@ -413,6 +413,11 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  success : function(res) {");
 
 		for (String key : Collections.list(headers.keys())) {
+			if ("Bundle-Developers".equals(key))
+				// The Bundle-Developers key can cause issues with this test due
+				// to potential unicode characters
+				continue;
+
 			sb.append("assert('header " + key + "', '" + headers.get(key) + "', res['" + key + "']);");
 		}
 				
