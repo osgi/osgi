@@ -22,22 +22,36 @@ import java.util.Map;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * A Bundle which is part of a feature.
- * @ThreadSafe
+ * A builder for {@link FeatureArtifact} objects.
+ * 
+ * @NotThreadSafe
  */
 @ProviderType
-public interface FeatureBundle {
+public interface FeatureArtifactBuilder {
 	/**
-	 * Get the bundle's ID.
+	 * Add metadata for this Artifact.
 	 * 
-	 * @return The ID of this bundle.
+	 * @param key Metadata key.
+	 * @param value Metadata value.
+	 * @return This builder.
 	 */
-	ID getID();
+	FeatureArtifactBuilder addMetadata(String key, Object value);
 
 	/**
-	 * Get the metadata for this bundle.
+	 * Add metadata for this Artifact by providing a map. All metadata in the
+	 * map is added to any previously provided metadata.
 	 * 
-	 * @return The metadata.
+	 * @param md The map with metadata.
+	 * @return This builder.
 	 */
-	Map<String,Object> getMetadata();
+	FeatureArtifactBuilder addMetadata(Map<String,Object> md);
+
+	/**
+	 * Build the Artifact object. Can only be called once on a builder. After
+	 * calling this method the current builder instance cannot be used any more.
+	 * 
+	 * @return The Feature Artifact.
+	 */
+	FeatureArtifact build();
+
 }

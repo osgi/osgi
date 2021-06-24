@@ -17,10 +17,14 @@
  *******************************************************************************/
 package org.osgi.service.feature;
 
+import java.util.Map;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * An Artifact is an entity with an ID.
+ * An Artifact is an entity with an ID, for use in extensions.
+ * 
+ * @ThreadSafe
  */
 @ProviderType
 public interface FeatureArtifact {
@@ -29,4 +33,11 @@ public interface FeatureArtifact {
      * @return The ID of this artifact.
      */
     ID getID();
+
+	/**
+	 * Get the metadata for this artifact.
+	 * 
+	 * @return The metadata.
+	 */
+	Map<String,Object> getMetadata();
 }

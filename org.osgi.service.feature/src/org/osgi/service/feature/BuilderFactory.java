@@ -24,6 +24,14 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface BuilderFactory {
+	/**
+	 * Obtain a new builder for Artifact objects.
+	 * 
+	 * @param id The artifact ID for the artifact object being built.
+	 * @return The builder.
+	 */
+	FeatureArtifactBuilder newArtifactBuilder(ID id);
+
     /**
      * Obtain a new builder for Bundle objects.
      * @param id The artifact ID for the bundle object being built.
