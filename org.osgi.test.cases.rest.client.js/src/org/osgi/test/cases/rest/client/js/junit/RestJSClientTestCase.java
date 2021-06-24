@@ -20,11 +20,14 @@ package org.osgi.test.cases.rest.client.js.junit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Writer;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Constants;
@@ -34,6 +37,7 @@ import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.resource.Capability;
 import org.osgi.util.tracker.BundleTracker;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -607,6 +611,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 	private void jsTest(String script) throws Exception {
         StringBuilder html = new StringBuilder();
         html.append("<!DOCTYPE html><html>"
+				+ "<head><meta charset=\"UTF-8\"/></head>"
 				+ "<body onload='executeTest()'>"
 				+ "<script src=\"" + jsclient + "\"></script>"
                 + "<script>"
@@ -654,11 +659,9 @@ public class RestJSClientTestCase extends RestTestUtils {
 
 		File f = File.createTempFile(getName(), ".html", dataArea);
 
-		OutputStream fos = new FileOutputStream(f);
-		try {
-			fos.write(html.toString().getBytes());
-		} finally {
-			fos.close();
+		try (Writer writer = Files.newBufferedWriter(f.toPath(),
+				StandardCharsets.UTF_8)) {
+			writer.append(html);
 		}
 
 		WebClient wc = new WebClient();
