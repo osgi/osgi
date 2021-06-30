@@ -28,11 +28,19 @@ import org.osgi.annotation.versioning.ProviderType;
  * @ThreadSafe
  */
 @ProviderType
-public interface Feature extends FeatureArtifact {
+public interface Feature {
     /**
-     * Get the name.
-     * @return The name.
-     */
+	 * Get the Feature's ID.
+	 * 
+	 * @return The ID of this Feature.
+	 */
+	ID getID();
+
+	/**
+	 * Get the name.
+	 * 
+	 * @return The name.
+	 */
     Optional<String> getName();
 
     /**
