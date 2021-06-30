@@ -33,10 +33,13 @@ public interface BuilderFactory {
 	FeatureArtifactBuilder newArtifactBuilder(ID id);
 
     /**
-     * Obtain a new builder for Bundle objects.
-     * @param id The artifact ID for the bundle object being built.
-     * @return The builder.
-     */
+	 * Obtain a new builder for Bundle objects.
+	 * 
+	 * @param id The ID for the bundle object being built. If the ID has no
+	 *            {@code type} specified, a default type of @{code jar} is
+	 *            assumed.
+	 * @return The builder.
+	 */
     FeatureBundleBuilder newBundleBuilder(ID id);
 
     /**
@@ -56,10 +59,13 @@ public interface BuilderFactory {
     FeatureConfigurationBuilder newConfigurationBuilder(String factoryPid, String name);
 
     /**
-     * Obtain a new builder for Feature objects.
-     * @param id The artifact ID for the feature object being built.
-     * @return The builder.
-     */
+	 * Obtain a new builder for Feature objects.
+	 * 
+	 * @param id The ID for the feature object being built. If the ID has no
+	 *            {@code type} specified, a default type of {@code osgifeature}
+	 *            is assumed.
+	 * @return The builder.
+	 */
     FeatureBuilder newFeatureBuilder(ID id);
 
     /**

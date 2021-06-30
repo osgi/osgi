@@ -33,7 +33,53 @@ public interface FeatureService {
      * Get a factory which can be used to build feature model entities.
      * @return A builder factory.
      */
-    public BuilderFactory getBuilderFactory();
+	BuilderFactory getBuilderFactory();
+
+	/**
+	 * Obtain an ID from a Maven Coordinates formatted string. The supported
+	 * syntax is as follows:
+	 * <p>
+	 * {@code groupId ':' artifactId ( ':' type ( ':' classifier )? )? ':' version }
+	 * 
+	 * @param coordinates The Maven Coordinates.
+	 * @return the ID.
+	 */
+	ID getIDfromMavenCoordinates(String coordinates);
+
+	/**
+	 * Obtain an ID.
+	 * 
+	 * @param groupId The group ID (not {@code null}, not empty).
+	 * @param artifactId The artifact ID (not {@code null}, not empty).
+	 * @param version The version (not {@code null}, not empty).
+	 * @return The ID.
+	 */
+	ID getID(String groupId, String artifactId, String version);
+
+	/**
+	 * Obtain an ID.
+	 * 
+	 * @param groupId The group ID (not {@code null}, not empty).
+	 * @param artifactId The artifact ID (not {@code null}, not empty).
+	 * @param version The version (not {@code null}, not empty).
+	 * @param type The type (not {@code null}, not empty).
+	 * @return The ID.
+	 */
+	ID getID(String groupId, String artifactId, String version,
+			String type);
+
+	/**
+	 * Obtain an ID.
+	 * 
+	 * @param groupId The group ID (not {@code null}, not empty).
+	 * @param artifactId The artifact ID (not {@code null}, not empty).
+	 * @param version The version (not {@code null}, not empty).
+	 * @param type The type (not {@code null}, not empty).
+	 * @param classifier The classifier (not {@code null}, not empty).
+	 * @return The ID.
+	 */
+	ID getID(String groupId, String artifactId, String version,
+			String type, String classifier);
 
     /**
      * Read a Feature from JSON
@@ -41,7 +87,7 @@ public interface FeatureService {
      * @return The Feature represented by the JSON
      * @throws IOException When reading fails
      */
-    public Feature readFeature(Reader jsonReader) throws IOException;
+	Feature readFeature(Reader jsonReader) throws IOException;
 
     /**
      * Write a Feature Model to JSON
@@ -49,5 +95,5 @@ public interface FeatureService {
      * @param jsonWriter A Writer to which the Feature should be written.
      * @throws IOException When writing fails.
      */
-    public void writeFeature(Feature feature, Writer jsonWriter) throws IOException;
+	void writeFeature(Feature feature, Writer jsonWriter) throws IOException;
 }
