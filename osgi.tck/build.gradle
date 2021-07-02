@@ -72,7 +72,7 @@ tasks.addRule('Pattern: tck.<name>: Run the TCKs for <name>.') { taskName ->
 		def book = taskName - 'tck.'
 		def destinationDirectory = objects.directoryProperty().value(layout.buildDirectory.dir("osgi.tck.${book}"))
 		def bndjar = destinationDirectory.file('jar/bnd.jar')
-		def tcks = bnd("build.${book}.tests").tokenize(',')
+		def tcks = bnd.get("build.${book}.tests").tokenize(',')
 		def booktask = tasks.create(taskName) {
 			description = "Run the TCKs for ${book}."
 			group = 'verification'
@@ -108,7 +108,7 @@ def matrix = tasks.register('matrix') {
 	group = 'build'
 	dependsOn 'preptck.core', 'preptck.cmpn'
 	doLast {
-		println "::set-output name=tck-matrix::${bnd('tck-matrix')}"
+		println "::set-output name=tck-matrix::${bnd.get('tck-matrix')}"
 	}
 }
 

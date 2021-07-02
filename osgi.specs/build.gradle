@@ -26,7 +26,7 @@ interface Injected {
 	@Inject FileSystemOperations getFs()
 }
 
-version bnd('osgi.version')
+version bnd.get('osgi.version')
 
 ext.fop_home = file("${bnd.licensed}/fop")
 ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
@@ -45,7 +45,7 @@ def javadoc = tasks.named('javadoc') {
 	def stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
 	classpath = sourceSets.main.compileClasspath
 	source = bnd.allSrcDirs
-	bnd.javadoc_specs.split(/\s*,\s*/).each {
+	bnd.get('javadoc.specs').split(/\s*,\s*/).each {
 		include it.replace('.','/')+'/**/*.java'
 	}
 	title = ''
@@ -139,11 +139,11 @@ books.forEach { book ->
 		group = 'documentation'
 
 		ext.bookxml = layout.buildDirectory.file("book/${name}")
-		def watermark = bnd("${book}.draft", 'no')
+		def watermark = bnd.get("${book}.draft", 'no')
 		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
 		def stylesheet = file('docbook/xsl/custom-profile.xsl')
 		def xmlFiles = objects.fileTree().from('docbook').include('**/*.xml')
-		def copyrightyear = "2000, ${bnd('copyright.year')}"
+		def copyrightyear = "2000, ${bnd.get('copyright.year')}"
 		def runtimeClasspath = sourceSets.main.runtimeClasspath
 		def docbookxsd = file("${bnd.licensed}/docbook-xsd/docbook.xsd")
 
@@ -194,7 +194,7 @@ books.forEach { book ->
 		group = 'documentation'
 
 		ext.bookxml = layout.buildDirectory.file("book/${name}")
-		def watermark = bnd("${book}.draft", 'no')
+		def watermark = bnd.get("${book}.draft", 'no')
 		ext.draftmode = objects.property(String.class).convention((watermark != 'no') ? 'yes' : 'no')
 		def stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
 		def baselinexml = file("baseline/${book}.xml")
@@ -242,7 +242,7 @@ books.forEach { book ->
 
 		def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
 		ext.imagesFile = layout.buildDirectory.file("images/${book}.txt")
-		def watermark = bnd("${book}.draft", 'no')
+		def watermark = bnd.get("${book}.draft", 'no')
 		def booktaskXml = booktask.flatMap({it.bookxml})
 		def booktaskDraftmode = booktask.flatMap({it.draftmode})
 
@@ -312,8 +312,8 @@ books.forEach { book ->
 		def commonXSL = file('docbook/xsl/custom-html-common.xsl')
 		def htmlResources = file('docbook/xsl/html-resources')
 		def licensedResources = file("${bnd.licensed}/webresources")
-		def watermark = bnd("${book}.draft", 'no')
-		def release_version = bnd('osgi.release')
+		def watermark = bnd.get("${book}.draft", 'no')
+		def release_version = bnd.get('osgi.release')
 		def destinationDirectory = layout.buildDirectory.dir("html/${book}")
 		def booktaskXml = booktask.flatMap({it.bookxml})
 		def booktaskDraftmode = booktask.flatMap({it.draftmode})
@@ -398,7 +398,7 @@ private Closure fotaskConfiguration(bookName, xmltask) {
 
 		ext.bookfo = layout.buildDirectory.file("fo/${name}")
 		def stylesheet = file('docbook/xsl/custom-fo.xsl')
-		def watermark = bnd("${bookName}.draft", 'no')
+		def watermark = bnd.get("${bookName}.draft", 'no')
 		def booktaskXml = xmltask.flatMap({it.bookxml})
 		def booktaskDraftmode = xmltask.flatMap({it.draftmode})
 

@@ -44,7 +44,7 @@ def jar = tasks.named('jar') {
 def javadoc = tasks.named('javadoc') {
 	inputs.files(jar).withPropertyName('jar')
 	source bnd.allSrcDirs
-	def javadocTitle = bnd('javadoc.title', project.name)
+	def javadocTitle = bnd.get('javadoc.title', project.name)
 	configure(options) {
 		bottom = "${bnd.copyright_html} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
 		memberLevel = JavadocMemberLevel.PROTECTED
