@@ -108,27 +108,30 @@ public interface Feature {
     List<FeatureBundle> getBundles();
 
     /**
-     * Get the configurations.
-     * @return The configurations.
-     */
+	 * Get the configurations. The iteration order of the returned map should
+	 * follow the definition order of the configurations in the feature.
+	 * 
+	 * @return The configurations.
+	 */
     Map<String, FeatureConfiguration> getConfigurations();
 
     /**
-     * Get the extensions.
-     * @return The extensions.
-     */
+	 * Get the extensions. The iteration order of the returned map should follow
+	 * the definition order of the extensions in the feature.
+	 * 
+	 * @return The extensions.
+	 */
     Map<String, FeatureExtension> getExtensions();
 
     /**
-     * Get the variables.
-     * @return The variables.
-     */
+	 * Get the variables. The iteration order of the returned map should follow
+	 * the definition order of the variables in the feature.
+	 * 
+	 * @return The variables.
+	 */
     Map<String, String> getVariables();
 
 	// TODO
-    // add prototype
-    // add requirements
-    // add capabilities
     // add framework properties
 
 }
