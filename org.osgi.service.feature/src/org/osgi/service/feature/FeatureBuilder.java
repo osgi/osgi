@@ -36,14 +36,6 @@ public interface FeatureBuilder {
 	FeatureBuilder setComplete(boolean complete);
 
 	/**
-	 * Sets the Copyright.
-	 * 
-	 * @param copyright The Copyright for the feature.
-	 * @return This builder.
-	 */
-	FeatureBuilder setCopyright(String copyright);
-
-	/**
 	 * Set the Feature Description.
 	 * 
 	 * @param description The description.
