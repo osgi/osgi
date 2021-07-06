@@ -19,7 +19,7 @@
 
 <chapter label="159"
          revision="$Id$"
-         version="5.0" xml:id="service.features"
+         version="5.0" xml:id="service.feature"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -27,7 +27,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Features Service Specification</title>
+  <title>Feature Service Specification</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.feature-version"
@@ -153,7 +153,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="5.100in"
-                       contentwidth="6.000in" fileref="features.svg"/>
+                       contentwidth="6.000in" fileref="feature.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -191,7 +191,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
           <listitem><para>Type (optional)</para></listitem>
           <listitem><para>Classifier (optional)</para></listitem>
         </itemizedlist>
-        For more information see <xref linkend="service.features-mvnpom.ref"/>.
+        For more information see <xref linkend="service.feature-mvnpom.ref"/>.
         The format used to specify identifiers is as follows:
         <programlisting>group-id ':' artifact-id [ ':' type [ ':' classifier ] ] ':' version</programlisting>
       </para>
@@ -340,7 +340,7 @@ Feature f = builder.build();</programlisting>
   <section>
     <title>Comments</title>
       <para>Comments in the form of <xref
-      linkend="service.features-jsmin.ref"/> comments are supported, that
+      linkend="service.feature-jsmin.ref"/> comments are supported, that
       is, any text on the same line after <code>//</code> is ignored and any
       text between <code>/* */</code> is ignored.</para>
   </section>
@@ -743,15 +743,15 @@ Feature f = builder.build();</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.features-json.ref"><title>JSON
+      <bibliomixed xml:id="service.feature-json.ref"><title>JSON
       (JavaScript Object Notation) </title><biblioid class="uri"><link
       xlink:href="https://www.json.org"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.features-jsmin.ref"><title>JSMin (The
+      <bibliomixed xml:id="service.feature-jsmin.ref"><title>JSMin (The
       JavaScript Minifier) </title><biblioid class="uri"><link
       xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>
       
-      <bibliomixed xml:id="service.features-mvnpom.ref"><title>Apache Maven Pom 
+      <bibliomixed xml:id="service.feature-mvnpom.ref"><title>Apache Maven Pom 
       Reference </title><biblioid class="uri"><link
       xlink:href="https://maven.apache.org/pom.html"/></biblioid></bibliomixed>
     </bibliolist>

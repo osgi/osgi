@@ -24,7 +24,9 @@ import java.io.Writer;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The Features service is the primary entry point for interacting with the feature model.
+ * The Feature service is the primary entry point for interacting with the
+ * feature model.
+ * 
  * @ThreadSafe
  */
 @ProviderType
