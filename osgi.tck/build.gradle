@@ -26,36 +26,36 @@ interface Injected {
 	@Inject ArchiveOperations getArchive()
 }
 
-def jar = tasks.named('jar')
+def jar = tasks.named("jar")
 
-tasks.register('tck') {
-	description = 'Run all the TCKs.'
-	group = 'verification'
-	dependsOn 'tck.core', 'tck.cmpn'
+tasks.register("tck") {
+	description = "Run all the TCKs."
+	group = "verification"
+	dependsOn "tck.core", "tck.cmpn"
 }
 
-tasks.addRule('Pattern: preptck.<name>: Prepare the TCKs for <name>.') { taskName ->
-	if (taskName.startsWith('preptck.')) {
+tasks.addRule("Pattern: preptck.<name>: Prepare the TCKs for <name>.") { taskName ->
+	if (taskName.startsWith("preptck.")) {
 		tasks.create(taskName) {
-			def book = taskName - 'preptck.'
+			def book = taskName - "preptck."
 			description = "Prepare the TCKs for ${book}."
-			group = 'verification'
-			def implJarTask = parent.project('osgi.impl').tasks.named('jar')
+			group = "verification"
+			def implJarTask = parent.project("osgi.impl").tasks.named("jar")
 			def implBuildDir = implJarTask.flatMap({it.destinationDirectory})
 			def jarFiles = objects.fileCollection()
-			jarFiles.from(fileTree(implBuildDir).include('osgi.impl.core.jar', "osgi.impl.${book}.jar")).builtBy(implJarTask)
+			jarFiles.from(fileTree(implBuildDir).include("osgi.impl.core.jar", "osgi.impl.${book}.jar")).builtBy(implJarTask)
 			jarFiles.from(layout.buildDirectory.file("osgi.tck.${book}.jar")).builtBy(jar)
-			inputs.files(jarFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName('jars')
+			inputs.files(jarFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("jars")
 			def injected = objects.newInstance(Injected)
 			def destinationDirectory = layout.buildDirectory.dir("osgi.tck.${book}")
-			outputs.dir(destinationDirectory).withPropertyName('tckdir')
+			outputs.dir(destinationDirectory).withPropertyName("tckdir")
 			def outputFiles = objects.fileTree().from(destinationDirectory)
-			doFirst('clean') { t ->
+			doFirst("clean") { t ->
 				injected.fs.delete {
 					delete outputFiles
 				}
 			}
-			doLast('prep') { t ->
+			doLast("prep") { t ->
 				jarFiles.forEach { jarFile ->
 					injected.fs.copy {
 						from injected.archive.zipTree(jarFile)
@@ -67,32 +67,32 @@ tasks.addRule('Pattern: preptck.<name>: Prepare the TCKs for <name>.') { taskNam
 	}
 }
 
-tasks.addRule('Pattern: tck.<name>: Run the TCKs for <name>.') { taskName ->
-	if (taskName.startsWith('tck.')) {
-		def book = taskName - 'tck.'
+tasks.addRule("Pattern: tck.<name>: Run the TCKs for <name>.") { taskName ->
+	if (taskName.startsWith("tck.")) {
+		def book = taskName - "tck."
 		def destinationDirectory = objects.directoryProperty().value(layout.buildDirectory.dir("osgi.tck.${book}"))
-		def bndjar = destinationDirectory.file('jar/bnd.jar')
-		def tcks = bnd.get("build.${book}.tests").tokenize(',')
+		def bndjar = destinationDirectory.file("jar/bnd.jar")
+		def tcks = bnd.get("build.${book}.tests").tokenize(",")
 		def booktask = tasks.create(taskName) {
 			description = "Run the TCKs for ${book}."
-			group = 'verification'
+			group = "verification"
 		}
 		tcks.forEach { bndName ->
 			def tcktask = tasks.create("${taskName}.${bndName}") {
 				description = "Run the ${bndName} TCK."
-				group = 'verification'
+				group = "verification"
 				dependsOn tasks.named("preptck.${book}")
 				def injected = objects.newInstance(Injected)
-				doLast('exec') { t ->
+				doLast("exec") { t ->
 					injected.exec.javaexec {
 						errorOutput = standardOutput // send stderr to stdout
 						workingDir destinationDirectory.get().getAsFile()
-						main = '-jar' // first arg must be the bnd jar
+						mainClass = "-jar" // first arg must be the bnd jar
 						args bndjar.get().getAsFile()
-						args '--exceptions'
-						args 'runtests'
-						args '--title', bndName
-						args '--reportdir', "reports/${bndName}"
+						args "--exceptions"
+						args "runtests"
+						args "--title", bndName
+						args "--reportdir", "reports/${bndName}"
 						args "${bndName}.bnd"
 					}.assertNormalExitValue()
 				}
@@ -103,16 +103,16 @@ tasks.addRule('Pattern: tck.<name>: Run the TCKs for <name>.') { taskName ->
 }
 
 // Used by GitHub Actions build to prepare the TCK test matrix
-def matrix = tasks.register('matrix') {
-	description = 'Prepare the TCK test matrix for the GitHub Actions build.'
-	group = 'build'
-	dependsOn 'preptck.core', 'preptck.cmpn'
+def matrix = tasks.register("matrix") {
+	description = "Prepare the TCK test matrix for the GitHub Actions build."
+	group = "build"
+	dependsOn "preptck.core", "preptck.cmpn"
 	doLast {
 		println "::set-output name=tck-matrix::${bnd.get('tck-matrix')}"
 	}
 }
 
-if (Boolean.parseBoolean(System.getenv('GITHUB_ACTIONS'))) {
+if (Boolean.parseBoolean(System.getenv("GITHUB_ACTIONS"))) {
 	jar.configure {
 		finalizedBy matrix
 	}

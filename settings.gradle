@@ -24,7 +24,7 @@
 
 pluginManagement {
 	plugins {
-		id 'biz.aQute.bnd.workspace' version bnd_version
+		id "biz.aQute.bnd.workspace" version bnd_version
 	}
 	repositories {
 		maven {
@@ -35,21 +35,21 @@ pluginManagement {
 	}
 	gradle.ext.bndWorkspaceConfigure = { workspace ->
 		// In case these are set from the command line...
-		workspace.setProperty('bnd_version', bnd_version)
-		workspace.setProperty('bnd_snapshots', bnd_snapshots)
+		workspace.setProperty("bnd_version", bnd_version)
+		workspace.setProperty("bnd_snapshots", bnd_snapshots)
 		/*
 		 * Compute the build time stamp. 
 		 * If the git workspace is clean, the build time is the time of the head commit.
 		 * If the git workspace is dirty, the build time is the current time.
 		 */
-		if ('git diff --no-ext-diff --quiet'.execute().waitFor() == 0) {
-			workspace.setProperty('_@tstamp', 'git show --no-patch --format=%ct000'.execute().text.trim())
+		if ("git diff --no-ext-diff --quiet".execute().waitFor() == 0) {
+			workspace.setProperty("_@tstamp", "git show --no-patch --format=%ct000".execute().text.trim())
 		} else {
-			workspace.setProperty('_@tstamp', Long.toString(System.currentTimeMillis()))
+			workspace.setProperty("_@tstamp", Long.toString(System.currentTimeMillis()))
 		}
 	}
 }
 
 plugins {
-	id 'biz.aQute.bnd.workspace'
+	id "biz.aQute.bnd.workspace"
 }

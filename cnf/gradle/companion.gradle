@@ -20,37 +20,38 @@
  * OSGi companion code Gradle script
  */
 
-def jar = tasks.named('jar') {
+def jar = tasks.named("jar") {
 	def docsDirectory = objects.directoryProperty().value(layout.buildDirectory.dir(provider({-> project.docsDirName})))
-	ext.javadocIncludes = docsDirectory.file('javadocIncludes.txt')
-	ext.javadocVersion = docsDirectory.file('javadocVersion.txt')
+	ext.javadocIncludes = docsDirectory.file("javadocIncludes.txt")
+	ext.javadocVersion = docsDirectory.file("javadocVersion.txt")
 	def projectName = project.name
 	def bndProject = bnd.project
 
-	outputs.file(javadocIncludes).withPropertyName('javadocIncludes')
-	outputs.file(javadocVersion).withPropertyName('javadocVersion')
+	outputs.file(javadocIncludes).withPropertyName("javadocIncludes")
+	outputs.file(javadocVersion).withPropertyName("javadocVersion")
 
-	doLast('javadoc-info') { t ->
+	doLast("javadoc-info") { t ->
 		File javadocIncludesFile = javadocIncludes.get().getAsFile()
 		javadocIncludesFile.text = bndProject.getExports().collect { packageRef, attrs ->
 			"${packageRef.getBinary()}/*.java"
-		}.join(',')
+		}.join(",")
 		File javadocVersionFile = javadocVersion.get().getAsFile()
 		def version = bndProject.getVersion(projectName)
 		javadocVersionFile.text = bndProject.getReplacer().process("\${versionmask;===s;${version}}", bndProject)
 	}
 }
 
-def javadoc = tasks.named('javadoc') {
-	inputs.files(jar).withPropertyName('jar')
+def javadoc = tasks.named("javadoc") {
+	inputs.files(jar).withPropertyName("jar")
 	source bnd.allSrcDirs
-	def javadocTitle = bnd.get('javadoc.title', project.name)
+	def javadocTitle = bnd.get("javadoc.title", project.name)
+	def copyrightHtml = bnd.get("copyright.html")
 	configure(options) {
-		bottom = "${bnd.copyright_html} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
+		bottom = "${copyrightHtml} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
 		memberLevel = JavadocMemberLevel.PROTECTED
-		charSet = 'UTF-8'
-		encoding = 'UTF-8'
-		docEncoding = 'UTF-8'
+		charSet = "UTF-8"
+		encoding = "UTF-8"
+		docEncoding = "UTF-8"
 		version = false
 		use = true
 		splitIndex = true
@@ -62,48 +63,49 @@ def javadoc = tasks.named('javadoc') {
 		noTree = false
 		noTimestamp = JavaVersion.current().isJava9Compatible()
 		tags = [
-			'Immutable:t:"Immutable"',
-			'ThreadSafe:t:"ThreadSafe"',
-			'NotThreadSafe:t:"NotThreadSafe"',
-			'GuardedBy:mf:"Guarded By:"',
-			'security:m:"Required Permissions"',
-			'noimplement:t:"Consumers of this API must not implement this interface"'
+			"Immutable:t:\"Immutable\"",
+			"ThreadSafe:t:\"ThreadSafe\"",
+			"NotThreadSafe:t:\"NotThreadSafe\"",
+			"GuardedBy:mf:\"Guarded By:\"",
+			"security:m:\"Required Permissions\"",
+			"noimplement:t:\"Consumers of this API must not implement this interface\""
 		]
-		links('http://docs.oracle.com/javase/8/docs/api/')
+		links("http://docs.oracle.com/javase/8/docs/api/")
 	}
 	// compute dependencies on other javadoc builds based upon the classpath
-	def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
+	def pattern = project.name.startsWith("osgi.") ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
 	def linkProjects = sourceSets.main.compileClasspath.findResults {
-		def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
+		def entry = parent.relativePath(it).replace(File.separatorChar, (char)'/')
 		def matcher = pattern.matcher(entry)
 		matcher ? parent.project(matcher[0][1]) : null
 	}
 	linkProjects.each { linkProject ->
-		dependsOn linkProject.absoluteProjectPath('javadoc')
+		dependsOn linkProject.absoluteProjectPath("javadoc")
 	}
 	/* Turn off javadoc 8 overly pedantic lint checking */
 	if (JavaVersion.current().isJava8Compatible()) {
-		options.addStringOption('Xdoclint:none', '-quiet')
+		options.addStringOption("Xdoclint:none", "-quiet")
 	}
-	doFirst('configuration') { t ->
+	doFirst("configuration") { t ->
+		def osgiRelease = bnd.get("osgi.release")
 		File javadocVersion = jar.flatMap({it.javadocVersion}).get().getAsFile()
 		File javadocIncludes = jar.flatMap({it.javadocIncludes}).get().getAsFile()
-		def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${javadocVersion.text}"
+		def javadocTitleVersion = project.name.startsWith("osgi.") ? "Release ${osgiRelease}" : "Version ${javadocVersion.text}"
 		options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
 		options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
 		options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
-		include javadocIncludes.text.tokenize(',')
+		include javadocIncludes.text.tokenize(",")
 		linkProjects.each { linkProject ->
-			File linkJavadocVersion = linkProject.tasks.named('jar').flatMap({it.javadocVersion}).get().getAsFile()
-			File linkDestinationDir = linkProject.tasks.named('javadoc').map({it.destinationDir}).get()
+			File linkJavadocVersion = linkProject.tasks.named("jar").flatMap({it.javadocVersion}).get().getAsFile()
+			File linkDestinationDir = linkProject.tasks.named("javadoc").map({it.destinationDir}).get()
 			options.linksOffline("../../${linkProject.name}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
 		}
-		logger.info 'Title         : {}', options.windowTitle
-		logger.info 'Packages      : {}', includes
-		logger.info 'Destdir       : {}', destinationDir
+		logger.info "Title         : {}", options.windowTitle
+		logger.info "Packages      : {}", includes
+		logger.info "Destdir       : {}", destinationDir
 	}
 }
 
-tasks.named('release') {
+tasks.named("release") {
 	dependsOn javadoc
 }
