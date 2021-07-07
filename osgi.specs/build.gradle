@@ -40,7 +40,7 @@ def javadoc = tasks.named("javadoc") {
 	description = "Build the docbook flavored javadoc."
 	group = "documentation"
 
-	def destinationDirectory = objects.directoryProperty().convention(layout.buildDirectory.dir("javadoc"))
+	def destinationDirectory = objects.directoryProperty().convention(layout.getBuildDirectory().dir("javadoc"))
 	destinationDir = file(destinationDirectory)
 	def javadocxml = destinationDirectory.file("javadoc.xml")
 	def docbookDir = destinationDirectory.dir("docbook")
@@ -89,7 +89,7 @@ def rdmtsummary = tasks.register("rdmtsummary") {
 	group = "documentation"
 
 	def runtimeClasspath = sourceSets.main.runtimeClasspath
-	def treesummaryxml = layout.buildDirectory.file("residentialdmt/treesummary.xml")
+	def treesummaryxml = layout.getBuildDirectory().file("residentialdmt/treesummary.xml")
 
 	inputs.files(parent.project("dmforest").sourceSets.main.allJava).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("dmforest")
 	inputs.files(runtimeClasspath).withNormalizer(ClasspathNormalizer.class).withPropertyName("runtimeClasspath")
@@ -99,10 +99,10 @@ def rdmtsummary = tasks.register("rdmtsummary") {
 	doLast("rdmtsummary") { t ->
 		treesummaryxml.get().getAsFile().withOutputStream { os ->
 			injected.exec.javaexec {
-				classpath runtimeClasspath
+				classpath(runtimeClasspath)
 				mainClass = "org.osgi.tools.dmt.TreeSummary"
-				standardOutput new BufferedOutputStream(os)
-				args "org.osgi.dmt.residential.\$"
+				standardOutput = new BufferedOutputStream(os)
+				args("org.osgi.dmt.residential.\$")
 			}.assertNormalExitValue()
 		}
 	}
@@ -112,9 +112,9 @@ def xmlns = tasks.register("xmlns", Copy.class) {
 	description = "Build the docbook flavored schemas."
 	group = "documentation"
 
-	from parent.file("xmlns")
-	into layout.buildDirectory.dir("xmlns")
-	include "**/*.xsd"
+	from(parent.file("xmlns"))
+	into(layout.getBuildDirectory().dir("xmlns"))
+	include("**/*.xsd")
 	includeEmptyDirs = false
 
 	doLast("strip-comments") { t ->
@@ -140,7 +140,7 @@ books.forEach { book ->
 		description = "Generate the docbook xml file for the book ${book}."
 		group = "documentation"
 
-		ext.bookxml = layout.buildDirectory.file("book/${name}")
+		ext.bookxml = layout.getBuildDirectory().file("book/${name}")
 		def watermark = bnd.get("${book}.draft", "no")
 		ext.draftmode = objects.property(String.class).convention((watermark != "no") ? "yes" : "no")
 		def stylesheet = file("docbook/xsl/custom-profile.xsl")
@@ -183,10 +183,10 @@ books.forEach { book ->
 				param("name": "copyright.year", "expression": copyrightyear)
 			}
 			injected.exec.javaexec {
-				classpath runtimeClasspath
+				classpath(runtimeClasspath)
 				mainClass = "org.osgi.tools.xmlvalidation.XmlValidator"
-				args docbookxsd
-				args bookxmlFile
+				args(docbookxsd)
+				args(bookxmlFile)
 			}.assertNormalExitValue()
 		}
 	}
@@ -195,7 +195,7 @@ books.forEach { book ->
 		description = "Generate the docbook diff xml file for the book ${book}."
 		group = "documentation"
 
-		ext.bookxml = layout.buildDirectory.file("book/${name}")
+		ext.bookxml = layout.getBuildDirectory().file("book/${name}")
 		def watermark = bnd.get("${book}.draft", "no")
 		ext.draftmode = objects.property(String.class).convention((watermark != "no") ? "yes" : "no")
 		def stylesheet = file("${licensed}/diffmk/style/docbook.xsl")
@@ -211,16 +211,16 @@ books.forEach { book ->
 		doLast("xml-diff") { t ->
 			def tmpxml = new File(temporaryDir, "diff.xml")
 			injected.exec.javaexec {
-				classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
+				classpath("${bnd.licensed}/diffmk/bin/diffmk.jar")
 				mainClass = "net.sf.diffmk.DiffMk"
 				minHeapSize = "1g"
 				maxHeapSize = "2g"
-				args "--verbose"
-				args "1"
-				args "--words"
-				args baselinexml
-				args booktaskXml.get().getAsFile()
-				args tmpxml
+				args("--verbose")
+				args("1")
+				args("--words")
+				args(baselinexml)
+				args(booktaskXml.get().getAsFile())
+				args(tmpxml)
 			}.assertNormalExitValue()
 			ant.xslt("style": stylesheet,
 			"in": tmpxml,
@@ -243,7 +243,7 @@ books.forEach { book ->
 		group = "documentation"
 
 		def imagesXSL = file("docbook/xsl/custom-html-images.xsl")
-		ext.imagesFile = layout.buildDirectory.file("images/${book}.txt")
+		ext.imagesFile = layout.getBuildDirectory().file("images/${book}.txt")
 		def watermark = bnd.get("${book}.draft", "no")
 		def booktaskXml = booktask.flatMap({it.bookxml})
 		def booktaskDraftmode = booktask.flatMap({it.draftmode})
@@ -273,11 +273,11 @@ books.forEach { book ->
 		group = "documentation"
 
 		def svgFiles = objects.fileTree().from("docbook").include("**/*.svg")
-		def bookFolder = layout.projectDirectory.dir("docbook/${book}")
+		def bookFolder = layout.getProjectDirectory().dir("docbook/${book}")
 		def imagesFile = rasterizelisttask.flatMap({it.imagesFile}).map({it.getAsFile()})
 		def imageFiles = objects.fileCollection().from(imagesFile.map({f -> f.collect({bookFolder.file(it)})}))
 		def runtimeClasspath = sourceSets.main.runtimeClasspath
-		def destinationDirectory = layout.buildDirectory.dir("images/${book}")
+		def destinationDirectory = layout.getBuildDirectory().dir("images/${book}")
 
 		inputs.files(rasterizelisttask).withPropertyName(rasterizelisttask.name)
 		inputs.files(svgFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("svgFiles")
@@ -288,7 +288,7 @@ books.forEach { book ->
 		def outputFiles = objects.fileTree().from(destinationDirectory)
 		doFirst("clean") { t ->
 			injected.fs.delete {
-				delete outputFiles
+				delete(outputFiles)
 			}
 		}
 		doLast("exec") { t ->
@@ -296,12 +296,12 @@ books.forEach { book ->
 				systemProperty("scale", "2")
 				systemProperty("dpi", "300")
 				systemProperty("JAVA_FONTS", file("fonts"))
-				classpath runtimeClasspath
+				classpath(runtimeClasspath)
 				mainClass = "org.osgi.tools.rasterizer.RasterizerMain"
 				minHeapSize = "1g"
 				maxHeapSize = "2g"
-				args destinationDirectory.get().getAsFile()
-				args imageFiles.getFiles()
+				args(destinationDirectory.get().getAsFile())
+				args(imageFiles.getFiles())
 			}.assertNormalExitValue()
 		}
 	}
@@ -316,7 +316,7 @@ books.forEach { book ->
 		def licensedResources = file("${licensed}/webresources")
 		def watermark = bnd.get("${book}.draft", "no")
 		def release_version = bnd.get("osgi.release")
-		def destinationDirectory = layout.buildDirectory.dir("html/${book}")
+		def destinationDirectory = layout.getBuildDirectory().dir("html/${book}")
 		def booktaskXml = booktask.flatMap({it.bookxml})
 		def booktaskDraftmode = booktask.flatMap({it.draftmode})
 
@@ -334,7 +334,7 @@ books.forEach { book ->
 		def outputFiles = objects.fileTree().from(destinationDirectory)
 		doFirst("clean") { t ->
 			injected.fs.delete {
-				delete outputFiles
+				delete(outputFiles)
 			}
 		}
 		doLast("xslt") { t ->
@@ -354,24 +354,24 @@ books.forEach { book ->
 			}
 
 			injected.fs.copy {
-				into destinationDirectory
-				from htmlResources
-				from (licensedResources) {
-					include "**/*.js"
-					into "js"
+				into(destinationDirectory)
+				from(htmlResources)
+				from(licensedResources) {
+					include("**/*.js")
+					into("js")
 					eachFile { fcd ->
 						fcd.path = "js/${fcd.name}"
 					}
 				}
-				from (licensedResources) {
-					include "**/*.css"
-					into "css"
+				from(licensedResources) {
+					include("**/*.css")
+					into("css")
 					eachFile { fcd ->
 						fcd.path = "css/${fcd.name}"
 					}
 				}
-				from (rasterizetask) {
-					into "images"
+				from(rasterizetask) {
+					into("images")
 				}
 				includeEmptyDirs = false
 			}
@@ -382,14 +382,14 @@ books.forEach { book ->
 		description = "Generate a ZIP archive of the docbook html for the book ${book}."
 		group = "documentation"
 
-		destinationDirectory = layout.buildDirectory
+		destinationDirectory = layout.getBuildDirectory()
 		archiveBaseName = "osgi.${book}"
 		archiveClassifier = "html"
-		from htmltask
+		from(htmltask)
 	}
 
 	specifications.configure {
-		dependsOn pdftask, ziptask
+		dependsOn(pdftask, ziptask)
 	}
 }
 
@@ -398,7 +398,7 @@ private Closure fotaskConfiguration(bookName, xmltask) {
 		description = "Generate the docbook fo file for the book ${bookName}."
 		group = "documentation"
 
-		ext.bookfo = layout.buildDirectory.file("fo/${name}")
+		ext.bookfo = layout.getBuildDirectory().file("fo/${name}")
 		def stylesheet = file("docbook/xsl/custom-fo.xsl")
 		def watermark = bnd.get("${bookName}.draft", "no")
 		def booktaskXml = xmltask.flatMap({it.bookxml})
@@ -430,7 +430,7 @@ private Closure pdftaskConfiguration(basebook, bookName, fotask) {
 		description = "Generate the docbook pdf file for the book ${bookName}."
 		group = "documentation"
 
-		def bookpdf = layout.buildDirectory.file("osgi.${bookName}-${version}.pdf")
+		def bookpdf = layout.getBuildDirectory().file("osgi.${bookName}-${version}.pdf")
 		def fontbasedir = file("fonts")
 		def basebookdir = file("docbook/${basebook}")
 		def fopxconf = file("docbook/fop/fop-osgi.xconf")
@@ -449,8 +449,8 @@ private Closure pdftaskConfiguration(basebook, bookName, fotask) {
 		def injected = objects.newInstance(Injected)
 		doLast("exec") { t ->
 			injected.fs.copy {
-				from fopxconf
-				into temporaryDir
+				from(fopxconf)
+				into(temporaryDir)
 				filter(ReplaceTokens,
 				"tokens": ["book.base.url": basebookdir.toURI().toString(),
 					"font.base.url": fontbasedir.toURI().toString(),
@@ -460,15 +460,15 @@ private Closure pdftaskConfiguration(basebook, bookName, fotask) {
 				systemProperty("java.awt.headless", "true")
 				systemProperty("JAVA_FONTS", fontbasedir)
 				systemProperty("log4j.configuration", log4jprops.toURI())
-				classpath classesDirectory.get().getAsFile()
-				classpath bnd.get("log4j")
-				classpath fop_classpath
+				classpath(classesDirectory.get().getAsFile())
+				classpath(bnd.get("log4j"))
+				classpath(fop_classpath)
 				mainClass = "org.osgi.tools.fop.FOPMain"
 				minHeapSize = "1g"
 				maxHeapSize = "3g"
-				args "-c", new File(temporaryDir, fopxconf.name)
-				args "-fo", booktaskFo.get().getAsFile()
-				args "-pdf", bookpdf.get().getAsFile()
+				args("-c", new File(temporaryDir, fopxconf.name))
+				args("-fo", booktaskFo.get().getAsFile())
+				args("-pdf", bookpdf.get().getAsFile())
 			}.assertNormalExitValue()
 		}
 	}
@@ -490,10 +490,10 @@ tasks.register("fontmetrics") {
 	doLast("exec") { t ->
 		tffs.forEach { ttf ->
 			injected.exec.javaexec {
-				classpath fop_classpath
+				classpath(fop_classpath)
 				mainClass = "org.apache.fop.fonts.apps.TTFReader"
-				args ttf.absolutePath
-				args ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/)
+				args(ttf.absolutePath)
+				args(ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/))
 			}.assertNormalExitValue()
 		}
 	}

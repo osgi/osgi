@@ -21,10 +21,10 @@
  */
 
 def jar = tasks.named("jar") {
-	def docsDirectory = objects.directoryProperty().value(layout.buildDirectory.dir(provider({-> project.docsDirName})))
+	def docsDirectory = objects.directoryProperty().value(layout.getBuildDirectory().dir(provider({-> project.docsDirName})))
 	ext.javadocIncludes = docsDirectory.file("javadocIncludes.txt")
 	ext.javadocVersion = docsDirectory.file("javadocVersion.txt")
-	def projectName = project.name
+	def projectName = project.getName()
 	def bndProject = bnd.project
 
 	outputs.file(javadocIncludes).withPropertyName("javadocIncludes")
@@ -37,14 +37,14 @@ def jar = tasks.named("jar") {
 		}.join(",")
 		File javadocVersionFile = javadocVersion.get().getAsFile()
 		def version = bndProject.getVersion(projectName)
-		javadocVersionFile.text = bndProject.getReplacer().process("\${versionmask;===s;${version}}", bndProject)
+		javadocVersionFile.text = bnd.process("\${versionmask;===s;${version}}")
 	}
 }
 
 def javadoc = tasks.named("javadoc") {
 	inputs.files(jar).withPropertyName("jar")
-	source bnd.allSrcDirs
-	def javadocTitle = bnd.get("javadoc.title", project.name)
+	source(bnd.allSrcDirs)
+	def javadocTitle = bnd.get("javadoc.title", project.getName())
 	def copyrightHtml = bnd.get("copyright.html")
 	configure(options) {
 		bottom = "${copyrightHtml} Licensed under the <a href=\"https://www.eclipse.org/legal/efsl.php\" target=\"_blank\">Eclipse Foundation Specification License – v1.0</a>"
@@ -70,17 +70,17 @@ def javadoc = tasks.named("javadoc") {
 			"security:m:\"Required Permissions\"",
 			"noimplement:t:\"Consumers of this API must not implement this interface\""
 		]
-		links("http://docs.oracle.com/javase/8/docs/api/")
+		links("https://docs.oracle.com/javase/8/docs/api/")
 	}
 	// compute dependencies on other javadoc builds based upon the classpath
-	def pattern = project.name.startsWith("osgi.") ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
+	def pattern = project.getName().startsWith("osgi.") ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
 	def linkProjects = sourceSets.main.compileClasspath.findResults {
 		def entry = parent.relativePath(it).replace(File.separatorChar, (char)'/')
 		def matcher = pattern.matcher(entry)
 		matcher ? parent.project(matcher[0][1]) : null
 	}
 	linkProjects.each { linkProject ->
-		dependsOn linkProject.absoluteProjectPath("javadoc")
+		dependsOn(linkProject.absoluteProjectPath("javadoc"))
 	}
 	/* Turn off javadoc 8 overly pedantic lint checking */
 	if (JavaVersion.current().isJava8Compatible()) {
@@ -90,22 +90,22 @@ def javadoc = tasks.named("javadoc") {
 		def osgiRelease = bnd.get("osgi.release")
 		File javadocVersion = jar.flatMap({it.javadocVersion}).get().getAsFile()
 		File javadocIncludes = jar.flatMap({it.javadocIncludes}).get().getAsFile()
-		def javadocTitleVersion = project.name.startsWith("osgi.") ? "Release ${osgiRelease}" : "Version ${javadocVersion.text}"
-		options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
+		def javadocTitleVersion = project.getName().startsWith("osgi.") ? "Release ${osgiRelease}" : "Version ${javadocVersion.text}"
+		options.docTitle = "OSGi&reg; ${javadocTitle} ${javadocTitleVersion}"
 		options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
-		options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
+		options.header = "<b>OSGi&reg; ${javadocTitle}</b><br/>${javadocTitleVersion}"
 		include javadocIncludes.text.tokenize(",")
 		linkProjects.each { linkProject ->
 			File linkJavadocVersion = linkProject.tasks.named("jar").flatMap({it.javadocVersion}).get().getAsFile()
 			File linkDestinationDir = linkProject.tasks.named("javadoc").map({it.destinationDir}).get()
-			options.linksOffline("../../${linkProject.name}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
+			options.linksOffline("../../${linkProject.getName()}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
 		}
-		logger.info "Title         : {}", options.windowTitle
-		logger.info "Packages      : {}", includes
-		logger.info "Destdir       : {}", destinationDir
+		logger.info("Title         : {}", options.windowTitle)
+		logger.info("Packages      : {}", includes)
+		logger.info("Destdir       : {}", destinationDir)
 	}
 }
 
 tasks.named("release") {
-	dependsOn javadoc
+	dependsOn(javadoc)
 }

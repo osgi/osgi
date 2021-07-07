@@ -37,7 +37,7 @@ subprojects {
 		tasks.named("test") {
 			useJUnitPlatform()
 			testLogging {
-				exceptionFormat "full"
+				exceptionFormat = "full"
 			}
 			if (!logger.isInfoEnabled()) {
 				def stdOut = [:]
@@ -69,11 +69,11 @@ subprojects {
 				}
 			}
 			if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
-				jvmArgs "-XX:+ShowCodeDetailsInExceptionMessages"
+				jvmArgs("-XX:+ShowCodeDetailsInExceptionMessages")
 			}
-			systemProperty "org.slf4j.simpleLogger.defaultLogLevel", gradle.startParameter.logLevel.name()
-			if (System.properties["maven.repo.local"]) {
-				systemProperty "maven.repo.local", IO.getFile(gradle.startParameter.currentDir, System.properties["maven.repo.local"])
+			systemProperty("org.slf4j.simpleLogger.defaultLogLevel", gradle.getStartParameter().getLogLevel().name())
+			if (System.getProperty("maven.repo.local")) {
+				systemProperty("maven.repo.local", IO.getFile(gradle.getStartParameter().getCurrentDir(), System.getProperty("maven.repo.local")))
 			}
 		}
 	}
