@@ -23,6 +23,7 @@ jar.cmpn.impls: \
 	org.osgi.impl.service.configurator,\
 	org.osgi.impl.service.coordinator,\
 	org.osgi.impl.service.event,\
+	org.osgi.impl.service.feature,\
 	org.osgi.impl.service.http,\
 	org.osgi.impl.service.http.whiteboard,\
 	org.osgi.impl.service.jaxrs,\

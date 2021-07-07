@@ -12,3 +12,7 @@ org.osgi.test.common;version=latest
 org.osgi.test.assertj.framework;version=latest
 org.osgi.test.junit4;version=latest
 org.osgi.test.junit5;version=latest
+org.mockito.mockito-core;version=latest
+net.bytebuddy.byte-buddy;version=latest
+net.bytebuddy.byte-buddy-agent;version=latest
+org.objenesis;version=latest
