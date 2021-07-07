@@ -33,6 +33,7 @@ pluginManagement {
 		mavenCentral()
 		gradlePluginPortal()
 	}
+	rootProject.name = "osgi"
 	gradle.ext.bndWorkspaceConfigure = { workspace ->
 		// In case these are set from the command line...
 		workspace.setProperty("bnd_version", bnd_version)
