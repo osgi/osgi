@@ -30,7 +30,7 @@ def refresh = tasks.register("refresh", WriteProperties.class) {
 	}
 	inputs.files(compileJava).withPropertyName(compileJava.name)
 	inputs.files(processResources).withPropertyName(processResources.name)
-	outputFile = layout.buildDirectory.file("refresh.properties")
+	outputFile = layout.getBuildDirectory().file("refresh.properties")
 	property("refreshed", System.currentTimeMillis())
 	doFirst("refresh") { t ->
 		logger.info "Refresh Bnd workspace after building Bnd plugins in {}", project.name

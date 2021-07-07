@@ -31,7 +31,7 @@ def jar = tasks.named("jar")
 tasks.register("tck") {
 	description = "Run all the TCKs."
 	group = "verification"
-	dependsOn "tck.core", "tck.cmpn"
+	dependsOn("tck.core", "tck.cmpn")
 }
 
 tasks.addRule("Pattern: preptck.<name>: Prepare the TCKs for <name>.") { taskName ->
@@ -44,22 +44,22 @@ tasks.addRule("Pattern: preptck.<name>: Prepare the TCKs for <name>.") { taskNam
 			def implBuildDir = implJarTask.flatMap({it.destinationDirectory})
 			def jarFiles = objects.fileCollection()
 			jarFiles.from(fileTree(implBuildDir).include("osgi.impl.core.jar", "osgi.impl.${book}.jar")).builtBy(implJarTask)
-			jarFiles.from(layout.buildDirectory.file("osgi.tck.${book}.jar")).builtBy(jar)
+			jarFiles.from(layout.getBuildDirectory().file("osgi.tck.${book}.jar")).builtBy(jar)
 			inputs.files(jarFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("jars")
 			def injected = objects.newInstance(Injected)
-			def destinationDirectory = layout.buildDirectory.dir("osgi.tck.${book}")
+			def destinationDirectory = layout.getBuildDirectory().dir("osgi.tck.${book}")
 			outputs.dir(destinationDirectory).withPropertyName("tckdir")
 			def outputFiles = objects.fileTree().from(destinationDirectory)
 			doFirst("clean") { t ->
 				injected.fs.delete {
-					delete outputFiles
+					delete(outputFiles)
 				}
 			}
 			doLast("prep") { t ->
 				jarFiles.forEach { jarFile ->
 					injected.fs.copy {
-						from injected.archive.zipTree(jarFile)
-						into destinationDirectory
+						from(injected.archive.zipTree(jarFile))
+						into(destinationDirectory)
 					}
 				}
 			}
@@ -70,7 +70,7 @@ tasks.addRule("Pattern: preptck.<name>: Prepare the TCKs for <name>.") { taskNam
 tasks.addRule("Pattern: tck.<name>: Run the TCKs for <name>.") { taskName ->
 	if (taskName.startsWith("tck.")) {
 		def book = taskName - "tck."
-		def destinationDirectory = objects.directoryProperty().value(layout.buildDirectory.dir("osgi.tck.${book}"))
+		def destinationDirectory = objects.directoryProperty().value(layout.getBuildDirectory().dir("osgi.tck.${book}"))
 		def bndjar = destinationDirectory.file("jar/bnd.jar")
 		def tcks = bnd.get("build.${book}.tests").tokenize(",")
 		def booktask = tasks.create(taskName) {
@@ -81,23 +81,23 @@ tasks.addRule("Pattern: tck.<name>: Run the TCKs for <name>.") { taskName ->
 			def tcktask = tasks.create("${taskName}.${bndName}") {
 				description = "Run the ${bndName} TCK."
 				group = "verification"
-				dependsOn tasks.named("preptck.${book}")
+				dependsOn(tasks.named("preptck.${book}"))
 				def injected = objects.newInstance(Injected)
 				doLast("exec") { t ->
 					injected.exec.javaexec {
 						errorOutput = standardOutput // send stderr to stdout
-						workingDir destinationDirectory.get().getAsFile()
+						workingDir = destinationDirectory.get().getAsFile()
 						mainClass = "-jar" // first arg must be the bnd jar
-						args bndjar.get().getAsFile()
-						args "--exceptions"
-						args "runtests"
-						args "--title", bndName
-						args "--reportdir", "reports/${bndName}"
-						args "${bndName}.bnd"
+						args(bndjar.get().getAsFile())
+						args("--exceptions")
+						args("runtests")
+						args("--title", bndName)
+						args("--reportdir", "reports/${bndName}")
+						args("${bndName}.bnd")
 					}.assertNormalExitValue()
 				}
 			}
-			booktask.dependsOn tcktask
+			booktask.dependsOn(tcktask)
 		}
 	}
 }
@@ -106,14 +106,15 @@ tasks.addRule("Pattern: tck.<name>: Run the TCKs for <name>.") { taskName ->
 def matrix = tasks.register("matrix") {
 	description = "Prepare the TCK test matrix for the GitHub Actions build."
 	group = "build"
-	dependsOn "preptck.core", "preptck.cmpn"
+	def tck_matrix = bnd.get("tck-matrix")
+	dependsOn("preptck.core", "preptck.cmpn")
 	doLast {
-		println "::set-output name=tck-matrix::${bnd.get('tck-matrix')}"
+		println "::set-output name=tck-matrix::${tck_matrix}"
 	}
 }
 
 if (Boolean.parseBoolean(System.getenv("GITHUB_ACTIONS"))) {
 	jar.configure {
-		finalizedBy matrix
+		finalizedBy(matrix)
 	}
 }

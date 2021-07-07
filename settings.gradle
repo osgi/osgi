@@ -28,7 +28,7 @@ pluginManagement {
 	}
 	repositories {
 		maven {
-			url uri(bnd_snapshots)
+			url = uri(bnd_snapshots)
 		}
 		mavenCentral()
 		gradlePluginPortal()
