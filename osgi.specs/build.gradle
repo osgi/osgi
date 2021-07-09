@@ -147,7 +147,7 @@ books.forEach { book ->
 		def xmlFiles = objects.fileTree().from("docbook").include("**/*.xml")
 		def copyrightyear = "2000, ${bnd.get('copyright.year')}"
 		def runtimeClasspath = sourceSets.main.runtimeClasspath
-		def docbookxsd = file("${bnd.licensed}/docbook-xsd/docbook.xsd")
+		def docbookxsd = file("${licensed}/docbook-xsd/docbook.xsd")
 
 		inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("stylesheet")
 		inputs.files(xmlFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("xmlFiles")
@@ -211,7 +211,7 @@ books.forEach { book ->
 		doLast("xml-diff") { t ->
 			def tmpxml = new File(temporaryDir, "diff.xml")
 			injected.exec.javaexec {
-				classpath("${bnd.licensed}/diffmk/bin/diffmk.jar")
+				classpath("${licensed}/diffmk/bin/diffmk.jar")
 				mainClass = "net.sf.diffmk.DiffMk"
 				minHeapSize = "1g"
 				maxHeapSize = "2g"
@@ -278,6 +278,7 @@ books.forEach { book ->
 		def imageFiles = objects.fileCollection().from(imagesFile.map({f -> f.collect({bookFolder.file(it)})}))
 		def runtimeClasspath = sourceSets.main.runtimeClasspath
 		def destinationDirectory = layout.getBuildDirectory().dir("images/${book}")
+		def fontbasedir = file("fonts")
 
 		inputs.files(rasterizelisttask).withPropertyName(rasterizelisttask.name)
 		inputs.files(svgFiles).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("svgFiles")
@@ -295,7 +296,7 @@ books.forEach { book ->
 			injected.exec.javaexec {
 				systemProperty("scale", "2")
 				systemProperty("dpi", "300")
-				systemProperty("JAVA_FONTS", file("fonts"))
+				systemProperty("JAVA_FONTS", fontbasedir)
 				classpath(runtimeClasspath)
 				mainClass = "org.osgi.tools.rasterizer.RasterizerMain"
 				minHeapSize = "1g"
@@ -492,8 +493,8 @@ tasks.register("fontmetrics") {
 			injected.exec.javaexec {
 				classpath(fop_classpath)
 				mainClass = "org.apache.fop.fonts.apps.TTFReader"
-				args(ttf.absolutePath)
-				args(ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/))
+				args(ttf.getAbsolutePath())
+				args(ttf.getAbsolutePath().replaceAll(/\.ttf$/, /.xml/))
 			}.assertNormalExitValue()
 		}
 	}
