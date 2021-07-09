@@ -31,9 +31,10 @@ def refresh = tasks.register("refresh", WriteProperties.class) {
 	inputs.files(compileJava).withPropertyName(compileJava.name)
 	inputs.files(processResources).withPropertyName(processResources.name)
 	outputFile = layout.getBuildDirectory().file("refresh.properties")
+	encoding = "UTF-8"
 	property("refreshed", System.currentTimeMillis())
 	doFirst("refresh") { t ->
-		logger.info "Refresh Bnd workspace after building Bnd plugins in {}", project.name
+		logger.info("Refresh Bnd workspace after building Bnd plugins in {}", project.name)
 		if (!bndWorkspace.refresh()) {
 			parent.subprojects {
 				if (plugins.hasPlugin("biz.aQute.bnd")) {
