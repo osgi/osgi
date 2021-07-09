@@ -1,0 +1,8 @@
+org.osgi.service.typedevent; version=latest
+org.osgi.impl.service.component; version=latest
+org.apache.aries.typedevent.bus; version=0.0.1
+org.osgi.util.pushstream; version=latest
+org.apache.aries.component-dsl.component-dsl; version=latest
+org.osgi.util.converter; version=latest
+slf4j.api;version=1.7.7
+slf4j.simple;version=1.7.7

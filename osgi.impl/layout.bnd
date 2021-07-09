@@ -30,7 +30,8 @@ jar.cmpn.impls: \
 	org.osgi.impl.service.log.stream,\
 	org.osgi.impl.service.metatype,\
 	org.osgi.impl.service.remoteserviceadmin,\
-    org.osgi.impl.service.repository,\
+	org.osgi.impl.service.repository,\
+	org.osgi.impl.service.typedevent,\
 	org.osgi.impl.service.transaction.control,\
 	org.osgi.impl.service.transaction.control.jdbc,\
 	org.osgi.impl.service.transaction.control.jpa,\

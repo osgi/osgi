@@ -1,0 +1,23 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
+
+-conditionalpackage					= org.osgi.test.support.*
+-privatepackage						=  \
+	${p}.*
+Import-Package: ${-signaturetest}, *
+
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.typedevent;version=latest,\
+	org.osgi.framework,\
+	org.osgi.dto
+
+-runbundles						= \
+    org.osgi.impl.service.log;version=latest, \
+    org.osgi.impl.service.cm;version=latest, \
+	org.osgi.service.typedevent;version=latest, \
+	org.osgi.impl.service.typedevent;version=latest
+
+-runproperties = ${runproperties}
+
+-signaturetest                      = org.osgi.service.typedevent
