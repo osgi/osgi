@@ -48,10 +48,10 @@ public interface FeatureExtensionBuilder {
 	 * Add an Artifact to the extension. Can only be called for extensions of
 	 * type {@link FeatureExtension.Type#ARTIFACTS}.
 	 *
-	 * @param art The artifact to add.
+	 * @param artifact The artifact to add.
 	 * @return This builder.
 	 */
-	FeatureExtensionBuilder addArtifact(FeatureArtifact art);
+	FeatureExtensionBuilder addArtifact(FeatureArtifact artifact);
 
     /**
      * Build the Extension. Can only be called once on a builder. After
