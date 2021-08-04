@@ -51,13 +51,6 @@ public interface Feature {
 	List<String> getCategories();
 
 	/**
-	 * Get the copyright.
-	 *
-	 * @return The copyright.
-	 */
-	Optional<String> getCopyright();
-
-	/**
 	 * Get the description.
 	 *
 	 * @return The description.
