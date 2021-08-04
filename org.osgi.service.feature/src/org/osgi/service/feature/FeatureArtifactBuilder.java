@@ -41,10 +41,10 @@ public interface FeatureArtifactBuilder {
 	 * Add metadata for this Artifact by providing a map. All metadata in the
 	 * map is added to any previously provided metadata.
 	 * 
-	 * @param md The map with metadata.
+	 * @param metadata The map with metadata.
 	 * @return This builder.
 	 */
-	FeatureArtifactBuilder addMetadata(Map<String,Object> md);
+	FeatureArtifactBuilder addMetadata(Map<String,Object> metadata);
 
 	/**
 	 * Build the Artifact object. Can only be called once on a builder. After

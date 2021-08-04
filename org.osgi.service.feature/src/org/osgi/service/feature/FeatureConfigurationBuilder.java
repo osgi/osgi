@@ -39,12 +39,13 @@ public interface FeatureConfigurationBuilder {
     FeatureConfigurationBuilder addValue(String key, Object value);
 
     /**
-     * Add a map of configuration values for this Configuration object. All values
-     * will be added to any previously provided configuration values.
-     * @param cfg
-     * @return This builder.
-     */
-    FeatureConfigurationBuilder addValues(Map<String, Object> cfg);
+	 * Add a map of configuration values for this Configuration object. All
+	 * values will be added to any previously provided configuration values.
+	 * 
+	 * @param configValues The map of configuration values to add.
+	 * @return This builder.
+	 */
+    FeatureConfigurationBuilder addValues(Map<String, Object> configValues);
 
     /**
      * Build the Configuration object. Can only be called once on a builder. After

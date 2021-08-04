@@ -40,10 +40,10 @@ public interface FeatureBundleBuilder {
      * Add metadata for this Bundle by providing a map. All
      * metadata in the map is added to any previously provided
      * metadata.
-     * @param md The map with metadata.
+     * @param metadata The map with metadata.
      * @return This builder.
      */
-    FeatureBundleBuilder addMetadata(Map<String, Object> md);
+    FeatureBundleBuilder addMetadata(Map<String, Object> metadata);
 
     /**
      * Build the Bundle object. Can only be called once on a builder. After

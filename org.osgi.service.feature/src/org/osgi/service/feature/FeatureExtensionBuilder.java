@@ -48,34 +48,10 @@ public interface FeatureExtensionBuilder {
 	 * Add an Artifact to the extension. Can only be called for extensions of
 	 * type {@link FeatureExtension.Type#ARTIFACTS}.
 	 *
-	 * @param aid The ArtifactID of the artifact to add.
+	 * @param artifact The artifact to add.
 	 * @return This builder.
 	 */
-    FeatureExtensionBuilder addArtifact(ID aid);
-
-    /**
-	 * Add an Artifact to the extension. Can only be called for extensions of
-	 * type {@link FeatureExtension.Type#ARTIFACTS}.
-	 *
-	 * @param groupId The Group ID of the artifact to add.
-	 * @param artifactId The Artifact ID of the artifact to add.
-	 * @param version The Version of the artifact to add.
-	 * @return This builder.
-	 */
-    FeatureExtensionBuilder addArtifact(String groupId, String artifactId, String version);
-
-    /**
-	 * Add an Artifact to the extension. Can only be called for extensions of
-	 * type {@link FeatureExtension.Type#ARTIFACTS}.
-	 *
-	 * @param groupId The Group ID of the artifact to add.
-	 * @param artifactId The Artifact ID of the artifact to add.
-	 * @param version The Version of the artifact to add.
-	 * @param type The type indicator of the artifact to add.
-	 * @param classifier The classifier of the artifact to add.
-	 * @return This builder.
-	 */
-    FeatureExtensionBuilder addArtifact(String groupId, String artifactId, String version, String type, String classifier);
+	FeatureExtensionBuilder addArtifact(FeatureArtifact artifact);
 
     /**
      * Build the Extension. Can only be called once on a builder. After
