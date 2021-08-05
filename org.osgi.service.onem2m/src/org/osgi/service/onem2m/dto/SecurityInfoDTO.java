@@ -28,7 +28,7 @@ import org.osgi.dto.DTO;
  * 
  * @see <a href=
  *      "http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf">oenM2M
- *      TS-0004 6.3.5.4.8</a>
+ *      TS-0004 6.3.5.48</a>
  * @NotThreadSafe
  */
 public class SecurityInfoDTO extends DTO {
