@@ -246,6 +246,13 @@ Features may have dependencies on other Features. Features inherit the capabilit
             </row>
 
             <row>
+              <entry>complete</entry>
+              <entry>boolean</entry>
+              <entry>Optional, defaults to <code>false</code></entry>
+              <entry>Completeness of the Feature. A Feature is complete when it has no external dependencies.</entry>
+            </row>
+
+            <row>
               <entry>description</entry>
               <entry>String</entry>
               <entry>Optional</entry>
@@ -257,13 +264,6 @@ Features may have dependencies on other Features. Features inherit the capabilit
               <entry>String</entry>
               <entry>Optional</entry>
               <entry>A location where documentation can be found for the Feature.</entry>
-            </row>
-
-            <row>
-              <entry>isComplete</entry>
-              <entry>boolean</entry>
-              <entry>Optional, defaults to <code>false</code></entry>
-              <entry>Completeness of the Feature. A Feature is complete when it has no external dependencies.</entry>
             </row>
 
             <row>
@@ -316,7 +316,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
       <title>Using the Feature API</title>
       <para>
         Features can also be created, read and written using the Feature API. The Feature API uses
-        the builder pattern to create most entities used in Features.
+        the builder pattern to create entities used in Features.
       </para>
       
       <para>
@@ -358,9 +358,9 @@ Feature f = builder.build();</programlisting>
     <para>
       Bundles are referenced using the identifier format described in 
       <xref linkend="service.feature-identifiers"/>.
-      This means that Bundles are referenced using their Maven coordinates. The <code>bundles</code> array can either contain
-      <code>String</code> values referencing the bundles directly by their identifier, or JSON objects which can contain the bundle
-      IDs with additional metadata. 
+      This means that Bundles are referenced using their Maven coordinates. The <code>bundles</code> array 
+	  contains JSON objects which can contain the bundle
+      IDs and specify optional additional metadata. 
     </para>
     <para>
       The following example shows a simple Feature describing a small application with its dependencies:
@@ -369,11 +369,11 @@ Feature f = builder.build();</programlisting>
     
   "name": "The Acme Application",
   "license": "https://opensource.org/licenses/Apache-2.0",
-  "isComplete": true,
+  "complete": true,
 
   "bundles": [
-    "org.osgi:org.osgi.util.function:1.1.0",
-    "org.osgi:org.osgi.util.promise:1.1.1",
+    { "id": "org.osgi:org.osgi.util.function:1.1.0" },
+    { "id": "org.osgi:org.osgi.util.promise:1.1.1" },
     {
       "id": "org.apache.commons:commons-email:1.5",
 
@@ -382,7 +382,7 @@ Feature f = builder.build();</programlisting>
       "org.acme.javadoc.link": 
         "https://commons.apache.org/proper/commons-email/javadocs/api-1.5"
     },
-    "com.acme:acmelib:1.7.2"      
+    { "id": "com.acme:acmelib:1.7.2" }      
   ]
    
   /* 
@@ -399,11 +399,13 @@ Feature f = builder.build();</programlisting>
         Arbitrary key-value pairs can be associated with bundle entries to store
         custom metadata alongside the bundle references.
         Reverse DNS naming should be used with the keys to avoid name clashes when
-        metadata is provided by multiple entities. 
+        metadata is provided by multiple entities. Keys not using the reverse DNS 
+        naming scheme are reserved for OSGi use.
       </para>
       
       <para>
-        Bundle metadata supports String keys and String values.
+        Bundle metadata supports String keys and <code>string</code>, 
+        <code>number</code> or <code>boolean</code> values.
       </para>
     </section>
     
@@ -504,7 +506,7 @@ Feature f = builder.build();</programlisting>
     
     <para>
       Variables are declared in the <code>variables</code> section of the Feature and they can have a default value specified.
-      The default can be of type <code>String</code>, <code>number</code> or <code>boolean</code>. Variables can also be declared
+      The default can be of type <code>string</code>, <code>number</code> or <code>boolean</code>. Variables can also be declared
       to <emphasis>not</emphasis> have a default, which means that they must be provided with a value through the Launcher. 
       This is done by specifying <code>null</code> as the default in the variable declaration.
     </para>
@@ -545,7 +547,7 @@ Feature f = builder.build();</programlisting>
   <section>
     <title>Extensions</title>
     <para>
-      Features can be extended with custom content. This makes it possible to keep entities and information relating to the Feature
+      Features can be extended with custom content. This makes it possible to keep custom entities and information relating to the Feature
     together with the rest of the Feature.</para>
     
     <para>
@@ -607,7 +609,7 @@ Feature f = builder.build();</programlisting>
       
       <para>
         Text extensions support the addition of custom text content to the Feature. 
-        The text is provided as a JSON string value or as a JSON array of strings.
+        The text is provided as a JSON array of strings.
       </para>
       
       <para>
@@ -618,12 +620,12 @@ Feature f = builder.build();</programlisting>
     
     "name": "The Acme Application",
     "license": "https://opensource.org/licenses/Apache-2.0",
-    "isComplete": true,
+    "complete": true,
 
     "bundles": [
-        "org.osgi:org.osgi.util.function:1.1.0",
-        "org.osgi:org.osgi.util.promise:1.1.1",
-        "com.acme:acmelib:2.0.0"      
+        { "id": "org.osgi:org.osgi.util.function:1.1.0" },
+        { "id": "org.osgi:org.osgi.util.promise:1.1.1" },
+        { "id": "com.acme:acmelib:2.0.0" }
     ],
     
     "extensions": {
@@ -656,12 +658,12 @@ Feature f = builder.build();</programlisting>
     
     "name": "The Acme Application",
     "license": "https://opensource.org/licenses/Apache-2.0",
-    "isComplete": true,
+    "complete": true,
 
     "bundles": [
-        "org.osgi:org.osgi.util.function:1.1.0",
-        "org.osgi:org.osgi.util.promise:1.1.1",
-        "com.acme:acmelib:2.0.0"      
+        { "id": "org.osgi:org.osgi.util.function:1.1.0" },
+        { "id": "org.osgi:org.osgi.util.promise:1.1.1" },
+        { "id": "com.acme:acmelib:2.0.0" }
     ],
     
     "extensions": {
@@ -698,7 +700,7 @@ Feature f = builder.build();</programlisting>
     
     "name": "The Acme Application",
     "license": "https://opensource.org/licenses/Apache-2.0",
-    "isComplete": true,
+    "complete": true,
 
     "bundles": [
         "org.osgi:org.osgi.util.function:1.1.0",
@@ -711,7 +713,7 @@ Feature f = builder.build();</programlisting>
             "kind": "mandatory",
             "type": "artifacts",
             "artifacts": [
-              "org.acme:appddl:1.2.1", 
+              { "id": "org.acme:appddl:1.2.1" }, 
               {
                 "id": "org.acme:appddl-custom:1.0.3",
                 "org.acme.target": "custom-db"
@@ -720,11 +722,12 @@ Feature f = builder.build();</programlisting>
         }
     }
 }</programlisting>
-        As with bundle identifiers, custom artifacts can be listed as ID only, or they can be 
+        As with bundle identifiers, custom artifacts are 
         specified in an object in the artifacts list with an explicit <code>id</code> and 
         optional additional metadata. The keys of the metadata should use a reverse DNS
-        naming pattern to avoid clashes and supported values are only of type <code>String</code>.
-        Keys that do not use reverse DNS as a prefix are reserved for OSGi use. 
+        naming pattern to avoid clashes. Keys that do not use reverse DNS as a prefix are reserved for OSGi use.
+        Supported metadata values can be of type 
+        <code>string</code>, <code>number</code> or <code>boolean</code>.
       </para>
         
     </section>
