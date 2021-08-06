@@ -97,22 +97,29 @@ public interface FeatureExtension {
     Kind getKind();
 
     /**
-     * Get the JSON from this extension.
-     * @return The JSON, or {@code null} if this is not a JSON extension.
-     */
-    String getJSON();
+	 * Get the JSON from this extension.
+	 * 
+	 * @return The JSON.
+	 * @throws IllegalStateException If called on an extension which is not of
+	 *             type JSON.
+	 */
+	String getJSON() throws IllegalStateException;
 
     /**
 	 * Get the Text from this extension.
 	 * 
-	 * @return The Text line by line, or {@code null} if this is not a Text
-	 *         extension.
+	 * @return The lines of text. The returned list is unmodifiable.
+	 * @throws IllegalStateException If called on an extension which is not of
+	 *             type TEXT.
 	 */
-	List<String> getText();
+	List<String> getText() throws IllegalStateException;
 
     /**
-     * Get the Artifacts from this extension.
-     * @return The Artifacts, or {@code null} if this is not an Artifacts extension.
-     */
-    List<FeatureArtifact> getArtifacts();
+	 * Get the Artifacts from this extension.
+	 * 
+	 * @return The Artifacts. The returned list is unmodifiable.
+	 * @throws IllegalStateException If called on an extension which is not of
+	 *             type ARTIFACTS.
+	 */
+	List<FeatureArtifact> getArtifacts() throws IllegalStateException;
 }
