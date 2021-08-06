@@ -711,7 +711,6 @@ Feature f = builder.build();</programlisting>
     </section>
   </section>
 
-
   <section>
     <title>Framework Launching Properties</title>
     <para>
@@ -737,7 +736,30 @@ Feature f = builder.build();</programlisting>
     }
   }
 }</programlisting>
-  </para>
+    </para>
+  </section>
+
+  <section>
+    <title>Resource Versioning</title>
+
+    <para>
+    Feature JSON resources are versioned to support the updates the JSON structure in the future.
+    To declare the document version of the Feature use the <code>feature-resource-version</code>
+    key in the JSON document.
+    </para>
+      <programlisting>{
+  "feature-resource-version": "1.0",
+  "id": "org.acme:acmeapp:1.0.0"
+
+  /*
+    Additional Feature entities here
+    ...
+  */
+}</programlisting>
+    <para>
+    The currently supported version of the Feature JSON documents is 1.0. If no
+    Feature Resource Version is specified <code>1.0</code> is used as the default.
+    </para>
   </section>
   
   <section>
