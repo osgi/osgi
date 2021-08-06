@@ -474,28 +474,6 @@ Feature f = builder.build();</programlisting>
   </section>
 
   <section>
-    <title>Framework Properties</title>
-    <para>
-      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. 
-      These can be provided in the Framework Properties section of the Feature.
-      The Launcher must be able to satisfy the specified properties. 
-      If it cannot ensure that these are present in the running Framework the launcher must fail.      
-    </para>
-
-    <para>
-      Example:
-      <programlisting>{
-  "id": "org.acme:acmeapp:osgifeature:fw-props:2.0.0",
-  "framework-properties": {
-    "org.osgi.framework.system.packages.extra": 
-      "javax.activation;version=\"1.1.1\"",
-    "org.osgi.framework.bootdelegation": "javax.activation"
-  }
-}</programlisting>
-  </para>
-  </section>
-
-  <section>
     <title>Variables</title>
     <para>
       Configurations and Framework Properties support late binding of values. This enables setting these items through a Launcher, 
@@ -728,6 +706,35 @@ Feature f = builder.build();</programlisting>
       </para>
         
     </section>
+  </section>
+
+
+  <section>
+    <title>Framework Properties</title>
+    <para>
+      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. 
+      These can be provided in the Framework Properties extension section of the Feature.
+      The Launcher must be able to satisfy the specified properties. 
+      If it cannot ensure that these are present in the running Framework the launcher must fail.      
+    </para>
+
+    <para>
+      Example:
+      <programlisting>{
+  "id": "org.acme:acmeapp:osgifeature:fw-props:2.0.0",
+  
+  "extensions": {
+    "framework-properties": {
+      "type": "json",
+      "json": {
+          "org.osgi.framework.system.packages.extra": 
+            "javax.activation;version=\"1.1.1\"",
+          "org.osgi.framework.bootdelegation": "javax.activation"
+      }
+    }
+  }
+}</programlisting>
+  </para>
   </section>
   
   <section>
