@@ -326,10 +326,11 @@ Features may have dependencies on other Features. Features inherit the capabilit
         <xref linkend="org.osgi.service.feature.BuilderFactory" xrefstyle="hyperlink"/>
       </para> 
       
-      <programlisting>BuilderFactory factory = // ... from Service Registry ...
+      <programlisting>FeatureService fs = ... // from Service Registry
+BuilderFactory factory = fs.getBuilderFactory();
 
 FeatureBuilder builder = factory.newFeatureBuilder(
-  new ID("org.acme", "acmeapp", "1.0.0"));
+  fs.getID("org.acme", "acmeapp", "1.0.0"));
 builder.setName("The ACME app");
 builder.setDescription("This is the main ACME app, "
   + "from where all functionality can be reached.");
@@ -416,34 +417,35 @@ Feature f = builder.build();</programlisting>
       <para>
         A Feature with Bundles can be created using the Feature API as follows:
       </para>
-      <programlisting>BuilderFactory factory = // ... from Service Registry ...
+      <programlisting>FeatureService fs = ... // from Service Registry
+BuilderFactory factory = fs.getBuilderFactory();
 
 FeatureBuilder builder = factory.newFeatureBuilder(
-    new ID("org.acme", "acmeapp", "1.0.1"));
+  fs.getID("org.acme", "acmeapp", "1.0.1"));
 builder.setName("The Acme Application");
 builder.setLicense("https://opensource.org/licenses/Apache-2.0");
 builder.setComplete(true);
 
-FeatureBundle b1 = factory.newBundleBuilder(
-    ID.fromMavenID("org.osgi:org.osgi.util.function:1.1.0"))
+FeatureBundle b1 = factory
+  .newBundleBuilder(fs.getIDfromMavenCoordinates(
+    "org.osgi:org.osgi.util.function:1.1.0"))
   .build();
-
-FeatureBundle b2 = factory.newBundleBuilder(
-    ID.fromMavenID("org.osgi:org.osgi.util.promise:1.1.1"))
+FeatureBundle b2 = factory
+  .newBundleBuilder(fs.getIDfromMavenCoordinates(
+    "org.osgi:org.osgi.util.promise:1.1.1"))
   .build();
-
-FeatureBundle b3 = factory.newBundleBuilder(
-    ID.fromMavenID("org.apache.commons:commons-email:1.1.5"))
+FeatureBundle b3 = factory
+  .newBundleBuilder(fs.getIDfromMavenCoordinates(
+    "org.apache.commons:commons-email:1.1.5"))
   .addMetadata("org.acme.javadoc.link",
     "https://commons.apache.org/proper/commons-email/javadocs/api-1.5")
   .build();
-
-FeatureBundle b4 = factory.newBundleBuilder(
-    ID.fromMavenID("com.acme:acmelib:1.7.2"))
+FeatureBundle b4 = factory
+  .newBundleBuilder(fs.getIDfromMavenCoordinates(
+    "com.acme:acmelib:1.7.2"))
   .build();
 
 builder.addBundles(b1, b2, b3, b4);
-
 Feature f = builder.build();</programlisting>
     </section>
   </section>
