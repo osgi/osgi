@@ -17,10 +17,10 @@
  *******************************************************************************/
 package org.osgi.service.feature;
 
-import org.osgi.annotation.versioning.ProviderType;
-
 import java.util.Map;
 import java.util.Optional;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Represents an OSGi Configuration in the Feature Model.
@@ -41,8 +41,9 @@ public interface FeatureConfiguration {
     Optional<String> getFactoryPid();
 
     /**
-     * Get the configuration key-value map.
-     * @return The key-value map.
-     */
+	 * Get the configuration key-value map.
+	 * 
+	 * @return The key-value map. The returned map is unmodifiable.
+	 */
     Map<String, Object> getValues();
 }

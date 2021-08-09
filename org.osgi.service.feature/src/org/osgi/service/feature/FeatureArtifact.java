@@ -37,7 +37,7 @@ public interface FeatureArtifact {
 	/**
 	 * Get the metadata for this artifact.
 	 * 
-	 * @return The metadata.
+	 * @return The metadata. The returned map is unmodifiable.
 	 */
 	Map<String,Object> getMetadata();
 }

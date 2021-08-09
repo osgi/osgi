@@ -46,7 +46,7 @@ public interface Feature {
     /**
 	 * Get the categories.
 	 *
-	 * @return The categories.
+	 * @return The categories. The returned list is unmodifiable.
 	 */
 	List<String> getCategories();
 
@@ -95,16 +95,17 @@ public interface Feature {
     boolean isComplete();
 
     /**
-     * Get the bundles.
-     * @return The bundles.
-     */
+	 * Get the bundles.
+	 * 
+	 * @return The bundles. The returned list is unmodifiable.
+	 */
     List<FeatureBundle> getBundles();
 
     /**
 	 * Get the configurations. The iteration order of the returned map should
 	 * follow the definition order of the configurations in the feature.
 	 * 
-	 * @return The configurations.
+	 * @return The configurations. The returned map is unmodifiable.
 	 */
     Map<String, FeatureConfiguration> getConfigurations();
 
@@ -112,7 +113,7 @@ public interface Feature {
 	 * Get the extensions. The iteration order of the returned map should follow
 	 * the definition order of the extensions in the feature.
 	 * 
-	 * @return The extensions.
+	 * @return The extensions. The returned map is unmodifiable.
 	 */
     Map<String, FeatureExtension> getExtensions();
 
@@ -120,11 +121,7 @@ public interface Feature {
 	 * Get the variables. The iteration order of the returned map should follow
 	 * the definition order of the variables in the feature.
 	 * 
-	 * @return The variables.
+	 * @return The variables. The returned map is unmodifiable.
 	 */
-    Map<String, String> getVariables();
-
-	// TODO
-    // add framework properties
-
+	Map<String,String> getVariables();
 }

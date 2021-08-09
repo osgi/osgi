@@ -37,7 +37,7 @@ public interface FeatureBundle {
 	/**
 	 * Get the metadata for this bundle.
 	 * 
-	 * @return The metadata.
+	 * @return The metadata. The returned map is unmodifiable.
 	 */
 	Map<String,Object> getMetadata();
 }
