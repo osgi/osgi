@@ -103,7 +103,7 @@ public interface FeatureExtension {
 	 * @throws IllegalStateException If called on an extension which is not of
 	 *             type JSON.
 	 */
-	String getJSON() throws IllegalStateException;
+	String getJSON();
 
     /**
 	 * Get the Text from this extension.
@@ -112,7 +112,7 @@ public interface FeatureExtension {
 	 * @throws IllegalStateException If called on an extension which is not of
 	 *             type TEXT.
 	 */
-	List<String> getText() throws IllegalStateException;
+	List<String> getText();
 
     /**
 	 * Get the Artifacts from this extension.
@@ -121,5 +121,5 @@ public interface FeatureExtension {
 	 * @throws IllegalStateException If called on an extension which is not of
 	 *             type ARTIFACTS.
 	 */
-	List<FeatureArtifact> getArtifacts() throws IllegalStateException;
+	List<FeatureArtifact> getArtifacts();
 }
