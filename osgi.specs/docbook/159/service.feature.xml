@@ -142,7 +142,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Properties</emphasis> - Framework properties can be specified in a Feature.</para>
+          <para><emphasis>Properties</emphasis> - Framework launching properties can be specified in a Feature.</para>
         </listitem>
 
       </itemizedlist>
@@ -474,31 +474,9 @@ Feature f = builder.build();</programlisting>
   </section>
 
   <section>
-    <title>Framework Properties</title>
-    <para>
-      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. 
-      These can be provided in the Framework Properties section of the Feature.
-      The Launcher must be able to satisfy the specified properties. 
-      If it cannot ensure that these are present in the running Framework the launcher must fail.      
-    </para>
-
-    <para>
-      Example:
-      <programlisting>{
-  "id": "org.acme:acmeapp:osgifeature:fw-props:2.0.0",
-  "framework-properties": {
-    "org.osgi.framework.system.packages.extra": 
-      "javax.activation;version=\"1.1.1\"",
-    "org.osgi.framework.bootdelegation": "javax.activation"
-  }
-}</programlisting>
-  </para>
-  </section>
-
-  <section>
     <title>Variables</title>
     <para>
-      Configurations and Framework Properties support late binding of values. This enables setting these items through a Launcher, 
+      Configurations and Framework Launching Properties support late binding of values. This enables setting these items through a Launcher,
       for example to specify a database user name, server port number or other information that may be variable between runtimes.
     </para>
     
@@ -529,13 +507,13 @@ Feature f = builder.build();</programlisting>
     }    
 }</programlisting>
       Variables are referenced with the curly brace placeholder syntax: <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
-      in the configuration value or framework property value section.  
+      in the configuration value or framework launching property value section.
       To support conversion of variables to non-string types the configurator syntax
       specifying the datatype with the configuration key can be used, as in the above example.
     </para>
     
     <para>
-      Multiple variables can be referenced for a single configuration or framework property value and variables can be combined with text. 
+      Multiple variables can be referenced for a single configuration or framework launching property value and variables can be combined with text.
       Variable substitution is applied recursively, that is if the value of a variable is again a variable it must be substituted.
       If no variable exist with the given name, then the <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
       must be retained in the value.
@@ -728,6 +706,35 @@ Feature f = builder.build();</programlisting>
       </para>
         
     </section>
+  </section>
+
+
+  <section>
+    <title>Framework Launching Properties</title>
+    <para>
+      When a Feature is launched in an OSGi framework it may be necessary to specify Framework properties. 
+      These can be provided in the Framework Properties extension section of the Feature.
+      The Launcher must be able to satisfy the specified properties. 
+      If it cannot ensure that these are present in the running Framework the launcher must fail.      
+    </para>
+
+    <para>
+      Example:
+      <programlisting>{
+  "id": "org.acme:acmeapp:osgifeature:fw-props:2.0.0",
+  
+  "extensions": {
+    "framework-launching-properties": {
+      "type": "json",
+      "json": {
+          "org.osgi.framework.system.packages.extra": 
+            "javax.activation;version=\"1.1.1\"",
+          "org.osgi.framework.bootdelegation": "javax.activation"
+      }
+    }
+  }
+}</programlisting>
+  </para>
   </section>
   
   <section>
