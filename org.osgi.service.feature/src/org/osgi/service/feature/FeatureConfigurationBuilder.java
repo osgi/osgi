@@ -29,20 +29,33 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface FeatureConfigurationBuilder {
 
     /**
-     * Add a configuration value for this Configuration object. If a
-     * value with the same key was previously provided the previous value is
-     * overwritten.
-     * @param key The configuration key.
-     * @param value The configuration value. Acceptable data types are: TODO list
-     * @return This builder.
-     */
+	 * Add a configuration value for this Configuration object. If a value with
+	 * the same key was previously provided (regardless of case) the previous
+	 * value is overwritten.
+	 *
+	 * @param key The configuration key.
+	 * @param value The configuration value. Acceptable data types are the data
+	 *            type supported by the Configuration Admin service, which are
+	 *            the Primary Property Types as defined for the Filter Syntax in
+	 *            the OSGi Core specification.
+	 * @throws IllegalArgumentException if the value is of an invalid type.
+	 * @return This builder.
+	 */
     FeatureConfigurationBuilder addValue(String key, Object value);
 
     /**
-	 * Add a map of configuration values for this Configuration object. All
-	 * values will be added to any previously provided configuration values.
-	 * 
-	 * @param configValues The map of configuration values to add.
+	 * Add a map of configuration values for this Configuration object. Values
+	 * will be added to any previously provided configuration values. If a value
+	 * with the same key was previously provided (regardless of case) the
+	 * previous value is overwritten.
+	 *
+	 * @param configValues The map of configuration values to add. Acceptable
+	 *            value types are the data type supported by the Configuration
+	 *            Admin service, which are the Primary Property Types as defined
+	 *            for the Filter Syntax in the OSGi Core specification.
+	 * @throws IllegalArgumentException if a value is of an invalid type or if
+	 *             the same key is provided in different capitalizations
+	 *             (regardless of case).
 	 * @return This builder.
 	 */
     FeatureConfigurationBuilder addValues(Map<String, Object> configValues);
