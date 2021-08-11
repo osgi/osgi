@@ -28,7 +28,8 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface FeatureBuilder {
 	/**
-	 * Set the Feature Complete flag.
+	 * Set the Feature Complete flag. If this method is not called the complete
+	 * flag defaults to {@code false}.
 	 * 
 	 * @param complete If the feature is complete.
 	 * @return This builder.
