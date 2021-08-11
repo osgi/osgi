@@ -529,7 +529,7 @@ Feature f = builder.build();</programlisting>
   <section>
     <title>Extensions</title>
     <para>
-      Features can be extended with custom content. This makes it possible to keep custom entities and information relating to the Feature
+      Features can include custom content. This makes it possible to keep custom entities and information relating to the Feature
     together with the rest of the Feature.</para>
     
     <para>
@@ -581,8 +581,9 @@ Feature f = builder.build();</programlisting>
     
     <para>
       Extensions are specified as JSON objects under the <code>extensions</code> key in the Feature. A Feature can
-      contain any number of extensions, as long as the extension keys are unique. It is recommended to use reverse
-      DNS naming for extension keys to avoid name clashing of multiple extensions in a single Feature. 
+      contain any number of extensions, as long as the extension keys are unique.
+      Extension keys should use reverse
+      DNS naming to avoid name clashing of multiple extensions in a single Feature.
       Extensions names without DNS prefix are reserved for OSGi use.
     </para>
     
