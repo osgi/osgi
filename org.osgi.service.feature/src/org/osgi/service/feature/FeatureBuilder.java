@@ -113,20 +113,27 @@ public interface FeatureBuilder {
     FeatureBuilder addExtensions(FeatureExtension ... extensions);
 
     /**
-     * Add a variable to the Feature. If a variable with the specified key
-     * already exists it is replaced with this one.
-     * @param key The key.
-     * @param defaultValue The default value.
-     * @return This builder.
-     */
-    FeatureBuilder addVariable(String key, String defaultValue);
+	 * Add a variable to the Feature. If a variable with the specified key
+	 * already exists it is replaced with this one. Variable values are of type:
+	 * String, Boolean or BigDecimal for numbers.
+	 * 
+	 * @param key The key.
+	 * @param defaultValue The default value.
+	 * @return This builder.
+	 * @throws IllegalArgumentException if the value is of an invalid type.
+	 */
+	FeatureBuilder addVariable(String key, Object defaultValue);
 
     /**
-     * Add a map of variables to the Feature
-     * @param variables to be added.
-     * @return This builder.
-     */
-    FeatureBuilder addVariables(Map<String, String> variables);
+	 * Add a map of variables to the Feature. Pre-existing variables with the
+	 * same key in are overwritten if these keys exist in the map. Variable
+	 * values are of type: String, Boolean or BigDecimal for numbers.
+	 * 
+	 * @param variables to be added.
+	 * @return This builder.
+	 * @throws IllegalArgumentException if a value is of an invalid type.
+	 */
+	FeatureBuilder addVariables(Map<String,Object> variables);
 
     /**
      * Build the Feature. Can only be called once on a builder. After
