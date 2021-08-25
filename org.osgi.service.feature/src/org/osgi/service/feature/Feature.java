@@ -119,9 +119,11 @@ public interface Feature {
 
     /**
 	 * Get the variables. The iteration order of the returned map should follow
-	 * the definition order of the variables in the feature.
+	 * the definition order of the variables in the feature. Values are of type:
+	 * String, Boolean or BigDecimal for numbers. The {@code null} JSON value is
+	 * represented by a null value in the map.
 	 * 
 	 * @return The variables. The returned map is unmodifiable.
 	 */
-	Map<String,String> getVariables();
+	Map<String,Object> getVariables();
 }
