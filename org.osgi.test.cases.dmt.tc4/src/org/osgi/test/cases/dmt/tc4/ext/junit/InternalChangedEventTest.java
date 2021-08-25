@@ -33,6 +33,7 @@ import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDmtEventListener;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestEventHandler;
+import org.osgi.test.support.sleep.Sleep;
 
 public class InternalChangedEventTest extends DmtAdminTestCase {
 
@@ -49,6 +50,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		Sleep.sleep(250L);
 		getDmtAdmin();
 	}
 
