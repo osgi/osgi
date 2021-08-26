@@ -31,6 +31,7 @@
 
 package org.osgi.test.cases.cdi.junit;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -85,18 +86,20 @@ public class ConfigurationTests extends AbstractTestCase {
 		Bundle tb3Bundle = installBundle("tb3.jar");
 
 		Configuration configurationA = null, configurationB = null;
-		ServiceTracker<BeanService, BeanService> stA = null, stB = null;
 
 		try {
 			int attempts = 50;
 			ComponentDTO configurationBeanA = null;
 
 			while (--attempts > 0) {
-				ContainerDTO containerDTO = getContainerDTO(cdiRuntime, tb3Bundle);
+				ContainerDTO containerDTO = getContainerDTO(cdiRuntime,
+						tb3Bundle);
 
-				configurationBeanA = containerDTO.components.stream().filter(
-					c -> c.template.name.equals("configurationBeanA")
-				).findFirst().orElse(null);
+				configurationBeanA = containerDTO.components.stream()
+						.filter(c -> c.template.name
+								.equals("configurationBeanA"))
+						.findFirst()
+						.orElse(null);
 
 				if (configurationBeanA != null) {
 					break;
@@ -104,17 +107,21 @@ public class ConfigurationTests extends AbstractTestCase {
 				Thread.sleep(100);
 			}
 
-			List<ConfigurationTemplateDTO> requiredConfigs = configurationBeanA.template.configurations.stream().filter(
+			List<ConfigurationTemplateDTO> requiredConfigs = configurationBeanA.template.configurations
+					.stream()
+					.filter(
 				tconf -> tconf.policy == ConfigurationPolicy.REQUIRED
 			).collect(Collectors.toList());
 
 			assertTrue(
 				configurationBeanA.instances.get(0).configurations.stream().noneMatch(
-					iconf -> requiredConfigs.stream().anyMatch(rc -> rc == iconf.template)
+							iconf -> requiredConfigs.stream()
+									.anyMatch(rc -> rc == iconf.template)
 				)
 			);
 
-			configurationA = configurationAdmin.getConfiguration("configurationBeanA", "?");
+			configurationA = configurationAdmin
+					.getConfiguration("configurationBeanA", "?");
 
 			Dictionary<String, Object> p1 = new Hashtable<>();
 			p1.put("ports", new int[] {12, 4567});
@@ -122,38 +129,57 @@ public class ConfigurationTests extends AbstractTestCase {
 
 			assertTrue(
 				configurationBeanA.instances.get(0).configurations.stream().allMatch(
-					iconf -> requiredConfigs.stream().anyMatch(rc -> rc == iconf.template)
+							iconf -> requiredConfigs.stream()
+									.anyMatch(rc -> rc == iconf.template)
 				)
 			);
 
-			configurationB = configurationAdmin.getConfiguration("configurationBeanB", "?");
+			configurationB = configurationAdmin
+					.getConfiguration("configurationBeanB", "?");
 
 			Dictionary<String, Object> p2 = new Hashtable<>();
 			p2.put("color", "green");
 			p2.put("ports", new int[] {80});
 			configurationB.update(p2);
 
-			stA = new ServiceTracker<BeanService, BeanService>(
-				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=A)(ports=4567))"), null);
-			stA.open(true);
+			try (CloseableTracker<BeanService,BeanService> stA = track(
+					"(&(objectClass=%s)(bean=A))",
+					BeanService.class.getName())) {
+				BeanService<Callable<int[]>> beanService = stA
+						.waitForService(timeout);
 
-			BeanService<Callable<int[]>> beanService = stA.waitForService(timeout);
+				assertNotNull(beanService);
 
-			assertNotNull(beanService);
-			assertEquals("blue", beanService.doSomething());
-			assertArrayEquals(new int[] {12, 4567}, beanService.get().call());
+				assertWithRetries(() -> {
+					assertEquals("blue", beanService.doSomething());
+					try {
+						assertArrayEquals(new int[] {
+								12, 4567
+						}, beanService.get().call());
+					} catch (final Exception e) {
+						throw new AssertionError(e);
+					}
+				});
+			}
 
-			stB = new ServiceTracker<BeanService, BeanService>(
-				bundleContext, bundleContext.createFilter(
-					"(&(objectClass=org.osgi.test.cases.cdi.interfaces.BeanService)(bean=B)(ports=80))"), null);
-			stB.open(true);
+			try (CloseableTracker<BeanService,BeanService> stB = track(
+					"(&(objectClass=%s)(bean=B))",
+					BeanService.class.getName())) {
+				final BeanService<Callable<int[]>> beanServiceB = stB
+						.waitForService(timeout);
+				assertNotNull(beanServiceB);
 
-			beanService = stB.waitForService(1000);
-
-			assertNotNull(beanService);
-			assertEquals("green", beanService.doSomething());
-			assertArrayEquals(new int[] {80}, beanService.get().call());
+				assertWithRetries(() -> {
+					assertEquals("green", beanServiceB.doSomething());
+					try {
+						assertArrayEquals(new int[] {
+								80
+						}, beanServiceB.get().call());
+					} catch (final Exception e) {
+						throw new AssertionError(e);
+					}
+				});
+			}
 		}
 		finally {
 			if (configurationA != null) {
@@ -172,16 +198,27 @@ public class ConfigurationTests extends AbstractTestCase {
 					// ignore
 				}
 			}
-			if (stA != null) {
-				stA.close();
-			}
-			if (stB != null) {
-				stB.close();
-			}
 			tb3Bundle.uninstall();
 		}
 	}
 
+	private void assertWithRetries(final Runnable runnable) throws Exception {
+		int retries = 50;
+		for (int i = 0; i < retries; i++) { // can take some time to let
+											// configuration listener get the
+											// event and update the bean
+			try {
+				runnable.run();
+				break;
+			} catch (final AssertionError ae) {
+				retries--;
+				if (retries == 0) {
+					throw ae;
+				}
+				sleep(200);
+			}
+		}
+	}
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testOptionalConfiguration() throws Exception {
