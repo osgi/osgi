@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 25.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 415.4 294.8" style="enable-background:new 0 0 415.4 294.8;" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="415.4px" height="215.9px" viewBox="0 0 415.4 215.9" style="enable-background:new 0 0 415.4 215.9;" xml:space="preserve"
+	>
 <style type="text/css">
 	.st0{stroke:#000000;stroke-miterlimit:10;}
 	.st1{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
@@ -9,7 +10,6 @@
 	.st3{font-size:9.2777px;}
 	.st4{fill:none;stroke:#000000;stroke-miterlimit:10;}
 	.st5{font-family:'ProductusBook';}
-	.st6{fill-opacity:0;}
 </style>
 <g>
 	<rect x="167" y="9.3" class="st0" width="76.6" height="34.2"/>
@@ -19,8 +19,7 @@
 <g>
 	<rect x="12.4" y="170.1" class="st0" width="76.6" height="34.2"/>
 	<rect x="10" y="167.9" class="st1" width="76.6" height="34.2"/>
-	<text transform="matrix(1 0 0 1 13.6555 178.0692)" class="st2 st3">Framework</text>
-	<text transform="matrix(1 0 0 1 13.6555 189.1692)" class="st2 st3">Property</text>
+	<text transform="matrix(1 0 0 1 13.6555 178.0692)" class="st2 st3">Variables</text>
 </g>
 <g>
 	<rect x="11.2" y="85.4" class="st0" width="76.6" height="34.2"/>
@@ -53,21 +52,9 @@
 <polyline class="st4" points="89.1,101.4 201.6,101.4 201.6,44.6 "/>
 <line class="st4" x1="242.7" y1="23.1" x2="321.5" y2="23.1"/>
 <polyline class="st4" points="320.3,100.3 201.6,101.4 201.6,184.9 89.1,184.9 "/>
-<polyline class="st4" points="320.3,184.9 201.6,184.9 201.6,268.4 319.1,268.4 "/>
 <text transform="matrix(1 0 0 1 145.3354 20.8933)" class="st5 st3">0..n </text>
 <text transform="matrix(1 0 0 1 204.6255 54.498)" class="st5 st3">0..n </text>
 <text transform="matrix(1 0 0 1 245.9385 20.8938)" class="st5 st3">0..n </text>
-<circle class="st6" cx="142.1" cy="74.6" r="14.7"/>
-<g>
-	<rect x="12.4" y="252.4" class="st0" width="76.6" height="34.2"/>
-	<rect x="10" y="250.2" class="st1" width="76.6" height="34.2"/>
-	<text transform="matrix(1 0 0 1 13.6555 260.3692)" class="st2 st3">Requirement</text>
-</g>
-<g>
-	<rect x="321.5" y="251.3" class="st0" width="76.6" height="34.2"/>
-	<rect x="319.1" y="249.1" class="st1" width="76.6" height="34.2"/>
-	<text transform="matrix(1 0 0 1 322.7555 259.2692)" class="st2 st3">Capability</text>
-</g>
-<line class="st4" x1="201.6" y1="268.4" x2="89.1" y2="268.4"/>
 <path class="st4" d="M518.7-10"/>
+<polyline class="st4" points="320.3,184.9 201.6,184.9 201.6,184.9 89.1,184.9 "/>
 </svg>
