@@ -31,7 +31,8 @@
 
 package org.osgi.test.cases.cdi.junit;
 
-import static java.lang.Thread.sleep;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import org.awaitility.Awaitility;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +64,8 @@ public class ConfigurationTests extends AbstractTestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
+		Awaitility.doNotCatchUncaughtExceptionsByDefault();
+		Awaitility.pollInSameThread();
 		runtimeTracker = new ServiceTracker<>(
 			bundleContext, CDIComponentRuntime.class, null);
 		runtimeTracker.open();
@@ -150,15 +154,10 @@ public class ConfigurationTests extends AbstractTestCase {
 
 				assertNotNull(beanService);
 
-				assertWithRetries(() -> {
-					assertEquals("blue", beanService.doSomething());
-					try {
-						assertArrayEquals(new int[] {
-								12, 4567
-						}, beanService.get().call());
-					} catch (final Exception e) {
-						throw new AssertionError(e);
-					}
+				await().untilAsserted(() -> {
+					assertThat(beanService.doSomething()).isEqualTo("blue");
+					assertThat(beanService.get().call()).containsExactly(12,
+							4567);
 				});
 			}
 
@@ -169,15 +168,9 @@ public class ConfigurationTests extends AbstractTestCase {
 						.waitForService(timeout);
 				assertNotNull(beanServiceB);
 
-				assertWithRetries(() -> {
-					assertEquals("green", beanServiceB.doSomething());
-					try {
-						assertArrayEquals(new int[] {
-								80
-						}, beanServiceB.get().call());
-					} catch (final Exception e) {
-						throw new AssertionError(e);
-					}
+				await().untilAsserted(() -> {
+					assertThat(beanServiceB.doSomething()).isEqualTo("green");
+					assertThat(beanServiceB.get().call()).containsExactly(80);
 				});
 			}
 		}
@@ -202,23 +195,6 @@ public class ConfigurationTests extends AbstractTestCase {
 		}
 	}
 
-	private void assertWithRetries(final Runnable runnable) throws Exception {
-		int retries = 50;
-		for (int i = 0; i < retries; i++) { // can take some time to let
-											// configuration listener get the
-											// event and update the bean
-			try {
-				runnable.run();
-				break;
-			} catch (final AssertionError ae) {
-				retries--;
-				if (retries == 0) {
-					throw ae;
-				}
-				sleep(200);
-			}
-		}
-	}
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testOptionalConfiguration() throws Exception {
