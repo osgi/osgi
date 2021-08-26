@@ -73,6 +73,8 @@ org.osgi:org.osgi.test.assertj.promise:${osgi-test.version}
 org.osgi:org.osgi.test.junit4:${osgi-test.version}
 org.osgi:org.osgi.test.junit5:${osgi-test.version}
 org.osgi:org.osgi.test.junit5.cm:${osgi-test.version}
+org.awaitility:awaitility:${awaitility.version}
+org.hamcrest:hamcrest:${hamcrest.version}
 
 # 3rd party artifacts
 javax.ejb:javax.ejb-api:3.2
