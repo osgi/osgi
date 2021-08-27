@@ -783,13 +783,6 @@ Feature f = builder.build();</programlisting>
     Feature Resource Version is specified <code>1.0</code> is used as the default.
     </para>
   </section>
-  
-  <section>
-    <title>Security</title>
-
-    <para>
-    ...</para>
-  </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.xml"/>
 
