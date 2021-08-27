@@ -48,6 +48,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -149,6 +150,10 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	protected void tearDown() throws Exception {
 		stopFramework();
 		super.tearDown();
+
+		System.out.println(
+				"Sleep for 10s before ending to allow for cleanup of ports before the next run.");
+		Sleep.sleep(10000);
 	}
 
 	/**
