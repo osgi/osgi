@@ -73,7 +73,7 @@ osgi.annotation.version=8.0.0
 
 # Documentation
 -groupid: org.osgi
--pom: version=${versionmask;===s;${@version}}
+-pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${-snapshot};${versionmask;===s;${@version}}}
 Bundle-Name: ${-groupid}:${bsn}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    Eclipse Foundation
