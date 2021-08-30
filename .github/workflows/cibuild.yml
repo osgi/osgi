@@ -64,7 +64,7 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        distribution: 'adopt'
+        distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
@@ -105,7 +105,7 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        distribution: 'adopt'
+        distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
@@ -145,7 +145,7 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        distribution: 'adopt'
+        distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Download TCK
       uses: actions/download-artifact@v2
