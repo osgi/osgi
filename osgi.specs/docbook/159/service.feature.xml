@@ -284,7 +284,7 @@ Features may have dependencies on other Features. Features inherit the capabilit
               <entry>SCM</entry>
               <entry>String</entry>
               <entry>Optional</entry>
-              <entry>the SCM information relating to the feature. The syntax of the value
+              <entry>SCM information relating to the feature. The syntax of the value
 	          follows the Bundle-SCM format. See the 'Bundle Manifest Headers' section
 	          in the OSGi Core specification.</entry>
             </row>
@@ -322,8 +322,8 @@ Features may have dependencies on other Features. Features inherit the capabilit
       <title>Using the Feature API</title>
       <para>
         Features can also be created, read and written using the Feature API. The main entry point 
-        for this API is the FeatureService. 
-        <xref linkend="org.osgi.service.feature.FeatureService" xrefstyle="hyperlink"/>
+        for this API is the
+        <xref linkend="org.osgi.service.feature.FeatureService" xrefstyle="hyperlink"/>.
         The Feature API uses
         the builder pattern to create entities used in Features.
       </para>
@@ -535,7 +535,6 @@ Feature f = builder.build();</programlisting>
     
     <para>
       Multiple variables can be referenced for a single configuration or framework launching property value and variables may be combined with text.
-      Variable substitution is applied recursively, that is if the value of a variable is again a variable it must be substituted.
       If no variable exist with the given name, then the <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
       must be retained in the value.
     </para>
@@ -561,7 +560,7 @@ Feature f = builder.build();</programlisting>
       </listitem>
 
       <listitem>
-        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts associated with the Feature, listed as identifiers.</para>
+        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts associated with the Feature.</para>
       </listitem>
     </itemizedlist>
     
@@ -578,7 +577,8 @@ Feature f = builder.build();</programlisting>
     <itemizedlist>
       <listitem>
         <para><emphasis>Mandatory</emphasis> - The entity processing this Feature 
-        <emphasis>must</emphasis> know how to handle this extension.</para>
+        <emphasis>must</emphasis> know how to handle this extension. If it cannot handle the
+        extension it must fail.</para>
       </listitem>
 
       <listitem>
