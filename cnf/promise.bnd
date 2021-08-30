@@ -1,6 +1,6 @@
 # bnd instructions for Promise projects
 
 # Uncomment the following line to build the non-snapshot version.
-#-snapshot:
+-snapshot: RC1
 
 packaging: cmpn,promise
