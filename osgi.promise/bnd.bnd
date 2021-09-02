@@ -5,7 +5,7 @@ Automatic-Module-Name: ${bsn}
 Bundle-Description: \
     OSGi Promise API Release ${versionmask;=;${build.version}} \
     for use inside and outside of OSGi environments
--maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning

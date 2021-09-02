@@ -66,6 +66,11 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
+        server-id: ossrh
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_PASSWORD
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: GPG_PASSPHRASE
     - name: Build
       id: build
       run: |
@@ -84,6 +89,7 @@ jobs:
       run: |
         ./.github/scripts/publish.sh
       env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
