@@ -4,7 +4,7 @@ spec.version = ${versionmask;===;${if;${spec.package.versionattr};${spec.package
 build.version = ${spec.version}.${project.build}
 Automatic-Module-Name: ${bsn}
 Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}
--maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning

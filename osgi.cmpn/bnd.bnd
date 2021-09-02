@@ -4,7 +4,7 @@
 Bundle-Description: \
 	OSGi Compendium Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles
--maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc"
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
 -fixupmessages.baseline.warning: Baseline mismatch;is:=warning
