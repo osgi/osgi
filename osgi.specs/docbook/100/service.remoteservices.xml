@@ -565,7 +565,7 @@ tracker.open();</programlisting>
     be reflected in the <code>service.intents</code> property. An intent can
     also <emphasis>constrain</emphasis> the possible communication mechanisms
     that a distribution provider can choose to distribute a service. This is
-    reflected in the <code>service.export.intents</code> and
+    reflected in the <code>service.exported.intents</code> and
     <code>service.exported.intents.extra</code> properties.</para>
 
     <para>The purpose of the intents is to have a
