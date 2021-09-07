@@ -104,7 +104,7 @@ org.apache.felix:org.apache.felix.converter:1.0.14
 org.apache.felix:org.apache.felix.http.servlet-api:1.1.2
 org.apache.felix:org.apache.felix.http.jetty:4.1.8
 
-org.apache.felix:org.apache.felix.scr:2.2.0-SNAPSHOT
+org.apache.felix:org.apache.felix.scr:2.2.0-RC1
 
 org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2
 org.apache.geronimo.specs:geronimo-annotation_1.1_spec:1.0.1
