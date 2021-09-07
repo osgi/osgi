@@ -14,3 +14,7 @@ testcases.junit4 = ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
 testcases.junit5 = ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 
 Test-Cases: ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}
+
+#for mockito
+-runproperties.osgi.tck: \
+	org.osgi.framework.bootdelegation=sun.reflect 

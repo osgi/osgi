@@ -75,6 +75,10 @@ org.osgi:org.osgi.test.junit5:${osgi-test.version}
 org.osgi:org.osgi.test.junit5.cm:${osgi-test.version}
 org.awaitility:awaitility:${awaitility.version}
 org.hamcrest:hamcrest:${hamcrest.version}
+org.mockito:mockito-core:jar:${org.mockito.version}
+net.bytebuddy:byte-buddy:${net.bytebuddy.version}
+net.bytebuddy:byte-buddy-agent:${net.bytebuddy.version}
+org.objenesis:objenesis:jar:${org.objenesis.version}
 
 # 3rd party artifacts
 javax.ejb:javax.ejb-api:3.2
@@ -192,3 +196,5 @@ org.slf4j:log4j-over-slf4j:1.7.7
 org.apache.zookeeper:zookeeper:3.4.13
 org.apache.aries.component-dsl:org.apache.aries.component-dsl.component-dsl:1.2.2
 org.apache.aries.typedevent:org.apache.aries.typedevent.bus:0.0.1-SNAPSHOT
+
+

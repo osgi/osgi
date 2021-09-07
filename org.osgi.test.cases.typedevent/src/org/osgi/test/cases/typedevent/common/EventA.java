@@ -16,17 +16,10 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.test.cases.typedevent.dto;
+package org.osgi.test.cases.typedevent.common;
 
-public class TestEvent {
+import org.osgi.dto.DTO;
 
-	public TestEvent(String test, String a, String A) {
-		this.test = test;
-		this.a = a;
-		this.A = A;
-	}
-
-	public String	a;
-	public String	A;
-	public String	test;
+public class EventA extends DTO {
+	public String a;
 }

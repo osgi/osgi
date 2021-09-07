@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.dto.DTO;
 import org.osgi.service.typedevent.TypedEventBus;
+import org.osgi.test.cases.typedevent.common.EventA;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
@@ -36,11 +38,10 @@ import org.osgi.test.junit5.service.ServiceExtension;
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
 @Nested
-public class TypedEventBusTest {
+@DisplayName("157.5.1 Error Handling")
+public class TypedEventBusInputValueTest {
 
-	private static final DTO	dto	= new DTO() {
-										public String a = "";
-									};
+	private static final DTO	dto	= new EventA();
 
 	@InjectService
 	TypedEventBus				typedEventBus;
@@ -48,11 +49,6 @@ public class TypedEventBusTest {
 	@Test
 	public void test_service_exists() {
 		assertThat(typedEventBus).isNotNull();
-	}
-
-	@Test
-	public void test_deliver_dto() {
-		typedEventBus.deliver(dto);
 	}
 
 	@Test
@@ -79,13 +75,6 @@ public class TypedEventBusTest {
 		assertThatNullPointerException().isThrownBy(() -> {
 			typedEventBus.deliver("a", null);
 		});
-
-	}
-
-	@Test
-	public void test_deliveruntyped() {
-
-		typedEventBus.deliverUntyped("a", new HashMap<>());
 
 	}
 
