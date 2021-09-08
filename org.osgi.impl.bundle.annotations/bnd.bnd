@@ -9,5 +9,3 @@ Bundle-Description			= Annotations Test Bundle
 	org.osgi.annotation.bundle; version=latest, \
 	org.osgi.annotation.versioning; version=latest
 
--runproperties = ${runproperties}
-

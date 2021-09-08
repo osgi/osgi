@@ -25,6 +25,4 @@ Export-Package: org.osgi.service.transaction.control, \
 	org.osgi.impl.service.transaction.control.jdbc; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 
--runproperties = ${runproperties}
-
 -signaturetest                      = org.osgi.service.transaction.control.jdbc

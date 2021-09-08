@@ -110,7 +110,8 @@ Bundle-License: ${SPDX-License-Identifier};\
 
 -runtrace=true
 runproperties = report=true, \
- equinox.use.ds=true
+ equinox.use.ds=true, \
+ org.osgi.framework.bootdelegation="${org.osgi.framework.bootdelegation.*}"
 runsecureproperties = ${runproperties}, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore

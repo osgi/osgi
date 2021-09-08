@@ -29,5 +29,3 @@ Import-Package: ${-signaturetest}, *
 -signaturetest                      = \
     org.osgi.service.repository
 
--runproperties = ${runproperties}
-

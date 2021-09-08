@@ -43,5 +43,4 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.jndi;version=latest, \
 	org.osgi.impl.service.jndi; version=latest
 
--runproperties = ${runproperties}, \
-	org.osgi.framework.bootdelegation=com.sun.*
+org.osgi.framework.bootdelegation=com.sun.*

@@ -24,5 +24,4 @@ Bundle-Description: Tests the service layer bundle
 	org.osgi.service.onem2m;version=latest,\
 	org.osgi.impl.service.onem2m;version=latest
 
--runproperties: ${runproperties},\
-	org.osgi.framework.bootdelegation=*
+org.osgi.framework.bootdelegation=*

@@ -23,5 +23,4 @@ Provide-Capability: osgi.implementation; \
 -runbundles = \
 	org.osgi.impl.service.rest.support; version=latest
 	
--runproperties = ${runproperties}, \
-	org.osgi.framework.bootdelegation="sun.*,com.sun.*"
+org.osgi.framework.bootdelegation=sun.*,com.sun.*

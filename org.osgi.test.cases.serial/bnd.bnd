@@ -22,5 +22,3 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.serial;version=latest,\
 	org.osgi.impl.service.serial;version=latest,\
 	org.osgi.impl.service.event;version=latest
-
--runproperties = ${runproperties}

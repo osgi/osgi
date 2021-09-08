@@ -62,8 +62,7 @@ Import-Package: ${-signaturetest}, *
 -runbundles: \
 	org.osgi.impl.bundle.cdi;version=latest
 
--runproperties: \
-	${runproperties},\
+-runproperties: ${runproperties},\
 	eclipse.consoleLog=true,\
 	eclipse.log.level=DEBUG
 

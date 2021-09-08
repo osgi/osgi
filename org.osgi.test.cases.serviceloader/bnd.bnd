@@ -40,5 +40,3 @@ Bundle-Category: osgi,test
 
 -runbundles = \
 	org.osgi.impl.bundle.serviceloader;version=latest
-
--runproperties: ${runproperties}

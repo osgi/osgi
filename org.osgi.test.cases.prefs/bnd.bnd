@@ -18,5 +18,3 @@ Import-Package: ${-signaturetest}, *
 -runbundles = \
     org.osgi.service.prefs;version=latest, \
 	org.osgi.impl.service.prefs; version=latest
-
--runproperties = ${runproperties}

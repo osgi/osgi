@@ -29,5 +29,5 @@ Import-Package 						= \
     org.osgi.service.jndi;version=latest, \
 	org.osgi.impl.service.jndi; version=latest
 
--runproperties = ${runsecureproperties}, \
-	org.osgi.framework.bootdelegation=com.sun.*
+org.osgi.framework.bootdelegation=com.sun.*
+-runproperties = ${runsecureproperties}

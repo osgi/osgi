@@ -17,5 +17,3 @@ Import-Package: ${-signaturetest}, *
 
 -runbundles = \
 	org.osgi.util.pushstream;version=latest
-
--runproperties = ${runproperties}

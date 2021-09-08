@@ -17,6 +17,4 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.jdbc; version=latest, \
 	org.osgi.impl.bundle.derby; version=latest
 
--runproperties					= ${runproperties}
-
 -signaturetest                      = org.osgi.service.jdbc

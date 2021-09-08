@@ -58,5 +58,3 @@ Import-Package: ${-signaturetest}, *
 
 -runbundles = \
 	org.osgi.impl.service.resolver; version=latest
-	
--runproperties = ${runproperties}

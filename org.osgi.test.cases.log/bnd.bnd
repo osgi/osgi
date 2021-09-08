@@ -21,7 +21,5 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest
 
--runproperties					= ${runproperties}
-
 -includeresource 					= \
 	tb1.jar

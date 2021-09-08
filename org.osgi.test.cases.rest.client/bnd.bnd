@@ -36,8 +36,8 @@ Bundle-Category: osgi,test
     org.osgi.impl.service.rest.support;version=latest, \
     org.osgi.impl.service.rest.client;version=latest
 
+org.osgi.framework.bootdelegation=sun.*,com.sun.*
 -runproperties = ${runproperties}, \
-    org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
     rest.tck.debug=false
 #  rest.tck.not_acceptable.check=false,\
 #  rest.tck.validate.xmls=false,\

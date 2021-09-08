@@ -37,8 +37,6 @@ Import-Package: ${-signaturetest},\
     org.osgi.impl.service.cm;version=latest,\
     org.osgi.impl.service.jaxrs;version=latest
 
--runproperties                  = ${runproperties}
-
 -signaturetest                      = org.osgi.service.jaxrs.runtime,\
                                       org.osgi.service.jaxrs.runtime.dto,\
                                       org.osgi.service.jaxrs.whiteboard

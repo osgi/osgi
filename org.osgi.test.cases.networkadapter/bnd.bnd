@@ -20,7 +20,5 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.networkadapter;version=latest,\
 	org.osgi.impl.service.event;version=latest
 
--runproperties = ${runproperties}
-
 Export-Package:  \
 	org.osgi.test.support.step

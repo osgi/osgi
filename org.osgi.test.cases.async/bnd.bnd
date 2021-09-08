@@ -22,8 +22,6 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.async;version=latest,\
 	org.osgi.impl.service.async;version=latest
 
--runproperties = ${runproperties}
-
 -signaturetest                      = \
  org.osgi.service.async, \
  org.osgi.service.async.delegate
