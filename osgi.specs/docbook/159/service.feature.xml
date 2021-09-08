@@ -348,6 +348,14 @@ builder.setDescription("This is the main ACME app, "
   + "from where all functionality is reached.");
 
 Feature f = builder.build();</programlisting>
+
+	  <para>
+	    The Feature API can also be useful in environments outside of an OSGi Framework where no service registry
+	    is available, for example in a build-system
+	    environment.
+	    In such environments the FeatureService can be obtained by using the <code>java.util.ServiceLoader</code>
+	    mechanism.
+	  </para>
     </section>
   </section>
 
@@ -668,7 +676,7 @@ Feature f = builder.build();</programlisting>
     </section>
       
     <section>
-      <title>Artifact list Extension</title>
+      <title>Artifact list Extensions</title>
       
       <para>
         Custom extensions can be used to associate artifacts that are not listed 
