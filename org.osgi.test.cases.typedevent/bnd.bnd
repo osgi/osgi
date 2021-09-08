@@ -9,9 +9,9 @@ Import-Package: ${-signaturetest}, *
 -buildpath: \
 	org.osgi.test.support;version=project,\
 	org.osgi.service.typedevent;version=latest,\
-	org.osgi.resource;version=latest,\
-	org.osgi.namespace.implementation;version=latest,\
-	org.osgi.namespace.service;version=latest,\
+	org.osgi.resource;maven-scope=provided;version=1.0,\
+	org.osgi.namespace.implementation;maven-scope=provided;version=1.0,\
+	org.osgi.namespace.service;maven-scope=provided;version=1.0,\
 	org.osgi.framework;maven-scope=provided;version=1.8,\
 	org.osgi.dto;maven-scope=provided;version=1.0
 

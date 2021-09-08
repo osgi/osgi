@@ -27,9 +27,10 @@ import static org.osgi.service.typedevent.TypedEventConstants.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
@@ -43,14 +44,16 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
-@Nested
 public class TypedEventCapabilityTestCase {
 
 	@InjectBundleContext
 	BundleContext ctx;
 
-	@SuppressWarnings("unchecked")
-	private void testServiceCapability(Class< ? > clz) {
+	@ParameterizedTest
+	@ValueSource(classes = {
+			TypedEventBus.class, TypedEventMonitor.class
+	})
+	public void test_service_capability(Class< ? > clz) {
 
 		String className = clz.getName();
 
@@ -60,6 +63,7 @@ public class TypedEventCapabilityTestCase {
 
 		BundleWiring wiring = ref.getBundle().adapt(BundleWiring.class);
 
+		@SuppressWarnings("unchecked")
 		BundleCapability cap = wiring.getCapabilities(SERVICE_NAMESPACE)
 				.stream()
 				.filter(c -> ((List<String>) c.getAttributes()
@@ -72,16 +76,6 @@ public class TypedEventCapabilityTestCase {
 
 		assertThat(cap.getDirectives().get(CAPABILITY_USES_DIRECTIVE))
 				.isEqualTo(clz.getPackage().getName());
-	}
-
-	@Test
-	public void test_bus_service_capability() {
-		testServiceCapability(TypedEventBus.class);
-	}
-
-	@Test
-	public void test_monitor_service_capability() {
-		testServiceCapability(TypedEventMonitor.class);
 	}
 
 	@Test
