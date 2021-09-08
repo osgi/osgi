@@ -18,6 +18,3 @@ Bundle-Description			= Metatype Annotations Test Bundle
 	org.osgi.impl.service.metatype; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest
-	
--runproperties = ${runproperties}
-

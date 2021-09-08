@@ -27,5 +27,3 @@ Import-Package: ${-signaturetest}, *
 -runbundles = \
     org.osgi.impl.service.clusterinfo;version=latest, \
     org.osgi.impl.service.log;version=latest
-
--runproperties = ${runproperties}

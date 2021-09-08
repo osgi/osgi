@@ -13,5 +13,3 @@ Import-Package: ${-signaturetest}, *
 -buildpath = \
     org.osgi.test.support;version=project, \
     org.osgi.framework;maven-scope=provided;version=1.8
-
--runproperties = ${runproperties}

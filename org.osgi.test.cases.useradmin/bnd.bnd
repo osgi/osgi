@@ -19,5 +19,3 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.useradmin;version=latest, \
 	org.osgi.impl.service.log;version=latest, \
 	org.osgi.impl.service.useradmin;version=latest
-
--runproperties = ${runproperties}

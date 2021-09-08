@@ -38,8 +38,8 @@ Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;
     org.osgi.impl.service.rest.client.js; version=latest, \
     org.osgi.impl.service.rest.support; version=latest
 
+org.osgi.framework.bootdelegation=sun.*,com.sun.*
 -runproperties = ${runproperties}, \
-    org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
     rest.tck.debug=false
 #  rest.tck.not_acceptable.check=false,\
 #  rest.tck.validate.xmls=false,\

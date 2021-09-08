@@ -24,5 +24,3 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.usbinfo;version=latest,\
 	org.osgi.impl.service.device.manager;version=latest,\
 	org.osgi.impl.service.event;version=latest
-
--runproperties = ${runproperties}

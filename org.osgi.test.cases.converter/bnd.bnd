@@ -21,5 +21,3 @@ Import-Package: ${-signaturetest}, *
 -runbundles: \
 	org.osgi.util.converter;version=latest, \
     org.osgi.util.function;version=latest
-
--runproperties = ${runproperties}

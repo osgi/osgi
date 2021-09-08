@@ -22,7 +22,4 @@ Import-Package: ${-signaturetest}, *
     org.osgi.impl.service.cm;version=latest, \
 	org.osgi.impl.service.typedevent;version=latest
 
--runproperties = ${runproperties}
-
 -signaturetest                      = org.osgi.service.typedevent
-

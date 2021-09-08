@@ -24,6 +24,4 @@ Export-Package: org.osgi.test.support.step;-noimport:=true, \
 	org.osgi.impl.service.dal.step;	version=latest, \
 	org.osgi.impl.service.event;	version=latest
 
--runproperties = ${runproperties}
-
 -signaturetest	= org.osgi.service.dal

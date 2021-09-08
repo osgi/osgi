@@ -51,6 +51,4 @@ Import-Package						= \
 	org.osgi.impl.service.jpa; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 
--runproperties					= ${runproperties}
-
 -signaturetest                      = org.osgi.service.jpa

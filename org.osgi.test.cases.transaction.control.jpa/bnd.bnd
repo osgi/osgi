@@ -29,6 +29,4 @@ javac.profile=compact2
 	org.osgi.impl.service.transaction.control.jpa; version=latest, \
     org.osgi.impl.service.jdbc.support; version=latest
 
--runproperties = ${runproperties}
-
 -signaturetest                      = org.osgi.service.transaction.control.jpa

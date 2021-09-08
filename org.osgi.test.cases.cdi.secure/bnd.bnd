@@ -40,8 +40,7 @@ Bundle-Description: Secure TCK for the OSGi/CDI integration
 -runsystemcapabilities: \
 	osgi.implementation;osgi.implementation="osgi.cm";uses:="org.osgi.service.cm,org.apache.felix.cm";version:Version="1.6"
 
--runproperties: \
-	${runsecureproperties},\
+-runproperties: ${runsecureproperties},\
 	eclipse.consoleLog=true,\
 	eclipse.log.level=DEBUG
 
