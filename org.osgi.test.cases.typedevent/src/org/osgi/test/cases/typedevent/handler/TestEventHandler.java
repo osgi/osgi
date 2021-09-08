@@ -40,9 +40,9 @@ public class TestEventHandler<T> implements TypedEventHandler<T>,
 		this.name = name;
 	}
 
-	Map<String,List<T>>						typedStore		= new HashMap<>();
-	Map<String,List<Map<String,Object>>>	untypedStore	= new HashMap<>();
-	Map<String,List<Map<String,Object>>>	unhandledStore	= new HashMap<>();
+	public Map<String,List<T>>					typedStore		= new HashMap<>();
+	public Map<String,List<Map<String,Object>>>	untypedStore	= new HashMap<>();
+	public Map<String,List<Map<String,Object>>>	unhandledStore	= new HashMap<>();
 
 	@Override
 	public void notify(String topic, T event) {

@@ -12,8 +12,10 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.resource;maven-scope=provided;version=1.0,\
 	org.osgi.namespace.implementation;maven-scope=provided;version=1.0,\
 	org.osgi.namespace.service;maven-scope=provided;version=1.0,\
-	org.osgi.framework;maven-scope=provided;version=1.8,\
-	org.osgi.dto;maven-scope=provided;version=1.0
+	org.osgi.framework;maven-scope=provided;version='1.8',\
+	org.osgi.dto;maven-scope=provided;version='1.0',\
+	org.osgi.util.promise;version='1.1',\
+	org.osgi.util.pushstream;version='1.0'
 
 -runbundles						= \
     org.osgi.impl.service.log;version=latest, \
@@ -23,3 +25,4 @@ Import-Package: ${-signaturetest}, *
 -runproperties = ${runproperties}
 
 -signaturetest                      = org.osgi.service.typedevent
+
