@@ -462,6 +462,36 @@ public class EventsIntegrationTest {
 			Mockito.verify(typedHandlerA, Mockito.after(1000).never())
 					.notify(Mockito.eq(TOPIC_A), Mockito.any());
 		}
+
+		public class OtherEventA {
+			public String a;
+		}
+
+		String TOPIC_OA = OtherEventA.class.getName().replace(".", "/");
+
+		@Test
+		public void test_deliver_to_relief() throws InterruptedException {
+
+			OtherEventA oa = new OtherEventA();
+			oa.a = "v";
+
+			TypedEventHandler<EventA> typedHandler = mock(
+					TypedEventHandlerA.class);
+
+			context.registerService(TypedEventHandler.class, typedHandler,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TOPICS,
+							new String[] {
+									TOPIC_OA
+							}));
+
+			eventBus.deliver(oa);
+
+			Mockito.verify(typedHandler, Mockito.timeout(1000))
+					.notify(Mockito.eq(TOPIC_OA),
+							Mockito.argThat(evA -> "v".equals(evA.a)));
+
+		}
+
 	}
 
 	@DisplayName("157.4.2 Receiving Untyped Events")
