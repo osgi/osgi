@@ -794,6 +794,8 @@ Feature f = builder.build();</programlisting>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.annotation.xml"/>
+
   <section>
     <title>References</title>
 
