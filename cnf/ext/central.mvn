@@ -197,7 +197,7 @@ org.apache.zookeeper:zookeeper:3.4.13
 org.apache.aries.component-dsl:org.apache.aries.component-dsl.component-dsl:1.2.2
 org.apache.aries.typedevent:org.apache.aries.typedevent.bus:0.0.1-SNAPSHOT
 
-org.apache.felix:org.apache.felix.feature:0.9.1-SNAPSHOT
+org.apache.felix:org.apache.felix.feature:0.9.3-SNAPSHOT
 org.apache.geronimo.specs:geronimo-json_1.1_spec:1.5
 org.apache.johnzon:johnzon-core:1.2.14
 org.apache.felix:org.apache.felix.cm.json:1.0.6

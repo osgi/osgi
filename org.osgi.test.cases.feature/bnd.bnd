@@ -11,7 +11,9 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.feature;version=latest,\
 	osgi.core;maven-scope=provided;version='4.3.1',\
 	org.json;version='1.0.0',\
-	org.apache.geronimo.specs.geronimo-json_1.1_spec
+	org.apache.geronimo.specs.geronimo-json_1.1_spec,\
+	org.osgi.namespace.implementation;maven-scope=provided;version=1.0,\
+	org.osgi.namespace.service;maven-scope=provided;version=1.0
 
 -runbundles						=\
 	org.osgi.impl.bundle.serviceloader;version=latest,\
