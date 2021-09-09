@@ -792,6 +792,27 @@ Feature f = builder.build();</programlisting>
     </para>
   </section>
 
+  <section>
+    <title>Capabilities</title>
+    
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the Feature Service must provide 
+      a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing the services it is registering. This capability must 
+      also declare uses constraints for the relevant service packages:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.feature.FeatureService";
+  uses:="org.osgi.service.feature"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.xml"/>
 
   <section>
