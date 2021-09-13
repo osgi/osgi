@@ -1210,8 +1210,9 @@ boolean val2 = cfg.my_other_value(); // val2=true
             <para>An interface can also be the source of a conversion to
             another map-like type. The name of each method without parameters
             is taken as key, taking into account the <xref
-            linkend="util.converter-key.mapping"/>. The method is invoked
-            using reflection to produce the associated value.</para>
+            linkend="util.converter-key.mapping"/>. The method is invoked 
+            using reflection to produce the associated value. Default methods
+            must also be handled by the converter.</para>
 
             <para>Whether a conversion source object is an interface is
             determined dynamically. When an object implements multiple
@@ -1219,7 +1220,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
             no-parameter methods is taken as the source type. To select a
             different interface use the <xref
             linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
-            xrefstyle="hyperlink"/> modifier: <programlisting>  Map m = converter.convert(myMultiInterface).
+            xrefstyle="hyperlink"/> modifier: <programlisting>Map m = converter.convert(myMultiInterface).
       sourceAs(MyInterfaceB.class).to(Map.class);</programlisting> If the
             source object also has a <code>getProperties()</code> method as
             described in <xref linkend="util.converter-getProperties"/>, this
