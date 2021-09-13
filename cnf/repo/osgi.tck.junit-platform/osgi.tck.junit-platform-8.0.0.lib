@@ -17,4 +17,4 @@ org.osgi.test.junit5;version=latest
 org.mockito.mockito-core;version=latest
 net.bytebuddy.byte-buddy;version=latest
 net.bytebuddy.byte-buddy-agent;version=latest
-org.objenesis;version=latest 
+org.objenesis;version=latest
