@@ -44,8 +44,9 @@ Bundle-Category: osgi,test
 -runproperties = ${runsecureproperties}, \
 	rsa.tck.timeout=300000,\
 	rsa.tck.timeout.factor=3,\
-    ${p}.framework.properties="", \
+    ${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
 	${p}.system.packages.extra="", \
     ${p}.serverconfig="service.exported.configs", \
+    org.osgi.service.http.port=9191,\
     service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.jaxrs;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
