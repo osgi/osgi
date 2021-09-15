@@ -8212,6 +8212,8 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.update(props);
 
 			this.startTargetBundle(bundleT1);
+			sleep(1000);
+			trace("Wait for signal.");
 			count1_1 = assertCallback(sync1_1, count1_1);
 			assertNotNull("called back with Non-null props", sync1_1.getProps());
 			assertNoCallback(sync1_2, count1_2);
@@ -8298,6 +8300,8 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.update(props);
 
 			this.startTargetBundle(bundleT1);
+			sleep(1000);
+			trace("Wait for signal.");
 			count1_1 = assertCallback(sync1_1, count1_1);
 			assertNotNull("called back with Non-null props", sync1_1.getProps());
 			assertNoCallback(sync1_2, count1_2);
@@ -8595,12 +8599,18 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.update(props);
 
 			this.startTargetBundle(bundleT1);
+			sleep(1000);
+			trace("Wait for signal.");
 			count1_1 = assertCallback(sync1_1, count1_1);
 			assertNotNull("called back with Non-null props", sync1_1.getProps());
 			assertNoCallback(sync1_2, count1_2);
 			this.startTargetBundle(bundleT2);
+			sleep(1000);
+			trace("Wait for signal.");
 			assertNoCallback(sync2_1, count2_1);
 			this.startTargetBundle(bundleT3);
+			sleep(1000);
+			trace("Wait for signal.");
 			count3_1 = assertCallback(sync3_1, count3_1);
 			assertNotNull("called back with Non-null props", sync3_1.getProps());
 			count3_2 = assertCallback(sync3_2, count3_2);
