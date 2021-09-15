@@ -412,7 +412,7 @@ framework/service/{serviceid}</programlisting>
         timestamp. A detected collision is indicated to the requesting clients
         through an error code 409.</para>
 
-        <para>The body of the response is <xref
+        <para>The body of the response is a <xref
         linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
         of the newly installed bundle. The following status codes can be
         returned:</para>
@@ -420,7 +420,9 @@ framework/service/{serviceid}</programlisting>
         <itemizedlist>
           <listitem>
             <para>200 (OK): the bundle has been successfully installed and the
-            body of the response contains the URI.</para>
+            body of the response contains a <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"
+          />.</para>
           </listitem>
 
           <listitem>
