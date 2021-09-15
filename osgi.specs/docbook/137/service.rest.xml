@@ -1033,9 +1033,9 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.bundles+json</code></para>
 
-          <programlisting>{
+          <programlisting>
    [bundleURI, bundleURI, ..., bundleURI]
-}</programlisting>
+</programlisting>
         </section>
 
         <section>
@@ -1062,9 +1062,9 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.bundles.representations+json</code></para>
 
-          <programlisting>{
+          <programlisting>
     [BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, ..., BUNDLE REPRESENTATION]
-}</programlisting>
+</programlisting>
         </section>
 
         <section>
@@ -1281,9 +1281,9 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.services+json</code></para>
 
-          <programlisting>{
+          <programlisting>
    [serviceURI, serviceURI, ..., serviceURI]
-}</programlisting>
+</programlisting>
         </section>
 
         <section>
@@ -1310,9 +1310,9 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           org.osgi.services.representations+json</code></para>
 
-          <programlisting>{
+          <programlisting>
    [SERVICE REPRESENTATION, SERVICE REPRESENTATION, ..., SERVICE REPRESENTATION]
-}</programlisting>
+</programlisting>
         </section>
 
         <section>
