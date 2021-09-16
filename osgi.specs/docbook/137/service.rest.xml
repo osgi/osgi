@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="137"
          revision="$Id$"
          version="5.0" xml:id="service.rest"
@@ -421,8 +420,8 @@ framework/service/{serviceid}</programlisting>
           <listitem>
             <para>200 (OK): the bundle has been successfully installed and the
             body of the response contains a <xref
-            linkend="service.rest-bundle.representation" xrefstyle="template:%t"
-          />.</para>
+            linkend="service.rest-bundle.representation"
+            xrefstyle="template:%t"/>.</para>
           </listitem>
 
           <listitem>
@@ -1033,9 +1032,7 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.bundles+json</code></para>
 
-          <programlisting>
-   [bundleURI, bundleURI, ..., bundleURI]
-</programlisting>
+          <programlisting>[bundleURI, bundleURI, ..., bundleURI]</programlisting>
         </section>
 
         <section>
@@ -1062,9 +1059,7 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.bundles.representations+json</code></para>
 
-          <programlisting>
-    [BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, ..., BUNDLE REPRESENTATION]
-</programlisting>
+          <programlisting>[BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, ..., BUNDLE REPRESENTATION]</programlisting>
         </section>
 
         <section>
@@ -1281,9 +1276,7 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           application/org.osgi.services+json</code></para>
 
-          <programlisting>
-   [serviceURI, serviceURI, ..., serviceURI]
-</programlisting>
+          <programlisting>[serviceURI, serviceURI, ..., serviceURI]</programlisting>
         </section>
 
         <section>
@@ -1310,9 +1303,7 @@ framework/service/{serviceid}</programlisting>
           <para><code>Content-Type:
           org.osgi.services.representations+json</code></para>
 
-          <programlisting>
-   [SERVICE REPRESENTATION, SERVICE REPRESENTATION, ..., SERVICE REPRESENTATION]
-</programlisting>
+          <programlisting>[SERVICE REPRESENTATION, SERVICE REPRESENTATION, ..., SERVICE REPRESENTATION]</programlisting>
         </section>
 
         <section>
@@ -1429,10 +1420,10 @@ client.installBundle({
     <para>This specification describes a REST-based management interface for
     Core Framework functionality. Other services in the framework might also
     benefit from management access through REST. This can involve services
-    specified by the OSGi Working Group as part of the Core Framework, Compendium,
-    or Enterprise Specifications but also application-specific functionality
-    provided by the developer. It is desirable to expose such management
-    services as extensions of the REST Management Service.</para>
+    specified by the OSGi Working Group as part of the Core or Compendium
+    Specifications but also application-specific functionality provided by the
+    developer. It is desirable to expose such management services as
+    extensions of the REST Management Service.</para>
 
     <para>This REST service can be implemented by using various technologies
     such as Java Servlets, Restlet, JAX-RS, and others. Therefore, it might
@@ -1470,13 +1461,13 @@ client.installBundle({
     the main REST implementation for inclusion in the Extensions
     Resource.</para>
 
-    <para>In order to be discoverable REST interface extensions to OSGi Core,
-    Compendium, or Enterprise services must use their canonical package name
-    as advertised name. E.g., the name of the REST interface for the User
-    Admin must be <code>org.osgi.service.useradmin</code>. This way, a client
-    is able to check if there is a given extension available on a host.
-    User-defined extensions should use the package name of the service they
-    provide management capabilities for.</para>
+    <para>In order to be discoverable REST interface extensions to OSGi Core
+    or Compendium services must use their canonical package name as advertised
+    name. E.g., the name of the REST interface for the User Admin must be
+    <code>org.osgi.service.useradmin</code>. This way, a client is able to
+    check if there is a given extension available on a host. User-defined
+    extensions should use the package name of the service they provide
+    management capabilities for.</para>
 
     <section xml:id="service.rest-extensions.resource">
       <title>Extensions Resource</title>
