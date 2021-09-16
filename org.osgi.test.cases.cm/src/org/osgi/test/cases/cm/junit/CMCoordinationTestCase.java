@@ -376,7 +376,6 @@ public class CMCoordinationTestCase {
 		if (regms != null) {
 			regms.unregister();
 		}
-
 	}
 
 	private long getLongProperty(String string, int i) {
