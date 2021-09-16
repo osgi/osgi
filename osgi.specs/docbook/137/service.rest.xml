@@ -1509,10 +1509,8 @@ client.installBundle({
         <para><code>Content-Type:
         application/org.osgi.extensions+json</code></para>
 
-        <programlisting>{ 
-   [ { "name" : "org.osgi.service.event", "path" : "contributions/eventadmin", 
-       "service" : 12 }, ... ]
-}</programlisting>
+        <programlisting>[ { "name" : "org.osgi.service.event", "path" : "contributions/eventadmin", 
+       "service" : 12 }, ... ]</programlisting>
       </section>
 
       <section>
