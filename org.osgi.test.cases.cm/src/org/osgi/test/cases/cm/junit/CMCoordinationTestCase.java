@@ -17,6 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.cm.junit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashSet;
@@ -24,9 +28,15 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
@@ -38,34 +48,53 @@ import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectBundleInstaller;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.install.BundleInstaller;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.cm.ConfigurationExtension;
+import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.test.junit5.context.InstalledBundleExtension;
+import org.osgi.test.junit5.service.ServiceExtension;
 
 /**
  * @author Carsten Ziegeler, Adobe, Testing CM + Coordinator
  */
-public class CMCoordinationTestCase extends DefaultTestBundleControl {
+@ExtendWith(BundleContextExtension.class)
+@ExtendWith(InstalledBundleExtension.class)
+@ExtendWith(ServiceExtension.class)
+@ExtendWith(ConfigurationExtension.class)
+public class CMCoordinationTestCase {
 
 	private long				SIGNAL_WAITING_TIME;
 
-	private ConfigurationAdmin cm;
-	private PermissionAdmin permAdmin;
-	private Bundle setAllPermissionBundle;
+	@InjectBundleContext
+	BundleContext								bc;
+	@InjectService(cardinality = 0)
+	ServiceAware<ConfigurationAdmin>	cm;
+	@InjectService(cardinality = 0)
+	ServiceAware<PermissionAdmin>		permAdmin;
+	@InjectBundleInstaller
+	BundleInstaller								bi;
+	Bundle								setAllPermissionBundle;
 
 	private Set<String>								existingConfigs;
 
+	@BeforeEach
 	protected void setUp() throws Exception {
 		SIGNAL_WAITING_TIME = getLongProperty(
 				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
-	    assignCm();
 
 		if (System.getSecurityManager() != null) {
-			permAdmin = getService(PermissionAdmin.class);
-			setAllPermissionBundle = getContext().installBundle(
-					getWebServer() + "setallpermission.jar");
+
+			setAllPermissionBundle = bi.installBundle("setallpermission.jar",
+					false);
 		}
 
 		// existing configurations
-        Configuration[] configs = cm.listConfigurations(null);
+		Configuration[] configs = cm.waitForService(500)
+				.listConfigurations(null);
 		existingConfigs = new HashSet<>();
         if (configs != null) {
             for (int i = 0; i < configs.length; i++) {
@@ -75,27 +104,25 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
         }
 	}
 
+	@AfterEach
 	protected void tearDown() throws Exception {
 		resetPermissions();
 		cleanCM(existingConfigs);
 		if (this.setAllPermissionBundle != null) {
+			this.setAllPermissionBundle.stop();
 			this.setAllPermissionBundle.uninstall();
 			this.setAllPermissionBundle = null;
 		}
-		if (permAdmin != null)
-			ungetService(permAdmin);
-
-        unregisterAllServices();
-		ungetService(cm);
 	}
 
-	private void resetPermissions() throws BundleException {
+	private void resetPermissions()
+			throws BundleException, InterruptedException {
 		if (permAdmin == null)
 			return;
 		try {
 			if (this.setAllPermissionBundle == null)
-				this.setAllPermissionBundle = getContext().installBundle(
-						getWebServer() + "setallpermission.jar");
+				this.setAllPermissionBundle = bi
+						.installBundle("setallpermission.jar", false);
 			this.setAllPermissionBundle.start();
 			this.setAllPermissionBundle.stop();
 		} catch (BundleException e) {
@@ -107,20 +134,21 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		this.printoutPermissions();
 	}
 
-	private void printoutPermissions() {
+	private void printoutPermissions() throws InterruptedException {
 		if (permAdmin == null)
 			return;
-		String[] locations = this.permAdmin.getLocations();
+		String[] locations = this.permAdmin.waitForService(500).getLocations();
 		if (locations != null)
 			for (int i = 0; i < locations.length; i++) {
 				System.out.println("locations[" + i + "]=" + locations[i]);
-				PermissionInfo[] pInfos = this.permAdmin
+				PermissionInfo[] pInfos = this.permAdmin.waitForService(500)
 						.getPermissions(locations[i]);
 				for (int j = 0; j < pInfos.length; j++) {
 					System.out.println("\t" + pInfos[j]);
 				}
 			}
-		PermissionInfo[] pInfos = this.permAdmin.getDefaultPermissions();
+		PermissionInfo[] pInfos = this.permAdmin.waitForService(500)
+				.getDefaultPermissions();
 		if (pInfos == null)
 			System.out.println("default permission=null");
 		else {
@@ -140,16 +168,13 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		}
 	}
 
-    private void assignCm() {
-        cm = getService(ConfigurationAdmin.class);
-    }
-
 	/**
 	 * Removes any configurations made by this bundle.
 	 */
 	private void cleanCM(Set<String> existingConfigs) throws Exception {
         if (cm != null) {
-            Configuration[] configs = cm.listConfigurations(null);
+			Configuration[] configs = cm.waitForService(500)
+					.listConfigurations(null);
             if (configs != null) {
                 for (int i = 0; i < configs.length; i++) {
                     Configuration config = configs[i];
@@ -180,9 +205,10 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 	 * @throws Exception
 	 * @since 1.6
 	 */
-	public void testListeners() throws Exception {
+	@Test
+	public void testListeners(@InjectService
+	Coordinator c) throws Exception {
 		// start a coordination
-		final Coordinator c = this.getService(Coordinator.class);
 		final Coordination coord = c.begin("cm-test", 0);
 		final List<ConfigurationEvent> syncList = new ArrayList<>();
 		final List<ConfigurationEvent> plainList = new ArrayList<>();
@@ -192,7 +218,7 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		try {
 			// add a synchronous listener
 
-			this.registerService(
+			bc.registerService(
 					SynchronousConfigurationListener.class.getName(),
 					new SynchronousConfigurationListener() {
 
@@ -207,7 +233,7 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 			// add a plain listener
 
-			this.registerService(
+			bc.registerService(
 					ConfigurationListener.class.getName(),
 					new ConfigurationListener() {
 
@@ -224,7 +250,8 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 			final Dictionary<String,Object> props = new Hashtable<>();
 			props.put("key", "value");
 
-			final Configuration conf = this.cm.getConfiguration(pid);
+			final Configuration conf = this.cm.waitForService(500)
+					.getConfiguration(pid);
 			conf.update(props);
 
 			assertEquals(1, syncList.size());
@@ -285,20 +312,21 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 	 * @throws Exception
 	 * @since 1.6
 	 */
-	public void testManagedService() throws Exception {
+	@Test
+	public void testManagedService(@InjectService
+	Coordinator c) throws Exception {
 		// start a coordination
-		final Coordinator c = this.getService(Coordinator.class);
 		final Coordination coord = c.begin("cm-test", 0);
 		final List<Boolean> events = new ArrayList<>();
 
 		final String pid = this.getClass().getName() + ".mstestpid";
-
+		ServiceRegistration regms = null;
 		try {
 			// add managed service
 			final Dictionary<String,Object> msProps = new Hashtable<>();
 			msProps.put(Constants.SERVICE_PID, pid);
 
-			this.registerService(
+			regms = bc.registerService(
 					ManagedService.class.getName(), new ManagedService() {
 
 						@Override
@@ -314,7 +342,8 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 			final Dictionary<String,Object> props = new Hashtable<>();
 			props.put("key", "value");
 
-			final Configuration conf = this.cm.getConfiguration(pid);
+			final Configuration conf = this.cm.waitForService(500)
+					.getConfiguration(pid);
 			conf.update(props);
 
 			sleep();
@@ -333,6 +362,9 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 			sleep();
 			assertEquals(0, events.size());
 		} finally {
+			if (regms != null) {
+				regms.unregister();
+			}
 			coord.end();
 		}
 
@@ -344,5 +376,9 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		assertTrue(events.get(2));
 		assertFalse(events.get(3));
 
+	}
+
+	private long getLongProperty(String string, int i) {
+		return i;
 	}
 }

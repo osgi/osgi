@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.cm.junit;
 
+import static org.osgi.test.support.compatibility.DefaultTestBundleControl.log;
+
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 			Dictionary<String, ? > properties)
 			throws ConfigurationException {
 		try {
-			CMControl.log("+++ updating " + pid);
+			log("+++ updating " + pid);
 			String data = "somedata";
 			/*
 			 * String data = (String) properties.get(propertyName);
@@ -68,7 +70,7 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
-		CMControl.log("--- done updating " + pid);
+		log("--- done updating " + pid);
 	}
 
 	public synchronized void deleted(java.lang.String pid) {

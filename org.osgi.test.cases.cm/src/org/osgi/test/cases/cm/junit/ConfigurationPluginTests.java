@@ -17,6 +17,12 @@
  *******************************************************************************/
 package org.osgi.test.cases.cm.junit;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.osgi.test.support.compatibility.DefaultTestBundleControl.trace;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -26,7 +32,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -43,12 +55,24 @@ import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectBundleInstaller;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.install.BundleInstaller;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.cm.ConfigurationExtension;
+import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.test.junit5.context.InstalledBundleExtension;
+import org.osgi.test.junit5.service.ServiceExtension;
 
 /**
  * Tests related to {@link ConfigurationPlugin}
  */
-public class ConfigurationPluginTests extends DefaultTestBundleControl {
+@ExtendWith(BundleContextExtension.class)
+@ExtendWith(InstalledBundleExtension.class)
+@ExtendWith(ServiceExtension.class)
+@ExtendWith(ConfigurationExtension.class)
+public class ConfigurationPluginTests {
 
 	private static final String	PROP_MS_PREFIX	= "plugin.ms.";
 
@@ -56,28 +80,34 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 
 	private long				SIGNAL_WAITING_TIME;
 
-	private ConfigurationAdmin cm;
-
-	private PermissionAdmin permAdmin;
+	@InjectBundleContext
+	BundleContext								bc;
+	@InjectService(cardinality = 0)
+	ServiceAware<ConfigurationAdmin>	cm;
+	@InjectService(cardinality = 0)
+	ServiceAware<PermissionAdmin>		permAdmin;
+	@InjectBundleInstaller
+	BundleInstaller								bi;
 	private Bundle setAllPermissionBundle;
 
 	/** PIDs of configurations existing before the test. */
 	private Set<String>								existingConfigs;
 
+	@BeforeEach
 	protected void setUp() throws Exception {
 		SIGNAL_WAITING_TIME = getLongProperty(
 				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
 
-		cm = getService(ConfigurationAdmin.class);
-
 		if (System.getSecurityManager() != null) {
-			permAdmin = getService(PermissionAdmin.class);
-			setAllPermissionBundle = getContext().installBundle(
-					getWebServer() + "setallpermission.jar");
+			setAllPermissionBundle = bi.installBundle("setallpermission.jar",
+					false);
+			setAllPermissionBundle.start();
+			;
 		}
 
 		// existing configurations
-        Configuration[] configs = cm.listConfigurations(null);
+		Configuration[] configs = cm.waitForService(500)
+				.listConfigurations(null);
 		existingConfigs = new HashSet<>();
         if (configs != null) {
             for (int i = 0; i < configs.length; i++) {
@@ -87,12 +117,16 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
         }
 	}
 
+	private long getLongProperty(String string, int i) {
+		// TODO Auto-generated method stub
+		return i;
+	}
+
+	@AfterEach
 	protected void tearDown() throws Exception {
 		resetPermissions();
 		cleanCM(existingConfigs);
 
-        unregisterAllServices();
-		ungetService(cm);
 	}
 
 	private void resetPermissions() throws BundleException {
@@ -100,8 +134,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 			return;
 		try {
 			if (this.setAllPermissionBundle == null)
-				this.setAllPermissionBundle = getContext().installBundle(
-						getWebServer() + "setallpermission.jar");
+				this.setAllPermissionBundle = bi
+						.installBundle("setallpermission.jar", false);
 			this.setAllPermissionBundle.start();
 			this.setAllPermissionBundle.stop();
 		} catch (BundleException e) {
@@ -123,11 +157,13 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 *       Dictionary)
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
+
+	@Test
 	public void testConfigurationPluginService() throws Exception {
 		// create configuration
 		String pid = Util
 				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		Configuration conf = cm.getConfiguration(pid);
+		Configuration conf = cm.waitForService(500).getConfiguration(pid);
 
 		SynchronizerImpl synchronizer = new SynchronizerImpl();
 		trace("Create and register a new ConfigurationListener");
@@ -160,12 +196,14 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * @throws Exception
 	 *             if an error occurs or an assertion fails in the test.
 	 */
+	@Test
 	public void testConfigurationPluginServiceFactory() throws Exception {
 
 		// create configuration
 		String factorypid = Util
 				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		Configuration conf = cm.createFactoryConfiguration(factorypid);
+		Configuration conf = cm.waitForService(500)
+				.createFactoryConfiguration(factorypid);
 
 		SynchronizerImpl synchronizer = new SynchronizerImpl();
 		trace("Create and register a new ConfigurationListener");
@@ -193,10 +231,13 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * <li>modifications wrt ranking
 	 * </ul>
 	 */
+	@Test
 	public void testRankingForManagedService() throws Exception {
 		// create configuration
 		final String pid = Util.createPid("mspid");
-		cm.getConfiguration(pid).update(Util.singletonDictionary("key", "val"));
+		cm.waitForService(500)
+				.getConfiguration(pid)
+				.update(Util.singletonDictionary("key", "val"));
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
 
@@ -208,7 +249,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 4, 1000, null);
 		createConfigurationPlugin(context, 5, 1001, null);
 
-		registerManagedService(pid, synchronizer);
+		ServiceRegistration< ? > reg = registerManagedService(pid,
+				synchronizer);
 
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -222,7 +264,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		// update configuration
 		context.invocationOrder.clear();
 		synchronizer.resetCount();
-		cm.getConfiguration(pid)
+		cm.waitForService(500)
+				.getConfiguration(pid)
 				.update(Util.singletonDictionary("key1", "val1"));
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -236,7 +279,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		// force update
 		context.invocationOrder.clear();
 		synchronizer.resetCount();
-		cm.getConfiguration(pid)
+		cm.waitForService(500)
+				.getConfiguration(pid)
 				.update(Util.singletonDictionary("key1", "val1"));
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -250,7 +294,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		// delete configuration
 		context.invocationOrder.clear();
 		synchronizer.resetCount();
-		cm.getConfiguration(pid).delete();
+		cm.waitForService(500).getConfiguration(pid).delete();
 		trace("Wait until the ManagedService has gotten the delete");
 
 		assertTrue("Update done",
@@ -258,6 +302,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		assertNull(synchronizer.getProps());
 		assertTrue(context.invocationOrder.isEmpty());
 		assertTrue(context.errors.isEmpty());
+		reg.unregister();
 	}
 
 	/**
@@ -270,10 +315,12 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * <li>modifications wrt ranking
 	 * </ul>
 	 */
+	@Test
 	public void testRankingForManagedServiceFactory() throws Exception {
 		// create configuration
 		final String pid = Util.createPid("msfpid");
-		final Configuration conf = cm.createFactoryConfiguration(pid);
+		final Configuration conf = cm.waitForService(500)
+				.createFactoryConfiguration(pid);
 		conf.update(Util.singletonDictionary("key", "val"));
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
@@ -286,7 +333,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 4, 1000, null);
 		createConfigurationPlugin(context, 5, 1001, null);
 
-		registerManagedServiceFactory(pid, synchronizer);
+		ServiceRegistration<?>reg=registerManagedServiceFactory(pid, synchronizer);
 
 		trace("Wait until the ManagedServiceFactory has gotten the update");
 
@@ -335,15 +382,19 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		assertNull(synchronizer.getProps());
 		assertTrue(context.invocationOrder.isEmpty());
 		assertTrue(context.errors.isEmpty());
+		reg.unregister();
 	}
 
 	/**
 	 * Test targetting of configuration plugins with a managed service
 	 */
+	@Test
 	public void testTargettingManagedService() throws Exception {
 		// create configuration
 		final String pid = Util.createPid("mspid");
-		cm.getConfiguration(pid).update(Util.singletonDictionary("key", "val"));
+		cm.waitForService(500)
+				.getConfiguration(pid)
+				.update(Util.singletonDictionary("key", "val"));
 
 		final PluginContext context = new PluginContext();
 
@@ -352,7 +403,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 3, 3, new String[] {"foo"});
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		registerManagedService(pid, synchronizer);
+		ServiceRegistration< ? > reg = registerManagedService(pid,
+				synchronizer);
 
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -362,15 +414,18 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		assertEquals("val", props.get("key"));
 		verifyPlugins(props, false, Arrays.asList(1, 2), Arrays.asList(1, 2),
 				context);
+		reg.unregister();
 	}
 
 	/**
 	 * Test targetting of configuration plugins with a managed service factory
 	 */
+	@Test
 	public void testTargettingManagedServiceFactory() throws Exception {
 		// create factory configuration
 		final String factoryPid = Util.createPid("msfpid");
-		final Configuration conf = cm.createFactoryConfiguration(factoryPid);
+		final Configuration conf = cm.waitForService(500)
+				.createFactoryConfiguration(factoryPid);
 		conf.update(Util.singletonDictionary("key", "val"));
 
 		final PluginContext context = new PluginContext();
@@ -380,7 +435,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 3, 3, new String[] {"foo"});
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		registerManagedServiceFactory(factoryPid, synchronizer);
+		ServiceRegistration< ? > reg = registerManagedServiceFactory(factoryPid,
+				synchronizer);
 
 		trace("Wait until the ManagedServiceFactory has gotten the update");
 
@@ -390,15 +446,17 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		assertEquals("val", props.get("key"));
 		verifyPlugins(props, true, Arrays.asList(1, 2), Arrays.asList(1, 2),
 				context);
+		reg.unregister();
 	}
 
 	/**
 	 * Test calling plugins through Configuration object
 	 */
+	@Test
 	public void testGetProcessedProperties() throws Exception {
 		// create configuration
 		final String pid = Util.createPid("mspid");
-		final Configuration conf = cm.getConfiguration(pid);
+		final Configuration conf = cm.waitForService(500).getConfiguration(pid);
 		conf.update(Util.singletonDictionary("key", "val"));
 
 		final PluginContext context = new PluginContext();
@@ -409,7 +467,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 4, 1000, null);
 		createConfigurationPlugin(context, 5, 1001, null);
 
-		final ServiceRegistration<ManagedService> reg = this.getContext()
+		final ServiceRegistration<ManagedService> reg = bc
 				.registerService(ManagedService.class, new ManagedService() {
 
 					@Override
@@ -455,7 +513,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 					props.get(ConfigurationAdmin.SERVICE_FACTORYPID));
 		}
 		assertNull(props.get(ConfigurationAdmin.SERVICE_BUNDLELOCATION));
-		assertEquals(
+		Assert.assertEquals(
 				"Order expected=" + callOrder + ", but was "
 						+ context.invocationOrder,
 				callOrder, context.invocationOrder);
@@ -495,13 +553,15 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * 
 	 * @param pid The pid for the service
 	 * @param synchronizer The synchronizer
+	 * @return
 	 * @throws Exception if something goes wrong
 	 */
-	private void registerManagedService(final String pid,
+	private ServiceRegistration< ? > registerManagedService(final String pid,
 			final Synchronizer synchronizer) throws Exception {
 		trace("Create and register a new ManagedService");
 
-		registerService(ManagedService.class.getName(), new ManagedService() {
+		return bc.registerService(ManagedService.class.getName(),
+				new ManagedService() {
 
 			@Override
 			public void updated(Dictionary<String, ? > properties)
@@ -517,13 +577,15 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * 
 	 * @param factoryPid The factoryPid for the service
 	 * @param synchronizer The synchronizer
+	 * @return
 	 * @throws Exception if something goes wrong
 	 */
-	private void registerManagedServiceFactory(final String factoryPid,
+	private ServiceRegistration< ? > registerManagedServiceFactory(
+			final String factoryPid,
 			final Synchronizer synchronizer) throws Exception {
 		trace("Create and register a new ManagedServiceFactory");
 
-		registerService(ManagedServiceFactory.class.getName(),
+		return bc.registerService(ManagedServiceFactory.class.getName(),
 				new ManagedServiceFactory() {
 
 					@Override
@@ -555,7 +617,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 			SynchronizerImpl synchronizer) throws Exception {
 		ConfigurationListenerImpl listener = new ConfigurationListenerImpl(
 				synchronizer, 1);
-		registerService(ConfigurationListener.class.getName(), listener, null);
+		bc.registerService(ConfigurationListener.class.getName(), listener,
+				null);
 		return listener;
 	}
 
@@ -564,7 +627,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 */
 	private NotVisitablePlugin createConfigurationPlugin() throws Exception {
 		NotVisitablePlugin plugin = new NotVisitablePlugin();
-		registerService(ConfigurationPlugin.class.getName(), plugin, null);
+		bc.registerService(ConfigurationPlugin.class.getName(), plugin, null);
 		return plugin;
 	}
 
@@ -590,7 +653,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		}
 
 		Plugin plugin = new Plugin(context, ranking, id);
-		registerService(ConfigurationPlugin.class.getName(), plugin, props);
+		bc.registerService(ConfigurationPlugin.class.getName(), plugin, props);
 	}
 
 	/**
@@ -598,7 +661,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 */
 	private void cleanCM(Set<String> existingConfigs) throws Exception {
         if (cm != null) {
-            Configuration[] configs = cm.listConfigurations(null);
+			Configuration[] configs = cm.waitForService(500)
+					.listConfigurations(null);
             if (configs != null) {
                 for (int i = 0; i < configs.length; i++) {
                     Configuration config = configs[i];

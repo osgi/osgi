@@ -30,19 +30,23 @@ Import-Package: ${-signaturetest}, *
 	
 -signaturetest                      = org.osgi.service.cm
 
--buildpath = \
-    org.osgi.test.support;version=project, \
-    org.osgi.framework;maven-scope=provided;version=1.8,\
-    org.osgi.resource;maven-scope=provided;version=1.0,\
-    org.osgi.service.permissionadmin;maven-scope=provided;version=1.2,\
-    org.osgi.namespace.implementation;version=1.0,\
-    org.osgi.namespace.service;version=1.0,\
-    org.osgi.service.coordinator;version=1.0,\
-	org.osgi.service.cm;version=latest
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.framework;maven-scope=provided;version='1.8',\
+	org.osgi.resource;maven-scope=provided;version='1.0',\
+	org.osgi.service.permissionadmin;maven-scope=provided;version='1.2',\
+	org.osgi.namespace.implementation;version='1.0',\
+	org.osgi.namespace.service;version='1.0',\
+	org.osgi.service.coordinator;version='1.0',\
+	org.osgi.service.cm;version=latest,\
+	org.osgi.annotation.versioning,\
+	org.osgi.test.junit5.cm
 
 -runbundles = \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.coordinator; version=latest
+	org.osgi.impl.service.coordinator; version=latest,\
+	org.osgi.test.junit5.cm; version=latest
+	
 	
 -runproperties = ${runsecureproperties}
