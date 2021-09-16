@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
@@ -89,7 +90,7 @@ public class CMCoordinationTestCase {
 		if (System.getSecurityManager() != null) {
 
 			setAllPermissionBundle = bi.installBundle("setallpermission.jar",
-					false);
+					true);
 		}
 
 		// existing configurations
@@ -312,7 +313,7 @@ public class CMCoordinationTestCase {
 	 * @throws Exception
 	 * @since 1.6
 	 */
-	@Test
+	@RepeatedTest(10)
 	public void testManagedService(@InjectService
 	Coordinator c) throws Exception {
 		// start a coordination
@@ -362,9 +363,6 @@ public class CMCoordinationTestCase {
 			sleep();
 			assertEquals(0, events.size());
 		} finally {
-			if (regms != null) {
-				regms.unregister();
-			}
 			coord.end();
 		}
 
@@ -375,6 +373,9 @@ public class CMCoordinationTestCase {
 		assertTrue(events.get(1));
 		assertTrue(events.get(2));
 		assertFalse(events.get(3));
+		if (regms != null) {
+			regms.unregister();
+		}
 
 	}
 
