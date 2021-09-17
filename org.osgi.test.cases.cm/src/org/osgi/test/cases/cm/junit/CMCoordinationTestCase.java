@@ -378,6 +378,7 @@ public class CMCoordinationTestCase {
 		}
 	}
 
+
 	private long getLongProperty(String string, int i) {
 		return i;
 	}
