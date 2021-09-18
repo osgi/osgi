@@ -217,11 +217,17 @@ public class CMControl extends DefaultTestBundleControl {
 
 	private static final String neverlandLocation = "http://neverneverland/";
 
+	List<String>				bLocs				= new ArrayList<>();
 	protected void setUp() throws Exception {
 		SIGNAL_WAITING_TIME = getLongProperty(
 				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
 		// printoutBundleList();
 
+		for (Bundle b : getContext().getBundles()) {
+			if (b.getState() != Bundle.UNINSTALLED) {
+			bLocs.add(b.getLocation());
+			}
+		}
 	    assignCm();
 
 		// populate the created configurations so that
@@ -237,7 +243,6 @@ public class CMControl extends DefaultTestBundleControl {
 		} else {
 			permissionFlag = true;
 		}
-
 		// existing configurations
         Configuration[] configs = cm.listConfigurations(null);
 		existingConfigs = new HashSet<>();
@@ -248,6 +253,7 @@ public class CMControl extends DefaultTestBundleControl {
                 existingConfigs.add(config.getPid());
             }
         }
+		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	protected void tearDown() throws Exception {
@@ -265,6 +271,14 @@ public class CMControl extends DefaultTestBundleControl {
 		ungetService(cm);
 		System.out.println("tearDown()");
 		// this.printoutBundleList();
+		for (Bundle b : getContext().getBundles()) {
+			if (!bLocs.contains(b.getLocation())) {
+				b.uninstall();
+			} else {
+				System.out.println(b);
+			}
+		}
+		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	private void resetPermissions() throws BundleException {
