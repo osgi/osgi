@@ -37,7 +37,7 @@ import org.osgi.service.typedevent.TypedEventConstants;
  * Declarative Services components which use the Typed Event specification.
  * 
  * @author $Id$
- * @since 1.4
+ * @since 1.0
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
