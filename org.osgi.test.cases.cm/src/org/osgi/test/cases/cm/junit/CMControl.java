@@ -253,7 +253,6 @@ public class CMControl extends DefaultTestBundleControl {
                 existingConfigs.add(config.getPid());
             }
         }
-		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	protected void tearDown() throws Exception {
@@ -274,11 +273,8 @@ public class CMControl extends DefaultTestBundleControl {
 		for (Bundle b : getContext().getBundles()) {
 			if (!bLocs.contains(b.getLocation())) {
 				b.uninstall();
-			} else {
-				System.out.println(b);
 			}
 		}
-		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	private void resetPermissions() throws BundleException {
