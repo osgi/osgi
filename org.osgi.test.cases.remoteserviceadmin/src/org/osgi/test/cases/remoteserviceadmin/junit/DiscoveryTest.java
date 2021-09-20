@@ -878,8 +878,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			lastMatchedFilter = matchedFilter;
 
 			if (EndpointEvent.ADDED == event.getType()) {
-				semAdded.release();
 				lastAddedEndpoint = event.getEndpoint();
+				semAdded.release();
 			}
 
 			if (EndpointEvent.MODIFIED == event.getType()) {
@@ -891,8 +891,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			}
 
 			if (EndpointEvent.REMOVED == event.getType()) {
-				semRemoved.release();
 				lastRemovedEndpoint = event.getEndpoint();
+				semRemoved.release();
 			}
 		}
 
