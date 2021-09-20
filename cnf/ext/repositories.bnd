@@ -9,7 +9,7 @@
         readonly=true, \
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='Maven Central';\
-        releaseUrl="${centralrepo}";\
+        releaseUrl="${centralrepo},${uri;${bnd_releases}}";\
         snapshotUrl="${uri;${bnd_snapshots}},${ossrhrepo},${apachesnapshotrepo}";\
         index=${.}/central.mvn;\
         readOnly=true,\
