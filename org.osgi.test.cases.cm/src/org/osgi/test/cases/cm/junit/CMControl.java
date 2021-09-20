@@ -253,7 +253,6 @@ public class CMControl extends DefaultTestBundleControl {
                 existingConfigs.add(config.getPid());
             }
         }
-		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	protected void tearDown() throws Exception {
@@ -274,11 +273,8 @@ public class CMControl extends DefaultTestBundleControl {
 		for (Bundle b : getContext().getBundles()) {
 			if (!bLocs.contains(b.getLocation())) {
 				b.uninstall();
-			} else {
-				System.out.println(b);
 			}
 		}
-		Sleep.sleep(SIGNAL_WAITING_TIME);
 	}
 
 	private void resetPermissions() throws BundleException {
@@ -2264,7 +2260,7 @@ public class CMControl extends DefaultTestBundleControl {
 			final Hashtable<String,Object> props1 = new Hashtable<String,Object>();
 			props1.put("scalar", "somevalue");
 			props1.put("array", new long[] {1, 2});
-			props1.put("collection", Arrays.asList(1,2));
+			props1.put("collection", Arrays.asList(1, 2));
 			assertTrue(conf.updateIfDifferent(props1));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 
@@ -2286,6 +2282,10 @@ public class CMControl extends DefaultTestBundleControl {
 
 			assertEquals(2, events.size());
 			
+			// wait for managed service
+			barrier.await();
+			barrier.reset();
+
 			// update array prop
 			final Hashtable<String,Object> props3 = new Hashtable<String,Object>(props2);
 			props3.put("array",  new long[] {3, 4});
@@ -2293,8 +2293,13 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(startLevel + 3, conf.getChangeCount());
 			assertEquals(3, events.size());
 			
+			// wait for managed service
+			barrier.await();
+			barrier.reset();
+
 			// update collection prop
-			final Hashtable<String,Object> props4 = new Hashtable<String,Object>(props3);
+			final Hashtable<String,Object> props4 = new Hashtable<String,Object>(
+					props3);
 			props4.put("collection", Arrays.asList(3, 4));
 			assertTrue(conf.updateIfDifferent(props4));
 			assertEquals(startLevel + 4, conf.getChangeCount());
@@ -2304,10 +2309,18 @@ public class CMControl extends DefaultTestBundleControl {
 			System.out.println("Waiting for managed service updates");
 			// wait for managed service
 			barrier.await();
+			barrier.reset();
 
 			assertNull(updates.get(0));
 			assertEquals("somevalue", updates.get(1).get("scalar"));
 			assertEquals("newvalue", updates.get(2).get("scalar"));
+			long[] array = (long[]) updates.get(3).get("array");
+			assertEquals(3, array[0]);
+			assertEquals(4, array[1]);
+			ArrayList< ? > collection = new ArrayList<>(
+					(Collection< ? >) updates.get(4).get("collection"));
+			assertEquals(Arrays.asList(3, 4), collection);
+
 		} finally {
 			this.unregisterService(listener);
 			this.unregisterService(ms);
