@@ -105,7 +105,8 @@ tasks.named("wrapper") {
 
 tasks.register("buildscriptDependencies") {
 	doLast {
-		println "bnd_version: ${bnd_version}"
+		println "bnd_version:   ${bnd_version}"
 		println "bnd_snapshots: ${bnd_snapshots}"
+		println "bnd_releases:  ${bnd_releases}"
 	}
 }

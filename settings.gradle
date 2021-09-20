@@ -28,7 +28,18 @@ pluginManagement {
 	}
 	repositories {
 		maven {
+			name = "Bnd Snapshots"
 			url = uri(bnd_snapshots)
+			mavenContent {
+				snapshotsOnly()
+			}
+		}
+		maven {
+			name = "Bnd Releases"
+			url = uri(bnd_releases)
+			mavenContent {
+				releasesOnly()
+			}
 		}
 		mavenCentral()
 		gradlePluginPortal()
@@ -38,6 +49,7 @@ pluginManagement {
 		// In case these are set from the command line...
 		workspace.setProperty("bnd_version", bnd_version)
 		workspace.setProperty("bnd_snapshots", bnd_snapshots)
+		workspace.setProperty("bnd_releases", bnd_releases)
 		/*
 		 * Compute the build time stamp. 
 		 * If the git workspace is clean, the build time is the time of the head commit.
