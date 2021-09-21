@@ -24,7 +24,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 	${osgi.core.specs} 
 
 -buildpath = \
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+	${osgi.annotation.buildpath}, \
 	${template;osgi.core.specs;${@};version=project}
 
 javadoc.title = Core

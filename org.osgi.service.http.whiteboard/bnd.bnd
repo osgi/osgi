@@ -6,7 +6,7 @@ Export-Package:  \
 
 -contract: JavaServlet
 -buildpath: \
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	${osgi.annotation.buildpath},\
 	org.osgi.framework;maven-scope=provided;version=1.8,\
 	org.osgi.dto;maven-scope=provided;version=1.0,\
 	org.osgi.service.component.annotations;maven-scope=provided;version=1.4,\

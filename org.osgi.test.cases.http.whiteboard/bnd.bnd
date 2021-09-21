@@ -21,7 +21,7 @@ Export-Package: ${p}.junit.mock
 	tb2.jar
 
 -buildpath = \
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	${osgi.annotation.buildpath},\
 	org.osgi.test.support;version=project,\
     org.osgi.framework;maven-scope=provided;version=1.8, \
     org.osgi.dto;maven-scope=provided;version=1.0, \

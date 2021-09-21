@@ -6,7 +6,7 @@ Export-Package: ${p}.*; -split-package:=first
 -contract: JavaCDI, JavaInject
 
 -buildpath: \
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+	${osgi.annotation.buildpath}, \
 	org.osgi.framework;maven-scope=provided;version=1.9, \
 	org.osgi.resource;maven-scope=provided;version=1.0, \
 	org.osgi.dto;maven-scope=provided;version=1.0, \
