@@ -37,7 +37,7 @@
  * @author $Id$
  */
 
-@Version("1.0.1")
+@Version("1.0.2")
 package org.osgi.service.tr069todmt;
 
 import org.osgi.annotation.versioning.Version;

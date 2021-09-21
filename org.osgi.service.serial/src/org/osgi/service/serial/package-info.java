@@ -33,7 +33,7 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version("1.0.1")
 package org.osgi.service.serial;
 
 import org.osgi.annotation.versioning.Version;
