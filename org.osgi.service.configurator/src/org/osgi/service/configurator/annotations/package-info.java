@@ -28,7 +28,7 @@
  * @author $Id$
  */
 
-@Version(CONFIGURATOR_SPECIFICATION_VERSION)
+@Version(CONFIGURATOR_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.configurator.annotations;
 
 import static org.osgi.service.configurator.ConfiguratorConstants.CONFIGURATOR_SPECIFICATION_VERSION;

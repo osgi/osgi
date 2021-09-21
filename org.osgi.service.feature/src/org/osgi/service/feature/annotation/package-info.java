@@ -19,8 +19,8 @@
 /**
  * Feature Annotations Package Version 1.0.
  * <p>
- * This package contains annotations that can be used to require the
- * Feature-Service implementation.
+ * This package contains annotations that can be used to require the Feature
+ * Service implementation.
  * <p>
  * Bundles should not normally need to import this package as the annotations
  * are only used at build-time.
@@ -29,9 +29,10 @@
  * @author $Id$
  */
 
-@Version(FeatureConstants.FEATURE_SPECIFICATION_VERSION)
+@Version(FEATURE_PACKAGE_VERSION)
 package org.osgi.service.feature.annotation;
 
+import static org.osgi.service.feature.FeatureConstants.FEATURE_PACKAGE_VERSION;
+
 import org.osgi.annotation.versioning.Version;
-import org.osgi.service.feature.FeatureConstants;
 

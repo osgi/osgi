@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version(METATYPE_SPECIFICATION_VERSION)
+@Version(METATYPE_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.metatype;
 
 import static org.osgi.service.metatype.MetaTypeService.METATYPE_SPECIFICATION_VERSION;

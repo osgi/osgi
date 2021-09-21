@@ -29,9 +29,10 @@
  * @author $Id$
  */
 
-@Version(ConfigurationConstants.CONFIGURATION_ADMIN_SPECIFICATION_VERSION)
+@Version(CONFIGURATION_ADMIN_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.cm.annotations;
 
+import static org.osgi.service.cm.ConfigurationConstants.CONFIGURATION_ADMIN_SPECIFICATION_VERSION;
+
 import org.osgi.annotation.versioning.Version;
-import org.osgi.service.cm.ConfigurationConstants;
 

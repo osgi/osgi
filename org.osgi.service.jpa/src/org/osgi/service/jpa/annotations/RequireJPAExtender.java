@@ -22,7 +22,6 @@ import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
 import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_CAPABILITY_NAME;
 import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -36,7 +35,6 @@ import org.osgi.annotation.bundle.Requirement;
  *
  * @author $Id$
  */
-@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE

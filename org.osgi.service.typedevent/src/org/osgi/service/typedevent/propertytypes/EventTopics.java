@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
 import org.osgi.service.typedevent.UntypedEventHandler;
-import org.osgi.service.typedevent.annotations.RequireTypedEvents;
+import org.osgi.service.typedevent.annotations.RequireTypedEvent;
 
 /**
  * Component Property Type for the {@link TypedEventConstants#TYPED_EVENT_TOPICS}
@@ -43,7 +43,7 @@ import org.osgi.service.typedevent.annotations.RequireTypedEvents;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@RequireTypedEvents
+@RequireTypedEvent
 public @interface EventTopics {
 	/**
 	 * Service property specifying the {@code Event} topics of interest to an

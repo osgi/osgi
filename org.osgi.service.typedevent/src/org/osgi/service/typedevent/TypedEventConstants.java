@@ -21,7 +21,7 @@ package org.osgi.service.typedevent;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Defines standard names for Type Safe Event properties.
+ * Defines standard names for Typed Event properties.
  * 
  * @author $Id$
  */
@@ -59,16 +59,22 @@ public final class TypedEventConstants {
 	public static final String	TYPED_EVENT_FILTER					= "event.filter";
 
 	/**
-	 * The name of the implementation capability for the Type Safe Events
+	 * The name of the implementation capability for the Typed Event
 	 * specification
 	 */
 	public static final String	TYPED_EVENT_IMPLEMENTATION			= "osgi.typedevent";
 
 	/**
-	 * The version of the implementation capability for the Type Safe Events
+	 * The version of the implementation capability for the Typed Event
 	 * specification
 	 */
-	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.0.0";
+	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.0";
+
+	/**
+	 * The package version of the Typed Event specification
+	 */
+	public static final String	TYPED_EVENT_PACKAGE_VERSION			= TYPED_EVENT_SPECIFICATION_VERSION
+			+ ".0";
 
 	/**
 	 * Private constructor to prevent instantiation

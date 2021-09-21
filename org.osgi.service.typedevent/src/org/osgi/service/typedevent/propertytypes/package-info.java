@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Type Safe Event Component Property Types Package Version 1.0.
+ * Typed Event Component Property Types Package Version 1.0.
  * <p>
  * When used as annotations, component property types are processed by tools to
  * generate Component Descriptions which are used at runtime.
@@ -27,15 +27,15 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.event.propertytypes; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.typedevent.propertytypes; version="[1.0,2.0)"}
  * 
  * @author $Id$
  */
 
-@Version(TYPED_EVENT_SPECIFICATION_VERSION)
+@Version(TYPED_EVENT_PACKAGE_VERSION)
 package org.osgi.service.typedevent.propertytypes;
 
-import static org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_SPECIFICATION_VERSION;
+import static org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_PACKAGE_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 

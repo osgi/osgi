@@ -18,7 +18,6 @@
 
 package org.osgi.service.cm.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,7 +34,6 @@ import org.osgi.service.cm.ConfigurationConstants;
  * @author $Id$
  * @since 1.6
  */
-@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE

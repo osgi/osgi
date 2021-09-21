@@ -16,6 +16,8 @@ Export-Package: ${osgi.annotation.packages}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+# Micro update to annotation packages
+osgi.version.micro = 1
 
 -dependson = \
     ${osgi.annotation.specs} 

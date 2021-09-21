@@ -18,7 +18,6 @@
 
 package org.osgi.annotation.bundle;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -39,7 +38,6 @@ import org.osgi.annotation.versioning.Version;
  * 
  * @author $Id$
  */
-@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.PACKAGE)
 public @interface Export {

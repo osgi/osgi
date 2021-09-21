@@ -25,7 +25,6 @@ import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMEN
 import static org.osgi.service.cdi.CDIConstants.CDI_CAPABILITY_NAME;
 import static org.osgi.service.cdi.CDIConstants.CDI_SPECIFICATION_VERSION;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -37,7 +36,6 @@ import org.osgi.annotation.bundle.Requirement;
  *
  * @author $Id$
  */
-@Documented
 @Retention(CLASS)
 @Target({
 		TYPE, PACKAGE

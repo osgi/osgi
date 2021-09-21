@@ -37,7 +37,9 @@
  * @author $Id$
  */
 
-@Version(CDIConstants.CDI_SPECIFICATION_VERSION)
+@Version(CDI_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.cdi;
+
+import static org.osgi.service.cdi.CDIConstants.CDI_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;

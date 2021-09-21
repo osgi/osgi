@@ -18,7 +18,6 @@
 
 package org.osgi.service.http.whiteboard.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -38,7 +37,6 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * 
  * @author $Id$
  */
-@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE

@@ -35,8 +35,10 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version(CONFIGURATOR_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.configurator;
+
+import static org.osgi.service.configurator.ConfiguratorConstants.CONFIGURATOR_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 

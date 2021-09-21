@@ -248,7 +248,7 @@ public interface EventConstants {
 	 * 
 	 * @since 1.4
 	 */
-	public static final String	EVENT_ADMIN_SPECIFICATION_VERSION	= "1.4.0";
+	public static final String	EVENT_ADMIN_SPECIFICATION_VERSION	= "1.4";
 
 	/**
 	 * This constant was released with an incorrectly spelled name. It has been

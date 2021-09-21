@@ -145,13 +145,25 @@ public interface ComponentConstants {
 	 * Compile time constant for the Specification Version of Declarative
 	 * Services.
 	 * <p>
-	 * Used in {@code Version} and {@code Requirement} annotations. The value of
-	 * this compile time constant will change when the specification version of
-	 * Declarative Services is updated.
+	 * Used in {@code Requirement} annotations. The value of this compile time
+	 * constant will change when the specification version of Declarative
+	 * Services is updated.
 	 * 
 	 * @since 1.4
 	 */
-	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.5.0";
+	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.5";
+
+	/**
+	 * Compile time constant for the Package Version of Declarative Services.
+	 * <p>
+	 * Used in {@code Version} annotations. The value of this compile time
+	 * constant will change when the specification version of Declarative
+	 * Services is updated or the micro version of the packages is updated.
+	 * 
+	 * @since 1.5
+	 */
+	public static final String	COMPONENT_PACKAGE_VERSION					= COMPONENT_SPECIFICATION_VERSION
+			+ ".0";
 
 	/**
 	 * Reference name for a component's satisfying condition.

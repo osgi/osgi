@@ -18,7 +18,6 @@
 
 package org.osgi.service.typedevent.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -39,7 +38,6 @@ import org.osgi.service.typedevent.TypedEventConstants;
  * @author $Id$
  * @since 1.0
  */
-@Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
 		ElementType.TYPE, ElementType.PACKAGE
@@ -47,6 +45,6 @@ import org.osgi.service.typedevent.TypedEventConstants;
 @Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
 		name = TypedEventConstants.TYPED_EVENT_IMPLEMENTATION, //
 		version = TypedEventConstants.TYPED_EVENT_SPECIFICATION_VERSION)
-public @interface RequireTypedEvents {
+public @interface RequireTypedEvent {
 	// This is a marker annotation.
 }
