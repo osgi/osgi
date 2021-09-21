@@ -23,7 +23,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 	${osgi.cmpn.specs}
 
 -buildpath = \
-    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    ${osgi.annotation.buildpath}, \
 	${template;osgi.cmpn.specs;${@};version=project}, \
     osgi.core;maven-scope=provided;version=latest, \
     org.apache.felix.http.servlet-api;version=latest, \
