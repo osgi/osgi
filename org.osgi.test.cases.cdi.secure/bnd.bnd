@@ -17,7 +17,7 @@ Bundle-Description: Secure TCK for the OSGi/CDI integration
 -runsystempackages: sun.misc
 
 -buildpath: \
-	osgi.annotation;maven-scope=provided;version=${osgi.annotation.version},\
+	${osgi.annotation.buildpath},\
 	org.osgi.test.support;version=project,\
     org.osgi.framework;maven-scope=provided;version=1.9,\
     org.osgi.dto;maven-scope=provided;version=1.1,\

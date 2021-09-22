@@ -23,7 +23,7 @@ import java.util.Map;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The Type Safe Event service. Bundles wishing to publish events must obtain
+ * The Typed Event service. Bundles wishing to publish events must obtain
  * this service and call one of the event delivery methods.
  * 
  * @ThreadSafe

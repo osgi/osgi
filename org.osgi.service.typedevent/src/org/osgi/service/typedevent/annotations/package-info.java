@@ -17,10 +17,10 @@
  *******************************************************************************/
 
 /**
- * Type Safe Event Annotations Package Version 1.0.
+ * Typed Event Annotations Package Version 1.0.
  * <p>
- * This package contains annotations that can be used to require the Type Safe
- * Event implementation.
+ * This package contains annotations that can be used to require the Typed Event
+ * implementation.
  * <p>
  * Bundles should not normally need to import this package as the annotations
  * are only used at build-time.

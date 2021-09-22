@@ -29,7 +29,7 @@
  * @author $Id$
  */
 
-@Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION)
+@Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.http.whiteboard.annotations;
 
 import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SPECIFICATION_VERSION;

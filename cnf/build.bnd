@@ -67,9 +67,10 @@ osgi.version.minor			= 0
 osgi.version.micro			= 0
 osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.micro}
 
-build.version				= ${osgi.version}.${project.build}
+build.versionmask           = ${versionmask;===;${1}}
+build.version				= ${build.versionmask;${osgi.version}}.${project.build}
 
-osgi.annotation.version=8.0.0
+osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=snapshot
 
 # Documentation
 -groupid: org.osgi

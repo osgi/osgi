@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version(EVENT_ADMIN_SPECIFICATION_VERSION)
+@Version(EVENT_ADMIN_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.event;
 
 import static org.osgi.service.event.EventConstants.EVENT_ADMIN_SPECIFICATION_VERSION;

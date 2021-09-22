@@ -8,7 +8,6 @@ Bundle-Description: \
 -maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
--fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
 
 Export-Package: ${osgi.promise.packages}
@@ -18,7 +17,7 @@ Export-Package: ${osgi.promise.packages}
 -dependson = ${osgi.promise.specs} 
 
 -buildpath = \
-    osgi.annotation;maven-scope=provided;version=${osgi.annotation.version}, \
+    ${osgi.annotation.buildpath}, \
     ${template;osgi.promise.specs;${@};version=project}
 
 javadoc.title = Promise

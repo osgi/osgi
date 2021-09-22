@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Type Safe Event Package Version 1.0.
+ * Typed Event Package Version 1.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.event.typed; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.typedevent; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.even.typed; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.typedevent; version="[1.0,1.1)"}
  * 
  * @author $Id$
  */

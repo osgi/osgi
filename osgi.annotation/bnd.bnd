@@ -7,15 +7,15 @@ Bundle-Description: \
 -maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
--fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
 
 Export-Package: ${osgi.annotation.packages}
 
 -includeresource = ${osgi.annotation.resources}
 
-Provide-Capability: osgi.unresolvable
-Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+# Removed osgi.unresolvable requirement
+# Micro version change in annotation packages
+build.versionmask: ${versionmask;==+;${1}}
 
 -dependson = \
     ${osgi.annotation.specs} 

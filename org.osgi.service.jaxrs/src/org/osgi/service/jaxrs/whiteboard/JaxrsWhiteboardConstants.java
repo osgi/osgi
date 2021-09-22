@@ -219,6 +219,6 @@ public final class JaxrsWhiteboardConstants {
 	 * The version of the implementation capability for the JAX-RS Whiteboard
 	 * specification
 	 */
-	public static final String	JAX_RS_WHITEBOARD_SPECIFICATION_VERSION	= "1.0.0";
+	public static final String	JAX_RS_WHITEBOARD_SPECIFICATION_VERSION	= "1.0";
 
 }

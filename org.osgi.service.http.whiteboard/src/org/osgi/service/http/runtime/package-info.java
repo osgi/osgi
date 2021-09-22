@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION)
+@Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")
 package org.osgi.service.http.runtime;
 
 import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SPECIFICATION_VERSION;

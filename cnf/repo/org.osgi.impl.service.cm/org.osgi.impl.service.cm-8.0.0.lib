@@ -1,1 +1,2 @@
+org.osgi.service.cm;version=latest
 org.apache.felix.configadmin; version=1.9

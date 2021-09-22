@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
-import org.osgi.service.typedevent.annotations.RequireTypedEvents;
+import org.osgi.service.typedevent.annotations.RequireTypedEvent;
 
 /**
  * Component Property Type for the {@link TypedEventConstants#TYPED_EVENT_TYPE}
@@ -42,7 +42,7 @@ import org.osgi.service.typedevent.annotations.RequireTypedEvents;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@RequireTypedEvents
+@RequireTypedEvent
 public @interface EventType {
 	/**
 	 * Service property specifying the {@code EventType} for a

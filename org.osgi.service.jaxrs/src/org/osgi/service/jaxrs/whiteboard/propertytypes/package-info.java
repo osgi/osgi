@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
+@Version(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION + ".0")
 package org.osgi.service.jaxrs.whiteboard.propertytypes;
 
 import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;

@@ -79,5 +79,5 @@ public interface MetaTypeService {
 	 * 
 	 * @since 1.4
 	 */
-	public static final String	METATYPE_SPECIFICATION_VERSION	= "1.4.0";
+	public static final String	METATYPE_SPECIFICATION_VERSION	= "1.4";
 }

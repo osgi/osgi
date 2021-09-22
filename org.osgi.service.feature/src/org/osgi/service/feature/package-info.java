@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Converter Package Version 1.0.
+ * Feature Package Version 1.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -30,9 +30,11 @@
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.serivice.feature; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.feature; version="[1.0,1.1)"}
  */
-@Version(FeatureConstants.FEATURE_SPECIFICATION_VERSION)
+@Version(FEATURE_SPECIFICATION_VERSION)
 package org.osgi.service.feature;
+
+import static org.osgi.service.feature.FeatureConstants.FEATURE_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;

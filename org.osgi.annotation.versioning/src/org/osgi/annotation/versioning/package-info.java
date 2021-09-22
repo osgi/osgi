@@ -25,6 +25,6 @@
  *      Semantic Versioning</a>
  * @author $Id$
  */
-@Version("1.1.1")
+@Version("1.1.2")
 package org.osgi.annotation.versioning;
 
