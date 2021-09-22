@@ -850,7 +850,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
           linkend="org.osgi.service.typedevent"/>"</programlisting>
 
       <para>The <xref
-      linkend="org.osgi.service.typedevent.annotations.RequireTypedEvents"
+      linkend="org.osgi.service.typedevent.annotations.RequireTypedEvent"
       xrefstyle="hyperlink"/> annotation can be used to require this
       capability.</para>
 
