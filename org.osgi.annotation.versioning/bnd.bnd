@@ -3,7 +3,4 @@
 
 Export-Package: ${p}.*; -split-package:=first
 
-Provide-Capability: osgi.unresolvable
-Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
-
 -buildpath =
