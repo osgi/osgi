@@ -31,10 +31,6 @@ import org.osgi.service.feature.FeatureConstants;
 /**
  * This annotation can be used to require the Feature implementation. It can be
  * used directly, or as a meta-annotation.
- * <p>
- * This annotation is applied to several of the Feature component property
- * annotations meaning that it does not normally need to be applied to
- * Declarative Services components which use the Feature Service.
  * 
  * @author $Id$
  */
