@@ -93,7 +93,7 @@ public class CDIConstants {
 	 * this compile time constant will change when the specification version of
 	 * CDI Integration is updated.
 	 */
-	public static final String	CDI_SPECIFICATION_VERSION			= "1.0.0";
+	public static final String	CDI_SPECIFICATION_VERSION			= "1.0";
 
 	/**
 	 * The '{@code descriptor}' attribute on the CDI extender requirement.

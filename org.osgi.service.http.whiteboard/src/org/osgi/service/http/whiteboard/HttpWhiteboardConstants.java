@@ -595,5 +595,5 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * @since 1.1
 	 */
-	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "1.1.0";
+	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "1.1";
 }

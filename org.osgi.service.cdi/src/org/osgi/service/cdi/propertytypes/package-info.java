@@ -32,7 +32,7 @@
  * @author $Id$
  */
 
-@Version(CDI_SPECIFICATION_VERSION)
+@Version(CDI_SPECIFICATION_VERSION + ".0")
 package org.osgi.service.cdi.propertytypes;
 
 import static org.osgi.service.cdi.CDIConstants.CDI_SPECIFICATION_VERSION;

@@ -44,5 +44,5 @@ public final class ConfigurationConstants {
 	 * 
 	 * @since 1.6
 	 */
-	public static final String	CONFIGURATION_ADMIN_SPECIFICATION_VERSION	= "1.6.0";
+	public static final String	CONFIGURATION_ADMIN_SPECIFICATION_VERSION	= "1.6";
 }
