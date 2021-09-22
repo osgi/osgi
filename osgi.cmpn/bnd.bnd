@@ -7,7 +7,6 @@ Bundle-Description: \
 -maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
 
 -baseline: *
--fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
 
 Import-Package: *; resolution:=optional
