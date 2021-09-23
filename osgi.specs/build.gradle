@@ -34,8 +34,6 @@ ext.fop_home = file("${licensed}/fop")
 ext.fop_classpath = files(fileTree("dir": new File(fop_home, "lib"), "include": "*.jar"),
 fileTree("dir": new File(fop_home, "build"), "includes": ["fop.jar", "fop-hyph.jar"]))
 
-def compileJava = tasks.named("compileJava")
-
 def javadoc = tasks.named("javadoc") {
 	description = "Build the docbook flavored javadoc."
 	group = "documentation"
@@ -55,9 +53,9 @@ def javadoc = tasks.named("javadoc") {
 	options.encoding = "UTF-8"
 	options.noTimestamp = JavaVersion.current().isJava9Compatible()
 	options.doclet = "org.osgi.tools.xmldoclet.XmlDoclet"
-	options.docletpath sourceSets.main.java.classesDirectory.get().getAsFile()
+	options.docletpath = sourceSets.main.output.files as List
 
-	inputs.files(compileJava).withPropertyName(compileJava.name)
+	inputs.files(sourceSets.main.output).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("docletpath")
 	inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("stylesheet")
 
 	doLast("xslt") { t ->
