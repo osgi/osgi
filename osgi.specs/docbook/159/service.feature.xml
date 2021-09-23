@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="159"
          revision="$Id$"
          version="5.0" xml:id="service.feature"
@@ -37,74 +36,69 @@
   <section>
     <title>Introduction</title>
 
-    <para>
-        OSGi has become a platform capable of running large applications for a variety of purposes, 
-        including rich client applications, server-side systems and cloud and container based architectures. 
-        As these applications are generally based on many bundles, describing each bundle individually 
-        in an application definition becomes unwieldy once the number of bundles reaches a certain level. 
-    </para>
+    <para>OSGi has become a platform capable of running large applications for
+    a variety of purposes, including rich client applications, server-side
+    systems and cloud and container based architectures. As these applications
+    are generally based on many bundles, describing each bundle individually
+    in an application definition becomes unwieldy once the number of bundles
+    reaches a certain level.</para>
 
-    <para>
-        When developing large scale applications it is often the case that few people know the role of every 
-        single bundle or configuration item in the application. To keep the architecture understandable a grouping 
-        mechanism is needed that allows for the representation of parts of the application into larger 
-        entities that keep reasoning about the system manageable. In such a domain members of teams 
-        spread across an organization will need to be able to both develop new parts for the application 
-        as well as make tweaks or enhancements to parts developed by others such as adding configuration and 
-        resources or changing one or more bundles relevant to their part of the application.
-    </para>
+    <para>When developing large scale applications it is often the case that
+    few people know the role of every single bundle or configuration item in
+    the application. To keep the architecture understandable a grouping
+    mechanism is needed that allows for the representation of parts of the
+    application into larger entities that keep reasoning about the system
+    manageable. In such a domain members of teams spread across an
+    organization will need to be able to both develop new parts for the
+    application as well as make tweaks or enhancements to parts developed by
+    others such as adding configuration and resources or changing one or more
+    bundles relevant to their part of the application.</para>
 
-    <para>
-        The higher level constructs that define the application should be reusable in different contexts, 
-        for example if one team has developed a component to handle job processing, different applications 
-        should be able to use it, and if needed tune its configuration or other aspects so that it works in 
-        each setting without having to know each and every detail that the job processing component is built 
-        up from.
-    </para>
+    <para>The higher level constructs that define the application should be
+    reusable in different contexts, for example if one team has developed a
+    component to handle job processing, different applications should be able
+    to use it, and if needed tune its configuration or other aspects so that
+    it works in each setting without having to know each and every detail that
+    the job processing component is built up from.</para>
 
-    <para>
-        Applications are often associated with additional resources or metadata, for example 
-        database scripts or custom artifacts.
-        By including these with the application definition, all the related entities are encapsulated in
-        a single artifact. 
-    </para>
+    <para>Applications are often associated with additional resources or
+    metadata, for example database scripts or custom artifacts. By including
+    these with the application definition, all the related entities are
+    encapsulated in a single artifact.</para>
 
-    <para>
-        By combining various applications 
-        or subsystems together, systems are composed of existing, reusable building blocks, where all these 
-        blocks can work together. 
-        Architects of these systems need to think about components without having to dive into the 
-        individual implementation details of each subcomponent. 
-        The Features defined in this specification can be used to model such applications. Features
-        contain the definition of an application or component and may be composed into larger systems.
-    </para>
-
+    <para>By combining various applications or subsystems together, systems
+    are composed of existing, reusable building blocks, where all these blocks
+    can work together. Architects of these systems need to think about
+    components without having to dive into the individual implementation
+    details of each subcomponent. The Features defined in this specification
+    can be used to model such applications. Features contain the definition of
+    an application or component and may be composed into larger
+    systems.</para>
 
     <section>
       <title>Essentials</title>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Declarative</emphasis> - Features are declarative and can be mapped to different implementations.
-          </para>
+          <para><emphasis>Declarative</emphasis> - Features are declarative
+          and can be mapped to different implementations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extensible</emphasis> - Features are extensible with custom content to facilitate all information related to 
-          a Feature to be co-located.
-          </para>
+          <para><emphasis>Extensible</emphasis> - Features are extensible with
+          custom content to facilitate all information related to a Feature to
+          be co-located.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Human Readable</emphasis> - No special software is needed to read or author Features.
-          </para>
+          <para><emphasis>Human Readable</emphasis> - No special software is
+          needed to read or author Features.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Machine Readable</emphasis> - Features are easily be processed by tools.
-          </para>
+          <para><emphasis>Machine Readable</emphasis> - Features are easily be
+          processed by tools.</para>
         </listitem>
-
       </itemizedlist>
     </section>
 
@@ -115,36 +109,43 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Feature</emphasis> - A Feature contains a number of entities that, when provided to a 
-          launcher can be turned into an executable system. Features are building blocks which 
-          may be assembled into larger systems.</para>
+          <para><emphasis>Feature</emphasis> - A Feature contains a number of
+          entities that, when provided to a launcher can be turned into an
+          executable system. Features are building blocks which may be
+          assembled into larger systems.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundles</emphasis> - A Feature can contain one ore more bundles.</para>
+          <para><emphasis>Bundles</emphasis> - A Feature can contain one ore
+          more bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration</emphasis> - A Feature can contain configurations for the Configuration Admin service.</para>
+          <para><emphasis>Configuration</emphasis> - A Feature can contain
+          configurations for the Configuration Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extension</emphasis> - A Feature can contain a number of extensions with custom content.</para>
-        </listitem>
-        
-        <listitem>
-          <para><emphasis>Launcher</emphasis> - A launcher turns one or more Features into an executable system.</para>
-        </listitem>
-        
-        <listitem>
-          <para><emphasis>Processor</emphasis> - A Feature processor reads Features and perform a processing
-          operation on them, such as validation, transformation or generation of new entities based on the Features.</para>
+          <para><emphasis>Extension</emphasis> - A Feature can contain a
+          number of extensions with custom content.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Properties</emphasis> - Framework launching properties can be specified in a Feature.</para>
+          <para><emphasis>Launcher</emphasis> - A launcher turns one or more
+          Features into an executable system.</para>
         </listitem>
 
+        <listitem>
+          <para><emphasis>Processor</emphasis> - A Feature processor reads
+          Features and perform a processing operation on them, such as
+          validation, transformation or generation of new entities based on
+          the Features.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Properties</emphasis> - Framework launching
+          properties can be specified in a Feature.</para>
+        </listitem>
       </itemizedlist>
 
       <figure pgwide="1">
@@ -163,74 +164,95 @@
   <section>
     <title>Feature</title>
 
-    <para>
-      Features are defined by declaring JSON documents or by using the
-      <link linkend="org.osgi.service.feature" xrefstyle="hyperlink">Feature API</link>.
-      Each Feature has a unique ID which includes a version. It holds a number of entities, including a list of bundles, configurations and others. 
-      Features are extensible, that is a Feature can also contain any number of custom entities which are related to the Feature.
-    </para>
+    <para>Features are defined by declaring JSON documents or by using the
+    <link linkend="org.osgi.service.feature" xrefstyle="hyperlink">Feature
+    API</link>. Each Feature has a unique ID which includes a version. It
+    holds a number of entities, including a list of bundles, configurations
+    and others. Features are extensible, that is a Feature can also contain
+    any number of custom entities which are related to the Feature.</para>
 
-    <para>
-Features may have dependencies on other Features. Features inherit the capabilities and requirements from all bundles listed in the Feature. 
-    </para>
+    <para>Features may have dependencies on other Features. Features inherit
+    the capabilities and requirements from all bundles listed in the
+    Feature.</para>
 
-    <para>
-      Once created, a Feature is immutable. Its definition cannot be modified. However it’s possible to record caching related information in a Feature through transient extensions.
-      This cached content is not significant for the definition of the Feature or part of its identity.
-    </para>
+    <para>Once created, a Feature is immutable. Its definition cannot be
+    modified. However it is possible to record caching related information in
+    a Feature through transient extensions. This cached content is not
+    significant for the definition of the Feature or part of its
+    identity.</para>
 
     <section xml:id="service.feature-identifiers">
       <title>Identifiers</title>
 
-      <para>
-        Identifiers used throughout this specification are defined using the Maven Identifier model. They are composed of the following parts:
+      <para>Identifiers used throughout this specification are defined using
+      the Maven Identifier model. They are composed of the following parts:
+      <itemizedlist>
+          <listitem>
+            <para>Group ID</para>
+          </listitem>
 
-        <itemizedlist>
-          <listitem><para>Group ID</para></listitem>
-          <listitem><para>Artifact ID</para></listitem>
-          <listitem><para>Version</para></listitem>
-          <listitem><para>Type (optional)</para></listitem>
-          <listitem><para>Classifier (optional)</para></listitem>
-        </itemizedlist>
-        Note that if Version has the <code>-SNAPSHOT</code> suffix, the identifier points at an unreleased artifact that is
-        under development and may still change.
-      </para>
-      <para>
-        For more information see <xref linkend="service.feature-mvnpom.ref"/>.
-        The format used to specify identifiers is as follows:
-        <programlisting>group-id ':' artifact-id [ ':' type [ ':' classifier ] ] ':' version</programlisting>
-      </para>
+          <listitem>
+            <para>Artifact ID</para>
+          </listitem>
+
+          <listitem>
+            <para>Version</para>
+          </listitem>
+
+          <listitem>
+            <para>Type (optional)</para>
+          </listitem>
+
+          <listitem>
+            <para>Classifier (optional)</para>
+          </listitem>
+        </itemizedlist> Note that if Version has the <code>-SNAPSHOT</code>
+      suffix, the identifier points at an unreleased artifact that is under
+      development and may still change.</para>
+
+      <para>For more information see <xref
+      linkend="service.feature-mvnpom.ref"/>. The format used to specify
+      identifiers is as follows:</para>
+
+      <programlisting>groupId ':' artifactId ( ':' type ( ':' classifier )? )? ':' version</programlisting>
     </section>
 
     <section>
       <title>Feature Identifier</title>
-      <para>
-        Each Feature has a unique identifier. Apart from providing a persistent handle to the Feature it also provides enough information to find the Feature in an artifact repository. This identifier is defined using the format described in 
-        <xref linkend="service.feature-identifiers"/>. 
-      </para>
-      
+
+      <para>Each Feature has a unique identifier. Apart from providing a
+      persistent handle to the Feature, it also provides enough information to
+      find the Feature in an artifact repository. This identifier is defined
+      using the format described in <xref
+      linkend="service.feature-identifiers"/>.</para>
+
       <section>
-	      <title>Identifier type</title>
-	      <para>Features use as identifier type the value <code>osgifeature</code>.</para>
+        <title>Identifier type</title>
+
+        <para>Features use as identifier type the value
+        <code>osgifeature</code>.</para>
       </section>
     </section>
-    
+
     <section>
       <title>Attributes</title>
-      <para>
-        A Feature can have the following attributes:
-      </para>
+
+      <para>A Feature can have the following attributes:</para>
 
       <table rowheader="firstcol">
         <title>Feature Attributes</title>
 
         <tgroup cols="4">
           <colspec colnum="4" colwidth="2.5*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
+
               <entry>Data Type</entry>
+
               <entry>Kind</entry>
+
               <entry>Description</entry>
             </row>
           </thead>
@@ -238,70 +260,99 @@ Features may have dependencies on other Features. Features inherit the capabilit
           <tbody>
             <row>
               <entry>name</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
+
               <entry>The short descriptive name of the Feature.</entry>
             </row>
-            
+
             <row>
               <entry>categories</entry>
+
               <entry>Array of String</entry>
+
               <entry>Optional, defaults to an empty array</entry>
-              <entry>The categories this Feature belongs to. The values are user-defined.</entry>
+
+              <entry>The categories this Feature belongs to. The values are
+              user-defined.</entry>
             </row>
 
             <row>
               <entry>complete</entry>
+
               <entry>boolean</entry>
+
               <entry>Optional, defaults to <code>false</code></entry>
-              <entry>Completeness of the Feature. A Feature is complete when it has no external dependencies.</entry>
+
+              <entry>Completeness of the Feature. A Feature is complete when
+              it has no external dependencies.</entry>
             </row>
 
             <row>
               <entry>description</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
+
               <entry>A longer description of the Feature.</entry>
             </row>
-            
+
             <row>
               <entry>docURL</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
-              <entry>A location where documentation can be found for the Feature.</entry>
+
+              <entry>A location where documentation can be found for the
+              Feature.</entry>
             </row>
 
             <row>
               <entry>license</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
-              <entry>The license of the Feature. The license only relates to the Feature itself and not to any
-              artifacts that might be referenced by the Feature. The license follows the <code>Bundle-License</code>
-              format as specified in the Core specification.</entry>
+
+              <entry>The license of the Feature. The license only relates to
+              the Feature itself and not to any artifacts that might be
+              referenced by the Feature. The license follows the
+              <code>Bundle-License</code> format as specified in the Core
+              specification.</entry>
             </row>
-            
+
             <row>
               <entry>SCM</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
-              <entry>SCM information relating to the feature. The syntax of the value
-	          follows the Bundle-SCM format. See the 'Bundle Manifest Headers' section
-	          in the OSGi Core specification.</entry>
+
+              <entry>SCM information relating to the feature. The syntax of
+              the value follows the Bundle-SCM format. See the 'Bundle
+              Manifest Headers' section in the OSGi Core
+              specification.</entry>
             </row>
 
             <row>
               <entry>vendor</entry>
+
               <entry>String</entry>
+
               <entry>Optional</entry>
+
               <entry>The vendor of the Feature.</entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
-      <para>
-        An initial Feature without content can be declared as follows:
-      </para>
+      <para>An initial Feature without content can be declared as
+      follows:</para>
 
       <programlisting>{
   "feature-resource-version": "1.0",
@@ -316,28 +367,25 @@ Features may have dependencies on other Features. Features inherit the capabilit
     ...
   */
 }</programlisting>
-      
     </section>
+
     <section>
       <title>Using the Feature API</title>
-      <para>
-        Features can also be created, read and written using the Feature API. The main entry point 
-        for this API is the
-        <xref linkend="org.osgi.service.feature.FeatureService" xrefstyle="hyperlink"/>.
-        The Feature API uses
-        the builder pattern to create entities used in Features.
-      </para>
-      
-      <para>
-        A builder instance is used to create a single entity and cannot be re-used to create a second one.
-        Builders are created from the
-        <xref linkend="org.osgi.service.feature.BuilderFactory" xrefstyle="hyperlink"/>, which is
-        available from the FeatureService through
-        <xref linkend="org.osgi.service.feature.FeatureService.getBuilderFactory--"
-              xrefstyle="hyperlink"/>. 
-     
-      </para> 
-      
+
+      <para>Features can also be created, read and written using the Feature
+      API. The main entry point for this API is the <xref
+      linkend="org.osgi.service.feature.FeatureService"
+      xrefstyle="hyperlink"/>. The Feature API uses the builder pattern to
+      create entities used in Features.</para>
+
+      <para>A builder instance is used to create a single entity and cannot be
+      re-used to create a second one. Builders are created from the <xref
+      linkend="org.osgi.service.feature.BuilderFactory"
+      xrefstyle="hyperlink"/>, which is available from the FeatureService
+      through <xref
+      linkend="org.osgi.service.feature.FeatureService.getBuilderFactory--"
+      xrefstyle="hyperlink"/>.</para>
+
       <programlisting>FeatureService fs = ... // from Service Registry
 BuilderFactory factory = fs.getBuilderFactory();
 
@@ -349,61 +397,57 @@ builder.setDescription("This is the main ACME app, "
 
 Feature f = builder.build();</programlisting>
 
-	  <para>
-	    The Feature API can also be useful in environments outside of an OSGi Framework where no service registry
-	    is available, for example in a build-system
-	    environment.
-	    In such environments the FeatureService can be obtained by using the <code>java.util.ServiceLoader</code>
-	    mechanism.
-	  </para>
+      <para>The Feature API can also be useful in environments outside of an
+      OSGi Framework where no service registry is available, for example in a
+      build-system environment. In such environments the FeatureService can be
+      obtained by using the <code>java.util.ServiceLoader</code>
+      mechanism.</para>
     </section>
   </section>
 
   <section>
     <title>Comments</title>
-      <para>Comments in the form of <xref
-      linkend="service.feature-jsmin.ref"/> comments are supported, that
-      is, any text on the same line after <code>//</code> is ignored and any
-      text between <code>/* */</code> is ignored.</para>
+
+    <para>Comments in the form of <xref linkend="service.feature-jsmin.ref"/>
+    comments are supported, that is, any text on the same line after
+    <code>//</code> is ignored and any text between <code>/* */</code> is
+    ignored.</para>
   </section>
-  
+
   <section>
     <title>Bundles</title>
-    <para>
-      Features list zero or more bundles that implement the functionality provided by the Feature. Bundles are listed by 
-      referencing them in the <code>bundles</code> array so that they can be resolved from a repository. Bundles can have 
-      metadata associated with them, such 
-      as the relative start order of the bundle in the Feature. 
-      Custom metadata may also be provided. A single Feature can 
-      provide multiple versions of the same bundle, if desired.
-    </para>
-    <para>
-      Bundles are referenced using the identifier format described in 
-      <xref linkend="service.feature-identifiers"/>.
-      This means that Bundles are referenced using their Maven coordinates. The <code>bundles</code> array 
-	  contains JSON objects which can contain the bundle
-      IDs and specify optional additional metadata. 
-    </para>
+
+    <para>Features list zero or more bundles that implement the functionality
+    provided by the Feature. Bundles are listed by referencing them in the
+    <code>bundles</code> array so that they can be resolved from a repository.
+    Bundles can have metadata associated with them, such as the relative start
+    order of the bundle in the Feature. Custom metadata may also be provided.
+    A single Feature can provide multiple versions of the same bundle, if
+    desired.</para>
+
+    <para>Bundles are referenced using the identifier format described in
+    <xref linkend="service.feature-identifiers"/>. This means that Bundles are
+    referenced using their Maven coordinates. The <code>bundles</code> array
+    contains JSON objects which can contain the bundle IDs and specify
+    optional additional metadata.</para>
 
     <section>
       <title>Bundle Metadata</title>
-      
-      <para>
-        Arbitrary key-value pairs can be associated with bundle entries to store
-        custom metadata alongside the bundle references.
-        Reverse DNS naming should be used with the keys to avoid name clashes when
-        metadata is provided by multiple entities. Keys not using the reverse DNS 
-        naming scheme are reserved for OSGi use.
-      </para>
-      
-      <para>
-        Bundle metadata supports String keys and <code>string</code>, 
-        <code>number</code> or <code>boolean</code> values.
-      </para>
-    
-      <para>
-        The following example shows a simple Feature describing a small application with its dependencies:
-        <programlisting>{
+
+      <para>Arbitrary key-value pairs can be associated with bundle entries to
+      store custom metadata alongside the bundle references. Reverse DNS
+      naming should be used with the keys to avoid name clashes when metadata
+      is provided by multiple entities. Keys not using the reverse DNS naming
+      scheme are reserved for OSGi use.</para>
+
+      <para>Bundle metadata supports <code>string</code> keys and
+      <code>string</code>, <code>number</code> or <code>boolean</code>
+      values.</para>
+
+      <para>The following example shows a simple Feature describing a small
+      application with its dependencies:</para>
+
+      <programlisting>{
   "feature-resource-version": "1.0",
   "id": "org.acme:acmeapp:1.0.1",
     
@@ -430,14 +474,14 @@ Feature f = builder.build();</programlisting>
     ...
   */
 }</programlisting>
-      </para>
     </section>
-    
+
     <section>
       <title>Using the Feature API</title>
-      <para>
-        A Feature with Bundles can be created using the Feature API as follows:
-      </para>
+
+      <para>A Feature with Bundles can be created using the Feature API as
+      follows:</para>
+
       <programlisting>FeatureService fs = ... // from Service Registry
 BuilderFactory factory = fs.getBuilderFactory();
 
@@ -473,22 +517,19 @@ Feature f = builder.build();</programlisting>
 
   <section>
     <title>Configurations</title>
-    <para>
-      Features support configuration using the OSGi Configurator syntax, see 
-      <xref linkend="service.configurator"/>. This is specified with the 
-      <code>configurations</code> key in the Feature. A Launcher can apply 
-      these configurations to the Configuration Admin service when starting 
-      the system.
-    </para>
 
-    <para>
-      It is an error to define the same PID twice in a single Feature. An entity 
-      processing the feature must fail in this case.
-    </para>
-    
-    <para>
-      Example:
-      <programlisting>{
+    <para>Features support configuration using the OSGi Configurator syntax,
+    see <xref linkend="service.configurator"/>. This is specified with the
+    <code>configurations</code> key in the Feature. A Launcher can apply these
+    configurations to the Configuration Admin service when starting the
+    system.</para>
+
+    <para>It is an error to define the same PID twice in a single Feature. An
+    entity processing the feature must fail in this case.</para>
+
+    <para>Example:</para>
+
+    <programlisting>{
     "feature-resource-version": "1.0",
     "id": "org.acme:acmeapp:osgifeature:configs:1.0.0",
     "configurations": {
@@ -498,26 +539,27 @@ Feature f = builder.build();</programlisting>
         }
     }    
 }</programlisting>
-    </para>
   </section>
 
   <section xml:id="service.feature-variables">
     <title>Variables</title>
-    <para>
-      Configurations and Framework Launching Properties support late binding of values. This enables setting these items through a Launcher,
-      for example to specify a database user name, server port number or other information that may be variable between runtimes.
-    </para>
-    
-    <para>
-      Variables are declared in the <code>variables</code> section of the Feature and they can have a default value specified.
-      The default must be of type <code>string</code>, <code>number</code> or <code>boolean</code>. Variables can also be declared
-      to <emphasis>not</emphasis> have a default, which means that they must be provided with a value through the Launcher. 
-      This is done by specifying <code>null</code> as the default in the variable declaration.
-    </para>
-    
-    <para>
-      Example:
-      <programlisting>{
+
+    <para>Configurations and Framework Launching Properties support late
+    binding of values. This enables setting these items through a Launcher,
+    for example to specify a database user name, server port number or other
+    information that may be variable between runtimes.</para>
+
+    <para>Variables are declared in the <code>variables</code> section of the
+    Feature and they can have a default value specified. The default must be
+    of type <code>string</code>, <code>number</code> or <code>boolean</code>.
+    Variables can also be declared to <emphasis>not</emphasis> have a default,
+    which means that they must be provided with a value through the Launcher.
+    This is done by specifying <code>null</code> as the default in the
+    variable declaration.</para>
+
+    <para>Example:</para>
+
+    <programlisting>{
     "feature-resource-version": "1.0",
     "id": "org.acme:acmeapp:osgifeature:configs:1.1.0",
     "variables": {
@@ -535,93 +577,90 @@ Feature f = builder.build();</programlisting>
         }
     }    
 }</programlisting>
-      Variables are referenced with the curly brace placeholder syntax: <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
-      in the configuration value or framework launching property value section.
-      To support conversion of variables to non-string types the configurator syntax
-      specifying the datatype with the configuration key is used, as in the above example.
-    </para>
-    
-    <para>
-      Multiple variables can be referenced for a single configuration or framework launching property value and variables may be combined with text.
-      If no variable exist with the given name, then the <code>${</code> <emphasis><code>variable-name</code></emphasis> <code>}</code>
-      must be retained in the value.
-    </para>
-  </section> 
-    
+
+    <para>Variables are referenced with the curly brace placeholder syntax:
+    <code>${</code> <emphasis><code>variable-name</code></emphasis>
+    <code>}</code> in the configuration value or framework launching property
+    value section. To support conversion of variables to non-string types the
+    configurator syntax specifying the datatype with the configuration key is
+    used, as in the above example. </para>
+
+    <para>Multiple variables can be referenced for a single configuration or
+    framework launching property value and variables may be combined with
+    text. If no variable exist with the given name, then the <code>${</code>
+    <emphasis><code>variable-name</code></emphasis> <code>}</code> must be
+    retained in the value.</para>
+  </section>
+
   <section>
     <title>Extensions</title>
-    <para>
-      Features can include custom content. This makes it possible to keep custom entities and information relating to the Feature
-    together with the rest of the Feature.</para>
-    
-    <para>
-      Custom content is provided through Feature extensions, which are in one of the following formats:
-    </para>
-     
+
+    <para>Features can include custom content. This makes it possible to keep
+    custom entities and information relating to the Feature together with the
+    rest of the Feature.</para>
+
+    <para>Custom content is provided through Feature extensions, which are in
+    one of the following formats:</para>
+
     <itemizedlist>
       <listitem>
-        <para><emphasis>Text</emphasis> - A text extension contains an array of text.</para>
+        <para><emphasis>Text</emphasis> - A text extension contains an array
+        of text.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>JSON</emphasis> - A JSON extension contains embedded custom JSON content.</para>
+        <para><emphasis>JSON</emphasis> - A JSON extension contains embedded
+        custom JSON content.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts associated with the Feature.</para>
+        <para><emphasis>Artifacts</emphasis> - A list of custom artifacts
+        associated with the Feature.</para>
       </listitem>
     </itemizedlist>
-    
-    <para>
-      Extensions can have a variety of consumers. For example they may be handled by a Feature Launcher
-      or by an external tool which can process the extension at any point of the Feature
-      life cycle.
-    </para>
-    
-    <para>
-      Extensions are of one of the following three kinds:
-    </para>
-    
+
+    <para>Extensions can have a variety of consumers. For example they may be
+    handled by a Feature Launcher or by an external tool which can process the
+    extension at any point of the Feature life cycle.</para>
+
+    <para>Extensions are of one of the following three kinds:</para>
+
     <itemizedlist>
       <listitem>
-        <para><emphasis>Mandatory</emphasis> - The entity processing this Feature 
-        <emphasis>must</emphasis> know how to handle this extension. If it cannot handle the
-        extension it must fail.</para>
+        <para><emphasis>Mandatory</emphasis> - The entity processing this
+        Feature <emphasis>must</emphasis> know how to handle this extension.
+        If it cannot handle the extension it must fail.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Optional</emphasis> - This extension is optional. If the entity
-        processing the Feature cannot handle it, the extension can be skipped or ignored.
-        This is the default.</para>
+        <para><emphasis>Optional</emphasis> - This extension is optional. If
+        the entity processing the Feature cannot handle it, the extension can
+        be skipped or ignored. This is the default.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Transient</emphasis> - This extension contains transient information
-        which may be used to optimize the processing of the Feature. It is not part of the 
-        Feature definition.</para>
+        <para><emphasis>Transient</emphasis> - This extension contains
+        transient information which may be used to optimize the processing of
+        the Feature. It is not part of the Feature definition.</para>
       </listitem>
     </itemizedlist>
-    
-    <para>
-      Extensions are specified as JSON objects under the <code>extensions</code> key in the Feature. A Feature can
-      contain any number of extensions, as long as the extension keys are unique.
-      Extension keys should use reverse
-      DNS naming to avoid name clashing of multiple extensions in a single Feature.
-      Extensions names without DNS prefix are reserved for OSGi use.
-    </para>
-    
+
+    <para>Extensions are specified as JSON objects under the
+    <code>extensions</code> key in the Feature. A Feature can contain any
+    number of extensions, as long as the extension keys are unique. Extension
+    keys should use reverse domain naming to avoid name clashing of multiple
+    extensions in a single Feature. Extensions names without a reverse domain
+    naming prefix are reserved for OSGi use.</para>
+
     <section>
       <title>Text Extensions</title>
-      
-      <para>
-        Text extensions support the addition of custom text content to the Feature. 
-        The text is provided as a JSON array of strings.
-      </para>
-      
-      <para>
-        Example:
-        
-        <programlisting>{
+
+      <para>Text extensions support the addition of custom text content to the
+      Feature. The text is provided as a JSON array of strings.</para>
+
+      <para>Example:</para>
+
+      <programlisting>{
     "feature-resource-version": "1.0",
     "id": "org.acme:acmeapp:2.0.0",
     
@@ -638,22 +677,19 @@ Feature f = builder.build();</programlisting>
         }
     }
 }</programlisting>
-        
-      </para>
     </section>
-    
+
     <section>
       <title>JSON Extensions</title>
-      
-      <para>
-        Custom JSON content is added to Features by using a JSON extension. The content can either be a
-        JSON object or a JSON array.
-      </para>
 
-      <para>
-        The following example extension declares under which execution environment the Feature is complete,
-        using a custom JSON object.       
-        <programlisting>{
+      <para>Custom JSON content is added to Features by using a JSON
+      extension. The content can either be a JSON object or a JSON
+      array.</para>
+
+      <para>The following example extension declares under which execution
+      environment the Feature is complete, using a custom JSON object.</para>
+
+      <programlisting>{
     "feature-resource-version": "1.0",
     "id": "org.acme:acmeapp:2.1.0",
     
@@ -661,7 +697,7 @@ Feature f = builder.build();</programlisting>
     "license": "https://opensource.org/licenses/Apache-2.0",
     
     "extensions": {
-        "execution-environment": {
+        "org.acme.execution-environment": {
             "type": "json",
             "json": {
                 "environment-capabilities":
@@ -672,24 +708,21 @@ Feature f = builder.build();</programlisting>
         }
     }
 }</programlisting>
-      </para>
     </section>
-      
+
     <section>
       <title>Artifact list Extensions</title>
-      
-      <para>
-        Custom extensions can be used to associate artifacts that are not listed 
-        as <code>bundles</code> with the Feature.
-      </para>
-      
-      <para>  
-        For example, database definition resources may be listed as artifacts in a Feature. In
-        the following example, the extension <code>org.acme.ddlfiles</code> lists 
-        Database Definition Resources which <emphasis>must</emphasis> be handled by 
-        the launcher agent, that is, the database must be configured when the application is run:
 
-        <programlisting>{
+      <para>Custom extensions can be used to associate artifacts that are not
+      listed as <code>bundles</code> with the Feature.</para>
+
+      <para>For example, database definition resources may be listed as
+      artifacts in a Feature. In the following example, the extension
+      <code>org.acme.ddlfiles</code> lists Database Definition Resources which
+      <emphasis>must</emphasis> be handled by the launcher agent, that is, the
+      database must be configured when the application is run:</para>
+
+      <programlisting>{
     "feature-resource-version": "1.0",
     "id": "org.acme:acmeapp:2.2.0",
     
@@ -717,36 +750,33 @@ Feature f = builder.build();</programlisting>
         }
     }
 }</programlisting>
-        As with bundle identifiers, custom artifacts are 
-        specified in an object in the artifacts list with an explicit <code>id</code> and 
-        optional additional metadata. The keys of the metadata should use a reverse DNS
-        naming pattern to avoid clashes. Keys that do not use reverse DNS as a prefix are reserved for OSGi use.
-        Supported metadata values must be of type 
-        <code>string</code>, <code>number</code> or <code>boolean</code>.
-      </para>
-        
+
+      <para>As with bundle identifiers, custom artifacts are specified in an
+      object in the artifacts list with an explicit <code>id</code> and
+      optional additional metadata. The keys of the metadata should use a
+      reverse domain naming pattern to avoid clashes. Keys that do not use
+      reverse domain name as a prefix are reserved for OSGi use. Supported
+      metadata values must be of type <code>string</code>, <code>number</code>
+      or <code>boolean</code>.</para>
     </section>
   </section>
 
   <section>
     <title>Framework Launching Properties</title>
-    <para>
-      When a Feature is launched in an OSGi framework it may be necessary to specify Framework Properties. 
-      These are provided in the Framework Launching Properties extension section of the Feature.
-      The Launcher must be able to satisfy the specified properties. 
-      If it cannot ensure that these are present in the running Framework the launcher must fail.      
-    </para>
-    
-    <para>
-     Framework Launching Properties can reference Variables as defined in 
-     <xref linkend="service.feature-variables"/>. 
-     These variables are 
-     substituted before the properties are set.
-    </para>
 
-    <para>
-      Example:
-      <programlisting>{
+    <para>When a Feature is launched in an OSGi framework it may be necessary
+    to specify Framework Properties. These are provided in the Framework
+    Launching Properties extension section of the Feature. The Launcher must
+    be able to satisfy the specified properties. If it cannot ensure that
+    these are present in the running Framework the launcher must fail.</para>
+
+    <para>Framework Launching Properties can reference Variables as defined in
+    <xref linkend="service.feature-variables"/>. These variables are
+    substituted before the properties are set.</para>
+
+    <para>Example:</para>
+
+    <programlisting>{
   "feature-resource-version": "1.0",
   "id": "org.acme:acmeapp:osgifeature:fw-props:2.0.0",
   
@@ -766,18 +796,17 @@ Feature f = builder.build();</programlisting>
     }
   }
 }</programlisting>
-    </para>
   </section>
 
   <section>
     <title>Resource Versioning</title>
 
-    <para>
-    Feature JSON resources are versioned to support updates to the JSON structure in the future.
-    To declare the document version of the Feature use the <code>feature-resource-version</code>
-    key in the JSON document.
-    </para>
-      <programlisting>{
+    <para>Feature JSON resources are versioned to support updates to the JSON
+    structure in the future. To declare the document version of the Feature
+    use the <code>feature-resource-version</code> key in the JSON
+    document.</para>
+
+    <programlisting>{
   "feature-resource-version": "1.0",
   "id": "org.acme:acmeapp:1.0.0"
 
@@ -786,23 +815,24 @@ Feature f = builder.build();</programlisting>
     ...
   */
 }</programlisting>
-    <para>
-    The currently supported version of the Feature JSON documents is 1.0. If no
-    Feature Resource Version is specified <code>1.0</code> is used as the default.
-    </para>
+
+    <para>The currently supported version of the Feature JSON documents is
+    1.0. If no Feature Resource Version is specified <code>1.0</code> is used
+    as the default.</para>
   </section>
 
   <section>
     <title>Capabilities</title>
-    
+
     <section>
       <title>osgi.service Capability</title>
 
-      <para>The bundle providing the Feature Service must provide 
-      a capability in the <link
+      <para>The bundle providing the Feature Service must provide a capability
+      in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-      namespace representing the services it is registering. This capability must 
-      also declare uses constraints for the relevant service packages:</para>
+      namespace representing the services it is registering. This capability
+      must also declare uses constraints for the relevant service
+      packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
   objectClass:List&lt;String&gt;="org.osgi.service.feature.FeatureService";
@@ -821,15 +851,15 @@ Feature f = builder.build();</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.feature-json.ref"><title>JSON
-      (JavaScript Object Notation) </title><biblioid class="uri"><link
+      <bibliomixed xml:id="service.feature-json.ref"><title>JSON (JavaScript
+      Object Notation) </title><biblioid class="uri"><link
       xlink:href="https://www.json.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.feature-jsmin.ref"><title>JSMin (The
       JavaScript Minifier) </title><biblioid class="uri"><link
       xlink:href="https://www.crockford.com/javascript/jsmin.html"/></biblioid></bibliomixed>
-      
-      <bibliomixed xml:id="service.feature-mvnpom.ref"><title>Apache Maven Pom 
+
+      <bibliomixed xml:id="service.feature-mvnpom.ref"><title>Apache Maven Pom
       Reference </title><biblioid class="uri"><link
       xlink:href="https://maven.apache.org/pom.html"/></biblioid></bibliomixed>
     </bibliolist>
