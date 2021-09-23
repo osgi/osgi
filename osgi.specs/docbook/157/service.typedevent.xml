@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="157"
          revision="$Id$"
          version="5.0" xml:id="service.typedevent"
@@ -37,77 +36,85 @@
   <section>
     <title>Introduction</title>
 
-    <para>Eventing systems are a common part of software programs, used to 
-    distribute information between parts of an application. To address this
-    the <xref linkend="service.event"/> was created as one of the earliest 
-    specifications defined by the OSGi Compendium. The design and usage of 
-    the Event Admin specification, however, makes certain trade-offs that do 
-    not fit well with modern application design:</para>
+    <para>Eventing systems are a common part of software programs, used to
+    distribute information between parts of an application. To address this,
+    the <xref linkend="service.event"/> was created as one of the earliest
+    specifications defined by the OSGi Compendium. The design and usage of the
+    Event Admin specification, however, makes certain trade-offs that do not
+    fit well with modern application design:</para>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Type Safety</emphasis> - Events are sent and received 
-        as opaque maps of key-value pairs. The “schema” of an event is therefore 
-        ill-defined and relies on “magic strings” being used correctly to locate 
-        data, and on careful handling of data values with unknown types.</para>
+        <para><emphasis>Type Safety</emphasis> - Events are sent and received
+        as opaque maps of key-value pairs. The “schema” of an event is
+        therefore ill-defined and relies on “magic strings” being used
+        correctly to locate data, and on careful handling of data values with
+        unknown types.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Unhandled Events</emphasis> - Events that are sent but have 
-        no interested Event Consumers are silently discarded. There is no way to know 
-        that an event was not handled, short of disrupting the system by registering
-        a handler for <emphasis>all</emphasis> events.</para>
+        <para><emphasis>Unhandled Events</emphasis> - Events that are sent but
+        have no interested Event Consumers are silently discarded. There is no
+        way to know that an event was not handled, short of disrupting the
+        system by registering a handler for <emphasis>all</emphasis>
+        events.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Observability</emphasis> - There is no simple, non-invasive 
-        way to monitor the flow of events through the system. The ability to monitor
-        and profile applications using Event Admin is therefore relatively limited.</para>
+        <para><emphasis>Observability</emphasis> - There is no simple,
+        non-invasive way to monitor the flow of events through the system. The
+        ability to monitor and profile applications using Event Admin is
+        therefore relatively limited.</para>
       </listitem>
     </itemizedlist>
 
-    <para>Adding these features to the original <xref linkend="service.event"/> 
-    specification is not feasible without breaking backward compatibility for clients.
-    Therefore this specification exists to provide an alternative eventing model which
-    supports these different requirements by making different design trade-offs.</para>
+    <para>Adding these features to the original <xref
+    linkend="service.event"/> specification is not feasible without breaking
+    backward compatibility for clients. Therefore this specification exists to
+    provide an alternative eventing model which supports these different
+    requirements by making different design trade-offs.</para>
 
     <section>
       <title>Essentials</title>
+
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event</emphasis> - A set of data created by an Event Source, 
-          encapsulated as an object and delivered to one or more Event Consumers.</para>
-        </listitem>
-        <listitem>
-          <para><emphasis>Event Schema</emphasis> - A definition of the expected data
-          layout within an event, including the names of data fields and the types of 
-          data that they contain.</para>
+          <para><emphasis>Event</emphasis> - A set of data created by an Event
+          Source, encapsulated as an object and delivered to one or more Event
+          Consumers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Topic</emphasis> - A String identifying the 
-          <emphasis>topic</emphasis> of an Event, effectively defining the Event Schema 
-          and the purpose of the event.</para>
+          <para><emphasis>Event Schema</emphasis> - A definition of the
+          expected data layout within an event, including the names of data
+          fields and the types of data that they contain.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Source</emphasis> - A software component which creates 
-          and sends events.</para>
+          <para><emphasis>Event Topic</emphasis> - A String identifying the
+          <emphasis>topic</emphasis> of an Event, effectively defining the
+          Event Schema and the purpose of the event.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Consumer</emphasis> - A software component which receives
-          events.</para>
+          <para><emphasis>Event Source</emphasis> - A software component which
+          creates and sends events.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DTO</emphasis> - A Data Transfer Object as per the OSGi DTO 
-          Specification.</para>
+          <para><emphasis>Event Consumer</emphasis> - A software component
+          which receives events.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Bus</emphasis> - A software component used by an Event 
-          Source and responsible for delivering Events to Event Consumers.</para>
+          <para><emphasis>DTO</emphasis> - A Data Transfer Object as per the
+          OSGi DTO Specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Bus</emphasis> - A software component used by
+          an Event Source and responsible for delivering Events to Event
+          Consumers.</para>
         </listitem>
       </itemizedlist>
 
@@ -116,7 +123,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.100in"
+            <imagedata align="center" contentdepth="4.000in"
                        contentwidth="7.000in"
                        fileref="typed-event-classes.svg"/>
           </imageobject>
@@ -129,102 +136,114 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Typed Event Bus</emphasis> - A service registered by the Typed Event implementation
-          that can be passed an Event object and that will distribute that event to any suitable
-          Event Handler Services.</para>
+          <para><emphasis>Typed Event Bus</emphasis> - A service registered by
+          the Typed Event implementation that can be passed an Event object
+          and that will distribute that event to any suitable Event Handler
+          Services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Handler</emphasis> - A service registered by an Event Consumer suitable
-          for receiving Event data from the Typed Event Bus.</para>
+          <para><emphasis>Event Handler</emphasis> - A service registered by
+          an Event Consumer suitable for receiving Event data from the Typed
+          Event Bus.</para>
         </listitem>
-
       </itemizedlist>
     </section>
   </section>
-  
+
   <section>
     <title>Events</title>
-    
-    <para>In this specification an Event is a set of string keys associated with data values. 
-    The defined set of allowable keys and permitted value types for the keys in an 
-    Event is known as the Event Schema. Both the Event Source and Event Consumers must
-    agree on a schema (or set of compatible schemas) in order for events to be consumed
-    correctly.</para>
-  
-    
+
+    <para>In this specification an Event is a set of string keys associated
+    with data values. The defined set of allowable keys and permitted value
+    types for the keys in an Event is known as the Event Schema. Both the
+    Event Source and Event Consumers must agree on a schema, or set of
+    compatible schemas, in order for events to be consumed correctly.</para>
+
     <section>
       <title>Type Safe Events</title>
-      
-      <para>A Type Safe Event is one in which the Event Schema is defined as a Java class. Using
-      a Java class provides a formal definition of the schema - event data uses fields in the class
-      as the keys, and each field definition defines the permitted type of the value.</para>
-      
-      <para>Type Safe Event classes are expected to conform to OSGi DTO rules. The architecture of 
-      OSGi DTOs is described in <xref linkend="intro.core.release" xrefstyle="template:%t"/>. All 
-      methods, all static fields, and any non public instance fields of an event object must be 
-      ignored by the Typed Event Service when processing the Event data.</para>
-      
-      <para>Some implementations of the Typed Event Service may support Type Safe Event classes 
-      that do not conform to the DTO rules, transforming them as needed in an implementation
-      specific way. This is permitted by this specification, however consumers which rely on
-      this behaviour may not be portable between different implementations of this specification.
-      </para>
-      
+
+      <para>A Type Safe Event is one in which the Event Schema is defined as a
+      Java class. Using a Java class provides a formal definition of the
+      schema - event data uses field names in the class as the keys, and each
+      field definition defines the permitted type of the value.</para>
+
+      <para>Type Safe Event classes are expected to conform to OSGi DTO rules.
+      The architecture of OSGi DTOs is described in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>. All methods, all
+      static fields, and any non public instance fields of an event object
+      must be ignored by the Typed Event Service when processing the Event
+      data.</para>
+
+      <para>Some implementations of the Typed Event Service may support Type
+      Safe Event classes that do not conform to the DTO rules, transforming
+      them as needed in an implementation specific way. This is permitted by
+      this specification, however consumers which rely on this behaviour may
+      not be portable between different implementations of this
+      specification.</para>
+
       <section>
         <title>Nested Data Structures</title>
-        <para>OSGi DTOs are permitted to have data values which are also DTOs, allowing nested data
-        structures to be created. This is also allowed for Type Safe Events, but with the same 
-        restriction that the event data must be a tree. There is no restriction on the depth of
-        nesting permitted.</para>
+
+        <para>OSGi DTOs are permitted to have data values which are also DTOs,
+        allowing nested data structures to be created. This is also allowed
+        for Type Safe Events, but with the same restriction that the event
+        data must be a tree. There is no restriction on the depth of nesting
+        permitted.</para>
       </section>
     </section>
 
     <section>
       <title>Untyped Events</title>
-      
-      <para>An Untyped Event is one in which there is no Java class defining the Event Schema.
-      In this case the event data is defined using a <code>Map</code> type with <code>String</code>
-      keys and values limited to types acceptable as fields in a DTO, excepting:</para>
-      
+
+      <para>An Untyped Event is one in which there is no Java class defining
+      the Event Schema. In this case the event data is defined using a
+      <code>Map</code> type with <code>String</code> keys and values limited
+      to types acceptable as fields in a DTO, excepting:</para>
+
       <itemizedlist>
         <listitem>
-          <para>DTO types - an untyped event may not have DTOs inside it as these form
-          part of a typed schema.</para>
-        </listitem>
-        
-        <listitem>
-          <para>Maps are only permitted if they follow the rules for Untyped events, that is having
-          <code>String</code> keys and DTO restricted value types excluding DTOs.</para>
-        </listitem>
-      </itemizedlist>       
-     
-      <para>Untyped Event instances are capable of representing exactly the same data as present
-      in a Type Safe Event instance, and are also subject to the same restrictions, that is 
-      the data must be a tree. Nested data should be included as sub-maps within the event map,
-      and these sub-maps may in turn contain nested data.</para>
-    </section>
-    
-    <section>
-      <title>Non Standard Type Safe Events</title>
-        
-      <para>Some Event schemas may be represented by an existing type which does not match the 
-      OSGi DTO rules. In this case there are two main options:</para>
-        
-      <itemizedlist>
-        <listitem>
-          <para>Create a DTO representation of the event schema, and convert from the existing 
-          type into the DTO representation in code.</para>
+          <para>DTO types - an untyped event may not have DTOs inside it as
+          these form part of a typed schema.</para>
         </listitem>
 
         <listitem>
-          <para>Convert the event data into an Untyped Event representation using nested Maps.</para>
+          <para>Maps are only permitted if they follow the rules for Untyped
+          events, that is having <code>String</code> keys and DTO restricted
+          value types excluding DTOs.</para>
         </listitem>
       </itemizedlist>
-      
-      <para>For example, the following code demonstrates how an object following the JavaBeans 
-      pattern can be converted into a DTO type or an untyped map:</para>
-      
+
+      <para>Untyped Event instances are capable of representing exactly the
+      same data as present in a Type Safe Event instance, and are also subject
+      to the same restrictions, that is the data must be a tree. Nested data
+      should be included as sub-maps within the event map, and these sub-maps
+      may in turn contain nested data.</para>
+    </section>
+
+    <section>
+      <title>Non Standard Type Safe Events</title>
+
+      <para>Some Event schemas may be represented by an existing type which
+      does not match the OSGi DTO rules. In this case there are two main
+      options:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Create a DTO representation of the event schema, and convert
+          from the existing type into the DTO representation in code.</para>
+        </listitem>
+
+        <listitem>
+          <para>Convert the event data into an Untyped Event representation
+          using nested Maps.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example, the following code demonstrates how an object
+      following the JavaBeans pattern can be converted into a DTO type or an
+      untyped map:</para>
+
       <programlisting>public class ExampleJavaBean {
     private String message;
     
@@ -246,75 +265,87 @@ public class ExampleEventSource {
     
     private Map&lt;String, Object&gt; createMapFromJavaBean(ExampleJavaBean bean) {
         return Converters.standardConverter().convert(bean)
-                .to(new TypeReference&lt;Map&gt;String, Object&gt;&gt;(){});
+                .to(new TypeReference&lt;Map&lt;String, Object&gt;&gt;(){});
     }
 }</programlisting>
     </section>
-    
+
     <section>
       <title>Event Mutability and Thread Safety</title>
-      
-      <para>The Typed Event Service is inherently multi-threaded. Events may be published from
-      multiple threads, and event data may be delivered to consumers on multiple threads.
-      Event Sources and Event Consumers must therefore assume that event data is shared between
-      threads from the moment that it is first passed to the <code>TypedEventBus</code>.</para>
-      
+
+      <para>The Typed Event Service is inherently multi-threaded. Events may
+      be published from multiple threads, and event data may be delivered to
+      consumers on multiple threads. Event Sources and Event Consumers must
+      therefore assume that event data is shared between threads from the
+      moment that it is first passed to the <code>TypedEventBus</code>.</para>
+
       <section>
         <title>Typed Event Mutability</title>
-        <para>Typed Events, and in particular DTO types, provide a simple yet powerful mechanism 
-        for defining an Event Schema in a type-safe way, however their use of mutable public 
-        fields means that they are potentially dangerous when shared between threads. Event Sources 
-        and Event Consumers should assume that their event instances are shared between 
-        threads and therefore not mutate the event data after publication or receipt.</para>
-        <para>If an Event Handler does need to make changes to an incoming event then it must copy the
-        event data into a new DTO instance. Note that any nested DTO values in the event data must also 
-        be copied if they are to be mutated.</para>
+
+        <para>Typed Events, and in particular DTO types, provide a simple yet
+        powerful mechanism for defining an Event Schema in a type-safe way.
+        However their use of mutable public fields means that they are
+        potentially dangerous when shared between threads. Event Sources and
+        Event Consumers should assume that their event instances are shared
+        between threads and therefore not mutate the event data after
+        publication or receipt.</para>
+
+        <para>If an Event Handler does need to make changes to an incoming
+        event then it must copy the event data into a new DTO instance. Note
+        that any nested DTO values in the event data must also be copied if
+        they are to be mutated.</para>
       </section>
+
       <section>
         <title>Untyped Event Mutability</title>
-        <para>When an event source publishes untyped event data it passes a Map instance to the Typed Event
-        Bus. The Typed Event Bus is not required to take a copy of this Map, and therefore the event source
-        must not change the Map, or any data structures within the Map, after the call to 
-        <xref linkend="org.osgi.service.typedevent.TypedEventBus.deliverUntyped-String-Map-"
-          xrefstyle="hyperlink"/>.
-        </para>
-        <para>Untyped Events are delivered as implementations of the Map interface. Bundles 
-        consuming untyped events should not rely on the event object being any particular
-        implementation of Map, and should treat the event object as immutable. The 
-        Typed Event Bus implementation may make copies of the event data, or enforce
-        the immutability of the map, before passing the event data to an Event Handler.</para>
+
+        <para>When an event source publishes untyped event data, it passes a
+        Map instance to the Typed Event Bus. The Typed Event Bus is not
+        required to take a copy of this Map, and therefore the event source
+        must not change the Map, or any data structures within the Map, after
+        the call to <xref
+        linkend="org.osgi.service.typedevent.TypedEventBus.deliverUntyped-String-Map-"
+        xrefstyle="hyperlink"/>.</para>
+
+        <para>Untyped Events are delivered as implementations of the Map
+        interface. Bundles consuming untyped events should not rely on the
+        event object being any particular implementation of Map, and should
+        treat the event object as immutable. The Typed Event Bus
+        implementation may make copies of the event data, or enforce the
+        immutability of the map, before passing the event data to an Event
+        Handler.</para>
       </section>
     </section>
   </section>
-  
-  <section>
 
+  <section>
     <title>Publishing Events</title>
-    
-    <para>To publish an event, the Event Source must retrieve the Typed Event Bus
-    service from the OSGi service registry. The Event Source then creates an event
-    object and calls one of the Typed Event Bus service's methods to publish the event.
-    Event publication is asynchronous, meaning that when a call to the Typed Event Bus
-    returns there is no guarantee that all (or even any) listeners have been notified.</para>
-    
+
+    <para>To publish an event, the Event Source must retrieve the Typed Event
+    Bus service from the OSGi service registry. The Event Source then creates
+    an event object and calls one of the Typed Event Bus service's methods to
+    publish the event. Event publication is asynchronous, meaning that when a
+    call to the Typed Event Bus returns there is no guarantee that all, or
+    even any, listeners have been notified.</para>
+
     <section xml:id="typedevent.event.topics">
       <title>Event Topics</title>
 
-      <para>Events are always published to a topic. The topic of an event 
-      defines the <emphasis>schema</emphasis> of the event. Topics exist
-      in order to give Event Consumers information about the schema of
-      the event, and the opportunity to register for just the events they 
-      are interested in. When a topic is designed, its name should not 
-      include any other information, such as the publisher of the event 
-      or the data associated with the event, those
-      parts are intended to be stored in the event properties.</para>
+      <para>Events are always published to a topic. The topic of an event
+      defines the <emphasis>schema</emphasis> of the event. Topics exist in
+      order to give Event Consumers information about the schema of the event,
+      and the opportunity to register for just the events they are interested
+      in. When a topic is designed, its name should not include any other
+      information, such as the publisher of the event or the data associated
+      with the event, those parts are intended to be stored in the event
+      properties.</para>
 
-      <para>The topic therefore serves as a first-level filter for
-      determining which handlers should receive the event. Typed Event service
+      <para>The topic therefore serves as a first-level filter for determining
+      which handlers should receive the event. Typed Event service
       implementations use the structure of the topic to optimize the
-      dispatching of the events to the handlers. The following
-      example code demonstrates how to send an event to a topic.</para>
-      
+      dispatching of the events to the handlers. The following example code
+      demonstrates how to send an event to a topic.</para>
+
       <programlisting>public class ExampleEvent {
     public String message;
 }         
@@ -337,16 +368,16 @@ public class ExampleEventSource {
       \u002F</code>). More precisely, the topic must conform to the following
       grammar:</para>
 
-      <programlisting>  // For further information see General Syntax Definitions in Core
+      <programlisting>// For further information see General Syntax Definitions in Core
 
-      topictoken  :: ( jletterordigit | '-' ) +
+topictoken  :: ( jletterordigit | '-' ) +
       
-      topic       ::= topictoken ( '/' topictoken ) *</programlisting>
+topic       ::= topictoken ( '/' topictoken ) *</programlisting>
 
       <para>Topics should be designed to become more specific when going from
-      left to right. Consumers can provide a prefix that matches a topic, using
-      the preferred order allows a handler to minimize the number of prefixes
-      it needs to register.</para>
+      left to right. Consumers can provide a prefix that matches a topic,
+      using the preferred order allows a handler to minimize the number of
+      prefixes it needs to register.</para>
 
       <para>Topics are case-sensitive. As a convention, topics should follow
       the reverse domain name scheme used by Java packages to guarantee
@@ -357,32 +388,34 @@ public class ExampleEventSource {
       <code>fully/qualified/package/ClassName/ACTION</code>. If necessary, a
       pseudo-class-name is used.</para>
     </section>
-    
+
     <section>
       <title>Automatically Generated Topics</title>
-      
-      <para>In many cases the name of a topic contains no information other than
-      defining the schema of the events sent on that topic. Therefore when publishing
-      a Typed Event to the Typed Event Bus the Typed Event implementation is able to
-      automatically generate a topic name based on the the type of the event object
-      being published.</para>
-      
-      <para>For the <xref linkend="org.osgi.service.typedevent.TypedEventBus.deliver-Object-"
-      xrefstyle="hyperlink"/> method on the Typed Event Bus where no topic string
-      is provided the implementation must create a topic string using the fully
-      qualified class name of the event object. To convert the class name into
-      a valid topic the full stop <code>.</code> separators must be converted
-      into solidus <code>/</code> separators. A non-normative example implementation follows:</para>
-      
+
+      <para>In many cases the name of a topic contains no information other
+      than defining the schema of the events sent on that topic. Therefore,
+      when publishing a Typed Event to the Typed Event Bus, the Typed Event
+      implementation is able to automatically generate a topic name based on
+      the the type of the event object being published.</para>
+
+      <para>For the <xref
+      linkend="org.osgi.service.typedevent.TypedEventBus.deliver-Object-"
+      xrefstyle="hyperlink"/> method on the Typed Event Bus where no topic
+      string is provided, the implementation must create a topic string using
+      the fully qualified class name of the event object. To convert the class
+      name into a valid topic the full stop <code>.</code> separators must be
+      converted into solidus <code>/</code> separators. A non-normative
+      example implementation follows:</para>
+
       <programlisting>public void deliver(Object event) {
     String topicName = event.getClass().getName().replace('.', '/');
     
     this.deliver(topicName, event);
 }</programlisting>
-      
-      <para>The following example demonstrates how an Event Source can make use of an
-      automatically generated topic name.</para>
-      
+
+      <para>The following example demonstrates how an Event Source can make
+      use of an automatically generated topic name.</para>
+
       <programlisting>package org.osgi.example;
 
 public class ExampleEvent {
@@ -398,72 +431,88 @@ public class ExampleEventSource {
         ExampleEvent event = new ExampleEvent();
         event.message = "The time is " + LocalDateTime.now();
 
-        //This event will be delivered to the topic "org/osgi/example/ExampleEvent"
+        // This event will be delivered to the 
+        // topic "org/osgi/example/ExampleEvent"
         bus.deliver(event);
     }
 }</programlisting>
     </section>
+
     <section>
-        <title>Thread Safety</title>
-        <para>The <code>TypedEventBus</code> implementation must thread safe and allow for
-        simultaneous event publication from multiple threads. For any given source 
-        thread events must be delivered in the same order as they were published by that
-        thread. Events published by different threads, however, may be delivered in a 
-        different order from the one in which they were published.</para>
-        
-        <para> For example, if thread 
-        <emphasis>A</emphasis> publishes events <emphasis>1</emphasis>, <emphasis>2</emphasis>
-        and <emphasis>3</emphasis>, while thread <emphasis>B</emphasis> publishes events
-        <emphasis>4</emphasis>, <emphasis>5</emphasis> and <emphasis>6</emphasis>, then
-        the events may be delivered:</para>
-        
-        <itemizedlist>
-          <listitem><para><emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>3</emphasis>,
-            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>6</emphasis></para>
-          </listitem>
-          
-          <listitem><para><emphasis>4</emphasis>, <emphasis>1</emphasis>, <emphasis>2</emphasis>,
-            <emphasis>5</emphasis>, <emphasis>6</emphasis>, <emphasis>3</emphasis></para>
-          </listitem>
-          <listitem><para>and so on</para>
-          </listitem>
-          
-        </itemizedlist>
-        <para>but events will never be delivered <emphasis>1</emphasis>, <emphasis>2</emphasis>, <emphasis>6</emphasis>,
-            <emphasis>4</emphasis>, <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
-      </section>
+      <title>Thread Safety</title>
+
+      <para>The <code>TypedEventBus</code> implementation must be thread safe
+      and allow for simultaneous event publication from multiple threads. For
+      any given source thread, events must be delivered in the same order as
+      they were published by that thread. Events published by different
+      threads, however, may be delivered in a different order from the one in
+      which they were published.</para>
+
+      <para>For example, if thread <emphasis>A</emphasis> publishes events
+      <emphasis>1</emphasis>, <emphasis>2</emphasis> and
+      <emphasis>3</emphasis>, while thread <emphasis>B</emphasis> publishes
+      events <emphasis>4</emphasis>, <emphasis>5</emphasis> and
+      <emphasis>6</emphasis>, then the events may be delivered:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>1</emphasis>, <emphasis>2</emphasis>,
+          <emphasis>3</emphasis>, <emphasis>4</emphasis>,
+          <emphasis>5</emphasis>, <emphasis>6</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>4</emphasis>, <emphasis>1</emphasis>,
+          <emphasis>2</emphasis>, <emphasis>5</emphasis>,
+          <emphasis>6</emphasis>, <emphasis>3</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>and so on</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>but events will never be delivered <emphasis>1</emphasis>,
+      <emphasis>2</emphasis>, <emphasis>6</emphasis>, <emphasis>4</emphasis>,
+      <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
+    </section>
   </section>
-  
+
   <section>
     <title>Receiving Events</title>
-    
-    <para>Event Consumers can Receive events by registering an appropriate Event Handler 
-    service in the Service Registry. This is a 
-    <xref linkend="org.osgi.service.typedevent.TypedEventHandler" xrefstyle="hyperlink"/> 
-    to receive events as type-safe objects, or an
-    <xref linkend="org.osgi.service.typedevent.UntypedEventHandler" xrefstyle="hyperlink"/>
-    to receive events as untyped Map structures.</para>
-    
-    <para>Published events are then delivered, using the whiteboard pattern, to any 
-    Event Handler service which has registered interest in the topic to which the event 
-    was published.</para>
-    
+
+    <para>Event Consumers can receive events by registering an appropriate
+    Event Handler service in the Service Registry. This is a <xref
+    linkend="org.osgi.service.typedevent.TypedEventHandler"
+    xrefstyle="hyperlink"/> to receive events as type-safe objects, or an
+    <xref linkend="org.osgi.service.typedevent.UntypedEventHandler"
+    xrefstyle="hyperlink"/> to receive events as untyped Map
+    structures.</para>
+
+    <para>Published events are then delivered, using the whiteboard pattern,
+    to any Event Handler service which has registered interest in the topic to
+    which the event was published.</para>
+
     <section>
       <title>Receiving Typed Events</title>
-      
-      <para>Typed Events are received by registering a <code>TypedEventHandler</code> implementation. 
-      This service has a single method <code>notify</code> which receives the String topic name and 
-      Object event data. The TypedEventHandler implementation must be registered as a service in the 
-      service registry using the TypedEventHandler interface.</para>
-      
-      <para>The TypedEventHandler interface is parameterized, and so it is expected that the implementation 
-      reifies the type parameter into a specific type. In this case the Typed Event implementation must 
-      adapt the Event object into the type defined by the TypedEventHandler implementation.
-      Implementations of this specification are free to choose their own adaptation mechanism,
-      however it must guarantee at least the same functionality as <xref linkend="util.converter"/>.</para>
-      
+
+      <para>Typed Events are received by registering a
+      <code>TypedEventHandler</code> implementation. This service has a single
+      method <code>notify</code> which receives the String topic name and
+      Object event data. The TypedEventHandler implementation must be
+      registered as a service in the service registry using the
+      TypedEventHandler interface.</para>
+
+      <para>The TypedEventHandler interface is parameterized, and so it is
+      expected that the implementation reifies the type parameter into a
+      specific type. In this case the Typed Event implementation must adapt
+      the Event object into the type defined by the TypedEventHandler
+      implementation. Implementations of this specification are free to choose
+      their own adaptation mechanism, however it must guarantee at least the
+      same functionality as <xref linkend="util.converter"/>.</para>
+
       <para>A simple example of receiving a typed event follows:</para>
-      
+
       <programlisting>public class ExampleEvent {
     public String message;
 }         
@@ -475,16 +524,17 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
         System.out.println("Received event: " + event.message);
     }
 }</programlisting>
-      
-      <para>If the TypedEventHandler implementation is unable to reify the type, or the required type is 
-      more specific than the reified type, then the Typed Event Handler must be registered with the 
-      <code>event.type</code> service property. This property has a string value containing the 
-      fully-qualified type name of the type that the Typed Event Handler expects to receive. This type must 
-      be loaded by the Typed Event implementation using the classloader of the bundle which registered the 
-      Typed Event Handler service. The loaded type must then be used as the target type when converting events.
-      For example:
-      </para>
-      
+
+      <para>If the TypedEventHandler implementation is unable to reify the
+      type, or the required type is more specific than the reified type, then
+      the Typed Event Handler must be registered with the
+      <code>event.type</code> service property. This property has a string
+      value containing the fully-qualified type name of the type that the
+      Typed Event Handler expects to receive. This type must be loaded by the
+      Typed Event implementation using the classloader of the bundle which
+      registered the Typed Event Handler service. The loaded type must then be
+      used as the target type when converting events. For example:</para>
+
       <programlisting>public class ExampleEvent {
     public String message;
 }
@@ -505,12 +555,15 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
             ((SpecialisedExampleEvent) event).sequenceId);
     }
 }</programlisting>
-      
-      <para>By default the reified type of the TypedEventHandler will be used as the target topic for the 
-      Event Handler. If the <code>event.type</code> property is set then this is used as the default topic instead of the 
-      reified type. To use a specific named topic the Typed Event Handler service may be registered with an 
-      <code>event.topics</code> service property specifying the topic(s) as a String+ value.</para>
-      
+
+      <para>By default the reified type of the TypedEventHandler will be used
+      as the target topic for the Event Handler. If the
+      <code>event.type</code> property is set then this is used as the default
+      topic instead of the reified type. To use a specific named topic the
+      Typed Event Handler service may be registered with an
+      <code>event.topics</code> service property specifying the topic(s) as a
+      String+ value.</para>
+
       <programlisting>public class ExampleEvent {
     public String message;
 }
@@ -523,23 +576,27 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
         System.out.println("Event received on topic: " + topic + 
                 " with message: " + event.message);
     }
-}</programlisting>   
+}</programlisting>
     </section>
-    
+
     <section>
       <title>Receiving Untyped Events</title>
-      
-      <para>Untyped Events are received by registering an <code>UntypedEventHandler</code> implementation. 
-      This service has a single method notifyUntyped which receives the <code>String</code> topic name and 
-      <code>Map</code> event data. The Untyped Event Handler implementation must be registered as a service in 
-      the service registry using the <code>UntypedEventHandler</code> interface.</para>
-      
-      <para>When delivering an event to an Untyped Event Handler the Typed Event Service must, if necessary,
-      convert the event data to a nested map structure.</para>
-      
-      <para>The <code>event.topics</code> service property must be used when registering an Untyped Event Hander service. 
-      If it is not then no events will be delivered to that Untyped Event Handler service.</para>
-      
+
+      <para>Untyped Events are received by registering an
+      <code>UntypedEventHandler</code> implementation. This service has a
+      single method notifyUntyped which receives the <code>String</code> topic
+      name and <code>Map</code> event data. The Untyped Event Handler
+      implementation must be registered as a service in the service registry
+      using the <code>UntypedEventHandler</code> interface.</para>
+
+      <para>When delivering an event to an Untyped Event Handler the Typed
+      Event Service must, if necessary, convert the event data to a nested map
+      structure.</para>
+
+      <para>The <code>event.topics</code> service property must be used when
+      registering an Untyped Event Hander service. If it is not, then no
+      events will be delivered to that Untyped Event Handler service.</para>
+
       <programlisting>public class ExampleEvent {
     public String message;
 }
@@ -554,15 +611,16 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
     }
 }</programlisting>
     </section>
-    
+
     <section>
       <title>Wildcard Topics</title>
-      
-      <para>The <code>event.topics</code> property may contain one or more wildcard topics. These are Strings which contain 
-      a topic name and append “/*”. This value means that the Event Handler must be called for Events sent to
-      sub-topics of the named topic. For example the component:</para>
-      
-            <programlisting>@Component
+
+      <para>The <code>event.topics</code> property may contain one or more
+      wildcard topics. These are Strings which contain a topic name and append
+      “/*”. This value means that the Event Handler must be called for Events
+      sent to sub-topics of the named topic. For example the component:</para>
+
+      <programlisting>@Component
 @EventTopics("foo/*")
 public class ExampleUntypedConsumer implements UntypedEventHandler {
     @Override
@@ -572,27 +630,37 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
     }
 }</programlisting>
 
-      <para>would receive events sent to the topics <code>foo/bar</code> and <code>foo/baz</code>, but not the topics
-      <code>foo</code> or <code>foobar/fizzbuzz</code>.</para>
-      
-      <para>The <code>*</code> character in a wildcard topic must always follow a solidus <code>/</code> character,
-      and must be the final character in the topic string, meaning that topic names such as <code>foo*</code>
-      and <code>foo/*/bar</code> are not valid. The only exception to this rule is that it is valid to use the 
-      topic name <code>*</code> to receive events on <emphasis>all</emphasis> topics. While it is valid to do so,
-      using the topic <code>*</code> is not typically recommended. For a mechanism to monitor the events flowing 
-      through the system see <xref linkend="service.typedevent-monitor"/>.</para>
+      <para>would receive events sent to the topics <code>foo/bar</code> and
+      <code>foo/baz</code>, but not the topics <code>foo</code> or
+      <code>foobar/fizzbuzz</code>.</para>
+
+      <para>The <code>*</code> character in a wildcard topic must always
+      follow a solidus <code>/</code> character, and must be the final
+      character in the topic string, meaning that topic names such as
+      <code>foo*</code> and <code>foo/*/bar</code> are not valid. The only
+      exception to this rule is that it is valid to use the topic name
+      <code>*</code> to receive events on <emphasis>all</emphasis> topics.
+      While it is valid to do so, using the topic <code>*</code> is not
+      typically recommended. For a mechanism to monitor the events flowing
+      through the system see <xref
+      linkend="service.typedevent-monitor"/>.</para>
     </section>
-    
+
     <section>
       <title>Unhandled Events</title>
-      
-      <para>Unhandled Events are events sent by an Event Source but which have no Event Handler service listening
-      to their topic. Rather than these events being discarded, the Typed Event implementation will search the 
-      service registry for services implementing <xref linkend="org.osgi.service.typedevent.UnhandledEventHandler" 
+
+      <para>Unhandled Events are events sent by an Event Source but which have
+      no Event Handler service listening to their topic. Rather than these
+      events being discarded, the Typed Event implementation will search the
+      service registry for services implementing <xref
+      linkend="org.osgi.service.typedevent.UnhandledEventHandler"
       xrefstyle="hyperlink"/>.</para>
-      <para>If any services are found then the Typed Event implementation will call the <code>notifyUnhandled</code> 
-      method passing the topic name and event data to all of the registered Unhandled Event Handler services.</para>
-      
+
+      <para>If any services are found then the Typed Event implementation will
+      call the <code>notifyUnhandled</code> method passing the topic name and
+      event data to all of the registered Unhandled Event Handler
+      services.</para>
+
       <programlisting>public class ExampleEvent {
     public String message;
 }
@@ -605,62 +673,85 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     }
 }</programlisting>
     </section>
+
     <section>
       <title>Filtering Events</title>
-      <para>Sometimes the use of a topic is insufficient to restrict the events received by an event consumer.
-      In these cases the consumer can further restrict the events that they receive by using a filter. The 
-      filter is supplied using the <code>event.filter</code> service property, the value of which is an LDAP
-      filter string. This filter is applied to the event data, and only events which match the filter are
-      delivered to the event handler service.
-      </para>
+
+      <para>Sometimes the use of a topic is insufficient to restrict the
+      events received by an event consumer. In these cases the consumer can
+      further restrict the events that they receive by using a filter. The
+      filter is supplied using the <code>event.filter</code> service property,
+      the value of which is an LDAP filter string. This filter is applied to
+      the event data, and only events which match the filter are delivered to
+      the event handler service.</para>
+
       <section>
         <title>Nested Event Data</title>
-        <para>Complex events may contain nested data structures, such as DTOs, as values in the event data.
-        As LDAP filtering is only designed to match against simple data this means that some event
-        properties cannot be filtered using the <code>event.filter</code> property. The event filter
-        is therefore only suitable for use in matching top-level event properties.</para>
+
+        <para>Complex events may contain nested data structures, such as DTOs,
+        as values in the event data. As LDAP filtering is only designed to
+        match against simple data this means that some event properties cannot
+        be filtered using the <code>event.filter</code> property. The event
+        filter is therefore only suitable for use in matching top-level event
+        properties.</para>
       </section>
+
       <section>
         <title>Ignored Events</title>
-        <para>Note that the use of a filter is different from receiving an event and choosing to ignore it based
-        on its data. If an event fails to match the filter supplied by an event handler service then it is 
-        <emphasis>not delivered</emphasis> to that event handler. This means that the event data remains eligible
-        to be sent to an <code>UnhandledEventHandler</code> unless another event handler does receive it.
-        An event that is received, but ignored, by an event handler service <emphasis>does</emphasis> count
-        as having been delivered, and so will never be sent to an <code>UnhandledEventHandler</code>.</para>
+
+        <para>Note that the use of a filter is different from receiving an
+        event and choosing to ignore it based on its data. If an event fails
+        to match the filter supplied by an event handler service then it is
+        <emphasis>not delivered</emphasis> to that event handler. This means
+        that the event data remains eligible to be sent to an
+        <code>UnhandledEventHandler</code> unless another event handler does
+        receive it. An event that is received, but ignored, by an event
+        handler service <emphasis>does</emphasis> count as having been
+        delivered, and so will never be sent to an
+        <code>UnhandledEventHandler</code>.</para>
       </section>
     </section>
+
     <section>
       <title>Failing Event Handlers</title>
-      <para>Event Handler implementations are called back by the Typed Event Bus implementation, and are
-      expected:</para>
+
+      <para>Event Handler implementations are called by the Typed Event Bus
+      implementation, and are expected:</para>
+
       <itemizedlist>
         <listitem>
           <para>Not to throw exceptions from their callback method</para>
         </listitem>
+
         <listitem>
-          <para>To return quickly - any long running tasks should be moved to another thread</para>
+          <para>To return quickly - any long running tasks should be moved to
+          another thread</para>
         </listitem>
       </itemizedlist>
-      
-      <para>If a Typed Event Bus implementation detects an Event Handler that is behaving incorrectly, either by
-      throwing exceptions, or by taking a long time to process the event, or some other problem, then the 
-      implementation may block further event delivery to that Event Handler.</para>
-      
-      <para>If an Event Handler is blocked by the event implementation then this situation must be logged.
-      Also, if a blocked Event Handler service is updated then the block must be removed by the implementation.
-      If the updated service continues to behave incorrectly then the block may be reinstated.</para>
+
+      <para>If a Typed Event Bus implementation detects an Event Handler that
+      is behaving incorrectly, either by throwing exceptions, or by taking a
+      long time to process the event, or some other problem, then the
+      implementation may block further event delivery to that Event
+      Handler.</para>
+
+      <para>If an Event Handler is blocked by the event implementation then
+      this situation must be logged. Also, if a blocked Event Handler service
+      is updated then the block must be removed by the implementation. If the
+      updated service continues to behave incorrectly then the block may be
+      reinstated.</para>
     </section>
+
     <section>
       <title>Event Handler Service Properties</title>
-      
-      <para>The service properties that can be used to configure an Event Handler service are
-      outlined in the following table.</para>
-      
+
+      <para>The service properties that can be used to configure an Event
+      Handler service are outlined in the following table.</para>
+
       <table pgwide="1">
         <title>Service properties applicable to Event Handler services</title>
 
-        <tgroup cols="4">
+        <tgroup cols="3">
           <colspec colnum="1" colwidth="1.9*"/>
 
           <colspec colnum="2" colwidth="0.7*"/>
@@ -683,10 +774,13 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
               <entry><code>String+</code></entry>
 
-              <entry><para>Declares the topic pattern(s) for which the service should be called. This
-              service property is <ns:emphasis>required</ns:emphasis> for <code>UntypedEventHandler</code>
-              services, but <code>TypedEventHandler</code> services may omit it if they are only interested
-              in the default topic name for their reified type.</para><para>See <xref
+              <entry><para>Declares the topic pattern(s) for which the service
+              should be called. This service property is
+              <emphasis>required</emphasis> for
+              <code>UntypedEventHandler</code> services, but
+              <code>TypedEventHandler</code> services may omit it if they are
+              only interested in the default topic name for their reified
+              type.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TOPICS"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
@@ -696,21 +790,27 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
               <entry><code>String</code></entry>
 
-              <entry><para>Defines the target type into which events should be converted before being
-              passed to the Event Handler service. This service property is <ns:emphasis>forbidden</ns:emphasis> 
-              for <code>UntypedEventHandler</code> services, but <code>TypedEventHandler</code> services may use
-              it if they wish to further refine the type of data they wish to receive.</para><para>See <xref
+              <entry><para>Defines the target type into which events should be
+              converted before being passed to the Event Handler service. This
+              service property is <emphasis>forbidden</emphasis> for
+              <code>UntypedEventHandler</code> services, but
+              <code>TypedEventHandler</code> services may use it if they wish
+              to further refine the type of data they wish to
+              receive.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TYPE"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
+
             <row>
               <entry><code>event.filter</code></entry>
 
               <entry><code>String</code></entry>
 
-              <entry><para>Defines an LDAP filter which should be tested against the properties in
-              the event data. Only events which pass the filter will be passed to the the Event Handler
-              service. Ths service property is permitted for both <code>TypedEventHandler</code> and
+              <entry><para>Defines an LDAP filter which should be tested
+              against the properties in the event data. Only events which pass
+              the filter will be passed to the the Event Handler service. Ths
+              service property is permitted for both
+              <code>TypedEventHandler</code> and
               <code>UntypedEventHandler</code> services.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_FILTER"
               xrefstyle="hyperlink"/>.</para></entry>
@@ -722,114 +822,145 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
     <section>
       <title>Error Handling</title>
-      
-      <para>There are several possible error scenarios for Event Handlers:</para>
-      
+
+      <para>There are several possible error scenarios for Event
+      Handlers:</para>
+
       <itemizedlist>
         <listitem>
-          <para><code>TypedEventHandler</code> - If the target event type is not discoverable, that is there is no 
-          reified type information, nor is there an <code>event.type</code> property, then the target type for the 
-          event is not known. In this situation there is no way for the Typed Event implementation to correctly target 
-          an event schema, and the <code>TypedEventHandler</code> must be ignored. The implementation must write a 
-          message to the log indicating which service is being ignored.</para>
+          <para><code>TypedEventHandler</code> - If the target event type is
+          not discoverable, that is there is no reified type information, nor
+          is there an <code>event.type</code> property, then the target type
+          for the event is not known. In this situation there is no way for
+          the Typed Event implementation to correctly target an event schema,
+          and the <code>TypedEventHandler</code> must be ignored. The
+          implementation must write a message to the log indicating which
+          service is being ignored.</para>
         </listitem>
 
         <listitem>
-          <para><code>TypedEventHandler</code> - If the target event type is discoverable but cannot be loaded
-          using the classloader of the bundle which registered the Typed Event Handler service then there is no 
-          way for the Typed Event implementation to correctly target an event schema, and the Event Handler must 
-          be ignored.</para>
+          <para><code>TypedEventHandler</code> - If the target event type is
+          discoverable but cannot be loaded using the class loader of the
+          bundle which registered the Typed Event Handler service then there
+          is no way for the Typed Event implementation to correctly target an
+          event schema, and the Event Handler must be ignored. The
+          implementation must write a message to the log indicating which
+          service is being ignored.</para>
         </listitem>
 
         <listitem>
-          <para>All Handler Types - If the event data cannot be adapted to the target type, that is the incoming
-          data cannot be transformed due to badly mismatched property names or values, then that specific Event 
-          cannot be submitted to the Handler. The Typed Event implementation must write a message to the log 
-          indicating which service failed to receive the event. If this error occurs repeatedly then the Typed Event 
-          implementation may choose to deny list and ignore the Event Handler service. Deny listing decisions
-          must be written to the log.</para>
+          <para>All Handler Types - If the event data cannot be adapted to the
+          target type, that is the incoming data cannot be transformed due to
+          badly mismatched property names or values, then that specific Event
+          cannot be submitted to the Handler. The Typed Event implementation
+          must write a message to the log indicating which service failed to
+          receive the event. If this error occurs repeatedly then the Typed
+          Event implementation may choose to deny list and ignore the Event
+          Handler service. Deny listing decisions must be written to the
+          log.</para>
         </listitem>
 
         <listitem>
-          <para>All Handler Types - If the <code>event.topics</code> property contains one or more invalid 
-          values then the Event Handler service must be ignored. The implementation must write a message to the 
-          log indicating which service is being ignored.</para>
+          <para>All Handler Types - If the <code>event.topics</code> property
+          contains one or more invalid values then the Event Handler service
+          must be ignored. The implementation must write a message to the log
+          indicating which service is being ignored.</para>
         </listitem>
       </itemizedlist>
     </section>
-
   </section>
-  
+
   <section>
     <title>The Typed Event Bus Service</title>
-    
-    <para>The Typed Event implementation must register a Typed Event Bus service in the service registry. This
-    service must implement and advertise the <xref linkend="org.osgi.service.typedevent.TypedEventBus" 
+
+    <para>The Typed Event implementation must register a Typed Event Bus
+    service in the service registry. This service must implement and advertise
+    the <xref linkend="org.osgi.service.typedevent.TypedEventBus"
     xrefstyle="hyperlink"/> interface.</para>
-      
+
     <section>
       <title>Error Handling</title>
-      
-      <para>It is not possible to know that an Event cannot be delivered until delivery is attempted. It is 
-      therefore not possible (or acceptable, given the asynchronous nature of delivery) to throw an exception 
-      to the sender of an event if there are problems delivering the event. The Event Bus service should not 
-      throw exceptions from any publication methods except:</para>
-      
+
+      <para>It is not possible to know that an Event cannot be delivered until
+      delivery is attempted. It is therefore not possible (or acceptable,
+      given the asynchronous nature of delivery) to throw an exception to the
+      sender of an event if there are problems delivering the event. The Event
+      Bus service should not throw exceptions from any publication methods
+      except:</para>
+
       <itemizedlist>
         <listitem>
-          <para><code>NullPointerException</code> if the event data is <code>null</code>.</para>
+          <para><code>NullPointerException</code> if the event data is
+          <code>null</code>.</para>
         </listitem>
+
         <listitem>
-          <para><code>IllegalArgumentException</code> if a topic name is supplied and it violates the
-          topic name syntax.</para>
+          <para><code>IllegalArgumentException</code> if a topic name is
+          supplied and it violates the topic name syntax.</para>
         </listitem>
       </itemizedlist>
     </section>
-      
   </section>
-  
+
   <section xml:id="service.typedevent-monitor">
-    <title>Monitoring Events</title> 
-    
-    <para>An important part of a software system is the ability to monitor it appropriately to determine 
-    whether it is functioning correctly, without having the measurements disrupt the system. To this end 
-    the Typed Event implementation must register a <xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor" 
-    xrefstyle="hyperlink"/> service which can be used to monitor the flow of events through the Event Bus.</para>
-    
-    <para>Events flowing through the Typed Event Bus can be monitored using one of the <code>monitorEvents</code> 
-    methods from the <code>TypedEventMonitor</code> service. These methods return a 
-    <xref linkend="org.osgi.util.pushstream.PushStream" xrefstyle="hyperlink"/> which delivers
-    <xref linkend="org.osgi.service.typedevent.monitor.MonitorEvent"  xrefstyle="hyperlink"/> 
-    instances each time an event is sent via the <code>TypedEventBus</code>. The monitor events contain the event 
-    topic, the event data, and a timestamp indicating when the event was sent.</para>
-    
+    <title>Monitoring Events</title>
+
+    <para>An important part of a software system is the ability to monitor it
+    appropriately to determine whether it is functioning correctly, without
+    having the measurements disrupt the system. To this end the Typed Event
+    implementation must register a <xref
+    linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor"
+    xrefstyle="hyperlink"/> service which can be used to monitor the flow of
+    events through the Event Bus.</para>
+
+    <para>Events flowing through the Typed Event Bus can be monitored using
+    one of the <code>monitorEvents</code> methods from the
+    <code>TypedEventMonitor</code> service. These methods return a <xref
+    linkend="org.osgi.util.pushstream.PushStream" xrefstyle="hyperlink"/>
+    which delivers <xref
+    linkend="org.osgi.service.typedevent.monitor.MonitorEvent"
+    xrefstyle="hyperlink"/> instances each time an event is sent via the
+    <code>TypedEventBus</code>. The monitor events contain the event topic,
+    the event data, and a timestamp indicating when the event was sent.</para>
+
     <section>
       <title>Event History</title>
-      
-      <para>In a running system it is often useful for monitoring tools to replay recent data immediately 
-      after a problem has occurred. For that reason Typed Event Monitor instances may store past events so that 
-      they can be replayed if requested. There are two <code>monitorEvents</code> methods capable of replaying history:</para>
-      
+
+      <para>In a running system it is often useful for monitoring tools to
+      replay recent data immediately after a problem has occurred. For that
+      reason Typed Event Monitor instances may store past events so that they
+      can be replayed if requested. There are two <code>monitorEvents</code>
+      methods capable of replaying history:</para>
+
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-int-" xrefstyle="hyperlink"/>  
-          takes an <code>int</code> representing the number of past events that should be replayed from the cached history</para>
+          <para><xref
+          linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-int-"
+          xrefstyle="hyperlink"/> takes an <code>int</code> representing the
+          number of past events that should be replayed from the cached
+          history</para>
         </listitem>
+
         <listitem>
-          <para><xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-Instant-" xrefstyle="hyperlink"/> 
-          takes an <code>Instant</code>, representing the time in the past from which the stream of monitoring events should start.</para>
+          <para><xref
+          linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-Instant-"
+          xrefstyle="hyperlink"/> takes an <code>Instant</code>, representing
+          the time in the past from which the stream of monitoring events
+          should start.</para>
         </listitem>
       </itemizedlist>
 
-      <para>Note that storing Event History is considered a best-effort option and it is not required that the 
-      implementation supply the full set of requested events. If insufficient past events are available then the 
-      implementation must provide the maximum amount of history available.</para>
+      <para>Note that storing Event History is considered a best-effort option
+      and it is not required that the implementation supply the full set of
+      requested events. If insufficient past events are available then the
+      implementation must provide the maximum amount of history
+      available.</para>
     </section>
   </section>
 
   <section>
     <title>Capabilities</title>
-    
+
     <section>
       <title>osgi.implementation Capability</title>
 
@@ -840,13 +971,13 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       xrefstyle="hyperlink"/>. This capability can be used by provisioning
       tools and during resolution to ensure that a Typed Event implementation
       is present. The capability must also declare a uses constraint for the
-      <code>org.osgi.service.typedevent</code> package and provide the version of
-      this specification:</para>
+      <code>org.osgi.service.typedevent</code> package and provide the version
+      of this specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
-       osgi.implementation="osgi.typedevent";
-       uses:="org.osgi.service.typedevent";
-       version:Version="<xref endterm="org.osgi.service.typedevent-version.number"
+ osgi.implementation="osgi.typedevent";
+ uses:="org.osgi.service.typedevent";
+ version:Version="<xref endterm="org.osgi.service.typedevent-version.number"
           linkend="org.osgi.service.typedevent"/>"</programlisting>
 
       <para>The <xref
@@ -861,18 +992,19 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     <section>
       <title>osgi.service Capability</title>
 
-      <para>The bundle providing the Typed Event Bus service must provide 
+      <para>The bundle providing the Typed Event Bus service must provide
       capabilities in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-      namespace representing the services it is required to register. This capability must 
-      also declare uses constraints for the relevant service packages:</para>
+      namespace representing the services it is required to register. This
+      capability must also declare uses constraints for the relevant service
+      packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.typedevent.TypedEventBus";
-  uses:="org.osgi.service.typedevent",
-  osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.typedevent.monitor.TypedEventMonitor";
-  uses:="org.osgi.service.typedevent"</programlisting>
+ objectClass:List&lt;String&gt;="org.osgi.service.typedevent.TypedEventBus";
+ uses:="org.osgi.service.typedevent",
+ osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.typedevent.monitor.TypedEventMonitor";
+ uses:="org.osgi.service.typedevent.monitor"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
@@ -881,15 +1013,14 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
   <section>
     <title>Security</title>
-    
+
     <section>
       <title>Topic Permission</title>
 
-      <para>The <xref
-      linkend="org.osgi.service.typedevent.TopicPermission"
-      xrefstyle="hyperlink"/> class allows fine-grained control
-      over which bundles may post events to a given topic and which bundles
-      may receive those events.</para>
+      <para>The <xref linkend="org.osgi.service.typedevent.TopicPermission"
+      xrefstyle="hyperlink"/> class allows fine-grained control over which
+      bundles may post events to a given topic and which bundles may receive
+      those events.</para>
 
       <para>The target parameter for the permission is the topic name.
       <code>TopicPermission</code> classes uses a wildcard matching algorithm
@@ -904,65 +1035,70 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       publish or receive events, respectively. Neither one implies the
       other.</para>
     </section>
-    
+
     <section>
       <title>Required Permissions</title>
 
       <para>Bundles that need to consume events must be granted permission to
       register the appropriate handler service. For Example:
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.TypedEventHandler</code>,
-      <code>REGISTER</code>] or 
+      <code>REGISTER</code>] or
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UntypedEventHandler</code>,
-      <code>REGISTER</code>] or 
+      <code>REGISTER</code>] or
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UnhandledEventHandler</code>,
       <code>REGISTER</code>]. In addition, bundles that consume events require
       <code>TopicPermission[ &lt;topic&gt;, SUBSCRIBE ]</code> for each topic
       they want to be notified about.</para>
 
-      <para>Bundles that need to publish events must be granted permission
-      to get the <code>TypedEventBus</code> service, that is
-      <code>ServicePermission[ org.osgi.service.typedevent.TypedEventBus, GET]</code>
-      so that they may retrieve the Typed Event Bus and use it. In
+      <para>Bundles that need to publish events must be granted permission to
+      get the <code>TypedEventBus</code> service, that is
+      <code>ServicePermission[ org.osgi.service.typedevent.TypedEventBus,
+      GET]</code> so that they may retrieve the Typed Event Bus and use it. In
       addition, event sources require <code>TopicPermission[ &lt;topic&gt;,
       PUBLISH]</code> for each topic they want to send events to. This
       includes any default topic names that are used when publishing</para>
 
-      <para>Bundles that need to monitor events flowing through the bus must be granted permission
-      to get the <code>TypedEventMonitor</code> service, that is
-      <code>ServicePermission[ org.osgi.service.typedevent.monitor.TypedEventMonitor, GET]</code>
-      so that they may retrieve the Typed Event Monitor and use it.</para>
+      <para>Bundles that need to monitor events flowing through the bus must
+      be granted permission to get the <code>TypedEventMonitor</code> service,
+      that is <code>ServicePermission[
+      org.osgi.service.typedevent.monitor.TypedEventMonitor, GET]</code> so
+      that they may retrieve the Typed Event Monitor and use it.</para>
 
-      <para>Only a bundle that provides a Typed Event implementation
-      should be granted <code>ServicePermission[
+      <para>Only a bundle that provides a Typed Event implementation should be
+      granted <code>ServicePermission[
       org.osgi.service.typedevent.TypedEventBus, REGISTER]</code> and
       <code>ServicePermission[
-      org.osgi.service.typedevent.monitor.TypedEventMonitor, REGISTER]</code> to register the
-      services defined by this specification.</para>
+      org.osgi.service.typedevent.monitor.TypedEventMonitor, REGISTER]</code>
+      to register the services defined by this specification.</para>
 
       <para>The Typed Event implementation must be granted
-      <code>ServicePermission[org.osgi.service.typedevent.TypedEventHandler, GET]</code>,
-      <code>ServicePermission[org.osgi.service.typedevent.UntypedEventHandler, GET]</code>,
-      <code>ServicePermission[org.osgi.service.typedevent.UnhandledEventHandler, GET]</code>,
-      <code>ServicePermission[org.osgi.service.typedevent.TypedEventBus, REGISTER]</code> and
-      <code>ServicePermission[org.osgi.service.typedevent.monitor.TypedEventMonitor, REGISTER]</code>
-      as these actions are all required to implement the specification.</para>
+      <code>ServicePermission[org.osgi.service.typedevent.TypedEventHandler,
+      GET]</code>,
+      <code>ServicePermission[org.osgi.service.typedevent.UntypedEventHandler,
+      GET]</code>,
+      <code>ServicePermission[org.osgi.service.typedevent.UnhandledEventHandler,
+      GET]</code>,
+      <code>ServicePermission[org.osgi.service.typedevent.TypedEventBus,
+      REGISTER]</code> and
+      <code>ServicePermission[org.osgi.service.typedevent.monitor.TypedEventMonitor,
+      REGISTER]</code> as these actions are all required to implement the
+      specification.</para>
     </section>
-    
+
     <section>
       <title>Security Context During Event Callbacks</title>
 
       <para>During an event notification, the Typed Event implementation's
-      Protection Domain will be on the stack above the handler's Protection Domain.
-      Therefore, if a handler needs to perform a secure operation using
-      its own privileges, it must invoke the <code>doPrivileged</code> method
-      to isolate its security context from that of its caller.</para>
+      Protection Domain will be on the stack above the handler's Protection
+      Domain. Therefore, if a handler needs to perform a secure operation
+      using its own privileges, it must invoke the <code>doPrivileged</code>
+      method to isolate its security context from that of its caller.</para>
 
       <para>The event delivery mechanism must not wrap event notifications in
       a <code>doPrivileged</code> call.</para>
     </section>
   </section>
 
-  
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.annotations.xml"/>
@@ -970,5 +1106,4 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.monitor.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.propertytypes.xml"/>
-  
 </chapter>
