@@ -24,7 +24,6 @@ org.osgi:org.osgi.service.device:1.1.0
 org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.enocean:1.0.0
 org.osgi:org.osgi.service.event:1.4.0
-#org.osgi:org.osgi.service.feature:1.0.0
 org.osgi:org.osgi.service.http:1.2.1
 org.osgi:org.osgi.service.http.whiteboard:1.1.0
 org.osgi:org.osgi.service.jaxrs:1.0.0
@@ -32,11 +31,9 @@ org.osgi:org.osgi.service.jdbc:1.0.0
 org.osgi:org.osgi.service.jndi:1.0.0
 org.osgi:org.osgi.service.jpa:1.1.0
 org.osgi:org.osgi.service.log:1.5.0
-#org.osgi:org.osgi.service.log.stream:1.0.0
 org.osgi:org.osgi.service.metatype:1.4.0
 org.osgi:org.osgi.service.metatype.annotations:1.4.0
 org.osgi:org.osgi.service.networkadapter:1.0.0
-#org.osgi:org.osgi.service.onem2m:1.0.0
 org.osgi:org.osgi.service.packageadmin:1.2.1
 org.osgi:org.osgi.service.permissionadmin:1.2.1
 org.osgi:org.osgi.service.prefs:1.1.1
@@ -50,7 +47,6 @@ org.osgi:org.osgi.service.serviceloader:1.0.0
 org.osgi:org.osgi.service.startlevel:1.1.1
 org.osgi:org.osgi.service.tr069todmt:1.0.1
 org.osgi:org.osgi.service.transaction.control:1.0.0
-#org.osgi:org.osgi.service.typedevent:1.0.0
 org.osgi:org.osgi.service.upnp:1.2.0
 org.osgi:org.osgi.service.url:1.0.1
 org.osgi:org.osgi.service.usbinfo:1.0.0

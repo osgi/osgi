@@ -21,27 +21,28 @@
  */
 
 def jar = tasks.named("jar") {
-	ext.jarVersion = layout.getBuildDirectory().file("version.txt")
-	ext.javadocIncludes = project.java.getDocsDir().file("javadoc-includes.txt")
+	def docsDirectory = objects.directoryProperty().value(layout.getBuildDirectory().dir(provider({-> project.docsDirName})))
+	ext.javadocIncludes = docsDirectory.file("javadocIncludes.txt")
+	ext.javadocVersion = docsDirectory.file("javadocVersion.txt")
 	def projectName = project.getName()
 	def bndProject = bnd.project
 
-	outputs.file(jarVersion).withPropertyName("jarVersion")
 	outputs.file(javadocIncludes).withPropertyName("javadocIncludes")
+	outputs.file(javadocVersion).withPropertyName("javadocVersion")
 
 	doLast("javadoc-info") { t ->
-		File jarVersionFile = jarVersion.get().getAsFile()
-		def version = bndProject.getVersion(projectName)
-		jarVersionFile.text = bnd.process("\${versionmask;===s;${version}}")
 		File javadocIncludesFile = javadocIncludes.get().getAsFile()
 		javadocIncludesFile.text = bndProject.getExports().collect { packageRef, attrs ->
 			"${packageRef.getBinary()}/*.java"
 		}.join(",")
+		File javadocVersionFile = javadocVersion.get().getAsFile()
+		def version = bndProject.getVersion(projectName)
+		javadocVersionFile.text = bnd.process("\${versionmask;===s;${version}}")
 	}
 }
 
 def javadoc = tasks.named("javadoc") {
-	inputs.files(jar).withPropertyName(jar.name)
+	inputs.files(jar).withPropertyName("jar")
 	source(bnd.allSrcDirs)
 	def javadocTitle = bnd.get("javadoc.title", project.getName())
 	def copyrightHtml = bnd.get("copyright.html")
@@ -87,7 +88,7 @@ def javadoc = tasks.named("javadoc") {
 	}
 	doFirst("configuration") { t ->
 		def osgiRelease = bnd.get("osgi.release")
-		File javadocVersion = jar.flatMap({it.jarVersion}).get().getAsFile()
+		File javadocVersion = jar.flatMap({it.javadocVersion}).get().getAsFile()
 		File javadocIncludes = jar.flatMap({it.javadocIncludes}).get().getAsFile()
 		def javadocTitleVersion = project.getName().startsWith("osgi.") ? "Release ${osgiRelease}" : "Version ${javadocVersion.text}"
 		options.docTitle = "OSGi&reg; ${javadocTitle} ${javadocTitleVersion}"
@@ -95,7 +96,7 @@ def javadoc = tasks.named("javadoc") {
 		options.header = "<b>OSGi&reg; ${javadocTitle}</b><br/>${javadocTitleVersion}"
 		include javadocIncludes.text.tokenize(",")
 		linkProjects.each { linkProject ->
-			File linkJavadocVersion = linkProject.tasks.named("jar").flatMap({it.jarVersion}).get().getAsFile()
+			File linkJavadocVersion = linkProject.tasks.named("jar").flatMap({it.javadocVersion}).get().getAsFile()
 			File linkDestinationDir = linkProject.tasks.named("javadoc").map({it.destinationDir}).get()
 			options.linksOffline("../../${linkProject.getName()}/${linkJavadocVersion.text}", linkDestinationDir.absolutePath)
 		}
@@ -106,5 +107,5 @@ def javadoc = tasks.named("javadoc") {
 }
 
 tasks.named("release") {
-	inputs.files(javadoc).withPropertyName(javadoc.name)
+	dependsOn(javadoc)
 }

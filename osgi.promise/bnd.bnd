@@ -1,11 +1,14 @@
 # Set javac settings from JDT prefs
--include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/promise.bnd, ${build}/publish.bnd
-companion.code = true
+-include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/promise.bnd
 
 Automatic-Module-Name: ${bsn}
 Bundle-Description: \
     OSGi Promise API Release ${versionmask;=;${build.version}} \
     for use inside and outside of OSGi environments
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
+
+-baseline: *
+companion.code = true
 
 Export-Package: ${osgi.promise.packages}
 

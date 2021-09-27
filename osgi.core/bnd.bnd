@@ -1,11 +1,14 @@
 # Set javac settings from JDT prefs
--include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/core.bnd, ${build}/publish.bnd
-companion.code = true
+-include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/core.bnd
 
 Automatic-Module-Name: ${bsn}
 Bundle-Description: \
 	OSGi Core Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
+
+-baseline: *
+companion.code = true
 
 Import-Package: *; resolution:=optional
 

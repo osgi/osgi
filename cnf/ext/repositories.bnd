@@ -43,7 +43,7 @@ publishrepo: ${if;${env;OSSRH_USERNAME};OSGiNexus}
 -connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
 
 -buildrepo: Local
--releaserepo: Release
+-releaserepo: Release,${publishrepo}
 -baselinerepo: Baseline
-
 -maven-release: pom;path=JAR,javadoc;path=NONE,sources;path=NONE
+mavensign: ${if;${is;${env;GPG_PASSPHRASE;UNSET};UNSET};;sign\\;passphrase=${first;${env;GPG_PASSPHRASE};DEFAULT}}

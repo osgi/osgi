@@ -1,9 +1,10 @@
-# Bnd instructions for companion code projects
--include: ${.}/publish.bnd
-companion.code = true
-
+# bnd instructions for companion code projects
 spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}
 spec.version = ${versionmask;===;${first;${spec.package.versionattr};0}}
 build.version = ${build.versionmask;${spec.version}}.${project.build}
 Automatic-Module-Name: ${bsn}
 Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}
+-maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
+
+-baseline: *
+companion.code = true
