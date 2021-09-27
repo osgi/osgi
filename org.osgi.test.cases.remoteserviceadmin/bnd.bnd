@@ -42,7 +42,6 @@ Bundle-Category: osgi,test
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.metatype;           version=latest, \
-	org.osgi.impl.service.http;               version=latest, \
 	org.osgi.impl.service.remoteserviceadmin; version=latest
 
 -runvm = -Xmx512m
@@ -50,9 +49,17 @@ Bundle-Category: osgi,test
 -runproperties = ${runproperties}, \
 	rsa.tck.timeout=30000,\
 	rsa.tck.timeout.factor=3,\
-	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
+	${p}.framework.properties="", \
 	${p}.system.packages.extra="", \
-    ${p}.serverconfig="service.exported.configs", \
-    org.osgi.service.http.port=9191,\
-    service.exported.configs="aries.tcp", \
-    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.jaxrs;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+${p}.serverconfig="service.exported.configs,service.exported.intents,ecf.endpoint.id.ns,ecf.generic.server.hostname,ecf.generic.server.port", \
+	service.exported.configs="ecf.generic.server",\
+	service.exported.intents=osgi.basic,osgi.async,\
+	${p}.bundles='${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}',\
+	ecf.endpoint.id.ns=org.eclipse.ecf.core.identity.StringID,\
+	org.eclipse.ecf.osgi.services.remoteserviceadmin.AbstractTopologyManager.requireServiceExportedConfigs=true,\
+	ecf.generic.server.hostname=localhost,\
+	ecf.generic.server.port=@@FREE_PORT@@,\
+	ecf.discovery.etcd3.usePlaintext=true,\
+	org.eclipse.ecf.remoteservice.excludeDistributionProviders=ecf.grpc.server,\
+	org.eclipse.ecf.osgi.services.remoteserviceadmin.HostContainerSelector.reuseExistingContainers=false,\
+	org.eclipse.ecf.osgi.services.remoteserviceadmin.TopologyManagerImpl.nonECFTopologyMananger=true      

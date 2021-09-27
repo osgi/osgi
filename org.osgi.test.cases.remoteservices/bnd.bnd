@@ -22,7 +22,6 @@ Export-Package 					= ${p}.common;version=1.0.0
     org.osgi.impl.service.cm;                 version=latest, \
     org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.metatype;           version=latest, \
-	org.osgi.impl.service.http;               version=latest, \
 	org.osgi.impl.service.remoteserviceadmin; version=latest, \
 	org.osgi.util.function;                   version=latest, \
 	org.osgi.util.promise;                    version=latest
@@ -34,7 +33,11 @@ Export-Package 					= ${p}.common;version=1.0.0
 	rsa.tck.timeout.factor=3,\
 	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
 	${p}.system.packages.extra="", \
-    ${p}.serverconfig="service.exported.configs", \
-    org.osgi.service.http.port=9191,\
-    service.exported.configs="aries.tcp", \
+    ${p}.serverconfig="service.exported.configs,ecf.generic.server.port,ecf.generic.server.hostname,ecf.endpoint.id.ns", \
+    service.exported.configs="ecf.generic.server", \
+    ecf.endpoint.id.ns=org.eclipse.ecf.core.identity.StringID,\
+    ecf.generic.server.hostname=localhost,\
+	ecf.generic.server.port=@@FREE_PORT@@,\
+    ecf.discovery.etcd3.usePlaintext=true,\
+    org.eclipse.ecf.osgi.services.remoteserviceadmin.disableServiceVersionChecking=true,\
     ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.util.function;latest},${repo;org.osgi.util.promise;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
