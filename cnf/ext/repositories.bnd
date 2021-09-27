@@ -34,12 +34,12 @@
 
 -plugin.repositories.nexus: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
-        name='OSGiNexus'; \
-        snapshotUrl="https://oss.sonatype.org/content/repositories/snapshots/"; \
-        releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
+        name='OSSRH'; \
+        snapshotUrl="${env;OSSRH_SNAPSHOT;https://oss.sonatype.org/content/repositories/snapshots/}"; \
+        releaseUrl="${env;OSSRH_RELEASE;https://oss.sonatype.org/service/local/staging/deploy/maven2/}"; \
         noupdateOnRelease=true
 
-publishrepo: ${if;${env;OSSRH_USERNAME};OSGiNexus}
+publishrepo: ${if;${env;OSSRH_USERNAME};OSSRH}
 -connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
 
 -buildrepo: Local
