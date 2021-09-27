@@ -1,13 +1,10 @@
 # Set javac settings from JDT prefs
--include : ${build}/eclipse/jdt.bnd, layout.bnd, ${build}/annotation.bnd
+-include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/annotation.bnd, ${build}/publish.bnd
+companion.code = true
 
 Bundle-Description: \
     OSGi Annotation Release ${versionmask;=;${build.version}}, \
     Annotations for use in compiling bundles
--maven-release: pom;path=JAR,javadoc;path="${target}/docs/javadoc",${def;mavensign}
-
--baseline: *
-companion.code = true
 
 Export-Package: ${osgi.annotation.packages}
 
