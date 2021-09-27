@@ -72,13 +72,16 @@ build.version				= ${build.versionmask;${osgi.version}}.${project.build}
 
 osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=snapshot
 
-# Documentation
+# -snapshot unset (commented out) is a snapshot build. (e.g. 6.0.0-SNAPSHOT)
+# -snapshot set to a value (e.g. RC1) is a release build with the value as the Maven version qualifier. (e.g. 6.0.0-RC1)
+# -snapshot set to the empty string is a release build with no Maven version qualifier. (e.g. 6.0.0)
+#-snapshot:
+
 -groupid: org.osgi
 -pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${-snapshot};${versionmask;===s;${@version}}}
 Bundle-Name: ${-groupid}:${bsn}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    Eclipse Foundation
-# To build the non-snapshot version, see the packaging bnd files for -snapshot.
 Bundle-Version:   ${build.version}-SNAPSHOT
 Bundle-DocURL:    https://docs.osgi.org/
 Git-Descriptor:   ${system-allow-fail;git describe --dirty --always --abbrev=9}
