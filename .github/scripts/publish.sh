@@ -16,5 +16,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0 
 #*******************************************************************************
+set -ev
 
 ./gradlew --no-daemon -Dmaven.repo.local=cnf/generated/m2 :deploy "$@"
