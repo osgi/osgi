@@ -8,7 +8,7 @@
 # Set draft status of the specification. Valid values are:
 # 'draft', 'proposed-final-draft', and either 'no' or unset.
 core.draft: draft
-cmpn.draft: draft
+cmpn.draft: proposed-final-draft
 
 javac.profile=
 fop_home: ${licensed}/fop
