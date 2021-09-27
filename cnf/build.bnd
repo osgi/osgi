@@ -75,7 +75,7 @@ osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=snapshot
 # -snapshot unset (commented out) is a snapshot build. (e.g. 6.0.0-SNAPSHOT)
 # -snapshot set to a value (e.g. RC1) is a release build with the value as the Maven version qualifier. (e.g. 6.0.0-RC1)
 # -snapshot set to the empty string is a release build with no Maven version qualifier. (e.g. 6.0.0)
-#-snapshot:
+-snapshot:
 
 -groupid: org.osgi
 -pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${-snapshot};${versionmask;===s;${@version}}}
