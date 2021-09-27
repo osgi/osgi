@@ -2,6 +2,9 @@
 -include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/cmpn.bnd, ${build}/publish.bnd
 companion.code = true
 
+# Don't publish osgi.cmpn
+publishrepo:
+
 Bundle-Description: \
 	OSGi Compendium Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles
