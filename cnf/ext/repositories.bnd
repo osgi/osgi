@@ -32,11 +32,11 @@
         index=${.}/baseline.mvn;\
         readOnly=true
 
--plugin.repositories.nexus: \
+-plugin.repositories.ossrh: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name='OSSRH'; \
-        snapshotUrl="${env;OSSRH_SNAPSHOT;https://oss.sonatype.org/content/repositories/snapshots/}"; \
-        releaseUrl="${env;OSSRH_RELEASE;https://oss.sonatype.org/service/local/staging/deploy/maven2/}"; \
+        snapshotUrl="${first;${env;OSSRH_SNAPSHOT};https://oss.sonatype.org/content/repositories/snapshots/}"; \
+        releaseUrl="${first;${env;OSSRH_RELEASE};https://oss.sonatype.org/service/local/staging/deploy/maven2/}"; \
         noupdateOnRelease=true
 
 publishrepo: ${if;${env;OSSRH_USERNAME};OSSRH}
