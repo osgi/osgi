@@ -83,6 +83,13 @@ jobs:
         path: |
           osgi.tck/generated/osgi.tck.*/
           !osgi.tck/generated/osgi.tck.*.jar
+    - name: Create Staging Repository
+      if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
+      run: |
+        ./.github/scripts/staging.sh
+      env:
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Release
       id: release
       if: ${{ fromJSON(env.canonical) }}
@@ -90,6 +97,7 @@ jobs:
         ./.github/scripts/publish.sh
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        OSSRH_RELEASE: ${{ env.OSSRH_RELEASE }}
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
