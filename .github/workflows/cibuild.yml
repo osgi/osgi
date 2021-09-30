@@ -86,7 +86,7 @@ jobs:
     - name: Create Staging Repository
       if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
       run: |
-        ./.github/scripts/staging.sh
+        ./.github/scripts/staging.sh org.osgi
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -97,7 +97,7 @@ jobs:
         ./.github/scripts/publish.sh
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        OSSRH_RELEASE: ${{ env.OSSRH_RELEASE }}
+        OSSRH_RELEASE: ${{ env.OSSRH_STAGINGREPOSITORY_org_osgi }}
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
