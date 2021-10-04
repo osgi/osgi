@@ -82,9 +82,9 @@
     Compendium <xref endterm="cmpn.book-release" linkend="cmpn.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 8</title>
+      <title>OSGi Core Release 9</title>
 
-      <para>This specification is based on OSGi Core Release 8. This
+      <para>This specification is based on OSGi Core Release 9. This
       specification can be downloaded from:</para>
 
       <programlisting><link xlink:href="https://docs.osgi.org/specification/"/></programlisting>

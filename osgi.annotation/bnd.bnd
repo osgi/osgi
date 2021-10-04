@@ -10,10 +10,6 @@ Export-Package: ${osgi.annotation.packages}
 
 -includeresource = ${osgi.annotation.resources}
 
-# Removed osgi.unresolvable requirement
-# Micro version change in annotation packages
-build.versionmask: ${versionmask;==+;${1}}
-
 -dependson = \
     ${osgi.annotation.specs} 
 
