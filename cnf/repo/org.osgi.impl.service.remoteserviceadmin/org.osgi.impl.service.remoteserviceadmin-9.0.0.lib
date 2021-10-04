@@ -1,0 +1,21 @@
+org.osgi.service.cm; version=latest
+org.osgi.impl.service.configurator;version=latest
+org.osgi.service.event; version=latest
+
+org.eclipse.core.jobs; version=latest
+org.eclipse.equinox.common; version=latest
+org.eclipse.equinox.concurrent; version=latest
+org.eclipse.equinox.supplement; version=latest
+org.eclipse.ecf.identity; version=latest
+org.eclipse.ecf; version=latest
+org.eclipse.ecf.sharedobject; version=latest
+org.eclipse.ecf.discovery; version=latest
+org.eclipse.ecf.provider; version=latest
+org.eclipse.ecf.remoteservice; version=latest
+org.eclipse.ecf.provider.remoteservice; version=latest
+org.eclipse.ecf.remoteservice.asyncproxy; version=latest
+org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy; version=latest
+org.eclipse.osgi.services.remoteserviceadmin; version=latest
+org.eclipse.ecf.osgi.services.remoteserviceadmin; version=latest
+org.eclipse.ecf.osgi.services.distribution; version=latest
+org.eclipse.ecf.provider.jmdns; version=latest
