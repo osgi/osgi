@@ -45,9 +45,9 @@ Bundle-Category: osgi,test
 	rsa.tck.timeout.factor=3,\
     ${p}.framework.properties="", \
 	${p}.system.packages.extra="", \
-${p}.serverconfig="service.exported.configs,service.exported.intents,ecf.endpoint.id.ns,ecf.generic.server.hostname,ecf.generic.server.port", \
+    ${p}.serverconfig="service.exported.configs,service.exported.intents,ecf.endpoint.id.ns,ecf.generic.server.hostname,ecf.generic.server.port", \
 	service.exported.configs="ecf.generic.server",\
-	service.exported.intents=osgi.basic,osgi.async,\
+	service.exported.intents="osgi.basic",\
 	ecf.endpoint.id.ns=org.eclipse.ecf.core.identity.StringID,\
 	org.eclipse.ecf.osgi.services.remoteserviceadmin.AbstractTopologyManager.requireServiceExportedConfigs=true,\
 	ecf.generic.server.hostname=localhost,\
