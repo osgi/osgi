@@ -33,12 +33,12 @@
       <orgname>OSGi Working Group</orgname>
     </author>
 
-    <releaseinfo xml:id="core.book-release">Release 8</releaseinfo>
+    <releaseinfo xml:id="core.book-release">Release 9</releaseinfo>
 
-    <pubdate>October 2020</pubdate>
+    <pubdate>TBD</pubdate>
 
     <copyright>
-      <year>2000, 2020</year>
+      <year>2000, 2021</year>
 
       <holder>Eclipse Foundation</holder>
     </copyright>
