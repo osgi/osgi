@@ -16,9 +16,6 @@ Export-Package: ${template;osgi.core.packages;${@};-split-package:=first}
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
--dependson = \
-	${osgi.core.specs} 
-
 -buildpath = \
 	${osgi.annotation.buildpath}, \
 	${template;osgi.core.specs;${@};version=project}

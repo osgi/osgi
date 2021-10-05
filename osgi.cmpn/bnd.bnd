@@ -19,9 +19,6 @@ Export-Package: ${template;osgi.cmpn.packages;${@};-split-package:=first}
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
--dependson =  \
-	${osgi.cmpn.specs}
-
 -buildpath = \
     ${osgi.annotation.buildpath}, \
 	${template;osgi.cmpn.specs;${@};version=project}, \

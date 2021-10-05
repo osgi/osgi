@@ -10,9 +10,6 @@ Export-Package: ${osgi.annotation.packages}
 
 -includeresource = ${osgi.annotation.resources}
 
--dependson = \
-    ${osgi.annotation.specs} 
-
 -buildpath = \
     ${template;osgi.annotation.specs;${@};version=project}
 

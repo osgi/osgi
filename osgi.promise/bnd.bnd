@@ -11,8 +11,6 @@ Export-Package: ${osgi.promise.packages}
 
 -includeresource = ${osgi.promise.resources}
 
--dependson = ${osgi.promise.specs} 
-
 -buildpath = \
     ${osgi.annotation.buildpath}, \
     ${template;osgi.promise.specs;${@};version=project}
