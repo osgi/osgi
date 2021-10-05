@@ -28,21 +28,6 @@ import aQute.lib.io.IO
 /* Configure the subprojects */
 subprojects {
 	if (plugins.hasPlugin("biz.aQute.bnd")) {
-		// This if block is to enable the use of the toolchain below with the older
-		// Bnd 5.3.0 gradle plugin which does not support toolchain.
-		// This if block can be removed when updating to Bnd 6.0.0 gradle plugin
-		if (!project.extensions.getByName("bnd").getClass().getSimpleName().startsWith("BndPluginExtension")) {
-			tasks.withType(JavaCompile).configureEach { t ->
-				t.sourceCompatibility = project.java.sourceCompatibility.toString()
-				t.targetCompatibility = project.java.targetCompatibility.toString()
-				def compilerArgs = t.options.compilerArgs
-				int i = compilerArgs.indexOf("--release")
-				if (i >= 0) {
-					compilerArgs.remove(i)
-					compilerArgs.remove(i)
-				}
-			}
-		}
 		java { // OSGi build requires JDK 8
 			toolchain {
 				languageVersion = JavaLanguageVersion.of(8)
