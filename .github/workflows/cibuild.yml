@@ -126,7 +126,7 @@ jobs:
       run: |
         ./.github/scripts/spec.sh
     - name: Publish Specification HTML
-      if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
+      if: ${{ (fromJSON(env.canonical) && (github.ref == 'refs/heads/main')) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
