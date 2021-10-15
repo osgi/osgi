@@ -78,7 +78,7 @@ osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=8.0.1
 #-snapshot:
 
 -groupid: org.osgi
--pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${-snapshot};${versionmask;===s;${@version}}}
+-pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${def;-snapshot};${versionmask;===s;${@version}}}
 Bundle-Name: ${-groupid}:${bsn}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    Eclipse Foundation
