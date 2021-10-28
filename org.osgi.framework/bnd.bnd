@@ -4,8 +4,8 @@
 Export-Package: ${p}.*; -split-package:=first; -noimport:=true
 
 -buildpath = \
-	${osgi.annotation.buildpath}, \
-	org.osgi.dto;maven-scope=provided;version=1.0, \
-	org.osgi.resource;maven-scope=provided;version=1.0
+	${osgi.annotation.buildpath},\
+	org.osgi.dto;version=1.0,\
+	org.osgi.resource;version=1.0
 
 -runfw =
