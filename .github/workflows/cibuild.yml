@@ -125,28 +125,39 @@ jobs:
       id: build
       run: |
         ./.github/scripts/spec.sh
-    - name: Publish Specification HTML
+    - name: Upload Specification HTML
       if: ${{ (fromJSON(env.canonical) && (github.ref == 'refs/heads/main')) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Specification-HTML
+        path: osgi.specs/generated/html/
+    - name: Upload Specification PDF
+      if: ${{ fromJSON(env.canonical) }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: OSGi-Specification-PDF
+        path: osgi.specs/generated/*.pdf
+
+  gh_pages:
+    if: ${{ (((github.repository == 'osgi/osgi') && (github.ref == 'refs/heads/main')) || (github.repository != 'osgi/osgi')) && (github.event_name != 'pull_request') }}
+    needs: spec
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Download Specification HTML
+      uses: actions/download-artifact@v2
+      with:
+        name: OSGi-Specification-HTML
+        path: osgi.specs/generated/html
+    - name: Publish Specification HTML
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: osgi.specs/generated/html
         force_orphan: true
-    - name: Upload Specification HTML
-      if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: OSGi-Specification-HTML
-        path: |
-          osgi.specs/generated/html/
-    - name: Upload Specification PDF
-      if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: OSGi-Specification-PDF
-        path: |
-          osgi.specs/generated/*.pdf
 
   tck:
     needs: build
