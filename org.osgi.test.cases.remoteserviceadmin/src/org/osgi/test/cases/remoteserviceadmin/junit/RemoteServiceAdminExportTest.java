@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import java.util.Arrays;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
@@ -730,6 +731,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * config type
 	 */
 	public void testExportConfigurationType() throws Exception {
+		Map<String,Object> properties = loadCTProperties();
+		String serverConfigType = (String) properties
+				.get("service.exported.configs");
 		// read supported configuration types from the DistributionProvider
 		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
@@ -737,12 +741,24 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
-
+		// also check that the desired serverConfigType is present in the RSA
+		// provided supportedConfigTypes
+		assertTrue(
+				Arrays.asList(supportedConfigTypes).contains(serverConfigType));
+		System.out.println("DSP supported config types:");
+		for (String c : supportedConfigTypes) {
+			System.out.println(
+					" " + c + (c.equals(serverConfigType) ? " - USED" : ""));
+		}
+		String[] serviceExportedConfigs = new String[] {
+				serverConfigType
+		};
 		// create and register a service
 		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+				supportedConfigTypes);
 
 		TestService service = new TestService();
 
@@ -764,12 +780,12 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
             properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+					serviceExportedConfigs);
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			assertNotNull(exportRegistrations);
@@ -820,7 +836,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 					// check for config type properties
 					assertNotNull(configtype);
-					assertEquals("service was exported with different config type than requested", supportedConfigTypes[0], configtype);
+					// Modified to look for config type through all available configs
+					assertTrue("service was exported with different config type than requested", Arrays.asList(supportedConfigTypes).contains(configtype));
 
 					for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext(); ) {
 						String key = keys.next();
@@ -869,6 +886,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * service again. It should fail and generate events.
 	 */
 	public void testForceExportFailure() throws Exception {
+		Map<String,Object> properties = loadCTProperties();
+		String serverConfigType = (String) properties
+				.get("service.exported.configs");
 		// read supported configuration types from the DistributionProvider
 		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
@@ -876,16 +896,24 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
+		// also check that the desired serverConfigType is present in the RSA
+		// provided supportedConfigTypes
+		assertTrue(
+				Arrays.asList(supportedConfigTypes).contains(serverConfigType));
 		System.out.println("DSP supported config types:");
 		for (String c : supportedConfigTypes) {
-			System.out.println(" " + c);
+			System.out.println(
+					" " + c + (c.equals(serverConfigType) ? " - USED" : ""));
 		}
-
+		String[] serviceExportedConfigs = new String[] {
+				serverConfigType
+		};
 		// create and register a service
 		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+				supportedConfigTypes);
 
 		TestService service = new TestService();
 
@@ -907,12 +935,12 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
             properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+					serviceExportedConfigs);
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			assertNotNull(exportRegistrations);
@@ -959,7 +987,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 				// check for config type properties
 				assertNotNull(configtype);
-				assertEquals("service was exported with different config type than requested", supportedConfigTypes[0], configtype);
+				assertTrue("service was exported with different config type than requested",Arrays.asList(supportedConfigTypes).contains(configtype));
 
 				for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext(); ) {
 					String key = keys.next();
@@ -1029,6 +1057,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * the spec.
 	 */
 	public void testExportConfigOverride() throws Exception {
+		Map<String,Object> properties = loadCTProperties();
+		String serverConfigType = (String) properties
+				.get("service.exported.configs");
 		// read supported configuration types from the DistributionProvider
 		ServiceReference< ? >[] dprefs = getContext().getServiceReferences(
 				(String) null, "(remote.configs.supported=*)");
@@ -1036,17 +1067,26 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		ServiceReference< ? > dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
 		assertTrue(supportedConfigTypes.length > 0);
+		// also check that the desired serverConfigType is present in the RSA
+		// provided supportedConfigTypes
+		assertTrue(
+				Arrays.asList(supportedConfigTypes).contains(serverConfigType));
 		System.out.println("DSP supported config types:");
 		for (String c : supportedConfigTypes) {
-			System.out.println(" " + c);
+			System.out.println(
+					" " + c + (c.equals(serverConfigType) ? " - USED" : ""));
 		}
+		String[] serviceExportedConfigs = new String[] {
+				serverConfigType
+		};
 
 		// create and register a service
 		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
-		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+				supportedConfigTypes);
 
 		TestService service = new TestService();
 
@@ -1058,11 +1098,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		assertNotNull(registration);
 
 		try {
-			Map<String, Object> properties = loadCTProperties();
 			properties.put("MyKey", "has been overridden"); // 122.10.10.1: change the case of the key
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
-			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS,
+					serviceExportedConfigs);
 			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
