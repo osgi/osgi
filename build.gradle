@@ -84,10 +84,6 @@ subprojects {
 	}
 }
 
-tasks.named("wrapper") {
-	jarFile = rootProject.file(".gradle-wrapper/gradle-wrapper.jar")
-}
-
 tasks.register("buildscriptDependencies") {
 	doLast {
 		println "bnd_version:   ${bnd_version}"
