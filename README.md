@@ -8,7 +8,7 @@ See [CONTRIBUTING](CONTRIBUTING.md) for information on checking out the repo and
 
 ## Draft Specifications
 
-The GitHub Actions build "Specification" job will publish the draft specifications into the repo's `gh-pages` branch. So you can  view the draft specifications for the `osgi/osgi` repo:
+The GitHub Actions build "GitHub Pages" job will publish the draft specifications into the repo's `gh-pages` branch. So you can view the draft specifications for the `osgi/osgi` repo:
 
 - [Core](https://osgi.github.io/osgi/core/)
 - [Compendium](https://osgi.github.io/osgi/cmpn/)
