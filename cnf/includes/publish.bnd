@@ -1,4 +1,4 @@
-# Common configuration for publishing
+# Common configuration for API publishing
 
 -baseline: *
 
@@ -6,6 +6,6 @@
 
 # Release to publishrepo only if the version does not match the baseline version
 baseline_jars: ${split;\\n|\\r\\n|\\r;${cat;${build}/ext/baseline.mvn}}
-baseline_jar: ${filter;${baseline_jars};\\Q${-groupid}:${def;spec.package;${p}}:\\E.*}
+baseline_jar: ${filter;${baseline_jars};\\Q${-groupid}:${def;bsn;${p}}:\\E.*}
 jar_version: ${if;${isfile;${target}/version.txt};${versionmask;===;${version_cleanup;${cat;${target}/version.txt}}}}
 -releaserepo.publish: ${if;${endswith;${baseline_jar};:${jar_version}};;${publishrepo}}

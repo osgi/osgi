@@ -1,4 +1,4 @@
--include : ${build}/eclipse/jdt.bnd
+-include : ${includes}/jdt.bnd
 
 -nobundles = true
 

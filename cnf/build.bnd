@@ -25,6 +25,7 @@ apachesnapshotrepo      = https://repository.apache.org/content/repositories/sna
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 workspacepluginpath     = ${build}/${bin}
+includes                = ${build}/includes
 
 -plugin.commands = \
     aQute.bnd.signing.JartoolSigner; \

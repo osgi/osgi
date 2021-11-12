@@ -1,0 +1,10 @@
+# Bnd instructions for TCK projects
+
+# Common configuration for TCK publishing
+-maven-release: pom;path=JAR,${if;${is;${env;GPG_PASSPHRASE;UNSET};UNSET};;sign\\;passphrase="${first;${env;GPG_PASSPHRASE};DEFAULT}"}
+
+# Release to publishrepo only if the version does not match the baseline version
+baseline_jars: ${split;\\n|\\r\\n|\\r;${cat;${build}/ext/baseline.mvn}}
+baseline_jar: ${filter;${baseline_jars};\\Q${-groupid}:${def;bsn;${p}}:\\E.*}
+jar_version: ${versionmask;===;${version_cleanup;${def;Bundle-Version}}}
+-releaserepo.publish: ${if;${endswith;${baseline_jar};:${jar_version}};;${publishrepo}}

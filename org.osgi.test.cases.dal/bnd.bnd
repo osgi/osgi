@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/cmpn.bnd
+-include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/cmpn.bnd
 
 Export-Package: org.osgi.test.support.step;-noimport:=true, \
  ${p}.step.*;-noimport:=true

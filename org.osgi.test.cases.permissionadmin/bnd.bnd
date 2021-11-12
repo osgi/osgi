@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit-platform.bnd, ${build}/core.bnd
+-include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/core.bnd
 
 Bundle-Category: osgi,test
 Export-Package: ${p}.service

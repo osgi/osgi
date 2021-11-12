@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd, ${build}/cmpn.bnd
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
 
 Export-Package:  \
 	org.osgi.service.http.*;-split-package:=first

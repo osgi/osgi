@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+-include: ${includes}/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
 -nobundles = true
 

@@ -1,4 +1,4 @@
--include            : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd
+-include            : ${includes}/jdt.bnd, ${.}/layout.bnd
 -dependson          : osgi.companion, ${build.tests}
 -resourceonly       : true
 

@@ -1,4 +1,4 @@
--include: ${build}/core.bnd
+-include: ${includes}/core.bnd
 
 Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Implementations
 
