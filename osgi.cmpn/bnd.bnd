@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/cmpn.bnd, ${build}/publish.bnd
+-include : ${includes}/jdt.bnd, ${.}/layout.bnd, ${includes}/cmpn.bnd, ${includes}/publish.bnd
 companion.code = true
 
 # Don't publish osgi.cmpn

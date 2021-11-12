@@ -1,4 +1,4 @@
-# Common configuration for publishing
+# Common configuration for API publishing
 
 -baseline: *
 

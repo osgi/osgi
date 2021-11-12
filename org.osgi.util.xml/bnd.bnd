@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd, ${build}/cmpn.bnd
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
 
 Export-Package: ${p}.*; -split-package:=first
 

@@ -1,5 +1,5 @@
 # Bnd instructions for companion code projects
--include: ${.}/publish.bnd
+-include: ${includes}/publish.bnd
 companion.code = true
 
 spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include : ${build}/eclipse/jdt.bnd, ${.}/layout.bnd, ${build}/annotation.bnd, ${build}/publish.bnd
+-include : ${includes}/jdt.bnd, ${.}/layout.bnd, ${includes}/annotation.bnd, ${includes}/publish.bnd
 companion.code = true
 
 Bundle-Description: \

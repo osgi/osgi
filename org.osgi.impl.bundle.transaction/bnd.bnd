@@ -1,6 +1,6 @@
 javac.profile=compact2
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
+-include: ${includes}/jdt.bnd, ${includes}/cmpn.bnd
 
 Bundle-Description				= OSGi Transaction reference implementation by ProSyst.
 

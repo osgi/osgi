@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd, ${build}/annotation.bnd
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/annotation.bnd
 
 Export-Package: ${p}.*; -split-package:=first
 

@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/osgi.tck.junit4-runpath.bnd, ${build}/core.bnd
+-include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit4-runpath.bnd, ${includes}/tck.bnd, ${includes}/core.bnd
 # The test case wipes out permissions for all bundles, so we need
 # to place the tester on the classpath rather than being in a bundle.
 

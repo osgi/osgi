@@ -1,4 +1,4 @@
--include: ${build}/cmpn.bnd
+-include: ${includes}/cmpn.bnd
 
 Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Implementations
 

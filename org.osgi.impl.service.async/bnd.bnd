@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${build}/cmpn.bnd
+-include: ${includes}/jdt.bnd, ${includes}/cmpn.bnd
 
 Bundle-Activator				= ${p}.Activator
 
