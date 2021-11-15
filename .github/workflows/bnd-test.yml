@@ -22,13 +22,21 @@ on:
   schedule:
     # Every Day at 3am
     - cron: '0 3 * * *'
+  push:
+    branches-ignore:
+    - 'dependabot/**'
+    paths:
+    - '.github/**/*bnd-test*'
+  pull_request:
+    paths:
+    - '.github/**/*bnd-test*'
 
 env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
   java_version: 8
-  ORG_GRADLE_PROJECT_bnd_version: 6.1.0-SNAPSHOT
+  ORG_GRADLE_PROJECT_bnd_version: 6.2.0-SNAPSHOT
 
 defaults:
   run:
