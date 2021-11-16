@@ -20,7 +20,7 @@ If your main JDK is higher than 8 you can set it on each run by adding `-Dorg.gr
 
 We use Gradle to build and the repository includes `gradlew`.
 
-- `./gradlew :build` - Builds and releases the artifacts into `cnf/generated/repo`.
+- `./gradlew :build :publish` - Builds and releases the artifacts into `cnf/generated/repo`.
 - `./gradlew :osgi.specs:specifications` - Builds the specifications into `osgi.specs/generated`.
 
 We use [GitHub Actions](https://github.com/osgi/osgi/actions?query=workflow%3A%22CI%20Build%22) for continuous integration and the repo includes a `.github/workflows/cibuild.yml` file to build via GitHub Actions.
