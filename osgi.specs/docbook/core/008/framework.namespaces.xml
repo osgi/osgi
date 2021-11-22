@@ -1457,27 +1457,4 @@ Bundle B:
       xlink:href="https://docs.osgi.org/reference/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added '*' (any) attribute description to <xref
-        linkend="framework.namespaces-wiring.bundle.namespace"/>, <xref
-        linkend="framework.namespaces-wiring.host.namespace"/>, and <xref
-        linkend="framework.namespaces-identity.namespace"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed deprecated <code>bootclasspath</code> extension type in
-        <xref linkend="framework.namespaces.osgi.wiring.host"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added new <code>tags</code> attribute to <xref
-        linkend="framework.namespaces-identity.namespace"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

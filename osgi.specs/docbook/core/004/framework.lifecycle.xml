@@ -4016,20 +4016,4 @@ D: Export-Package: s</programlisting>
       xlink:href="http://www.ietf.org/rfc/rfc4122.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>References to deprecated launching property
-        <code>org.osgi.supports.bootclasspath.extension</code> removed.</para>
-      </listitem>
-
-      <listitem>
-        <para>References to deprecated FrameworkEvent type
-        <code>STOPPED_BOOTCLASSPATH_MODIFIED</code> removed.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

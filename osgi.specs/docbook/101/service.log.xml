@@ -1495,37 +1495,4 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       Service Specification</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The list of Bundle Event types in <xref
-        linkend="service.log-table.bundle.event.log.entries"/> has been
-        updated to include additional event types.</para>
-      </listitem>
-
-      <listitem>
-        <para>The names of the Loggers used for mapping framework, bundle and
-        service events into the log have been modified to include the bundle
-        symbolic name of the bundle associated with the event. This change
-        allows finer control over the logging. See <xref
-        linkend="service.log-mapping.events"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>The names of the Loggers used for the deprecated LogService log
-        methods have been modified to include the bundle symbolic name of the
-        bundle which obtained the LogService object. This change allows finer
-        control over the logging. See <xref
-        linkend="service.log-log.service"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>The Log Stream Provider Service was moved out of this chapter
-        into chapter 158 of the Compendium specification.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
