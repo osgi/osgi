@@ -900,31 +900,4 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The base Java language level version is now Java 8.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.condition"
-        xrefstyle="template:%t"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.connect"
-        xrefstyle="template:%t"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Moved <xref linkend="service.log" xrefstyle="template:%t"/> from
-        the Compendium specification. Log Stream Provider Service was
-        separated out of the Log Service specification into a new chapter in
-        the Compendium specification.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

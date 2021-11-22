@@ -550,22 +550,4 @@ ServiceReferenceDTO referenceDTO = reference.adapt(ServiceReferenceDTO.class);</
       xlink:href="https://en.wikipedia.org/wiki/Data_transfer_object"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Updated <xref linkend="framework.dto-obtaining-dtos"/> to
-        reflect that ServiceReference can now be adapted to
-        ServiceReferenceDTO.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that the allowed key types for Map values in DTOs are
-        limited to primitive wrapper classes, <code>String</code>, enums, and
-        <code>Version</code>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

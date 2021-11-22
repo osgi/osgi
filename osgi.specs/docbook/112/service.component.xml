@@ -6375,38 +6375,4 @@ public class MyComponent implements AcmeService {}</programlisting>
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for <xref
-        linkend="org.osgi.service.component.AnyService"
-        xrefstyle="hyperlink"/>. See <xref
-        linkend="service.component-anyservice"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for satisfying conditions using the Condition
-        Service Specification. See <xref
-        linkend="service.component-satisfying.condition"/> and <xref
-        linkend="service.component-locating.true.condition"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for use of Optional to hold unary references for
-        field and constructor injection. This is primarily for optional (0..1)
-        cardinality but can also be used with mandatory (1..1)
-        cardinality.</para>
-      </listitem>
-
-      <listitem>
-        <para>Component properties from <code>property</code> and
-        <code>properties</code> elements take precedence over the
-        <code>target</code> attributes of <code>reference</code> elements. See
-        <xref linkend="service.component-component.properties"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

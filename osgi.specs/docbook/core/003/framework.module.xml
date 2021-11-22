@@ -5794,29 +5794,4 @@ URL(String protocol, String host, String file)</programlisting>
       xlink:href="https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified that the system bundle can export <code>java.*</code>
-        packages. See <xref
-        linkend="framework.module.parentclassloader"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added new <xref
-        linkend="org.osgi.framework.FrameworkUtil.getBundle-ClassLoader-"/>
-        method. See <xref
-        linkend="framework.module-finding-a-bundle"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed reference to deprecated <code>bootclasspath</code>
-        extension type in <xref
-        linkend="framework.module.fragmenthost"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

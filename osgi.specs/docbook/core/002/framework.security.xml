@@ -1078,16 +1078,4 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added Service Permission <code>GET</code> for
-        <code>org.osgi.service.condition.Condition</code> to the implied permissions.
-        See <xref linkend="framework.security.impliedpermissions"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

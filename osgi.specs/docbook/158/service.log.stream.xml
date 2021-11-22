@@ -170,15 +170,4 @@
       Specification</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>This chapter was created by moving the Log Stream Provider
-        Service out of the Log Service chapter.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
