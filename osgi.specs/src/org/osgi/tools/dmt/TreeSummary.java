@@ -18,6 +18,8 @@
 
 package org.osgi.tools.dmt;
 
+import static java.util.stream.Collectors.toList;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -26,8 +28,11 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
 import org.osgi.dmt.ddf.AddableMAP;
 import org.osgi.dmt.ddf.LIST;
 import org.osgi.dmt.ddf.MAP;
@@ -206,9 +211,14 @@ public class TreeSummary {
 																		// dmtType
 																		// +
 																		// "}";
-													Method ms[] = c.getDeclaredMethods();
+													List<Method> ms = Arrays
+															.stream(c
+																	.getDeclaredMethods())
+															.sorted(Comparator
+																	.comparing(
+																			Method::getName))
+															.collect(toList());
 													for (Method m : ms) {
-
 														XNode child = new XNode(this, m.getName(), m.getGenericReturnType());
 														Scope s = m.getAnnotation(Scope.class);
 														if (s != null)
@@ -283,7 +293,7 @@ public class TreeSummary {
 	 * @param args Unused.
 	 * @throws Exception
 	 */
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
 		Class<?> root = Class.forName(args[0]);
 		XNode n = new XNode(null, root.getSimpleName(), root);
 		n.print("", true);
