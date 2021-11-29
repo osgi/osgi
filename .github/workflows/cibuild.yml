@@ -38,6 +38,7 @@ env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
+    -Dmaven.repo.local=cnf/generated/m2
   canonical: ${{ (github.repository == 'osgi/osgi') && ((github.ref == 'refs/heads/main') || (github.ref == 'refs/heads/release')) && (github.event_name != 'pull_request') }}
   java_version: 8
 
@@ -73,8 +74,10 @@ jobs:
         gpg-passphrase: GPG_PASSPHRASE
     - name: Build
       id: build
-      run: |
-        ./.github/scripts/build.sh
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: --continue :build
     - name: Upload TCK
       uses: actions/upload-artifact@v2
       with:
@@ -93,8 +96,10 @@ jobs:
     - name: Publish
       id: publish
       if: ${{ fromJSON(env.canonical) }}
-      run: |
-        ./.github/scripts/publish.sh
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: :publish
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         OSSRH_RELEASE: ${{ env.OSSRH_STAGINGREPOSITORY_org_osgi }}
@@ -123,8 +128,10 @@ jobs:
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
-      run: |
-        ./.github/scripts/spec.sh
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
       if: ${{ (fromJSON(env.canonical) && (github.ref == 'refs/heads/main')) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
       uses: actions/upload-artifact@v2
