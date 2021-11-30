@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: Apache-2.0 
+# SPDX-License-Identifier: Apache-2.0
 #*******************************************************************************
 
 name: Test Bnd
@@ -35,6 +35,7 @@ env:
   LC_ALL: en_US.UTF-8
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
+    -Dmaven.repo.local=cnf/generated/m2
   java_version: 8
   ORG_GRADLE_PROJECT_bnd_version: 6.2.0-SNAPSHOT
 
@@ -59,8 +60,10 @@ jobs:
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
-      run: |
-        ./.github/scripts/build.sh :osgi.specs:specifications :osgi.tck:tck.core :buildscriptDependencies
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: --continue :build :osgi.specs:specifications :osgi.tck:tck.core :buildscriptDependencies
     - name: Upload TCK Test Reports on failure
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
