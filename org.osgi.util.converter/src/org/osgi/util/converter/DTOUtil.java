@@ -18,44 +18,52 @@
 
 package org.osgi.util.converter;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * @author $Id$
  */
 class DTOUtil {
+	private static final Method[] OBJECT_CLASS_METHODS = Object.class
+			.getMethods();
+
 	private DTOUtil() {
 		// Do not instantiate. This is a utility class.
 	}
 
 	static boolean isDTOType(Class< ? > cls, boolean ignorePublicNoArgsCtor) {
 		if (!ignorePublicNoArgsCtor) {
-			try {
-				cls.getConstructor();
-			} catch (NoSuchMethodException | SecurityException e) {
-				// No public zero-arg constructor, not a DTO
+			boolean hasPublicNoargsCtor = false;
+			for (Constructor< ? > ctor : cls.getConstructors()) {
+				if (ctor.getParameterCount() == 0) {
+					hasPublicNoargsCtor = true;
+					break;
+				}
+			}
+			if (!hasPublicNoargsCtor) {
 				return false;
 			}
 		}
 
 		for (Method m : cls.getMethods()) {
-			try {
-				Object.class.getMethod(m.getName(), m.getParameterTypes());
-			} catch (NoSuchMethodException snme) {
-				// Not a method defined by Object.class (or override of such
-				// method)
+			boolean objectClassMethod = false;
+			for (Method om : OBJECT_CLASS_METHODS) {
+				if (om.getName().equals(m.getName())) {
+					if (Arrays.equals(om.getParameterTypes(),
+							m.getParameterTypes())) {
+						objectClassMethod = true;
+						break;
+					}
+				}
+			}
+			if (!objectClassMethod) {
 				return false;
 			}
 		}
-
-		/*
-		 * for (Field f : cls.getDeclaredFields()) { int modifiers =
-		 * f.getModifiers(); if (Modifier.isStatic(modifiers)) { // ignore
-		 * static fields continue; } if (!Modifier.isPublic(modifiers)) { return
-		 * false; } }
-		 */
 
 		boolean foundField = false;
 		for (Field f : cls.getFields()) {
