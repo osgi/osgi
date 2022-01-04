@@ -37,30 +37,20 @@ class DTOUtil {
 
 	static boolean isDTOType(Class< ? > cls, boolean ignorePublicNoArgsCtor) {
 		if (!ignorePublicNoArgsCtor) {
-			boolean hasPublicNoargsCtor = false;
-			for (Constructor< ? > ctor : cls.getConstructors()) {
-				if (ctor.getParameterCount() == 0) {
-					hasPublicNoargsCtor = true;
-					break;
-				}
-			}
-			if (!hasPublicNoargsCtor) {
+			if (Arrays.stream(cls.getConstructors())
+					.noneMatch(ctor -> ctor.getParameterCount() == 0)) {
+				// No public zero-arg constructor, not a DTO
 				return false;
 			}
 		}
 
 		for (Method m : cls.getMethods()) {
-			boolean objectClassMethod = false;
-			for (Method om : OBJECT_CLASS_METHODS) {
-				if (om.getName().equals(m.getName())) {
-					if (Arrays.equals(om.getParameterTypes(),
-							m.getParameterTypes())) {
-						objectClassMethod = true;
-						break;
-					}
-				}
-			}
-			if (!objectClassMethod) {
+			if (Arrays.stream(OBJECT_CLASS_METHODS)
+					.noneMatch(om -> om.getName().equals(m.getName())
+							&& Arrays.equals(om.getParameterTypes(),
+									m.getParameterTypes()))) {
+				// Not a method defined by Object.class (or override of such
+				// method)
 				return false;
 			}
 		}
