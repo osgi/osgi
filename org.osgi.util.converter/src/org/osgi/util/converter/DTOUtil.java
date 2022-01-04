@@ -18,44 +18,42 @@
 
 package org.osgi.util.converter;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * @author $Id$
  */
 class DTOUtil {
+	private static final Method[] OBJECT_CLASS_METHODS = Object.class
+			.getMethods();
+
 	private DTOUtil() {
 		// Do not instantiate. This is a utility class.
 	}
 
 	static boolean isDTOType(Class< ? > cls, boolean ignorePublicNoArgsCtor) {
 		if (!ignorePublicNoArgsCtor) {
-			try {
-				cls.getConstructor();
-			} catch (NoSuchMethodException | SecurityException e) {
+			if (Arrays.stream(cls.getConstructors())
+					.noneMatch(ctor -> ctor.getParameterCount() == 0)) {
 				// No public zero-arg constructor, not a DTO
 				return false;
 			}
 		}
 
 		for (Method m : cls.getMethods()) {
-			try {
-				Object.class.getMethod(m.getName(), m.getParameterTypes());
-			} catch (NoSuchMethodException snme) {
+			if (Arrays.stream(OBJECT_CLASS_METHODS)
+					.noneMatch(om -> om.getName().equals(m.getName())
+							&& Arrays.equals(om.getParameterTypes(),
+									m.getParameterTypes()))) {
 				// Not a method defined by Object.class (or override of such
 				// method)
 				return false;
 			}
 		}
-
-		/*
-		 * for (Field f : cls.getDeclaredFields()) { int modifiers =
-		 * f.getModifiers(); if (Modifier.isStatic(modifiers)) { // ignore
-		 * static fields continue; } if (!Modifier.isPublic(modifiers)) { return
-		 * false; } }
-		 */
 
 		boolean foundField = false;
 		for (Field f : cls.getFields()) {
