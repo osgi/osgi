@@ -512,26 +512,30 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 				String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
-				if (name != null) {
+				if ("JavaServlet".equals(name)) {
 					Collection<Version> versions = Versions.plus(attributes.get(
 							ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
-					if (name.equals("JavaServlet") && !versions.isEmpty()
-							&& versions.iterator()
-							.next()
-							.equals(new Version("3.1.0"))) {
-						Map<String, String> directives = capability.getDirectives();
+					for (Version v : versions) {
+						if (v.equals(new Version("3.1.0"))) {
+							Map<String,String> directives = capability
+									.getDirectives();
 
-						String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
+							String uses = directives
+									.get(Namespace.CAPABILITY_USES_DIRECTIVE);
 
-						List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
+							List<String> packages = Arrays
+									.asList(uses.split("\\s*,\\s*"));
 
-						assertTrue(packages.contains("javax.servlet"));
-						assertTrue(packages.contains("javax.servlet.annotation"));
-						assertTrue(packages.contains("javax.servlet.descriptor"));
-						assertTrue(packages.contains("javax.servlet.http"));
+							assertTrue(packages.contains("javax.servlet"));
+							assertTrue(packages
+									.contains("javax.servlet.annotation"));
+							assertTrue(packages
+									.contains("javax.servlet.descriptor"));
+							assertTrue(packages.contains("javax.servlet.http"));
 
-						foundContract = true;
+							foundContract = true;
+						}
 					}
 				}
 			}
@@ -552,26 +556,31 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 					String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
-					if (name != null) {
+					if ("JavaServlet".equals(name)) {
 						Collection<Version> versions = Versions.plus(attributes
 								.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
-						if (name.equals("JavaServlet") && !versions.isEmpty()
-								&& versions.iterator()
-										.next()
-										.equals(new Version("3.1.0"))) {
-							Map<String, String> directives = capability.getDirectives();
+						for (Version v : versions) {
+							if (v.equals(new Version("3.1.0"))) {
+								Map<String,String> directives = capability
+										.getDirectives();
 
-							String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
+								String uses = directives.get(
+										Namespace.CAPABILITY_USES_DIRECTIVE);
 
-							List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
+								List<String> packages = Arrays
+										.asList(uses.split("\\s*,\\s*"));
 
-							assertTrue(packages.contains("javax.servlet"));
-							assertTrue(packages.contains("javax.servlet.annotation"));
-							assertTrue(packages.contains("javax.servlet.descriptor"));
-							assertTrue(packages.contains("javax.servlet.http"));
+								assertTrue(packages.contains("javax.servlet"));
+								assertTrue(packages
+										.contains("javax.servlet.annotation"));
+								assertTrue(packages
+										.contains("javax.servlet.descriptor"));
+								assertTrue(packages
+										.contains("javax.servlet.http"));
 
-							foundContract = true;
+								foundContract = true;
+							}
 						}
 					}
 				}
