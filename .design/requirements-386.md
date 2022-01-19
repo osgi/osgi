@@ -53,3 +53,4 @@ Bill has a Feature that contains a custom extension to initialize the database f
 * FL-0070: The solution MUST provide a predictable mechanism to merge multiple Features, taking into account that bundles, configurations and custom extensions each have different requirements on how they are merged.
 * FL-0080: The solution MUST provide a mechanism to resolve merge conflicts.
 * FL-0090: The solution MUST provide a well defined mechanism for handling failures when merging features or launching them.
+* FL-0100: The solution MUST provide a well defined mechanism where the currently launched features can be inspected.
