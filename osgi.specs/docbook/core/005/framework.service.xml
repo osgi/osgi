@@ -678,8 +678,9 @@
       ranking order is in descending <code>service.ranking</code> numeric
       order where ties give a preference to the earlier registrant.</para>
 
-      <para>The ranking order is the reverse of the natural ordering of a
-      <code>ServiceReference</code> object.</para>
+      <para>The ranking order is the reverse of the <link
+      linkend="org.osgi.framework.ServiceReference.compareTo-Object-">natural
+      ordering</link> of a <code>ServiceReference</code> object.</para>
 
       <para>The purpose of the ranking order is to allow:</para>
 
@@ -735,14 +736,10 @@
           <code>ServiceReference</code> object to a service object that
           implements, and was registered under, the name of the specified
           service interface. If multiple such service objects exist, a
-          <code>ServiceReference</code> object to the service object with the
-          highest <xref linkend="org.osgi.framework.Constants.SERVICE_RANKING"
-          xrefstyle="hyperlink"/> is returned. If there is a tie in ranking, a
-          <code>ServiceReference</code> object to the service object with the
-          lowest <xref linkend="org.osgi.framework.Constants.SERVICE_ID"
-          xrefstyle="hyperlink"/> (the service object that was registered
-          first) is returned. If no matching service objects are registered
-          then <code>null</code> must be returned.</para>
+          <code>ServiceReference</code> object to the service that is first in
+          <link linkend="framework.service.servicerankingorder">ranking
+          order</link> is returned. If no matching service objects are
+          registered then <code>null</code> must be returned.</para>
         </listitem>
 
         <listitem>
@@ -772,7 +769,9 @@
           xrefstyle="hyperlink"/> method and an empty collection must be
           returned by the <xref
           linkend="org.osgi.framework.BundleContext.getServiceReferences-Class-String-"
-          xrefstyle="hyperlink"/> method.</para>
+          xrefstyle="hyperlink"/> method. There is no guarantee that the
+          <code>ServiceReference</code> objects in the array or collection
+          will be in any specific order.</para>
         </listitem>
       </itemizedlist>
 

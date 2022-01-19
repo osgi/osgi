@@ -51,9 +51,9 @@ public enum CollectionType {
 	 * services.
 	 * <p>
 	 * The Maps must implement {@code Comparable} with the {@code compareTo}
-	 * method comparing service property maps using the same ordering as
-	 * {@code ServiceReference.compareTo} based upon service ranking and service
-	 * id.
+	 * method comparing service property maps using an ordering which is the
+	 * same as the natural ordering of {@code ServiceReference}s as specified in
+	 * {@code ServiceReference.compareTo}.
 	 */
 	PROPERTIES("properties"),
 
@@ -64,9 +64,10 @@ public enum CollectionType {
 	 * {@link #PROPERTIES}, and whose value is the bound service object.
 	 * <p>
 	 * The Map.Entries must implement {@code Comparable} with the
-	 * {@code compareTo} method comparing service property maps using the same
-	 * ordering as {@code ServiceReference.compareTo} based upon service ranking
-	 * and service id.
+	 * {@code compareTo} method comparing service property maps using an
+	 * ordering which is the same as the natural ordering of
+	 * {@code ServiceReference}s as specified in
+	 * {@code ServiceReference.compareTo}.
 	 */
 	TUPLE("tuple");
 

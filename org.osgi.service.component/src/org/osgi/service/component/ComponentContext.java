@@ -49,22 +49,19 @@ public interface ComponentContext {
 
 	/**
 	 * Returns the service object for the specified reference name.
-	 * 
 	 * <p>
 	 * If the cardinality of the reference is {@code 0..n} or {@code 1..n} and
-	 * multiple services are bound to the reference, the service with the
-	 * highest ranking (as specified in its {@code Constants.SERVICE_RANKING}
-	 * property) is returned. If there is a tie in ranking, the service with the
-	 * lowest service id (as specified in its {@code Constants.SERVICE_ID}
-	 * property); that is, the service that was registered first is returned.
+	 * multiple services are bound to the reference, the service whose
+	 * {@code ServiceReference} is first in the ranking order is returned. See
+	 * {@code ServiceReference.compareTo(Object)}.
 	 * 
 	 * @param name The name of a reference as specified in a {@code reference}
-	 *        element in this component's description.
+	 *            element in this component's description.
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the reference cardinality is {@code 0..1} or {@code 0..n} and no
 	 *         bound service is available.
 	 * @throws ComponentException If Service Component Runtime catches an
-	 *         exception while activating the bound service.
+	 *             exception while activating the bound service.
 	 */
 	public <S> S locateService(String name);
 
@@ -90,14 +87,16 @@ public interface ComponentContext {
 	 * Returns the service objects for the specified reference name.
 	 * 
 	 * @param name The name of a reference as specified in a {@code reference}
-	 *        element in this component's description.
+	 *            element in this component's description.
 	 * @return An array of service objects for the referenced service or
 	 *         {@code null} if the reference cardinality is {@code 0..1} or
 	 *         {@code 0..n} and no bound service is available. If the reference
 	 *         cardinality is {@code 0..1} or {@code 1..1} and a bound service
-	 *         is available, the array will have exactly one element.
+	 *         is available, the array will have exactly one element. There is
+	 *         no guarantee that the service objects in the array will be in any
+	 *         specific order.
 	 * @throws ComponentException If Service Component Runtime catches an
-	 *         exception while activating a bound service.
+	 *             exception while activating a bound service.
 	 */
 	public Object[] locateServices(String name);
 

@@ -25,7 +25,7 @@
  * @author $Id$
  */
 
-@Version(COMPONENT_SPECIFICATION_VERSION)
+@Version(COMPONENT_SPECIFICATION_VERSION + ".1")
 package org.osgi.service.component.annotations;
 
 import static org.osgi.service.component.ComponentConstants.COMPONENT_SPECIFICATION_VERSION;

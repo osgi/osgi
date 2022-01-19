@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="52" revision="$Id$"
          version="5.0" xml:id="service.url"
          xmlns="http://docbook.org/ns/docbook"
@@ -353,13 +352,11 @@
       <para>Once the proxy is created, it must track the service registry for
       registrations and unregistrations of services matching its associated
       scheme. The proxy must be associated with the service that matches the
-      scheme and has the highest value for the
-      <code>org.osgi.framework.Constants.SERVICE_RANKING</code> service
-      registration property (see <xref
-      linkend="framework.service.serviceproperties"/> ) at any moment in time.
-      If a proxy is associated with a URL Stream Handler Service, it must
-      change the associated handler to a newly registered service when that
-      service has a higher value for the ranking property.</para>
+      scheme and has the highest ranking (first in <link
+      linkend="framework.service.servicerankingorder">ranking order</link>) at
+      any moment in time. If a proxy is associated with a URL Stream Handler
+      Service, it must change the associated handler to a newly registered
+      service when that service has a higher ranking.</para>
 
       <para>The proxy object must forward all method requests to the
       associated URL Stream Handler Service until this service object becomes
@@ -538,8 +535,8 @@ com.acme.url.application.zip</programlisting></para>
       implementation classes, the <code>AbstractURLStreamHandlerService</code>
       has been provided. Apart from making the relevant methods public, the
       <code>AbstractURLStreamHandlerService</code> stores the
-      <code>URLStreamHandlerSetter</code> object in a private variable. To make the
-      <code>setURL</code> method work properly, it overrides the
+      <code>URLStreamHandlerSetter</code> object in a private variable. To
+      make the <code>setURL</code> method work properly, it overrides the
       <code>setURL</code> method to invoke the <code>setURL</code> method on
       the saved <code>URLStreamHandlerSetter</code> object rather then the
       <code>URLStreamHandler.setURL</code> method. This means that a subclass

@@ -26,10 +26,9 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Services registered as a {@code Preprocessor} using a whiteboard pattern are
  * executed for every request before the dispatching is performed.
  * <p>
- * If there are several services of this type, they are run in order of their
- * service ranking, the one with the highest ranking is used first. In the case
- * of a service ranking tie, the service with the lowest service id is processed
- * first.
+ * If there are several services of this type, they are run in
+ * {@link org.osgi.framework.ServiceReference#compareTo(Object) ranking order},
+ * the one with the highest ranking is used first.
  * <p>
  * The preprocessor is handled in the same way as filters. When a preprocessor
  * is put into service {@link Filter#init(javax.servlet.FilterConfig)} is

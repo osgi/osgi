@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="55" revision="$Id$"
          version="5.0" xml:id="framework.servicehooks"
          xmlns="http://docbook.org/ns/docbook"
@@ -531,14 +530,14 @@
     linkend="org.osgi.framework.hooks.service.EventListenerHook"
     xrefstyle="hyperlink"/> object as a service with the framework. The
     framework must then send a service events to all the registered hooks. The
-    calling order of the hooks is defined by the reversed
-    <code>compareTo</code> ordering of their Service Reference objects. That
-    is, the service with the highest ranking number is called first. Event
-    Listener Hooks are called <emphasis>after</emphasis> the event is
-    generated but <emphasis>before</emphasis> they are filtered by the
-    optional filter expressions of the service listeners. Before the return,
-    the handler can remove bundles from the given list. This allows an Event
-    Listener Hook to hide service events for specific bundles.</para>
+    calling order of the hooks is defined by ranking order, see <xref
+    linkend="framework.service.servicerankingorder"/>. That is, the service
+    with the highest ranking is called first. Event Listener Hooks are called
+    <emphasis>after</emphasis> the event is generated but
+    <emphasis>before</emphasis> they are filtered by the optional filter
+    expressions of the service listeners. Before the return, the handler can
+    remove bundles from the given list. This allows an Event Listener Hook to
+    hide service events for specific bundles.</para>
 
     <para>The model is depicted in the <xref linkend="i1664951"/>. A target
     bundle listens for service events but these events can be filtered by the
@@ -630,10 +629,10 @@
     registry with the <code>getServiceReference</code> or
     <code>getServiceReferences</code> methods. A registered Find Hook service
     gets a chance to inspect the returned set of service references and can
-    optionally shrink the set of returned services. The order in which the
-    find hooks are called is the reverse <code>compareTo</code> ordering of
-    their Service References. That is, the service with the highest ranking
-    number must be called first.</para>
+    optionally shrink the set of returned services. The calling order of the
+    hooks is defined by ranking order, see <xref
+    linkend="framework.service.servicerankingorder"/>. That is, the service
+    with the highest ranking number must be called first.</para>
 
     <itemizedlist>
       <listitem>

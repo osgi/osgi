@@ -544,15 +544,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Returns a {@code ServiceReference} for one of the services being tracked
 	 * by this {@code ServiceTracker}.
-	 * 
 	 * <p>
-	 * If multiple services are being tracked, the service with the highest
-	 * ranking (as specified in its {@code service.ranking} property) is
-	 * returned. If there is a tie in ranking, the service with the lowest
-	 * service id (as specified in its {@code service.id} property); that is,
-	 * the service that was registered first is returned. This is the same
-	 * algorithm used by {@code BundleContext.getServiceReference}.
-	 * 
+	 * If multiple services are being tracked, the service that is first in the
+	 * {@link ServiceReference#compareTo(Object) ranking order} is returned.
+	 * This is the same algorithm used by
+	 * {@code BundleContext.getServiceReference}.
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of references for the tracked services.
@@ -775,9 +771,8 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Return a {@code SortedMap} of the {@code ServiceReference}s and service
 	 * objects for all services being tracked by this {@code ServiceTracker}.
-	 * The map is sorted in reverse natural order of {@code ServiceReference}.
-	 * That is, the first entry is the service with the highest ranking and the
-	 * lowest service id.
+	 * The map is sorted in {@link ServiceReference#compareTo(Object) ranking
+	 * order}.
 	 * 
 	 * @return A {@code SortedMap} with the {@code ServiceReference}s and
 	 *         service objects for all services being tracked by this

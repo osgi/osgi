@@ -248,12 +248,11 @@
             <code>default</code>. To override the default, register a custom
             <code>ServletContextHelper</code> service with the name
             <code>default</code>. If multiple Servlet Context Helper services
-            are registered with the same name, the one with the highest
-            Service Ranking is used. In case of a tie, the service with the
-            lowest service ID wins. In other words, the normal OSGi service
-            ranking applies.</para> <para>Registrations with an invalid or
-            unspecified name are not used and reflected in the failure DTOs.
-            See <xref
+            are registered with the same name, the one that is first in
+            ranking order, as specified in
+            <code>ServiceReference.compareTo</code>, is
+            used.</para><para>Registrations with an invalid or unspecified
+            name are not used and reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -303,10 +302,10 @@
         </listitem>
 
         <listitem>
-          <para>In the case of two Servlet Context Helpers with the same path,
-          the service with the highest ranking is searched first for a match.
-          In the case of a tie, the lowest service ID is searched
-          first.</para>
+          <para>In the case of multiple Servlet Context Helper services with
+          the same path, the services are searched in ranking order, as
+          specified in <code>ServiceReference.compareTo</code>, for a
+          match.</para>
         </listitem>
       </orderedlist></para>
 
@@ -324,7 +323,7 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
           <para><code>/foo</code> context looking for a pattern to match
           <code>/bar/someServlet</code></para>
         </listitem>
-      </orderedlist> Note that whole path segments must match. Therefore the
+      </orderedlist>Note that whole path segments must match. Therefore the
     following request can only be handled by the Servlet Context Helper
     registered under the /foo path:
     <code>http://localhost/foo/bars/someOtherServlet</code>.</para>
@@ -335,7 +334,7 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
     linkend="service.http.whiteboard.common.properties"/>.</para>
 
     <para>If a Servlet Context Helper can not be used, for example because it
-    is shadowed by another Servlet Context Helper service with the same name,
+    is shadowed by another Servlet Context Helper service with the same name
     but with a higher ranking, this is reflected in the <xref
     linkend="org.osgi.service.http.runtime.dto.FailedServletContextDTO"
     xrefstyle="hyperlink"/>. Similarly, if an alternative <code>default</code>
@@ -700,8 +699,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <code>osgi.http.whiteboard.servlet.name</code> property, if
               associated with this Servlet Context Helper. If multiple
               servlets have the same name and are associated with this Servlet
-              Context Helper then the highest ranked servlet is used. In the
-              case of a tie, the one with the lowest service ID is
+              Context Helper, then the servlet that is first in ranking order,
+              as specified in <code>ServiceReference.compareTo</code>, is
               used.</para></entry>
             </row>
 
@@ -1102,11 +1101,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para><code>Servlet</code> and resource service registrations associated
     with a single Servlet Context share the same namespace. In case of
-    identical registration patterns, service ranking rules are used to select
-    the service handling a request. That is, Whiteboard servlets that have
-    patterns shadowed by other Whiteboard services associated with the
-    <emphasis>same</emphasis> Servlet Context are represented in the failure
-    DTOs.</para>
+    identical registration patterns, the service that is first in ranking
+    order, as specified in <code>ServiceReference.compareTo</code>, is
+    selected as the service handling a request. That is, Whiteboard servlets
+    that have patterns shadowed by other Whiteboard services associated with
+    the <emphasis>same</emphasis> Servlet Context are represented in the
+    failure DTOs.</para>
 
     <para>The above rules can cause servlets that are already bound becoming
     unbound if a better match arrives. This ensures a predictable end result
@@ -1493,7 +1493,8 @@ public class MyErrorServlet extends HttpServlet {
       <para>The example servlet is invoked in case of a <code>500</code> error
       code, or if an <code>IOException</code> (or subclass) occurs. If there
       is more than one error page registered for the same exception or error
-      code, service ranking rules are used to select the handling
+      code, the service that is first in ranking order, as specified in
+      <code>ServiceReference.compareTo</code>, is selected as the handling
       servlet.</para>
     </section>
 
@@ -1727,13 +1728,12 @@ public class AsyncServlet extends HttpServlet {
     services.</para>
 
     <para>Multiple servlet filters can process the same servlet
-    request/response. If more than one <code>Filter</code> matches, the order
-    in which they are processed is governed by their service ranking. The
-    servlet filter with the highest ranking is processed first in the filter
-    chain, while the servlet filter with the lowest ranking is processed last,
-    before the <code>Servlet.service</code> method is called. In the case of a
-    service ranking tie, the servlet filter with the lowest
-    <code>service.id</code> is processed first. After the servlet completes
+    request/response. If more than one <code>Filter</code> matches, they are
+    processed in ranking order, as specified in
+    <code>ServiceReference.compareTo</code>. The servlet filter with the
+    highest ranking is processed first in the filter chain, while the servlet
+    filter with the lowest ranking is processed last, before the
+    <code>Servlet.service</code> method is called. After the servlet completes
     its <code>service</code> method the filter chain is unwound in reverse
     order.</para>
 
@@ -2064,8 +2064,8 @@ public class SomeResourceService {}</programlisting>
     Helper.</para>
 
     <para>Multiple listeners of the same type registered with a given Servlet
-    Context Helper are invoked in sequence, service ranking rules are used to
-    determine the order.</para>
+    Context Helper are invoked in ranking order, as specified in
+    <code>ServiceReference.compareTo</code>.</para>
 
     <table pgwide="1">
       <title>Service properties for listener services.</title>
