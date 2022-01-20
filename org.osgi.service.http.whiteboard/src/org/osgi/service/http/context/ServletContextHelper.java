@@ -34,30 +34,27 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * Helper service for a servlet context used by a Http Whiteboard implementation
  * to serve HTTP requests.
- *
  * <p>
  * This service defines methods that the Http Whiteboard implementation may call
  * to get information for a request when dealing with whiteboard services.
- * 
  * <p>
  * Each {@code ServletContextHelper} is registered with a
  * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
  * "osgi.http.whiteboard.context.name"} service property containing a name to
  * reference by servlets, servlet filters, resources, and listeners. If there is
  * more than one {@code ServletContextHelper} registered with the same context
- * name, the one with the highest service ranking is active, the others are
- * inactive.
- * 
+ * name, the one that is first in the
+ * {@link org.osgi.framework.ServiceReference#compareTo(Object) ranking order}
+ * is active, the others are inactive.
  * <p>
  * A context is registered with the
  * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
  * "osgi.http.whiteboard.context.path"} service property to define a path under
  * which all services registered with this context are reachable. If there is
  * more than one {@code ServletContextHelper} registered with the same path,
- * each duplicate context path is searched by service ranking order according to
- * {@link org.osgi.framework.ServiceReference#compareTo(Object)} until a
- * matching servlet or resource is found.
- * 
+ * each duplicate context path is searched in
+ * {@link org.osgi.framework.ServiceReference#compareTo(Object) ranking order}
+ * until a matching servlet or resource is found.
  * <p>
  * Servlets, servlet filters, resources, and listeners services may be
  * associated with a {@code ServletContextHelper} service with the
@@ -66,23 +63,21 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * {@code ServletContextHelper} service does not exist or is currently not
  * active, the whiteboard services for that {@code ServletContextHelper} are not
  * active either.
- * 
  * <p>
  * If no {@code ServletContextHelper} service is associated, that is no
  * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
  * "osgi.http.whiteboard.context.select"} service property is configured for a
  * whiteboard service, a default {@code ServletContextHelper} is used.
- * 
  * <p>
  * Those whiteboard services that are associated with the same
  * {@code ServletContextHelper} object will share the same
  * {@code ServletContext} object.
- * 
  * <p>
  * The behavior of the methods on the default {@code ServletContextHelper} is
  * defined as follows:
  * <ul>
- * <li>{@link #getMimeType(String) getMimeType} - Always returns {@code null}.</li>
+ * <li>{@link #getMimeType(String) getMimeType} - Always returns
+ * {@code null}.</li>
  * <li>{@link #handleSecurity(HttpServletRequest, HttpServletResponse)
  * handleSecurity} - Always returns {@code true}.</li>
  * <li>{@link #getResource(String) getResource} - Assumes the named resource is
@@ -90,14 +85,16 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * calls the whiteboard service bundle's {@code Bundle.getEntry} method, and
  * returns the appropriate URL to access the resource. On a Java runtime
  * environment that supports permissions, the Http Whiteboard implementation
- * needs to be granted {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
+ * needs to be granted
+ * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
  * <li>{@link #getResourcePaths(String) getResourcePaths} - Assumes that the
  * resources are in the bundle of the whiteboard service. This method calls
  * {@code Bundle.findEntries} method, and returns the found entries. On a Java
  * runtime environment that supports permissions, the Http Whiteboard
  * implementation needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
- * <li>{@link #getRealPath(String) getRealPath} - Always returns {@code null}.</li>
+ * <li>{@link #getRealPath(String) getRealPath} - Always returns
+ * {@code null}.</li>
  * </ul>
  * 
  * @ThreadSafe

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="126"
          revision="$Id$"
          version="5.0" xml:id="service.jndi"
@@ -248,9 +247,10 @@ javax.naming.directory</programlisting>
       registry. If such a service is found, then that service is used to
       create a new Context, which is subsequently returned. If no class name
       is specified, the service registry is searched for Initial Context
-      Factory services. These services are tried in ranking order to see if
-      they can create an appropriate Context, the first one that can create a
-      Context is then used.</para>
+      Factory services. These services are tried in ranking order, as
+      specified in <code>ServiceReference.compareTo</code>, to see if they can
+      create an appropriate Context, the first one that can create a Context
+      is then used.</para>
 
       <para>If no class name is specified, all Initial Context Factory Builder
       services are tried to see if they can create a Context, the first
@@ -693,11 +693,8 @@ javax.naming.directory</programlisting>
       <para>In the following sections the cases for presence or absence of the
       <code>java.naming.factory.initial</code> property are described. Several
       steps in these algorithm iterate over a set of available services. This
-      iteration must always take place in service <emphasis>ranking
-      order</emphasis>. Service ranking order follows the ordering of the
-      <code>service.ranking</code> service property, which is the highest
-      <code>service.ranking</code> value, or when equal, the lowest
-      <code>service.id</code> value.</para>
+      iteration must always take place in ranking order as specified in
+      <code>ServiceReference.compareTo</code>.</para>
 
       <para>Exception handling in the following steps is as follows:</para>
 
@@ -971,10 +968,11 @@ javax.naming.directory</programlisting>
       initial Context their applications receive.</para>
 
       <para>An Initial Context Factory Builder provider must register an
-      Initial Context Factory Builder service. The
-      <code>service.ranking</code> property defines the iteration ordering of
-      multiple Initial Context Factory Builder services. Implementations must
-      be careful to correctly provide defaults.</para>
+      Initial Context Factory Builder service. The iteration ordering of
+      multiple Initial Context Factory Builder services must always take place
+      in ranking order as specified in
+      <code>ServiceReference.compareTo</code>. Implementations must be careful
+      to correctly provide defaults.</para>
 
       <para>For example, a container could use a thread local variable to mark
       the stack for a specific application. The implementation of the Initial
@@ -1219,11 +1217,11 @@ jndi-name ::= &lt;any string&gt;</programlisting>
     incompatible with the class space of the owning bundle.</para>
 
     <para>The lookup for a URL with the <code>osgi:</code> scheme and
-    <code>service</code> path returns the service with highest
-    <code>service.ranking</code> and the lowest <code>service.id</code>. This
-    scheme only allows a single service to be found. Multiple services can be
-    obtained with the <code>osgi:</code> scheme and <code>servicelist</code>
-    path:</para>
+    <code>service</code> path returns the service whose
+    <code>ServiceReference</code> is first in ranking order as specified in
+    <code>ServiceReference.compareTo</code>. This scheme only allows a single
+    service to be found. Multiple services can be obtained with the
+    <code>osgi:</code> scheme and <code>servicelist</code> path:</para>
 
     <programlisting>servicelist ::= 'osgi:servicelist/' query?</programlisting>
 

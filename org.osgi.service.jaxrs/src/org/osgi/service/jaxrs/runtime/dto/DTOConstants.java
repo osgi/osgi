@@ -37,8 +37,9 @@ public final class DTOConstants {
 	/**
 	 * Service is shadowed by another service.
 	 * <p>
-	 * For example, a service with the same service properties but a higher
-	 * service ranking.
+	 * For example, another service with the same service properties but having
+	 * a higher service ranking. See
+	 * {@link org.osgi.framework.ServiceReference#compareTo(Object)}.
 	 */
 	public static final int	FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE		= 1;
 

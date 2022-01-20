@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="151"
          revision="$Id$"
          version="5.0" xml:id="service.jaxrs"
@@ -443,7 +442,8 @@ public String interrogateSession(@PathParam("name") String name,
             is registered with an illegal name then it is not bound and this
             is reflected in the failure DTOs. If two JAX-RS services are
             registered with the same name (even if they are advertised as
-            different types) then only the higher ranked service is bound and
+            different types) then only the first service in ranking order, as
+            specified in <code>ServiceReference.compareTo</code>, is bound and
             the lower ranked service(s) are reflected in the failure DTOs. See
             <xref
             linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_NAME"
@@ -605,14 +605,15 @@ public class Foo {
         <para>When clashes occur in the JAX-RS whiteboard then resources
         supplied using the service whiteboard must be preferred to static
         resources contained in the application. If two or more whiteboard
-        resources exist then they must be ordered using their service ranking.
-        Unlike for other services in the JAX-RS whiteboard, whiteboard
-        resource services must not be ordered using their natural ordering.
-        Whiteboard resource services with the same ranking must be considered
-        equal, following the normal resource method selection rules defined in
-        the JAX-RS specification. As per the core specification, whiteboard
-        services with no <code>service.ranking</code> property must be treated
-        as having a ranking of <code>0</code>.</para>
+        resources exist then they must be ordered using ranking order, as
+        specified in <code>ServiceReference.compareTo</code>. Unlike for other
+        services in the JAX-RS whiteboard, whiteboard resource services must
+        not be ordered using their natural ordering. Whiteboard resource
+        services with the same ranking must be considered equal, following the
+        normal resource method selection rules defined in the JAX-RS
+        specification. As per the Core specification, whiteboard services with
+        no <code>service.ranking</code> property must be treated as having a
+        ranking of <code>0</code>.</para>
       </section>
     </section>
 
@@ -719,17 +720,17 @@ public class Foo {
     }
 }</programlisting>
 
-        <para>Single valued asynchronous results can also be provided by returning 
-        a suitable type from the resource method. This can be a 
+        <para>Single valued asynchronous results can also be provided by
+        returning a suitable type from the resource method. This can be a
         <code>CompletionStage</code> as described in the JAX-RS specification,
-        or an OSGi <code>Promise</code> type. In this case the response from the 
-        resource method will be sent once the returned type has completed, either 
-        successfully or by failing.</para>
-        
-        <para>The following example demonstrates the use of an
-        asynchronous return value:</para>
-        
-<programlisting>@Component(service = MyResource.class,
+        or an OSGi <code>Promise</code> type. In this case the response from
+        the resource method will be sent once the returned type has completed,
+        either successfully or by failing.</para>
+
+        <para>The following example demonstrates the use of an asynchronous
+        return value:</para>
+
+        <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource     
  public class MyResource {
@@ -1015,8 +1016,9 @@ public class FizzResource {
       ordered according to their <code>javax.annotation.Priority</code>. If
       two extensions of the same type have the same priority then the
       whiteboard implementation must break the tie by ordering the extensions
-      according to the natural ordering of their service references, with
-      static extensions being ranked below all whiteboard services.</para>
+      according to the natural ordering of their service references, as
+      specified in <code>ServiceReference.compareTo</code>, with static
+      extensions being ranked below all whiteboard services.</para>
 
       <para>The extension processing flow is as follows:</para>
 
@@ -1326,11 +1328,12 @@ public class JsonProvider implements MessageBodyReader,
 
       <para>The base URI for each application within the whiteboard must be
       unique. If two or more applications targeting the same whiteboard are
-      registered with the same base URI then only the highest ranked service
-      will be made available. All other application services with that URI
-      will have a failure DTO created for them. The same rules also apply to
-      the <code>osgi.jaxrs.name</code> property, with the highest ranked
-      service shadowing other applications with the same name.</para>
+      registered with the same base URI then only the first in ranking order,
+      as specified in <code>ServiceReference.compareTo</code>, will be made
+      available. All other application services with that URI will have a
+      failure DTO created for them. The same rules also apply to the
+      <code>osgi.jaxrs.name</code> property, with the highest ranked service
+      shadowing other applications with the same name.</para>
 
       <para>The default application is implicitly created by the whiteboard
       and has the name <code>.default</code>. The default application has a

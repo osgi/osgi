@@ -171,7 +171,8 @@ public interface ServiceReference<S>
 	/**
 	 * Compares this {@code ServiceReference} with the specified
 	 * {@code ServiceReference} for order.
-	 * 
+	 * <p>
+	 * <b>Natural Order</b>
 	 * <p>
 	 * If this {@code ServiceReference} and the specified
 	 * {@code ServiceReference} have the same {@link Constants#SERVICE_ID
@@ -184,15 +185,31 @@ public interface ServiceReference<S>
 	 * {@code ServiceReference} is less than the specified
 	 * {@code ServiceReference} if it has a higher {@link Constants#SERVICE_ID
 	 * service id} and greater if it has a lower service id.
+	 * <p>
+	 * Sorting a collection of {@code ServiceReference} objects with natural
+	 * order will result in the first element having the lowest
+	 * {@link Constants#SERVICE_RANKING service ranking} and the last element
+	 * having the highest {@link Constants#SERVICE_RANKING service ranking}.
+	 * <p>
+	 * <b>Ranking Order</b>
+	 * <p>
+	 * <em>Ranking order</em>, as defined in the Core Specification, is the
+	 * reverse of natural order.
+	 * <p>
+	 * Sorting a collection of {@code ServiceReference} objects with ranking
+	 * order will result in the first element having the highest
+	 * {@link Constants#SERVICE_RANKING service ranking} and the last element
+	 * having the lowest {@link Constants#SERVICE_RANKING service ranking}.
 	 * 
 	 * @param reference The {@code ServiceReference} to be compared.
 	 * @return Returns a negative integer, zero, or a positive integer if this
 	 *         {@code ServiceReference} is less than, equal to, or greater than
 	 *         the specified {@code ServiceReference}.
 	 * @throws IllegalArgumentException If the specified
-	 *         {@code ServiceReference} was not created by the same framework
-	 *         instance as this {@code ServiceReference}.
+	 *             {@code ServiceReference} was not created by the same
+	 *             framework instance as this {@code ServiceReference}.
 	 * @since 1.4
+	 * @see "Core Specification, Service Ranking Order"
 	 */
 	@Override
 	public int compareTo(Object reference);

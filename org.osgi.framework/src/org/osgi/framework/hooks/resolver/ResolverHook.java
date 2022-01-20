@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.namespace.BundleNamespace;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.wiring.BundleCapability;
@@ -32,7 +33,6 @@ import org.osgi.framework.wiring.FrameworkWiring;
 /**
  * OSGi Framework Resolver Hook instances are obtained from the OSGi
  * {@link ResolverHookFactory Framework Resolver Hook Factory} service.
- * 
  * <p>
  * A Resolver Hook instance is called by the framework during a resolve process.
  * A resolver hook may influence the outcome of a resolve process by removing
@@ -41,7 +41,6 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * supports all remove operations. Any other attempts to modify a shrinkable
  * collection will result in an {@code UnsupportedOperationException} being
  * thrown.
- * 
  * <p>
  * The following steps outline the way a framework uses the resolver hooks
  * during a resolve process.
@@ -60,7 +59,6 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * {@link ResolverHookFactory#begin(Collection)} method to inform the hooks
  * about a resolve process beginning and to obtain a Resolver Hook instance that
  * will be used for the duration of the resolve process.</li>
- * 
  * <li>Determine the collection of unresolved bundle revisions that may be
  * considered for resolution during the current resolution process and place
  * each of the bundle revisions in a shrinkable collection {@code Resolvable}.
@@ -78,7 +76,8 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * <li>Determine the collection of available capabilities that have a namespace
  * of {@link IdentityNamespace osgi.identity}, are singletons, and have the same
  * symbolic name as the singleton bundle revision {@code B} and place each of
- * the matching capabilities into a shrinkable collection {@code Collisions}.</li>
+ * the matching capabilities into a shrinkable collection
+ * {@code Collisions}.</li>
  * <li>Remove the {@link IdentityNamespace osgi.identity} capability provided by
  * bundle revision {@code B} from shrinkable collection {@code Collisions}. A
  * singleton bundle cannot collide with itself.</li>
@@ -118,11 +117,11 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * <li>For each resolver hook call the {@link #end()} method to inform the hooks
  * about a resolve process ending.</li>
  * </ol>
- * In all cases, the order in which the resolver hooks are called is the reverse
- * compareTo ordering of their Service References. That is, the service with the
- * highest ranking number must be called first. In cases where a shrinkable
- * collection becomes empty the framework is required to call the remaining
- * registered hooks.
+ * In all cases, the resolver hooks are called in
+ * {@link ServiceReference#compareTo(Object) ranking order}. That is, the
+ * service with the highest ranking must be called first. In cases where a
+ * shrinkable collection becomes empty the framework is required to call the
+ * remaining registered hooks.
  * <p>
  * Resolver hooks are low level. Implementations of the resolver hook must be
  * careful not to create an unresolvable state which is very hard for a

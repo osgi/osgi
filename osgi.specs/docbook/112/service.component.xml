@@ -731,9 +731,9 @@
           <para><code>Map</code> - An unmodifiable Map containing the service
           properties of the bound service. This Map must additionally
           implement <code>Comparable</code> with the <code>compareTo</code>
-          method comparing service property maps using the same ordering as
-          <code>ServiceReference.compareTo</code> based upon service ranking
-          and service id.</para>
+          method comparing service property maps using an ordering which is
+          the same as the natural ordering of <code>ServiceReference</code>s
+          as specified in <code>ServiceReference.compareTo</code>.</para>
         </listitem>
       </itemizedlist>
 
@@ -943,9 +943,9 @@
           <para><code>Map</code> - An unmodifiable Map containing the service
           properties of the bound service. This Map must additionally
           implement <code>Comparable</code> with the <code>compareTo</code>
-          method comparing service property maps using the same ordering as
-          <code>ServiceReference.compareTo</code> based upon service ranking
-          and service id.</para>
+          method comparing service property maps using an ordering which is
+          the same as the natural ordering of <code>ServiceReference</code>s
+          as specified in <code>ServiceReference.compareTo</code>.</para>
         </listitem>
 
         <listitem>
@@ -954,9 +954,9 @@
           bound service, as above, and whose value is the bound service
           object. This Map.Entry must additionally implement
           <code>Comparable</code> with the <code>compareTo</code> method
-          comparing the service property map key using the same ordering as
-          <code>ServiceReference.compareTo</code> based upon service ranking
-          and service id.</para>
+          comparing the service property map key using an ordering which is
+          the same as the natural ordering of <code>ServiceReference</code>s
+          as specified in <code>ServiceReference.compareTo</code>.</para>
         </listitem>
 
         <listitem>
@@ -1265,11 +1265,8 @@ multiplicity ::= '1' | 'n'</programlisting>
       unsatisfied, the component configuration must be deactivated. If the
       reference has a unary cardinality and there is more than one target
       service for the reference, then the bound service must be the target
-      service with the highest service ranking as specified by the
-      <code>service.ranking</code> property. If there are multiple target
-      services with the same service ranking, then the bound service must be
-      the target service with the highest service ranking and the lowest
-      service id as specified by the <code>service.id</code> property.</para>
+      service whose <code>ServiceReference</code> is first in the ranking
+      order as specified in <code>ServiceReference.compareTo</code>.</para>
 
       <para>In the following example, a component wants to register a resource
       with all Http Services that are available. Such a scenario has the
@@ -1652,17 +1649,19 @@ public class HttpResourceImpl {
         if present, and the field must not be modified. Before the component
         instance is activated, SCR must set the field value with a new mutable
         collection that must contain the initial set of bound services sorted
-        using the same ordering as <code>ServiceReference.compareTo</code>
-        based upon service ranking and service id. The collection may be empty
+        using an ordering which is the same as the natural ordering of
+        <code>ServiceReference</code>s as specified in
+        <code>ServiceReference.compareTo</code>. The collection may be empty
         if the reference has optional cardinality and there are no bound
         services. If the reference is dynamic, when there is a change in the
         set of bound services or the service properties of a bound service are
         modified and the collection holds service properties, SCR must replace
         the field value with a new mutable collection that must contain the
-        updated set of bound services sorted using the same ordering as
-        <code>ServiceReference.compareTo</code> based upon service ranking and
-        service id. The new collection may be empty if the reference has
-        optional cardinality and there are no bound services.</para>
+        updated set of bound services sorted using an ordering which is the
+        same as the natural ordering of <code>ServiceReference</code>s as
+        specified in <code>ServiceReference.compareTo</code>. The new
+        collection may be empty if the reference has optional cardinality and
+        there are no bound services.</para>
       </section>
 
       <section>

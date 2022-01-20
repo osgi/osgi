@@ -530,12 +530,10 @@ public interface BundleContext extends BundleReference {
 	 * expression, and the packages for the class names under which the services
 	 * were registered match the context bundle's packages as defined in
 	 * {@link ServiceReference#isAssignableTo(Bundle, String)}.
-	 * 
 	 * <p>
 	 * The list is valid at the time of the call to this method. However since
 	 * the Framework is a very dynamic environment, services can be modified or
 	 * unregistered at any time.
-	 * 
 	 * <p>
 	 * The specified {@code filter} expression is used to select the registered
 	 * services whose service properties contain keys and values which satisfy
@@ -545,7 +543,6 @@ public interface BundleContext extends BundleReference {
 	 * {@code filter} expression cannot be parsed, an
 	 * {@link InvalidSyntaxException} will be thrown with a human readable
 	 * message where the filter became unparsable.
-	 * 
 	 * <p>
 	 * The result is an array of {@code ServiceReference} objects for all
 	 * services that meet all of the following conditions:
@@ -567,12 +564,14 @@ public interface BundleContext extends BundleReference {
 	 * </ul>
 	 * 
 	 * @param clazz The class name with which the service was registered or
-	 *        {@code null} for all services.
+	 *            {@code null} for all services.
 	 * @param filter The filter expression or {@code null} for all services.
 	 * @return An array of {@code ServiceReference} objects or {@code null} if
-	 *         no services are registered which satisfy the search.
+	 *         no services are registered which satisfy the search. There is no
+	 *         guarantee that the {@code ServiceReference} objects in the array
+	 *         will be in any specific order.
 	 * @throws InvalidSyntaxException If the specified {@code filter} contains
-	 *         an invalid filter expression that cannot be parsed.
+	 *             an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
@@ -582,12 +581,10 @@ public interface BundleContext extends BundleReference {
 	 * of {@code ServiceReference} objects contains services that were
 	 * registered under the specified class and match the specified filter
 	 * expression.
-	 * 
 	 * <p>
 	 * The list is valid at the time of the call to this method. However since
 	 * the Framework is a very dynamic environment, services can be modified or
 	 * unregistered at any time.
-	 * 
 	 * <p>
 	 * The specified {@code filter} expression is used to select the registered
 	 * services whose service properties contain keys and values which satisfy
@@ -597,7 +594,6 @@ public interface BundleContext extends BundleReference {
 	 * {@code filter} expression cannot be parsed, an
 	 * {@link InvalidSyntaxException} will be thrown with a human readable
 	 * message where the filter became unparsable.
-	 * 
 	 * <p>
 	 * The result is an array of {@code ServiceReference} objects for all
 	 * services that meet all of the following conditions:
@@ -615,12 +611,14 @@ public interface BundleContext extends BundleReference {
 	 * </ul>
 	 * 
 	 * @param clazz The class name with which the service was registered or
-	 *        {@code null} for all services.
+	 *            {@code null} for all services.
 	 * @param filter The filter expression or {@code null} for all services.
 	 * @return An array of {@code ServiceReference} objects or {@code null} if
-	 *         no services are registered which satisfy the search.
+	 *         no services are registered which satisfy the search. There is no
+	 *         guarantee that the {@code ServiceReference} objects in the array
+	 *         will be in any specific order.
 	 * @throws InvalidSyntaxException If the specified {@code filter} contains
-	 *         an invalid filter expression that cannot be parsed.
+	 *             an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
@@ -629,12 +627,10 @@ public interface BundleContext extends BundleReference {
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
 	 * and was registered under the specified class.
-	 * 
 	 * <p>
 	 * The returned {@code ServiceReference} object is valid at the time of the
 	 * call to this method. However as the Framework is a very dynamic
 	 * environment, services can be modified or unregistered at any time.
-	 * 
 	 * <p>
 	 * This method is the same as calling
 	 * {@link #getServiceReferences(String, String)} with a {@code null} filter
@@ -642,14 +638,8 @@ public interface BundleContext extends BundleReference {
 	 * is provided as a convenience for when the caller is interested in any
 	 * service that implements the specified class.
 	 * <p>
-	 * If multiple such services exist, the service with the highest priority is
-	 * selected. This priority is defined as the service reference with the
-	 * highest ranking (as specified in its {@link Constants#SERVICE_RANKING}
-	 * property) is returned.
-	 * <p>
-	 * If there is a tie in ranking, the service with the lowest service id (as
-	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
-	 * service that was registered first is returned.
+	 * If multiple such services exist, the service that is first in the
+	 * {@link ServiceReference#compareTo(Object) ranking order} is returned.
 	 * 
 	 * @param clazz The class name with which the service was registered.
 	 * @return A {@code ServiceReference} object, or {@code null} if no services
@@ -662,28 +652,22 @@ public interface BundleContext extends BundleReference {
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
 	 * and was registered under the name of the specified class.
-	 * 
 	 * <p>
 	 * The returned {@code ServiceReference} object is valid at the time of the
 	 * call to this method. However as the Framework is a very dynamic
 	 * environment, services can be modified or unregistered at any time.
-	 * 
 	 * <p>
 	 * This method is the same as calling
 	 * {@link #getServiceReferences(Class, String)} with a {@code null} filter
 	 * expression. It is provided as a convenience for when the caller is
 	 * interested in any service that implements the specified class.
 	 * <p>
-	 * If multiple such services exist, the service with the highest ranking (as
-	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
-	 * <p>
-	 * If there is a tie in ranking, the service with the lowest service id (as
-	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
-	 * service that was registered first is returned.
+	 * If multiple such services exist, the service that is first in the
+	 * {@link ServiceReference#compareTo(Object) ranking order} is returned.
 	 * 
 	 * @param <S> Type of Service.
 	 * @param clazz The class under whose name the service was registered. Must
-	 *        not be {@code null}.
+	 *            not be {@code null}.
 	 * @return A {@code ServiceReference} object, or {@code null} if no services
 	 *         are registered which implement the specified class.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
@@ -699,12 +683,10 @@ public interface BundleContext extends BundleReference {
 	 * specified filter expression, and the packages for the class names under
 	 * which the services were registered match the context bundle's packages as
 	 * defined in {@link ServiceReference#isAssignableTo(Bundle, String)}.
-	 * 
 	 * <p>
 	 * The collection is valid at the time of the call to this method. However
 	 * since the Framework is a very dynamic environment, services can be
 	 * modified or unregistered at any time.
-	 * 
 	 * <p>
 	 * The specified {@code filter} expression is used to select the registered
 	 * services whose service properties contain keys and values which satisfy
@@ -714,7 +696,6 @@ public interface BundleContext extends BundleReference {
 	 * {@code filter} expression cannot be parsed, an
 	 * {@link InvalidSyntaxException} will be thrown with a human readable
 	 * message where the filter became unparsable.
-	 * 
 	 * <p>
 	 * The result is a collection of {@code ServiceReference} objects for all
 	 * services that meet all of the following conditions:
@@ -736,12 +717,14 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param <S> Type of Service
 	 * @param clazz The class under whose name the service was registered. Must
-	 *        not be {@code null}.
+	 *            not be {@code null}.
 	 * @param filter The filter expression or {@code null} for all services.
 	 * @return A collection of {@code ServiceReference} objects. May be empty if
-	 *         no services are registered which satisfy the search.
+	 *         no services are registered which satisfy the search. There is no
+	 *         guarantee that the {@code ServiceReference} objects in the
+	 *         collection will be in any specific order.
 	 * @throws InvalidSyntaxException If the specified {@code filter} contains
-	 *         an invalid filter expression that cannot be parsed.
+	 *             an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.6
 	 */
