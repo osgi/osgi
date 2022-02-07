@@ -17,13 +17,13 @@
  *******************************************************************************/
 
 /**
- * OSGi Bundle Annotations Package Version 1.1.
+ * OSGi Bundle Annotations Package Version 2.0.
  * <p>
  * This package is not used at runtime.
  *
  * @author $Id$
  */
-@Version("1.1.1")
+@Version("2.0")
 package org.osgi.annotation.bundle;
 
 import org.osgi.annotation.versioning.Version;

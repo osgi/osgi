@@ -81,19 +81,21 @@ public @interface Export {
 	 * If not specified, the {@link Substitution#CALCULATED} substitution
 	 * policy is used for this package.
 	 */
-	Substitution substitution() default Substitution.CALCULATED;
+	String substitution() default Substitution.CALCULATED;
 
 	/**
 	 * Substitution policy for this package.
 	 */
-	public enum Substitution {
+	public final class Substitution {
+		private Substitution() {
+		}
 		/**
 		 * Use a consumer type version range for the import package clause when
 		 * substitutably importing a package.
 		 * 
 		 * @see ConsumerType
 		 */
-		CONSUMER,
+		public static final String	CONSUMER	= "CONSUMER";
 
 		/**
 		 * Use a provider type version range for the import package clause when
@@ -101,17 +103,17 @@ public @interface Export {
 		 * 
 		 * @see ProviderType
 		 */
-		PROVIDER,
+		public static final String	PROVIDER	= "PROVIDER";
 
 		/**
 		 * The package must not be substitutably imported.
 		 */
-		NOIMPORT,
+		public static final String	NOIMPORT	= "NOIMPORT";
 
 		/**
 		 * The policy value is calculated by inspection of the classes in the
 		 * package.
 		 */
-		CALCULATED
+		public static final String	CALCULATED	= "CALCULATED";
 	}
 }
