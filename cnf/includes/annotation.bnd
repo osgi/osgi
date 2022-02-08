@@ -1,3 +1,5 @@
 # Common configuration for Annotation projects
 
 packaging: annotation
+
+-snapshot:
