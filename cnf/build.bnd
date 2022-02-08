@@ -71,7 +71,7 @@ osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.mic
 build.versionmask           = ${versionmask;===;${1}}
 build.version				= ${build.versionmask;${osgi.version}}.${project.build}
 
-osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=8.0.1
+osgi.annotation.buildpath = osgi.annotation;maven-scope=provided;version=8.1.0
 
 # -snapshot unset (commented out) is a snapshot build. (e.g. 6.0.0-SNAPSHOT)
 # -snapshot set to a value (e.g. RC1) is a release build with the value as the Maven version qualifier. (e.g. 6.0.0-RC1)

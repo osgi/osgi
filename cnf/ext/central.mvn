@@ -1,5 +1,5 @@
 # OSGi artifacts
-org.osgi:osgi.annotation:8.0.0
+org.osgi:osgi.annotation:8.1.0
 
 # Core R6
 org.osgi:org.osgi.dto:1.0.0
