@@ -1,4 +1,4 @@
-org.osgi:org.osgi.annotation.bundle:1.1.1
+org.osgi:org.osgi.annotation.bundle:2.0.0
 org.osgi:org.osgi.annotation.versioning:1.1.2
 org.osgi:org.osgi.dto:1.1.1
 org.osgi:org.osgi.framework:1.10.0
@@ -57,13 +57,13 @@ org.osgi:org.osgi.service.usbinfo:1.0.1
 org.osgi:org.osgi.service.useradmin:1.1.1
 org.osgi:org.osgi.service.wireadmin:1.0.2
 org.osgi:org.osgi.service.zigbee:1.0.1
-org.osgi:org.osgi.util.converter:1.0.8
+org.osgi:org.osgi.util.converter:1.0.9
 org.osgi:org.osgi.util.function:1.2.0
 org.osgi:org.osgi.util.promise:1.2.0
 org.osgi:org.osgi.util.pushstream:1.0.2
 org.osgi:org.osgi.util.tracker:1.5.4
 org.osgi:org.osgi.util.xml:1.0.2
-org.osgi:osgi.annotation:8.0.1
+org.osgi:osgi.annotation:8.1.0
 org.osgi:osgi.cmpn:7.0.0
 org.osgi:osgi.core:8.0.0
 org.osgi:osgi.promise:8.0.0
