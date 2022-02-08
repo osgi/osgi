@@ -10,3 +10,5 @@ Export-Package: ${p}.*; -split-package:=first
 -testpath: \
  osgi.tck.junit-platform;version=latest,\
  org.apiguardian:apiguardian-api;version=latest
+
+-snapshot:
