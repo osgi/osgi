@@ -40,6 +40,7 @@
         noupdateOnRelease=true
 
 publishrepo: ${if;${env;OSSRH_USERNAME};OSSRH}
+gpg: ${if;${env;GPG_PASSPHRASE};gpg --pinentry-mode=loopback;gpg}
 -connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
 
 -buildrepo: Local
