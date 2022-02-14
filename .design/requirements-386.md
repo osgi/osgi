@@ -1,6 +1,6 @@
 # Feature Launcher
 
-This documents looks into the requirenments for a Feature Launcher specification.
+This documents looks into the requirements for a Feature Launcher specification.
 
 ## Introduction
 
@@ -11,7 +11,7 @@ The Feature Service focuses on the definition aspect of systems. What is needed 
 ## Terminology
 
 * _Feature_ - A Feature contains a number of entities that define an executable system. Features are building blocks which may be assembled into larger systems.
-* _Feature Descriptor_ - A JSON document containing a Feating description.
+* _Feature Descriptor_ - A JSON document containing a Feature description.
 * _Feature Extension_ - A Feature can contain a number of extensions with custom content.
 
 ## Problem Description
@@ -26,7 +26,7 @@ What is needed is a launcher that can take a JSON Feature Descriptor, as defined
 
 Harry has obtained an OSGi Feature descriptor from Linda. The Feature descriptor embodies the application Linda has built. Harry would like to use Linda's application so is looking for a tool to launch it.
 
-### UC2: On the fly add in additional feature models
+### UC2: On the fly add in additional features
 
 Linda has written an application that she has distributed as an OSGi Feature descriptor. Linda would like to introspect the state of the system through the Felix Web Console, for this she needs to launch her application together with a second Feature descriptor for the web console. She needs the launcher to take both Feature descriptors and turn it into a single running system.
 
@@ -36,7 +36,7 @@ Harry wants to use Linda's application, but the application opens a socket on hi
 
 ### UC4: Clashes
 
-Emily is building a bigger application where she needs to embed Linda's application. Emily does this by combining Linda's Feature with her own Feature descriptor, making it a component of the bigger application. However, one bundle used in Linda's application has a newer version that Emily needs. She has defined this newer version in her Feature descriptor. The launcher needs to make it possible for Emily to select the correct version of this bundle, given the fact that its declared twice in both features.
+Emily is building a bigger application where she needs to embed Linda's application. Emily does this by combining Linda's Feature with her own Feature descriptor, making it a component of the bigger application. However, one bundle used in Linda's application has a newer version that Emily needs. She has defined this newer version in her own Feature descriptor. The launcher needs to make it possible for Emily to select the correct version of this bundle, given the fact that its declared twice.
 
 ### UC5: Extensions
 
@@ -45,8 +45,8 @@ Bill has a Feature that contains a custom extension to initialize the database f
 ## Requirements
 
 * FL-0010: The solution MUST make it possible to create a running system from a JSON Feature descriptor as defined by the Feature Service specification.
-* FL-0020: The solution MUST be able to instantiate an OSGi framework for this.
-* FL-0030: The solution MAY support working with an existing, already running, OSGi framework to run the Feature.
+* FL-0020: The solution MUST be able to instantiate an OSGi framework for this. The solution MUST provide a way to declare which Framework and which JVM to use.
+* FL-0030: The solution MUST support working with an existing, already running, OSGi framework to run the Feature.
 * FL-0040: The solution MUST provide a mechanism to plug in extension handlers which are executed before the Feature is launched.
 * FL-0050: The solution MUST be able to take multiple Feature descriptors to combine these into a single running system.
 * FL-0060: The solution MUST provide a mechanism to pass in values for Feature descriptor variables.
