@@ -1,0 +1,14 @@
+# Set javac settings from JDT prefs
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
+
+Export-Package:  \
+	org.osgi.service.servlet.*;-split-package:=first
+
+-contract: JavaServlet
+-buildpath: \
+	${osgi.annotation.buildpath},\
+	org.osgi.framework;maven-scope=provided;version=1.8,\
+	org.osgi.dto;maven-scope=provided;version=1.0,\
+	org.osgi.service.component.annotations;maven-scope=provided;version=1.4,\
+	jakarta.servlet-api;maven-scope=provided;version=5.0,\
+	org.osgi.namespace.implementation;version=1.0
