@@ -30,7 +30,7 @@ subprojects {
 	if (plugins.hasPlugin("biz.aQute.bnd")) {
 		java { // OSGi build requires JDK 8
 			toolchain {
-				languageVersion = JavaLanguageVersion.of(8)
+				languageVersion = JavaLanguageVersion.of(11)
 			}
 		}
 		if (bnd.is("companion.code")) {
