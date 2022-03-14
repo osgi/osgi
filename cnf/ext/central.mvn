@@ -69,6 +69,7 @@ org.opentest4j:opentest4j:1.2.0
 org.apache.servicemix.bundles:org.apache.servicemix.bundles.junit:4.13.2_1
 org.osgi:org.osgi.test.common:${osgi-test.version}
 org.osgi:org.osgi.test.assertj.framework:${osgi-test.version}
+org.osgi:org.osgi.test.assertj.log:${osgi-test.version}
 org.osgi:org.osgi.test.assertj.promise:${osgi-test.version}
 org.osgi:org.osgi.test.junit4:${osgi-test.version}
 org.osgi:org.osgi.test.junit5:${osgi-test.version}
