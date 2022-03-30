@@ -26,7 +26,7 @@ jar.cmpn.impls: \
 	org.osgi.impl.service.feature,\
 	org.osgi.impl.service.http,\
 	org.osgi.impl.service.http.whiteboard,\
-	org.osgi.impl.service.jaxrs,\
+	org.osgi.impl.service.jakartars,\
 	org.osgi.impl.service.jpa,\
 	org.osgi.impl.service.log.stream,\
 	org.osgi.impl.service.metatype,\

@@ -196,6 +196,9 @@ org.apache.geronimo.specs:geronimo-json_1.1_spec:1.5
 org.apache.johnzon:johnzon-core:1.2.14
 org.apache.felix:org.apache.felix.cm.json:1.0.6
 
+# Jakarta EE API
+jakarta.ws.rs:jakarta.ws.rs-api:3.0.0
+
 # ECF RSA
 org.eclipse.platform:org.eclipse.core.jobs:3.9.3
 org.eclipse.platform:org.eclipse.equinox.common:3.9.0
