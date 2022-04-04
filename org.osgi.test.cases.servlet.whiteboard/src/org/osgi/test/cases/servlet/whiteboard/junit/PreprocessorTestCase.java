@@ -25,9 +25,9 @@ import java.util.List;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.servlet.runtime.dto.PreprocessorDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 import org.osgi.service.servlet.whiteboard.Preprocessor;
-import org.osgi.service.servlet.whiteboard.runtime.dto.PreprocessorDTO;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockPreprocessor;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockServlet;
 

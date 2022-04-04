@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
-package org.osgi.test.cases.servlet.whiteboard.junit;
+package org.osgi.test.cases.servlet.whiteboard.secure.junit;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +38,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.servlet.runtime.HttpServiceRuntime;
 import org.osgi.service.servlet.runtime.dto.ErrorPageDTO;
 import org.osgi.service.servlet.runtime.dto.FailedErrorPageDTO;
@@ -59,9 +60,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
-	public static final String														DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
-
 	private ServiceTracker<HttpServiceRuntime,ServiceReference<HttpServiceRuntime>>	runtimeTracker;
+
+	public static final String	DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
 
 	protected RequestInfoDTO calculateRequestInfoDTO(String string) {
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
@@ -102,43 +103,10 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return null;
 	}
 
-	protected ErrorPageDTO getErrorPageDTOByException(String context,
-			String exception) {
-		ServletContextDTO servletContextDTO = getServletContextDTOByName(
-				context);
-
-		if (servletContextDTO == null) {
-			return null;
-		}
-
-		for (ErrorPageDTO errorPageDTO : servletContextDTO.errorPageDTOs) {
-			for (String ex : errorPageDTO.exceptions) {
-				if (exception.equals(ex)) {
-					return errorPageDTO;
-				}
-			}
-		}
-
-		return null;
-	}
-
 	protected FailedErrorPageDTO getFailedErrorPageDTOByName(String name) {
 		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
 			if (name.equals(failedErrorPageDTO.name)) {
 				return failedErrorPageDTO;
-			}
-		}
-
-		return null;
-	}
-
-	protected FailedErrorPageDTO getFailedErrorPageDTOByException(
-			String exception) {
-		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
-			for (String ex : failedErrorPageDTO.exceptions) {
-				if (exception.equals(ex)) {
-					return failedErrorPageDTO;
-				}
 			}
 		}
 
@@ -363,7 +331,7 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
 		return new URL(
 				"http", getProperty("org.apache.felix.http.host"),
-				getIntegerProperty("org.osgi.service.http.port", 8080), path);
+				getIntegerProperty("org.osgi.service.servlet.port", 8080), path);
 	}
 
 	protected String getSymbolicName(ClassLoader classLoader) throws IOException {
@@ -466,6 +434,17 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		}
 	}
 
+	protected ConditionalPermissionAdmin getPermissionAdmin() {
+		BundleContext context = getContext();
+
+		ServiceReference<ConditionalPermissionAdmin> serviceReference = context
+				.getServiceReference(ConditionalPermissionAdmin.class);
+
+		assertNotNull(serviceReference);
+
+		return context.getService(serviceReference);
+	}
+
 	@Override
 	protected void setUp() throws Exception {
 		for (String bundlePath : getBundlePaths()) {
@@ -539,21 +518,12 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	}
 
 	protected long waitForRegistration(final long previousCount) {
-		return waitForRegistration(previousCount, 100);
-	}
-
-	protected long waitForRegistration(final long previousCount,
-			int maxAttempts) {
 		while (this.httpRuntimeChangeCount.longValue() == previousCount) {
-			if (maxAttempts <= 0) {
-				throw new IllegalStateException("Max attempts exceeded");
-			}
 			try {
 				Thread.sleep(20L);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
-			maxAttempts--;
 		}
 		return this.httpRuntimeChangeCount.longValue();
 	}

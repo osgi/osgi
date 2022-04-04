@@ -25,11 +25,11 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.servlet.context.ServletContextHelper;
+import org.osgi.service.servlet.runtime.dto.DTOConstants;
+import org.osgi.service.servlet.runtime.dto.FailedResourceDTO;
+import org.osgi.service.servlet.runtime.dto.ResourceDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.service.servlet.whiteboard.ServletContextHelper;
-import org.osgi.service.servlet.whiteboard.runtime.dto.DTOConstants;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedResourceDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.ResourceDTO;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockSCHFactory;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockServlet;
 

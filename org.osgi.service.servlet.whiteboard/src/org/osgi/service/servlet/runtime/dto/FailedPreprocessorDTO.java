@@ -15,28 +15,26 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
-package org.osgi.test.cases.servlet.whiteboard.junit.mock;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceFactory;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.servlet.context.ServletContextHelper;
+package org.osgi.service.servlet.runtime.dto;
 
-public class MockSCHFactory implements ServiceFactory<ServletContextHelper> {
+/**
+ * Represents a preprocessor service which is currently not being used due to a
+ * problem.
+ * 
+ * @NotThreadSafe
+ * @author $Id$
+ * @since 1.1
+ */
+public class FailedPreprocessorDTO extends PreprocessorDTO {
 
-	@Override
-	public ServletContextHelper getService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> registration) {
-
-		return new ServletContextHelper(bundle) {};
-	}
-
-	@Override
-	public void ungetService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> registration,
-			ServletContextHelper service) {
-	}
+	/**
+	 * The reason why the preprocessor represented by this DTO is not used.
+	 * 
+	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
+	 * @see DTOConstants#FAILURE_REASON_EXCEPTION_ON_INIT
+	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
+	 */
+	public int	failureReason;
 
 }

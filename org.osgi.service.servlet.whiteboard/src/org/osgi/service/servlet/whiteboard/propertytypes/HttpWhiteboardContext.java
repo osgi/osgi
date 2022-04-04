@@ -31,7 +31,7 @@ import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
  * {@code osgi.http.whiteboard.context.path} service properties.
  * <p>
  * This annotation can be used on a
- * {@link org.osgi.service.servlet.whiteboard.ServletContextHelper
+ * {@link org.osgi.service.servlet.context.ServletContextHelper
  * ServletContextHelper} to declare the values of the
  * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
  * HTTP_WHITEBOARD_CONTEXT_NAME} and
