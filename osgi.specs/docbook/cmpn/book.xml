@@ -124,7 +124,7 @@
 
   <xi:include href="../150/service.configurator.xml"/>
 
-  <xi:include href="../151/service.jaxrs.xml"/>
+  <xi:include href="../151/service.jakartars.xml"/>
 
   <xi:include href="../152/service.cdi.xml"/>
 

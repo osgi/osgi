@@ -571,20 +571,20 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.jaxrs"
+              <entry><xref linkend="service.jakartars"
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.jaxrs.runtime"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.runtime.dto"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.whiteboard"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.annotations"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes"/></code></para><para><code><xref
-              linkend="org.osgi.service.jaxrs.client"/></code></para></entry>
+              linkend="org.osgi.service.jakartars.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.jakartars.runtime.dto"/></code></para><para><code><xref
+              linkend="org.osgi.service.jakartars.whiteboard"/></code></para><para><code><xref
+              linkend="org.osgi.service.jakartars.whiteboard.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.jakartars.whiteboard.propertytypes"/></code></para><para><code><xref
+              linkend="org.osgi.service.jakartars.client"/></code></para></entry>
 
               <entry><code><xref
-              endterm="org.osgi.service.jaxrs.whiteboard-version"
-              linkend="service.jaxrs"/></code></entry>
+              endterm="org.osgi.service.jakartars.whiteboard-version"
+              linkend="service.jakartars"/></code></entry>
             </row>
 
             <row>
