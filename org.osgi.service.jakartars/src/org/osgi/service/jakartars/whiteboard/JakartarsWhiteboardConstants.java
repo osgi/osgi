@@ -223,6 +223,6 @@ public final class JakartarsWhiteboardConstants {
 	 * The version of the implementation capability for the Jakarta RESTful Web
 	 * Services Whiteboard specification
 	 */
-	public static final String	JAKARTA_RS_WHITEBOARD_SPECIFICATION_VERSION	= "1.0";
+	public static final String	JAKARTA_RS_WHITEBOARD_SPECIFICATION_VERSION	= "2.0";
 
 }

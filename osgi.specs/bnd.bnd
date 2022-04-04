@@ -21,7 +21,7 @@ batik_jars: ${findfile;${fop_home};batik*.jar},${findfile;${fop_home};xml-apis*.
     org.eclipse.persistence.jpa_spec; version=latest, \
     org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
     org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
-    org.apache.aries.javax.jax.rs-api;version=latest,\
+    jakarta.ws.rs-api;version=latest,\
     com.icl.saxon; version=latest, \
     ${template;batik_jars;${fop_home}/${@};version=file}
 
