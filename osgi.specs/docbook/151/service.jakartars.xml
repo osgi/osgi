@@ -18,7 +18,7 @@
  -->
 <chapter label="151"
          revision="$Id$"
-         version="5.0" xml:id="service.jaxrs"
+         version="5.0" xml:id="service.jakartars"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -26,11 +26,11 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>JAX-RS Whiteboard Specification</title>
+  <title>Jakarta RESTful Web Services Whiteboard Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.service.jaxrs.whiteboard-version"
-    linkend="org.osgi.service.jaxrs.whiteboard"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.jakartars.whiteboard-version"
+    linkend="org.osgi.service.jakartars.whiteboard"/></releaseinfo>
   </info>
 
   <section>
@@ -44,55 +44,55 @@
     result of an operation, potentially including a response body if the
     operation returns a result.</para>
 
-    <para>The <xref linkend="service.jaxrs-i21217577"/> defines a set of
+    <para>The <xref linkend="service.jakartars-i21217577"/> defines a set of
     annotation mappings which allow Plain Old Java Objects (POJOs) to be
     directly exposed as RESTful web resources; these resources can also be
-    grouped together using a JAX-RS <code>Application</code>. Furthermore the
+    grouped together using a Jakarta RESTful Web Services <code>Application</code>. Furthermore the
     specification defines a plugable model for extending the behavior of the
-    application and the features of the JAX-RS container itself. For example
+    application and the features of the Jakarta RESTful Web Services container itself. For example
     an extension may define specific error responses that should be sent when
     particular exceptions occur, or an extension may add support for
-    serializing responses to a different format. The OSGi JAX-RS Whiteboard
+    serializing responses to a different format. The OSGi Jakarta RESTful Web Services Whiteboard
     Specification provides a light and convenient way of using these POJOs,
     applications and extensions in an OSGi environment through the use of the
-    <xref linkend="service.jaxrs-whiteboard.pattern.ref"/>.</para>
+    <xref linkend="service.jakartars-whiteboard.pattern.ref"/>.</para>
 
-    <para>The JAX-RS Whiteboard specification supports:</para>
+    <para>The Jakarta RESTful Web Services Whiteboard specification supports:</para>
 
     <itemizedlist>
       <listitem>
         <para><emphasis>Registering Resources</emphasis> - Registering a
-        JAX-RS annotated POJO in the Service Registry makes it available to be
+        Jakarta RESTful Web Services annotated POJO in the Service Registry makes it available to be
         bound to an endpoint and to start responding to incoming
         requests.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Registering Applications</emphasis> - Registering a
-        JAX-RS <code>Application</code> in the Service Registry makes it
+        Jakarta RESTful Web Services <code>Application</code> in the Service Registry makes it
         available to be bound to an endpoint and to start responding to
         incoming requests.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Registering Extensions</emphasis> - The JAX-RS
-        specification defines a variety of plugable extensions. JAX-RS
+        <para><emphasis>Registering Extensions</emphasis> - The Jakarta RESTful Web Services
+        specification defines a variety of plugable extensions. These
         extensions can be registered in the Service Registry to include them
         in the handling pipeline.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Requiring Extensions</emphasis> - Sometimes JAX-RS
-        resources, or even JAX-RS extensions, depend upon the presence of
-        another extension. For example a JAX-RS resource and a JAX-RS
-        exception mapper may both depend on a JSON serializer. JAX-RS
+        <para><emphasis>Requiring Extensions</emphasis> - Sometimes Jakarta RESTful Web Services
+        resources, or even Jakarta RESTful Web Services extensions, depend upon the presence of
+        another extension. For example a Jakarta RESTful Web Services resource and
+        exception mapper may both depend on a JSON serializer. Jakarta RESTful Web Services
         Whiteboard services may define preconditions that must be satisfied
         before they can be bound.</para>
       </listitem>
     </itemizedlist>
 
-    <para>JAX-RS Whiteboard implementations must support at least version 2.1
-    of the JAX-RS API.</para>
+    <para>Jakarta RESTful Web Services Whiteboard implementations must support at least version 3.0
+    of the Jakarta RESTful Web Services API.</para>
 
     <section>
       <title>Entities</title>
@@ -101,60 +101,60 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JAX-RS Whiteboard service</emphasis> - An object
+          <para><emphasis>Jakarta RESTful Web Services Whiteboard service</emphasis> - An object
           registered in the Service Registry providing the necessary
-          Whiteboard service properties defined by this specification. JAX-RS
+          Whiteboard service properties defined by this specification.
           Whiteboard services may be <emphasis>resource</emphasis>,
           <emphasis>application</emphasis> or <emphasis>extension</emphasis>
           services</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Whiteboard implementation</emphasis> - An
-          implementation that provides one or more JAX-RS Whiteboards.</para>
+          <para><emphasis>Jakarta RESTful Web Services Whiteboard implementation</emphasis> - An
+          implementation that provides one or more Jakarta RESTful Web Services Whiteboards.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Whiteboard</emphasis> - A runtime instance
-          that processes JAX-RS Whiteboard services. Each JAX-RS Whiteboard
-          service may be processed by multiple JAX-RS Whiteboards. Different
-          JAX-RS Whiteboards provided by the same JAX-RS Whiteboard
+          <para><emphasis>Jakarta RESTful Web Services Whiteboard</emphasis> - A runtime instance
+          that processes Jakarta RESTful Web Services Whiteboard services. Each Jakarta RESTful Web Services Whiteboard
+          service may be processed by multiple Jakarta RESTful Web Services Whiteboards. Different
+          Jakarta RESTful Web Services Whiteboards provided by the same Jakarta RESTful Web Services Whiteboard
           implementation may configured differently, for example using
           different ports or root contexts.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Service Runtime service</emphasis> - A
-          service providing runtime introspection into a JAX-RS Whiteboard
+          <para><emphasis>Jakarta RESTful Web Services Service Runtime service</emphasis> - A
+          service providing runtime introspection into a Jakarta RESTful Web Services Whiteboard
           instance.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Resource Service</emphasis> - A service that
+          <para><emphasis>Jakarta RESTful Web Services Resource Service</emphasis> - A service that
           provides one or more RESTful resource methods which map to incoming
           HTTP requests.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Application Service</emphasis> - A service
-          that provides a <code>javax.ws.rs.core.Application</code> to be
-          hosted by a JAX-RS Whiteboard.</para>
+          <para><emphasis>Jakarta RESTful Web Services Application Service</emphasis> - A service
+          that provides a <code>jakarta.ws.rs.core.Application</code> to be
+          hosted by a Jakarta RESTful Web Services Whiteboard.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Extension Service</emphasis> - A service that
-          extends the functionality of a JAX-RS Whiteboard.</para>
+          <para><emphasis>Jakarta RESTful Web Services Extension Service</emphasis> - A service that
+          extends the functionality of a Jakarta RESTful Web Services Whiteboard.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Static Resources</emphasis> - JAX-RS resources that
-          are included programmatically in a JAX-RS Whiteboard application,
+          <para><emphasis>Static Resources</emphasis> - Jakarta RESTful Web Services resources that
+          are included programmatically in a Jakarta RESTful Web Services Whiteboard application,
           rather than being added at runtime by the whiteboard.</para>
         </listitem>
       </itemizedlist>
 
-      <figure pgwide="1" xml:id="service.jaxrs.whiteboard-overview">
-        <title>JAX-RS Whiteboard Overview Diagram</title>
+      <figure pgwide="1" xml:id="service.jakartars.whiteboard-overview">
+        <title>Jakarta RESTful Web Services Whiteboard Overview Diagram</title>
 
         <mediaobject>
           <imageobject>
@@ -164,68 +164,68 @@
         </mediaobject>
       </figure>
 
-      <para>The <xref linkend="service.jaxrs.whiteboard-overview"/> shows an
-      OSGi framework running a JAX-RS Whiteboard Implementation bundle. This
-      bundle has been configured to provide two JAX-RS whiteboards, each of
-      which has a corresponding JAX-RS Service Runtime Service. The various
-      JAX-RS Whiteboard services available in the framework are discovered and
+      <para>The <xref linkend="service.jakartars.whiteboard-overview"/> shows an
+      OSGi framework running a Jakarta RESTful Web Services Whiteboard Implementation bundle. This
+      bundle has been configured to provide two Jakarta RESTful Web Services whiteboards, each of
+      which has a corresponding Jakarta RESTful Web Services Service Runtime Service. The various
+      Jakarta RESTful Web Services Whiteboard services available in the framework are discovered and
       processed by both whiteboards.</para>
     </section>
   </section>
 
-  <section xml:id="service.jaxrs.whiteboard">
-    <title>The JAX-RS Whiteboard</title>
+  <section xml:id="service.jakartars.whiteboard">
+    <title>The Jakarta RESTful Web Services Whiteboard</title>
 
-    <para>An important principle of the JAX-RS Whiteboard specification is
-    that an OSGi framework may contain many active JAX-RS Whiteboards at any
-    time, even if there is only a single JAX-RS Whiteboard implementation
+    <para>An important principle of the Jakarta RESTful Web Services Whiteboard specification is
+    that an OSGi framework may contain many active Jakarta RESTful Web Services Whiteboards at any
+    time, even if there is only a single Jakarta RESTful Web Services Whiteboard implementation
     present in the framework. In addition to providing a web endpoint with
-    which to register Whiteboard services, a JAX-RS Whiteboard provides a
-    holder for JAX-RS Applications.</para>
+    which to register Whiteboard services, a Jakarta RESTful Web Services Whiteboard provides a
+    holder for Jakarta RESTful Web Services Applications.</para>
 
-    <para>All JAX-RS Whiteboards have a <code>default</code> application which
+    <para>All Jakarta RESTful Web Services Whiteboards have a <code>default</code> application which
     is used to register resources that do not target an existing application.
-    In this respect a JAX-RS whiteboard application shares some similarities
+    In this respect a Jakarta RESTful Web Services whiteboard application shares some similarities
     with a Servlet Context in the <xref linkend="service.http.whiteboard"/>.
-    Resources registered with a JAX-RS Whiteboard are always registered as
+    Resources registered with a Jakarta RESTful Web Services Whiteboard are always registered as
     part of an application. The generated name of the default application is
-    <code>.default</code>, and it is mapped to the root context of the JAX-RS
+    <code>.default</code>, and it is mapped to the root context of the Jakarta RESTful Web Services
     Whiteboard.</para>
 
-    <para>A JAX-RS Whiteboard implementation must create a JAX-RS Whiteboard
+    <para>A Jakarta RESTful Web Services Whiteboard implementation must create a Jakarta RESTful Web Services Whiteboard
     instance, however it is expected that most implementations will permit
-    multiple JAX-RS whiteboards to be configured. These instances may differ
+    multiple Jakarta RESTful Web Services whiteboards to be configured. These instances may differ
     significantly, or may simply offer the same capabilities on a different
     port.</para>
 
-    <para>For details on the association process between JAX-RS Whiteboard
-    services and a JAX-RS Whiteboard see <xref
+    <para>For details on the association process between Jakarta RESTful Web Services Whiteboard
+    services and a Jakarta RESTful Web Services Whiteboard see <xref
     linkend="service.http.whiteboard.common.properties"/>.</para>
 
     <section>
-      <title>The JAX-RS Service Runtime Service</title>
+      <title>The Jakarta RESTful Web Services Service Runtime Service</title>
 
       <para>The <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
+      linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime"
       xrefstyle="hyperlink"/> service represents the runtime state information
-      of a JAX-RS Whiteboard instance. This information is provided through
+      of a Jakarta RESTful Web Services Whiteboard instance. This information is provided through
       Data Transfer Objects (DTOs). The architecture of OSGi DTOs is described
       in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
-      <para>Each JAX-RS Whiteboard implementation registers exactly one
-      <code>JaxrsServiceRuntime</code> service per JAX-RS Whiteboard. The
-      service properties of the JAX-RS Service Runtime Service can be used to
-      target JAX-RS Whiteboard services at specific JAX-RS whiteboards, as
-      described by the <code>osgi.jaxrs.whiteboard.target</code> property in
-      <xref linkend="service.jaxrs.common.properties"/>.</para>
+      <para>Each Jakarta RESTful Web Services Whiteboard implementation registers exactly one
+      <code>JakartarsServiceRuntime</code> service per Jakarta RESTful Web Services Whiteboard. The
+      service properties of the Jakarta RESTful Web Services Service Runtime Service can be used to
+      target Jakarta RESTful Web Services Whiteboard services at specific Jakarta RESTful Web Services whiteboards, as
+      described by the <code>osgi.jakartars.whiteboard.target</code> property in
+      <xref linkend="service.jakartars.common.properties"/>.</para>
 
-      <para>The <code>JaxrsServiceRuntime</code> provides service registration
-      properties to declare its underlying JAX-RS Whiteboard. These service
+      <para>The <code>JakartarsServiceRuntime</code> provides service registration
+      properties to declare its underlying Jakarta RESTful Web Services Whiteboard. These service
       properties can include implementation-specific key-value pairs. They
       also include the following:</para>
 
       <table pgwide="1">
-        <title>Service properties for the <code>JaxrsServiceRuntime</code>
+        <title>Service properties for the <code>JakartarsServiceRuntime</code>
         service</title>
 
         <tgroup cols="3">
@@ -247,22 +247,22 @@
 
           <tbody>
             <row>
-              <entry><code>osgi.jaxrs.endpoint</code></entry>
+              <entry><code>osgi.jakartars.endpoint</code></entry>
 
               <entry><code>String+</code></entry>
 
-              <entry><para> Endpoint(s) where this JAX-RS Whiteboard is
+              <entry><para> Endpoint(s) where this Jakarta RESTful Web Services Whiteboard is
               listening. Registered Whiteboard services are made available
               here. Values could be provided as URLs e.g.
               <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
               <code>/myapp/</code>. Relative paths may be used if the scheme
               and authority parts of the URLs are not known, for example if
-              the JAX-RS Whiteboard is delegating to a bridged Http Service
-              implementation. If the JAX-RS Whiteboard Service is serving the
+              the Jakarta RESTful Web Services Whiteboard is delegating to a bridged Http Service
+              implementation. If the Jakarta RESTful Web Services Whiteboard Service is serving the
               root context and scheme and authority are not known, the value
               of the property is <code>/</code>. Each entry must end with a
               slash.</para><para>See <xref
-              linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT"
+              linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntimeConstants.JAKARTA_RS_SERVICE_ENDPOINT"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
@@ -271,12 +271,12 @@
 
               <entry><code>Long</code></entry>
 
-              <entry><para>Whenever the DTOs available from the JAX-RS Service
+              <entry><para>Whenever the DTOs available from the Jakarta RESTful Web Services Service
               Runtime service change, the value of this property will
               increase.</para> <para>This allows interested parties to be
               notified of changes to the DTOs by observing Service Events of
               type <code>MODIFIED</code> for the <xref
-              linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
+              linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime"
               xrefstyle="hyperlink"/> service. See
               <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in
               <xref linkend="intro.core.release"
@@ -290,24 +290,24 @@
     <section>
       <title>Inspecting the Runtime DTOs</title>
 
-      <para>The JAX-RS Service Runtime service provides information about
+      <para>The Jakarta RESTful Web Services Service Runtime service provides information about
       registered Whiteboard services through the <xref
-      linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
+      linkend="org.osgi.service.jakartars.runtime.dto.RuntimeDTO"
       xrefstyle="hyperlink"/>.</para>
 
       <para>The Runtime DTO provides information about services that have been
-      successfully registered as well as information about the JAX-RS
-      Whiteboard services that were not successfully registered. JAX-RS
+      successfully registered as well as information about the Jakarta RESTful Web Services
+      Whiteboard services that were not successfully registered. Jakarta RESTful Web Services
       Whiteboard services that have the required properties set but cannot be
-      processed, are reflected in the failure DTOs. JAX-RS Whiteboard services
+      processed, are reflected in the failure DTOs. Jakarta RESTful Web Services Whiteboard services
       of interfaces described in this specification that do not have the
       required properties set are ignored and not reflected in the failure
       DTOs.</para>
 
       <para>The Runtime DTO can be obtained using the <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime.getRuntimeDTO--"
+      linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime.getRuntimeDTO--"
       xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a
-      snapshot of the state of the JAX-RS Runtime, including the JAX-RS
+      snapshot of the state of the Jakarta RESTful Web Services Runtime, including the Jakarta RESTful Web Services
       Whiteboard resources, extensions and applications that are active in
       each registered application. The Runtime DTO also includes information
       about Whiteboard services which could not be activated.</para>
@@ -353,13 +353,13 @@
       into a servlet container into which the OSGi Framework has been deployed
       as a Web Application.</para>
 
-      <para>In bridged situations the JAX-RS Whiteboard implementation will
-      have limited facilities for creating new JAX-RS whiteboards, and may
+      <para>In bridged situations the Jakarta RESTful Web Services Whiteboard implementation will
+      have limited facilities for creating new Jakarta RESTful Web Services whiteboards, and may
       also have limited information about its environment.</para>
 
       <para>Information about the surrounding Servlet Container, including
-      ServletContext information and HttpSession data, is available to JAX-RS
-      Whiteboard resources using standard JAX-RS injection behavior.</para>
+      ServletContext information and HttpSession data, is available to Jakarta RESTful Web Services
+      Whiteboard resources using standard Jakarta RESTful Web Services injection behavior.</para>
 
       <programlisting>@GET
 @Path("{name}")
@@ -369,41 +369,41 @@ public String interrogateSession(@PathParam("name") String name,
     return String.valueOf(s.getAttribute(name));
 }</programlisting>
 
-      <para>A JAX-RS Whiteboard implementation needs to ensure that Http
-      Sessions are not shared amongst different JAX-RS Whiteboards, or amongst
-      different JAX-RS Whiteboard applications. That is,
+      <para>A Jakarta RESTful Web Services Whiteboard implementation needs to ensure that Http
+      Sessions are not shared amongst different Jakarta RESTful Web Services Whiteboards, or amongst
+      different Jakarta RESTful Web Services Whiteboard applications. That is,
       <code>HttpServletRequest.getSession()</code> calls must provide
-      different sessions for each whiteboard application with which a JAX-RS
+      different sessions for each whiteboard application with which a Jakarta RESTful Web Services
       whiteboard service is associated.</para>
     </section>
 
     <section>
-      <title>Isolation between JAX-RS Whiteboards</title>
+      <title>Isolation between Jakarta RESTful Web Services Whiteboards</title>
 
-      <para>Even when they are created by the same JAX-RS Whiteboard
-      implementation, each JAX-RS Whiteboard instance is separate, and
-      isolated from other instances. Importantly, JAX-RS Whiteboard services
-      targeted to one JAX-RS Whiteboard application must not be visible in any
+      <para>Even when they are created by the same Jakarta RESTful Web Services Whiteboard
+      implementation, each Jakarta RESTful Web Services Whiteboard instance is separate, and
+      isolated from other instances. Importantly, Jakarta RESTful Web Services Whiteboard services
+      targeted to one Jakarta RESTful Web Services Whiteboard application must not be visible in any
       other Whiteboard or applications to which they are not targeted.</para>
 
       <para>This isolation restriction is critical, as it ensures that
-      different JAX-RS Whiteboard applications can be configured with
+      different Jakarta RESTful Web Services Whiteboard applications can be configured with
       different, potentially overlapping, incompatible extension
       features.</para>
     </section>
   </section>
 
-  <section xml:id="service.jaxrs.common.properties">
+  <section xml:id="service.jakartars.common.properties">
     <title>Common Whiteboard Properties</title>
 
-    <para>JAX-RS Whiteboard services support common service registration
-    properties to associate them with a JAX-RS Whiteboard. These properties
+    <para>Jakarta RESTful Web Services Whiteboard services support common service registration
+    properties to associate them with a Jakarta RESTful Web Services Whiteboard. These properties
     apply to whiteboard resources, extensions and applications except where
     explicitly stated otherwise. Each service property has an associated
     Component Property Type annotation that can be used to easily apply the
     property to a Declarative Services Component.</para>
 
-    <table pgwide="1" xml:id="service.jaxrs.common.properties.table">
+    <table pgwide="1" xml:id="service.jakartars.common.properties.table">
       <title>Common properties</title>
 
       <tgroup cols="3">
@@ -425,40 +425,40 @@ public String interrogateSession(@PathParam("name") String name,
 
         <tbody>
           <row>
-            <entry><para><code>osgi.jaxrs.name</code></para><para><xref
-            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsName"
+            <entry><para><code>osgi.jakartars.name</code></para><para><xref
+            linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsName"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>A user defined name that can be used to identify a
-            JAX-RS whiteboard service. Names must follow OSGi symbolic name
+            Jakarta RESTful Web Services whiteboard service. Names must follow OSGi symbolic name
             rules, and also must not start with the prefixes <code>'.'</code>
             or <code>'osgi.'</code>.</para> <para>If no name is defined for a
-            JAX-RS whiteboard service then one is generated for it. This
+            Jakarta RESTful Web Services whiteboard service then one is generated for it. This
             generated name will start with a <code>'.'</code>. The prefix
             <code>osgi.</code> is currently unused, but reserved for future
-            versions of this specification. </para> <para>If a JAX-RS service
+            versions of this specification. </para> <para>If a Jakarta RESTful Web Services service
             is registered with an illegal name then it is not bound and this
-            is reflected in the failure DTOs. If two JAX-RS services are
+            is reflected in the failure DTOs. If two Jakarta RESTful Web Services services are
             registered with the same name (even if they are advertised as
             different types) then only the first service in ranking order, as
             specified in <code>ServiceReference.compareTo</code>, is bound and
             the lower ranked service(s) are reflected in the failure DTOs. See
             <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_NAME"
+            linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.application.select</code><emphasis
+            <entry><para><code>osgi.jakartars.application.select</code><emphasis
             role="strong"><superscript>†</superscript></emphasis></para><para><xref
-            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect"
+            linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsApplicationSelect"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
-            <entry><para>An LDAP-style filter to select the JAX-RS
+            <entry><para>An LDAP-style filter to select the Jakarta RESTful Web Services
             Application(s) with which this Whiteboard service should be
             associated. Any service property of the Application can be
             filtered on. If this filter is not defined then the default
@@ -466,63 +466,63 @@ public String interrogateSession(@PathParam("name") String name,
             specifically targeted using the application name
             <code>.default</code>. </para> <para>For example, to select an
             Application with name <code>myApp</code> provide the following
-            filter:</para><programlisting>(osgi.jaxrs.name=myApp)</programlisting><para>To
+            filter:</para><programlisting>(osgi.jakartars.name=myApp)</programlisting><para>To
             select all Applications in the whiteboard provide the following
-            value:</para><programlisting>(osgi.jaxrs.name=*)</programlisting><para>If
+            value:</para><programlisting>(osgi.jakartars.name=*)</programlisting><para>If
             no matching application exists this is reflected in the failure
             DTOs. See <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT"
+            linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT"
             xrefstyle="hyperlink"/>.</para> <para>† Note that this property is
-            not valid for JAX-RS Application services.</para></entry>
+            not valid for Jakarta RESTful Web Services Application services.</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.extension.select</code></para><para><xref
-            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtensionSelect"
+            <entry><para><code>osgi.jakartars.extension.select</code></para><para><xref
+            linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsExtensionSelect"
             xrefstyle="hyperlink"/> </para></entry>
 
             <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>A set of LDAP-style filters used to express
             dependencies on one or more extension services. If a filter is
-            provided then the JAX-RS Whiteboard attempts to match that filter
+            provided then the Jakarta RESTful Web Services Whiteboard attempts to match that filter
             against the service properties of the Whiteboard runtime, the
             service properties of the whiteboard application, and each of the
             extension services currently active in the application. This
             search may occur in any order. If all of the supplied filters are
-            matched then the whiteboard service is registered into the JAX-RS
+            matched then the whiteboard service is registered into the Jakarta RESTful Web Services
             Whiteboard application. </para> <para>For example, to require an
             extension which provides JSON serialization advertising property
             name <code>serialize.to</code> with value <code>JSON</code>
             provide the following filter:</para> <programlisting>(serialize.to=JSON)</programlisting>
             <para>A more detailed version of this example is available in
-            <xref linkend="service.jaxrs.extension.example"/></para> <para>If
+            <xref linkend="service.jakartars.extension.example"/></para> <para>If
             any filter(s) fail to match then this is reflected in the failure
             DTOs. See <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT"
+            linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_EXTENSION_SELECT"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
-            <entry><para> <code>osgi.jaxrs.whiteboard.target</code>
+            <entry><para> <code>osgi.jakartars.whiteboard.target</code>
             </para><para><xref
-            linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsWhiteboardTarget"
+            linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsWhiteboardTarget"
             xrefstyle="hyperlink"/> </para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The value of this service property is an LDAP-style
-            filter expression to select the JAX-RS Whiteboard(s) to handle
+            filter expression to select the Jakarta RESTful Web Services Whiteboard(s) to handle
             this Whiteboard service. The LDAP filter is used to match <xref
-            linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
-            xrefstyle="hyperlink"/> services. Each JAX-RS Whiteboard exposes
-            exactly one <code>JaxrsServiceRuntime</code> service. This
+            linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime"
+            xrefstyle="hyperlink"/> services. Each Jakarta RESTful Web Services Whiteboard exposes
+            exactly one <code>JakartarsServiceRuntime</code> service. This
             property is used to associate the Whiteboard service with the
-            JAX-RS Whiteboard that registered the
-            <code>JaxrsServiceRuntime</code> service. If this property is not
-            specified then the service will target all JAX-RS Whiteboards. See
+            Jakarta RESTful Web Services Whiteboard that registered the
+            <code>JakartarsServiceRuntime</code> service. If this property is not
+            specified then the service will target all Jakarta RESTful Web Services Whiteboards. See
             <xref
-            linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET"
+            linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_WHITEBOARD_TARGET"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
@@ -530,30 +530,30 @@ public String interrogateSession(@PathParam("name") String name,
     </table>
   </section>
 
-  <section xml:id="service.jaxrs.resource.services">
-    <title>Registering JAX-RS Resources</title>
+  <section xml:id="service.jakartars.resource.services">
+    <title>Registering RESTful Resources</title>
 
-    <para>JAX-RS resources can be registered with the JAX-RS Whiteboard by
+    <para>Jakarta RESTful Web Services resources can be registered with the Jakarta RESTful Web Services Whiteboard by
     registering them as Whiteboard services. This means that the resource POJO
-    implementations are registered in the Service Registry. As JAX-RS
+    implementations are registered in the Service Registry. As Jakarta RESTful Web Services
     resources are POJOs they may be registered using <emphasis>any</emphasis>
-    valid service interface, including <code>Object</code>. The JAX-RS
+    valid service interface, including <code>Object</code>. The Jakarta RESTful Web Services
     container will then use reflection to discover methods and annotations on
     the resource object, just as it would outside of OSGi.</para>
 
-    <para>As JAX-RS resources have no common interface type they are instead
-    registered with the <code>osgi.jaxrs.resource</code> service property with
+    <para>As Jakarta RESTful Web Services resources have no common interface type they are instead
+    registered with the <code>osgi.jakartars.resource</code> service property with
     a value of <code>"true"</code>. This property serves as a marker to the
-    JAX-RS whiteboard runtime, indicating that this OSGi service should be
-    hosted as a JAX-RS Whiteboard resource.</para>
+    Jakarta RESTful Web Services whiteboard runtime, indicating that this OSGi service should be
+    hosted as a Jakarta RESTful Web Services Whiteboard resource.</para>
 
     <section>
-      <title>JAX-RS Resource mapping</title>
+      <title>Jakarta RESTful Web Services Resource mapping</title>
 
-      <para>JAX-RS resources use the <code>Path</code> annotation to bind
-      themselves to particular URIs within the JAX-RS container. The path
+      <para>Jakarta RESTful Web Services resources use the <code>Path</code> annotation to bind
+      themselves to particular URIs within the Jakarta RESTful Web Services container. The path
       annotation can be applied to the resource class, and to individual
-      resource methods. For example the following JAX-RS resource:</para>
+      resource methods. For example the following Jakarta RESTful Web Services resource:</para>
 
       <programlisting>@Path("foo")
 public class Foo {
@@ -577,7 +577,7 @@ public class Foo {
 
 }</programlisting>
 
-      <para>This JAX-RS resource defines two resource methods. The
+      <para>This Jakarta RESTful Web Services resource defines two resource methods. The
       <code>Path</code> annotation applied to the class sets the base URI for
       all methods in the resource. The <code>getFoos()</code> method is
       therefore bound to the URI <code>foo</code>. The <code>Path</code>
@@ -585,32 +585,32 @@ public class Foo {
       sub-resource which captures the next token in the URI. This method is
       therefore bound to URIs of the form <code>foo/buzz</code>.</para>
 
-      <para>When used as an OSGi JAX-RS Whiteboard service a JAX-RS resource
+      <para>When used as an OSGi Jakarta RESTful Web Services Whiteboard service a Jakarta RESTful Web Services resource
       follows the same mapping rules, but the base context(s) it uses are
       determined by the Application(s) to which it is mapped. For example,
       when mapped to the default application of a whiteboard with endpoint
       <code>http://127.0.0.1/</code> the <code>getFoos()</code> method would
       be available at <code>http://127.0.0.1/foo</code>.</para>
 
-      <section xml:id="service.jaxrs.resource.services.clashes">
+      <section xml:id="service.jakartars.resource.services.clashes">
         <title>Clashing resource mappings</title>
 
-        <para>Resource services bound to a JAX-RS whiteboard application share
+        <para>Resource services bound to a Jakarta RESTful Web Services whiteboard application share
         a single URI namespace with other resources in the application
-        (including any existing static resources). When JAX-RS services are
+        (including any existing static resources). When Jakarta RESTful Web Services services are
         bound it is possible that one or more methods on these services will
-        map to the same URI. This situation is permitted by the JAX-RS
+        map to the same URI. This situation is permitted by the Jakarta RESTful Web Services
         specification which defines a detailed selection algorithm.</para>
 
-        <para>When clashes occur in the JAX-RS whiteboard then resources
+        <para>When clashes occur in the Jakarta RESTful Web Services whiteboard then resources
         supplied using the service whiteboard must be preferred to static
         resources contained in the application. If two or more whiteboard
         resources exist then they must be ordered using ranking order, as
         specified in <code>ServiceReference.compareTo</code>. Unlike for other
-        services in the JAX-RS whiteboard, whiteboard resource services must
+        services in the Jakarta RESTful Web Services whiteboard, whiteboard resource services must
         not be ordered using their natural ordering. Whiteboard resource
         services with the same ranking must be considered equal, following the
-        normal resource method selection rules defined in the JAX-RS
+        normal resource method selection rules defined in the Jakarta RESTful Web Services
         specification. As per the Core specification, whiteboard services with
         no <code>service.ranking</code> property must be treated as having a
         ranking of <code>0</code>.</para>
@@ -618,30 +618,30 @@ public class Foo {
     </section>
 
     <section>
-      <title>JAX-RS Whiteboard Resource Lifecycle</title>
+      <title>Jakarta RESTful Web Services Whiteboard Resource Lifecycle</title>
 
-      <para>A key tenet of JAX-RS is that all resource objects are stateless.
-      In the JAX-RS specification resources therefore have one of two scopes,
+      <para>A key tenet of Jakarta RESTful Web Services is that all resource objects are stateless.
+      In the Jakarta RESTful Web Services specification resources therefore have one of two scopes,
       they are either singleton, or request-scoped. Singleton resources are
-      created once, potentially outside the JAX-RS container, and
+      created once, potentially outside the Jakarta RESTful Web Services container, and
       request-scoped resources are created on-demand for each request, then
       discarded afterwards.</para>
 
-      <para>Typically JAX-RS developers are encouraged to write request-scoped
+      <para>Typically Jakarta RESTful Web Services developers are encouraged to write request-scoped
       resources, as this makes it difficult to accidentally write stateful
       components. In OSGi, however, it is more common to write singleton
       services. On demand instances of OSGi services can be created, but only
       if the service is registered as a <code>prototype</code> scope.</para>
 
-      <para>The JAX-RS whiteboard implementation is responsible for managing
-      the mismatch between the OSGi service lifecycle model and the JAX-RS
-      resource lifecycle model. If the JAX-RS whiteboard resource is
+      <para>The Jakarta RESTful Web Services whiteboard implementation is responsible for managing
+      the mismatch between the OSGi service lifecycle model and the Jakarta RESTful Web Services
+      resource lifecycle model. If the Jakarta RESTful Web Services whiteboard resource is
       registered as prototype scope then the implementation must treat the
       resources as request-scoped, creating a new service instance for each
       request and releasing it when the request completes. Otherwise the
-      JAX-RS whiteboard service must be registered as a singleton scope
+      Jakarta RESTful Web Services whiteboard service must be registered as a singleton scope
       resource within the application. Singleton scope whiteboard resources
-      must be released by the JAX-RS whiteboard when the application with
+      must be released by the Jakarta RESTful Web Services whiteboard when the application with
       which they have been registered is removed from the whiteboard, even if
       this is only a temporary situation.</para>
 
@@ -649,7 +649,7 @@ public class Foo {
       prevent the service from being used, which is reflected using a failure
       DTO. In such a case the system treats the resource as unusable.</para>
 
-      <para>When multiple JAX-RS Whiteboard implementations are present all of
+      <para>When multiple Jakarta RESTful Web Services Whiteboard implementations are present all of
       them can potentially process the whiteboard resources. In such
       situations it can be useful to associate the servlet with a specific
       whiteboard by specifying the <code>osgi.http.whiteboard.target</code>
@@ -658,17 +658,17 @@ public class Foo {
       <section>
         <title>Resource Context Injection</title>
 
-        <para>JAX-RS resources may have objects injected into them by the
-        JAX-RS container. These objects may be related to an incoming request,
+        <para>Jakarta RESTful Web Services resources may have objects injected into them by the
+        Jakarta RESTful Web Services container. These objects may be related to an incoming request,
         for example an HTTP header value, or part of the container runtime.
-        Injected resources are annotated with a JAX-RS annotation, for example
+        Injected resources are annotated with a Jakarta RESTful Web Services annotation, for example
         <code>@Context</code>, and may be injected as method parameters, or as
         fields in the object.</para>
 
-        <para>If the JAX-RS injected objects are passed as method parameters
+        <para>If the Jakarta RESTful Web Services injected objects are passed as method parameters
         then the resource object may be a singleton. If, however, the objects
-        are injected into fields by the JAX-RS container then the resource
-        should be declared as a <code>prototype</code> scope. JAX-RS
+        are injected into fields by the Jakarta RESTful Web Services container then the resource
+        should be declared as a <code>prototype</code> scope. Jakarta RESTful Web Services
         Whiteboard implementations may support field injection for singleton
         resources, however this behavior is non portable, and may lead to
         errors at runtime when using other implementations.</para>
@@ -678,15 +678,15 @@ public class Foo {
         <title>Request-Scoped Resources</title>
 
         <para>Request-scoped resources are created on demand for a request and
-        then discarded afterwards. Critically for OSGi services the JAX-RS
+        then discarded afterwards. Critically for OSGi services the Jakarta RESTful Web Services
         whiteboard <emphasis>must not</emphasis> release a prototype scope
         service until <emphasis>after</emphasis> the response has completed.
-        If the resource makes use of a JAX-RS <code>AsyncResponse</code>,
+        If the resource makes use of a Jakarta RESTful Web Services <code>AsyncResponse</code>,
         <code>SseEventSink</code> or a <code>StreamingOutput</code> then this
         may be some time after the return of resource method, and potentially
         on a different thread.</para>
 
-        <para>JAX-RS whiteboard implementations must therefore take special
+        <para>Jakarta RESTful Web Services whiteboard implementations must therefore take special
         care not to release request scoped instances until they are completely
         finished.</para>
       </section>
@@ -694,7 +694,7 @@ public class Foo {
       <section>
         <title>Asynchronous Responses</title>
 
-        <para>JAX-RS supports asynchronous responses either for single-valued
+        <para>Jakarta RESTful Web Services supports asynchronous responses either for single-valued
         results, or for streams of data.</para>
 
         <para>Single valued results may be provided by the
@@ -708,7 +708,7 @@ public class Foo {
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource     
+ @JakartarsResource     
  public class MyResource {
   
     @Path(“foo”)
@@ -722,7 +722,7 @@ public class Foo {
 
         <para>Single valued asynchronous results can also be provided by
         returning a suitable type from the resource method. This can be a
-        <code>CompletionStage</code> as described in the JAX-RS specification,
+        <code>CompletionStage</code> as described in the Jakarta RESTful Web Services specification,
         or an OSGi <code>Promise</code> type. In this case the response from
         the resource method will be sent once the returned type has completed,
         either successfully or by failing.</para>
@@ -732,7 +732,7 @@ public class Foo {
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource     
+ @JakartarsResource     
  public class MyResource {
   
     @Path(“foo”)
@@ -743,8 +743,8 @@ public class Foo {
     }
 }</programlisting>
 
-        <para>Multi-valued results in JAX-RS are handled using Server Sent
-        Events. To send Server Sent Events a JAX-RS resource must declare its
+        <para>Multi-valued results in Jakarta RESTful Web Services are handled using Server Sent
+        Events. To send Server Sent Events a Jakarta RESTful Web Services resource must declare its
         produced media type appropriately, and inject its resource method with
         a <code>SseEventSink</code>. The resource must also gain access to a
         <code>Sse</code> to use as a factory for Outbound Server Sent Events.
@@ -756,7 +756,7 @@ public class Foo {
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource     
+ @JakartarsResource     
  public class MyResource {
   
     @Context
@@ -778,13 +778,13 @@ public class Foo {
       <title>Resource Service Properties</title>
 
       <para>The following table describes the properties that can be used by
-      JAX-RS resources registered as Whiteboard services. Additionally, the
+      Jakarta RESTful Web Services resources registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.jaxrs.common.properties.table"
+      linkend="service.jakartars.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
       <table pgwide="1">
-        <title>Service properties for JAX-RS Whiteboard resource
+        <title>Service properties for Jakarta RESTful Web Services Whiteboard resource
         services.</title>
 
         <tgroup cols="3">
@@ -806,16 +806,16 @@ public class Foo {
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.resource</code></para><para><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource"
+              <entry><para><code>osgi.jakartars.resource</code></para><para><xref
+              linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsResource"
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
 
               <entry><para>Declares that this service must be processed by the
-              JAX-RS whiteboard when set to <code>true</code>. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_RESOURCE"
+              Jakarta RESTful Web Services whiteboard when set to <code>true</code>. See <xref
+              linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_RESOURCE"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -824,14 +824,14 @@ public class Foo {
     </section>
 
     <section>
-      <title>A JAX-RS Whiteboard Resource Example</title>
+      <title>A Jakarta RESTful Web Services Whiteboard Resource Example</title>
 
       <para>The following example code uses Declarative Services annotations
-      to register a JAX-RS Whiteboard service.</para>
+      to register a Jakarta RESTful Web Services Whiteboard service.</para>
 
       <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource     
+ @JakartarsResource     
  public class MyResource {
   
      @GET
@@ -850,30 +850,30 @@ public class Foo {
       <para>To associate the above example resource with another application
       add the following service property:</para>
 
-      <programlisting>osgi.jaxrs.application.select=(osgi.jaxrs.name=myApp)</programlisting>
+      <programlisting>osgi.jakartars.application.select=(osgi.jakartars.name=myApp)</programlisting>
 
       <para>This can also be added using the property annotation:</para>
 
-      <programlisting>@JaxrsApplicationSelect("(osgi.jaxrs.name=myApp)")</programlisting>
+      <programlisting>@JakartarsApplicationSelect("(osgi.jakartars.name=myApp)")</programlisting>
 
-      <para>Setting this property requires a JAX-RS application named
+      <para>Setting this property requires a Jakarta RESTful Web Services application named
       <code>myApp</code> to be registered:</para>
 
       <programlisting>@Component(service=Application.class)
-@JaxrsName("myApp")
-@JaxrsApplicationBase("foo")
+@JakartarsName("myApp")
+@JakartarsApplicationBase("foo")
 public class MyApplication extends Application {}</programlisting>
 
       <para>Now the whiteboard resource will be available at
       <code>http://www.acme.com/foo/hello</code> as configured by the custom
-      JAX-RS application.</para>
+      Jakarta RESTful Web Services application.</para>
     </section>
   </section>
 
-  <section xml:id="service.jaxrs.extension.services">
-    <title>Registering JAX-RS Extensions</title>
+  <section xml:id="service.jakartars.extension.services">
+    <title>Registering Extensions</title>
 
-    <para>JAX-RS extensions can be registered with the JAX-RS Whiteboard by
+    <para>Jakarta RESTful Web Services extensions can be registered with the Jakarta RESTful Web Services Whiteboard by
     registering them as Whiteboard services. This means that the extension
     implementations are registered in the Service Registry. It is relatively
     common for a single extension type to provide more than one extension
@@ -881,14 +881,14 @@ public class MyApplication extends Application {}</programlisting>
     <code>MessageBodyWriter</code> are often provided by a single
     object.</para>
 
-    <para>Extension services must be registered with the JAX-RS application
+    <para>Extension services must be registered with the Jakarta RESTful Web Services application
     that they target using only the interfaces that they advertise in the OSGi
     service registry. If, for example, an extension service object implements
     <code>MessageBodyReader</code> and <code>ContainerRequestFilter</code> but
     only advertises <code>MessageBodyReader</code> in its service registration
     then it must only be used as a <code>MessageBodyReader</code></para>
 
-    <para>The following JAX-RS extension interfaces are supported by this
+    <para>The following Jakarta RESTful Web Services extension interfaces are supported by this
     specification:</para>
 
     <itemizedlist>
@@ -913,13 +913,13 @@ public class MyApplication extends Application {}</programlisting>
 
       <listitem>
         <para><code>ContextResolver</code> extensions are used to provide
-        objects for injection into other JAX-RS resources and
+        objects for injection into other Jakarta RESTful Web Services resources and
         extensions.</para>
       </listitem>
 
       <listitem>
         <para><code>ExceptionMapper</code> extensions are used to map
-        exceptions thrown by JAX-RS resources into responses.</para>
+        exceptions thrown by Jakarta RESTful Web Services resources into responses.</para>
       </listitem>
 
       <listitem>
@@ -930,26 +930,26 @@ public class MyApplication extends Application {}</programlisting>
       <listitem>
         <para><code>Feature</code> and <code>DynamicFeature</code> - these
         extensions are used as a way to register multiple extension types with
-        the JAX-RS container. Dynamic Features further allow the extensions to
-        be targeted to specific resources within the JAX-RS container.</para>
+        the Jakarta RESTful Web Services container. Dynamic Features further allow the extensions to
+        be targeted to specific resources within the Jakarta RESTful Web Services container.</para>
       </listitem>
     </itemizedlist>
 
-    <para>As JAX-RS extensions have many possible interface types, none of
+    <para>As Jakarta RESTful Web Services extensions have many possible interface types, none of
     which are defined by this specification, they must be registered with the
-    <code>osgi.jaxrs.extension</code> service property with a value of
-    <code>true</code>. This property serves as a marker to the JAX-RS
+    <code>osgi.jakartars.extension</code> service property with a value of
+    <code>true</code>. This property serves as a marker to the Jakarta RESTful Web Services
     whiteboard runtime, indicating that this OSGi service should be used as a
-    JAX-RS Whiteboard extension.</para>
+    Jakarta RESTful Web Services Whiteboard extension.</para>
 
-    <para>If the <code>osgi.jaxrs.extension</code> is added to a service which
-    does not advertise any of the JAX-RS extension types then this is an
+    <para>If the <code>osgi.jakartars.extension</code> is added to a service which
+    does not advertise any of the Jakarta RESTful Web Services extension types then this is an
     error, and must result in a failure DTO being created.</para>
 
     <section>
-      <title>Name Binding and JAX-RS Extensions</title>
+      <title>Name Binding and Jakarta RESTful Web Services Extensions</title>
 
-      <para>By default JAX-RS extensions are applied to every request, however
+      <para>By default Jakarta RESTful Web Services extensions are applied to every request, however
       sometimes they are only needed for a subset of resource methods. In this
       case a <code>NameBinding</code> annotation can be used to apply the
       extension to a subset of resource methods. The following example
@@ -963,7 +963,7 @@ public class MyApplication extends Application {}</programlisting>
 public @interface FizzBuzz{}
 
 @Component
-@JaxrsExtension
+@JakartarsExtension
 @FizzBuzz
 public class FizzBuzzReplacer implements WriterInterceptor {
 
@@ -979,7 +979,7 @@ public class FizzBuzzReplacer implements WriterInterceptor {
 }
 
 @Component(service=FizzResource.class)
-@JaxrsResource
+@JakartarsResource
 @Path("fizzbuzz")
 public class FizzResource {
 
@@ -993,7 +993,7 @@ public class FizzResource {
       <para>The result of an http request to the <code>fizzbuzz</code> URI
       will be <emphasis>fizzbuzz, buzz, fizzbuzzbuzz</emphasis></para>
 
-      <para>The JAX-RS whiteboard implementation must support the use of
+      <para>The Jakarta RESTful Web Services whiteboard implementation must support the use of
       <code>NameBinding</code> to limit the scope of applied whiteboard
       extensions.</para>
     </section>
@@ -1001,8 +1001,8 @@ public class FizzResource {
     <section>
       <title>Extension ordering</title>
 
-      <para>JAX-RS filters can be annotated with <code>@PreMatching</code> to
-      indicate that they should be applied before the JAX-RS container works
+      <para>Jakarta RESTful Web Services filters can be annotated with <code>@PreMatching</code> to
+      indicate that they should be applied before the Jakarta RESTful Web Services container works
       out which resource should be called by the incoming request. These
       filters can therefore change the request such that it maps to a
       different resource than it would have before the filter’s operation.
@@ -1010,8 +1010,8 @@ public class FizzResource {
       corresponding named resource is available to the runtime when they
       operate.</para>
 
-      <para>When used in the OSGi JAX-RS Whiteboard JAX-RS extensions follow
-      the same ordering rules as defined by the JAX-RS specification. Where
+      <para>When used in the OSGi Jakarta RESTful Web Services Whiteboard Jakarta RESTful Web Services extensions follow
+      the same ordering rules as defined by the Jakarta RESTful Web Services specification. Where
       more than one extension of a particular type is available then they are
       ordered according to their <code>javax.annotation.Priority</code>. If
       two extensions of the same type have the same priority then the
@@ -1108,9 +1108,9 @@ public class FizzResource {
     <section>
       <title>Extension dependencies</title>
 
-      <para>The <code>osgi.jaxrs.extension.select</code> property described in
-      <xref linkend="service.jaxrs.common.properties"/> applies to extensions
-      as well as JAX-RS resources. This is because one extension may depend on
+      <para>The <code>osgi.jakartars.extension.select</code> property described in
+      <xref linkend="service.jakartars.common.properties"/> applies to extensions
+      as well as Jakarta RESTful Web Services resources. This is because one extension may depend on
       another.</para>
 
       <para>The most common reason for an extension to have a dependency is
@@ -1119,8 +1119,8 @@ public class FizzResource {
       extension. The following example demonstrates a simple dependency on a
       Jackson ObjectMapper.</para>
 
-      <programlisting>@JaxrsExtension
-@JaxrsName("configProvider")
+      <programlisting>@JakartarsExtension
+@JakartarsName("configProvider")
 @Component
 public class ConfigProvider implements ContextResolver {
     
@@ -1134,8 +1134,8 @@ public class ConfigProvider implements ContextResolver {
     }
 }
 
-@JaxrsExtension
-@JaxrsExtensionSelect("(osgi.jaxrs.name=configProvider)")
+@JakartarsExtension
+@JakartarsExtensionSelect("(osgi.jakartars.name=configProvider)")
 @Component(scope=ServiceScope.PROTOTYPE)
 public class ConfiguredExtension implements WriterInterceptor {
 
@@ -1160,40 +1160,40 @@ public class ConfiguredExtension implements WriterInterceptor {
     <section>
       <title>Built in extensions</title>
 
-      <para>Depending on the capabilities of the JAX-RS whiteboard
+      <para>Depending on the capabilities of the Jakarta RESTful Web Services whiteboard
       implementation, and any statically defined extensions that make up a
-      JAX-RS Whiteboard application, there may be numerous non standard
+      Jakarta RESTful Web Services Whiteboard application, there may be numerous non standard
       extensions available. These extensions must be represented using service
-      properties on the JAX-RS Service Runtime, or the whiteboard application
+      properties on the Jakarta RESTful Web Services Service Runtime, or the whiteboard application
       as appropriate. This is why the extension select filters must also be
-      matched against the JAX-RS Service Runtime service and the whiteboard
+      matched against the Jakarta RESTful Web Services Service Runtime service and the whiteboard
       application being targeted.</para>
     </section>
 
     <section>
-      <title>JAX-RS Whiteboard Extension Lifecycle</title>
+      <title>Jakarta RESTful Web Services Whiteboard Extension Lifecycle</title>
 
-      <para>JAX-RS extensions have a different lifecycle from JAX-RS
-      resources, within a single application a JAX-RS extension always behaves
-      as a singleton. If a JAX-RS whiteboard extension is registered as
+      <para>Jakarta RESTful Web Services extensions have a different lifecycle from Jakarta RESTful Web Services
+      resources, within a single application a Jakarta RESTful Web Services extension always behaves
+      as a singleton. If a Jakarta RESTful Web Services whiteboard extension is registered as
       prototype scope then the whiteboard implementation must obtain a
       separate instance for every application to which the extension is
-      applied. Whiteboard extension services must be released by the JAX-RS
+      applied. Whiteboard extension services must be released by the Jakarta RESTful Web Services
       whiteboard when the application with which they have been registered is
       removed from the whiteboard, even if this is only a temporary
       situation.</para>
 
-      <para>JAX-RS extensions often require configuration, and need to be
+      <para>Jakarta RESTful Web Services extensions often require configuration, and need to be
       configured differently for different applications. This configuration is
-      typically provided by a JAX-RS <code>ContextResolver</code> and injected
-      into fields of the extension by the JAX-RS container. It is therefore
-      highly recommended that JAX-RS Whiteboard extensions are always
+      typically provided by a Jakarta RESTful Web Services <code>ContextResolver</code> and injected
+      into fields of the extension by the Jakarta RESTful Web Services container. It is therefore
+      highly recommended that Jakarta RESTful Web Services Whiteboard extensions are always
       registered as prototype scope, so that separate instances can be created
       for each whiteboard application.</para>
 
       <para>If an extension is registered as a singleton service then it
-      should not rely on any fields being injected by the JAX-RS Whiteboard
-      implementation. JAX-RS Whiteboard implementations may support field
+      should not rely on any fields being injected by the Jakarta RESTful Web Services Whiteboard
+      implementation. Jakarta RESTful Web Services Whiteboard implementations may support field
       injection for singleton extensions, however this behavior is non
       portable, and may lead to errors at runtime when using other
       implementations.</para>
@@ -1203,13 +1203,13 @@ public class ConfiguredExtension implements WriterInterceptor {
       <title>Extension Service Properties</title>
 
       <para>The following table describes the properties that can be used by
-      JAX-RS extensions registered as Whiteboard services. Additionally, the
+      Jakarta RESTful Web Services extensions registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.jaxrs.common.properties.table"
+      linkend="service.jakartars.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
       <table pgwide="1">
-        <title>Service properties for JAX-RS Whiteboard extension
+        <title>Service properties for Jakarta RESTful Web Services Whiteboard extension
         services.</title>
 
         <tgroup cols="3">
@@ -1231,16 +1231,16 @@ public class ConfiguredExtension implements WriterInterceptor {
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.extension</code></para><para><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtension"
+              <entry><para><code>osgi.jakartars.extension</code></para><para><xref
+              linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsExtension"
               xrefstyle="hyperlink"/> </para></entry>
 
               <entry><para><code>String</code> /
               <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
 
               <entry><para>Declares that this service must be processed by the
-              JAX-RS whiteboard when set to <code>true</code>. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_EXTENSION"
+              Jakarta RESTful Web Services whiteboard when set to <code>true</code>. See <xref
+              linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_EXTENSION"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -1248,16 +1248,16 @@ public class ConfiguredExtension implements WriterInterceptor {
       </table>
     </section>
 
-    <section xml:id="service.jaxrs.extension.example">
-      <title>A JAX-RS Whiteboard Extension Example</title>
+    <section xml:id="service.jakartars.extension.example">
+      <title>A Jakarta RESTful Web Services Whiteboard Extension Example</title>
 
       <para>The following example code uses Declarative Services annotations
-      to register a require JAX-RS Whiteboard extension which provides JSON
-      support, and requires the extension from a JAX-RS whiteboard
+      to register a require Jakarta RESTful Web Services Whiteboard extension which provides JSON
+      support, and requires the extension from a Jakarta RESTful Web Services whiteboard
       resource.</para>
 
       <programlisting>@Component(property="serialize.to=JSON")
-@JaxrsExtension
+@JakartarsExtension
 public class JsonProvider implements MessageBodyReader,
       MessageBodyWriter {
     ...      
@@ -1265,8 +1265,8 @@ public class JsonProvider implements MessageBodyReader,
  
  @Component(service = Object.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource
- @JaxrsExtensionSelect("(serialize.to=JSON)")
+ @JakartarsResource
+ @JakartarsExtensionSelect("(serialize.to=JSON)")
  public class MyResource {
   
      @GET
@@ -1279,43 +1279,43 @@ public class JsonProvider implements MessageBodyReader,
     </section>
   </section>
 
-  <section xml:id="service.jaxrs.application.services">
-    <title>Registering JAX-RS Applications</title>
+  <section xml:id="service.jakartars.application.services">
+    <title>Registering RESTful Web Service Applications</title>
 
-    <para>The JAX-RS specification defines the concept of an
+    <para>The Jakarta RESTful Web Services specification defines the concept of an
     <code>Application</code>. An application is an object which collects
-    together one or more JAX-RS resources and extensions, and provides them to
-    the JAX-RS container. These resources may be provided as pre-instantiated
+    together one or more Jakarta RESTful Web Services resources and extensions, and provides them to
+    the Jakarta RESTful Web Services container. These resources may be provided as pre-instantiated
     singletons, or as <code>Class</code> objects to be reflectively
     instantiated.</para>
 
-    <para>The OSGi JAX-RS whiteboard supports direct registration of
+    <para>The OSGi Jakarta RESTful Web Services whiteboard supports direct registration of
     Applications for two reasons:</para>
 
     <itemizedlist>
       <listitem>
-        <para>To support the use of legacy JAX-RS applications with the
+        <para>To support the use of legacy Jakarta RESTful Web Services applications with the
         whiteboard</para>
       </listitem>
 
       <listitem>
-        <para>To provide simple scoping of JAX-RS resources and extensions
+        <para>To provide simple scoping of Jakarta RESTful Web Services resources and extensions
         within a whiteboard, in this scenario it can be desirable to register
         an otherwise empty Application. This application can then be targeted
         by whiteboard services using the
-        <code>osgi.jaxrs.application.select</code> property.</para>
+        <code>osgi.jakartars.application.select</code> property.</para>
       </listitem>
     </itemizedlist>
 
-    <para><code>Application</code>s can be registered with the JAX-RS
+    <para><code>Application</code>s can be registered with the Jakarta RESTful Web Services
     Whiteboard by registering them as Whiteboard services which advertise
-    themselves using the JAX-RS <code>Application</code> type. In addition the
+    themselves using the Jakarta RESTful Web Services <code>Application</code> type. In addition the
     whiteboard services must provide a
-    <code>osgi.jaxrs.application.base</code> property. The value of this
+    <code>osgi.jakartars.application.base</code> property. The value of this
     property is the URI path relative to the root whiteboard context at which
     the application will be registered. Note that the value of any
     <code>ApplicationPath</code> annotation will be applied by the container
-    in addition to the <code>osgi.jaxrs.application.base</code>.</para>
+    in addition to the <code>osgi.jakartars.application.base</code>.</para>
 
     <para>Each registered Whiteboard Application service is provided as a
     separate application within the whiteboard, and is isolated from other
@@ -1332,7 +1332,7 @@ public class JsonProvider implements MessageBodyReader,
       as specified in <code>ServiceReference.compareTo</code>, will be made
       available. All other application services with that URI will have a
       failure DTO created for them. The same rules also apply to the
-      <code>osgi.jaxrs.name</code> property, with the highest ranked service
+      <code>osgi.jakartars.name</code> property, with the highest ranked service
       shadowing other applications with the same name.</para>
 
       <para>The default application is implicitly created by the whiteboard
@@ -1342,13 +1342,13 @@ public class JsonProvider implements MessageBodyReader,
       application bound at <code>/</code>.</para>
 
       <para>A whiteboard application service may set an
-      <code>osgi.jaxrs.name</code> of <code>.default</code> to replace the
+      <code>osgi.jakartars.name</code> of <code>.default</code> to replace the
       default application. This technique may be used to rebind the default
       application to a base uri other than <code>/</code>.</para>
 
       <para>If a whiteboard application fails (for example if the service get
       fails), or cannot be immediately deployed (for example if it has an
-      unsatisfied <code>osgi.jaxrs.extension.select</code>) then any
+      unsatisfied <code>osgi.jakartars.extension.select</code>) then any
       applications that it shadows are still shadowed and relevant failure
       DTOs are created for all of the applications.</para>
     </section>
@@ -1359,7 +1359,7 @@ public class JsonProvider implements MessageBodyReader,
       <para>It is possible for an application to require additional whiteboard
       extensions before it is eligible to be hosted by the whiteboard. When
       making this determination the Whiteboard implementation must perform a
-      dry-run validation of the <code>osgi.jaxrs.extension.select</code>
+      dry-run validation of the <code>osgi.jakartars.extension.select</code>
       filter, applying all of the whiteboard extensions targeted to the
       application before determining whether the application's requirements
       are met.</para>
@@ -1369,14 +1369,14 @@ public class JsonProvider implements MessageBodyReader,
       <title>Application Service Properties</title>
 
       <para>The following table describes the properties that can be used by
-      JAX-RS applications registered as Whiteboard services. Additionally, the
+      Jakarta RESTful Web Services applications registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.jaxrs.common.properties.table"
+      linkend="service.jakartars.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported, except for the
-      <code>osgi.jaxrs.application.select</code> property.</para>
+      <code>osgi.jakartars.application.select</code> property.</para>
 
       <table pgwide="1">
-        <title>Service properties for JAX-RS Whiteboard application
+        <title>Service properties for Jakarta RESTful Web Services Whiteboard application
         services.</title>
 
         <tgroup cols="3">
@@ -1398,17 +1398,17 @@ public class JsonProvider implements MessageBodyReader,
 
           <tbody>
             <row>
-              <entry><para><code>osgi.jaxrs.application.base</code></para><para><xref
-              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationBase"
+              <entry><para><code>osgi.jakartars.application.base</code></para><para><xref
+              linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsApplicationBase"
               xrefstyle="hyperlink"/> </para></entry>
 
               <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
               <entry><para>Declares that this service must be processed by the
-              JAX-RS whiteboard, and defines the URI, relative to the root
+              Jakarta RESTful Web Services whiteboard, and defines the URI, relative to the root
               context of the whiteboard, at which the Application should be
               registered. See <xref
-              linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE"
+              linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_BASE"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -1419,18 +1419,18 @@ public class JsonProvider implements MessageBodyReader,
     <section>
       <title>Accessing the Application service properties</title>
 
-      <para>In JAX-RS the <code>@Context</code> annotation may be used to
+      <para>In Jakarta RESTful Web Services the <code>@Context</code> annotation may be used to
       inject the <code>Application</code> instance into a resource or
       extension. Application configuration properties can also be injected
       using the <code>Configuration</code> type.</para>
 
-      <para>When using the JAX-RS Whiteboard it can also be necessary to
+      <para>When using the Jakarta RESTful Web Services Whiteboard it can also be necessary to
       access the service properties associated with the application hosting
       the resource, for example to allow customization of the resource's
-      response. To this end, the JAX-RS whiteboard implementation must make
+      response. To this end, the Jakarta RESTful Web Services whiteboard implementation must make
       the Application service properties available as a <code>Map</code> in
       the configuration. The key used to store this map is
-      <code>osgi.jaxrs.application.serviceProperties</code>, and it can be
+      <code>osgi.jakartars.application.serviceProperties</code>, and it can be
       found in any injected <code>Configuration</code> instance.</para>
 
       <para>Furthermore, for <code>Feature</code> and
@@ -1445,22 +1445,22 @@ public class JsonProvider implements MessageBodyReader,
       <para>In the case where the hosting application is not an OSGi service,
       for example a Whiteboard implementation may choose to provide its
       default application as an internal detail, then the
-      <code>osgi.jaxrs.application.serviceProperties</code> map must exist
-      containing the <code>osgi.jaxrs.name</code> of the application and the
-      service properties associated with the JaxrsServiceRuntime
+      <code>osgi.jakartars.application.serviceProperties</code> map must exist
+      containing the <code>osgi.jakartars.name</code> of the application and the
+      service properties associated with the JakartarsServiceRuntime
       service.</para>
     </section>
 
     <section>
-      <title>A JAX-RS Whiteboard Application Example</title>
+      <title>A Jakarta RESTful Web Services Whiteboard Application Example</title>
 
       <para>The following example code uses Declarative Services annotations
-      to register a JAX-RS Whiteboard application, and shows how to target an
+      to register a Jakarta RESTful Web Services Whiteboard application, and shows how to target an
       additional whiteboard resource to that application.</para>
 
       <programlisting>@Component(service=Application.class)
-@JaxrsApplicationBase("example")
-@JaxrsName("myApp")
+@JakartarsApplicationBase("example")
+@JakartarsName("myApp")
 public class MyApplication extends Application {
     public Set&lt;Class&lt;?&gt;&gt; getClasses() {
         return new HashSet&lt;&gt;(Arrays.asList(StaticResource.class));
@@ -1469,8 +1469,8 @@ public class MyApplication extends Application {
  
  @Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource
- @JaxrsApplicationSelect("(osgi.jaxrs.name=myApp)")
+ @JakartarsResource
+ @JakartarsApplicationSelect("(osgi.jakartars.name=myApp)")
  public class MyResource {
   
      @GET
@@ -1487,20 +1487,20 @@ public class MyApplication extends Application {
   </section>
 
   <section>
-    <title>Advertising JAX-RS Endpoints</title>
+    <title>Advertising Web Service Endpoints</title>
 
-    <para>All JAX-RS Whiteboard services may be registered with an optional
-    <code>osgi.jaxrs.name</code> property. For Whiteboard resources and
+    <para>All Jakarta RESTful Web Services Whiteboard services may be registered with an optional
+    <code>osgi.jakartars.name</code> property. For Whiteboard resources and
     applications (but not extensions), if the registered service has set this
-    property then the JAX-RS container must register a <xref
-    linkend="org.osgi.service.jaxrs.runtime.JaxrsEndpoint"
+    property then the Jakarta RESTful Web Services container must register a <xref
+    linkend="org.osgi.service.jakartars.runtime.JakartarsEndpoint"
     xrefstyle="hyperlink"/> service identifying the URI(s) that can be used to
     access the service.</para>
 
     <para>The endpoint service must declare the following properties:</para>
 
     <table pgwide="1">
-      <title>Service properties for JAX-RS Whiteboard application
+      <title>Service properties for Jakarta RESTful Web Services Whiteboard application
       services.</title>
 
       <tgroup cols="3">
@@ -1522,20 +1522,20 @@ public class MyApplication extends Application {
 
         <tbody>
           <row>
-            <entry><para><code>osgi.jaxrs.name</code></para></entry>
+            <entry><para><code>osgi.jakartars.name</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>The name of the JAX-RS bean or application that has
+            <entry><para>The name of the Jakarta RESTful Web Services bean or application that has
             been registered.</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.uri</code></para></entry>
+            <entry><para><code>osgi.jakartars.uri</code></para></entry>
 
             <entry><para><code>List&lt;String&gt;</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>The URI(s) that can be used to access the JAX-RS
+            <entry><para>The URI(s) that can be used to access the Jakarta RESTful Web Services
             resource or application</para></entry>
           </row>
 
@@ -1549,38 +1549,38 @@ public class MyApplication extends Application {
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.bundle.symbolicname</code></para></entry>
+            <entry><para><code>osgi.jakartars.bundle.symbolicname</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Set to the symbolic name of the bundle that provided
-            the JAX-RS whiteboard service.</para></entry>
+            the Jakarta RESTful Web Services whiteboard service.</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.bundle.id</code></para></entry>
+            <entry><para><code>osgi.jakartars.bundle.id</code></para></entry>
 
             <entry><para><code>Long</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>Set to the id of the bundle that provided the JAX-RS
+            <entry><para>Set to the id of the bundle that provided the Jakarta RESTful Web Services
             service</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.bundle.version</code></para></entry>
+            <entry><para><code>osgi.jakartars.bundle.version</code></para></entry>
 
             <entry><para><code>Version</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Set to the version of the bundle that provided the
-            JAX-RS service</para></entry>
+            Jakarta RESTful Web Services service</para></entry>
           </row>
 
           <row>
-            <entry><para><code>osgi.jaxrs.service.id</code></para></entry>
+            <entry><para><code>osgi.jakartars.service.id</code></para></entry>
 
             <entry><para><code>Long</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>Set to the service id of the JAX-RS
+            <entry><para>Set to the service id of the Jakarta RESTful Web Services
             service</para></entry>
           </row>
         </tbody>
@@ -1591,7 +1591,7 @@ public class MyApplication extends Application {
   <section>
     <title>Whiteboard Error Handling</title>
 
-    <para>There are a number of error cases where the JAX-RS whiteboard may be
+    <para>There are a number of error cases where the Jakarta RESTful Web Services whiteboard may be
     unable to correctly register a resource. All of these cases must result in
     a failure DTO being created with the appropriate error code.</para>
 
@@ -1599,29 +1599,29 @@ public class MyApplication extends Application {
       <listitem>
         <para><emphasis>Failure to obtain a service instance</emphasis> - In
         the case where a published service is unable to be obtained by the
-        JAX-RS whiteboard then the service is deny listed by the container. A
-        failure DTO is made available from the JaxrsServiceRuntime
+        Jakarta RESTful Web Services whiteboard then the service is deny listed by the container. A
+        failure DTO is made available from the JakartarsServiceRuntime
         representing the deny listed service object.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Invalid service objects</emphasis> - JAX-RS extension
+        <para><emphasis>Invalid service objects</emphasis> - Jakarta RESTful Web Services extension
         and Application objects are required to advertise certain interfaces,
         or to extend certain types. If a service advertises itself using a
-        JAX-RS whiteboard service property, but fails to advertise an
-        appropriate JAX-RS type, or fails to provide any resource methods then
+        Jakarta RESTful Web Services whiteboard service property, but fails to advertise an
+        appropriate Jakarta RESTful Web Services type, or fails to provide any resource methods then
         this is an error and the service must be deny listed by the container.
-        A failure DTO is available from the JaxrsServiceRuntime representing
+        A failure DTO is available from the JakartarsServiceRuntime representing
         the deny listed service object.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Overlapping Application mappings</emphasis> - As with
-        resources in a single application it is possible that two JAX-RS
+        resources in a single application it is possible that two Jakarta RESTful Web Services
         resources will register for the same path across applications. In this
         case the application with the longer base URI is shadowed, and a
-        failure DTO is available from the JaxrsServiceRuntime representing the
-        shadowed Application. Note that determining when two JAX-RS
+        failure DTO is available from the JakartarsServiceRuntime representing the
+        shadowed Application. Note that determining when two Jakarta RESTful Web Services
         applications overlap requires an analysis of the resource paths and
         all of sub-resource paths. If any of these paths clash then the
         entirety of the shadowed application must be unregistered and marked
@@ -1631,22 +1631,22 @@ public class MyApplication extends Application {
 
       <listitem>
         <para><emphasis>Class-Space Compatibility</emphasis> - Much of the
-        JAX-RS mapping definition is handled using annotations with runtime
-        visibility. As JAX-RS beans are POJOs there is no guarantee of
-        class-space compatibility when the JAX-RS implementation searches for
-        whiteboard services. The JAX-RS whiteboard must therefore confirm that
-        the registered service shares the correct view of the JAX-RS packages.
-        If the class space is not consistent then the JAX-RS whiteboard
+        Jakarta RESTful Web Services mapping definition is handled using annotations with runtime
+        visibility. As Jakarta RESTful Web Services beans are POJOs there is no guarantee of
+        class-space compatibility when the Jakarta RESTful Web Services implementation searches for
+        whiteboard services. The Jakarta RESTful Web Services whiteboard must therefore confirm that
+        the registered service shares the correct view of the Jakarta RESTful Web Services packages.
+        If the class space is not consistent then the Jakarta RESTful Web Services whiteboard
         container must not register the services, but instead should create a
-        failure DTO indicating that the JAX-RS object is unable to be
+        failure DTO indicating that the Jakarta RESTful Web Services object is unable to be
         registered due to an incompatible class-space.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Missing Required Extensions</emphasis> - If a JAX-RS
+        <para><emphasis>Missing Required Extensions</emphasis> - If a Jakarta RESTful Web Services
         resource or extension requires one or more extensions using a
-        <code>osgi.jaxrs.extension.select</code> filter then at any given time
-        it is possible that the JAX-RS container will not be able to host the
+        <code>osgi.jakartars.extension.select</code> filter then at any given time
+        it is possible that the Jakarta RESTful Web Services container will not be able to host the
         resource. At this time a failure DTO must be created for the relevant
         resource or extension service.</para>
       </listitem>
@@ -1654,9 +1654,9 @@ public class MyApplication extends Application {
   </section>
 
   <section>
-    <title>The JAX-RS Client API</title>
+    <title>The Jakarta RESTful Web Services Client API</title>
 
-    <para>The JAX-RS specification includes a client API for making REST
+    <para>The Jakarta RESTful Web Services specification includes a client API for making REST
     requests. The normal mechanism for obtaining a <code>Client</code> is to
     use a <code>ClientBuilder</code>, which is instantiated using a static
     factory method. Static factory methods require the reflective loading of
@@ -1664,7 +1664,7 @@ public class MyApplication extends Application {
     to force indirectly wired objects to be discarded if the implementation
     bundle is stopped or uninstalled.</para>
 
-    <para>JAX-RS implementations must therefore register their ClientBuilder
+    <para>Jakarta RESTful Web Services implementations must therefore register their ClientBuilder
     implementations as OSGi services for bundles to use in making Client
     instances. The ClientBuilder must be registered as a prototype scoped
     service. This allows bundles to configure multiple separate Client
@@ -1697,37 +1697,37 @@ public class MyApplication extends Application {
       </orderedlist>
 
       <para>In order to add filters, interceptors, readers and writers to the
-      JAX-RS client users should use the <code>ClientBuilder#register()</code>
+      Jakarta RESTful Web Services client users should use the <code>ClientBuilder#register()</code>
       method when building their client.</para>
     </section>
 
     <section>
       <title>Reactive Clients</title>
 
-      <para>The JAX-RS client API supports both synchronous and asynchronous
-      calls. In JAX-RS 2.1 the asynchronous behavior of the client was
+      <para>The Jakarta RESTful Web Services client API supports both synchronous and asynchronous
+      calls. In Jakarta RESTful Web Services 2.1 the asynchronous behavior of the client was
       extended using the <code>RxInvoker</code> (reactive invoker) interface.
       All clients are required to support a reactive invoker which returns
       CompletionStage instances, however in OSGi the common representation of
       an asynchronous return is the <code>Promise</code>. This specification
       therefore provides the <xref
-      linkend="org.osgi.service.jaxrs.client.PromiseRxInvoker"
+      linkend="org.osgi.service.jakartars.client.PromiseRxInvoker"
       xrefstyle="hyperlink"/> interface which can be used to obtain Promises
-      from the JAX-RS client.</para>
+      from the Jakarta RESTful Web Services client.</para>
 
-      <para>It is the responsibility of the JAX-RS whiteboard implementation
+      <para>It is the responsibility of the Jakarta RESTful Web Services whiteboard implementation
       to create instances of <code>PromiseRxInvoker</code>. The exact
       mechanism by which instances are created is undefined, however it is
       possible to register a portable factory to create
       <code>PromiseRxInvoker</code> instances by implementing the
       <code>RxInvokerProvider</code> interface and registering this type with
-      the JAX-RS client. This portable implementation, however, is forced to
-      use a blocking model by the underlying JAX-RS API, and so
+      the Jakarta RESTful Web Services client. This portable implementation, however, is forced to
+      use a blocking model by the underlying Jakarta RESTful Web Services API, and so
       implementations may choose to implement a more optimized non-blocking
       model using internal types.</para>
 
       <para>Clients of this specification may make use of the
-      <code>PromiseRxInvoker</code> using normal JAX-RS idioms. For
+      <code>PromiseRxInvoker</code> using normal Jakarta RESTful Web Services idioms. For
       example:</para>
 
       <programlisting>Client client = clientBuilder.build();
@@ -1743,18 +1743,18 @@ Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
     <section>
       <title>Consuming Server Sent Events</title>
 
-      <para>In JAX-RS 2.1 support was added for Server Sent Events. These
+      <para>In Jakarta RESTful Web Services 2.1 support was added for Server Sent Events. These
       events are consumed by a REST client using the
       <code>SseEventSource</code>. The <code>SseEventSource</code> is not
-      created by a JAX-RS client instance, but is normally created using a
+      created by a Jakarta RESTful Web Services client instance, but is normally created using a
       static factory method, which does not work in a modular environment.
-      Therefore the JAX-RS whiteboard implementation must register a
+      Therefore the Jakarta RESTful Web Services whiteboard implementation must register a
       <code>SseEventSourceFactory</code> service in the service registry. This
-      object serves as a factory for the JAX-RS SSE types.</para>
+      object serves as a factory for the Jakarta RESTful Web Services SSE types.</para>
 
       <para>Note that the SseEventSource has no way to register filters or
       message body processors. All of the filters and necessary processors
-      must be registered with the JAX-RS client that is used to create the
+      must be registered with the Jakarta RESTful Web Services client that is used to create the
       <code>WebTarget</code> used when building the SseEventSource. A client
       may therefore consume Server Sent Events in the following way:</para>
 
@@ -1804,7 +1804,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
   <section>
     <title>Portability and Interoperability</title>
 
-    <para>The extensions defined by the JAX-RS specification make JAX-RS
+    <para>The extensions defined by the Jakarta RESTful Web Services specification make Jakarta RESTful Web Services
     runtimes highly plugable, and it is common to extend the behavior of an
     application using this model. In many cases the custom behaviors are
     specific to a particular use case, for example mapping a specific
@@ -1812,26 +1812,26 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     portability. In some common cases, however, there are extensions that can
     be used across a great many applications.</para>
 
-    <para>In order to ensure that a JAX-RS whiteboard application can make use
+    <para>In order to ensure that a Jakarta RESTful Web Services whiteboard application can make use
     of a common extension service in a portable way this specification defines
     standard service property names that should be registered, as appropriate,
     by whiteboard extension services, whiteboard applications with static
-    extensions, and JAX-RS whiteboard implementations that provide built-in
+    extensions, and Jakarta RESTful Web Services whiteboard implementations that provide built-in
     extension capabilities.</para>
 
     <section>
       <title>Media Type support</title>
 
-      <para>A common use of the JAX-RS extension mechanism is to provide
+      <para>A common use of the Jakarta RESTful Web Services extension mechanism is to provide
       support for additional media types, both for consuming incoming requests
-      and for producing responses. All JAX-RS whiteboards must implicitly
+      and for producing responses. All Jakarta RESTful Web Services whiteboards must implicitly
       support <code>text/plain</code> and <code>application/xml</code> (using
       JAXB), however commonly used media types, such as
       <code>application/json</code> must be provided as an extension.</para>
 
       <para>To ensure that whiteboard resources can depend on support for a
       particular media type in a portable way this specification defines the
-      <code>osgi.jaxrs.media.type</code> property. This property key should be
+      <code>osgi.jakartars.media.type</code> property. This property key should be
       registered with one or more media types that are supported, and may be
       provided by:</para>
 
@@ -1849,12 +1849,12 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         </listitem>
 
         <listitem>
-          <para>A JAX-RS Whiteboard implementation - if the implementation
+          <para>A Jakarta RESTful Web Services Whiteboard implementation - if the implementation
           provides general purpose built-in support for reading from and
           writing to a media type then it should register this property. If
           the built-in extension is always available then it should also be
-          advertised by the <xref linkend="service.jaxrs-service.capability"/>
-          for the JaxrsServiceRuntime.</para>
+          advertised by the <xref linkend="service.jakartars-service.capability"/>
+          for the JakartarsServiceRuntime.</para>
         </listitem>
       </itemizedlist>
 
@@ -1862,17 +1862,17 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       support must not require implementation specific mapping metadata (for
       example annotations) and should, at a minimum, work with the OSGi scalar
       types and DTOs. The property key is available as a constant in <xref
-      linkend="org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_MEDIA_TYPE"
+      linkend="org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants.JAKARTA_RS_MEDIA_TYPE"
       xrefstyle="hyperlink"/>.</para>
 
       <section>
         <title>Media Type names, wildcards and suffixes</title>
 
         <para>Where possible the value(s) of the
-        <code>osgi.jaxrs.media.type</code> property should use the IANA
+        <code>osgi.jakartars.media.type</code> property should use the IANA
         registered names of the media type(s) supported, for example
         <code>application/json</code>. Officially registered media types are
-        available from <xref linkend="service.jaxrs-iana.media.types"/>. If
+        available from <xref linkend="service.jakartars-iana.media.types"/>. If
         there is no officially registered media type then a vendor type should
         be used. Personal types may also be used, however due to the lack of
         portability afforded by personal types it is recommended that a
@@ -1889,7 +1889,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         <code>application/vcard+json</code>.</para>
 
         <para>Wildcard types must not be used as values for the
-        <code>osgi.jaxrs.media.type</code> property as these do not provide
+        <code>osgi.jakartars.media.type</code> property as these do not provide
         sufficient information for whiteboard resources to reliably select a
         media type provider. Where a provider wishes to advertise support for
         a general suffix, for example <code>+json</code> or <code>+cbor</code>
@@ -1903,16 +1903,16 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         should also be used for suffixes that have no primary type, for
         example <code>+der</code>. Official media type registrations are
         available from <xref
-        linkend="service.jaxrs-iana.media.type.suffixes"/></para>
+        linkend="service.jakartars-iana.media.type.suffixes"/></para>
       </section>
 
       <section>
         <title>Media Type Selection Example</title>
 
-        <para>The most commonly required media type for JAX-RS services is
+        <para>The most commonly required media type for Jakarta RESTful Web Services services is
         <code>application/json</code>. To this end this specification defines
         a Component Property annotation <xref
-        linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JSONRequired"
+        linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JSONRequired"
         xrefstyle="hyperlink"/> which can be applied to a Declarative Services
         component to express:</para>
 
@@ -1923,7 +1923,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
           </listitem>
 
           <listitem>
-            <para>A requirement for the JAX-RS whiteboard</para>
+            <para>A requirement for the Jakarta RESTful Web Services whiteboard</para>
           </listitem>
 
           <listitem>
@@ -1938,7 +1938,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
- @JaxrsResource
+ @JakartarsResource
  @JSONRequired
  @Produces(MediaType.APPLICATION_JSON)  
  public class MyResource {
@@ -1951,15 +1951,15 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 }</programlisting>
 
         <para>A corresponding component property type (<xref
-        linkend="org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsMediaType"
-        xrefstyle="hyperlink"/>) exists for use on a JAX-RS whiteboard
+        linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsMediaType"
+        xrefstyle="hyperlink"/>) exists for use on a Jakarta RESTful Web Services whiteboard
         extension or application service which provides media type support.
         This can be used to declare that one or more media types are
         supported.</para>
 
         <programlisting>@Component(scope = ServiceScope.PROTOTYPE)
- @JaxrsExtension
- @JaxrsMediaType(MediaType.APPLICATION_JSON)
+ @JakartarsExtension
+ @JakartarsMediaType(MediaType.APPLICATION_JSON)
  public class MyFeature implements Feature {
   
     public boolean configure(FeatureContext context) {
@@ -1977,24 +1977,24 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <section>
       <title>osgi.implementation Capability</title>
 
-      <para>The JAX-RS Whiteboard implementation bundle must provide the <link
+      <para>The Jakarta RESTful Web Services Whiteboard implementation bundle must provide the <link
       linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
-      capability with name <code>osgi.jaxrs</code>. This capability can be
-      used by provisioning tools and during resolution to ensure that a JAX-RS
+      capability with name <code>osgi.jakartars</code>. This capability can be
+      used by provisioning tools and during resolution to ensure that a Jakarta RESTful Web Services
       Whiteboard implementation is present to process the Whiteboard services
       defined in this specification. The capability must also declare a uses
-      constraint for the <code>javax.ws.rs.*</code> specification packages,
-      and for the and OSGi JAX-RS Whiteboard package. The version of this
+      constraint for the <code>jakarta.ws.rs.*</code> specification packages,
+      and for the and OSGi Jakarta RESTful Web Services Whiteboard package. The version of this
       capability must match the version of this specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
-       osgi.implementation="osgi.jaxrs";
-       uses:="javax.ws.rs, javax.ws.rs.client, javax.ws.rs.container,
-              javax.ws.rs.core, javax.ws.rs.ext, javax.ws.rs.sse, 
-              org.osgi.service.jaxrs.whiteboard";
+       osgi.implementation="osgi.jakartars";
+       uses:="jakarta.ws.rs, jakarta.ws.rs.client, jakarta.ws.rs.container,
+              jakarta.ws.rs.core, jakarta.ws.rs.ext, jakarta.ws.rs.sse, 
+              org.osgi.service.jakartars.whiteboard";
        version:Version="<xref
-          endterm="org.osgi.service.jaxrs.whiteboard-version.number"
-          linkend="org.osgi.service.jaxrs.whiteboard"/>"</programlisting>
+          endterm="org.osgi.service.jakartars.whiteboard-version.number"
+          linkend="org.osgi.service.jakartars.whiteboard"/>"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
@@ -2003,10 +2003,10 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <section>
       <title>osgi.contract Capability</title>
 
-      <para>The JAX-RS Whiteboard implementation must provide a capability in
+      <para>The Jakarta RESTful Web Services Whiteboard implementation must provide a capability in
       the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
-      namespace with name <code>JavaJAXRS</code> if it exports the JAX-RS
+      namespace with name <code>JakartaRest</code> if it exports the Jakarta RESTful Web Services
       specification packages. See <xref
       linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
 
@@ -2015,50 +2015,50 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       under OSGi Semantic Versioning rules. For more details see <xref
       linkend="service.namespaces-osgi.contract.namespace"/>.</para>
 
-      <para>If the JAX-RS API is provided by another bundle, the JAX-RS
+      <para>If the Jakarta RESTful Web Services API is provided by another bundle, the Jakarta RESTful Web Services
       Whiteboard implementation must be a consumer of the API and require the
       contract.</para>
     </section>
 
-    <section xml:id="service.jaxrs-service.capability">
+    <section xml:id="service.jakartars-service.capability">
       <title>osgi.service Capability</title>
 
       <para>The bundle providing the <xref
-      linkend="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime"
+      linkend="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime"
       xrefstyle="hyperlink"/> service must provide a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace representing this service. This capability must also declare a
-      uses constraint for the <code>org.osgi.service.jaxrs.runtime</code> and
-      <code>org.osgi.service.jaxrs.runtime.dto</code> packages:</para>
+      uses constraint for the <code>org.osgi.service.jakartars.runtime</code> and
+      <code>org.osgi.service.jakartars.runtime.dto</code> packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime";
-  uses:="org.osgi.service.jaxrs.runtime,org.osgi.service.jaxrs.runtime.dto"</programlisting>
+  objectClass:List&lt;String&gt;="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime";
+  uses:="org.osgi.service.jakartars.runtime,org.osgi.service.jakartars.runtime.dto"</programlisting>
 
       <para>The bundle providing the
-      <code>javax.ws.rs.client.ClientBuilder</code> service must also provide
+      <code>jakarta.ws.rs.client.ClientBuilder</code> service must also provide
       a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace representing this service. This capability must declare that
       the service is prototype scope, and that there is a uses constraint for
-      the <code>javax.ws.rs.client</code> package:</para>
+      the <code>jakarta.ws.rs.client</code> package:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="javax.ws.rs.client.ClientBuilder";
-  uses:="javax.ws.rs.client,org.osgi.service.jaxrs.client";
+  objectClass:List&lt;String&gt;="jakarta.ws.rs.client.ClientBuilder";
+  uses:="jakarta.ws.rs.client,org.osgi.service.jakartars.client";
   service.scope="prototype"</programlisting>
 
       <para>The bundle providing the
-      <code>org.osgi.service.jaxrs.client.SseEventSourceFactory</code> service
+      <code>org.osgi.service.jakartars.client.SseEventSourceFactory</code> service
       must also provide a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace representing this service. This capability must declare a uses
-      constraint for the <code>org.osgi.service.jaxrs.client</code>
+      constraint for the <code>org.osgi.service.jakartars.client</code>
       package:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.client.SseEventSourceFactory";
-  uses:="org.osgi.service.jaxrs.client"</programlisting>
+  objectClass:List&lt;String&gt;="org.osgi.service.jakartars.client.SseEventSourceFactory";
+  uses:="org.osgi.service.jakartars.client"</programlisting>
 
       <para>These capabilities must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
@@ -2074,73 +2074,73 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <section>
       <title>Service Permissions</title>
 
-      <para>Bundles that need to register JAX-RS Whiteboard services must be
+      <para>Bundles that need to register Jakarta RESTful Web Services Whiteboard services must be
       granted <code>ServicePermission[interfaceName, REGISTER]</code> where
-      interface name is the relevant JAX-RS Whiteboard service interface
+      interface name is the relevant Jakarta RESTful Web Services Whiteboard service interface
       name.</para>
 
       <para>The Http Whiteboard implementation must be granted
-      <code>ServicePermission[*, GET]</code> to retrieve the JAX-RS Whiteboard
+      <code>ServicePermission[*, GET]</code> to retrieve the Jakarta RESTful Web Services Whiteboard
       services from the service registry.</para>
     </section>
 
     <section>
       <title>Runtime Introspection</title>
 
-      <para>Bundles that need to introspect the state of the JAX-RS runtime
+      <para>Bundles that need to introspect the state of the Jakarta RESTful Web Services runtime
       will need
-      <code>ServicePermission[org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime,
-      GET]</code> to obtain the JAX-RS Service Runtime service and access the
+      <code>ServicePermission[org.osgi.service.jakartars.runtime.JakartarsServiceRuntime,
+      GET]</code> to obtain the Jakarta RESTful Web Services Service Runtime service and access the
       DTO types.</para>
     </section>
 
     <section>
-      <title>Calling JAX-RS Whiteboard Services</title>
+      <title>Calling Jakarta RESTful Web Services Whiteboard Services</title>
 
-      <para>This specification does not require that the JAX-RS Whiteboard
-      implementation is granted All Permission or wraps calls to the JAX-RS
+      <para>This specification does not require that the Jakarta RESTful Web Services Whiteboard
+      implementation is granted All Permission or wraps calls to the Jakarta RESTful Web Services
       Whiteboard services in a <code>doPrivileged</code> block. Therefore, it
-      is the responsibility of the JAX-RS Whiteboard services to use a
+      is the responsibility of the Jakarta RESTful Web Services Whiteboard services to use a
       <code>doPrivileged</code> block when performing privileged
       operations.</para>
     </section>
   </section>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.client.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.client.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.runtime.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.dto.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.runtime.dto.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.whiteboard.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.annotations.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.whiteboard.annotations.xml"/>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.propertytypes.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartars.whiteboard.propertytypes.xml"/>
 
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.jaxrs-i21217577"><title>Java API for
+      <bibliomixed xml:id="service.jakartars-i21217577"><title>Java API for
       RESTful Web Services Specification</title><biblioid class="uri"><link
       xlink:href="https://jcp.org/en/jsr/detail?id=370"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="service.jaxrs-portable.java.contracts.ref"><title>Portable Java
+      xml:id="service.jakartars-portable.java.contracts.ref"><title>Portable Java
       Contract Definitions</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="service.jaxrs-whiteboard.pattern.ref"><title>Whiteboard
+      xml:id="service.jakartars-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.jaxrs-iana.media.types"><title>IANA Media
+      <bibliomixed xml:id="service.jakartars-iana.media.types"><title>IANA Media
       Type Registrations</title><biblioid class="uri"><link
       xlink:href="https://www.iana.org/assignments/media-types/media-types.xhtml"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.jaxrs-iana.media.type.suffixes"><title>IANA
+      <bibliomixed xml:id="service.jakartars-iana.media.type.suffixes"><title>IANA
       Media Type Suffix Registrations</title><biblioid class="uri"><link
       xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/></biblioid></bibliomixed>
     </bibliolist>
