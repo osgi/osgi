@@ -18,3 +18,5 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.bundle.derby; version=latest
 
 -signaturetest                      = org.osgi.service.jdbc
+
+-runproperties.tck.cardinality: org.osgi.tck.cardinality=SHOULD

@@ -19,207 +19,183 @@
 
 package org.osgi.test.cases.jdbc.junit;
 
-import java.sql.SQLException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_CLASS;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_NAME;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION;
+
 import java.util.Properties;
 
-import org.osgi.framework.ServiceReference;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.osgi.service.jdbc.DataSourceFactory;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.service.ServiceSource;
 
-public class JDBCTestCase extends OSGiTestCase {
-	private String databaseName = "dbName";
-	private String dataSourceName = "dsName";
-	private String description = "desc";
-	private String password = "pswd";
-	private String user = "usr";
-	
-	private ServiceReference<DataSourceFactory>	ref;
-	private DataSourceFactory	factory;
+public class JDBCTestCase {
+	private static String	databaseName	= "dbName";
+	private static String	dataSourceName	= "dsName";
+	private static String	description		= "desc";
+	private static String	password		= "pswd";
+	private static String	user			= "usr";
 
-	protected void setUp() {
-		ref = getContext()
-				.getServiceReference(DataSourceFactory.class);
-		assertNotNull("No DataSourceFactory service available", ref);
-		factory = getContext().getService(ref);
-		assertNotNull(factory);
-	}
-	
-	protected void tearDown() {
-		getContext().ungetService(ref);
-	}
-
-	public void testRegisteredProperties() {
-
-		Object className = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS);
-
-		assertNotNull(
-				"The DataSourceFactory is missing the required osgi.jdbc.driver.class property",
-				className);
-		assertTrue("The DataSourceFactory driver class is not a String",
-				className instanceof String);
-
-		Object driverName = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_NAME);
-		if (driverName != null) {
-			assertTrue("The DataSourceFactory driver name is not a String",
-					driverName instanceof String);
-		}
-
-		Object driverVersion = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_VERSION);
-		if (driverVersion != null) {
-			assertTrue("The DataSourceFactory driver version is not a String",
-					driverName instanceof String);
-		}
-	}
-
-	public void testCreateDataSource() throws Exception {
+	private static Properties props() {
 		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
-
-		try {
-			factory.createDataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createDataSource( props );
-			fail("Should have gotten a SQLException for invalid property \"junk\".");
-		} catch ( SQLException ignore ) { }
-	}
-
-	public void testCreateConnectionPoolDataSource() throws Exception {
-		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
-
-		try {
-			factory.createConnectionPoolDataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-		
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createConnectionPoolDataSource( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
-	}
-
-	public void testCreateXADataSource() throws Exception {
-		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
-
-		try {
-			factory.createXADataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-		
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createXADataSource( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
-	}
-
-	public void testCreateDriver() throws Exception {
-		Properties props = new Properties();
-
-		try {
-			factory.createDriver(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (DataSource only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createDriver( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
-	}
-
-	public void testAtLeastOneMethodWorks() {
-
-		Properties props = new Properties();
-
-		try {
-			factory.createDriver(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (DataSource only
-			// DataSourceFactory implementations are perfectly valid).
-		}
-
 		props.put(DataSourceFactory.JDBC_DATABASE_NAME, databaseName);
 		props.put(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
 		props.put(DataSourceFactory.JDBC_DESCRIPTION, description);
 		props.put(DataSourceFactory.JDBC_PASSWORD, password);
 		props.put(DataSourceFactory.JDBC_USER, user);
+		// Drivers can support additional custom configuration properties.
 
-		try {
-			factory.createXADataSource(props);
+		return props;
+	}
 
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
+	@Test
+	@Tag("MUST")
+	public void testRegisteredMandantoryProperties(@InjectService
+	ServiceAware<DataSourceFactory> sa) {
+
+		ServiceReferenceAssert<DataSourceFactory> sRefAssert = ServiceReferenceAssert
+				.assertThat(sa.getServiceReference());
+
+		sRefAssert.hasServicePropertiesThat()
+				.as("The DataSourceFactory is missing the required osgi.jdbc.driver.class property")
+				.containsKey(OSGI_JDBC_DRIVER_CLASS)
+				.extractingByKey(OSGI_JDBC_DRIVER_CLASS)
+				.isNotNull()
+				.as("The DataSourceFactory driver class is not a String")
+				.isInstanceOf(String.class);
+
+		Object driverName = sa.getServiceReference()
+				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_NAME);
+		if (driverName != null) {
+			Assertions.assertThat(driverName).isInstanceOf(String.class);
 		}
 
-		try {
-			factory.createConnectionPoolDataSource(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
+		Object driverVersion = sa.getServiceReference()
+				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_VERSION);
+		if (driverVersion != null) {
+			Assertions.assertThat(driverVersion).isInstanceOf(String.class);
 		}
 
-		try {
-			factory.createDataSource(props);
+	}
 
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-		}
+	@Test
+	@Tag("SHOULD")
+	@EnabledIfSystemProperty(named = "org.osgi.tck.cardinality", matches = ".*SHOULD.*")
+	public void testRegistereOptionalPropertyName(@InjectService
+	ServiceAware<DataSourceFactory> sa) {
 
-		fail("None of the DataSourceFactory methods successfully created a DataSource or Driver");
+		ServiceReferenceAssert.assertThat(sa.getServiceReference())
+				.hasServicePropertiesThat()
+				.as("The DataSourceFactory is missing the required osgi.jdbc.driver.name property")
+				.containsKey(OSGI_JDBC_DRIVER_NAME)
+				.extractingByKey(OSGI_JDBC_DRIVER_NAME)
+				.isNotNull()
+				.as("The DataSourceFactory driver name is not a String")
+				.isInstanceOf(String.class);
+
+
+	}
+
+	@Test
+	@Tag("SHOULD")
+	@EnabledIfSystemProperty(named = "org.osgi.tck.cardinality", matches = ".*SHOULD.*")
+	public void testRegistereOptionalPropertyVersion(@InjectService
+	ServiceAware<DataSourceFactory> sa) {
+
+		ServiceReferenceAssert.assertThat(sa.getServiceReference())
+				.hasServicePropertiesThat()
+				.as("The DataSourceFactory is missing the required osgi.jdbc.driver.version property")
+				.containsKey(OSGI_JDBC_DRIVER_VERSION)
+				.extractingByKey(OSGI_JDBC_DRIVER_VERSION)
+				.isNotNull()
+				.as("The DataSourceFactory driver version is not a String")
+				.isInstanceOf(String.class);
+
+	}
+
+	@Tag("MUST")
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testAtLeastOneMethodWorks(DataSourceFactory dsfFactory) {
+
+		// One of the DataSourceFactory methods must successfully created a
+		// DataSource or Driver"
+
+		assertThat(dsfFactory).satisfiesAnyOf(
+
+				// DataSource
+				dsf -> assertThat(dsf).satisfies(
+
+						// no Exception
+						f -> assertThatCode(() -> f.createDataSource(props()))
+								.doesNotThrowAnyException(),
+
+						// null indicates no properties
+						f -> assertThatCode(() -> f.createDataSource(null))
+								.doesNotThrowAnyException(),
+
+						// AND return not null
+						f -> assertThat(f.createDataSource(props()))
+								.isNotNull()),
+
+				// OR ConnectionPoolDataSource
+				dsf -> assertThat(dsf).satisfies(
+
+						// no Exception
+						f -> assertThatCode(
+								() -> f.createConnectionPoolDataSource(props()))
+										.doesNotThrowAnyException(),
+
+						// null indicates no properties
+						f -> assertThatCode(
+								() -> f.createConnectionPoolDataSource(null))
+										.doesNotThrowAnyException(),
+
+						// AND return not null
+						f -> assertThat(
+								f.createConnectionPoolDataSource(props()))
+										.isNotNull()),
+
+				// OR XADataSource
+				dsf -> assertThat(dsf).satisfies(
+
+						// no Exception
+						f -> assertThatCode(() -> f.createXADataSource(props()))
+								.doesNotThrowAnyException(),
+
+						// null indicates no properties
+						f -> assertThatCode(() -> f.createXADataSource(null))
+								.doesNotThrowAnyException(),
+
+						// AND return not null
+						f -> assertThat(f.createXADataSource(props()))
+								.isNotNull()),
+
+				// OR Driver
+				dsf -> assertThat(dsf).satisfies(
+
+						// no Exception
+						f -> assertThatCode(
+								() -> f.createDriver(new Properties()))
+										.doesNotThrowAnyException(),
+
+						// null indicates no properties
+						f -> assertThatCode(() -> f.createDriver(null))
+								.doesNotThrowAnyException(),
+
+						// AND return not null
+						f -> assertThat(f.createDriver(new Properties()))
+								.isNotNull()));
+
 	}
 
 }
