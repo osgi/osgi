@@ -25,8 +25,8 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.servlet.context.ServletContextHelper;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.service.servlet.whiteboard.ServletContextHelper;
 import org.osgi.test.common.dictionary.Dictionaries;
 
 import jakarta.servlet.Servlet;

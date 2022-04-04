@@ -26,11 +26,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.servlet.context.ServletContextHelper;
+import org.osgi.service.servlet.runtime.dto.DTOConstants;
+import org.osgi.service.servlet.runtime.dto.FailedListenerDTO;
+import org.osgi.service.servlet.runtime.dto.ListenerDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.service.servlet.whiteboard.ServletContextHelper;
-import org.osgi.service.servlet.whiteboard.runtime.dto.DTOConstants;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedListenerDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.ListenerDTO;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockSCL;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockServlet;
 

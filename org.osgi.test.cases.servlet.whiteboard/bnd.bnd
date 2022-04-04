@@ -49,6 +49,6 @@ Export-Package: ${p}.junit.mock
 
 -signaturetest = \
   org.osgi.service.servlet.whiteboard, \
-  org.osgi.service.servlet.whiteboard.runtime, \
-  org.osgi.service.servlet.whiteboard.runtime.dto
+  org.osgi.service.servlet.runtime, \
+  org.osgi.service.servlet.runtime.dto
 

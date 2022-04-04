@@ -15,28 +15,26 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
-package org.osgi.test.cases.servlet.whiteboard.junit.mock;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceFactory;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.servlet.context.ServletContextHelper;
+package org.osgi.service.servlet.runtime.dto;
 
-public class MockSCHFactory implements ServiceFactory<ServletContextHelper> {
+/**
+ * Represents a {@code jakarta.servlet.Servlet} for handling errors and currently
+ * being used by a servlet context.
+ *
+ * @NotThreadSafe
+ * @author $Id$
+ */
+public class ErrorPageDTO extends BaseServletDTO {
+	/**
+	 * The exceptions the error page is used for. This array might be
+	 * empty.
+	 */
+	public String[]	exceptions;
 
-	@Override
-	public ServletContextHelper getService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> registration) {
-
-		return new ServletContextHelper(bundle) {};
-	}
-
-	@Override
-	public void ungetService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> registration,
-			ServletContextHelper service) {
-	}
-
+	/**
+	 * The error codes the error page is used for. This array might be
+	 * empty.
+	 */
+	public long[]	errorCodes;
 }

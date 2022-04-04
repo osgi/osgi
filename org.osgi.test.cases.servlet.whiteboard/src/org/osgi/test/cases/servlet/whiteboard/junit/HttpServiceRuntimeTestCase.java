@@ -43,18 +43,18 @@ import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.namespace.service.ServiceNamespace;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
+import org.osgi.service.servlet.context.ServletContextHelper;
+import org.osgi.service.servlet.runtime.HttpServiceRuntime;
+import org.osgi.service.servlet.runtime.HttpServiceRuntimeConstants;
+import org.osgi.service.servlet.runtime.dto.FailedErrorPageDTO;
+import org.osgi.service.servlet.runtime.dto.FailedFilterDTO;
+import org.osgi.service.servlet.runtime.dto.FailedListenerDTO;
+import org.osgi.service.servlet.runtime.dto.FailedResourceDTO;
+import org.osgi.service.servlet.runtime.dto.FailedServletContextDTO;
+import org.osgi.service.servlet.runtime.dto.FailedServletDTO;
+import org.osgi.service.servlet.runtime.dto.RequestInfoDTO;
+import org.osgi.service.servlet.runtime.dto.ServletContextDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.service.servlet.whiteboard.ServletContextHelper;
-import org.osgi.service.servlet.whiteboard.runtime.HttpServiceRuntime;
-import org.osgi.service.servlet.whiteboard.runtime.HttpServiceRuntimeConstants;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedErrorPageDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedFilterDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedListenerDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedResourceDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedServletContextDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedServletDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.RequestInfoDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.ServletContextDTO;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockFilter;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockSCL;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockServlet;
@@ -616,9 +616,9 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 				List<String> packages = Arrays.asList(uses.split(","));
 
 				assertTrue(packages.contains(
-						"org.osgi.service.servlet.whiteboard.runtime"));
+						"org.osgi.service.servlet.runtime"));
 				assertTrue(packages.contains(
-						"org.osgi.service.servlet.whiteboard.runtime.dto"));
+						"org.osgi.service.servlet.runtime.dto"));
 
 				found = true;
 			}

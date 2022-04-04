@@ -31,11 +31,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.servlet.runtime.dto.DTOConstants;
+import org.osgi.service.servlet.runtime.dto.FailedFilterDTO;
+import org.osgi.service.servlet.runtime.dto.FilterDTO;
+import org.osgi.service.servlet.runtime.dto.RequestInfoDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.service.servlet.whiteboard.runtime.dto.DTOConstants;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FailedFilterDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.FilterDTO;
-import org.osgi.service.servlet.whiteboard.runtime.dto.RequestInfoDTO;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockFilter;
 import org.osgi.test.cases.servlet.whiteboard.junit.mock.MockServlet;
 
