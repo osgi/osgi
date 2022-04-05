@@ -48,11 +48,11 @@ public @interface JakartarsApplicationSelect {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property providing an OSGi filter identifying the application(s)
-	 * to which this service should be bound.
+	 * Service property providing a OSGi filter(s) identifying the
+	 * application(s) to which this service should be bound.
 	 * 
-	 * @return The filter for selecting the applications to bind to.
+	 * @return The filter(s) for selecting the application(s) to bind to.
 	 * @see org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_APPLICATION_SELECT
 	 */
-	String value();
+	String[] value();
 }
