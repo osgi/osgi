@@ -456,13 +456,16 @@ public String interrogateSession(@PathParam("name") String name,
             linkend="org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsApplicationSelect"
             xrefstyle="hyperlink"/></para></entry>
 
-            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
-            <entry><para>An LDAP-style filter to select the Jakarta RESTful Web Services
+            <entry><para>One or more LDAP-style filters to select the Jakarta RESTful Web Services
             Application(s) with which this Whiteboard service should be
             associated. Any service property of the Application can be
-            filtered on. If this filter is not defined then the default
-            Application is used. The default application can also be
+            filtered on. If these filters are not defined then the default
+            Application is used. If multiple filters are defined then each filter
+            is used to select target applications. Target applications
+            are selected at most once, even if they match more than one filter. 
+            The default application can also be
             specifically targeted using the application name
             <code>.default</code>. </para> <para>For example, to select an
             Application with name <code>myApp</code> provide the following
