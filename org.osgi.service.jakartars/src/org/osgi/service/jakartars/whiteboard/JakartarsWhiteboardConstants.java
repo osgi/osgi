@@ -94,17 +94,17 @@ public final class JakartarsWhiteboardConstants {
 	 * Service property specifying the target application for a Jakarta RESTful
 	 * Web Services resource or extension service.
 	 * <p>
-	 * The specified filter is used to determine whether a resource should be
-	 * included in a particular application. Services without this service
-	 * property are bound to the default Application.
+	 * The specified filter(s) is/are used to determine whether a resource
+	 * should be included in a particular application. Services without this
+	 * service property are bound to the default Application.
 	 * <p>
 	 * If a filter property is registered and no application running in the
 	 * whiteboard matches the filter then the service will be failed with a
 	 * cause of
 	 * {@link DTOConstants#FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE}
 	 * <p>
-	 * The value of this service property must be of type {@code String}, and be
-	 * a valid OSGi filter.
+	 * The value of this service property must be of type {@code String+}, and
+	 * each entry must be a valid OSGi filter.
 	 */
 	public static final String	JAKARTA_RS_APPLICATION_SELECT				= "osgi.jakartars.application.select";
 
