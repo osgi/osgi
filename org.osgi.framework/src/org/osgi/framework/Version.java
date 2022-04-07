@@ -47,7 +47,8 @@ public class Version implements Comparable<Version> {
 	private final int			minor;
 	private final int			micro;
 	private final String		qualifier;
-	private static final String	SEPARATOR		= ".";
+	private static final char	SEPARATOR			= '.';
+	private static final String	SEPARATOR_STRING	= ".";
 	private transient String	versionString /* default to null */;
 	private transient int		hash /* default to 0 */;
 
@@ -124,7 +125,8 @@ public class Version implements Comparable<Version> {
 		String qual = "";
 
 		try {
-			StringTokenizer st = new StringTokenizer(version, SEPARATOR, true);
+			StringTokenizer st = new StringTokenizer(version, SEPARATOR_STRING,
+					true);
 			maj = parseInt(st.nextToken(), version);
 
 			if (st.hasMoreTokens()) { // minor
@@ -320,14 +322,13 @@ public class Version implements Comparable<Version> {
 		}
 		int q = qualifier.length();
 		StringBuilder result = new StringBuilder(20 + q);
-		result.append(major);
-		result.append(SEPARATOR);
-		result.append(minor);
-		result.append(SEPARATOR);
-		result.append(micro);
+		result.append(major)
+				.append(SEPARATOR)
+				.append(minor)
+				.append(SEPARATOR)
+				.append(micro);
 		if (q > 0) {
-			result.append(SEPARATOR);
-			result.append(qualifier);
+			result.append(SEPARATOR).append(qualifier);
 		}
 		return versionString = result.toString();
 	}

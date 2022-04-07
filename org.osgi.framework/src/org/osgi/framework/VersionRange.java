@@ -383,20 +383,18 @@ public class VersionRange {
 		if (s != null) {
 			return s;
 		}
-		String leftVersion = left.toString();
+		String leftVersion = left.toString0();
 		if (right == null) {
-			StringBuilder result = new StringBuilder(leftVersion.length() + 1);
-			result.append(left.toString0());
-			return versionRangeString = result.toString();
+			return versionRangeString = leftVersion;
 		}
-		String rightVerion = right.toString();
+		String rightVerion = right.toString0();
 		StringBuilder result = new StringBuilder(
-				leftVersion.length() + rightVerion.length() + 5);
-		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
-		result.append(left.toString0());
-		result.append(ENDPOINT_DELIMITER);
-		result.append(right.toString0());
-		result.append(rightClosed ? RIGHT_CLOSED : RIGHT_OPEN);
+				leftVersion.length() + rightVerion.length() + 3);
+		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN)
+				.append(leftVersion)
+				.append(ENDPOINT_DELIMITER)
+				.append(rightVerion)
+				.append(rightClosed ? RIGHT_CLOSED : RIGHT_OPEN);
 		return versionRangeString = result.toString();
 	}
 
@@ -480,39 +478,51 @@ public class VersionRange {
 		final boolean needPresence = !leftClosed && ((right == null) || !rightClosed);
 		final boolean multipleTerms = needPresence || (right != null);
 		if (multipleTerms) {
-			result.append("(&");
+			result.append('(').append('&');
 		}
 		if (needPresence) {
-			result.append('(');
-			result.append(attributeName);
-			result.append("=*)");
+			result.append('(')
+					.append(attributeName)
+					.append('=')
+					.append('*')
+					.append(')');
 		}
 		if (leftClosed) {
-			result.append('(');
-			result.append(attributeName);
-			result.append(">=");
-			result.append(left.toString0());
-			result.append(')');
+			result.append('(')
+					.append(attributeName)
+					.append('>')
+					.append('=')
+					.append(left.toString0())
+					.append(')');
 		} else {
-			result.append("(!(");
-			result.append(attributeName);
-			result.append("<=");
-			result.append(left.toString0());
-			result.append("))");
+			result.append('(')
+					.append('!')
+					.append('(')
+					.append(attributeName)
+					.append('<')
+					.append('=')
+					.append(left.toString0())
+					.append(')')
+					.append(')');
 		}
 		if (right != null) {
 			if (rightClosed) {
-				result.append('(');
-				result.append(attributeName);
-				result.append("<=");
-				result.append(right.toString0());
-				result.append(')');
+				result.append('(')
+						.append(attributeName)
+						.append('<')
+						.append('=')
+						.append(right.toString0())
+						.append(')');
 			} else {
-				result.append("(!(");
-				result.append(attributeName);
-				result.append(">=");
-				result.append(right.toString0());
-				result.append("))");
+				result.append('(')
+						.append('!')
+						.append('(')
+						.append(attributeName)
+						.append('>')
+						.append('=')
+						.append(right.toString0())
+						.append(')')
+						.append(')');
 			}
 		}
 		if (multipleTerms) {
