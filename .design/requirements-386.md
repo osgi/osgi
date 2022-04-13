@@ -26,17 +26,9 @@ What is needed is a launcher that can take a JSON Feature Descriptor, as defined
 
 Harry has obtained an OSGi Feature descriptor from Linda. The Feature descriptor embodies the application Linda has built. Harry would like to use Linda's application so is looking for a tool to launch it.
 
-### UC2: On the fly add in additional features
-
-Linda has written an application that she has distributed as an OSGi Feature descriptor. Linda would like to introspect the state of the system through the Felix Web Console, for this she needs to launch her application together with a second Feature descriptor for the web console. She needs the launcher to take both Feature descriptors and turn it into a single running system.
-
 ### UC3: Overrides
 
 Harry wants to use Linda's application, but the application opens a socket on his machine on a port that he is using for a different purpose. Harry needs to be able to launch the application as-is, but change the socket port number used.
-
-### UC4: Clashes
-
-Emily is building a bigger application where she needs to embed Linda's application. Emily does this by combining Linda's Feature with her own Feature descriptor, making it a component of the bigger application. However, one bundle used in Linda's application has a newer version that Emily needs. She has defined this newer version in her own Feature descriptor. The launcher needs to make it possible for Emily to select the correct version of this bundle, given the fact that its declared twice.
 
 ### UC5: Extensions
 
@@ -48,9 +40,5 @@ Bill has a Feature that contains a custom extension to initialize the database f
 * FL-0020: The solution MUST be able to instantiate an OSGi framework for this. The solution MUST provide a way to declare which Framework and which JVM to use.
 * FL-0030: The solution MUST support working with an existing, already running, OSGi framework to run the Feature.
 * FL-0040: The solution MUST provide a mechanism to plug in extension handlers which are executed before the Feature is launched.
-* FL-0050: The solution MUST be able to take multiple Feature descriptors to combine these into a single running system.
 * FL-0060: The solution MUST provide a mechanism to pass in values for Feature descriptor variables.
-* FL-0070: The solution MUST provide a predictable mechanism to merge multiple Features, taking into account that bundles, configurations and custom extensions each have different requirements on how they are merged.
-* FL-0080: The solution MUST provide a mechanism to resolve merge conflicts.
-* FL-0090: The solution MUST provide a well defined mechanism for handling failures when merging features or launching them.
 * FL-0100: The solution MUST provide a well defined mechanism where the currently launched features can be inspected.
