@@ -44,7 +44,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 
-	private static final String							JAVA_SERVLET_TEMP_DIR_PROP	= "javax.servlet.content.tempdir";
+	private static final String							JAVA_SERVLET_TEMP_DIR_PROP	= "jakarta.servlet.content.tempdir";
 
 	private ServiceRegistration<ServletContextHelper>	registration;
 

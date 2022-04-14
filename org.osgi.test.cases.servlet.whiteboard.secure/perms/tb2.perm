@@ -7,5 +7,5 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
-(org.osgi.framework.CapabilityPermission "(&(capability.namespace=osgi.contract)(osgi.contract=JavaServlet))" "require")
-(org.osgi.framework.ServicePermission "javax.servlet.Servlet" "register")
+(org.osgi.framework.CapabilityPermission "(&(capability.namespace=osgi.contract)(osgi.contract=JakartaServlet))" "require")
+(org.osgi.framework.ServicePermission "jakarta.servlet.Servlet" "register")
