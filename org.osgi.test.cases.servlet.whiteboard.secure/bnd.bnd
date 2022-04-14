@@ -32,7 +32,7 @@ Import-Package: org.apache.avalon.framework.logger;resolution:=optional,\
 	org.apache.httpcomponents.httpclient;version=4.5.3
 
 -runbundles = \
-    org.osgi.impl.service.http.whiteboard;version=latest
+    org.osgi.impl.service.servlet.whiteboard;version=latest
 
 -runproperties = ${runsecureproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
