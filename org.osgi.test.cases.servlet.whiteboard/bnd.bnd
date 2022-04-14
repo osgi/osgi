@@ -40,7 +40,7 @@ Export-Package: ${p}.junit.mock
 
 -runbundles = \
     org.osgi.util.function;version=latest, \
-    org.osgi.impl.service.http.whiteboard;version=latest
+    org.osgi.impl.service.servlet.whiteboard;version=latest
 
 -runproperties = ${runproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
@@ -48,6 +48,7 @@ Export-Package: ${p}.junit.mock
 	org.apache.felix.http.whiteboard.changecount.delay=0
 
 -signaturetest = \
+  org.osgi.service.servlet.context, \
   org.osgi.service.servlet.whiteboard, \
   org.osgi.service.servlet.runtime, \
   org.osgi.service.servlet.runtime.dto

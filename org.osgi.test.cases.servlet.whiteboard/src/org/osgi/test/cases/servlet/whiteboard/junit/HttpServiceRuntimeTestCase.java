@@ -443,7 +443,6 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals(getServiceId(sr), requestInfoDTO.resourceDTO.serviceId);
 	}
 
-	// TODO - This test needs to be updated
 	public void test_140_11_1() throws Exception {
 		BundleContext context = getContext();
 
@@ -463,17 +462,17 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 			if (name != null) {
 				Version version = (Version)attributes.get("version");
 
-				if (name.equals("osgi.http") && (version != null) && (version.equals(new Version("1.1.0")))) {
+				if (name.equals("osgi.http") && (version != null) && (version.equals(new Version("2.0.0")))) {
 					Map<String, String> directives = capability.getDirectives();
 
 					String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
 
 					List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
 
-					assertTrue(packages.contains("javax.servlet"));
-					assertTrue(packages.contains("javax.servlet.http"));
-					assertTrue(packages.contains("org.osgi.service.http.context"));
-					assertTrue(packages.contains("org.osgi.service.http.whiteboard"));
+					assertTrue(packages.contains("jakarta.servlet"));
+					assertTrue(packages.contains("jakarta.servlet.http"));
+					assertTrue(packages.contains("org.osgi.service.servlet.context"));
+					assertTrue(packages.contains("org.osgi.service.servlet.whiteboard"));
 
 					found = true;
 				}
@@ -483,7 +482,6 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(found);
 	}
 
-	// TODO - This test needs to be updated for JakartaServlet contract
 	public void test_140_11_2() throws Exception {
 		BundleContext context = getContext();
 
@@ -499,7 +497,7 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 			Map<String, Object> attributes = capability.getAttributes();
 			String name = (String) attributes.get(PackageNamespace.PACKAGE_NAMESPACE);
 
-			if (name.equals("javax.servlet")) {
+			if (name.equals("jakarta.servlet")) {
 				found = true;
 			}
 		}
@@ -514,12 +512,12 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 				String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
-				if ("JavaServlet".equals(name)) {
+				if ("JakartaServlet".equals(name)) {
 					Collection<Version> versions = Versions.plus(attributes.get(
 							ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
 					for (Version v : versions) {
-						if (v.equals(new Version("3.1.0"))) {
+						if (v.equals(new Version("5.0.0"))) {
 							Map<String,String> directives = capability
 									.getDirectives();
 
@@ -529,12 +527,12 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 							List<String> packages = Arrays
 									.asList(uses.split("\\s*,\\s*"));
 
-							assertTrue(packages.contains("javax.servlet"));
+							assertTrue(packages.contains("jakarta.servlet"));
 							assertTrue(packages
-									.contains("javax.servlet.annotation"));
+									.contains("jakarta.servlet.annotation"));
 							assertTrue(packages
-									.contains("javax.servlet.descriptor"));
-							assertTrue(packages.contains("javax.servlet.http"));
+									.contains("jakarta.servlet.descriptor"));
+							assertTrue(packages.contains("jakarta.servlet.http"));
 
 							foundContract = true;
 						}
@@ -558,12 +556,12 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 					String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
-					if ("JavaServlet".equals(name)) {
+					if ("JakartaServlet".equals(name)) {
 						Collection<Version> versions = Versions.plus(attributes
 								.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE));
 
 						for (Version v : versions) {
-							if (v.equals(new Version("3.1.0"))) {
+							if (v.equals(new Version("5.0.0"))) {
 								Map<String,String> directives = capability
 										.getDirectives();
 
@@ -573,13 +571,13 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 								List<String> packages = Arrays
 										.asList(uses.split("\\s*,\\s*"));
 
-								assertTrue(packages.contains("javax.servlet"));
+								assertTrue(packages.contains("jakarta.servlet"));
 								assertTrue(packages
-										.contains("javax.servlet.annotation"));
+										.contains("jakarta.servlet.annotation"));
 								assertTrue(packages
-										.contains("javax.servlet.descriptor"));
+										.contains("jakarta.servlet.descriptor"));
 								assertTrue(packages
-										.contains("javax.servlet.http"));
+										.contains("jakarta.servlet.http"));
 
 								foundContract = true;
 							}
