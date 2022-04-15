@@ -46,6 +46,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Artifacts
@@ -173,6 +176,8 @@ jobs:
         force_orphan: true
 
   tck:
+    permissions:
+      contents: none
     needs: build
     strategy:
       fail-fast: false

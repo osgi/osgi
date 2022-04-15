@@ -43,6 +43,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build and TCK core
