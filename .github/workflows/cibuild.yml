@@ -67,11 +67,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
-        server-id: ossrh
-        server-username: OSSRH_USERNAME
-        server-password: OSSRH_PASSWORD
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg-passphrase: GPG_PASSPHRASE
     - name: Build
       id: build
       uses: gradle/gradle-build-action@v2
@@ -86,6 +81,17 @@ jobs:
         path: |
           osgi.tck/generated/osgi.tck.*/
           !osgi.tck/generated/osgi.tck.*.jar
+    - name: Configure settings.xml for Publish
+      if: ${{ fromJSON(env.canonical) }}
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.java_version }}
+        server-id: ossrh
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_PASSWORD
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: GPG_PASSPHRASE
     - name: Create Staging Repository
       if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
       run: |
