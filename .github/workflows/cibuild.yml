@@ -46,6 +46,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Artifacts
@@ -54,7 +57,7 @@ jobs:
       tck-matrix: ${{ steps.build.outputs.tck-matrix }}
     steps:
     - name: Git Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Git Unshallow
       if: ${{ fromJSON(env.canonical) }}
       run: |
@@ -63,7 +66,27 @@ jobs:
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Set up Java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.java_version }}
+    - name: Build
+      id: build
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: --continue :build
+    - name: Upload TCK
+      uses: actions/upload-artifact@v3
+      with:
+        name: OSGi-TCK
+        if-no-files-found: error
+        path: |
+          osgi.tck/generated/osgi.tck.*/
+          !osgi.tck/generated/osgi.tck.*.jar
+    - name: Configure settings.xml for Publish
+      if: ${{ fromJSON(env.canonical) }}
+      uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -72,20 +95,6 @@ jobs:
         server-password: OSSRH_PASSWORD
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg-passphrase: GPG_PASSPHRASE
-    - name: Build
-      id: build
-      uses: gradle/gradle-build-action@v2
-      with:
-        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: --continue :build
-    - name: Upload TCK
-      uses: actions/upload-artifact@v2
-      with:
-        name: OSGi-TCK
-        if-no-files-found: error
-        path: |
-          osgi.tck/generated/osgi.tck.*/
-          !osgi.tck/generated/osgi.tck.*.jar
     - name: Create Staging Repository
       if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
       run: |
@@ -107,7 +116,7 @@ jobs:
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: OSGi-Generated-Repo
         path: |
@@ -118,11 +127,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Git Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Set up Java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -134,13 +143,13 @@ jobs:
         arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
       if: ${{ (fromJSON(env.canonical) && (github.ref == 'refs/heads/main')) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
@@ -154,7 +163,7 @@ jobs:
       contents: write
     steps:
     - name: Download Specification HTML
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html
@@ -167,6 +176,8 @@ jobs:
         force_orphan: true
 
   tck:
+    permissions:
+      contents: none
     needs: build
     strategy:
       fail-fast: false
@@ -175,12 +186,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set up Java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Download TCK
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: OSGi-TCK
     - name: Run TCK
@@ -190,7 +201,7 @@ jobs:
         java -jar jar/bnd.jar --exceptions runtests --title ${{ matrix.tck }} --reportdir reports/${{ matrix.tck }} ${{ matrix.tck }}.bnd
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |
