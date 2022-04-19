@@ -59,7 +59,7 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 
 		String baseURI = getBaseURI();
 
-		WebTarget target = c.target(baseURI + "/whiteboard/stream");
+		WebTarget target = c.target(baseURI).path("whiteboard/stream");
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
