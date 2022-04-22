@@ -64,7 +64,7 @@ public class ClientTestCase extends AbstractJAXRSTestCase {
 
 		String baseURI = getBaseURI();
 
-		WebTarget target = c.target(baseURI + "/whiteboard/resource");
+		WebTarget target = c.target(baseURI).path("whiteboard/resource");
 
 		assertEquals(NOT_FOUND.getStatusCode(),
 				target.request().get().getStatusInfo().getStatusCode());
@@ -124,7 +124,8 @@ public class ClientTestCase extends AbstractJAXRSTestCase {
 
 			String baseURI = getBaseURI();
 
-			WebTarget target = c.target(baseURI + "/whiteboard/async/{name}");
+			WebTarget target = c.target(baseURI)
+					.path("whiteboard/async/{name}");
 
 			Promise<String> p = target.resolveTemplate("name", "Bob")
 					.request()

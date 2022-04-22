@@ -16,3 +16,7 @@ The GitHub Actions build "GitHub Pages" job will publish the draft specification
 In your fork, just add `core/` or `cmpn/` to the end of your fork's GitHub Pages URL. For example:
 
 > https://&lt;username&gt;.github.io/osgi/core/
+
+## More Information
+
+For more information see the OSGi Specification Project pages at Eclipse: https://projects.eclipse.org/projects/technology.osgi
