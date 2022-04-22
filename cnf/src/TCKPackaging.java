@@ -143,7 +143,8 @@ public class TCKPackaging extends Packaging implements AnalyzerPlugin {
 	 */
 	protected void pack(Analyzer analyzer, Jar jar, Project project, String bsn,
 			String name) throws Exception {
-		Container c = project.getBundle(bsn, "latest", Strategy.HIGHEST, null);
+		Container c = project.getBundle(bsn, "latest", Strategy.HIGHEST,
+				Collections.emptyMap());
 
 		File f = c.getFile();
 		if (f != null) {
