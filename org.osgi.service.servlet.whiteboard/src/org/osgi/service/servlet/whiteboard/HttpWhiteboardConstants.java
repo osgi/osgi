@@ -228,7 +228,6 @@ public final class HttpWhiteboardConstants {
 	 * The value of this service property must be of type {@code Boolean}.
 	 *
 	 * @see "Java Servlet Specification Version 3.0, Section 8.1.5 @MultipartConfig"
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED	= "osgi.http.whiteboard.servlet.multipart.enabled";
 
@@ -244,7 +243,6 @@ public final class HttpWhiteboardConstants {
 	 * The value of this service property must be of type {@code Integer}.
 	 *
 	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD	= "osgi.http.whiteboard.servlet.multipart.fileSizeThreshold";
 
@@ -260,7 +258,6 @@ public final class HttpWhiteboardConstants {
 	 * The value of this service property must be of type {@code String}.
 	 *
 	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION	= "osgi.http.whiteboard.servlet.multipart.location";
 
@@ -275,7 +272,6 @@ public final class HttpWhiteboardConstants {
 	 * The value of this service property must be of type {@code Long}.
 	 *
 	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE	= "osgi.http.whiteboard.servlet.multipart.maxFileSize";
 
@@ -290,7 +286,6 @@ public final class HttpWhiteboardConstants {
 	 * The value of this service property must be of type {@code Long}.
 	 *
 	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE	= "osgi.http.whiteboard.servlet.multipart.maxRequestSize";
 
@@ -426,8 +421,6 @@ public final class HttpWhiteboardConstants {
 	 * <p>
 	 * For {@link Preprocessor} services, the value of each initialization
 	 * parameter service property must be of type {@code String}.
-	 * 
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_PREPROCESSOR_INIT_PARAM_PREFIX		= "preprocessor.init.";
 
@@ -559,7 +552,6 @@ public final class HttpWhiteboardConstants {
 	 * invalid registration.
 	 * 
 	 * @see #HTTP_SERVICE_CONTEXT_FILTER
-	 * @since 1.1
 	 */
 	public static final String	HTTP_SERVICE_CONTEXT_PROPERTY						= "osgi.http.whiteboard.context.httpservice";
 
@@ -570,7 +562,6 @@ public final class HttpWhiteboardConstants {
 	 * this filter.
 	 *
 	 * @see #HTTP_SERVICE_CONTEXT_PROPERTY
-	 * @since 1.1
 	 */
 	public static final String	HTTP_SERVICE_CONTEXT_FILTER							= "("
 			+ HTTP_SERVICE_CONTEXT_PROPERTY + "=*)";
@@ -578,16 +569,12 @@ public final class HttpWhiteboardConstants {
 	/**
 	 * The name of the implementation capability for the Http Whiteboard
 	 * specification
-	 * 
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_IMPLEMENTATION						= "osgi.http";
 
 	/**
 	 * The version of the implementation capability for the Http Whiteboard
 	 * specification
-	 * 
-	 * @since 1.1
 	 */
 	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "2";
 }

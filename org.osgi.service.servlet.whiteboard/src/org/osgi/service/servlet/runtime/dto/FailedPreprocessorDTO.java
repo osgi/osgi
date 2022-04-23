@@ -24,7 +24,6 @@ package org.osgi.service.servlet.runtime.dto;
  * 
  * @NotThreadSafe
  * @author $Id$
- * @since 1.1
  */
 public class FailedPreprocessorDTO extends PreprocessorDTO {
 

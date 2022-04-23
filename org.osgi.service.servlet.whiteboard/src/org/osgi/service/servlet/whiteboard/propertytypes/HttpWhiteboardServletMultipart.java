@@ -49,7 +49,6 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * 
  * @see "Component Property Types"
  * @author $Id$
- * @since 1.1
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)

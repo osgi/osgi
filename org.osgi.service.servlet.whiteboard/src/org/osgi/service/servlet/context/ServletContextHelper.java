@@ -24,12 +24,12 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Helper service for a servlet context used by a Http Whiteboard implementation
@@ -226,7 +226,6 @@ public abstract class ServletContextHelper {
 	 * 
 	 * @param request The HTTP request.
 	 * @param response The HTTP response.
-	 * @since 1.1
 	 * @see #handleSecurity(HttpServletRequest, HttpServletResponse)
 	 */
 	public void finishSecurity(final HttpServletRequest request,
@@ -316,7 +315,6 @@ public abstract class ServletContextHelper {
 
 	/**
 	 * Gets the real path corresponding to the given virtual path.
-	 * 
 	 * <p>
 	 * Called by the Http Whiteboard implementation to support the
 	 * {@code ServletContext} method {@code getRealPath} for whiteboard

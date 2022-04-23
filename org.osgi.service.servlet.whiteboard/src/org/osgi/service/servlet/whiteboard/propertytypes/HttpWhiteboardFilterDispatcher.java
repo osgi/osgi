@@ -23,9 +23,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import jakarta.servlet.DispatcherType;
-
 import org.osgi.service.component.annotations.ComponentPropertyType;
+
+import jakarta.servlet.DispatcherType;
 
 /**
  * Component Property Type for the
@@ -38,7 +38,6 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * 
  * @see "Component Property Types"
  * @author $Id$
- * @since 1.1
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)

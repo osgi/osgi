@@ -29,7 +29,6 @@ import org.osgi.dto.DTO;
  * 
  * @NotThreadSafe
  * @author $Id$
- * @since 1.1
  */
 public class PreprocessorDTO extends DTO {
 
