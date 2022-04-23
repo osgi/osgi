@@ -29,8 +29,8 @@
   <title>Http Whiteboard Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.service.http.whiteboard-version"
-    linkend="org.osgi.service.http.whiteboard"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.servlet.whiteboard-version"
+    linkend="org.osgi.service.servlet.whiteboard"/></releaseinfo>
   </info>
 
   <section>
@@ -95,7 +95,7 @@
     protocols if these protocols can conform to the semantics of the Java
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support version 3.1 or later of
+    <para>Http Whiteboard implementations must support version 5.0 or later of
     the Java Servlet API.</para>
 
     <section>
@@ -2436,8 +2436,8 @@ public class MyFilter implements Filter</programlisting> This specification
        uses:="jakarta.servlet, jakarta.servlet.http, 
               org.osgi.service.servlet.context, org.osgi.service.servlet.whiteboard";
        version:Version="<xref
-          endterm="org.osgi.service.http.whiteboard-version.number"
-          linkend="org.osgi.service.http.whiteboard"/>"</programlisting>
+          endterm="org.osgi.service.servlet.whiteboard-version.number"
+          linkend="org.osgi.service.servlet.whiteboard"/>"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
@@ -2449,8 +2449,8 @@ public class MyFilter implements Filter</programlisting> This specification
       <programlisting>Require-Capability: osgi.implementation;
        filter:="(&amp;(osgi.implementation=osgi.http)
                  (version&gt;=<xref
-          endterm="org.osgi.service.http.whiteboard-version.number"
-          linkend="org.osgi.service.http.whiteboard"/>)(!(version&gt;=2.0)))"
+          endterm="org.osgi.service.servlet.whiteboard-version.number"
+          linkend="org.osgi.service.servlet.whiteboard"/>)(!(version&gt;=3.0)))"
       </programlisting>
 
       <para>To simplify the creation of this requirement, the <xref
@@ -2464,7 +2464,7 @@ public class MyFilter implements Filter</programlisting> This specification
       <para>The Http Whiteboard implementation must provide a capability in
       the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
-      namespace with name <code>JavaServlet</code> if it exports the
+      namespace with name <code>JakartaServlet</code> if it exports the
       <code>jakarta.servlet</code> and <code>jakarta.servlet.http</code> packages.
       See <xref
       linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
