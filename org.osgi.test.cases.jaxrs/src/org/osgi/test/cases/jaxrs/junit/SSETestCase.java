@@ -22,7 +22,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -82,18 +82,18 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 
 			AtomicReference<Throwable> ref = new AtomicReference<Throwable>();
 			List<Integer> list = new CopyOnWriteArrayList<>();
-			CountDownLatch latch = new CountDownLatch(10);
+			Semaphore semaphore = new Semaphore(-9);
 
 			SseEventSource source = sseTracker.getService().newSource(target);
 
 			source.register(e -> {
 				list.add(e.readData(Integer.class));
-				latch.countDown();
+				semaphore.release();
 			}, t -> ref.set(t));
 
 			source.open();
 
-			assertTrue(latch.await(10, TimeUnit.SECONDS));
+			assertTrue(semaphore.tryAcquire(10, TimeUnit.SECONDS));
 
 			assertNull(ref.get());
 			source.close();
