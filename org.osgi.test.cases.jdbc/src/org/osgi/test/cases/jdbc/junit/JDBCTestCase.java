@@ -91,12 +91,6 @@ public class JDBCTestCase extends OSGiTestCase {
 			return;
 		}
 
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createDataSource( props );
-			fail("Should have gotten a SQLException for invalid property \"junk\".");
-		} catch ( SQLException ignore ) { }
 	}
 
 	public void testCreateConnectionPoolDataSource() throws Exception {
@@ -115,13 +109,6 @@ public class JDBCTestCase extends OSGiTestCase {
 			// No point in further testing
 			return;
 		}
-		
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createConnectionPoolDataSource( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
 	}
 
 	public void testCreateXADataSource() throws Exception {
@@ -140,13 +127,6 @@ public class JDBCTestCase extends OSGiTestCase {
 			// No point in further testing
 			return;
 		}
-		
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createXADataSource( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
 	}
 
 	public void testCreateDriver() throws Exception {
@@ -161,12 +141,6 @@ public class JDBCTestCase extends OSGiTestCase {
 			return;
 		}
 
-		// make sure we get an exception if we use an unknown property
-		props.put( "junk", "junk" );
-		try {
-			factory.createDriver( props );
-			fail( "Should have gotten a SQLException." );
-		} catch ( SQLException ignore ) { }
 	}
 
 	public void testAtLeastOneMethodWorks() {
