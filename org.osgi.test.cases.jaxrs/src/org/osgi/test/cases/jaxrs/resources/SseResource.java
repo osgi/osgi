@@ -19,6 +19,7 @@ package org.osgi.test.cases.jaxrs.resources;
 
 import static javax.ws.rs.core.HttpHeaders.LAST_EVENT_ID_HEADER;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.ws.rs.GET;
@@ -50,22 +51,25 @@ public class SseResource {
 	SseEventSink sink) throws NoContentException {
 
 		int id;
+		boolean hello;
 		if (lastId == null) {
 			id = -1;
+			hello = true;
 		} else {
 			id = Integer.parseInt(lastId);
 			if (id >= 9) {
 				throw new NoContentException("No events after " + lastId);
 			}
+			hello = false;
 		}
 		
 		new Thread(() -> {
 
-			CompletionStage< ? > cs = sink.send(sse.newEventBuilder()
+			CompletionStage< ? > cs = hello ? sink.send(sse.newEventBuilder()
 					.reconnectDelay(500)
 					.comment("Hello")
 					.data(42)
-					.build());
+					.build()) : CompletableFuture.completedFuture(null);
 
 			try {
 				for (int i = id + 1; i < 10; i++) {
