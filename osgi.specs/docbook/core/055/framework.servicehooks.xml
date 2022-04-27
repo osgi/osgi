@@ -350,7 +350,7 @@
       <para>The following example shows how to hide a specific Service
       Reference from a specific bundle.</para>
 
-      <programlisting>public class Hide implementsEventListenerHook, FindHook {
+      <programlisting>public class Hide implements EventListenerHook, FindHook {
     final Bundle           bundle;
     final ServiceReference reference;
     final BundleContext    context;
