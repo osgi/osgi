@@ -95,7 +95,7 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 
 			assertNull(ref.get());
 
-			assertEquals(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9), list);
+			assertEquals(Arrays.asList(42, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9), list);
 		
 		} finally {
 			reg.unregister();

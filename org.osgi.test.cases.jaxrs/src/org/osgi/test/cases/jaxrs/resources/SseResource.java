@@ -17,14 +17,18 @@
  *******************************************************************************/
 package org.osgi.test.cases.jaxrs.resources;
 
+import static javax.ws.rs.core.HttpHeaders.LAST_EVENT_ID_HEADER;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NoContentException;
 import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseEventSink;
 
@@ -42,15 +46,36 @@ public class SseResource {
 
 	@GET
 	@Produces(MediaType.SERVER_SENT_EVENTS)
-	public void stream(@Context SseEventSink sink) {
+	public void stream(@HeaderParam(LAST_EVENT_ID_HEADER)
+	String lastId, @Context
+	SseEventSink sink) throws NoContentException {
+
+		int id;
+		boolean hello;
+		if (lastId == null) {
+			id = -1;
+			hello = true;
+		} else {
+			id = Integer.parseInt(lastId);
+			if (id >= 9) {
+				throw new NoContentException("No events after " + lastId);
+			}
+			hello = false;
+		}
+		
 		new Thread(() -> {
 
-			CompletionStage< ? > cs = CompletableFuture.completedFuture(null);
+			CompletionStage< ? > cs = hello ? sink.send(sse.newEventBuilder()
+					.reconnectDelay(500)
+					.comment("Hello")
+					.data(42)
+					.build()) : CompletableFuture.completedFuture(null);
 
 			try {
-				for (int i = 0; i < 10; i++) {
+				for (int i = id + 1; i < 10; i++) {
 					Thread.sleep(500);
 					cs = cs.thenCombine(sink.send(sse.newEventBuilder()
+							.id(String.valueOf(i))
 							.data(i)
 							.mediaType(type)
 							.build()), (a, b) -> null);
