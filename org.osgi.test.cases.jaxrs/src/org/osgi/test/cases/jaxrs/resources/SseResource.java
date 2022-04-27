@@ -52,6 +52,7 @@ public class SseResource {
 					Thread.sleep(500);
 					cs = cs.thenCombine(sink.send(sse.newEventBuilder()
 							.data(i)
+							.reconnectDelay(5500l)
 							.mediaType(type)
 							.build()), (a, b) -> null);
 				}
