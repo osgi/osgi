@@ -295,10 +295,44 @@ DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlistin
       <code>DataSourceFactory</code> interface.</para>
 
       <para>A Data Source Factory is not required to implement all of the
-      factory methods. If an implementation does not support a particular type
-      then it must throw a SQL Exception. This specification does not provide
-      a mechanism to depend on a Data Source Factory service that implements a
-      particular factory method.</para>
+      factory methods. To indicate which factory method is implemented the 
+      <code>DataSourceFactory</code> must declare this using the Service-Propertie 
+      <code>org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY</code>. If 
+      an implementation does not support a particular type then it must throw a SQL 
+      Exception.</para>
+     
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY"
+          xrefstyle="hyperlink"/></para>
+        </listitem> 
+      </itemizedlist> 
+      
+      <para>Values to indicate the cabability of the Data Source Factory are:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+      </itemizedlist>
 
       <para>The following code shows how a <code>DataSource</code> object
       could be created.</para>
