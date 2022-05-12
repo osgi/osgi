@@ -16,184 +16,168 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-
 package org.osgi.test.cases.jdbc.junit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_CLASS;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION;
 
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.service.ServiceSource;
 
-public class JDBCTestCase extends OSGiTestCase {
-	private String databaseName = "dbName";
-	private String dataSourceName = "dsName";
-	private String description = "desc";
-	private String password = "pswd";
-	private String user = "usr";
-	
-	private ServiceReference<DataSourceFactory>	ref;
-	private DataSourceFactory	factory;
+public class JDBCTestCase {
+	private static class DfltProps extends Properties {
 
-	protected void setUp() {
-		ref = getContext()
-				.getServiceReference(DataSourceFactory.class);
-		assertNotNull("No DataSourceFactory service available", ref);
-		factory = getContext().getService(ref);
-		assertNotNull(factory);
-	}
-	
-	protected void tearDown() {
-		getContext().ungetService(ref);
-	}
+		private static final long serialVersionUID = 1L;
 
-	public void testRegisteredProperties() {
-
-		Object className = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS);
-
-		assertNotNull(
-				"The DataSourceFactory is missing the required osgi.jdbc.driver.class property",
-				className);
-		assertTrue("The DataSourceFactory driver class is not a String",
-				className instanceof String);
-
-		Object driverName = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_NAME);
-		if (driverName != null) {
-			assertTrue("The DataSourceFactory driver name is not a String",
-					driverName instanceof String);
+		DfltProps() {
+			super();
+			put(DataSourceFactory.JDBC_DATABASE_NAME, databaseName);
+			put(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
+			put(DataSourceFactory.JDBC_DESCRIPTION, description);
+			put(DataSourceFactory.JDBC_PASSWORD, password);
+			put(DataSourceFactory.JDBC_USER, user);
+			// Drivers can support additional custom configuration properties.
 		}
+	}
 
-		Object driverVersion = ref
-				.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_VERSION);
+	private static final String	FILTER_CAPABILITY_CONNECTIONPOOLEDDATASOURCE	= "("
+			+ OSGI_JDBC_CAPABILITY + "="
+			+ OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE + ")";
+
+	private static final String	FILTER_CAPABILITY_DATASOURCE					= "("
+			+ OSGI_JDBC_CAPABILITY + "=" + OSGI_JDBC_CAPABILITY_DATASOURCE
+			+ ")";
+
+	private static final String	FILTER_CAPABILITY_DRIVER						= "("
+			+ OSGI_JDBC_CAPABILITY + "=" + OSGI_JDBC_CAPABILITY_DRIVER + ")";
+
+	private static final String	FILTER_CAPABILITY_XADATASOURCE					= "("
+			+ OSGI_JDBC_CAPABILITY + "=" + OSGI_JDBC_CAPABILITY_XADATASOURCE
+			+ ")";
+
+	static String				databaseName									= "dbName";
+	static String				dataSourceName									= "dsName";
+	static String				description										= "desc";
+	static String				password										= "pswd";
+	static String				user											= "usr";
+
+	@Test
+	public void testMinimumOneDataSourceFactory(
+			@InjectService(cardinality = 1, filter = "("
+					+ OSGI_JDBC_DRIVER_CLASS + "=*)")
+			ServiceAware<DataSourceFactory> sa) {
+		assertThat(sa.getService()).isNotNull();
+
+		ServiceReferenceAssert.assertThat(sa.getServiceReference())
+				.hasServicePropertiesThat()
+				.containsKey(OSGI_JDBC_CAPABILITY)
+				.extractingByKey(OSGI_JDBC_CAPABILITY)
+				.isNotNull();
+
+	}
+
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testRegisteredProperties(
+			ServiceReference<DataSourceFactory> sr) {
+
+		ServiceReferenceAssert<DataSourceFactory> sRefAssert = ServiceReferenceAssert
+				.assertThat(sr);
+
+		sRefAssert.hasServicePropertiesThat()
+				.as("The DataSourceFactory is missing the required osgi.jdbc.driver.class property")
+				.containsKey(OSGI_JDBC_DRIVER_CLASS)
+				.extractingByKey(OSGI_JDBC_DRIVER_CLASS)
+				.isNotNull()
+				.as("The DataSourceFactory driver class is not a String")
+				.isInstanceOf(String.class);
+
+		Object driverVersion = sr.getProperty(OSGI_JDBC_DRIVER_VERSION);
+
 		if (driverVersion != null) {
-			assertTrue("The DataSourceFactory driver version is not a String",
-					driverName instanceof String);
+			assertTrue(driverVersion instanceof String,
+					"The DataSourceFactory driver version is not a String");
 		}
 	}
 
-	public void testCreateDataSource() throws Exception {
-		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_CONNECTIONPOOLEDDATASOURCE)
+	public void testCapabilityConnectionPoolDataSource(DataSourceFactory dsf)
+			throws SQLException {
 
-		try {
-			factory.createDataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
+		assertThatNoException()
+				.isThrownBy(() -> dsf.createConnectionPoolDataSource(null));
+
+		assertThat(dsf.createConnectionPoolDataSource(null)).isNotNull();
+
+		assertThatNoException().isThrownBy(
+				() -> dsf.createConnectionPoolDataSource(new DfltProps()));
+
+		assertThat(dsf.createConnectionPoolDataSource(new DfltProps()))
+				.isNotNull();
+	}
+
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_DATASOURCE)
+	public void testCapabilityDataSource(DataSourceFactory dsf)
+			throws SQLException {
+
+		assertThatNoException().isThrownBy(() -> dsf.createDataSource(null));
+
+		assertThat(dsf.createDataSource(null)).isNotNull();
+
+		assertThatNoException()
+				.isThrownBy(() -> dsf.createDataSource(new DfltProps()));
+
+		assertThat(dsf.createDataSource(new DfltProps())).isNotNull();
+	}
+
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_DRIVER)
+	public void testCapabilityDriver(DataSourceFactory dsf)
+			throws SQLException {
+
+		assertThatNoException().isThrownBy(() -> dsf.createDriver(null));
+
+		assertThat(dsf.createDriver(null)).isNotNull();
+
+		assertThatNoException()
+				.isThrownBy(() -> dsf.createDriver(new Properties()));
+
+		assertThat(dsf.createDriver(new Properties())).isNotNull();
 
 	}
 
-	public void testCreateConnectionPoolDataSource() throws Exception {
-		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_XADATASOURCE)
+	public void testCapabilityXADataSource(DataSourceFactory dsf)
+			throws SQLException {
 
-		try {
-			factory.createConnectionPoolDataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-	}
+		assertThatNoException().isThrownBy(() -> dsf.createXADataSource(null));
 
-	public void testCreateXADataSource() throws Exception {
-		Properties props = new Properties();
-		props.put( DataSourceFactory.JDBC_DATABASE_NAME, databaseName );
-		props.put( DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName );
-		props.put( DataSourceFactory.JDBC_DESCRIPTION, description );
-		props.put( DataSourceFactory.JDBC_PASSWORD, password );
-		props.put( DataSourceFactory.JDBC_USER, user );
+		assertThat(dsf.createXADataSource(null)).isNotNull();
 
-		try {
-			factory.createXADataSource(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-	}
+		assertThatNoException()
+				.isThrownBy(() -> dsf.createXADataSource(new DfltProps()));
 
-	public void testCreateDriver() throws Exception {
-		Properties props = new Properties();
-
-		try {
-			factory.createDriver(props);
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (DataSource only
-			// DataSourceFactory implementations are perfectly valid).
-			// No point in further testing
-			return;
-		}
-
-	}
-
-	public void testAtLeastOneMethodWorks() {
-
-		Properties props = new Properties();
-
-		try {
-			factory.createDriver(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (DataSource only
-			// DataSourceFactory implementations are perfectly valid).
-		}
-
-		props.put(DataSourceFactory.JDBC_DATABASE_NAME, databaseName);
-		props.put(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
-		props.put(DataSourceFactory.JDBC_DESCRIPTION, description);
-		props.put(DataSourceFactory.JDBC_PASSWORD, password);
-		props.put(DataSourceFactory.JDBC_USER, user);
-
-		try {
-			factory.createXADataSource(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-		}
-
-		try {
-			factory.createConnectionPoolDataSource(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-		}
-
-		try {
-			factory.createDataSource(props);
-
-			// At least one test passed!
-			return;
-		} catch (SQLException sqle) {
-			// This is allowed as it may not be supported (Driver only
-			// DataSourceFactory implementations are perfectly valid).
-		}
-
-		fail("None of the DataSourceFactory methods successfully created a DataSource or Driver");
+		assertThat(dsf.createXADataSource(new DfltProps())).isNotNull();
 	}
 
 }
