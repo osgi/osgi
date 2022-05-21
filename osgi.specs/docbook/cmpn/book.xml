@@ -102,7 +102,7 @@
 
   <xi:include href="../139/service.enocean.xml"/>
 
-  <xi:include href="../140/service.http.whiteboard.xml"/>
+  <xi:include href="../140/service.servlet.whiteboard.xml"/>
 
   <xi:include href="../141/service.dal.xml"/>
 
