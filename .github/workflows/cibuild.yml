@@ -75,7 +75,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: --continue :build
+        arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
       uses: actions/upload-artifact@v3
       with:

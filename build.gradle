@@ -86,6 +86,7 @@ subprojects {
 
 tasks.register("buildscriptDependencies") {
 	doLast {
+		println "Java version:  ${JavaVersion.current()}"
 		println "bnd_version:   ${bnd_version}"
 		println "bnd_snapshots: ${bnd_snapshots}"
 		println "bnd_releases:  ${bnd_releases}"
