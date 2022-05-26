@@ -47,6 +47,12 @@ public class Activator implements BundleActivator {
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_CLASS, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_CLASS_PROPERTY_VALUE );
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_NAME, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_NAME_PROPERTY_VALUE );
 		props.put( DataSourceFactory.OSGI_JDBC_DRIVER_VERSION, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_VERSION_PROPERTY_VALUE );
+		props.put(DataSourceFactory.OSGI_JDBC_CAPABILITY, new String[] {
+				DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER,
+				DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE,
+				DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE,
+				DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE
+		});
 
 		dataSourceServiceRegistration = context.registerService(
 				DataSourceFactory.class,

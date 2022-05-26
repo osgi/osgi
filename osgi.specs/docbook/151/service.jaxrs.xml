@@ -186,7 +186,7 @@
     <para>All JAX-RS Whiteboards have a <code>default</code> application which
     is used to register resources that do not target an existing application.
     In this respect a JAX-RS whiteboard application shares some similarities
-    with a Servlet Context in the <xref linkend="service.servlet.whiteboard"/>.
+    with a Servlet Context in the <xref linkend="service.http.whiteboard"/>.
     Resources registered with a JAX-RS Whiteboard are always registered as
     part of an application. The generated name of the default application is
     <code>.default</code>, and it is mapped to the root context of the JAX-RS
@@ -200,7 +200,7 @@
 
     <para>For details on the association process between JAX-RS Whiteboard
     services and a JAX-RS Whiteboard see <xref
-    linkend="service.servlet.whiteboard.common.properties"/>.</para>
+    linkend="service.http.whiteboard.common.properties"/>.</para>
 
     <section>
       <title>The JAX-RS Service Runtime Service</title>
@@ -652,7 +652,7 @@ public class Foo {
       <para>When multiple JAX-RS Whiteboard implementations are present all of
       them can potentially process the whiteboard resources. In such
       situations it can be useful to associate the servlet with a specific
-      whiteboard by specifying the <code>osgi.servlet.whiteboard.target</code>
+      whiteboard by specifying the <code>osgi.http.whiteboard.target</code>
       property on the service.</para>
 
       <section>
@@ -2008,7 +2008,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
       namespace with name <code>JavaJAXRS</code> if it exports the JAX-RS
       specification packages. See <xref
-      linkend="service.servlet.whiteboard-portable.java.contracts.ref"/>.</para>
+      linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
