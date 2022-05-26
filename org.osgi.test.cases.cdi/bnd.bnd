@@ -65,5 +65,3 @@ Import-Package: ${-signaturetest}, *
 -runproperties: ${runproperties},\
 	eclipse.consoleLog=true,\
 	eclipse.log.level=DEBUG
-
-javac.profile=

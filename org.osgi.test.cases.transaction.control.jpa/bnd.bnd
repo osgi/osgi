@@ -1,5 +1,3 @@
-javac.profile=compact2
-
 # Set javac settings from JDT prefs
 -include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/cmpn.bnd
 

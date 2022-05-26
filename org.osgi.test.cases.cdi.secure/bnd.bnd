@@ -43,5 +43,3 @@ Bundle-Description: Secure TCK for the OSGi/CDI integration
 -runproperties: ${runsecureproperties},\
 	eclipse.consoleLog=true,\
 	eclipse.log.level=DEBUG
-
-javac.profile=

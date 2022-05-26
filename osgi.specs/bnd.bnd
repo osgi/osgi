@@ -10,7 +10,6 @@
 core.draft: draft
 cmpn.draft: draft
 
-javac.profile=
 fop_home: ${licensed}/fop
 batik_jars: ${findfile;${fop_home};batik*.jar},${findfile;${fop_home};xml-apis*.jar}
 
