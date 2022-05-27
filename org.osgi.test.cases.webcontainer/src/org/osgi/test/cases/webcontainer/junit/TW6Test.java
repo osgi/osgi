@@ -93,13 +93,13 @@ public class TW6Test extends WebContainerTestBundleControl {
             Attributes attrs = mf.getAttributes("welcome.jsp");
             String val = null;
             if (attrs != null) {
-				val = attrs.getValue("SHA-1-Digest");
+				val = attrs.getValue("SHA-256-Digest");
             }
             assertNull(val);  
             
             // verify signature did exist in the original war.
             mf = super.getManifestFromWarName("tw6.war");
-			val = mf.getAttributes("welcome.jsp").getValue("SHA-1-Digest");
+			val = mf.getAttributes("welcome.jsp").getValue("SHA-256-Digest");
             assertNotNull(val);  
         } finally {
             if (is != null) {
