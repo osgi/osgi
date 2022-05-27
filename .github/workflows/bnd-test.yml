@@ -36,7 +36,7 @@ env:
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
     -Dmaven.repo.local=cnf/generated/m2
-  java_version: 8
+  java_version: 17
   ORG_GRADLE_PROJECT_bnd_version: 6.4.0-SNAPSHOT
 
 defaults:
