@@ -19,6 +19,7 @@
 package org.osgi.impl.service.jndi;
 
 import java.util.Hashtable;
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,7 +41,7 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 class DefaultRuntimeInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder {
 
-	private static final Logger	logger	= 
+	private static final Logger logger = 
 		Logger.getLogger(DefaultRuntimeInitialContextFactoryBuilder.class.getName());
 
 	@Override
@@ -51,14 +52,25 @@ class DefaultRuntimeInitialContextFactoryBuilder implements
 			final String initialContextFactoryName = 
 				(String) environment.get(Context.INITIAL_CONTEXT_FACTORY);
 
-			// attempt to load this provider from the system classpath
 			try {
-				Class< ? > clazz = 
-					getClass().getClassLoader().loadClass(initialContextFactoryName);
-				return (InitialContextFactory) clazz.getConstructor()
-						.newInstance();
-			}
-			catch (Exception e) {
+				// attempt to load this provider from the system classpath
+				try {
+					Class< ? > clazz = getClass().getClassLoader()
+							.loadClass(initialContextFactoryName);
+					return (InitialContextFactory) clazz.getConstructor()
+							.newInstance();
+				} catch (IllegalAccessException e) {
+					// Under JPMS, the class constructor is not accessible
+					for (InitialContextFactory factory : ServiceLoader
+							.loadInstalled(InitialContextFactory.class)) {
+						if (factory.getClass()
+								.getName()
+								.equals(initialContextFactoryName)) {
+							return factory;
+						}
+					}
+				}
+			} catch (Exception e) {
 				logger.log(Level.FINEST,
 							 "Error while trying to load system-level JNDI provider",
 							 e);
