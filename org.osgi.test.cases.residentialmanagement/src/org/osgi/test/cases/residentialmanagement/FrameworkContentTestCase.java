@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.osgi.test.cases.residentialmanagement;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -27,7 +29,6 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -340,7 +341,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		// + launching properties from core spec
 		// + properties in the residential spec
 		// + other known properties
-		Properties expectedProps = (Properties) System.getProperties().clone();
+		Map<String,String> expectedProps = new HashMap<>();
+		System.getProperties().forEach((k, v) -> {
+			expectedProps.put((String) k, (String) v);
+		});
 		addFrameworkLaunchingProperties(expectedProps);
 		addResidentialProperties(expectedProps);
 		// any other known properties ?
@@ -348,22 +352,17 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		String uri = FRAMEWORK_ROOT;
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		String[] children = session.getChildNodeNames(uri + "/" + PROPERTY);
-		List<String> unknownProps = new ArrayList<String>();
-		List<String> wrongValue = new ArrayList<String>();
+		Map<String,String> actualProps = new HashMap<>();
 		for (String key : children ) {
 			String value = session.getNodeValue(uri + "/" + PROPERTY + "/" + key).getString();
-			if ( expectedProps.get(key) == null )
-				unknownProps.add(key);
-			else
-			if ( value.equals(expectedProps.get(key)))
-				expectedProps.remove(key);
-			else
-				wrongValue.add(key);
+			actualProps.put(key, value);
 		}
-		
-		assertEquals("There are Framework properties missing in the RMT: " + expectedProps, 0, expectedProps.size());
-		assertEquals("There are unknown Framework properties in the RMT: " + unknownProps, 0, unknownProps.size());
-		assertEquals("There are Framework properties with wrong values in the RMT: " + wrongValue, 0, wrongValue.size());
+		// tz matching is flaky
+		expectedProps.remove("user.timezone");
+		actualProps.remove("user.timezone");
+
+		assertThat(actualProps).as("Expected Framework properties in RMT")
+				.containsExactlyInAnyOrderEntriesOf(expectedProps);
 	}
 	
 	
@@ -692,7 +691,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * Only the props are added that are really set.
 	 * @param props
 	 */
-	private void addFrameworkLaunchingProperties( Properties props ) {
+	private void addFrameworkLaunchingProperties(Map<String,String> props) {
 		for (String key : LAUNCHING_PROPS) 
 			if ( getContext().getProperty(key ) != null )
 				props.put( key, getContext().getProperty(key));
@@ -703,7 +702,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * Only the props are added that are really set.
 	 * @param props
 	 */
-	private void addResidentialProperties( Properties props ) {
+	private void addResidentialProperties(Map<String,String> props) {
 		for (String key : RESIDIENTIAL_PROPS) 
 			if ( getContext().getProperty(key ) != null )
 				props.put( key, getContext().getProperty(key));
