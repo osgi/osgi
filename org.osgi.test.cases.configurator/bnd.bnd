@@ -35,10 +35,11 @@ Import-Package: *
     org.osgi.util.promise;version=1.1
 
 -runbundles = \
+    org.osgi.impl.bundle.serviceloader;version=latest,\
     org.osgi.impl.service.cm; version=latest , \
     org.osgi.impl.service.configurator; version=latest , \
     org.osgi.impl.service.log; version=latest
 
 -runproperties = ${runproperties},\
     ${p}.storageroot=${target-dir}/${p}.testStorageRoot,\
-    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest}}"
+    ${p}.bundles="${uniq;${repo.osgi.tck.*},${repo;org.osgi.impl.bundle.serviceloader;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest}}"
