@@ -1,4 +1,5 @@
 org.osgi.service.cm; version=latest
+org.osgi.impl.bundle.serviceloader;version=latest
 org.osgi.impl.service.configurator;version=latest
 org.osgi.service.event; version=latest
 

@@ -42,7 +42,7 @@ env:
     -Dorg.gradle.parallel=true
     -Dmaven.repo.local=cnf/generated/m2
   canonical: ${{ (github.repository == 'osgi/osgi') && ((github.ref == 'refs/heads/main') || (github.ref == 'refs/heads/release')) && (github.event_name != 'pull_request') }}
-  java_version: 8
+  java_version: 17
 
 defaults:
   run:
@@ -75,7 +75,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: --continue :build
+        arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
       uses: actions/upload-artifact@v3
       with:

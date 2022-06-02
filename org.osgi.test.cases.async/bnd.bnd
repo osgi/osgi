@@ -18,6 +18,8 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.async;version=latest,\
     org.osgi.service.log;version=1.3
 
+-runvm: ${if;${is;-1;${vcompare;${java.specification.version};9}};;--add-opens=java.base/java.lang=ALL-UNNAMED}
+
 -runbundles						= \
 	org.osgi.service.async;version=latest,\
 	org.osgi.impl.service.async;version=latest
