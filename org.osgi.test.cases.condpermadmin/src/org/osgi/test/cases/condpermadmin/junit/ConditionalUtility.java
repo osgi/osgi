@@ -32,6 +32,7 @@ import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
+import org.osgi.test.support.string.Strings;
 
 import junit.framework.AssertionFailedError;
 
@@ -110,7 +111,9 @@ public class ConditionalUtility {
 			checkPermission(permission);
 			ConditionalTestControl.pass(message);
 		} catch (Throwable e) {
-			ConditionalTestControl.fail(message + " but " + e.getClass().getName() + " was thrown");
+			ConditionalTestControl
+					.fail(message + " but " + e.getClass().getName()
+							+ " was thrown\n" + Strings.toString(e));
 		}
 	}
 	

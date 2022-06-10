@@ -1,8 +1,10 @@
 # -include for testing with junit 3/4 with JUnit on classpath
 
--runpath.osgi.tck: assertj-core;version=latest
+-runpath.osgi.tck: assertj-core;version=latest,\
+ net.bytebuddy.byte-buddy;version=latest
 
 -buildpath.osgi.tck: assertj-core;version=latest,\
+ net.bytebuddy.byte-buddy;version=latest,\
  biz.aQute.junit;version=latest
 
 -tester: biz.aQute.junit;version=latest

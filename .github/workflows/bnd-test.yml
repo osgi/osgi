@@ -36,8 +36,8 @@ env:
   GRADLE_OPTS: >-
     -Dorg.gradle.parallel=true
     -Dmaven.repo.local=cnf/generated/m2
-  java_version: 8
-  ORG_GRADLE_PROJECT_bnd_version: 6.3.0-SNAPSHOT
+  java_version: 17
+  ORG_GRADLE_PROJECT_bnd_version: 6.4.0-SNAPSHOT
 
 defaults:
   run:
@@ -66,7 +66,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: --continue :build :osgi.specs:specifications :osgi.tck:tck.core :buildscriptDependencies
+        arguments: --continue :buildscriptDependencies :build :osgi.specs:specifications :osgi.tck:tck.core
     - name: Upload TCK Test Reports on failure
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3

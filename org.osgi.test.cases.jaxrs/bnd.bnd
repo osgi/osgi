@@ -33,6 +33,8 @@ Import-Package: ${-signaturetest},\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
 	org.apache.httpcomponents.httpclient;version=4.5.3
 
+-runvm: ${if;${is;-1;${vcompare;${java.specification.version};9}};;--add-opens=java.base/java.net=ALL-UNNAMED}
+
 -runbundles = \
     org.osgi.impl.service.cm;version=latest,\
     org.osgi.impl.service.jaxrs;version=latest

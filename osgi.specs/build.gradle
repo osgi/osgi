@@ -38,6 +38,13 @@ def javadoc = tasks.named("javadoc") {
 	description = "Build the docbook flavored javadoc."
 	group = "documentation"
 
+	/*
+	 * Our doclet is based upon the pre-Java 9 doclet api
+	 */
+	javadocTool = javaToolchains.javadocToolFor {
+		languageVersion = JavaLanguageVersion.of(8)
+	}
+
 	def destinationDirectory = objects.directoryProperty().convention(layout.getBuildDirectory().dir("javadoc"))
 	destinationDir = file(destinationDirectory)
 	def javadocxml = destinationDirectory.file("javadoc.xml")
@@ -51,7 +58,7 @@ def javadoc = tasks.named("javadoc") {
 	title = ""
 	options.memberLevel = JavadocMemberLevel.PROTECTED
 	options.encoding = "UTF-8"
-	options.noTimestamp = JavaVersion.current().isJava9Compatible()
+	options.noTimestamp = false
 	options.doclet = "org.osgi.tools.xmldoclet.XmlDoclet"
 	options.docletpath = sourceSets.main.output.files as List
 

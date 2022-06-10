@@ -48,7 +48,7 @@ Import-Package: ${-signaturetest}, *
 
 -runbundles:
 -runframework: none
-
+-runvm: ${if;${is;-1;${vcompare;${java.specification.version};9}};;--add-opens=java.base/java.lang=ALL-UNNAMED}
 -runproperties = ${runproperties}, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \
 	${p}.bundles=, \

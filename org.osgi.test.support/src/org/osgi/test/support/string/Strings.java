@@ -18,6 +18,8 @@
 
 package org.osgi.test.support.string;
 
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,5 +46,11 @@ public class Strings {
 		List<T> list = new ArrayList<>(array.length);
 		Collections.addAll(list, array);
 		return list;
+	}
+
+	public static String toString(Throwable t) {
+		CharArrayWriter sw = new CharArrayWriter();
+		t.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
 	}
 }

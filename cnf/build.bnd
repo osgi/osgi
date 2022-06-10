@@ -10,7 +10,6 @@ licensed = ${workspace}/licensed
 javac.debug = on
 javac.source = 1.8
 javac.target  = 1.8
-javac.profile = compact1
 -eeprofile = auto
 -noimportjava = true
 
@@ -32,7 +31,7 @@ includes                = ${build}/includes
         keystore="${build}/keystore"; \
         keypass=testtest; \
         storepass=testtest; \
-        digestalg=SHA-1, \
+        digestalg=SHA-256, \
     Packaging; \
         path:="${workspacepluginpath}"; \
         command:=-pack, \

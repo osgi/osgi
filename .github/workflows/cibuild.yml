@@ -22,17 +22,19 @@ on:
   push:
     branches-ignore:
     - 'dependabot/**'
-    paths-ignore:
-    - '.design/**'
-    - '.github/*.yml'
-    - 'README.md'
-    - 'CONTRIBUTING.md'
+    paths:
+    - '**'
+    - '!.design/**'
+    - '!*.md'
+    - '!.github/**'
+    - '.github/**/*ci*'
   pull_request:
-    paths-ignore:
-    - '.design/**'
-    - '.github/*.yml'
-    - 'README.md'
-    - 'CONTRIBUTING.md'
+    paths:
+    - '**'
+    - '!.design/**'
+    - '!*.md'
+    - '!.github/**'
+    - '.github/**/*ci*'
 
 env:
   LC_ALL: en_US.UTF-8
@@ -40,7 +42,7 @@ env:
     -Dorg.gradle.parallel=true
     -Dmaven.repo.local=cnf/generated/m2
   canonical: ${{ (github.repository == 'osgi/osgi') && ((github.ref == 'refs/heads/main') || (github.ref == 'refs/heads/release')) && (github.event_name != 'pull_request') }}
-  java_version: 8
+  java_version: 17
 
 defaults:
   run:
@@ -63,8 +65,6 @@ jobs:
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
-    - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
     - name: Set up Java
       uses: actions/setup-java@v3
       with:
@@ -75,7 +75,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: --continue :build
+        arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
       uses: actions/upload-artifact@v3
       with:
@@ -98,7 +98,7 @@ jobs:
     - name: Create Staging Repository
       if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
       run: |
-        ./.github/scripts/staging.sh org.osgi
+        ./.github/scripts/cistaging.sh org.osgi
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -128,8 +128,6 @@ jobs:
     steps:
     - name: Git Checkout
       uses: actions/checkout@v3
-    - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
     - name: Set up Java
       uses: actions/setup-java@v3
       with:
