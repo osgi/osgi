@@ -2644,13 +2644,13 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       DTOs.</para>
     </section>
   </section>
-
+<!--
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.servlet.context.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.servlet.runtime.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.servlet.runtime.dto.xml"/>
-
+-->
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.servlet.whiteboard.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.servlet.whiteboard.annotations.xml"/>
