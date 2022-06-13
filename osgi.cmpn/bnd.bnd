@@ -1,6 +1,7 @@
 # Set javac settings from JDT prefs
 -include : ${includes}/jdt.bnd, ${.}/layout.bnd, ${includes}/cmpn.bnd, ${includes}/publish.bnd
 companion.code = true
+-contract: JakartaServlet
 
 # Don't publish osgi.cmpn
 publishrepo:
@@ -23,7 +24,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     ${osgi.annotation.buildpath}, \
 	${template;osgi.cmpn.specs;${@};version=project}, \
     osgi.core;maven-scope=provided;version=latest, \
-    org.apache.felix.http.servlet-api;version=2.0, \
+    org.apache.felix.http.servlet-api;version=2.0.0, \
     org.eclipse.persistence.jpa_spec;version=latest, \
     org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
     org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
