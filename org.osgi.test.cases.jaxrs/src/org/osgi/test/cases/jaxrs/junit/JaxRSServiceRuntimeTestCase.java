@@ -23,6 +23,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_DUPLICATE_NAME;
 import static org.osgi.service.jaxrs.runtime.dto.DTOConstants.FAILURE_REASON_NOT_AN_EXTENSION_TYPE;
@@ -38,7 +42,6 @@ import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_
 import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_NAME;
 import static org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants.JAX_RS_RESOURCE;
 
-import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -48,6 +51,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.WriterInterceptor;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.service.jaxrs.runtime.dto.ApplicationDTO;
@@ -75,14 +80,9 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 
 	private JaxrsServiceRuntime runtimeService;
 
-	public void setUp() {
-		super.setUp();
-		runtimeService = getContext().getService(runtime);
-	}
-
-	public void tearDown() throws IOException {
-		getContext().ungetService(runtime);
-		super.tearDown();
+	@BeforeEach
+	public void getRuntimeService() {
+		runtimeService = context.getService(runtime);
 	}
 
 	/**
@@ -91,6 +91,7 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testWhiteboardResourceDTO() throws Exception {
 
 		ResourceDTO[] resourceDTOs = runtimeService
@@ -98,38 +99,34 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 		int previousResourceLength = resourceDTOs == null ? 0
 				: resourceDTOs.length;
 
+		// Register a whiteboard resource
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 		properties.put(JAX_RS_NAME, "test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
+		ServiceRegistration<WhiteboardResource> reg = context
 				.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		resourceDTOs = runtimeService
+				.getRuntimeDTO().defaultApplication.resourceDTOs;
 
-			resourceDTOs = runtimeService
-					.getRuntimeDTO().defaultApplication.resourceDTOs;
+		assertEquals(previousResourceLength + 1, resourceDTOs.length);
 
-			assertEquals(previousResourceLength + 1, resourceDTOs.length);
+		ResourceDTO whiteboardResource = findResourceDTO(resourceDTOs, "test");
 
-			ResourceDTO whiteboardResource = findResourceDTO(resourceDTOs,
-					"test");
+		assertNotNull(whiteboardResource);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				whiteboardResource.serviceId);
+		assertEquals(5, whiteboardResource.resourceMethods.length);
 
-			assertNotNull(whiteboardResource);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					whiteboardResource.serviceId);
-			assertEquals(5, whiteboardResource.resourceMethods.length);
-
-			for (ResourceMethodInfoDTO infoDTO : whiteboardResource.resourceMethods) {
-				checkWhiteboardResourceMethod(infoDTO);
-			}
-		} finally {
-			reg.unregister();
+		for (ResourceMethodInfoDTO infoDTO : whiteboardResource.resourceMethods) {
+			checkWhiteboardResourceMethod(infoDTO);
 		}
 	}
 
@@ -198,6 +195,7 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testWhiteboardExtensionDTO() throws Exception {
 
 		ExtensionDTO[] extensionDTOs = runtimeService
@@ -205,56 +203,53 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 		int previousExtensionLength = extensionDTOs == null ? 0
 				: extensionDTOs.length;
 
+		// Register a whiteboard extension
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_EXTENSION, Boolean.TRUE);
 		properties.put(JAX_RS_NAME, "test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration< ? > reg = getContext()
+		ServiceRegistration< ? > reg = context
 				.registerService(new String[] {
 						MessageBodyReader.class.getName(),
 						MessageBodyWriter.class.getName()
 		}, new OSGiTextMimeTypeCodec(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		extensionDTOs = runtimeService
+				.getRuntimeDTO().defaultApplication.extensionDTOs;
 
-			extensionDTOs = runtimeService
-					.getRuntimeDTO().defaultApplication.extensionDTOs;
+		assertEquals(previousExtensionLength + 1, extensionDTOs.length);
 
-			assertEquals(previousExtensionLength + 1, extensionDTOs.length);
-
-			ExtensionDTO whiteboardExtension = null;
-			for (ExtensionDTO extension : extensionDTOs) {
-				if ("test".equals(extension.name)) {
-					whiteboardExtension = extension;
-					break;
-				}
+		ExtensionDTO whiteboardExtension = null;
+		for (ExtensionDTO extension : extensionDTOs) {
+			if ("test".equals(extension.name)) {
+				whiteboardExtension = extension;
+				break;
 			}
-
-			assertNotNull(whiteboardExtension);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					whiteboardExtension.serviceId);
-
-			assertEquals(
-					new HashSet<>(asList(MessageBodyReader.class.getName(),
-							MessageBodyWriter.class.getName())),
-					new HashSet<>(asList(whiteboardExtension.extensionTypes)));
-
-			assertNotNull(whiteboardExtension.consumes);
-			assertEquals(1, whiteboardExtension.consumes.length);
-			assertEquals("osgi/text", whiteboardExtension.consumes[0]);
-			assertNotNull(whiteboardExtension.produces);
-			assertEquals(1, whiteboardExtension.produces.length);
-			assertEquals("osgi/text", whiteboardExtension.produces[0]);
-
-			assertNull(whiteboardExtension.nameBindings);
-			assertNull(whiteboardExtension.filteredByName);
-		} finally {
-			reg.unregister();
 		}
+
+		assertNotNull(whiteboardExtension);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				whiteboardExtension.serviceId);
+
+		assertEquals(
+				new HashSet<>(asList(MessageBodyReader.class.getName(),
+						MessageBodyWriter.class.getName())),
+				new HashSet<>(asList(whiteboardExtension.extensionTypes)));
+
+		assertNotNull(whiteboardExtension.consumes);
+		assertEquals(1, whiteboardExtension.consumes.length);
+		assertEquals("osgi/text", whiteboardExtension.consumes[0]);
+		assertNotNull(whiteboardExtension.produces);
+		assertEquals(1, whiteboardExtension.produces.length);
+		assertEquals("osgi/text", whiteboardExtension.produces[0]);
+
+		assertNull(whiteboardExtension.nameBindings);
+		assertNull(whiteboardExtension.filteredByName);
 	}
 
 	/**
@@ -262,69 +257,61 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testNameBoundDTOs() throws Exception {
 
+		// Register a whiteboard resource
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<NameBoundWhiteboardResource> resourceReg = getContext()
+		ServiceRegistration<NameBoundWhiteboardResource> resourceReg = context
 				.registerService(NameBoundWhiteboardResource.class,
 						new NameBoundWhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JAX_RS_EXTENSION, TRUE);
+		properties.put(JAX_RS_NAME, "test");
+		ServiceRegistration<WriterInterceptor> extensionReg = context
+				.registerService(WriterInterceptor.class,
+						new BoundStringReplacer("fizz", "fizzbuzz"),
+						properties);
+		awaitSelection.getValue();
 
-			properties = new Hashtable<>();
-			properties.put(JAX_RS_EXTENSION, TRUE);
-			properties.put(JAX_RS_NAME, "test");
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new BoundStringReplacer("fizz", "fizzbuzz"),
-							properties);
-			try {
-				awaitSelection.getValue();
+		ExtensionDTO[] extensionDTOs = runtimeService
+				.getRuntimeDTO().defaultApplication.extensionDTOs;
 
-				ExtensionDTO[] extensionDTOs = runtimeService
-						.getRuntimeDTO().defaultApplication.extensionDTOs;
-
-				ExtensionDTO whiteboardExtension = null;
-				for (ExtensionDTO extension : extensionDTOs) {
-					if ("test".equals(extension.name)) {
-						whiteboardExtension = extension;
-						break;
-					}
+		ExtensionDTO whiteboardExtension = null;
+		for (ExtensionDTO extension : extensionDTOs) {
+			if ("test".equals(extension.name)) {
+				whiteboardExtension = extension;
+				break;
 				}
-
-				assertNotNull(whiteboardExtension);
-				assertEquals(
-						extensionReg.getReference().getProperty(SERVICE_ID),
-						whiteboardExtension.serviceId);
-
-				assertEquals(asList(NameBound.class.getName()),
-						asList(whiteboardExtension.nameBindings));
-
-				assertNotNull(whiteboardExtension.filteredByName);
-				assertEquals(1, whiteboardExtension.filteredByName.length);
-
-				checkBoundResourceDTO(resourceReg,
-						whiteboardExtension.filteredByName[0]);
-
-				checkBoundResourceDTO(resourceReg,
-						findResourceDTO(
-								runtimeService
-										.getRuntimeDTO().defaultApplication.resourceDTOs,
-								whiteboardExtension.filteredByName[0].name));
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
 		}
+
+		assertNotNull(whiteboardExtension);
+		assertEquals(extensionReg.getReference().getProperty(SERVICE_ID),
+				whiteboardExtension.serviceId);
+
+		assertEquals(asList(NameBound.class.getName()),
+				asList(whiteboardExtension.nameBindings));
+
+		assertNotNull(whiteboardExtension.filteredByName);
+		assertEquals(1, whiteboardExtension.filteredByName.length);
+
+		checkBoundResourceDTO(resourceReg,
+				whiteboardExtension.filteredByName[0]);
+
+		checkBoundResourceDTO(resourceReg, findResourceDTO(
+				runtimeService.getRuntimeDTO().defaultApplication.resourceDTOs,
+				whiteboardExtension.filteredByName[0].name));
+
 	}
 
 	private void checkBoundResourceDTO(
@@ -359,6 +346,7 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testWhiteboardApplicationDTO() throws Exception {
 
 		ApplicationDTO[] applicationDTOs = runtimeService
@@ -366,45 +354,41 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 		int previousApplicationsLength = applicationDTOs == null ? 0
 				: applicationDTOs.length;
 
+		// Register a whiteboard application
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_APPLICATION_BASE, "/test");
 		properties.put(JAX_RS_NAME, "test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
+		ServiceRegistration<Application> reg = context
 				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		applicationDTOs = runtimeService.getRuntimeDTO().applicationDTOs;
 
-			applicationDTOs = runtimeService.getRuntimeDTO().applicationDTOs;
-
-			ApplicationDTO whiteboardApp = null;
-			for (ApplicationDTO app : applicationDTOs) {
-				if ("test".equals(app.name)) {
-					whiteboardApp = app;
-					break;
-				}
+		ApplicationDTO whiteboardApp = null;
+		for (ApplicationDTO app : applicationDTOs) {
+			if ("test".equals(app.name)) {
+				whiteboardApp = app;
+				break;
 			}
+		}
 
-			assertEquals(previousApplicationsLength + 1,
-					applicationDTOs.length);
+		assertEquals(previousApplicationsLength + 1, applicationDTOs.length);
 
-			assertNotNull(whiteboardApp);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					whiteboardApp.serviceId);
-			assertEquals(5, whiteboardApp.resourceMethods.length);
+		assertNotNull(whiteboardApp);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				whiteboardApp.serviceId);
+		assertEquals(5, whiteboardApp.resourceMethods.length);
 
-			for (ResourceMethodInfoDTO infoDTO : whiteboardApp.resourceMethods) {
-				checkWhiteboardResourceMethod(infoDTO);
-			}
-		} finally {
-			reg.unregister();
+		for (ResourceMethodInfoDTO infoDTO : whiteboardApp.resourceMethods) {
+			checkWhiteboardResourceMethod(infoDTO);
 		}
 	}
 
@@ -413,69 +397,60 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testResourcesWithClashingNames() throws Exception {
+
+		// Register a whiteboard resource
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 		properties.put(JAX_RS_NAME, "test");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> reg = getContext().registerService(
+		context.registerService(EchoResource.class, new EchoResource(),
+				properties);
+
+		awaitSelection.getValue();
+
+		// Register a second clashing whiteboard resource
+		awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<EchoResource> reg2 = context.registerService(
 				EchoResource.class, new EchoResource(), properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		// Register a whiteboard extension, also with a clashing name
 
-			ServiceRegistration<EchoResource> reg2 = getContext()
-					.registerService(EchoResource.class, new EchoResource(),
-							properties);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			try {
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JAX_RS_NAME, "test");
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		ServiceRegistration<WriterInterceptor> extensionReg = context
+				.registerService(WriterInterceptor.class,
+						new StringReplacer("fizz", "fizzbuzz"), properties);
 
-				properties = new Hashtable<>();
-				properties.put(JAX_RS_EXTENSION, Boolean.TRUE);
-				properties.put(JAX_RS_NAME, "test");
+		awaitSelection.getValue();
 
-				ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-						.registerService(WriterInterceptor.class,
-								new StringReplacer("fizz", "fizzbuzz"),
-								properties);
+		FailedResourceDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedResourceDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_DUPLICATE_NAME, dtos[0].failureReason);
+		assertEquals(reg2.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 
-				try {
-					awaitSelection.getValue();
+		FailedExtensionDTO[] exDtos = runtimeService
+				.getRuntimeDTO().failedExtensionDTOs;
+		assertNotNull(exDtos);
+		assertEquals(1, exDtos.length);
+		assertEquals(FAILURE_REASON_DUPLICATE_NAME, exDtos[0].failureReason);
+		assertEquals(extensionReg.getReference().getProperty(SERVICE_ID),
+				exDtos[0].serviceId);
 
-					FailedResourceDTO[] dtos = runtimeService
-							.getRuntimeDTO().failedResourceDTOs;
-					assertNotNull(dtos);
-					assertEquals(1, dtos.length);
-					assertEquals(FAILURE_REASON_DUPLICATE_NAME,
-							dtos[0].failureReason);
-					assertEquals(reg2.getReference().getProperty(SERVICE_ID),
-							dtos[0].serviceId);
-
-					FailedExtensionDTO[] exDtos = runtimeService
-							.getRuntimeDTO().failedExtensionDTOs;
-					assertNotNull(exDtos);
-					assertEquals(1, exDtos.length);
-					assertEquals(FAILURE_REASON_DUPLICATE_NAME,
-							exDtos[0].failureReason);
-					assertEquals(
-							extensionReg.getReference().getProperty(SERVICE_ID),
-							exDtos[0].serviceId);
-				} finally {
-					extensionReg.unregister();
-				}
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -483,31 +458,29 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testMissingExtension() throws Exception {
+		// Register a whiteboard resource with an extension requirement
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 		properties.put(JAX_RS_EXTENSION_SELECT, "(foo=bar)");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> reg = getContext().registerService(
+		ServiceRegistration<EchoResource> reg = context.registerService(
 				EchoResource.class, new EchoResource(), properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			FailedResourceDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedResourceDTOs;
-			assertNotNull(dtos);
-			assertEquals(1, dtos.length);
-			assertEquals(FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE,
-					dtos[0].failureReason);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					dtos[0].serviceId);
+		FailedResourceDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedResourceDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE,
+				dtos[0].failureReason);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -515,31 +488,29 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testMissingApplications() throws Exception {
+		// Register a whiteboard resource with an application selection
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 		properties.put(JAX_RS_APPLICATION_SELECT, "(foo=bar)");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> reg = getContext().registerService(
+		ServiceRegistration<EchoResource> reg = context.registerService(
 				EchoResource.class, new EchoResource(), properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			FailedResourceDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedResourceDTOs;
-			assertNotNull(dtos);
-			assertEquals(1, dtos.length);
-			assertEquals(FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE,
-					dtos[0].failureReason);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					dtos[0].serviceId);
+		FailedResourceDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedResourceDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE,
+				dtos[0].failureReason);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -547,31 +518,30 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testInvalidProperty() throws Exception {
+
+		// Register a whiteboard resource with an invalid filter
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 		properties.put(JAX_RS_EXTENSION_SELECT, "...foo=bar...");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> reg = getContext().registerService(
+		ServiceRegistration<EchoResource> reg = context.registerService(
 				EchoResource.class, new EchoResource(), properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			FailedResourceDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedResourceDTOs;
-			assertNotNull(dtos);
-			assertEquals(1, dtos.length);
-			assertEquals(FAILURE_REASON_VALIDATION_FAILED,
-					dtos[0].failureReason);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					dtos[0].serviceId);
+		FailedResourceDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedResourceDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_VALIDATION_FAILED, dtos[0].failureReason);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -579,31 +549,28 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testInvalidExtensionType() throws Exception {
+		// Register a whiteboard extension as an invalid type
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_EXTENSION, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<OSGiTextMimeTypeCodec> reg = getContext()
+		ServiceRegistration<OSGiTextMimeTypeCodec> reg = context
 				.registerService(OSGiTextMimeTypeCodec.class,
 						new OSGiTextMimeTypeCodec(), properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			FailedExtensionDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedExtensionDTOs;
-			assertNotNull(dtos);
-			assertEquals(1, dtos.length);
-			assertEquals(FAILURE_REASON_NOT_AN_EXTENSION_TYPE,
-					dtos[0].failureReason);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					dtos[0].serviceId);
-
-		} finally {
-			reg.unregister();
-		}
+		FailedExtensionDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedExtensionDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_NOT_AN_EXTENSION_TYPE,
+				dtos[0].failureReason);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 	}
 
 	/**
@@ -611,32 +578,32 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testUngettableService() throws Exception {
+
+		// Register a whiteboard resource that fails to get
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> reg = getContext().registerService(
+		ServiceRegistration<EchoResource> reg = context.registerService(
 				EchoResource.class,
 				getPrototypeServiceFactory(() -> null, (a, b) -> {}),
 				properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			FailedResourceDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedResourceDTOs;
-			assertNotNull(dtos);
-			assertEquals(1, dtos.length);
-			assertEquals(FAILURE_REASON_SERVICE_NOT_GETTABLE,
-					dtos[0].failureReason);
-			assertEquals(reg.getReference().getProperty(SERVICE_ID),
-					dtos[0].serviceId);
+		FailedResourceDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedResourceDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_SERVICE_NOT_GETTABLE,
+				dtos[0].failureReason);
+		assertEquals(reg.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -644,45 +611,42 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationShadowing() throws Exception {
+
+		// Register a whiteboard application at "/clash"
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JAX_RS_APPLICATION_BASE, "/clash");
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
+		context.registerService(Application.class,
+						new SimpleApplication(emptySet(),
+								singleton(new WhiteboardResource())),
+						properties);
+
+		awaitSelection.getValue();
+
+		// Register a second whiteboard application at "/clash"
+
+		awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<Application> reg2 = context
 				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
 
-		try {
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
-
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(),
-									singleton(new WhiteboardResource())),
-							properties);
-
-			try {
-				awaitSelection.getValue();
-
-				FailedApplicationDTO[] dtos = runtimeService
-						.getRuntimeDTO().failedApplicationDTOs;
-				assertNotNull(dtos);
-				assertEquals(1, dtos.length);
-				assertEquals(FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
-						dtos[0].failureReason);
-				assertEquals(reg2.getReference().getProperty(SERVICE_ID),
-						dtos[0].serviceId);
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
+		FailedApplicationDTO[] dtos = runtimeService
+				.getRuntimeDTO().failedApplicationDTOs;
+		assertNotNull(dtos);
+		assertEquals(1, dtos.length);
+		assertEquals(FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
+				dtos[0].failureReason);
+		assertEquals(reg2.getReference().getProperty(SERVICE_ID),
+				dtos[0].serviceId);
 	}
 }

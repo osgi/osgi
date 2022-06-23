@@ -19,6 +19,7 @@
 
 package org.osgi.test.cases.jaxrs.junit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.osgi.service.jaxrs.runtime.JaxrsServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
 
 import java.io.ByteArrayOutputStream;
@@ -31,35 +32,46 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
 import org.osgi.test.cases.jaxrs.util.ServiceUpdateHelper;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.junit5.context.BundleContextExtension;
 
 /**
  * This test covers the lifecycle behaviours described in section 151.4.2
  */
-public abstract class AbstractJAXRSTestCase extends OSGiTestCase {
+@ExtendWith(BundleContextExtension.class)
+public abstract class AbstractJAXRSTestCase {
 	
+	@InjectBundleContext
+	protected BundleContext							context;
+
 	protected CloseableHttpClient					client;
 
 	protected ServiceUpdateHelper					helper;
 
 	protected ServiceReference<JaxrsServiceRuntime>	runtime;
 
+	@BeforeEach
 	public void setUp() {
 		client = HttpClients.createDefault();
 
-		helper = new ServiceUpdateHelper(getContext());
+		helper = new ServiceUpdateHelper(context);
 		helper.open();
 
 		runtime = helper.awaitRuntime(5000);
 	}
 
+	@AfterEach
 	public void tearDown() throws IOException {
 		helper.close();
 		client.close();
