@@ -23,6 +23,8 @@ import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.PAYMENT_REQUIRED;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -47,6 +49,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
@@ -80,54 +83,50 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleExtension() throws Exception {
 		
+		// Register a whiteboard resource
+
 		Dictionary<String, Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime,
 				5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class, new WhiteboardResource(), properties);
+		context.registerService(WhiteboardResource.class,
+				new WhiteboardResource(), properties);
 		
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
-			
-			String baseURI = getBaseURI();
+		String baseURI = getBaseURI();
 
-			// Do a get
+		// Do a get
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		// Register an extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
-			try {
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(WriterInterceptor.class,
+				new StringReplacer("fizz", "fizzbuzz"), properties);
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		// Do a get
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
 	}
 
 	/**
@@ -135,59 +134,52 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testNameBoundExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<NameBoundWhiteboardResource> resourceReg = getContext()
-				.registerService(NameBoundWhiteboardResource.class,
+		context.registerService(NameBoundWhiteboardResource.class,
 						new NameBoundWhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(WriterInterceptor.class,
+				new BoundStringReplacer("fizz", "fizzbuzz"), properties);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new BoundStringReplacer("fizz", "fizzbuzz"),
-							properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				String baseURI = getBaseURI();
+		String baseURI = getBaseURI();
 
-				// One method should be intercepted but not the other
+		// One method should be intercepted but not the other
 
-				HttpUriRequest getRequest = RequestBuilder
-						.get(baseURI + "whiteboard/name/bound").build();
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/name/bound")
+				.build();
 
-				CloseableHttpResponse httpResponse = client.execute(getRequest);
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-				getRequest = RequestBuilder
-						.get(baseURI + "whiteboard/name/unbound").build();
+		getRequest = RequestBuilder.get(baseURI + "whiteboard/name/unbound")
+				.build();
 
-				httpResponse = client.execute(getRequest);
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
 	}
 
 	/**
@@ -196,108 +188,98 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testExtensionOrdering() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Register a whiteboard extension
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
-			try {
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(WriterInterceptor.class,
+				new StringReplacer("fizz", "fizzbuzz"), properties);
 
-				httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		// Do a get
+		httpResponse = client.execute(getRequest);
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-						Boolean.TRUE);
-				ServiceRegistration<WriterInterceptor> extensionReg2 = getContext()
-						.registerService(WriterInterceptor.class,
-								new StringReplacer("buzz", "fizzbuzz"),
-								properties);
-				try {
-					awaitSelection.getValue();
+		// Register another extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					httpResponse = client.execute(getRequest);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		ServiceRegistration<WriterInterceptor> extensionReg2 = context
+				.registerService(WriterInterceptor.class,
+						new StringReplacer("buzz", "fizzbuzz"), properties);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals(
-							"The second writer interceptor was not applied after the first.",
-							"[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]",
-							response);
+		awaitSelection.getValue();
 
-					// Promote the second filter to be first
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		// Do a get
 
-					properties.put(Constants.SERVICE_RANKING,
-							Integer.valueOf(10));
-					extensionReg2.setProperties(properties);
+		httpResponse = client.execute(getRequest);
 
-					awaitSelection.getValue();
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]", response,
+				"The second writer interceptor was not applied after the first.");
 
-					httpResponse = client.execute(getRequest);
+		// Promote the second filter to be first
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("The filter ranking was not observed",
-							"[fizzbuzzbuzz, fizzbuzz, fizzbuzzfizzbuzzbuzz]",
-							response);
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
+		extensionReg2.setProperties(properties);
 
-					// Reset the second filter ranking to default
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection.getValue();
 
-					properties.remove(Constants.SERVICE_RANKING);
-					extensionReg2.setProperties(properties);
+		httpResponse = client.execute(getRequest);
 
-					awaitSelection.getValue();
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizzbuzzbuzz, fizzbuzz, fizzbuzzfizzbuzzbuzz]", response,
+				"The filter ranking was not observed");
 
-					httpResponse = client.execute(getRequest);
+		// Reset the second filter ranking to default
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals(
-							"[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]",
-							response);
-				} finally {
-					extensionReg2.unregister();
-				}
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		properties.remove(Constants.SERVICE_RANKING);
+		extensionReg2.setProperties(properties);
+
+		awaitSelection.getValue();
+
+		httpResponse = client.execute(getRequest);
+
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]",
+				response);
+
 	}
 
 	/**
@@ -305,7 +287,10 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testResourceRequiresExtension() throws Exception {
+
+		// Register a whiteboard resource with an extension requirement
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
@@ -314,48 +299,41 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 404, null);
 
-			String response = assertResponse(httpResponse, 404, null);
+		// Register the extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put("foo", "bar");
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			properties.put("foo", "bar");
+		context.registerService(WriterInterceptor.class,
+				new StringReplacer("fizz", "fizzbuzz"), properties);
 
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		// The get should work this time
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
 	}
 
 	/**
@@ -363,85 +341,74 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testExtensionRequiresExtension() throws Exception {
 
+		// Register a whiteboard resource
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Register a whiteboard extension
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
-					"(foo=bar)");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+				"(foo=bar)");
 
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							getPrototypeServiceFactory(
-									ConfigurableStringReplacer::new,
-									(a, b) -> {}),
-							properties);
-			try {
-				awaitSelection.getValue();
+		context.registerService(WriterInterceptor.class,
+				getPrototypeServiceFactory(ConfigurableStringReplacer::new,
+						(a, b) -> {
+						}),
+				properties);
 
-				httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Do another get
+		httpResponse = client.execute(getRequest);
 
-				// Now register the contextresolver
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-						Boolean.TRUE);
-				properties.put("foo", "bar");
+		// Now register the contextresolver
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				@SuppressWarnings("rawtypes")
-				ServiceRegistration<ContextResolver> contextResolverReg = getContext()
-						.registerService(ContextResolver.class,
-								new ExtensionConfigProvider("fizz", "fizzbuzz"),
-								properties);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put("foo", "bar");
 
-				try {
-					awaitSelection.getValue();
+		context.registerService(ContextResolver.class,
+				new ExtensionConfigProvider("fizz", "fizzbuzz"), properties);
 
-					httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-				} finally {
-					contextResolverReg.unregister();
-				}
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		// Do a final get
+		httpResponse = client.execute(getRequest);
+
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
 	}
 
 	/**
@@ -449,6 +416,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleWhiteboardTarget() throws Exception {
 
 		Long serviceId = (Long) runtime.getProperty(Constants.SERVICE_ID);
@@ -456,84 +424,82 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 		String selectFilter = "(service.id=" + serviceId + ")";
 		String rejectFilter = "(!" + selectFilter + ")";
 
+		// Register a whiteboard resource
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Register an extension targeting the whiteboard
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-					selectFilter);
-			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-					.registerService(WriterInterceptor.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
-			try {
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				selectFilter);
+		ServiceRegistration<WriterInterceptor> extensionReg = context
+				.registerService(WriterInterceptor.class,
+						new StringReplacer("fizz", "fizzbuzz"), properties);
 
-				httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		// Do another get
+		httpResponse = client.execute(getRequest);
 
-				// Change the target
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-						rejectFilter);
-				extensionReg.setProperties(properties);
+		// Change the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				awaitSelection.getValue();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				rejectFilter);
+		extensionReg.setProperties(properties);
 
-				httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Do another get
 
-				// Reset the target
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		httpResponse = client.execute(getRequest);
 
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-						selectFilter);
-				extensionReg.setProperties(properties);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-				awaitSelection.getValue();
+		// Reset the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				httpResponse = client.execute(getRequest);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				selectFilter);
+		extensionReg.setProperties(properties);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		awaitSelection.getValue();
+
+		// Do one last get
+		httpResponse = client.execute(getRequest);
+
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
 	}
 
 	/**
@@ -542,6 +508,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testFeatureExtension() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -549,48 +516,39 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(Feature.class,
+				new StringReplacerFeature("fizz", "fizzbuzz"), properties);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<Feature> extensionReg = getContext()
-					.registerService(Feature.class,
-							new StringReplacerFeature("fizz", "fizzbuzz"),
-							properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		// Do another get
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
 	}
 
 	/**
@@ -599,85 +557,77 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testDynamicFeatureExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		// Register a second resource that won't be targeted by the
+		// dynamic feature
 
-			// Register a second resource that won't be targeted by the
-			// dynamic feature
+		context.registerService(WhiteboardResource.class,
+				new WhiteboardResourceSubClass(), properties);
 
-			ServiceRegistration<WhiteboardResource> subclassResourceReg = getContext()
-					.registerService(WhiteboardResource.class,
-							new WhiteboardResourceSubClass(), properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				HttpUriRequest getRequest2 = RequestBuilder
-						.get(baseURI + "whiteboard/resource-subclass").build();
+		// Get the second resource
+		HttpUriRequest getRequest2 = RequestBuilder
+				.get(baseURI + "whiteboard/resource-subclass")
+				.build();
 
-				httpResponse = client.execute(getRequest2);
+		httpResponse = client.execute(getRequest2);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		// Register the whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-						Boolean.TRUE);
-				ServiceRegistration<DynamicFeature> extensionReg = getContext()
-						.registerService(DynamicFeature.class,
-								new StringReplacerDynamicFeature("fizz",
-										"fizzbuzz"),
-								properties);
-				try {
-					awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(DynamicFeature.class,
+						new StringReplacerDynamicFeature("fizz", "fizzbuzz"),
+						properties);
 
-					httpResponse = client.execute(getRequest);
+		awaitSelection.getValue();
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		// Do the gets to check the result
+		httpResponse = client.execute(getRequest);
 
-					// Not applied to the second resource
-					httpResponse = client.execute(getRequest2);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
-				} finally {
-					extensionReg.unregister();
-				}
-			} finally {
-				subclassResourceReg.unregister();
-			}
+		// Not applied to the second resource
+		httpResponse = client.execute(getRequest2);
 
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
+
 	}
 
 	/**
@@ -686,56 +636,49 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testReaderInterceptorExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/body")
+				.setEntity(new StringEntity("fizz"))
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/body")
-					.setEntity(new StringEntity("fizz"))
-					.build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizz", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("fizz", response);
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(ReaderInterceptor.class,
+				new StringReplacer("fizz", "fizzbuzz"), properties);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<ReaderInterceptor> extensionReg = getContext()
-					.registerService(ReaderInterceptor.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("fizzbuzz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizzbuzz", response);
+
 	}
 
 	/**
@@ -744,6 +687,7 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testContainerRequestFilterExtension() throws Exception {
 		
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -751,52 +695,40 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 		
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 		
-		try {
+		awaitSelection.getValue();
 			
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 			
-			String baseURI = getBaseURI();
+		// Do a get
 			
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/header")
+				.setHeader("echo", "fizz")
+				.build();
+
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
+
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizz", response);
+
+		// Register the extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
+
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(ContainerRequestFilter.class,
+				new HeaderStringReplacer("fizz", "fizzbuzz"), properties);
+		awaitSelection.getValue();
 			
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/header")
-					.setHeader("echo", "fizz")
-					.build();
-			
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
-			
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("fizz", response);
-			
-			awaitSelection = helper.awaitModification(runtime, 5000);
-			
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<ContainerRequestFilter> extensionReg = getContext()
-					.registerService(ContainerRequestFilter.class,
-							new HeaderStringReplacer("fizz", "fizzbuzz"),
-							properties);
-			try {
-				awaitSelection.getValue();
-				
-				httpResponse = client.execute(getRequest);
-				
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("fizzbuzz",
-						httpResponse.getFirstHeader("echo").getValue());
-				assertEquals("fizzbuzz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		// Do a get
+		httpResponse = client.execute(getRequest);
+
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizzbuzz",
+				httpResponse.getFirstHeader("echo").getValue());
+		assertEquals("fizzbuzz", response);
 	}
 
 	/**
@@ -805,59 +737,52 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testContainerResponseFilterExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/header")
+				.setHeader("echo", "fizz")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/header")
-					.setHeader("echo", "fizz")
-					.build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizz", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("fizz", response);
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(ContainerResponseFilter.class,
+				new HeaderStringReplacer("fizz", "fizzbuzz"), properties);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<ContainerResponseFilter> extensionReg = getContext()
-					.registerService(ContainerResponseFilter.class,
-							new HeaderStringReplacer("fizz", "fizzbuzz"),
-							properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		// Do a get
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("fizzbuzz",
-						httpResponse.getFirstHeader("echo").getValue());
-				assertEquals("fizz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizzbuzz",
+				httpResponse.getFirstHeader("echo").getValue());
+		assertEquals("fizz", response);
+
 	}
 
 	/**
@@ -866,60 +791,52 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testMessageBodyReaderExtension() throws Exception {
+
+		// Register a whiteboard resource
 		
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 		
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 		
-		try {
+		awaitSelection.getValue();
 			
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 			
-			String baseURI = getBaseURI();
+		// Do a get
 			
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/body")
+				.setEntity(new StringEntity("fizz",
+						ContentType.create("osgi/text", "UTF-8")))
+				.build();
+
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
+
+		String response = assertResponse(httpResponse, 200,
+				"osgi/text;charset=UTF-8");
+		assertEquals("fizz", response);
+
+		awaitSelection = helper.awaitModification(runtime, 5000);
+
+		// Register a whiteboard extension
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(MessageBodyReader.class,
+						new OSGiTextMimeTypeCodec(), properties);
+		awaitSelection.getValue();
 			
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/body")
-					.setEntity(new StringEntity("fizz",
-							ContentType.create("osgi/text", "UTF-8")))
-					.build();
+		// Do a get
+		httpResponse = client.execute(getRequest);
 			
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
-			
-			String response = assertResponse(httpResponse, 200,
+		response = assertResponse(httpResponse, 200,
 					"osgi/text;charset=UTF-8");
-			assertEquals("fizz", response);
-			
-			awaitSelection = helper.awaitModification(runtime, 5000);
-			
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			@SuppressWarnings("rawtypes")
-			ServiceRegistration<MessageBodyReader> extensionReg = getContext()
-					.registerService(MessageBodyReader.class,
-							new OSGiTextMimeTypeCodec(), properties);
-			try {
-				awaitSelection.getValue();
-				
-				httpResponse = client.execute(getRequest);
-				
-				response = assertResponse(httpResponse, 200,
-						"osgi/text;charset=UTF-8");
-				assertEquals("OSGi Read: fizz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		assertEquals("OSGi Read: fizz", response);
+
 	}
 
 	/**
@@ -928,60 +845,52 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testMessageBodyWriterExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/body")
+				.setEntity(new StringEntity("fizz",
+						ContentType.create("osgi/text", "UTF-8")))
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/body")
-					.setEntity(new StringEntity("fizz",
-							ContentType.create("osgi/text", "UTF-8")))
-					.build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200,
+				"osgi/text;charset=UTF-8");
+		assertEquals("fizz", response);
 
-			String response = assertResponse(httpResponse, 200,
-					"osgi/text;charset=UTF-8");
-			assertEquals("fizz", response);
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(MessageBodyWriter.class,
+				new OSGiTextMimeTypeCodec(), properties);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			@SuppressWarnings("rawtypes")
-			ServiceRegistration<MessageBodyWriter> extensionReg = getContext()
-					.registerService(MessageBodyWriter.class,
-							new OSGiTextMimeTypeCodec(), properties);
-			try {
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		// Do a final get
+		httpResponse = client.execute(getRequest);
 
-				response = assertResponse(httpResponse, 200,
-						"osgi/text;charset=UTF-8");
-				assertEquals("OSGi Write: fizz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, "osgi/text;charset=UTF-8");
+		assertEquals("OSGi Write: fizz", response);
+
 	}
 
 	/**
@@ -990,55 +899,49 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testParamConverterProviderExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<EchoResource> resourceReg = getContext()
-				.registerService(EchoResource.class, new EchoResource(),
+		context.registerService(EchoResource.class, new EchoResource(),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder.get(baseURI + "echo/promise")
+				.addHeader("echo", "fizz")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "echo/promise")
-					.addHeader("echo", "fizz")
-					.build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		assertResponse(httpResponse, 500, null);
 
-			assertResponse(httpResponse, 500, null);
+		// Register a whiteboard extension
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(ParamConverterProvider.class,
+				new PromiseConverterProvider(), properties);
+		awaitSelection.getValue();
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			ServiceRegistration<ParamConverterProvider> extensionReg = getContext()
-					.registerService(ParamConverterProvider.class,
-							new PromiseConverterProvider(), properties);
-			try {
-				awaitSelection.getValue();
+		// Do a get
 
-				httpResponse = client.execute(getRequest);
+		httpResponse = client.execute(getRequest);
 
-				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("fizz", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizz", response);
+
 	}
 
 	/**
@@ -1047,55 +950,49 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testExceptionMapperExtension() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<StringResource> resourceReg = getContext()
-				.registerService(StringResource.class, new StringResource(null),
+		context.registerService(StringResource.class, new StringResource(null),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/string/length")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/string/length").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		assertResponse(httpResponse, 500, null);
 
-			assertResponse(httpResponse, 500, null);
+		// Register a whiteboard extension
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			@SuppressWarnings("rawtypes")
-			ServiceRegistration<ExceptionMapper> extensionReg = getContext()
-					.registerService(ExceptionMapper.class, new NPEMapper(),
-							properties);
-			try {
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		context.registerService(ExceptionMapper.class, new NPEMapper(),
+				properties);
+		awaitSelection.getValue();
 
-				httpResponse = client.execute(getRequest);
+		httpResponse = client.execute(getRequest);
 
-				String response = assertResponse(httpResponse,
-						PAYMENT_REQUIRED.getStatusCode(), TEXT_PLAIN);
-				assertEquals("NPE", response);
-			} finally {
-				extensionReg.unregister();
-			}
-		} finally {
-			resourceReg.unregister();
-		}
+		String response = assertResponse(httpResponse,
+				PAYMENT_REQUIRED.getStatusCode(), TEXT_PLAIN);
+		assertEquals("NPE", response);
+
 	}
 
 	/**
@@ -1104,8 +1001,10 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testExtensionWhenApplicationChanges() throws Exception {
 
+		// Register a whiteboard extension selecting an application
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
@@ -1117,55 +1016,48 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Semaphore releaseSemaphore = new Semaphore(0);
 
-		ServiceRegistration<WriterInterceptor> reg = getContext()
-				.registerService(WriterInterceptor.class,
+		context.registerService(WriterInterceptor.class,
 						getServiceFactory(() -> {
 							getSemaphore.release();
 							return new StringReplacer("fizz", "fizzbuzz");
 						}, (sr, s) -> releaseSemaphore.release()), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register the application to be targeted
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test");
+		properties.put("foo", "bar");
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test");
-			properties.put("foo", "bar");
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		ServiceRegistration<Application> appReg = context.registerService(
+				Application.class,
+				new SimpleApplication(singleton(WhiteboardResource.class),
+						emptySet()),
+				properties);
 
-			ServiceRegistration<Application> appReg = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(singleton(WhiteboardResource.class), emptySet()),
-							properties);
+		awaitSelection.getValue();
 
-			try {
+		String baseURI = getBaseURI();
 
-				awaitSelection.getValue();
+		// Do a get
 
-				String baseURI = getBaseURI();
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-				// Do a get
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-				CloseableHttpResponse httpResponse = client.execute(
-						RequestBuilder.get(baseURI + "test/whiteboard/resource")
-								.build());
+		// Unregister the application and check the extension is released
 
-				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		appReg.unregister();
 
-			} finally {
-				appReg.unregister();
-			}
+		assertTrue(getSemaphore.availablePermits() > 0);
+		assertTrue(releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
+				100, TimeUnit.MILLISECONDS));
 
-			assertTrue(getSemaphore.availablePermits() > 0);
-			assertTrue(
-					releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
-							100, TimeUnit.MILLISECONDS));
-
-		} finally {
-			reg.unregister();
-		}
 	}
 }

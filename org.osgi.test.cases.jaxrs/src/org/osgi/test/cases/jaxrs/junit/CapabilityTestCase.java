@@ -19,6 +19,7 @@ package org.osgi.test.cases.jaxrs.junit;
 
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertTrue;
 import static org.osgi.namespace.contract.ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE;
 import static org.osgi.namespace.contract.ContractNamespace.CONTRACT_NAMESPACE;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
@@ -37,6 +38,7 @@ import java.util.Set;
 
 import javax.ws.rs.client.ClientBuilder;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
@@ -58,6 +60,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testJaxRsServiceRuntimeServiceCapability() throws Exception {
 
 		List<BundleCapability> capabilities = runtime.getBundle()
@@ -104,6 +107,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testJaxRsClientBuilderServiceCapability() throws Exception {
 
 		List<BundleCapability> capabilities = runtime.getBundle()
@@ -150,6 +154,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSseEventSourceFactoryServiceCapability() throws Exception {
 
 		List<BundleCapability> capabilities = runtime.getBundle()
@@ -194,6 +199,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testJaxRsServiceWhiteboardImplementationCapability()
 			throws Exception {
 
@@ -201,7 +207,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 		boolean uses = false;
 		boolean version = false;
 
-		bundles: for (Bundle bundle : getContext().getBundles()) {
+		bundles: for (Bundle bundle : context.getBundles()) {
 			List<BundleCapability> capabilities = bundle
 					.adapt(BundleWiring.class)
 					.getCapabilities(IMPLEMENTATION_NAMESPACE);
@@ -256,6 +262,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testJaxRsContractCapability()
 			throws Exception {
 		
@@ -263,7 +270,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 		boolean uses = false;
 		boolean version = false;
 		
-		bundles: for (Bundle bundle : getContext().getBundles()) {
+		bundles: for (Bundle bundle : context.getBundles()) {
 			List<BundleCapability> capabilities = bundle
 					.adapt(BundleWiring.class)
 					.getCapabilities(CONTRACT_NAMESPACE);

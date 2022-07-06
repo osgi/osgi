@@ -21,6 +21,9 @@ package org.osgi.test.cases.jaxrs.junit;
 
 import static java.util.Collections.emptySet;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource.CUSTOM_HEADER;
 
 import java.util.Dictionary;
@@ -35,6 +38,7 @@ import javax.ws.rs.core.Application;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
@@ -57,51 +61,48 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleSingletonResource() throws Exception {
 		
+		// Register a whiteboard resource
 		Dictionary<String, Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 		
-
 		Promise<Void> awaitSelection = helper.awaitModification(runtime,
 				5000);
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
-				.registerService(WhiteboardResource.class, new WhiteboardResource(), properties);
+		context.registerService(WhiteboardResource.class,
+				new WhiteboardResource(), properties);
+
+		awaitSelection.getValue();
 		
-		try {
+		String baseURI = getBaseURI();
 
-			awaitSelection.getValue();
-			
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Do a delete
 
-			// Do a delete
+		httpResponse = client.execute(
+				RequestBuilder.delete(baseURI + "whiteboard/resource/buzz")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.delete(baseURI + "whiteboard/resource/buzz").build());
+		response = assertResponse(httpResponse, 200, null);
+		assertEquals("", response);
 
-			response = assertResponse(httpResponse, 200, null);
-			assertEquals("", response);
+		// Do another get to show the singleton-ness
 
-			// Do another get to show the singleton-ness
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/resource").build());
-
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizz, fizzbuzz]", response);
 		
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -110,7 +111,10 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimplePrototypeResource() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
@@ -119,53 +123,48 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		AtomicInteger creationCount = new AtomicInteger();
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						getPrototypeServiceFactory(() -> {
 							creationCount.incrementAndGet();
 							return new WhiteboardResource();
 						}, (sr, s) -> {}), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// We have a base count as the whiteboard may request a resource to
+		// check it out first
+		int baseCount = creationCount.get();
 
-			// We have a base count as the whiteboard may request a resource to
-			// check it out first
-			int baseCount = creationCount.get();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
+		assertEquals(baseCount + 1, creationCount.get());
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-			assertEquals(baseCount + 1, creationCount.get());
+		// Do a delete
 
-			// Do a delete
+		httpResponse = client.execute(
+				RequestBuilder.delete(baseURI + "whiteboard/resource/buzz")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.delete(baseURI + "whiteboard/resource/buzz").build());
+		response = assertResponse(httpResponse, 200, null);
+		assertEquals("", response);
+		assertEquals(baseCount + 2, creationCount.get());
 
-			response = assertResponse(httpResponse, 200, null);
-			assertEquals("", response);
-			assertEquals(baseCount + 2, creationCount.get());
+		// Do another get to show the singleton-ness
 
-			// Do another get to show the singleton-ness
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
+		assertEquals(baseCount + 3, creationCount.get());
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-			assertEquals(baseCount + 3, creationCount.get());
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -174,39 +173,36 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testContextFieldInjection() throws Exception {
 	
+		// Register a whiteboard resource
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 	
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 	
-		ServiceRegistration<ContextInjectedWhiteboardResource> reg = getContext()
-				.registerService(ContextInjectedWhiteboardResource.class,
+		context.registerService(ContextInjectedWhiteboardResource.class,
 						getPrototypeServiceFactory(
 								ContextInjectedWhiteboardResource::new,
 								(x, y) -> {}),
 						properties);
 	
-		try {
+		awaitSelection.getValue();
+
+		String baseURI = getBaseURI();
+
+		// Do a get
+
+		CloseableHttpResponse httpResponse = client
+				.execute(RequestBuilder.get(baseURI + "whiteboard/context")
+						.addHeader(CUSTOM_HEADER, "test")
+						.build());
+
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("test", response);
 	
-			awaitSelection.getValue();
-	
-			String baseURI = getBaseURI();
-	
-			// Do a get
-	
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/context")
-					.addHeader(CUSTOM_HEADER, "test")
-					.build());
-	
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("test", response);
-	
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -215,7 +211,10 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testAsyncPrototypeResource() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
@@ -226,8 +225,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		AtomicBoolean wasReleasedPreCompletion = new AtomicBoolean(true);
 
-		ServiceRegistration<AsyncWhiteboardResource> reg = getContext()
-				.registerService(AsyncWhiteboardResource.class,
+		context.registerService(AsyncWhiteboardResource.class,
 						getPrototypeServiceFactory(
 								() -> new AsyncWhiteboardResource(
 										() -> preCompleteSemaphore.release(),
@@ -236,25 +234,20 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 										!preCompleteSemaphore.tryAcquire())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/async/quack").build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/async/quack").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("quack", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("quack", response);
+		assertFalse(wasReleasedPreCompletion.get());
 
-			assertFalse(wasReleasedPreCompletion.get());
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -262,46 +255,41 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testAsyncReturnValues() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<AsyncReturnWhiteboardResource> reg = getContext()
-				.registerService(AsyncReturnWhiteboardResource.class,
+		context.registerService(AsyncReturnWhiteboardResource.class,
 						new AsyncReturnWhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/asyncReturn/cs/woof")
+						.build());
 
-			CloseableHttpResponse httpResponse = client.execute(
-					RequestBuilder
-							.get(baseURI + "whiteboard/asyncReturn/cs/woof")
-							.build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("woof", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("woof", response);
+		httpResponse.close();
 
-			httpResponse.close();
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/asyncReturn/p/miaow")
+						.build());
 
-			httpResponse = client.execute(
-					RequestBuilder
-							.get(baseURI + "whiteboard/asyncReturn/p/miaow")
-							.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("miaow", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("miaow", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -309,12 +297,15 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleWhiteboardTarget() throws Exception {
 
 		Long serviceId = (Long) runtime.getProperty(Constants.SERVICE_ID);
 
 		String selectFilter = "(service.id=" + serviceId + ")";
 		String rejectFilter = "(!" + selectFilter + ")";
+
+		// Register a whiteboard resource targeting the whiteboard
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
@@ -323,54 +314,50 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
+		ServiceRegistration<WhiteboardResource> reg = context
 				.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Change the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Change the target
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				rejectFilter);
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-					rejectFilter);
-			reg.setProperties(properties);
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		httpResponse = client.execute(getRequest);
 
-			httpResponse = client.execute(getRequest);
+		assertResponse(httpResponse, 404, null);
 
-			assertResponse(httpResponse, 404, null);
+		// Reset the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Reset the target
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				selectFilter);
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-					selectFilter);
-			reg.setProperties(properties);
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		httpResponse = client.execute(getRequest);
 
-			httpResponse = client.execute(getRequest);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -379,7 +366,10 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSingletonResourceWhenApplicationChanges() throws Exception {
+
+		// Register a whiteboard resource with an application target
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
@@ -392,72 +382,64 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Semaphore releaseSemaphore = new Semaphore(0);
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						getServiceFactory(() -> {
 							getSemaphore.release();
 							return new WhiteboardResource();
 						}, (sr, s) -> releaseSemaphore.release()), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register a whiteboard application
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test");
-			properties.put("foo", "bar");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test");
+		properties.put("foo", "bar");
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			ServiceRegistration<Application> appReg = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(), emptySet()),
-							properties);
+		ServiceRegistration<Application> appReg = context.registerService(
+				Application.class,
+				new SimpleApplication(emptySet(), emptySet()), properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-				String baseURI = getBaseURI();
+		// Do a get
 
-				// Do a get
-
-				CloseableHttpResponse httpResponse = client.execute(
-						RequestBuilder.get(baseURI + "test/whiteboard/resource")
-								.build());
-
-				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-				// Do a delete
-
-				httpResponse = client.execute(RequestBuilder
-						.delete(baseURI + "test/whiteboard/resource/buzz")
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
 						.build());
 
-				response = assertResponse(httpResponse, 200, null);
-				assertEquals("", response);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-				// Do another get to show the singleton-ness
+		// Do a delete
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "test/whiteboard/resource").build());
+		httpResponse = client.execute(
+				RequestBuilder.delete(baseURI + "test/whiteboard/resource/buzz")
+						.build());
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, null);
+		assertEquals("", response);
 
-			} finally {
-				appReg.unregister();
-			}
+		// Do another get to show the singleton-ness
 
-			assertTrue(getSemaphore.availablePermits() > 0);
-			assertTrue(
-					releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
-							100, TimeUnit.MILLISECONDS));
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-		} finally {
-			reg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizz, fizzbuzz]", response);
+
+		// Unregister the application
+		appReg.unregister();
+
+		assertTrue(getSemaphore.availablePermits() > 0);
+		assertTrue(releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
+				100, TimeUnit.MILLISECONDS));
+
 	}
 }
