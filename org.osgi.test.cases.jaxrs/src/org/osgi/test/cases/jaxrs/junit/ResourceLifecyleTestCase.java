@@ -222,6 +222,7 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
 		Semaphore preCompleteSemaphore = new Semaphore(0);
+		Semaphore releaseSemaphore = new Semaphore(0);
 
 		AtomicBoolean wasReleasedPreCompletion = new AtomicBoolean(true);
 
@@ -230,8 +231,11 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 								() -> new AsyncWhiteboardResource(
 										() -> preCompleteSemaphore.release(),
 										() -> {}),
-								(sr,s) -> wasReleasedPreCompletion.set(
-										!preCompleteSemaphore.tryAcquire())),
+						(sr, s) -> {
+							wasReleasedPreCompletion
+									.set(!preCompleteSemaphore.tryAcquire());
+							releaseSemaphore.release();
+						}),
 						properties);
 
 		awaitSelection.getValue();
@@ -246,6 +250,8 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
 		assertEquals("quack", response);
 
+		// This should be very fast as the response has been received already
+		assertTrue(releaseSemaphore.tryAcquire(100, TimeUnit.MILLISECONDS));
 		assertFalse(wasReleasedPreCompletion.get());
 
 	}
