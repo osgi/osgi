@@ -242,6 +242,9 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		String baseURI = getBaseURI();
 
+		// Clear the semaphore as setup may involve get/release of the service
+		releaseSemaphore.drainPermits();
+
 		// Do a get
 
 		CloseableHttpResponse httpResponse = client.execute(
