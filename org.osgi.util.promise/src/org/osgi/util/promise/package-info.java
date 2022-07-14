@@ -17,23 +17,23 @@
  *******************************************************************************/
 
 /**
- * Promise Package Version 1.2.
+ * Promise Package Version 1.3.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest.
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.promise; version="[1.2,2.0)"}
+ * {@code  Import-Package: org.osgi.util.promise; version="[1.3,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.promise; version="[1.2,1.3)"}
+ * {@code  Import-Package: org.osgi.util.promise; version="[1.3,1.4)"}
  * 
  * @author $Id$
  */
 
-@Version("1.2.0")
+@Version("1.3.0")
 package org.osgi.util.promise;
 
 import org.osgi.annotation.versioning.Version;

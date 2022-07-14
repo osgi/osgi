@@ -246,20 +246,35 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> onFailure(Consumer< ? super Throwable> failure) {
-		return onResolve(new OnFailure(failure));
+		return onFailure(failure, Throwable.class);
 	}
 
 	/**
-	 * A callback used for the {@link #onFailure(Consumer)} method.
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <F> Promise<T> onFailure(
+			Consumer< ? super F> failure,
+			Class< ? extends F> failureType) {
+		return onResolve(new OnFailure<>(failure, failureType));
+	}
+
+	/**
+	 * A callback used for the {@link #onFailure(Consumer, Class)} method.
 	 * 
+	 * @param <F> The failure type.
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private final class OnFailure implements Runnable, Result<T> {
-		private final Consumer< ? super Throwable> failure;
+	private final class OnFailure<F>
+			implements Runnable, Result<T> {
+		private final Consumer< ? super F>	failure;
+		private final Class< ? extends F>	failureType;
 
-		OnFailure(Consumer< ? super Throwable> failure) {
+		OnFailure(Consumer< ? super F> failure,
+				Class< ? extends F> failureType) {
 			this.failure = requireNonNull(failure);
+			this.failureType = requireNonNull(failureType);
 		}
 
 		@Override
@@ -267,11 +282,12 @@ abstract class PromiseImpl<T> implements Promise<T> {
 			result(this);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void accept(T v, Throwable f) {
-			if (f != null) {
+			if (failureType.isInstance(f)) {
 				try {
-					failure.accept(f);
+					failure.accept((F) f);
 				} catch (Throwable e) {
 					uncaughtException(e);
 				}
@@ -344,8 +360,17 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
+		return recover(recovery, Throwable.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> recover(Function<Promise< ? >, ? extends T> recovery,
+			Class< ? > failureType) {
 		DeferredPromiseImpl<T> chained = deferred();
-		onResolve(chained.new Recover(this, recovery));
+		onResolve(chained.new Recover(this, recovery, failureType));
 		return chained.orDone();
 	}
 
@@ -354,8 +379,18 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
+		return recoverWith(recovery, Throwable.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> recoverWith(
+			Function<Promise< ? >,Promise< ? extends T>> recovery,
+			Class< ? > failureType) {
 		DeferredPromiseImpl<T> chained = deferred();
-		onResolve(chained.new RecoverWith(this, recovery));
+		onResolve(chained.new RecoverWith(this, recovery, failureType));
 		return chained.orDone();
 	}
 
@@ -364,8 +399,17 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
+		return fallbackTo(fallback, Throwable.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> fallbackTo(Promise< ? extends T> fallback,
+			Class< ? > failureType) {
 		DeferredPromiseImpl<T> chained = deferred();
-		onResolve(chained.new FallbackTo(this, fallback));
+		onResolve(chained.new FallbackTo(this, fallback, failureType));
 		return chained.orDone();
 	}
 
