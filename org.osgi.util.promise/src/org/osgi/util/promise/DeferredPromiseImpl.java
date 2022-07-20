@@ -545,18 +545,22 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * A callback used by the {@link PromiseImpl#recover(Function)} method.
+	 * A callback used by the {@link PromiseImpl#recover(Function,Class)}
+	 * method.
 	 * 
 	 * @Immutable
 	 */
 	final class Recover implements Runnable, Result<T> {
 		private final PromiseImpl<T>						promise;
 		private final Function<Promise< ? >, ? extends T>	recovery;
+		private final Class< ? >							failureType;
 
 		Recover(PromiseImpl<T> promise,
-				Function<Promise< ? >, ? extends T> recovery) {
+				Function<Promise< ? >, ? extends T> recovery,
+				Class< ? > failureType) {
 			this.promise = requireNonNull(promise);
 			this.recovery = requireNonNull(recovery);
+			this.failureType = requireNonNull(failureType);
 		}
 
 		@Override
@@ -566,7 +570,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void accept(T v, Throwable f) {
-			if (f != null) {
+			if (failureType.isInstance(f)) {
 				try {
 					v = recovery.apply(promise);
 					if (v != null) {
@@ -581,18 +585,22 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * A callback used by the {@link PromiseImpl#recoverWith(Function)} method.
+	 * A callback used by the {@link PromiseImpl#recoverWith(Function,Class)}
+	 * method.
 	 * 
 	 * @Immutable
 	 */
 	final class RecoverWith implements Runnable, Result<T> {
 		private final PromiseImpl<T>								promise;
 		private final Function<Promise< ? >,Promise< ? extends T>>	recovery;
+		private final Class< ? >									failureType;
 
 		RecoverWith(PromiseImpl<T> promise,
-				Function<Promise< ? >,Promise< ? extends T>> recovery) {
+				Function<Promise< ? >,Promise< ? extends T>> recovery,
+				Class< ? > failureType) {
 			this.promise = requireNonNull(promise);
 			this.recovery = requireNonNull(recovery);
+			this.failureType = requireNonNull(failureType);
 		}
 
 		@Override
@@ -602,7 +610,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void accept(T v, Throwable f) {
-			if (f != null) {
+			if (failureType.isInstance(f)) {
 				Promise< ? extends T> recovered = null;
 				try {
 					recovered = recovery.apply(promise);
@@ -619,7 +627,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * A callback used by the {@link PromiseImpl#fallbackTo(Promise)} method.
+	 * A callback used by the {@link PromiseImpl#fallbackTo(Promise,Class)}
+	 * method.
 	 * 
 	 * @Immutable
 	 */
@@ -627,10 +636,13 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 			implements Runnable, InlineCallback, Result<T> {
 		private final PromiseImpl<T>		promise;
 		private final Promise< ? extends T>	fallback;
+		private final Class< ? >			failureType;
 
-		FallbackTo(PromiseImpl<T> promise, Promise< ? extends T> fallback) {
+		FallbackTo(PromiseImpl<T> promise, Promise< ? extends T> fallback,
+				Class< ? > failureType) {
 			this.promise = requireNonNull(promise);
 			this.fallback = requireNonNull(fallback);
+			this.failureType = requireNonNull(failureType);
 		}
 
 		@Override
@@ -640,11 +652,11 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		@Override
 		public void accept(T v, Throwable f) {
-			if (f != null) {
+			if (failureType.isInstance(f)) {
 				fallback.onResolve(new FallbackChain(fallback, f));
 				return;
 			}
-			tryResolve(v, null);
+			tryResolve(v, f);
 		}
 	}
 

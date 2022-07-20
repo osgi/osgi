@@ -211,10 +211,17 @@
     specified as <code>null</code>, then implementation default executors will
     be used. The <xref linkend="org.osgi.util.promise.Deferred.Deferred--"
     xrefstyle="hyperlink"/> constructor will create a Deferred whose
-    associated Promise uses the implementation default executors. All Promise
-    objects created by a Promise must use the same executors as the creating
-    Promise. Callbacks must be called using the callback executor. The
-    scheduled executor must be used by the <xref
+    associated Promise uses the default Promise Factory which uses the
+    implementation default executors. All Promise objects created by a Promise
+    must use the same Promise Factory as the creating Promise. Callbacks must
+    be called using the callback executor of the Promise Factory associated
+    with the Promise if the Promise Factory was created with the <xref
+    linkend="org.osgi.util.promise.PromiseFactory.Option.CALLBACKS_EXECUTOR_THREAD"
+    xrefstyle="hyperlink"/> option. Otherwise, when the Promise is already
+    resolved, the current thread may be used to call the callback to avoid a
+    thread context switch. If the callback executor rejects the execution, the
+    current thread will be used to call the callback to avoid loss of the
+    callback operation. The scheduled executor must be used by the <xref
     linkend="org.osgi.util.promise.Promise.timeout-long-"
     xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Promise.delay-long-"
@@ -379,6 +386,21 @@ answer.onResolve(() -&gt; doSomethingWithAnswer(answer));</programlisting>
       passed to the <xref linkend="org.osgi.util.function.Consumer"
       xrefstyle="hyperlink"/>. The <xref
       linkend="org.osgi.util.promise.Promise.onFailure-Consumer-"
+      xrefstyle="hyperlink"/> method returns the Promise object upon which it
+      is called.</para>
+
+      <para>The <xref
+      linkend="org.osgi.util.promise.Promise.onFailure-Consumer-Class-"
+      xrefstyle="hyperlink"/> method is used to register a <xref
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/> with
+      the Promise which must be called when the Promise is resolved
+      unsuccessfully with a failure of a specified type. The failure of the
+      resolved Promise is passed to the <xref
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>. If
+      the Promise is unsuccessfully resolved with a failure which is not of
+      the specified type, the <xref linkend="org.osgi.util.function.Consumer"
+      xrefstyle="hyperlink"/> argument is not called. The <xref
+      linkend="org.osgi.util.promise.Promise.onFailure-Consumer-Class-"
       xrefstyle="hyperlink"/> method returns the Promise object upon which it
       is called.</para>
     </section>
@@ -549,6 +571,24 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
       <listitem>
         <para><xref
+        linkend="org.osgi.util.promise.Promise.recover-Function-Class-"
+        xrefstyle="hyperlink"/> - Recover from the unsuccessful resolution of
+        the Promise with a recovery value when the failure is of a specified
+        type.</para>
+
+        <para>The <xref
+        linkend="org.osgi.util.promise.Promise.recover-Function-Class-"
+        xrefstyle="hyperlink"/> method provides the same behavior as <xref
+        linkend="org.osgi.util.promise.Promise.recover-Function-"
+        xrefstyle="hyperlink"/> but only when the failure is of the specified
+        type. If the Promise is unsuccessfully resolved with a failure which
+        is not of the specified type, the function argument is not called and
+        the Promise returned by the recover method is resolved with the
+        failure of the Promise.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
         linkend="org.osgi.util.promise.Promise.recoverWith-Function-"
         xrefstyle="hyperlink"/> - Recover from the unsuccessful resolution of
         the Promise with a recovery Promise.</para>
@@ -569,6 +609,24 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
       <listitem>
         <para><xref
+        linkend="org.osgi.util.promise.Promise.recoverWith-Function-Class-"
+        xrefstyle="hyperlink"/> - Recover from the unsuccessful resolution of
+        the Promise with a recovery Promise when the failure is of a specified
+        type.</para>
+
+        <para>The <xref
+        linkend="org.osgi.util.promise.Promise.recoverWith-Function-Class-"
+        xrefstyle="hyperlink"/> method provides the same behavior as <xref
+        linkend="org.osgi.util.promise.Promise.recoverWith-Function-"
+        xrefstyle="hyperlink"/> but only when the failure is of the specified
+        type. If the Promise is unsuccessfully resolved with a failure which
+        is not of the specified type, the function argument is not called and
+        the Promise returned by the recover method is resolved with the
+        failure of the Promise.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
         linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-"
         xrefstyle="hyperlink"/> - Fall back to the value of the Promise
         argument if the Promise unsuccessfully resolves.</para>
@@ -584,6 +642,24 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         If the Promise argument is unsuccessfully resolved, the Promise
         returned by the fallbackTo method is unsuccessfully resolved with the
         failure of the Promise.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-Class-"
+        xrefstyle="hyperlink"/> - Fall back to the value of the Promise
+        argument if the Promise unsuccessfully resolves with a failure of a
+        specified type.</para>
+
+        <para>The <xref
+        linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-Class-"
+        xrefstyle="hyperlink"/> method provides the same behavior as <xref
+        linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-"
+        xrefstyle="hyperlink"/> but only when the failure is of the specified
+        type. If the Promise is unsuccessfully resolved with a failure which
+        is not of the specified type, the Promise argument is not used and the
+        Promise returned by the fallbackTo method is resolved with the failure
+        of the Promise.</para>
       </listitem>
     </itemizedlist>
 
@@ -749,5 +825,24 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
       Interfaces</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added new overloaded methods <xref
+        linkend="org.osgi.util.promise.Promise.onFailure-Consumer-Class-"
+        xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.util.promise.Promise.recover-Function-Class-"
+        xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.util.promise.Promise.recoverWith-Function-Class-"
+        xrefstyle="hyperlink"/>, and <xref
+        linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-Class-"
+        xrefstyle="hyperlink"/>. These overloaded methods allow the caller to
+        specify the type of the failure for which they are in effect.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

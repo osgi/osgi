@@ -104,6 +104,17 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public <F> Promise<T> onFailure(Consumer< ? super F> failure,
+			Class< ? extends F> failureType) {
+		requireNonNull(failure);
+		requireNonNull(failureType);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public <R> Promise<R> then(Success< ? super T, ? extends R> success,
 			Failure failure) {
 		if (success == null) {
@@ -125,6 +136,17 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Promise<T> recover(Function<Promise< ? >, ? extends T> recovery,
+			Class< ? > failureType) {
+		requireNonNull(recovery);
+		requireNonNull(failureType);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Promise<T> recoverWith(
 			Function<Promise< ? >,Promise< ? extends T>> recovery) {
 		requireNonNull(recovery);
@@ -135,8 +157,31 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Promise<T> recoverWith(
+			Function<Promise< ? >,Promise< ? extends T>> recovery,
+			Class< ? > failureType) {
+		requireNonNull(recovery);
+		requireNonNull(failureType);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Promise<T> fallbackTo(Promise< ? extends T> fallback) {
 		requireNonNull(fallback);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> fallbackTo(Promise< ? extends T> fallback,
+			Class< ? > failureType) {
+		requireNonNull(fallback);
+		requireNonNull(failureType);
 		return this;
 	}
 
