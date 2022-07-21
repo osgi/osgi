@@ -70,11 +70,9 @@ import org.osgi.annotation.versioning.ProviderType;
  * called (for example, {@link ServiceListener}s for
  * {@link ServiceEvent#UNREGISTERING} events and {@link ServiceFactory}s for
  * unget operations), those other bundles can observe the stopping bundle in the
- * {@code STOPPING} state but with an invalid {@code BundleContext} object. If
- * the {@code BundleContext} object is used after it has become invalid, an
- * {@code IllegalStateException} must be thrown. The {@code BundleContext}
- * object must never be reused after its context bundle is stopped.
- * 
+ * {@code STOPPING} state but with an invalid {@code BundleContext} object. The
+ * {@code BundleContext} object must never be reused after its context bundle is
+ * stopped.
  * <p>
  * Two {@code BundleContext} objects are equal if they both refer to the same
  * execution context of a bundle. The Framework is the only entity that can
@@ -105,6 +103,7 @@ public interface BundleContext extends BundleReference {
 	 * @param key The name of the requested property.
 	 * @return The value of the requested property, or {@code null} if the
 	 *         property is undefined.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code PropertyPermission} to read the property, and the Java
 	 *         Runtime Environment supports permissions.
@@ -214,6 +213,7 @@ public interface BundleContext extends BundleReference {
 	 * @param id The identifier of the bundle to retrieve.
 	 * @return A {@code Bundle} object or {@code null} if the identifier does
 	 *         not match any installed bundle.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	Bundle getBundle(long id);
 
@@ -227,6 +227,7 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @return An array of {@code Bundle} objects, one object per installed
 	 *         bundle.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	Bundle[] getBundles();
 
@@ -300,10 +301,10 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * <p>
 	 * If {@code listener} is not contained in this context bundle's list of
-	 * listeners, this method does nothing.
+	 * listeners or this BundleContext is no longer valid, this method does
+	 * nothing.
 	 * 
 	 * @param listener The {@code ServiceListener} to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	void removeServiceListener(ServiceListener listener);
 
@@ -333,10 +334,10 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * <p>
 	 * If {@code listener} is not contained in the context bundle's list of
-	 * listeners, this method does nothing.
+	 * listeners or this BundleContext is no longer valid, this method does
+	 * nothing.
 	 * 
 	 * @param listener The {@code BundleListener} object to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws SecurityException If listener is a
 	 *         {@code SynchronousBundleListener} and the caller does not have
 	 *         the appropriate {@code AdminPermission[context bundle,LISTENER]},
@@ -366,10 +367,10 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * <p>
 	 * If {@code listener} is not contained in the context bundle's list of
-	 * listeners, this method does nothing.
+	 * listeners or this BundleContext is no longer valid, this method does
+	 * nothing.
 	 * 
 	 * @param listener The {@code FrameworkListener} object to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	void removeFrameworkListener(FrameworkListener listener);
 
@@ -808,6 +809,8 @@ public interface BundleContext extends BundleReference {
 	 * <p>
 	 * The following steps are required to release the service object:
 	 * <ol>
+	 * <li>If this BundleContext is no longer valid, {@code false} is
+	 * returned.</li>
 	 * <li>If the context bundle's use count for the service is zero or the
 	 * service has been unregistered, {@code false} is returned.</li>
 	 * <li>The context bundle's use count for the service is decremented by one.
@@ -824,7 +827,6 @@ public interface BundleContext extends BundleReference {
 	 * @return {@code false} if the context bundle's use count for the service
 	 *         is zero or if the service has been unregistered; {@code true}
 	 *         otherwise.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code ServiceReference} was not created by the same framework
 	 *         instance as this {@code BundleContext}.
@@ -925,6 +927,7 @@ public interface BundleContext extends BundleReference {
 	 * @param location The location of the bundle to retrieve.
 	 * @return A {@code Bundle} object or {@code null} if the location does not
 	 *         match any installed bundle.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.6
 	 */
 	Bundle getBundle(String location);
