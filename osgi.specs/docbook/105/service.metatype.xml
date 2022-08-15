@@ -1483,7 +1483,7 @@ female=Female</programlisting>
 
       <programlisting>@ObjectClassDefinition(localization = "OSGI-INF/l10n/member",
     description = "%member.description",
-    name = "%member.name"
+    name = "%member.name",
     icon = @Icon(resource = "icon/member-32.png", size = 32))
 @interface Member {
   @AttributeDefinition(type = AttributeType.PASSWORD,
