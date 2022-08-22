@@ -6354,7 +6354,7 @@ public class MyComponent implements AcmeService {}</programlisting>
 
       <bibliomixed xml:id="i1567926"><title>Java Properties
       File</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
       1.0</title><biblioid class="uri"><link

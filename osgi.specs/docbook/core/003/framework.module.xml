@@ -5791,7 +5791,7 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed
       xml:id="framework.module-ref.multireleasejar"><title>Multi-release JAR
       File</title><biblioid class="uri"><link
-      xlink:href="https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/en/java/javase/17/docs/specs/jar/jar.html#multi-release-jar-files"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

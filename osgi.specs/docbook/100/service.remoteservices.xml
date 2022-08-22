@@ -1405,7 +1405,7 @@ com.acme.rmi.path = service-id/24</programlisting>
 
       <bibliomixed xml:id="i1721171"><title>Java Language
       Specification</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/specs/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

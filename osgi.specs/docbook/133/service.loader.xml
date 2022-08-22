@@ -1120,7 +1120,7 @@ CapabilityPermission["osgi.serviceloader", PROVIDE]
     <bibliolist>
       <bibliomixed xml:id="i3255894"><title>Java Service Loader
       API</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
