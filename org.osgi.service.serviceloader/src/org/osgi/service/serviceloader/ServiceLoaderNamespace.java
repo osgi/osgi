@@ -63,17 +63,15 @@ public final class ServiceLoaderNamespace extends Namespace {
 	public static final String	SERVICELOADER_NAMESPACE			= "osgi.serviceloader";
 
 	/**
-	 * The capability directive used to specify the implementation classes of
-	 * the service. The value of this attribute must be of type
-	 * {@code List<String>}.
-	 * 
+	 * The capability directive used to specify the implementation class of the
+	 * service. The value of this directive must be of type {@code String}.
 	 * <p>
 	 * If this directive is not specified, then all advertised Service Providers
 	 * that match the service type name must be registered. If this directive is
 	 * specified, then only Service Providers that match the service type name
-	 * whose implementation class is contained in the value of this attribute
-	 * must be registered. To not register a service for this capability use an
-	 * empty string.
+	 * whose implementation class matches the value of this attribute must be
+	 * registered. To not register a service for this capability use an empty
+	 * string.
 	 */
 	public static final String	CAPABILITY_REGISTER_DIRECTIVE	= "register";
 
