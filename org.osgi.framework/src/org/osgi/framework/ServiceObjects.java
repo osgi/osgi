@@ -126,8 +126,6 @@ public interface ServiceObjects<S> {
 	 * 
 	 * @param service A service object previously provided by this
 	 *            {@code ServiceObjects} object.
-	 * @throws IllegalStateException If the BundleContext used to create this
-	 *             {@code ServiceObjects} object is no longer valid.
 	 * @throws IllegalArgumentException If the specified service object is
 	 *             {@code null} or was not provided by a {@code ServiceObjects}
 	 *             object for the associated service.

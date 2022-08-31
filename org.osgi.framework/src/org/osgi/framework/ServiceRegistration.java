@@ -89,6 +89,8 @@ public interface ServiceRegistration<S> {
 	 * <p>
 	 * The following steps are required to unregister a service:
 	 * <ol>
+	 * <li>If this {@code ServiceRegistration} object has already been
+	 * unregistered, then this method does nothing and returns.</li>
 	 * <li>The service is removed from the Framework service registry so that it
 	 * can no longer be obtained.</li>
 	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is fired
@@ -107,8 +109,6 @@ public interface ServiceRegistration<S> {
 	 * </li>
 	 * </ol>
 	 * 
-	 * @throws IllegalStateException If this {@code ServiceRegistration} object
-	 *         has already been unregistered.
 	 * @see BundleContext#ungetService(ServiceReference)
 	 * @see ServiceFactory#ungetService(Bundle, ServiceRegistration, Object)
 	 */
