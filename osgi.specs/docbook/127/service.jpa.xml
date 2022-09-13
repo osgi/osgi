@@ -1317,6 +1317,26 @@ suffix:     META-INF/persistence.xml</programlisting>
       implementation will need to be included with the JPA Provider
       bundle.</para>
     </section>
+    <section>
+      <title>JTA Datasource Access</title>
+
+      <para>JPA supports defining data sources in terms of JNDI lookups.
+      <itemizedlist>
+        <listitem>
+          <para><code>jta-data-source</code> used when <code>transaction-type=JTA</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>non-jta-data-source</code> used when <code>transaction-type=RESOURCE_LOCAL</code></para>
+        </listitem>
+       
+      </itemizedlist>
+      
+      Providers must support using the information when given in a Persitence Unit as described above (that is either <code>jta-data-source</code> or <code>non-jta-data-source</code> depending on the given <code>transaction-type</code>)
+      as an alternative of tracking a DataSource factory performing an JNDI lookup with the given name.
+      If the lookup failed an error must be logged and the Persitence-Unit is handled as incomplete as if no suitable DataSource is found.
+      </para>
+    </section>
   </section>
 
   <section>
