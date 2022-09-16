@@ -797,7 +797,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i3068796"><title>Java Transaction API Specification
       1.1</title><biblioid class="uri"><link
-      xlink:href="http://www.oracle.com/technetwork/java/javaee/jta/index.html"/></biblioid></bibliomixed>
+      xlink:href="https://www.oracle.com/java/technologies/jta.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3068810"><title>XA+ Specification</title>Version
       2, The Open Group, ISBN: 1-85912-046-6</bibliomixed>
@@ -807,7 +807,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
 
       <bibliomixed xml:id="i3073418"><title>Java Platform, Enterprise Edition
       (Java EE) Specification, v5</title><biblioid class="uri"><link
-      xlink:href="http://jcp.org/en/jsr/detail?id=244"/></biblioid></bibliomixed>
+      xlink:href="https://jcp.org/en/jsr/detail?id=244"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

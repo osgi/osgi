@@ -6358,7 +6358,7 @@ public class MyComponent implements AcmeService {}</programlisting>
 
       <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
       1.0</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/REC-xml/"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/REC-xml/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1655737"><title>OSGi XML Schemas</title><biblioid
       class="uri"><link

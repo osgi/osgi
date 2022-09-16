@@ -2663,7 +2663,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     <bibliolist>
       <bibliomixed xml:id="service.http.whiteboard-i21231452"><title>HTTP 1.0
       Specification RFC-1945</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc1945.txt"/>, May
+      xlink:href="https://www.ietf.org/rfc/rfc1945.txt"/>, May
       1996</biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21215926"><title>HTTP 1.1
@@ -2696,7 +2696,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <bibliomixed xml:id="service.http.whiteboard-i21220308"><title>RFC 2617:
       HTTP Authentication: Basic and Digest Access
       Authentication</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard

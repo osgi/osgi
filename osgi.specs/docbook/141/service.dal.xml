@@ -1936,7 +1936,7 @@ if (deviceSRefs != null) {
     <bibliolist>
       <bibliomixed xml:id="service.dal-ref.bean.spec"><title>JavaBeans
       Spec</title><biblioid class="uri"><link
-      xlink:href="http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html"/></biblioid></bibliomixed>
+      xlink:href="https://www.oracle.com/java/technologies/javase/javabeans-spec.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
