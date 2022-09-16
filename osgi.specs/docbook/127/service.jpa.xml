@@ -1605,19 +1605,19 @@ Require-Capability: osgi.contract;
     <bibliolist>
       <bibliomixed xml:id="i3075794"><title>JPA 1.0</title><biblioid
       class="uri"><link
-      xlink:href="http://jcp.org/en/jsr/summary?id=220"/></biblioid></bibliomixed>
+      xlink:href="https://jcp.org/en/jsr/detail?id=220"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3075842"><title>JPA 2.0</title><biblioid
       class="uri"><link
-      xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
+      xlink:href="https://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3075842.1"><title>JPA 2.1</title><biblioid
       class="uri"><link
-      xlink:href="http://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
+      xlink:href="https://jcp.org/en/jsr/summary?id=317"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3091015"><title>Java EE 5</title><biblioid
       class="uri"><link
-      xlink:href="http://www.oracle.com/technetwork/java/javaee/tech/index.html"/></biblioid></bibliomixed>
+      xlink:href="https://www.oracle.com/java/technologies/javaee/javaeetechnologies.html#javaee5"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jpa-portable.java.contracts.ref"><title>Portable Java

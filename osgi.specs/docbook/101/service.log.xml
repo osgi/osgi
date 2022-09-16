@@ -1484,7 +1484,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       <bibliomixed
       xml:id="service.log-slf4j.ref"><title>SLF4J</title><biblioid
       class="uri"><link
-      xlink:href="http://www.slf4j.org"/></biblioid></bibliomixed>
+      xlink:href="https://www.slf4j.org"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.log-configurator.ref"><title>Configurator</title>OSGi

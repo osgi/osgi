@@ -1031,11 +1031,11 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <bibliomixed xml:id="i1457637"><title>RFC 2253Lightweight Directory
       Access Protocol (v3): UTF-8 String Representation of Distinguished
       Names</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2253.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2253.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1485767"><title>X.509
       Certificates</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2459.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2459.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1488926"><title>Java Security
       Architecture</title><biblioid class="uri"><link
@@ -1051,28 +1051,28 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
       <bibliomixed xml:id="i1483030"><title>Secure Hash
       Standard</title><biblioid class="uri"><link
-      xlink:href="http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
       Internet Electronic Mail</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc1421.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc1421.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1484747"><title>DSA</title><biblioid
       class="uri"><link
-      xlink:href="http://www.itl.nist.gov/fipspubs/fip186.htm"/></biblioid></bibliomixed>
+      xlink:href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1484864"><title>RSA</title><biblioid
-      class="uri"><link xlink:href="http://www.ietf.org/rfc/rfc2313.txt"/>
+      class="uri"><link xlink:href="https://www.ietf.org/rfc/rfc2313.txt"/>
       which is superseded by <link
-      xlink:href="http://www.ietf.org/rfc/rfc2437.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2437.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
       #7</title><biblioid class="uri"><link
-      xlink:href="http://www.rsasecurity.com/rsalabs/node.asp?id=2129"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2315.txt"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1488889"><title>Unicode Normalization UAX #
       15</title><biblioid class="uri"><link
-      xlink:href="http://www.unicode.org/reports/tr15/"/></biblioid></bibliomixed>
+      xlink:href="https://www.unicode.org/reports/tr15/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
       Directory Services</title>ISBN 1-57870-070-1</bibliomixed>

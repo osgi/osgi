@@ -498,9 +498,9 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>Java SE
-      1.4</title><biblioid class="uri"><link
-      xlink:href="http://www.oracle.com/technetwork/java/archive-139210.html"/></biblioid></bibliomixed>
+      <bibliomixed><title>Java
+      SE</title><biblioid class="uri"><link
+      xlink:href="https://www.oracle.com/java/technologies/java-se-glance.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

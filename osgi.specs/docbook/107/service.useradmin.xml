@@ -1080,7 +1080,7 @@ ROLE_REMOVED</programlisting>
 
       <bibliomixed xml:id="i1307810"><title>Java Authentication and
       Authorization Service</title><biblioid class="uri"><link
-      xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jaas/JAASRefGuide.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>
