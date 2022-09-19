@@ -503,4 +503,167 @@ public interface Promise<T> {
 	 * @since 1.2
 	 */
 	CompletionStage<T> toCompletionStage();
+
+	/**
+	 * Register a callback to be called with the failure for this Promise when
+	 * this Promise is resolved with a failure of a failure type. The callback
+	 * will not be called if this Promise is resolved successfully or if the
+	 * failure is not an instance of the specified failure type.
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * <p>
+	 * Resolving this Promise <i>happens-before</i> any registered callback is
+	 * called. That is, in a registered callback, {@link #isDone()} must return
+	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
+	 * block.
+	 * <p>
+	 * A callback may be called on a different thread than the thread which
+	 * registered the callback. So the callback must be thread safe but can rely
+	 * upon that the registration of the callback <i>happens-before</i> the
+	 * registered callback is called.
+	 * 
+	 * @param failure The Consumer callback that receives the failure of this
+	 *            Promise if the failure is an instance of the specified failure
+	 *            type. Must not be {@code null}.
+	 * @param failureType The type of failure for which this callback will be
+	 *            called. If the failure is not an instance of the specified
+	 *            failure type, the specified callback will not be called. Must
+	 *            not be {@code null}.
+	 * @param <F> The failure type.
+	 * @return This Promise.
+	 * @since 1.3
+	 */
+	<F> Promise<T> onFailure(Consumer< ? super F> failure,
+			Class< ? extends F> failureType);
+
+	/**
+	 * Recover from a failure of this Promise with a recovery value if the
+	 * failure is an instance of a failure type.
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise must be
+	 * resolved with the value of this Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is not an
+	 * instance of the specified failure type, the returned Promise must be
+	 * failed with the failure of this Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is an instance
+	 * of the specified failure type, the specified Function is applied to this
+	 * Promise to produce a recovery value.
+	 * <ul>
+	 * <li>If the recovery value is not {@code null}, the returned Promise must
+	 * be resolved with the recovery value.</li>
+	 * <li>If the recovery value is {@code null}, the returned Promise must be
+	 * failed with the failure of this Promise.</li>
+	 * <li>If the specified Function throws an exception, the returned Promise
+	 * must be failed with that exception.</li>
+	 * </ul>
+	 * <p>
+	 * To recover from a failure of this Promise with a recovery value of
+	 * {@code null}, the {@link #recoverWith(Function, Class)} method must be
+	 * used. The specified Function for {@link #recoverWith(Function, Class)}
+	 * can return {@code Promises.resolved(null)} to supply the desired
+	 * {@code null} value.
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * 
+	 * @param recovery If this Promise resolves with a failure and the failure
+	 *            is an instance of the specified failure type, the specified
+	 *            Function is called to produce a recovery value to be used to
+	 *            resolve the returned Promise. Must not be {@code null}.
+	 * @param failureType The type of failure for which the specified recovery
+	 *            will be used. If the failure is not an instance of the failure
+	 *            type, the specified recovery will not be called and the
+	 *            returned Promise must be failed with the failure of this
+	 *            Promise. Must not be {@code null}.
+	 * @return A Promise that resolves with the value of this Promise or
+	 *         recovers from the failure of this Promise if the failure is an
+	 *         instance of the specified failure type.
+	 * @since 1.3
+	 */
+	Promise<T> recover(Function<Promise< ? >, ? extends T> recovery,
+			Class< ? > failureType);
+
+	/**
+	 * Recover from a failure of this Promise with a recovery Promise if the
+	 * failure is an instance of a failure type.
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise must be
+	 * resolved with the value of this Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is not an
+	 * instance of the specified failure type, the returned Promise must be
+	 * failed with the failure of this Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is an instance
+	 * of the specified failure type, the specified Function is applied to this
+	 * Promise to produce a recovery Promise.
+	 * <ul>
+	 * <li>If the recovery Promise is not {@code null}, the returned Promise
+	 * must be resolved with the recovery Promise.</li>
+	 * <li>If the recovery Promise is {@code null}, the returned Promise must be
+	 * failed with the failure of this Promise.</li>
+	 * <li>If the specified Function throws an exception, the returned Promise
+	 * must be failed with that exception.</li>
+	 * </ul>
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * 
+	 * @param recovery If this Promise resolves with a failure and the failure
+	 *            is an instance of the specified failure type, the specified
+	 *            Function is called to produce a recovery Promise to be used to
+	 *            resolve the returned Promise. Must not be {@code null}.
+	 * @param failureType The type of failure for which this recovery will be
+	 *            used. If the failure is not an instance of the failure type,
+	 *            the specified recovery will not be called and the returned
+	 *            Promise must be failed with the failure of this Promise. Must
+	 *            not be {@code null}.
+	 * @return A Promise that resolves with the value of this Promise or
+	 *         recovers from the failure of this Promise if the failure is an
+	 *         instance of the specified failure type.
+	 * @since 1.3
+	 */
+	Promise<T> recoverWith(
+			Function<Promise< ? >,Promise< ? extends T>> recovery,
+			Class< ? > failureType);
+
+	/**
+	 * Fall back to the value of the specified Promise if this Promise fails and
+	 * the failure is an instance of a failure type.
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise must be
+	 * resolved with the value of this Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is an instance
+	 * of the specified failure type, the successful result of the specified
+	 * Promise is used to resolve the returned Promise. If the specified Promise
+	 * is resolved with a failure, the returned Promise must be failed with the
+	 * failure of this Promise rather than the failure of the specified Promise.
+	 * <p>
+	 * If this Promise is resolved with a failure and the failure is not an
+	 * instance of the specified failure type, the returned Promise must be
+	 * failed with the failure of this Promise.
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * 
+	 * @param fallback The Promise whose value must be used to resolve the
+	 *            returned Promise if this Promise resolves with a failure and
+	 *            the failure is an instance of the specified failure type. Must
+	 *            not be {@code null}.
+	 * @param failureType The type of failure for which this recovery will be
+	 *            used. If the failure is not an instance of the failure type,
+	 *            the specified recovery will not be called and the returned
+	 *            Promise must be failed with the failure of this Promise. Must
+	 *            not be {@code null}.
+	 * @return A Promise that returns the value of this Promise or falls back to
+	 *         the value of the specified Promise if the failure is an instance
+	 *         of the specified failure type.
+	 * @since 1.3
+	 */
+	Promise<T> fallbackTo(Promise< ? extends T> fallback,
+			Class< ? > failureType);
 }

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="133"
          revision="$Id$"
          version="5.0" xml:id="service.loader"
@@ -419,7 +418,7 @@ if ( it.hasNext() ) {
       capability can discriminate between multiple Service Providers in the
       same bundle. The Service Loader API does not have this feature: any
       wired requirement has visibility to all Service Providers in the wired
-      bundle, regardless of the <code>registered</code> directive.</para>
+      bundle, regardless of the <code>register</code> directive.</para>
     </section>
 
     <section>
@@ -575,8 +574,8 @@ Bundle-ClassPath:       legacy.jar</programlisting>
         </listitem>
 
         <listitem>
-          <para>The register directive matches the fully qualified name of the
-          Service Provider.</para>
+          <para>The <code>register</code> directive matches the fully
+          qualified name of the Service Provider.</para>
         </listitem>
       </itemizedlist>
 
@@ -1120,7 +1119,7 @@ CapabilityPermission["osgi.serviceloader", PROVIDE]
     <bibliolist>
       <bibliomixed xml:id="i3255894"><title>Java Service Loader
       API</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

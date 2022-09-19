@@ -270,6 +270,139 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 	}
 
+	// Test opposite of:
+	// If a Managed Service is registered and no configuration information is
+	// available or the configuration is not visible then the Configuration
+	// Admin service must call updated(Dictionary) with a null parameter.
+	//
+	// Configuration exists before ManagedService is registered. No update(null)
+	// use cfg-dictionary directly
+
+	public void test_deliver_existing_Configuration_to_later_registered_ManagedService()
+			throws Exception {
+		// start a coordination
+		final Coordinator c = this.getService(Coordinator.class);
+		final Coordination coord = c.begin("cm-test1", 0);
+		final List<Boolean> events = new ArrayList<>();
+
+		final String pid = this.getClass().getName() + ".mstestpid2";
+
+		try {
+			// create the configuration
+			final Dictionary<String,Object> props = new Hashtable<>();
+			props.put("key", "value");
+
+			final Configuration conf = this.cm.getConfiguration(pid);
+			conf.update(props);
+
+			// add managed service
+			final Dictionary<String,Object> msProps = new Hashtable<>();
+			msProps.put(Constants.SERVICE_PID, pid);
+
+			this.registerService(ManagedService.class.getName(),
+					new ManagedService() {
+
+						@Override
+						public void updated(Dictionary<String, ? > properties)
+								throws ConfigurationException {
+							System.out.println(properties);
+							events.add(properties != null);
+						}
+
+					}, msProps);
+
+			sleep();
+			assertEquals(0, events.size());
+
+			// update configuration
+			props.put("key2", "value2");
+			conf.update(props);
+
+			sleep();
+			assertEquals(0, events.size());
+
+			// delete configuration
+			conf.delete();
+
+			sleep();
+			assertEquals(0, events.size());
+		} finally {
+			coord.end();
+		}
+
+		// wait and verify listener
+		sleep();
+		events.forEach(System.out::println);
+		assertEquals(3, events.size());
+		assertTrue(events.get(0));// we have a Configuration -> not null
+		assertTrue(events.get(1));// we update the Configuration -> not null
+		assertFalse(events.get(2));// we remove the configuration -> null
+
+	}
+
+	public void testCoordinatedConfigurationOnBeforeRegisteredManagedService()
+			throws Exception {
+
+		final List<Boolean> events = new ArrayList<>();
+		final String pid = this.getClass().getName() + ".mstestpid3";
+		// add managed service
+		final Dictionary<String,Object> msProps = new Hashtable<>();
+		msProps.put(Constants.SERVICE_PID, pid);
+
+		this.registerService(ManagedService.class.getName(),
+				new ManagedService() {
+
+					@Override
+					public void updated(Dictionary<String, ? > properties)
+							throws ConfigurationException {
+						events.add(properties != null);
+					}
+
+				}, msProps);
+
+		// start a coordination
+		final Coordinator c = this.getService(Coordinator.class);
+		final Coordination coord = c.begin("cm-test2", 0);
+
+		try {
+
+			// create the configuration
+			final Dictionary<String,Object> props = new Hashtable<>();
+			props.put("key", "value");
+
+			final Configuration conf = this.cm.getConfiguration(pid);
+			conf.update(props);
+
+			sleep();
+			assertEquals(1, events.size());// update with null because
+											// registered before coordination
+
+			// update configuration
+			props.put("key2", "value2");
+			conf.update(props);
+
+			sleep();
+			assertEquals(1, events.size());
+
+			// delete configuration
+			conf.delete();
+
+			sleep();
+			assertEquals(1, events.size());
+		} finally {
+			coord.end();
+		}
+
+		// wait and verify listener
+		sleep();
+		assertEquals(4, events.size());
+		assertFalse(events.get(0));
+		assertTrue(events.get(1));
+		assertTrue(events.get(2));
+		assertFalse(events.get(3));
+
+	}
+
 	/**
 	 * This test tests a managed service. It
 	 * <ol>
@@ -293,13 +426,14 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 		final String pid = this.getClass().getName() + ".mstestpid";
 
+		boolean checkpoint = false;
 		try {
 			// add managed service
 			final Dictionary<String,Object> msProps = new Hashtable<>();
 			msProps.put(Constants.SERVICE_PID, pid);
 
-			this.registerService(
-					ManagedService.class.getName(), new ManagedService() {
+			this.registerService(ManagedService.class.getName(),
+					new ManagedService() {
 
 						@Override
 						public void updated(Dictionary<String, ? > properties)
@@ -332,10 +466,14 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 			sleep();
 			assertEquals(0, events.size());
+			checkpoint = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			c.fail(e);
 		} finally {
 			coord.end();
 		}
-
+		assertTrue(checkpoint);
 		// wait and verify listener
 		sleep();
 		assertEquals(4, events.size());

@@ -3883,49 +3883,49 @@ compName ::= &lt; component name &gt;</programlisting>
     <bibliolist>
       <bibliomixed xml:id="service.cdi-bib.cdi"><title>CDI</title> <biblioid
       class="uri"><link
-      xlink:href="http://www.cdi-spec.org/"/></biblioid></bibliomixed>
+      xlink:href="https://www.cdi-spec.org/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.cdi-bib.cdi20"><title>CDI 2.0</title>
       <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.cdi-bib.unproxyable"><title>unproxyable
       bean types</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#unproxyable"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#unproxyable"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.cdi.default.bean.discovery.mode"><title>Default
       bean discovery mode</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#default_bean_discovery"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#default_bean_discovery"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.cdi-bib.cdi.exclude.filters"><title>Exclude
       filters</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#exclude_filters"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#exclude_filters"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.cdi.packaging.and.deployment"><title>Packaging
       and deployment</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#packaging_deployment"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#packaging_deployment"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.cdi.typesafe.resolution"><title>Typesafe
       Resolution</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#typesafe_resolution"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#typesafe_resolution"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.cdi.scopes.and.contexts"><title>Scopes and
       contexts</title> <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#contexts"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#contexts"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.cdi.pseudoscope"><title>Pseudo-scope</title>
       <biblioid class="uri"><link
-      xlink:href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#normal_scope"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#normal_scope"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.postconstruct"><title>@PostConstruct</title>
       <biblioid class="uri"><link
-      xlink:href="https://javaee.github.io/javaee-spec/javadocs/javax/annotation/PostConstruct.html"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/annotations/1.3/apidocs/javax/annotation/postconstruct"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.general.syntax.definitions"><title>General
@@ -3937,11 +3937,11 @@ compName ::= &lt; component name &gt;</programlisting>
 
       <bibliomixed xml:id="service.cdi-bib.inject"><title>Dependency Injection
       for Java</title> <biblioid class="uri"><link
-      xlink:href="https://jcp.org/en/jsr/detail?id=330"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/dependency-injection/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.cdi-bib.jta"><title>Java Transaction
       API</title> <biblioid class="uri"><link
-      xlink:href="https://github.com/eclipse-ee4j/jta-api"/></biblioid></bibliomixed>
+      xlink:href="https://jakarta.ee/specifications/transactions/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.cdi-bib.portable.java.contract"><title>Portable Java

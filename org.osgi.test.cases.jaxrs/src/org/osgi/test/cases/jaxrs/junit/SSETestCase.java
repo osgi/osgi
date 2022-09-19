@@ -17,6 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.jaxrs.junit;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -32,13 +36,16 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.sse.SseEventSource;
 
-import org.osgi.framework.ServiceRegistration;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.service.jaxrs.client.SseEventSourceFactory;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.resources.SseResource;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.junit5.service.ServiceExtension;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.tracker.ServiceTracker;
 
+@ExtendWith(ServiceExtension.class)
 public class SSETestCase extends AbstractJAXRSTestCase {
 	
 	/**
@@ -47,59 +54,45 @@ public class SSETestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testJaxRsSseEventSourceFactory() throws Exception {
+	@Test
+	public void testJaxRsSseEventSourceFactory(@InjectService(timeout = 2000)
+	ClientBuilder clientBuilder, @InjectService(timeout = 2000)
+	SseEventSourceFactory sseFactory) throws Exception {
 
-		ServiceTracker<ClientBuilder,ClientBuilder> clientTracker = new ServiceTracker<>(
-				getContext(), ClientBuilder.class, null);
-		clientTracker.open();
-
-		assertNotNull(clientTracker.waitForService(2000));
-
-		Client c = clientTracker.getService().build();
+		Client c = clientBuilder.build();
 
 		String baseURI = getBaseURI();
 
 		WebTarget target = c.target(baseURI).path("whiteboard/stream");
 
+		// Register a whiteboard service
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<SseResource> reg = getContext().registerService(
-				SseResource.class, new SseResource(MediaType.TEXT_PLAIN_TYPE),
-				properties);
+		context.registerService(SseResource.class,
+				new SseResource(MediaType.TEXT_PLAIN_TYPE), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Get the SSE stream
+		AtomicReference<Throwable> ref = new AtomicReference<Throwable>();
+		List<Integer> list = new CopyOnWriteArrayList<>();
+		Semaphore s = new Semaphore(0);
 
-			ServiceTracker<SseEventSourceFactory,SseEventSourceFactory> sseTracker = new ServiceTracker<>(
-					getContext(), SseEventSourceFactory.class, null);
-			sseTracker.open();
+		SseEventSource source = sseFactory.newSource(target);
 
-			assertNotNull(sseTracker.waitForService(2000));
+		source.register(e -> list.add(e.readData(Integer.class)),
+				t -> ref.set(t), s::release);
 
-			AtomicReference<Throwable> ref = new AtomicReference<Throwable>();
-			List<Integer> list = new CopyOnWriteArrayList<>();
-			Semaphore s = new Semaphore(0);
+		source.open();
 
-			SseEventSource source = sseTracker.getService().newSource(target);
+		assertTrue(s.tryAcquire(10, TimeUnit.SECONDS));
 
-			source.register(e -> list.add(e.readData(Integer.class)),
-					t -> ref.set(t), s::release);
+		assertNull(ref.get());
 
-			source.open();
-
-			assertTrue(s.tryAcquire(10, TimeUnit.SECONDS));
-
-			assertNull(ref.get());
-
-			assertEquals(Arrays.asList(42, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9), list);
+		assertEquals(Arrays.asList(42, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9), list);
 		
-		} finally {
-			reg.unregister();
-			clientTracker.close();
-		}
 	}
 }

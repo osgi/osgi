@@ -431,15 +431,15 @@
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.servlet.whiteboard"/></code></para><para><code><xref
-              linkend="org.osgi.service.servlet.whiteboard.annotations"/></code></para><para><code><xref
-              linkend="org.osgi.service.servlet.whiteboard.propertytypes"/></code></para><para><code><xref
-              linkend="org.osgi.service.servlet.context"/></code></para><para><code><xref
-              linkend="org.osgi.service.servlet.runtime"/></code></para><para><code><xref
-              linkend="org.osgi.service.servlet.runtime.dto"/></code></para></entry>
+              linkend="org.osgi.service.http.whiteboard"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.whiteboard.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.whiteboard.propertytypes"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.context"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime.dto"/></code></para></entry>
 
               <entry><code><xref
-              endterm="org.osgi.service.servlet.whiteboard-version"
+              endterm="org.osgi.service.http.whiteboard-version"
               linkend="service.http.whiteboard"/></code></entry>
             </row>
 

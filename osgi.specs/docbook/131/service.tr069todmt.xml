@@ -530,7 +530,7 @@ _-_-_
 &lt;/ParameterValueStruct&gt;</programlisting>
 
       <para>The <code>xsi</code> prefix refers to the
-      <code>http://www.w3.org/2001/XMLSchema-instance</code> namespace.
+      <code>https://www.w3.org/2001/XMLSchema-instance</code> namespace.
       However, this makes not all TR-106 types well defined, for example in
       XML Schema <code>base64</code> is called <code>base64Binary</code>. This
       specification assumes that the names and definitions in <xref
@@ -3672,28 +3672,28 @@ de-telekom-shell</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i741499"><title>TR-069 Amendment
       3</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i694602"><title>TR-106 Amendment
       3</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i731609"><title>XML Schema Part 2: Datatypes Second
       Edition</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/xmlschema-2/"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/xmlschema-2/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i741562"><title>SOAP
       1.1</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/2000/NOTE- SOAP-20000508"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/soap11/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i747814"><title>Extensible Markup Language (XML)
       1.0 (Second
       Edition)</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/xml/#NT-Letter"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i799974"><title>Broadband
       Forum</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

@@ -1623,7 +1623,7 @@ client.installBundle({
 
       <bibliomixed xml:id="service.rest-webidl"><title>Web
       IDL</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/WebIDL/"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/WebIDL/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
       Schemas</title><biblioid class="uri"><link

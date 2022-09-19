@@ -21,6 +21,9 @@ package org.osgi.test.cases.jaxrs.junit;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -37,6 +40,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
 import org.junit.Assume;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
@@ -62,6 +66,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleSingletonResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -70,45 +75,41 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
-				.registerService(Application.class,
+		context.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Do a delete
 
-			// Do a delete
+		httpResponse = client.execute(
+				RequestBuilder.delete(baseURI + "test/whiteboard/resource/buzz")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.delete(baseURI + "test/whiteboard/resource/buzz").build());
+		response = assertResponse(httpResponse, 200, null);
+		assertEquals("", response);
 
-			response = assertResponse(httpResponse, 200, null);
-			assertEquals("", response);
+		// Do another get to show the singleton-ness
 
-			// Do another get to show the singleton-ness
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build());
-
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[fizz, fizzbuzz]", response);
 	}
 
 	/**
@@ -117,6 +118,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 *
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimplePrototypeResource() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -125,45 +127,42 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(singleton(WhiteboardResource.class),
 						emptySet()),
 				properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Do a delete
 
-			// Do a delete
+		httpResponse = client.execute(
+				RequestBuilder.delete(baseURI + "test/whiteboard/resource/buzz")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.delete(baseURI + "test/whiteboard/resource/buzz").build());
+		response = assertResponse(httpResponse, 200, null);
+		assertEquals("", response);
 
-			response = assertResponse(httpResponse, 200, null);
-			assertEquals("", response);
+		// Do another get to show the statelessness
 
-			// Do another get to show the statelessness
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -171,6 +170,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationBase() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -179,46 +179,42 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
+		ServiceRegistration<Application> reg = context
 				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Change the base and re-request (note that it is valid to have no
+		// leading '/')
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Change the base and re-request (note that it is valid to have no
-			// leading '/')
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"changed");
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"changed");
-			reg.setProperties(properties);
-
-			awaitSelection.getValue();
+		awaitSelection.getValue();
 			
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "changed/whiteboard/resource")
+						.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "changed/whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -226,6 +222,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationPathAnnotation() throws Exception {
 
 		Dictionary<String,Object> properties = new Hashtable<>();
@@ -234,47 +231,42 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
+		ServiceRegistration<Application> reg = context
 				.registerService(Application.class,
 						new ApplicationWithPathAnnotation(emptySet(),
 								singleton(new WhiteboardResource())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(RequestBuilder
+				.get(baseURI + "test/annotated/whiteboard/resource")
+				.build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/annotated/whiteboard/resource")
-					.build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Change the base and re-request (note that it is valid to have no
+		// leading '/'
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Change the base and re-request (note that it is valid to have no
-			// leading '/'
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"changed");
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"changed");
-			reg.setProperties(properties);
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		httpResponse = client.execute(RequestBuilder
+				.get(baseURI + "changed/annotated/whiteboard/resource")
+				.build());
 
-			httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "changed/annotated/whiteboard/resource")
-					.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -282,7 +274,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationWhiteboardResource() throws Exception {
+
+		// Register the first empty application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
@@ -292,160 +287,144 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(emptySet(), emptySet()), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register the second empty application at "test2"
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(), emptySet()),
-							properties);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			try {
+		context.registerService(Application.class,
+				new SimpleApplication(emptySet(), emptySet()), properties);
 
-				awaitSelection.getValue();
+		awaitSelection.getValue();
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
-						Boolean.TRUE);
+		// Register an untargeted whiteboard resource
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-						.registerService(WhiteboardResource.class,
-								new WhiteboardResource(), properties);
+		ServiceRegistration<WhiteboardResource> resourceReg = context
+				.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
 
-				try {
+		awaitSelection.getValue();
 
-					awaitSelection.getValue();
 
-					String baseURI = getBaseURI();
+		// Do a get on each application, and the default application
+		String baseURI = getBaseURI();
 
-					// Do a get on each application, and the default application
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					CloseableHttpResponse httpResponse = client
-							.execute(RequestBuilder
-									.get(baseURI + "test/whiteboard/resource")
-									.build());
+		String response = assertResponse(httpResponse, 404, null);
 
-					String response = assertResponse(httpResponse, 404, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 404, null);
 
-					response = assertResponse(httpResponse, 404, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Rebind the resource targeting test2
 
-					// Rebind the resource
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=test2)");
+		resourceReg.setProperties(properties);
 
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name=test2)");
-					resourceReg.setProperties(properties);
+		awaitSelection.getValue();
 
-					awaitSelection.getValue();
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test/whiteboard/resource").build());
+		response = assertResponse(httpResponse, 404, null);
 
-					response = assertResponse(httpResponse, 404, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 404, null);
 
-					response = assertResponse(httpResponse, 404, null);
+		// Target just the default application
 
-					// Target just the default application
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name="
+						+ JaxrsWhiteboardConstants.JAX_RS_DEFAULT_APPLICATION
+						+ ")");
+		resourceReg.setProperties(properties);
 
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name="
-									+ JaxrsWhiteboardConstants.JAX_RS_DEFAULT_APPLICATION
-									+ ")");
-					resourceReg.setProperties(properties);
+		awaitSelection.getValue();
 
-					awaitSelection.getValue();
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
+		response = assertResponse(httpResponse, 404, null);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test/whiteboard/resource").build());
-					response = assertResponse(httpResponse, 404, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 404, null);
 
-					response = assertResponse(httpResponse, 404, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Target all the applications
 
-					// Target all the applications
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
+		resourceReg.setProperties(properties);
 
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name=*)");
-					resourceReg.setProperties(properties);
+		awaitSelection.getValue();
 
-					awaitSelection.getValue();
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test/whiteboard/resource").build());
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
-				} finally {
-					resourceReg.unregister();
-				}
-
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -453,7 +432,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationIsolationExtensions() throws Exception {
+
+		// Register the first application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
@@ -463,83 +445,64 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(emptySet(),
 						singleton(new StringReplacer("fizz", "fizzbuzz"))),
 				properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register the second application at "test2"
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(), emptySet()),
-							properties);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
+		context.registerService(Application.class,
+				new SimpleApplication(emptySet(), emptySet()), properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		// Register a whiteboard resource targeting all applications
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
-						Boolean.TRUE);
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-						"(osgi.jaxrs.name=*)");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-						.registerService(WhiteboardResource.class,
-								new WhiteboardResource(), properties);
+		context.registerService(WhiteboardResource.class,
+				new WhiteboardResource(), properties);
 
-				try {
 
-					awaitSelection.getValue();
+		awaitSelection.getValue();
 
-					String baseURI = getBaseURI();
+		String baseURI = getBaseURI();
 
-					// Do a get on each application, and the default application
+		// Do a get on each application, and the default application
 
-					CloseableHttpResponse httpResponse = client
-							.execute(RequestBuilder
-									.get(baseURI + "test/whiteboard/resource")
-									.build());
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					String response = assertResponse(httpResponse, 200,
-							TEXT_PLAIN);
-					assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-				} finally {
-					resourceReg.unregister();
-				}
-
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -547,7 +510,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationIsolationExtensions2() throws Exception {
+
+		// Register the first empty application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
@@ -557,125 +523,94 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		// Register the second empty application at "test2"
+
+		context.registerService(Application.class,
 				new SimpleApplication(emptySet(), emptySet()), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
+		context.registerService(Application.class,
+				new SimpleApplication(emptySet(), emptySet()), properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(), emptySet()),
-							properties);
+		awaitSelection.getValue();
 
-			try {
+		// Register a whiteboard targeting all the applications
 
-				awaitSelection.getValue();
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
-						Boolean.TRUE);
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-						"(osgi.jaxrs.name=*)");
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		context.registerService(WhiteboardResource.class,
+				new WhiteboardResource(), properties);
 
-				ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-						.registerService(WhiteboardResource.class,
-								new WhiteboardResource(), properties);
+		awaitSelection.getValue();
 
-				try {
+		String baseURI = getBaseURI();
 
-					awaitSelection.getValue();
+		// Do a get on each application, and the default application
 
-					String baseURI = getBaseURI();
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					// Do a get on each application, and the default application
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					CloseableHttpResponse httpResponse = client
-							.execute(RequestBuilder
-									.get(baseURI + "test/whiteboard/resource")
-									.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					String response = assertResponse(httpResponse, 200,
-							TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		// Register an extension targeting both test applications
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=t*)");
+		context.registerService(WriterInterceptor.class,
+				new StringReplacer("fizz", "fizzbuzz"), properties);
 
-					properties = new Hashtable<>();
-					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-							Boolean.TRUE);
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name=t*)");
-					ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-							.registerService(WriterInterceptor.class,
-									new StringReplacer("fizz", "fizzbuzz"),
-									properties);
-					try {
+		awaitSelection.getValue();
 
-						awaitSelection.getValue();
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test/whiteboard/resource")
-								.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]",
-								response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test2/whiteboard/resource")
-								.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]",
-								response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizz, fizzbuzz]", response);
-					} finally {
-						extensionReg.unregister();
-					}
-
-				} finally {
-					resourceReg.unregister();
-				}
-
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -683,7 +618,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationProvidedExtensionDependency() throws Exception {
+
+		// Register the first empty application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 
@@ -693,132 +631,102 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(emptySet(), emptySet()), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register the second empty application at "test2"
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			properties.put("replacer-config", "fizz-buzz");
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(),
-									singleton(new ExtensionConfigProvider(
-											"fizz", "fizzbuzz"))),
-							properties);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
+		properties.put("replacer-config", "fizz-buzz");
+		context.registerService(Application.class,
+				new SimpleApplication(emptySet(), singleton(
+						new ExtensionConfigProvider("fizz", "fizzbuzz"))),
+				properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		// Register a whiteboard resource targeting all applications
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
-						Boolean.TRUE);
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-						"(osgi.jaxrs.name=*)");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-						.registerService(WhiteboardResource.class,
-								new WhiteboardResource(), properties);
+		context.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
 
-				try {
+		awaitSelection.getValue();
 
-					awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-					String baseURI = getBaseURI();
+		// Do a get on each application, and the default application
 
-					// Do a get on each application, and the default application
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					CloseableHttpResponse httpResponse = client
-							.execute(RequestBuilder
-									.get(baseURI + "test/whiteboard/resource")
-									.build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					String response = assertResponse(httpResponse, 200,
-							TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Register an extension which needs config
+		// This will only be satisfied by one of the applications
 
-					// Register an extension which needs config
-					// This will only be satisfied by one of the applications
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+				"(replacer-config=*)");
+		context.registerService(WriterInterceptor.class,
+				new ConfigurableStringReplacer(), properties);
 
-					properties = new Hashtable<>();
-					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-							Boolean.TRUE);
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name=*)");
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
-							"(replacer-config=*)");
-					ServiceRegistration<WriterInterceptor> extensionReg = getContext()
-							.registerService(WriterInterceptor.class,
-									new ConfigurableStringReplacer(),
-									properties);
-					try {
+		awaitSelection.getValue();
 
-						awaitSelection.getValue();
+		// Do a get on each application, and the default application
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test/whiteboard/resource")
-								.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizz, fizzbuzz]",
-								response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test2/whiteboard/resource")
-								.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]",
-								response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "whiteboard/resource").build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizz, fizzbuzz]", response);
-					} finally {
-						extensionReg.unregister();
-					}
-				} finally {
-					resourceReg.unregister();
-				}
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
+
 	}
 
 	/**
@@ -827,8 +735,11 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationExtensionDependency() throws Exception {
 
+		// Register the first empty application at "test"
+		
 		Dictionary<String,Object> properties = new Hashtable<>();
 
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
@@ -837,132 +748,109 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(emptySet(), emptySet()), properties);
 
-		try {
+		awaitSelection.getValue();
+		
+		// Register the first empty application at "test"
 
-			awaitSelection.getValue();
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
+				"(replacer-config=*)");
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION_SELECT,
-					"(replacer-config=*)");
+		context.registerService(Application.class,
+						new SimpleApplication(
+								singleton(ConfigurableStringReplacer.class),
+								emptySet()),
+						properties);
 
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(
-									singleton(ConfigurableStringReplacer.class),
-									emptySet()),
-							properties);
+		awaitSelection.getValue();
 
-			try {
+		// Register a whiteboard application targeting all applications
+		
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
+				Boolean.TRUE);
+		properties.put(
+				JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
 
-				awaitSelection.getValue();
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-				properties = new Hashtable<>();
-				properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE,
-						Boolean.TRUE);
-				properties.put(
-						JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-						"(osgi.jaxrs.name=*)");
+		context.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
 
-				awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection.getValue();
 
-				ServiceRegistration<WhiteboardResource> resourceReg = getContext()
-						.registerService(WhiteboardResource.class,
-								new WhiteboardResource(), properties);
+		String baseURI = getBaseURI();
 
-				try {
+		// Do a get on each application, and the default application
 
-					awaitSelection.getValue();
+		CloseableHttpResponse httpResponse = client
+				.execute(RequestBuilder
+						.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					String baseURI = getBaseURI();
+		String response = assertResponse(httpResponse, 200,
+				TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					// Do a get on each application, and the default application
+		httpResponse = client.execute(RequestBuilder
+				.get(baseURI + "test2/whiteboard/resource")
+				.build());
 
-					CloseableHttpResponse httpResponse = client
-							.execute(RequestBuilder
-									.get(baseURI + "test/whiteboard/resource")
-									.build());
+		response = assertResponse(httpResponse, 404, null);
 
-					String response = assertResponse(httpResponse, 200,
-							TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		httpResponse = client.execute(RequestBuilder
+				.get(baseURI + "whiteboard/resource").build());
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "test2/whiteboard/resource")
-							.build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					response = assertResponse(httpResponse, 404, null);
+		// Register an extension which provides the config needed
+		// by the test 2 application
 
-					httpResponse = client.execute(RequestBuilder
-							.get(baseURI + "whiteboard/resource").build());
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-					assertEquals("[buzz, fizz, fizzbuzz]", response);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
+				Boolean.TRUE);
+		properties.put(
+				JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=*)");
+		properties.put("replacer-config", "fizz-buzz");
+		context.registerService(ContextResolver.class,
+						new ExtensionConfigProvider("fizz",
+								"fizzbuzz"),
+						properties);
+		awaitSelection.getValue();
 
-					// Register an extension which provides the config needed
-					// by the test 2 application
+		// Do a get on each application, and the default application
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-					awaitSelection = helper.awaitModification(runtime, 5000);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-					properties = new Hashtable<>();
-					properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-							Boolean.TRUE);
-					properties.put(
-							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-							"(osgi.jaxrs.name=*)");
-					properties.put("replacer-config", "fizz-buzz");
-					@SuppressWarnings("rawtypes")
-					ServiceRegistration<ContextResolver> extensionReg = getContext()
-							.registerService(ContextResolver.class,
-									new ExtensionConfigProvider("fizz",
-											"fizzbuzz"),
-									properties);
-					try {
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/resource")
+						.build());
 
-						awaitSelection.getValue();
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test/whiteboard/resource")
-								.build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizz, fizzbuzz]", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "test2/whiteboard/resource")
-								.build());
-
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]",
-								response);
-
-						httpResponse = client.execute(RequestBuilder
-								.get(baseURI + "whiteboard/resource").build());
-
-						response = assertResponse(httpResponse, 200,
-								TEXT_PLAIN);
-						assertEquals("[buzz, fizz, fizzbuzz]", response);
-					} finally {
-						extensionReg.unregister();
-					}
-				} finally {
-					resourceReg.unregister();
-				}
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -970,6 +858,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testSimpleWhiteboardTarget() throws Exception {
 
 		Long serviceId = (Long) runtime.getProperty(Constants.SERVICE_ID);
@@ -977,6 +866,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 		String selectFilter = "(service.id=" + serviceId + ")";
 		String rejectFilter = "(!" + selectFilter + ")";
 
+		// Register an empty application at "test", targeting the whiteboard
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
 				"/test");
@@ -985,56 +875,53 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
+		ServiceRegistration<Application> reg = context.registerService(
 				Application.class,
 				new SimpleApplication(singleton(WhiteboardResource.class),
 						emptySet()),
 				properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do the get
+		HttpUriRequest getRequest = RequestBuilder
+				.get(baseURI + "test/whiteboard/resource")
+				.build();
 
-			HttpUriRequest getRequest = RequestBuilder
-					.get(baseURI + "test/whiteboard/resource").build();
+		CloseableHttpResponse httpResponse = client.execute(getRequest);
 
-			CloseableHttpResponse httpResponse = client.execute(getRequest);
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Change the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Change the target
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				rejectFilter);
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-					rejectFilter);
-			reg.setProperties(properties);
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		httpResponse = client.execute(getRequest);
 
-			httpResponse = client.execute(getRequest);
+		assertResponse(httpResponse, 404, null);
 
-			assertResponse(httpResponse, 404, null);
+		// Reset the target
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			// Reset the target
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				selectFilter);
+		reg.setProperties(properties);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
-					selectFilter);
-			reg.setProperties(properties);
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		httpResponse = client.execute(getRequest);
 
-			httpResponse = client.execute(getRequest);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -1042,6 +929,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationIsolationContainer() throws Exception {
 
 		try {
@@ -1053,6 +941,8 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					cnfe);
 		}
 
+		// Register the first application at "test"
+
 		Dictionary<String,Object> properties = new Hashtable<>();
 
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test");
@@ -1061,79 +951,68 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
-				Application.class,
+		context.registerService(Application.class,
 				new SimpleApplication(singleton(SessionManipulator.class),
 						emptySet()),
 				properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register the second application at "test2"
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test2");
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(
-									singleton(SessionManipulator.class),
-									emptySet()),
-							properties);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, "test2");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test2");
+		context.registerService(Application.class, new SimpleApplication(
+				singleton(SessionManipulator.class), emptySet()), properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-				String baseURI = getBaseURI();
+		// Set and get a session property on test
 
-				// Set and get a session property on test
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.put(baseURI + "test/whiteboard/session/fizz")
+						.setEntity(new StringEntity("buzz"))
+						.build());
 
-				CloseableHttpResponse httpResponse = client
-						.execute(RequestBuilder
-								.put(baseURI + "test/whiteboard/session/fizz")
-								.setEntity(new StringEntity("buzz"))
-								.build());
+		assertResponse(httpResponse, 200, null);
 
-				assertResponse(httpResponse, 200, null);
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/session/fizz")
+						.build());
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "test/whiteboard/session/fizz").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("buzz", response);
 
-				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("buzz", response);
+		// Set the same property with a different value on test2
 
-				// Set the same property with a different value on test2
-
-				httpResponse = client.execute(RequestBuilder
-						.put(baseURI + "test2/whiteboard/session/fizz")
+		httpResponse = client.execute(
+				RequestBuilder.put(baseURI + "test2/whiteboard/session/fizz")
 						.setEntity(new StringEntity("fizzbuzz"))
 						.build());
 
-				assertResponse(httpResponse, 200, null);
+		assertResponse(httpResponse, 200, null);
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "test2/whiteboard/session/fizz")
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test2/whiteboard/session/fizz")
 						.build());
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("fizzbuzz", response);
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizzbuzz", response);
 
-				// Check that test was isolated from the change
+		// Check that test was isolated from the change
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "test/whiteboard/session/fizz").build());
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/session/fizz")
+						.build());
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("buzz", response);
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("buzz", response);
+
 	}
 
 	/**
@@ -1142,58 +1021,52 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testShadowDefaultPath() throws Exception {
+
+		// Register a whiteboard resource
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<StringResource> reg = getContext().registerService(
-				StringResource.class, new StringResource("fizz"), properties);
+		context.registerService(StringResource.class,
+				new StringResource("fizz"), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/string").build());
 
-			CloseableHttpResponse httpResponse = client.execute(
-					RequestBuilder.get(baseURI + "whiteboard/string").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("fizz", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("fizz", response);
+		// Register an application at the default path
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE, "/");
 
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
+		context.registerService(Application.class,
 							new SimpleApplication(emptySet(),
 									singleton(new StringResource("buzz"))),
 							properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		// Check the overriding resource is called
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/string").build());
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "whiteboard/string").build());
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("buzz", response);
 
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("buzz", response);
-
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -1202,60 +1075,53 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testMoveDefaultApplication() throws Exception {
 
+		// Register a whiteboard resource
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<WhiteboardResource> reg = getContext()
-				.registerService(WhiteboardResource.class,
+		context.registerService(WhiteboardResource.class,
 						new WhiteboardResource(), properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "whiteboard/resource").build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "whiteboard/resource").build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizz, fizzbuzz]", response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals("[buzz, fizz, fizzbuzz]", response);
+		// Register a new default application at "test"
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test");
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, ".default");
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
-					"/test");
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_NAME, ".default");
+		context.registerService(Application.class,
+				new SimpleApplication(emptySet(),
+						singleton(new StringReplacer("fizz", "fizzbuzz"))),
+				properties);
 
-			ServiceRegistration<Application> reg2 = getContext()
-					.registerService(Application.class,
-							new SimpleApplication(emptySet(), singleton(
-									new StringReplacer("fizz", "fizzbuzz"))),
-							properties);
+		awaitSelection.getValue();
 
-			try {
+		// Do the get
+		httpResponse = client.execute(
+				RequestBuilder.get(baseURI + "test/whiteboard/resource")
+						.build());
 
-				awaitSelection.getValue();
+		response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 
-				httpResponse = client.execute(RequestBuilder
-						.get(baseURI + "test/whiteboard/resource").build());
-
-				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
-
-			} finally {
-				reg2.unregister();
-			}
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -1263,7 +1129,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationServiceProps() throws Exception {
+
+		// Register an application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
@@ -1271,33 +1140,27 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext()
+		ServiceRegistration<Application> reg = context
 				.registerService(Application.class,
 						new SimpleApplication(emptySet(),
 								singleton(new ConfigurationAwareResource())),
 						properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		String baseURI = getBaseURI();
 
-			String baseURI = getBaseURI();
+		// Do a get
 
-			// Do a get
+		CloseableHttpResponse httpResponse = client.execute(RequestBuilder
+				.get(baseURI + "test/whiteboard/config/service.id")
+				.build());
 
-			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
-					.get(baseURI + "test/whiteboard/config/service.id")
-					.build());
+		String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+		assertEquals(
+				String.valueOf(reg.getReference().getProperty("service.id")),
+				response);
 
-			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
-			assertEquals(
-					String.valueOf(
-							reg.getReference().getProperty("service.id")),
-					response);
-
-		} finally {
-			reg.unregister();
-		}
 	}
 
 	/**
@@ -1305,7 +1168,10 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testApplicationServicePropsInFeature() throws Exception {
+
+		// Register an application at "test"
 
 		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE,
@@ -1314,52 +1180,41 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 
 		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
 
-		ServiceRegistration<Application> reg = getContext().registerService(
+		ServiceRegistration<Application> reg = context.registerService(
 				Application.class,
 				new SimpleApplication(emptySet(),
 						singleton(new ConfigurationAwareResource())),
 				properties);
 
-		try {
+		awaitSelection.getValue();
 
-			awaitSelection.getValue();
+		// Register an extension targeting test and grab the service properties
 
-			properties = new Hashtable<>();
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION,
-					Boolean.TRUE);
-			properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
-					"(osgi.jaxrs.name=test)");
+		properties = new Hashtable<>();
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(osgi.jaxrs.name=test)");
 
-			awaitSelection = helper.awaitModification(runtime, 5000);
+		awaitSelection = helper.awaitModification(runtime, 5000);
 
-			AtomicReference<Object> value = new AtomicReference<Object>();
+		AtomicReference<Object> value = new AtomicReference<Object>();
 
-			ServiceRegistration<Feature> extensionReg = getContext()
-					.registerService(Feature.class,
-							ctx -> {
-								value.set(ctx.getConfiguration().getProperty(
-										JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES));
-								return true;
-							}, properties);
+		context.registerService(Feature.class, ctx -> {
+			value.set(ctx.getConfiguration()
+					.getProperty(
+							JaxrsWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES));
+			return true;
+		}, properties);
 
-			try {
+		awaitSelection.getValue();
 
-				awaitSelection.getValue();
+		// Get the
+		Object o = value.get();
 
-				Object o = value.get();
-
-				assertNotNull(o);
-				assertTrue(o instanceof Map);
-				assertEquals(
-						reg.getReference().getProperty("service.id"),
+		assertNotNull(o);
+		assertTrue(o instanceof Map);
+		assertEquals(reg.getReference().getProperty("service.id"),
 						((Map< ? , ? >) o).get("service.id"));
 
-			} finally {
-				extensionReg.unregister();
-			}
-
-		} finally {
-			reg.unregister();
-		}
 	}
 }

@@ -1596,15 +1596,15 @@ ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
     <bibliolist>
       <bibliomixed xml:id="i3131859"><title>Java Naming and Directory
       Interface</title><biblioid class="uri"><link
-      xlink:href="http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/jndi/index.html"/></biblioid></bibliomixed>
 
-      <bibliomixed><title>Java Naming and Directory Interface Tutorial from
-      Sun Microsystems</title><biblioid class="uri"><link
-      xlink:href="http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html"/></biblioid></bibliomixed>
+      <bibliomixed><title>Java Naming and Directory Interface
+      Tutorial</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/javase/tutorial/jndi/index.html"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i3109941"><title>JNDI Standard Property
       Names</title><biblioid class="uri"><link
-      xlink:href="http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html"/></biblioid></bibliomixed>
+      xlink:href="https://docs.oracle.com/javase/8/docs/api/javax/naming/Context.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

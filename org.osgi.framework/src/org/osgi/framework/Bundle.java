@@ -359,8 +359,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 *         {@link BundleException#RESOLVE_ERROR},
 	 *         {@link BundleException#STATECHANGE_ERROR}, and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
@@ -380,8 +379,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 *         {@link BundleException#RESOLVE_ERROR},
 	 *         {@link BundleException#STATECHANGE_ERROR}, and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
@@ -451,8 +449,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @throws BundleException BundleException types thrown by this method
 	 *         include: {@link BundleException#STATECHANGE_ERROR} and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
@@ -469,8 +466,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @throws BundleException BundleException types thrown by this method
 	 *         include: {@link BundleException#STATECHANGE_ERROR} and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
@@ -554,8 +550,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 *         {@link BundleException#RESOLVE_ERROR},
 	 *         {@link BundleException#STATECHANGE_ERROR}, and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,LIFECYCLE]} for both the current
 	 *         bundle and the updated bundle, and the Java Runtime Environment
@@ -581,8 +576,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 *         {@link BundleException#RESOLVE_ERROR},
 	 *         {@link BundleException#STATECHANGE_ERROR}, and
 	 *         {@link BundleException#ACTIVATOR_ERROR}.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,LIFECYCLE]} for both the current
 	 *         bundle and the updated bundle, and the Java Runtime Environment
@@ -610,8 +604,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * The following steps are required to uninstall a bundle:
 	 * <ol>
-	 * <li>If this bundle's state is {@code UNINSTALLED} then an
-	 * {@code IllegalStateException} is thrown.</li>
+	 * <li>If this bundle's state is {@code UNINSTALLED}, then this method does
+	 * nothing and returns.</li>
 	 * <li>If this bundle's state is {@code ACTIVE}, {@code STARTING} or
 	 * {@code STOPPING}, this bundle is stopped as described in the
 	 * {@code Bundle.stop} method. If {@code Bundle.stop} throws an exception, a
@@ -643,8 +637,6 @@ public interface Bundle extends Comparable<Bundle> {
 	 *         does not complete in a timely manner. BundleException types
 	 *         thrown by this method include:
 	 *         {@link BundleException#STATECHANGE_ERROR}
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java Runtime
 	 *         Environment supports permissions.

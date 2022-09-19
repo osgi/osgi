@@ -651,11 +651,11 @@
     <bibliolist>
       <bibliomixed xml:id="i1227403"><title>JSR 10 Preferences
       API</title><biblioid class="uri"><link
-      xlink:href="http://www.jcp.org/jsr/detail/10.jsp"/></biblioid></bibliomixed>
+      xlink:href="https://www.jcp.org/en/jsr/detail?id=10"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1219521"><title>RFC 2045 Base 64
       encoding</title><biblioid class="uri"><link
-      xlink:href="http://www.ietf.org/rfc/rfc2045.txt"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc2045.txt"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

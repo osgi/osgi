@@ -2872,11 +2872,11 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
       <bibliomixed
       xml:id="i1709441"><title>UUIDs</title><biblioid class="uri"><link
-      xlink:href="http://en.wikipedia.org/wiki/Universally_Unique_Identifier"/></biblioid></bibliomixed>
+      xlink:href="https://en.wikipedia.org/wiki/Universally_Unique_Identifier"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1788834"><title>Service Location Protocol
       (SLP)</title><biblioid class="uri"><link
-      xlink:href="http://en.wikipedia.org/wiki/Service_Location_Protocol"/></biblioid></bibliomixed>
+      xlink:href="https://en.wikipedia.org/wiki/Service_Location_Protocol"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="i1789952"><title>JGroups</title><biblioid class="uri"><link
@@ -2884,11 +2884,11 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
       <bibliomixed
       xml:id="i1789020"><title>UDDI</title><biblioid class="uri"><link
-      xlink:href="http://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration"/></biblioid></bibliomixed>
+      xlink:href="https://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1789031"><title>Service Component Architecture
       (SCA)</title><biblioid class="uri"><link
-      xlink:href="http://www.osoa.org/display/Main/Home"/></biblioid></bibliomixed>
+      xlink:href="https://www.osoa.org/"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

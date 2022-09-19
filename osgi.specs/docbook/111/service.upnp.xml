@@ -963,17 +963,17 @@
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="i1586441"><title>UPnP
-      Forum</title><biblioid class="uri"><link
-      xlink:href="http://www.upnp.org"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="i1586441"><title>Open Connectivity
+      Foundation</title><biblioid class="uri"><link
+      xlink:href="https://openconnectivity.org/developer/specifications/upnp-resources/upnp/"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1325817"><title>XML
       Schema</title><biblioid class="uri"><link
-      xlink:href="http://www.w3.org/TR/xmlschema-2"/></biblioid></bibliomixed>
+      xlink:href="https://www.w3.org/TR/xmlschema-2"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1325829"><title>ISO 8601 Date And Time
       formats</title><biblioid class="uri"><link
-      xlink:href="http://www.iso.ch"/></biblioid></bibliomixed>
+      xlink:href="https://www.iso.org/iso-8601-date-and-time-format.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

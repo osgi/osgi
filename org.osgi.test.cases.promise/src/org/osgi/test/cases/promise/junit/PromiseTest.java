@@ -1392,6 +1392,10 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.filter(null));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.filter(null));
 	}
 
 	@Test
@@ -1429,6 +1433,10 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.map(null));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.map(null));
 	}
 
 	@Test
@@ -1467,6 +1475,10 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.flatMap(null));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.flatMap(null));
 	}
 
 	@Test
@@ -1485,6 +1497,21 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void recover_type_no_failure() throws Exception {
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.resolved(value1);
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(t -> {
+			latch.countDown();
+			return value2;
+		}, TimeoutException.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value1);
+		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+	}
+
+	@Test
 	public void testRecoverFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = Long.valueOf(43);
@@ -1495,6 +1522,35 @@ public class PromiseTest {
 		});
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
+	}
+
+	@Test
+	public void recover_type_failure_match() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure);
+		final Promise<Number> p2 = p1.recover(t -> {
+			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
+			return value2;
+		}, Error.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value2);
+	}
+
+	@Test
+	public void recover_type_failure_no_match() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure);
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(t -> {
+			latch.countDown();
+			return value2;
+		}, TimeoutException.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
 	}
 
 	@Test
@@ -1533,6 +1589,18 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.recover(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.recover(p -> "recovered", null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.recover(null, TimeoutException.class));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.recover(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.recover(p -> "recovered", null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.recover(null, TimeoutException.class));
 	}
 
 	@Test
@@ -1551,6 +1619,21 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void recover_with_type_no_failure() throws Exception {
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.resolved(value1);
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recoverWith(t -> {
+			latch.countDown();
+			return factory.resolved(value2);
+		}, TimeoutException.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value1);
+		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+	}
+
+	@Test
 	public void testRecoverWithFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = Long.valueOf(43);
@@ -1561,6 +1644,35 @@ public class PromiseTest {
 		});
 		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value2);
+	}
+
+	@Test
+	public void recover_with_type_failure_match() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure);
+		final Promise<Number> p2 = p1.recoverWith(t -> {
+			assertThat(t).hasFailedWithThrowableThat().isSameAs(failure);
+			return factory.resolved(value2);
+		}, Error.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value2);
+	}
+
+	@Test
+	public void recover_with_type_failure_no_match() throws Exception {
+		final Throwable failure = new Error("fail");
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure);
+		final Promise<Number> p2 = p1.recoverWith(t -> {
+			latch.countDown();
+			return factory.resolved(value2);
+		}, TimeoutException.class);
+		assertThat(p2).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasFailedWithThrowableThat()
+				.isSameAs(failure);
+		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
 	}
 
 	@Test
@@ -1599,6 +1711,18 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.recoverWith(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.recoverWith(p -> p1, null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.recoverWith(null, TimeoutException.class));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.recoverWith(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.recoverWith(p -> p1, null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.recoverWith(null, TimeoutException.class));
 	}
 
 	@Test
@@ -1613,6 +1737,17 @@ public class PromiseTest {
 	}
 
 	@Test
+	public void fallback_to_type_no_failure() throws Exception {
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.resolved(value1);
+		final Promise<Long> p2 = factory.resolved(value2);
+		final Promise<Number> p3 = p1.fallbackTo(p2, TimeoutException.class);
+		assertThat(p3).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value1);
+	}
+
+	@Test
 	public void testFallbackToFailure() throws Exception {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
@@ -1621,6 +1756,34 @@ public class PromiseTest {
 		final Promise<Number> p2 = factory.failed(failure2);
 		final Promise<Long> p3 = factory.resolved(value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
+		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value3);
+	}
+
+	@Test
+	public void fallback_to_type_failure_match() throws Exception {
+		final Error failure1 = new Error("fail1");
+		final Error failure2 = new Error("fail2");
+		final Long value3 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure1);
+		final Promise<Number> p2 = factory.failed(failure2);
+		final Promise<Long> p3 = factory.resolved(value3);
+		final Promise<Number> p4 = p1.fallbackTo(p2, Error.class)
+				.fallbackTo(p3);
+		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
+				.hasSameValue(value3);
+	}
+
+	@Test
+	public void fallback_to_type_failure_no_match() throws Exception {
+		final Error failure1 = new Error("fail1");
+		final Long value2 = Long.valueOf(42);
+		final Long value3 = Long.valueOf(43);
+		final Promise<Number> p1 = factory.failed(failure1);
+		final Promise<Number> p2 = factory.resolved(value2);
+		final Promise<Long> p3 = factory.resolved(value3);
+		final Promise<Number> p4 = p1.fallbackTo(p2, TimeoutException.class)
+				.fallbackTo(p3);
 		assertThat(p4).resolvesWithin(WAIT_TIME, TimeUnit.SECONDS)
 				.hasSameValue(value3);
 	}
@@ -1646,6 +1809,18 @@ public class PromiseTest {
 		String value1 = new String("value");
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException().isThrownBy(() -> p1.fallbackTo(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.fallbackTo(p1, null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.fallbackTo(null, TimeoutException.class));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException().isThrownBy(() -> p2.fallbackTo(null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.fallbackTo(p1, null));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.fallbackTo(null, TimeoutException.class));
 	}
 
 	@Test
@@ -2037,6 +2212,11 @@ public class PromiseTest {
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.thenAccept((Consumer<String>) null));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.thenAccept((Consumer<String>) null));
 	}
 
 	@Test
@@ -2068,6 +2248,24 @@ public class PromiseTest {
 		String value = new String("value");
 		d.resolve(value);
 		assertThat(latch.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+		assertThat(p).hasSameValue(value);
+	}
+
+	@Test
+	public void on_failure_type_no_failure() throws Exception {
+		final CountDownLatch latchAll = new CountDownLatch(1);
+		final CountDownLatch latchType = new CountDownLatch(1);
+		final Deferred<String> d = factory.deferred();
+		final Promise<String> p = d.getPromise()
+				.onFailure(t -> latchType.countDown(), TimeoutException.class)
+				.onFailure(t -> latchAll.countDown());
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+		assertThat(latchType.getCount()).isGreaterThan(0L);
+		assertThat(p).isNotDone();
+		String value = new String("value");
+		d.resolve(value);
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+		assertThat(latchType.getCount()).isGreaterThan(0L);
 		assertThat(p).hasSameValue(value);
 	}
 
@@ -2108,6 +2306,76 @@ public class PromiseTest {
 		assertThat(result.get()).isSameAs(failure);
 	}
 
+	public interface LatchException {
+		void countDown();
+	}
+
+	public static class TestException extends RuntimeException
+			implements LatchException {
+		private static final long serialVersionUID = 1L;
+		private final CountDownLatch latch;
+		public TestException(CountDownLatch latch) {
+			this.latch = latch;
+		}
+
+		@Override
+		public void countDown() {
+			latch.countDown();
+		}
+	}
+
+	@Test
+	public void on_failure_type_failure_match() throws Exception {
+		final CountDownLatch latchAll = new CountDownLatch(1);
+		final CountDownLatch latchType = new CountDownLatch(1);
+		final Deferred<String> d = factory.deferred();
+		final AtomicReference<Throwable> result = new AtomicReference<>();
+		final Throwable failure = new TestException(latchType);
+		final Promise<String> p = d.getPromise()
+				.onFailure(LatchException::countDown, LatchException.class)
+				.onFailure(t -> {
+			result.set(t);
+			latchAll.countDown();
+		});
+
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+		assertThat(latchType.getCount()).isGreaterThan(0L);
+		assertThat(p).isNotDone();
+		d.fail(failure);
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isTrue();
+		assertThat(latchType.await(WAIT_TIME, TimeUnit.SECONDS)).isTrue();
+		assertThat(p).hasFailedWithThrowableThat().isSameAs(failure);
+		assertThat(catchThrowableOfType(() -> p.getValue(),
+				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThat(result.get()).isSameAs(failure);
+	}
+
+	@Test
+	public void on_failure_type_failure_no_match() throws Exception {
+		final CountDownLatch latchAll = new CountDownLatch(1);
+		final CountDownLatch latchType = new CountDownLatch(1);
+		final Deferred<String> d = factory.deferred();
+		final AtomicReference<Throwable> result = new AtomicReference<>();
+		final Throwable failure = new TestException(latchType);
+		final Promise<String> p = d.getPromise()
+				.onFailure(t -> latchType.countDown(), TimeoutException.class)
+				.onFailure(t -> {
+					result.set(t);
+					latchAll.countDown();
+				});
+
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isFalse();
+		assertThat(latchType.getCount()).isGreaterThan(0L);
+		assertThat(p).isNotDone();
+		d.fail(failure);
+		assertThat(latchAll.await(WAIT_TIME, TimeUnit.SECONDS)).isTrue();
+		assertThat(latchType.getCount()).isGreaterThan(0L);
+		assertThat(p).hasFailedWithThrowableThat().isSameAs(failure);
+		assertThat(catchThrowableOfType(() -> p.getValue(),
+				InvocationTargetException.class).getCause()).isSameAs(failure);
+		assertThat(result.get()).isSameAs(failure);
+	}
+
 	@Test
 	public void testOnResolveNull1() throws Exception {
 		Deferred<String> d1 = factory.deferred();
@@ -2130,14 +2398,36 @@ public class PromiseTest {
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
 				.isThrownBy(() -> p1.onSuccess((Consumer<String>) null));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.onSuccess((Consumer<String>) null));
 	}
 
 	@Test
 	public void testOnFailureNull() throws Exception {
 		String value1 = new String("value");
+		Consumer<Object> consumerNull = null;
+		Consumer<Object> consumerEmpty = t -> {
+		};
+		Class<Throwable> classNull = null;
 		Promise<String> p1 = factory.resolved(value1);
 		assertThatNullPointerException()
-				.isThrownBy(() -> p1.onFailure((Consumer<Throwable>) null));
+				.isThrownBy(() -> p1.onFailure(consumerNull));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p1.onFailure(consumerEmpty, classNull));
+		assertThatNullPointerException().isThrownBy(
+				() -> p1.onFailure(consumerNull, TimeoutException.class));
+
+		Error failure2 = new Error("fail2");
+		Promise<String> p2 = factory.failed(failure2);
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.onFailure(consumerNull));
+		assertThatNullPointerException()
+				.isThrownBy(() -> p2.onFailure(consumerEmpty, classNull));
+		assertThatNullPointerException().isThrownBy(() -> p2
+				.onFailure(consumerNull, TimeoutException.class));
 	}
 
 	@Test

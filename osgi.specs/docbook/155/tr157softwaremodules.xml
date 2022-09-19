@@ -851,30 +851,30 @@
     <bibliolist>
       <bibliomixed xml:id="i747111"><title>Broadband
       Forum</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i749662"><title>RFC 4122 A Universally Unique
       IDentifier (UUID) URN
       Namespace</title><biblioid class="uri"><link
-      xlink:href="http://tools.ietf.org/html/rfc4122"/></biblioid></bibliomixed>
+      xlink:href="https://www.ietf.org/rfc/rfc4122.txt"/></biblioid></bibliomixed>
 
       <bibliomixed><title>TR-157a3 Component Objects for
       CWMP</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i751018"><title>TR-157a3 Internet Gateway Device
       Software
       Modules</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/cwmp/tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/cwmp/tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i749742"><title>TR-069a3 CPE WAN Management
       Protocol</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i749746"><title>TR-106a4 Data Model Template for
       TR-069-Enabled
       Devices</title><biblioid class="uri"><link
-      xlink:href="http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 </chapter>

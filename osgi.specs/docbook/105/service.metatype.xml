@@ -1483,7 +1483,7 @@ female=Female</programlisting>
 
       <programlisting>@ObjectClassDefinition(localization = "OSGI-INF/l10n/member",
     description = "%member.description",
-    name = "%member.name"
+    name = "%member.name",
     icon = @Icon(resource = "icon/member-32.png", size = 32))
 @interface Member {
   @AttributeDefinition(type = AttributeType.PASSWORD,
@@ -1771,7 +1771,7 @@ public class MyComponent {
     <bibliolist>
       <bibliomixed xml:id="i1215866"><title>LDAP.</title><biblioid
       class="uri"><link
-      xlink:href="http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol"/></biblioid></bibliomixed>
+      xlink:href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol"/></biblioid></bibliomixed>
 
       <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
       Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,

@@ -434,12 +434,12 @@ public class GenericDTO extends DTO{
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0001.ref"><title>oneM2M: TS-0001 Functional Architecture V3.15.1
       </title><biblioid class="uri"><link
-      xlink:href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0001-Functional_Architecture-V3_15_1.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0004.ref"><title>oneM2M: TS-0004 Service Layer Core Protocol  V3.11.2
       </title><biblioid class="uri"><link
-      xlink:href="http://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf"/></biblioid></bibliomixed>
+      xlink:href="https://www.onem2m.org/images/files/deliverables/Release3/TS-0004_Service_Layer_Core_Protocol_V3_11_2.pdf"/></biblioid></bibliomixed>
     </bibliolist>
     <bibliolist>
       <bibliomixed xml:id="service.onem2m.ts-0008.ref"><title>oneM2M: TS-0008 CoAP Protocol Binding V3.3.1
