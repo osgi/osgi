@@ -1,20 +1,52 @@
-org.apache.geronimo.specs.geronimo-activation_1.1_spec;version=1.0.2
-jakarta.xml.bind-api;version=2.3.3
-jakarta.xml.ws-api;version=2.3.3
-jakarta.xml.soap-api;version=1.4.2
+# Core gecko modules
 
-org.apache.aries.javax.jax.rs-api;version=1.0.4
-org.apache.aries.jax.rs.whiteboard;version=1.0.4
+org.gecko.rest.jersey;version=6.0.0
+org.gecko.rest.jersey.jetty;version=6.0.0
+org.gecko.rest.jersey.sse;version=6.0.0
+org.gecko.rest.jersey.tck;version=6.0.0
 
-org.apache.geronimo.specs.geronimo-annotation_1.3_spec;version=1.1
-org.apache.geronimo.specs.geronimo-json_1.0_spec;version=1.0.0
+# Dependencies from the OSGi build
+org.osgi.service.jakartars;version=latest
+org.osgi.util.promise;version=latest
+org.osgi.util.converter;version=latest
+org.osgi.impl.bundle.serviceloader;version=latest
+org.osgi.impl.service.cm;version=latest
+org.osgi.impl.service.component;version=latest
+org.osgi.impl.service.configurator;version=latest
 
-org.osgi.service.jaxrs;version=latest
-org.osgi.impl.service.http.whiteboard;version=latest
+# Jersey dependencies
+org.glassfish.hk2.api;version=3.0.3
+org.glassfish.hk2.external.aopalliance-repackaged;version=3.0.3
+org.glassfish.hk2.locator;version=3.0.3
+org.glassfish.hk2.utils;version=3.0.3
+org.glassfish.jersey.containers.jersey-container-servlet-core;version=3.0.8
+org.glassfish.jersey.core.jersey-client;version=3.0.8
+org.glassfish.jersey.core.jersey-common;version=3.0.8
+org.glassfish.jersey.core.jersey-server;version=3.0.8
+org.glassfish.jersey.inject.jersey-hk2;version=3.0.8
+org.glassfish.jersey.media.jersey-media-sse;version=3.0.8
+org.glassfish.hk2.osgi-resource-locator;version=1.0.3
 
-log4j.over.slf4j;version=1.7.7
-slf4j.api;version=1.7.7
-slf4j.simple;version=1.7.7
+# Jetty dependencies
 
-org.apache.ws.xmlschema.core;version=2.2.1
-org.objectweb.asm.all;version=5.0.4
+org.eclipse.jetty.http;version=11.0.12
+org.eclipse.jetty.io;version=11.0.12
+org.eclipse.jetty.security;version=11.0.12
+org.eclipse.jetty.server;version=11.0.12
+org.eclipse.jetty.servlet;version=11.0.12
+org.eclipse.jetty.util;version=11.0.12
+
+# Jakarta dependencies
+
+jakarta.ws.rs-api;version=3.1.0
+jakarta.annotation-api;version=2.1.1
+jakarta.inject.jakarta.inject-api;version=2.0.1
+org.apache.felix.http.servlet-api;version=2.0.0
+
+# Other dependencies
+javassist;version=3.29.2
+org.objectweb.asm;version=9.3.0
+slf4j.api;version=1.7.36
+slf4j.simple;version=1.7.36
+
+	
