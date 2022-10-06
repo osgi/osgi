@@ -23,7 +23,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     ${osgi.annotation.buildpath}, \
 	${template;osgi.cmpn.specs;${@};version=project}, \
     osgi.core;maven-scope=provided;version=latest, \
-    org.apache.felix.http.servlet-api;version=latest, \
+    org.apache.felix.http.servlet-api;version=1.1.2, \
     org.eclipse.persistence.jpa_spec;version=latest, \
     org.apache.geronimo.specs.geronimo-atinject_1.0_spec;version=1.1,\
     org.apache.geronimo.specs.geronimo-jcdi_2.0_spec;version=1.1,\
