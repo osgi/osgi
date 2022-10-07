@@ -346,7 +346,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=test2)");
+				"(osgi.jakartars.name=test2)");
 		resourceReg.setProperties(properties);
 
 		awaitSelection.getValue();
@@ -375,7 +375,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name="
+				"(osgi.jakartars.name="
 						+ JakartarsWhiteboardConstants.JAKARTA_RS_DEFAULT_APPLICATION
 						+ ")");
 		resourceReg.setProperties(properties);
@@ -405,7 +405,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 		resourceReg.setProperties(properties);
 
 		awaitSelection.getValue();
@@ -475,7 +475,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 
 		awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -555,7 +555,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 
 		awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -597,7 +597,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=t*)");
+				"(osgi.jakartars.name=t*)");
 		context.registerService(WriterInterceptor.class,
 				new StringReplacer("fizz", "fizzbuzz"), properties);
 
@@ -672,7 +672,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 
 		awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -715,7 +715,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 		properties.put(JakartarsWhiteboardConstants.JAKARTA_RS_EXTENSION_SELECT,
 				"(replacer-config=*)");
 		context.registerService(WriterInterceptor.class,
@@ -799,7 +799,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 
 		awaitSelection = helper.awaitModification(runtime, 5000);
 
@@ -843,7 +843,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=*)");
+				"(osgi.jakartars.name=*)");
 		properties.put("replacer-config", "fizz-buzz");
 		context.registerService(ContextResolver.class,
 						new ExtensionConfigProvider("fizz",
@@ -1223,7 +1223,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				Boolean.TRUE);
 		properties.put(
 				JakartarsWhiteboardConstants.JAKARTA_RS_APPLICATION_SELECT,
-				"(osgi.jaxrs.name=test)");
+				"(osgi.jakartars.name=test)");
 
 		awaitSelection = helper.awaitModification(runtime, 5000);
 
