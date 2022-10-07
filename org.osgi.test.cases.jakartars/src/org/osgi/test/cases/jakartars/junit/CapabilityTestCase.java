@@ -85,9 +85,10 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 				if (usesDirective != null) {
 					Set<String> packages = new HashSet<String>(Arrays
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
-					uses = packages.contains("org.osgi.service.jaxrs.runtime")
+					uses = packages
+							.contains("org.osgi.service.jakartars.runtime")
 							&& packages.contains(
-									"org.osgi.service.jaxrs.runtime.dto");
+									"org.osgi.service.jakartars.runtime.dto");
 				}
 
 				break;
@@ -133,7 +134,8 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 					Set<String> packages = new HashSet<String>(Arrays
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
 					uses = packages.contains("jakarta.ws.rs.client") &&
-							packages.contains("org.osgi.service.jaxrs.client");
+							packages.contains(
+									"org.osgi.service.jakartars.client");
 				}
 
 				break;
@@ -179,7 +181,8 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 				if (usesDirective != null) {
 					Set<String> packages = new HashSet<String>(Arrays
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
-					uses = packages.contains("org.osgi.service.jaxrs.client");
+					uses = packages
+							.contains("org.osgi.service.jakartars.client");
 				}
 
 				break;
@@ -230,7 +233,7 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 						Collection<String> requiredPackages = new ArrayList<>(
 								JAX_RS_PACKAGES);
 						requiredPackages
-								.add("org.osgi.service.jaxrs.whiteboard");
+								.add("org.osgi.service.jakartars.whiteboard");
 
 						Set<String> packages = new HashSet<String>(
 								Arrays.asList(usesDirective.trim()
