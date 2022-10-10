@@ -20,6 +20,7 @@ org.glassfish.hk2.external.aopalliance-repackaged;version=3.0.3
 org.glassfish.hk2.locator;version=3.0.3
 org.glassfish.hk2.utils;version=3.0.3
 org.glassfish.jersey.containers.jersey-container-servlet-core;version=3.0.8
+org.glassfish.jersey.containers.jersey-container-servlet;version=3.0.8
 org.glassfish.jersey.core.jersey-client;version=3.0.8
 org.glassfish.jersey.core.jersey-common;version=3.0.8
 org.glassfish.jersey.core.jersey-server;version=3.0.8
@@ -39,8 +40,11 @@ org.eclipse.jetty.util;version=11.0.12
 # Jakarta dependencies
 
 jakarta.ws.rs-api;version=3.1.0
+jakarta.activation-api;version=2.1.0
 jakarta.annotation-api;version=2.1.1
 jakarta.inject.jakarta.inject-api;version=2.0.1
+jakarta.validation.jakarta.validation-api;version=3.0.2
+jakarta.xml.bind-api;version=4.0.0
 org.apache.felix.http.servlet-api;version=2.0.0
 
 # Other dependencies
@@ -48,5 +52,9 @@ javassist;version=3.29.2
 org.objectweb.asm;version=9.3.0
 slf4j.api;version=1.7.36
 slf4j.simple;version=1.7.36
+com.sun.activation.jakarta.activation;version=2.0.1
+com.sun.xml.bind.jaxb-osgi;version=4.0.1
+
+
 
 	
