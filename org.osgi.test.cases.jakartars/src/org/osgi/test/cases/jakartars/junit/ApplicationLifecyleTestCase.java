@@ -958,7 +958,7 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 
 		try {
 			getClass().getClassLoader()
-					.loadClass("javax.servlet.http.HttpSession");
+					.loadClass("jakarta.servlet.http.HttpSession");
 		} catch (ClassNotFoundException cnfe) {
 			Assume.assumeNoException(
 					"No servlet container detected, so session isolation cannot be tested",
