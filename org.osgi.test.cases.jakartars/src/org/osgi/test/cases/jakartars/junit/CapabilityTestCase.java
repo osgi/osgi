@@ -216,7 +216,7 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 					.getCapabilities(IMPLEMENTATION_NAMESPACE);
 
 			for (Capability cap : capabilities) {
-				hasCapability = "osgi.jaxrs".equals(
+				hasCapability = "osgi.jakartars".equals(
 						cap.getAttributes().get(IMPLEMENTATION_NAMESPACE));
 				if (hasCapability) {
 					Version required = Version
