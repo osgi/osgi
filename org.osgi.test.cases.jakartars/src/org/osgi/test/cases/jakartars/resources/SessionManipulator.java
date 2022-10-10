@@ -17,7 +17,7 @@
  *******************************************************************************/
 package org.osgi.test.cases.jakartars.resources;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
