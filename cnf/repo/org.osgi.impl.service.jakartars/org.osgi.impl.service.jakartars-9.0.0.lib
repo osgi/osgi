@@ -1,9 +1,3 @@
-# Core gecko modules
-
-org.gecko.rest.jersey;version=6.0.0
-org.gecko.rest.jersey.jetty;version=6.0.0
-org.gecko.rest.jersey.sse;version=6.0.0
-org.gecko.rest.jersey.tck;version=6.0.0
 
 # Dependencies from the OSGi build
 org.osgi.service.jakartars;version=latest
@@ -55,6 +49,12 @@ slf4j.simple;version=1.7.36
 com.sun.activation.jakarta.activation;version=2.0.1
 com.sun.xml.bind.jaxb-osgi;version=4.0.1
 
+# Core gecko modules
+
+org.gecko.rest.jersey;version=6.0.0
+org.gecko.rest.jersey.jetty;version=6.0.0
+org.gecko.rest.jersey.sse;version=6.0.0
+org.gecko.rest.jersey.tck;version=6.0.0
 
 
 	
