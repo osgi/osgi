@@ -1,0 +1,9 @@
+# Set javac settings from JDT prefs
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath: \
+	${osgi.annotation.buildpath},\
+	org.osgi.service.feature;version=1.0.0,\
+	org.osgi.namespace.implementation;version=1.0
