@@ -4,8 +4,23 @@ import java.net.URL;
 
 import org.osgi.service.feature.Feature;
 
+/**
+ * Create a Feature Launcher.
+ */
 public interface LauncherFactory {
-	Launcher newLauncher(URL... models);
+	/**
+	 * Create a new launcher based on the provided URLs.
+	 * 
+	 * @param features URLs to the Feature files.
+	 * @return the new launcher;
+	 */
+	Launcher newLauncher(URL... features);
 
-	Launcher newLauncher(Feature... models);
+	/**
+	 * Create a new launcher based on the provided Feature instances;
+	 * 
+	 * @param features The features the launcher should use.
+	 * @return the new launcher.
+	 */
+	Launcher newLauncher(Feature... features);
 }
