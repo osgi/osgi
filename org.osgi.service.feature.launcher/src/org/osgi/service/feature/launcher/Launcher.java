@@ -1,23 +1,18 @@
 package org.osgi.service.feature.launcher;
 
-import org.osgi.service.feature.Feature;
+import org.osgi.framework.launch.Framework;
 
 /**
  * A launcher can launch one or more Feature models into a running system.
  */
 public interface Launcher {
 	/**
-	 * Returns the effective Feature, which combines all features provided to
-	 * the launcher together.
+	 * Start the launcher. This method is asynchronous and will return as soon
+	 * as the launching has been initiated.
 	 * 
-	 * @return The effective Feature.
+	 * @return The Framework the Feature is launched into.
 	 */
-	Feature getEffectiveFeature();
-
-	/**
-	 * Start the launcher.
-	 */
-	void start();
+	Framework start();
 
 	/**
 	 * Wait until the system has stopped.

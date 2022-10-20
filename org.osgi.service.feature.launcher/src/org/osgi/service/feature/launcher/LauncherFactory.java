@@ -11,16 +11,16 @@ public interface LauncherFactory {
 	/**
 	 * Create a new launcher based on the provided URLs.
 	 * 
-	 * @param features URLs to the Feature files.
+	 * @param feature URL to the Feature file.
 	 * @return the new launcher;
 	 */
-	Launcher newLauncher(URL... features);
+	Launcher newLauncher(URL feature);
 
 	/**
 	 * Create a new launcher based on the provided Feature instances;
 	 * 
-	 * @param features The features the launcher should use.
+	 * @param feature The feature the launcher should use.
 	 * @return the new launcher.
 	 */
-	Launcher newLauncher(Feature... features);
+	Launcher newLauncher(Feature... feature);
 }

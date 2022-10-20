@@ -35,8 +35,143 @@
   <section>
       <title>Introduction</title>
 
-      <para>Here goes text...</para>
+      <para>Here goes the intro text...</para>
   </section>
+
+  <section>
+  	<title>Launching a Feature</title>
+  	<para>To launch a feature, the launcher must find or create a target environment for the 
+  	feature first. For example it can launch an OSGi framework that the Feature should run in.
+  	</para>
+  	
+  	<para>
+  	In the framework, the launcher should deploy all the bundles found in the Feature. It must 
+  	first install all bundles, then resolve all bundles and finally start all the bundles.
+  	The order in which this happens between the bundles is not defined.
+  	<remark>Introduce start order in metadata</remark> 
+  	</para>
+  	
+  	<para>
+  	Once all bundles are started and all bundle fragments resolved and attached the launcher 
+  	should provide the specified configurations to the Configuration Admin Service. 
+  	</para>
+  	
+  	<para>
+  	A Feature can be lauched using the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
+  	xrefstyle="hyperlink"/> service. The service can be obtained from the Service registry if running
+  	in an OSGi Framework or using the ServiceLoader mechanism otherwise.
+  	</para>
+  	
+  	<programlisting>ServiceLoader&lt;LauncherFactory&gt; sl =
+ServiceLoader.load(LauncherFactory.class);
+
+LauncherFactory factory = sl.iterator().next();
+Launcher launcher = factory.newLauncher(new URL("file:///home/david/myfeature.json"));
+launcher.start();
+
+launcher.waitForStop(0); // Start is asynchronous
+  	</programlisting>
+  	
+  	<para>
+  	At this point the feature is launched.
+  	</para>
+  </section>
+
+  <section>
+  	<title>Handling Bundles</title>
+  	<para>All bundles listed in the Feature will first be installed, then resolved
+  	and finally started in the Framework chosen by the launcher.</para>
+  </section>
+
+  <section>
+  	<title>Handling Configuration</title>
+  	<para>If configuration is found in the Feature then it is passed to the Configuration
+  	Admin service. If a Feature contains a <code>configuration</code> section but the Configuration
+  	Admin service is not found in the running system, the launcher will abort with an 
+  	IllegalStateException <code>TODO or some other exception?</code> .</para>
+  </section>
+
+  <section>
+  	<title>Specifying Framework Properties</title>
+  	<para>Framework Launching Properties can be provided in the feature through
+  	the <code>framework-launching-properties</code> extension.
+  	The launcher must ensure that the framework it provides for the feature has these
+  	properties set. If it cannot provide a Framework with the requested Framework properties
+  	set it must fail.</para>
+  	
+  	<para>For example, to ensure the <code>org.osgi.framework.bsnversion</code> Framework
+  	property in the Framework used for the Feature, specify the following the in Feature
+  	definition: <programlisting>  "extensions": {
+    "framework-launching-properties": {
+      "type": "json",
+      "kind": "mandatory",
+      "json": {
+          "org.osgi.framework.bsnversion": "multiple"
+      }
+    }
+  }
+</programlisting>  		
+  	</para>
+  </section>
+
+  <section>
+  	<title>Specifying Runtime Preconditions</title>
+  	<para>A Feature can specify the preconditions it places on its runtime environment. That is,
+  	the Framework used to run the Feature in, must satisfy these constraints. If the Launcher
+  	cannot provide a Framework with the specified conditions, it must fail.</para>
+  	
+  	<para>
+  	Preconditions of the following type can be specified:
+  	<itemizedlist>
+  	  <listitem>
+  	    <para>Resolver Capabilities - require that a certain capability is satisfied in the 
+  	    runtime, for example an <code>osgi.ee</code> capability to demand a certain Java 
+  	    runtime or a minimum Framework API version.</para>
+  	  </listitem>
+  	  <listitem>
+  	    <para>Pre-installed Features - require that the features listed are already installed
+  	    in the Framework.
+  	    </para>
+  	  </listitem>
+  	</itemizedlist>
+  	If no preconditions are specified, the Launcher is free to chose a Java and OSGi implementation
+  	of its choice.
+  	</para>
+  	
+  	<para>The preconditions are specified using the <code>execution-environment</code>
+  	extension, for example:<programlisting>
+    "extensions": {
+        "execution-environment": {
+            "type": "json",
+            "kind": "mandatory",
+            "json": {
+                "capability-filters": {                
+                    "osgi.ee": "(&amp;(osgi.ee=JavaSE)(version=11))",
+                    "osgi.wiring.package": "(&amp;(osgi.wiring.package=org.osgi.framework)(version=1.10))"
+                }, 
+                "provided-features": ["org.acme:platform:1.1"]
+            }
+        }
+    }</programlisting>
+  	</para>
+  </section>
+
+  <section>
+  	<title>Specifying Variables</title>
+  	<para></para>
+  </section>
+
+  <section>
+  	<title>Specifying Extension Handlers</title>
+  	<para></para>
+  </section>
+
+  <section>
+  	<title>Specifying Post-processors</title>
+  	<para></para>
+  </section>
+  
+  <!-- Specifying merge conflict handlers -->
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.launcher.xml"/>
 
