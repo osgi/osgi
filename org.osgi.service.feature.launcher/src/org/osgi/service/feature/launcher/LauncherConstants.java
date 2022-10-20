@@ -26,10 +26,8 @@ public final class LauncherConstants {
 		// non-instantiable
 	}
 
-
 	/**
-	 * The version of the implementation capability for the Feature
-	 * specification.
+	 * The version of the Feature specification.
 	 */
 	public static final String LAUNCHER_SPECIFICATION_VERSION = "1.0";
 }
