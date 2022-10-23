@@ -3,7 +3,7 @@ package org.osgi.service.feature.launcher;
 import org.osgi.framework.launch.Framework;
 
 /**
- * A launcher can launch one or more Feature models into a running system.
+ * A launcher can launch a Feature model into a running system.
  */
 public interface Launcher {
 	/**
@@ -23,6 +23,8 @@ public interface Launcher {
 	 *             thread before or while the current thread was waiting for the
 	 *             system to stop. The <i>interrupted status</i> of the current
 	 *             thread is cleared when this exception is thrown.
+	 * @throws LauncherException When the launch is not successful.
 	 */
-	void waitForStop(long timeout) throws InterruptedException;
+	void waitForStop(long timeout)
+			throws InterruptedException, LauncherException;
 }

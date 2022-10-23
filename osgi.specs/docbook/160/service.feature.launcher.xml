@@ -35,18 +35,31 @@
   <section>
       <title>Introduction</title>
 
-      <para>Here goes the intro text...</para>
+      <para>The <xref linkend="service.feature"/> defines a model to 
+      design and declare Complex Applications and reuable Sub-Components that are
+      composed of multiple bundles, configurations and other metadata.</para>
+      
+      <para>This specification focuses on turning these Features into a running system,
+      by introducing the Feature launcher. The launcher takes a Feature definition,
+      obtains a runtime environment for it and then starts the Feature in that
+      environment.</para>
+      
+      <para>
+      The launcher also interacts with the Configuration Admin Service, that is, it provides
+      configuration to the system if present in the Feature.
+      </para>
   </section>
 
   <section>
   	<title>Launching a Feature</title>
-  	<para>To launch a feature, the launcher must find or create a target environment for the 
-  	feature first. For example it can launch an OSGi framework that the Feature should run in.
+  	<para>To launch a Feature, the launcher must find or create a target environment for the 
+  	Feature first. For example it can launch an OSGi framework that the Feature should run in.
   	</para>
   	
   	<para>
-  	In the framework, the launcher should deploy all the bundles found in the Feature. It must 
-  	first install all bundles, then resolve all bundles and finally start all the bundles.
+  	The launcher should deploy all the bundles referenced by the Feature in this Framework. 
+  	It must 
+  	first install all bundles, then resolve them and finally start all the bundles.
   	The order in which this happens between the bundles is not defined.
   	<remark>Introduce start order in metadata</remark> 
   	</para>
@@ -57,23 +70,26 @@
   	</para>
   	
   	<para>
-  	A Feature can be lauched using the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
-  	xrefstyle="hyperlink"/> service. The service can be obtained from the Service registry if running
+  	A Feature launcher can be obained using the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
+  	xrefstyle="hyperlink"/> service. This service can be obtained from the Service registry if running
   	in an OSGi Framework or using the ServiceLoader mechanism otherwise.
   	</para>
   	
   	<programlisting>ServiceLoader&lt;LauncherFactory&gt; sl =
-ServiceLoader.load(LauncherFactory.class);
+  ServiceLoader.load(LauncherFactory.class);
 
 LauncherFactory factory = sl.iterator().next();
-Launcher launcher = factory.newLauncher(new URL("file:///home/david/myfeature.json"));
+Launcher launcher = factory.newLauncher(
+  new URL("file:///home/david/myfeature.json"),
+  Collections.emptyMap());
 launcher.start();
 
 launcher.waitForStop(0); // Start is asynchronous
   	</programlisting>
   	
-  	<para>
-  	At this point the feature is launched.
+  	<para>If a Feature can't be launched <code>waitForStop()</code> will throw a 
+  	<xref linkend="org.osgi.service.feature.launcher.LauncherException"
+  	xrefstyle="hyperlink"/>.
   	</para>
   </section>
 
@@ -81,6 +97,12 @@ launcher.waitForStop(0); // Start is asynchronous
   	<title>Handling Bundles</title>
   	<para>All bundles listed in the Feature will first be installed, then resolved
   	and finally started in the Framework chosen by the launcher.</para>
+  	
+  	<para>Bundle fragments are installed and resolved and attached to their host(s).
+  	</para>
+  	
+  	<para>If a Bundle cannot resolve or start a <code>LauncherException</code> must be
+  	thrown.</para>
   </section>
 
   <section>
@@ -88,20 +110,20 @@ launcher.waitForStop(0); // Start is asynchronous
   	<para>If configuration is found in the Feature then it is passed to the Configuration
   	Admin service. If a Feature contains a <code>configuration</code> section but the Configuration
   	Admin service is not found in the running system, the launcher will abort with an 
-  	IllegalStateException <code>TODO or some other exception?</code> .</para>
+  	<code>LauncherException</code>.</para>
   </section>
 
   <section>
   	<title>Specifying Framework Properties</title>
-  	<para>Framework Launching Properties can be provided in the feature through
+  	<para>Framework Launching Properties can be provided in the Feature through
   	the <code>framework-launching-properties</code> extension.
-  	The launcher must ensure that the framework it provides for the feature has these
+  	The launcher must ensure that the Framework it provides for the feature has these
   	properties set. If it cannot provide a Framework with the requested Framework properties
-  	set it must fail.</para>
+  	set it must fail with a <code>LauncherException</code>.</para>
   	
   	<para>For example, to ensure the <code>org.osgi.framework.bsnversion</code> Framework
-  	property in the Framework used for the Feature, specify the following the in Feature
-  	definition: <programlisting>  "extensions": {
+  	property is set for the Feature, specify the following in the Feature: 
+  	<programlisting>  "extensions": {
     "framework-launching-properties": {
       "type": "json",
       "kind": "mandatory",
@@ -109,8 +131,7 @@ launcher.waitForStop(0); // Start is asynchronous
           "org.osgi.framework.bsnversion": "multiple"
       }
     }
-  }
-</programlisting>  		
+  }</programlisting>  		
   	</para>
   </section>
 
@@ -121,54 +142,51 @@ launcher.waitForStop(0); // Start is asynchronous
   	cannot provide a Framework with the specified conditions, it must fail.</para>
   	
   	<para>
-  	Preconditions of the following type can be specified:
-  	<itemizedlist>
-  	  <listitem>
-  	    <para>Resolver Capabilities - require that a certain capability is satisfied in the 
-  	    runtime, for example an <code>osgi.ee</code> capability to demand a certain Java 
-  	    runtime or a minimum Framework API version.</para>
-  	  </listitem>
-  	  <listitem>
-  	    <para>Pre-installed Features - require that the features listed are already installed
-  	    in the Framework.
-  	    </para>
-  	  </listitem>
-  	</itemizedlist>
-  	If no preconditions are specified, the Launcher is free to chose a Java and OSGi implementation
+  	Preconditions are specified as requirements in the Feature.
+  	If no preconditions are specified, the Launcher is free to choose a Java and OSGi implementation
   	of its choice.
   	</para>
   	
-  	<para>The preconditions are specified using the <code>execution-environment</code>
-  	extension, for example:<programlisting>
-    "extensions": {
-        "execution-environment": {
-            "type": "json",
-            "kind": "mandatory",
-            "json": {
-                "capability-filters": {                
-                    "osgi.ee": "(&amp;(osgi.ee=JavaSE)(version=11))",
-                    "osgi.wiring.package": "(&amp;(osgi.wiring.package=org.osgi.framework)(version=1.10))"
-                }, 
-                "provided-features": ["org.acme:platform:1.1"]
-            }
-        }
-    }</programlisting>
+  	<para>For example:<programlisting>  "requirements": [
+    {
+      "namespace": "osgi.ee", 
+      "filter":    "(&amp;(osgi.ee=JavaSE)(version=11))"
+    }, {
+      "namespace": "osgi.wiring.package", 
+      "filter":    "(&amp;(osgi.wiring.package=org.osgi.framework)(version=1.10))"    
+    }
+  ]</programlisting>
   	</para>
   </section>
 
   <section>
   	<title>Specifying Variables</title>
-  	<para></para>
+  	<para>Variables allow for late binding of configuration values and Framework properties.
+  	Variables are provided through the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
+  	xrefstyle="hyperlink"/>:
+  	<programlisting>Map&lt;String,Object&gt; variables = new HashMap&lt;&gt;();
+variables.put("user.name", "scott");
+variables.put("db.driver", "postgresql");
+  	
+LauncherFactory factory = ... // From Service Registry or Service Loader
+Launcher launcher = factory.newLauncher(
+  new URL("https://repo.maven.apache.org/maven2/org/foo/Bar/1.0.0/Bar-1.0.0.osgifeature"),
+  variables);
+  
+launcher.start();</programlisting>
+  	</para>
   </section>
 
   <section>
   	<title>Specifying Extension Handlers</title>
   	<para></para>
+  	<remark>TODO</remark>
   </section>
 
   <section>
   	<title>Specifying Post-processors</title>
   	<para></para>
+  	<remark>TODO</remark>
   </section>
   
   <!-- Specifying merge conflict handlers -->
