@@ -98,8 +98,8 @@
      id="rect51" /><text
      style="font-size:11px;font-family:ProductusSemibold"
      id="text53"
-     x="315.18631"
-     y="50.594002">Resource</text>
+     x="317.18631"
+     y="58.594002">Resource</text>
 <rect
      x="315.186"
      y="135.83301"
@@ -109,8 +109,8 @@
      id="rect55" /><text
      style="font-size:11px;font-family:ProductusSemibold"
      id="text57"
-     x="315.18631"
-     y="159.7639">Extension</text>
+     x="317.18631"
+     y="167.7639">Extension</text>
 <rect
      x="315.186"
      y="132.9"
@@ -126,8 +126,8 @@
      id="rect63" /><text
      style="font-size:11px;font-family:ProductusBook"
      id="text67"
-     x="58.939102"
-     y="107.94526">Implementation</text>
+     x="66.939102"
+     y="118.94526">Implementation</text>
 <rect
      x="172.381"
      y="166.224"
@@ -137,23 +137,28 @@
      id="rect69" /><text
      style="font-size:11px;font-family:ProductusSemibold"
      id="text75"
-     x="20.210022"
-     y="21.857025">JAX-RS Service</text>
+     x="17.210022"
+     y="21.857025">Jakarta RESTful Web</text>
 <text
      style="font-size:11px;font-family:ProductusSemibold"
-     x="36.210022"
+     x="8.010022"
      y="31.857025"
-     id="text3451">Runtime</text>
+     id="text3451">Services Service Runtime</text>
 <text
-     y="69.823769"
-     x="169.7729"
+     y="64.823769"
+     x="154.7729"
      id="text3431"
-     style="font-size:11px;font-family:ProductusBook">JAX-RS</text>
+     style="font-size:11px;font-family:ProductusBook">Jakarta RESTful</text>
 <text
-     y="80.823769"
-     x="158.7729"
+     y="75.823769"
+     x="161.7729"
      style="font-size:11px;font-family:ProductusBook"
-     id="text3435">Whiteboard</text>
+     id="text3435">Web Services</text>
+<text
+     y="86.823769"
+     x="166.7729"
+     style="font-size:11px;font-family:ProductusBook"
+     id="text3435-a">Whiteboard</text>
 <polygon
      transform="matrix(0.88488044,0,0,1.1613172,19.842382,-33.587642)"
      id="polygon3439"
@@ -161,13 +166,18 @@
      style="fill:none;stroke:#000000;stroke-width:0.66659999;stroke-linejoin:round" /><text
      style="font-size:11px;font-family:ProductusBook"
      id="text3441"
-     x="169.7729"
-     y="115.82377">JAX-RS</text>
+     x="154.7729"
+     y="110.82377">Jakarta RESTful</text>
 <text
      id="text3443"
      style="font-size:11px;font-family:ProductusBook"
-     x="158.7729"
-     y="126.82377">Whiteboard</text>
+     x="161.7729"
+     y="121.82377">Web Services</text>
+<text
+     id="text3443-a"
+     style="font-size:11px;font-family:ProductusBook"
+     x="166.7729"
+     y="132.82377">Whiteboard</text>
 <polygon
      style="fill:none;stroke:#000000;stroke-width:0.66659999;stroke-linejoin:round"
      points="148.376,72.279 236.705,72.279 236.705,108.943 192.541,108.943 148.376,108.943 "
@@ -175,13 +185,18 @@
      transform="matrix(0.88488044,0,0,1.1613172,19.842382,12.412358)" /><text
      style="font-size:11px;font-family:ProductusBook"
      id="text3447"
-     x="79.772903"
-     y="85.823769">JAX-RS</text>
+     x="64.772903"
+     y="85.823769">Jakarta RESTful</text>
 <text
      id="text3449"
      style="font-size:11px;font-family:ProductusBook"
      x="70.772903"
-     y="96.823769">Whiteboard</text>
+     y="96.823769">Web Services</text>
+<text
+     id="text3449-a"
+     style="font-size:11px;font-family:ProductusBook"
+     x="74.772903"
+     y="107.823769">Whiteboard</text>
 <polygon
      transform="translate(31.306049,73.766695)"
      id="polygon3453"
@@ -194,14 +209,14 @@
      x1="179.61415"
      style="fill:none;stroke:#000000;stroke-width:0.6663596;stroke-linejoin:round" /><text
      y="161.85703"
-     x="20.210022"
+     x="17.210022"
      id="text3457"
-     style="font-size:11px;font-family:ProductusSemibold">JAX-RS Service</text>
+     style="font-size:11px;font-family:ProductusSemibold">Jakarta RESTful Web</text>
 <text
      id="text3459"
      y="171.85703"
-     x="36.210022"
-     style="font-size:11px;font-family:ProductusSemibold">Runtime</text>
+     x="8.010022"
+     style="font-size:11px;font-family:ProductusSemibold">Services Service Runtime</text>
 <line
      id="line3463"
      y2="50.729923"
@@ -242,19 +257,29 @@
      id="text3477"
      style="font-size:11px;font-family:ProductusSemibold"
      x="317.18631"
-     y="40.594002">JAX-RS</text>
+     y="37.594002">Jakarta RESTful</text>
+     <text
+     id="text3477-a"
+     style="font-size:11px;font-family:ProductusSemibold"
+     x="317.18631"
+     y="48.594002">Web Services</text>
 <text
-     y="148.59399"
+     y="145.59399"
      x="317.18631"
      style="font-size:11px;font-family:ProductusSemibold"
-     id="text3479">JAX-RS</text>
+     id="text3479">Jakarta RESTful</text>
+<text
+     y="156.59399"
+     x="317.18631"
+     style="font-size:11px;font-family:ProductusSemibold"
+     id="text3479-a">Web Services</text>
 <polygon
      transform="translate(0,8)"
      id="polygon3373"
      points="312.968,90.395 294.619,101.244 294.619,79.562 "
      style="fill:none;stroke:#000000;stroke-width:0.66659999;stroke-linejoin:round" /><text
-     y="105.7639"
-     x="315.18631"
+     y="113.7639"
+     x="317.18631"
      id="text3375"
      style="font-size:11px;font-family:ProductusSemibold">Application</text>
 <line
@@ -267,5 +292,10 @@
      id="text3379"
      style="font-size:11px;font-family:ProductusSemibold"
      x="317.18631"
-     y="94.593987">JAX-RS</text>
+     y="91.593987">Jakarta RESTful</text>
+     <text
+     id="text3379"
+     style="font-size:11px;font-family:ProductusSemibold"
+     x="317.18631"
+     y="102.593987">Web Services</text>
 </svg>

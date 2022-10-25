@@ -201,6 +201,9 @@ org.apache.geronimo.specs:geronimo-json_1.1_spec:1.5
 org.apache.johnzon:johnzon-core:1.2.14
 org.apache.felix:org.apache.felix.cm.json:1.0.6
 
+# Jakarta EE API
+jakarta.ws.rs:jakarta.ws.rs-api:3.0.0
+
 # ECF RSA
 org.eclipse.platform:org.eclipse.core.jobs:3.9.3
 org.eclipse.platform:org.eclipse.equinox.common:3.9.0
@@ -222,3 +225,45 @@ org.eclipse.ecf:org.eclipse.ecf.provider:4.9.1
 org.eclipse.ecf:org.eclipse.ecf.provider.remoteservice:4.6.1
 org.eclipse.ecf:org.eclipse.ecf.provider.jmdns:4.3.301
 
+
+# Jakarta RS impl
+
+org.geckoprojects.jakartars:org.gecko.rest.jersey:6.0.0-SNAPSHOT
+org.geckoprojects.jakartars:org.gecko.rest.jersey.jetty:6.0.0-SNAPSHOT
+org.geckoprojects.jakartars:org.gecko.rest.jersey.sse:6.0.0-SNAPSHOT
+org.geckoprojects.jakartars:org.gecko.rest.jersey.tck:6.0.0-SNAPSHOT
+
+org.glassfish.hk2:hk2-api:3.0.3
+org.glassfish.hk2:hk2-locator:3.0.3
+org.glassfish.hk2:osgi-resource-locator:1.0.3
+org.glassfish.hk2:hk2-utils:3.0.3
+org.glassfish.hk2.external:aopalliance-repackaged:3.0.3
+org.glassfish.jersey.containers:jersey-container-servlet-core:3.0.8
+org.glassfish.jersey.containers:jersey-container-servlet:3.0.8
+org.glassfish.jersey.core:jersey-client:3.0.8
+org.glassfish.jersey.core:jersey-common:3.0.8
+org.glassfish.jersey.core:jersey-server:3.0.8
+org.glassfish.jersey.inject:jersey-hk2:3.0.8
+org.glassfish.jersey.media:jersey-media-sse:3.0.8
+
+org.eclipse.jetty:jetty-http:11.0.12
+org.eclipse.jetty:jetty-io:11.0.12
+org.eclipse.jetty:jetty-security:11.0.12
+org.eclipse.jetty:jetty-server:11.0.12
+org.eclipse.jetty:jetty-servlet:11.0.12
+org.eclipse.jetty:jetty-util:11.0.12
+
+jakarta.ws.rs:jakarta.ws.rs-api:3.1.0
+jakarta.activation:jakarta.activation-api:2.1.0
+jakarta.annotation:jakarta.annotation-api:2.1.1
+jakarta.inject:jakarta.inject-api:2.0.1
+jakarta.validation:jakarta.validation-api:3.0.2
+jakarta.xml.bind:jakarta.xml.bind-api:4.0.0
+org.apache.felix:org.apache.felix.http.servlet-api:2.0.0
+
+org.ow2.asm:asm:jar:9.3
+org.javassist:javassist:3.29.2-GA
+org.slf4j:slf4j-api:1.7.36
+org.slf4j:slf4j-simple:1.7.36
+com.sun.activation:jakarta.activation:2.0.1
+com.sun.xml.bind:jaxb-osgi:4.0.1
