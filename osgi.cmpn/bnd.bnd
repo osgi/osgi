@@ -1,7 +1,6 @@
 # Set javac settings from JDT prefs
 -include : ${includes}/jdt.bnd, ${.}/layout.bnd, ${includes}/cmpn.bnd, ${includes}/publish.bnd
 companion.code = true
--contract: JakartaServlet
 
 # Don't publish osgi.cmpn
 publishrepo:
