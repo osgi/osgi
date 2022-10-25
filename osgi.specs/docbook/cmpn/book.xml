@@ -52,8 +52,6 @@
 
   <xi:include href="../100/service.remoteservices.xml"/>
 
-  <xi:include href="../102/service.http.xml"/>
-
   <xi:include href="../103/service.device.xml"/>
 
   <xi:include href="../104/service.cm.xml"/>

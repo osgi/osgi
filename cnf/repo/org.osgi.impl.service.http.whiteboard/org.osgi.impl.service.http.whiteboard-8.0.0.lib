@@ -1,5 +1,0 @@
-org.osgi.service.http.whiteboard; version=latest
-org.apache.felix.http.servlet-api; version=1.1
-org.apache.felix.http.jetty; version=4.0
-org.osgi.service.cm; version=latest
-org.osgi.service.event; version=latest

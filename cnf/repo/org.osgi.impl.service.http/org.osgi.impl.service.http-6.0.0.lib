@@ -1,1 +1,1 @@
-org.osgi.impl.service.http.whiteboard; version=latest
+org.osgi.impl.service.servlet; version=latest
