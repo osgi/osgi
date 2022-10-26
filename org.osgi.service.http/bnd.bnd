@@ -1,8 +1,0 @@
-# Set javac settings from JDT prefs
--include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
-
-Export-Package: ${p}.*; -split-package:=first
-
--buildpath = \
-    ${osgi.annotation.buildpath}, \
-	org.osgi.impl.bundle.servlet;maven-scope=provided;version=2.1

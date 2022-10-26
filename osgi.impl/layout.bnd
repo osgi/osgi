@@ -24,14 +24,13 @@ jar.cmpn.impls: \
 	org.osgi.impl.service.coordinator,\
 	org.osgi.impl.service.event,\
 	org.osgi.impl.service.feature,\
-	org.osgi.impl.service.http,\
-	org.osgi.impl.service.http.whiteboard,\
 	org.osgi.impl.service.jakartars,\
 	org.osgi.impl.service.jpa,\
 	org.osgi.impl.service.log.stream,\
 	org.osgi.impl.service.metatype,\
 	org.osgi.impl.service.remoteserviceadmin,\
 	org.osgi.impl.service.repository,\
+        org.osgi.impl.service.servlet,\
 	org.osgi.impl.service.typedevent,\
 	org.osgi.impl.service.transaction.control,\
 	org.osgi.impl.service.transaction.control.jdbc,\
