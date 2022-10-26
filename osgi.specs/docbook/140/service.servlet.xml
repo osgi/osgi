@@ -18,7 +18,7 @@
  -->
 <chapter label="140"
          revision="$Id$"
-         version="5.0" xml:id="service.http.whiteboard"
+         version="5.0" xml:id="service.servlet"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -26,7 +26,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Http Whiteboard Specification</title>
+  <title>Whiteboard Specification for Jakarta™ Servlet</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.servlet.whiteboard-version"
@@ -38,11 +38,11 @@
 
     <para>Servlets have become a popular and widely supported mechanism for
     providing dynamic content on the Internet. While servlets are defined in
-    the <xref linkend="service.http.whiteboard-i21217577"/>, the OSGi Http
+    the <xref linkend="service.servlet-i21217577"/>, the OSGi Http
     Whiteboard Specification provides a light and convenient way of using
     servlets, servlet filters, servlet listeners and web resources in an OSGi
     environment through the use of the <xref
-    linkend="service.http.whiteboard-whiteboard.pattern.ref"/>.</para>
+    linkend="service.servlet-whiteboard.pattern.ref"/>.</para>
 
     <para>The Http Whiteboard specification supports:</para>
 
@@ -79,15 +79,15 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="service.http.whiteboard-i21231452"/></para>
+        <para><xref linkend="service.servlet-i21231452"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="service.http.whiteboard-i21215926"/></para>
+        <para><xref linkend="service.servlet-i21215926"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="service.http.whiteboard-http2"/></para>
+        <para><xref linkend="service.servlet-http2"/></para>
       </listitem>
     </itemizedlist>
 
@@ -201,7 +201,7 @@
     Whiteboard service.</para>
 
     <para>Some environments may use <xref
-    linkend="service.http.whiteboard-service.hook.ref"/> to isolate
+    linkend="service.servlet-service.hook.ref"/> to isolate
     <code>ServletContextHelper</code> service registrations. The Whiteboard
     implementation must check that the bundle registering the Whiteboard
     service has the ability to find the <code>ServletContextHelper</code>
@@ -959,7 +959,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
             different sessions per associated
             <code>ServletContextHelper</code>. Http Sessions are defined in
             chapter 7 of the <xref
-            linkend="service.http.whiteboard-i21217577"/>.</para>
+            linkend="service.servlet-i21217577"/>.</para>
           </listitem>
         </orderedlist></para>
     </section>
@@ -1051,7 +1051,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     should be registered as Prototype Service Factory.</para>
   </section>
 
-  <section xml:id="service.http.whiteboard-i21223311">
+  <section xml:id="service.servlet-i21223311">
     <title>Registering Servlets</title>
 
     <para>Servlets can be registered with the Http Whiteboard implementation
@@ -1063,7 +1063,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <code>osgi.http.whiteboard.servlet.pattern</code> service property. Each
     pattern defines the URL context that will trigger the servlet to handle
     the request. They are defined by the <xref
-    linkend="service.http.whiteboard-i21217577"/> in section 12.2,
+    linkend="service.servlet-i21217577"/> in section 12.2,
     <emphasis>Specification of Mappings</emphasis>. Note that these mapping
     rules are slightly different than those defined in the <xref
     linkend="service.http"/>. The mapping rules are:</para>
@@ -1378,7 +1378,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>The following example code uses Declarative Services annotations to
     register a servlet whiteboard service.</para>
 
-    <programlisting xml:id="service.http.whiteboard-i21223332">@HttpWhiteboardServletPattern("/myservlet")
+    <programlisting xml:id="service.servlet-i21223332">@HttpWhiteboardServletPattern("/myservlet")
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE,
     property = "servlet.init.myname=value")
 public class MyServlet extends HttpServlet {
@@ -1935,7 +1935,7 @@ public class MyPreprocessor implements Preprocessor {
             <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The pattern(s) to be used to serve resources. As
-            defined by the <xref linkend="service.http.whiteboard-i21217577"/>
+            defined by the <xref linkend="service.servlet-i21217577"/>
             in section 12.2, <emphasis>Specification of
             Mappings</emphasis>.</para><para>This property marks the service
             as a resource service. </para><para>See <xref
@@ -2001,7 +2001,7 @@ public class SomeResourceService {}</programlisting>
       <code>osgi.http.whiteboard.resource.pattern</code> competes with the
       <code>osgi.http.whiteboard.servlet.pattern</code> property specified on
       servlets. If these values overlap, the rules as outlined in <xref
-      linkend="service.http.whiteboard-i21223311"/> are used to resolve
+      linkend="service.servlet-i21223311"/> are used to resolve
       conflicts, where resource services are treated just like servlets.
       Shadowed resource patterns are reported as <xref
       linkend="org.osgi.service.servlet.runtime.dto.FailedResourceDTO"
@@ -2128,7 +2128,7 @@ public class MyServletRequestListener implements ServletRequestListener {
 }</programlisting>
 
     <para>For more details on the behavior of the listeners see the <xref
-    linkend="service.http.whiteboard-i21217577"/>.</para>
+    linkend="service.servlet-i21217577"/>.</para>
   </section>
 
   <section>
@@ -2467,7 +2467,7 @@ public class MyFilter implements Filter</programlisting> This specification
       namespace with name <code>JavaServlet</code> if it exports the
       <code>jakarta.servlet</code> and <code>jakarta.servlet.http</code> packages.
       See <xref
-      linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
+      linkend="service.servlet-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
@@ -2661,12 +2661,12 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.http.whiteboard-i21231452"><title>HTTP 1.0
+      <bibliomixed xml:id="service.servlet-i21231452"><title>HTTP 1.0
       Specification RFC-1945</title><biblioid class="uri"><link
       xlink:href="https://www.ietf.org/rfc/rfc1945.txt"/>, May
       1996</biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.http.whiteboard-i21215926"><title>HTTP 1.1
+      <bibliomixed xml:id="service.servlet-i21215926"><title>HTTP 1.1
       Specifications RFCs 7230-7235</title><biblioid class="uri"><link
       xlink:href="https://tools.ietf.org/html/rfc7230"/></biblioid><?line-break ?><biblioid
       class="uri"><link
@@ -2680,31 +2680,31 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       class="uri"><link
       xlink:href="https://tools.ietf.org/html/rfc7235"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.http.whiteboard-http2"><title>HTTP/2
+      <bibliomixed xml:id="service.servlet-http2"><title>HTTP/2
       Specifications</title><biblioid class="uri"><link
       xlink:href="https://http2.github.io"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
+      <bibliomixed xml:id="service.servlet-i21217577"><title>Java
       Servlet 3.1 Specification</title><biblioid class="uri"><link
       xlink:href="https://jcp.org/aboutJava/communityprocess/final/jsr340/"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="service.http.whiteboard-portable.java.contracts.ref"><title>Portable
+      xml:id="service.servlet-portable.java.contracts.ref"><title>Portable
       Java Contract Definitions</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.http.whiteboard-i21220308"><title>RFC 2617:
+      <bibliomixed xml:id="service.servlet-i21220308"><title>RFC 2617:
       HTTP Authentication: Basic and Digest Access
       Authentication</title><biblioid class="uri"><link
       xlink:href="https://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
+      xml:id="service.servlet-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 
       <bibliomixed
-      xml:id="service.http.whiteboard-service.hook.ref"><title>Core Service
+      xml:id="service.servlet-service.hook.ref"><title>Core Service
       Hooks</title>OSGi Core, Chapter 55 Service Hook Service
       Specification</bibliomixed>
     </bibliolist>
