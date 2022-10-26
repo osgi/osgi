@@ -2241,7 +2241,7 @@ public class MyServletRequestListener implements ServletRequestListener {
             <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
             <code>/myapp/</code>. Relative paths may be used if the scheme and
             authority parts of the URLs are not known such as in a bridged
-            Http Service implementation. If the Servlet Whiteboard implementation
+            Servlet Whiteboard implementation. If the Servlet Whiteboard implementation
             is serving the root context and scheme and authority are not known, 
             the value of the property is <code>/</code>. Each entry must end with a
             slash.</para><para>See <xref
@@ -2637,6 +2637,11 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       xml:id="service.servlet-http.whiteboard.ref"><title>Http Whiteboard
       Specification</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.http.whiteboard.html"/></biblioid></bibliomixed>
+
+      <bibliomixed
+      xml:id="service.servlet-http.ref"><title>Http Service
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.http.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
 
@@ -2648,6 +2653,10 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
         <para>This specification is providing the same functionality as its
         predecessor, <xref linkend="service.servlet-http.whiteboard.ref"/>, with
         the switch from the Java Servlet API to the Jakarta Servlet API.</para>
+      </listitem>
+      <listitem>
+        <para>Removed the reference to the <xref linkend="service.servlet-http.ref"/>
+        specying the behaviour if an implementation is also implementing that specification.</para> 
       </listitem>
     </itemizedlist>
   </section>
