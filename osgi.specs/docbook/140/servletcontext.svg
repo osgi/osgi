@@ -80,7 +80,7 @@
 <rect x="21.739" y="30.533" style="fill:none;" width="35.915" height="10.252"/>
 <text transform="matrix(1 0 0 1 21.7395 38.1025)" style="fill:#010101; font-family:'ProductusSemibold'; font-size:10.5;">WebApp</text>
 <rect x="27.455" y="59.359" style="fill:none;" width="70.43" height="10.252"/>
-<text transform="matrix(1 0 0 1 27.4553 66.9287)" style="fill:#010101; font-family:'ProductusSemibold'; font-size:10.5;">Http Whiteboard</text>
+<text transform="matrix(1 0 0 1 27.4553 66.9287)" style="fill:#010101; font-family:'ProductusSemibold'; font-size:10.5;">Servlet Whiteboard</text>
 <rect x="165.074" y="28.763" style="fill:none;" width="61.757" height="9.743"/>
 <text transform="matrix(1 0 0 1 165.0745 36.793)" style="fill:#010101; font-family:'ProductusBook'; font-size:11;">Servlet Context </text>
 <rect x="165.074" y="80.948" style="fill:none;" width="61.757" height="9.743"/>

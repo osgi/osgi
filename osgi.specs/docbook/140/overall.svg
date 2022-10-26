@@ -45,7 +45,7 @@
 <rect x="315.186" y="132.9" style="fill:none;" width="75.929" height="11.667"/>
 <text transform="matrix(1 0 0 1 315.1863 140.8313)" style="font-family:'ProductusSemibold'; font-size:11;">Resources Service</text>
 <rect x="158.338" y="78.075" style="fill:none;" width="68.359" height="23.758"/>
-<text transform="matrix(1 0 0 1 158.3386 86.1038)" style="font-family:'ProductusBook'; font-size:11;">Http Whiteboard</text>
+<text transform="matrix(1 0 0 1 158.3386 86.1038)" style="font-family:'ProductusBook'; font-size:11;">Servlet Whiteboard</text>
 <text transform="matrix(1 0 0 1 158.3386 99.304)" style="font-family:'ProductusBook'; font-size:11;">implementation</text>
 <rect x="172.381" y="166.224" style="fill:none;" width="40.272" height="11.667"/>
 <text transform="matrix(1 0 0 1 172.3816 174.1545)" style="font-family:'ProductusSemibold'; font-size:11;">Listeners</text>
