@@ -16,10 +16,10 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
-<book revision="$Id$"
-      version="5.0" xml:id="cmpn.book"
-      xmlns="http://docbook.org/ns/docbook"
+<book revision="$Id$" version="5.0"
+      xml:id="cmpn.book" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -33,9 +33,9 @@
       <orgname>OSGi Working Group</orgname>
     </author>
 
-    <releaseinfo xml:id="cmpn.book-release">Release 9</releaseinfo>
+    <releaseinfo xml:id="cmpn.book-release">Release 8.1</releaseinfo>
 
-    <pubdate>TBD</pubdate>
+    <pubdate>December 2022</pubdate>
 
     <copyright>
       <year>2000, 2021</year>
