@@ -266,13 +266,12 @@
       <code>User</code> object has (or implies) a specified action
       <code>Role</code> object.</para>
 
-      <para>For example, in the case of the Http Service, the
-      <code>HttpContext</code> object can authenticate the initiator and place
-      an <code>Authorization</code> object in the request header. The servlet
+      <para>For example, in the case of a web application, a server component
+      like a servlet filter can authenticate the initiator and place
+      an <code>Authorization</code> object in the request. The servlet
       calls the <code>hasRole</code> method on this <code>Authorization</code>
       object to verify that the initiator has the authority to perform a
-      certain action. See <xref
-      linkend="service.http.authentication"/>.</para>
+      certain action.</para>
     </section>
   </section>
 

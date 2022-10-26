@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.http.protocol.HttpService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -73,25 +72,6 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 		Collection<ServiceReference<HttpServiceRuntime>> references = context.getServiceReferences(HttpServiceRuntime.class, null);
 
 		assertEquals(1, references.size());
-	}
-
-	public void test_140_9_OSGI_HTTP_SERVICE_ID() throws Exception {
-		BundleContext context = getContext();
-
-		ServiceReference<HttpServiceRuntime> srA = context.getServiceReference(HttpServiceRuntime.class);
-		ServiceReference<HttpService> srB = context.getServiceReference(HttpService.class);
-
-		assertNotNull(srA);
-
-		if (srB == null) {
-			return;
-		}
-
-		@SuppressWarnings("unchecked")
-		Collection<Long> httpServiceIds = (Collection<Long>) srA.getProperty(HttpServiceRuntimeConstants.HTTP_SERVICE_ID);
-
-		assertNotNull(httpServiceIds);
-		assertTrue(httpServiceIds.contains(srB.getProperty(Constants.SERVICE_ID)));
 	}
 
 	public void test_140_9_HTTP_SERVICE_ENDPOINT() throws Exception {

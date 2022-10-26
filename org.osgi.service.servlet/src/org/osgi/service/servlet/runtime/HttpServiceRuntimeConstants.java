@@ -48,20 +48,4 @@ public final class HttpServiceRuntimeConstants {
 	 * {@code String[]}, or {@code Collection<String>}.
 	 */
 	public static final String	HTTP_SERVICE_ENDPOINT	= "osgi.http.endpoint";
-
-	/**
-	 * Http Runtime Service service property to associate the Http Runtime
-	 * Service with one or more HttpService services.
-	 * 
-	 * <p>
-	 * If this Servlet Whiteboard implementation also implements the Http Service
-	 * Specification, this service property is set to a collection of
-	 * {@code service.id} for the {@code HttpService} services registered by
-	 * this implementation.
-	 * 
-	 * <p>
-	 * The value of this service property must be of type
-	 * {@code Collection<Long>}.
-	 */
-	public static final String	HTTP_SERVICE_ID		= "osgi.http.service.id";
 }

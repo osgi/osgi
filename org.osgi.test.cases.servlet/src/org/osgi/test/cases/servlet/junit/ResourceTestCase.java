@@ -277,38 +277,4 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 	}
-
-	/**
-	 * Tests for 1.1 Update
-	 */
-
-	/**
-	 * Registration of servlet with http service (not allowed).
-	 */
-	public void testHttpServiceAndResource() throws Exception {
-		final String path = "/tesths";
-		Dictionary<String,Object> properties = new Hashtable<String,Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN,
-				path);
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX,
-				path);
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
-				"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
-						+ "=*)");
-		final long before = this.getHttpRuntimeChangeCount();
-		this.serviceRegistrations.add(this.getContext()
-				.registerService(Servlet.class, new MockServlet(), properties));
-		this.waitForRegistration(before);
-
-		boolean found = false;
-		for (final FailedResourceDTO fsd : this.getHttpServiceRuntime()
-				.getRuntimeDTO().failedResourceDTOs) {
-			if (fsd.patterns.length > 0 && path.equals(fsd.patterns[0])) {
-				found = true;
-				break;
-			}
-		}
-		assertTrue(found);
-	}
-
 }
