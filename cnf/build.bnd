@@ -61,9 +61,9 @@ copyright.year = ${tstamp;yyyy}
 copyright = Copyright (c) Contributors to the Eclipse Foundation
 copyright.html = ${replace;${copyright};[(]c[)];&copy\\;}
 
-osgi.release				= 9
+osgi.release				= 8
 osgi.version.major			= ${osgi.release}
-osgi.version.minor			= 0
+osgi.version.minor			= 1
 osgi.version.micro			= 0
 osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.micro}
 
