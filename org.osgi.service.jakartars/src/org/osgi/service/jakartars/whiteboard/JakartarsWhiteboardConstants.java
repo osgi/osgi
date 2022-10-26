@@ -214,14 +214,14 @@ public final class JakartarsWhiteboardConstants {
 	public static final String	JAKARTA_RS_WHITEBOARD_TARGET				= "osgi.jakartars.whiteboard.target";
 
 	/**
-	 * The name of the implementation capability for the Jakarta RESTful Web
-	 * Services Whiteboard specification
+	 * The name of the implementation capability for the Whiteboard
+	 * Specification for Jakarta RESTful Web Services.
 	 */
 	public static final String	JAKARTA_RS_WHITEBOARD_IMPLEMENTATION		= "osgi.jakartars";
 
 	/**
-	 * The version of the implementation capability for the Jakarta RESTful Web
-	 * Services Whiteboard specification
+	 * The version of the implementation capability for the Whiteboard
+	 * Specification for Jakarta RESTful Web Services.
 	 */
 	public static final String	JAKARTA_RS_WHITEBOARD_SPECIFICATION_VERSION	= "2.0";
 
