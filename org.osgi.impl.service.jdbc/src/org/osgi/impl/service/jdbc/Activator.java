@@ -50,7 +50,7 @@ public class Activator implements BundleActivator {
 		props.put(DataSourceFactory.OSGI_JDBC_CAPABILITY, new String[] {
 				DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER,
 				DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE,
-				DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE,
+				DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE,
 				DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE
 		});
 

@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="125"
          revision="$Id$"
          version="5.0" xml:id="service.jdbc"
@@ -222,10 +221,10 @@ java.sql</programlisting>
 
       <para>A Database Driver must import the <code>javax.sql</code> package.
       The <code>java.sql</code> package that contains the <code>Driver</code>
-      and <code>SQLException</code> interface is automatically visible
-      because it starts with <code>java.</code>. Both packages are contained
-      in the JRE since Java SE 1.4. These packages are not normally versioned
-      with OSGi version numbers. Bundles using the Data Source Factory must
+      and <code>SQLException</code> interface is automatically visible because
+      it starts with <code>java.</code>. Both packages are contained in the
+      JRE since Java SE 1.4. These packages are not normally versioned with
+      OSGi version numbers. Bundles using the Data Source Factory must
       therefore ensure they get the proper imports, which is usually from the
       JRE. Due to the lack of specified metadata, the deployer is responsible
       for ensuring this.</para>
@@ -294,45 +293,32 @@ DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlistin
       configuration properties are also defined in the
       <code>DataSourceFactory</code> interface.</para>
 
-      <para>A Data Source Factory is not required to implement all of the
-      factory methods. To indicate which factory method is implemented the 
-      <code>DataSourceFactory</code> must declare this using the Service-Propertie 
-      <code>org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY</code>. If 
-      an implementation does not support a particular type then it must throw a SQL 
-      Exception.</para>
-     
+      <para>A Data Source Factory service is not required to implement all of
+      the factory methods. To indicate which factory method is implemented,
+      the Data Source Factory service must be registered with the service
+      property <code>osgi.jdbc.datasourcefactory.capability</code> having one
+      or more of the following values.</para>
+
       <itemizedlist>
         <listitem>
-          <para><xref
-          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY"
-          xrefstyle="hyperlink"/></para>
-        </listitem> 
-      </itemizedlist> 
-      
-      <para>Values to indicate the cabability of the Data Source Factory are:</para>
-      
-      <itemizedlist>
-        <listitem>
-          <para><xref
-          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER"
-          xrefstyle="hyperlink"/></para>
+          <para><code>driver</code></para>
         </listitem>
+
         <listitem>
-          <para><xref
-          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE"
-          xrefstyle="hyperlink"/></para>
+          <para><code>datasource</code></para>
         </listitem>
+
         <listitem>
-          <para><xref
-          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE"
-          xrefstyle="hyperlink"/></para>
+          <para><code>connectionpooldatasource</code></para>
         </listitem>
+
         <listitem>
-          <para><xref
-          linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE"
-          xrefstyle="hyperlink"/></para>
+          <para><code>xadatasource</code></para>
         </listitem>
       </itemizedlist>
+
+      <para>If an implementation does not support a particular type then it
+      must throw a SQL Exception.</para>
 
       <para>The following code shows how a <code>DataSource</code> object
       could be created.</para>
@@ -498,9 +484,20 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>Java
-      SE</title><biblioid class="uri"><link
+      <bibliomixed><title>Java SE</title><biblioid class="uri"><link
       xlink:href="https://www.oracle.com/java/technologies/java-se-glance.html"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added the service property
+        <code>osgi.jdbc.datasourcefactory.capability</code> to
+        DataSourceFactory.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

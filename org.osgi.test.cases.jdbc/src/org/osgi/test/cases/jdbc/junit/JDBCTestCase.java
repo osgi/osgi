@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY;
-import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE;
+import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DRIVER;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_XADATASOURCE;
@@ -57,9 +57,9 @@ public class JDBCTestCase {
 		}
 	}
 
-	private static final String	FILTER_CAPABILITY_CONNECTIONPOOLEDDATASOURCE	= "("
+	private static final String	FILTER_CAPABILITY_CONNECTIONPOOLDATASOURCE	= "("
 			+ OSGI_JDBC_CAPABILITY + "="
-			+ OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE + ")";
+			+ OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE + ")";
 
 	private static final String	FILTER_CAPABILITY_DATASOURCE					= "("
 			+ OSGI_JDBC_CAPABILITY + "=" + OSGI_JDBC_CAPABILITY_DATASOURCE
@@ -118,7 +118,7 @@ public class JDBCTestCase {
 	}
 
 	@ParameterizedTest
-	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_CONNECTIONPOOLEDDATASOURCE)
+	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_CONNECTIONPOOLDATASOURCE)
 	public void testCapabilityConnectionPoolDataSource(DataSourceFactory dsf)
 			throws SQLException {
 

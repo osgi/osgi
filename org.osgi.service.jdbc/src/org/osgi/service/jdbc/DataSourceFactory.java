@@ -43,52 +43,49 @@ public interface DataSourceFactory {
 	/**
 	 * Service property used by a {@code DataSourceFactory} to declare the
 	 * capabilities when registering a JDBC DataSourceFactory service. Clients
-	 * may filter or test this property to determine if the comparison method
-	 * could be used.
+	 * may filter or test this property to determine if the create method can be
+	 * used. The type of this service property is {@code String+}
 	 * 
 	 * @since 1.1
 	 */
 	public static final String	OSGI_JDBC_CAPABILITY							= "osgi.jdbc.datasourcefactory.capability";
 
 	/**
-	 * As a value of the property 'osgi.jdbc.datasourcefactory.capability' it
-	 * indicates that the {@code DataSourceFactory} is able to provide a
-	 * {@code Driver} invoking the {@code createDriver(Properties props)}
-	 * method.
+	 * {@link #OSGI_JDBC_CAPABILITY} service property which indicates that the
+	 * {@code DataSourceFactory} is able to provide a {@code Driver} invoking
+	 * the {@code createDriver(Properties props)} method.
 	 * 
 	 * @since 1.1
 	 */
 	public static final String	OSGI_JDBC_CAPABILITY_DRIVER						= "driver";
 
 	/**
-	 * As a value of the property 'osgi.jdbc.datasourcefactory.capability' it
-	 * indicates that the {@code DataSourceFactory} is able to provide a
-	 * {@code DataSource} invoking the
-	 * {@code createDataSource(Properties props)} method.
+	 * {@link #OSGI_JDBC_CAPABILITY} service property which indicates that the
+	 * {@code DataSourceFactory} is able to provide a {@code DataSource}
+	 * invoking the {@code createDataSource(Properties props)} method.
 	 * 
 	 * @since 1.1
 	 */
 	public static final String	OSGI_JDBC_CAPABILITY_DATASOURCE					= "datasource";
 
 	/**
-	 * As a value of the property 'osgi.jdbc.datasourcefactory.capability' it
-	 * indicates that the {@code DataSourceFactory} is able to provide a
+	 * {@link #OSGI_JDBC_CAPABILITY} service property which indicates that the
+	 * {@code DataSourceFactory} is able to provide a
 	 * {@code ConnectionPoolDataSource} invoking the
 	 * {@code createConnectionPoolDataSource(Properties props)} method.
 	 * 
 	 * @since 1.1
 	 */
-	public static final String	OSGI_JDBC_CAPABILITY_CONNECTIONPOOLEDDATASOURCE	= "connectionpooleddatasource";
+	public static final String	OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE	= "connectionpooldatasource";
 
 	/**
-	 * As a value of the property 'osgi.jdbc.datasourcefactory.capability' it
-	 * indicates that the {@code DataSourceFactory} is able to provide a
-	 * {@code XADataSource} invoking the
-	 * {@code createXADataSource(Properties props)} method.
+	 * {@link #OSGI_JDBC_CAPABILITY} service property which indicates that the
+	 * {@code DataSourceFactory} is able to provide a {@code XADataSource}
+	 * invoking the {@code createXADataSource(Properties props)} method.
 	 * 
 	 * @since 1.1
 	 */
-	public static final String	OSGI_JDBC_CAPABILITY_XADATASOURCE				= "xadatadource";
+	public static final String	OSGI_JDBC_CAPABILITY_XADATASOURCE				= "xadatasource";
 
 	/**
 	 * Service property used by a JDBC driver to declare the driver class when
