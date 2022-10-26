@@ -1442,31 +1442,4 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(receivedLatch.await(5, TimeUnit.SECONDS));
 		assertTrue(contents.isEmpty());
 	}
-
-	/**
-	 * Registration of servlet with http service (not allowed).
-	 */
-	public void testHttpServiceAndServlet() throws Exception {
-		final String path = "/tesths";
-		Dictionary<String,Object> properties = new Hashtable<String,Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
-				path);
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
-				"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
-						+ "=*)");
-		final long before = this.getHttpRuntimeChangeCount();
-		this.serviceRegistrations.add(this.getContext().registerService(
-				Servlet.class, new MockServlet(), properties));
-		this.waitForRegistration(before);
-
-		boolean found = false;
-		for (final FailedServletDTO fsd : this.getHttpServiceRuntime()
-				.getRuntimeDTO().failedServletDTOs) {
-			if (fsd.patterns.length > 0 && path.equals(fsd.patterns[0])) {
-				found = true;
-				break;
-			}
-		}
-		assertTrue(found);
-	}
 }
