@@ -16,7 +16,6 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-
 <chapter label="1" revision="$Id$"
          version="5.0" xml:id="introduction"
          xmlns="http://docbook.org/ns/docbook"
@@ -82,9 +81,9 @@
     Compendium <xref endterm="cmpn.book-release" linkend="cmpn.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 9</title>
+      <title>OSGi Core Release 8</title>
 
-      <para>This specification is based on OSGi Core Release 9. This
+      <para>This specification is based on OSGi Core Release 8. This
       specification can be downloaded from:</para>
 
       <programlisting><link xlink:href="https://docs.osgi.org/specification/"/></programlisting>
@@ -733,5 +732,42 @@
       Specifications</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/specification/"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Updated <xref linkend="util.pushstream"
+        xrefstyle="template:%n %t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.jdbc"
+        xrefstyle="template:%n %t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="util.pushstream"
+        xrefstyle="template:%n %t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="service.servlet" xrefstyle="template:%n %t"/>
+        updated for Jakarta EE and replaces the Http Whiteboard specification
+        which is based upon the <code>javax</code>-namespace Servlet API. The
+        old Http Service specification was also removed as it is based upon
+        the old version 2.1 of the <code>javax</code>-namespace Servlet
+        API.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="service.jakartars" xrefstyle="template:%n %t"/>
+        updated for Jakarta EE and replaces the JaxRS Whiteboard specification
+        which is based upon the <code>javax</code>-namespace JAX-RS API.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
