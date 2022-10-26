@@ -38,13 +38,13 @@
 
     <para>Servlets have become a popular and widely supported mechanism for
     providing dynamic content on the Internet. While servlets are defined in
-    the <xref linkend="service.servlet-i21217577"/>, the OSGi Http
-    Whiteboard Specification provides a light and convenient way of using
+    the <xref linkend="service.servlet-i21217577"/>, the Servlet Whiteboard
+    Specification provides a light and convenient way of using
     servlets, servlet filters, servlet listeners and web resources in an OSGi
     environment through the use of the <xref
     linkend="service.servlet-whiteboard.pattern.ref"/>.</para>
 
-    <para>The Http Whiteboard specification supports:</para>
+    <para>The Servlet Whiteboard Specification supports:</para>
 
     <itemizedlist>
       <listitem>
@@ -92,11 +92,11 @@
     </itemizedlist>
 
     <para>Alternatively, implementations of this service can support other
-    protocols if these protocols can conform to the semantics of the Java
+    protocols if these protocols can conform to the semantics of the Jakarta
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support version 3.1 or later of
-    the Java Servlet API.</para>
+    <para>Implementations of this specification must support version 5.0 or later of
+    the Jakarta Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -105,19 +105,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Http Whiteboard service</emphasis> - An object
+          <para><emphasis>Servlet Whiteboard service</emphasis> - An object
           registered in the Service Registry under one of the Whiteboard
           service interfaces defined by this specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Whiteboard implementation</emphasis> - An
-          implementation that processes Http Whiteboard services.</para>
+          <para><emphasis>Servlet Whiteboard implementation</emphasis> - An
+          implementation that processes Servlet Whiteboard services.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Http Service Runtime service</emphasis> - Service
-          providing runtime introspection into the Http Whiteboard
+          providing runtime introspection into the Servlet Whiteboard
           implementation.</para>
         </listitem>
 
@@ -151,7 +151,7 @@
       </itemizedlist>
 
       <figure pgwide="1">
-        <title>Http Whiteboard Overview Diagram</title>
+        <title>Servlet Whiteboard Overview Diagram</title>
 
         <mediaobject>
           <imageobject>
@@ -177,7 +177,7 @@
     handle security and supports a number of methods from the
     <code>ServletContext</code>.</para>
 
-    <para>The Http Whiteboard implementation must create a separate
+    <para>The Servlet Whiteboard implementation must create a separate
     <code>ServletContext</code> instance for each
     <code>ServletContextHelper</code> service. Whiteboard services can be
     associated with the Servlet Context Helper by using the
@@ -339,7 +339,7 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
     linkend="org.osgi.service.servlet.runtime.dto.FailedServletContextDTO"
     xrefstyle="hyperlink"/>. Similarly, if an alternative <code>default</code>
     Servlet Context Helper is provided, the default Servlet Context Helper
-    provided by the Http Whiteboard implementation is not used and represented
+    provided by the Servlet Whiteboard implementation is not used and represented
     in a failure DTO.</para>
 
     <para>An example Servlet Context Helper defined using Declarative Services
@@ -902,11 +902,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <title>Relation to the Servlet Container</title>
 
       <para>Implementations of this specification will often be backed by
-      existing servlet containers or a Java EE application server. There may
+      existing servlet containers or a Jakarta EE application server. There may
       also exist implementations which bridge into a servlet container into
       which the OSGi Framework has been deployed as a Web Application.</para>
 
-      <para>In bridged situations the Http Whiteboard implementation will live
+      <para>In bridged situations the Servlet Whiteboard implementation will live
       in one servlet context and all Whiteboard services registered by this
       implementation will be backed by the same underlying Servlet Context.
       However, to exhibit the behavior described in <xref
@@ -934,9 +934,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para>Where <xref
       linkend="service.http.whiteboard.servletcontext.methods"
       xrefstyle="template:Table %n on page %p"/> states <emphasis>Backed by
-      the Servlet Container</emphasis> and the Http Whiteboard implementation
+      the Servlet Container</emphasis> and the Servlet Whiteboard implementation
       is deployed in bridged mode, the API call can be forwarded to the
-      top-level Servlet Context. If the Http Whiteboard implementation is not
+      top-level Servlet Context. If the Servlet Whiteboard implementation is not
       deployed in bridged mode, it must provide another means to handle these
       APIs.</para>
 
@@ -970,7 +970,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>Whiteboard servlet, servlet filter, resource and listener services
     support common service registration properties to associate them with a
-    <code>ServletContextHelper</code> and/or a Http Whiteboard
+    <code>ServletContextHelper</code> and/or a Servlet Whiteboard
     implementation.</para>
 
     <table pgwide="1" xml:id="service.http.whiteboard.common.properties.table">
@@ -1025,16 +1025,16 @@ public class CDNServletContextHelper extends ServletContextHelper {
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The value of this service property is an LDAP-style
-            filter expression to select the Http Whiteboard implementation(s)
+            filter expression to select the Servlet Whiteboard implementation(s)
             to handle this Whiteboard service. The LDAP filter is used to
             match <xref
             linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
-            xrefstyle="hyperlink"/> services. Each Http Whiteboard
+            xrefstyle="hyperlink"/> services. Each Servlet Whiteboard
             <emphasis>implementation</emphasis> exposes exactly one
             <code>HttpServiceRuntime</code> service. This property is used to
-            associate the Whiteboard service with the Http Whiteboard
+            associate the Whiteboard service with the Servlet Whiteboard
             implementation that registered the <code>HttpServiceRuntime</code>
-            service. If this property is not specified, all Http Whiteboard
+            service. If this property is not specified, all Servlet Whiteboard
             implementations can handle the service. See <xref
             linkend="org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
             xrefstyle="hyperlink"/>.</para></entry>
@@ -1054,7 +1054,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
   <section xml:id="service.servlet-i21223311">
     <title>Registering Servlets</title>
 
-    <para>Servlets can be registered with the Http Whiteboard implementation
+    <para>Servlets can be registered with the Servlet Whiteboard implementation
     by registering them as Whiteboard services. This means that
     <code>Servlet</code> implementations are registered in the Service
     Registry under the <code>jakarta.servlet.Servlet</code> interface.</para>
@@ -1064,9 +1064,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     pattern defines the URL context that will trigger the servlet to handle
     the request. They are defined by the <xref
     linkend="service.servlet-i21217577"/> in section 12.2,
-    <emphasis>Specification of Mappings</emphasis>. Note that these mapping
-    rules are slightly different than those defined in the <xref
-    linkend="service.http"/>. The mapping rules are:</para>
+    <emphasis>Specification of Mappings</emphasis>.
+    The mapping rules are:</para>
 
     <itemizedlist>
       <listitem>
@@ -1118,17 +1117,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     have this property, the servlet name defaults to the fully qualified class
     name of the service object.</para>
 
-    <para>With implementations that both implement this specification as well
-    as the <xref linkend="service.http"/>, situations can arise where a
-    servlet is registered for the same pattern with the Http Service as well
-    as with the Http Whiteboard. The Servlet Context of the Http Service is
-    treated in the same way as all contexts managed by the Whiteboard
-    implementation. The highest ranking is associated with the context of the
-    Http Service. For a request, contexts are processed in the order as
-    described in section <xref
-    linkend="service.http.whiteboard.servletcontext"/>.</para>
-
-    <para>For example, if the Http Whiteboard implementation is listening on
+    <para>For example, if the Servlet Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
     <code>Servlet</code> object is registered with the pattern
     <code>"/servlet"</code>, then the <code>Servlet</code> object's
@@ -1330,13 +1319,13 @@ public class CDNServletContextHelper extends ServletContextHelper {
     osgi.http.whiteboard.servlet.name
     osgi.http.whiteboard.servlet.errorPage</programlisting></para>
 
-    <para><code>Servlet</code> objects are initialized by a Http Whiteboard
+    <para><code>Servlet</code> objects are initialized by a Servlet Whiteboard
     implementation before they start serving requests. The initialization is
     done by calling the <code>Servlet</code> object's
     <code>Servlet.init(ServletConfig)</code> method. The
     <code>ServletConfig</code> parameter provides access to the initialization
     parameters specified when the <code>Servlet</code> object was registered.
-    Once the servlet is no longer used by the Http Whiteboard implementation
+    Once the servlet is no longer used by the Servlet Whiteboard implementation
     the <code>destroy</code> method is called. Failure during
     <code>Servlet.init</code> will prevent the servlet from being used, which
     is reflected using a failure DTO. In such a case the system treats the
@@ -1348,7 +1337,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     servlet is re-initialized. If a Prototype Service Factory is used for the
     servlet this re-initialization is done on a new service object.</para>
 
-    <para>When multiple Http Whiteboard implementations are present all of
+    <para>When multiple Servlet Whiteboard implementations are present all of
     them can potentially process the <code>Servlet</code>. In such situations
     it can be useful to associate the servlet with a specific implementation
     by specifying the <code>osgi.http.whiteboard.target</code> property on the
@@ -1359,7 +1348,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <code>osgi.http.whiteboard.target</code> property or the property is not
     set, the <code>Servlet</code> will be processed by all the matching
     implementations. A <code>Servlet</code> service that is processed by more
-    than one Http Whiteboard implementation will have its <code>init</code>
+    than one Servlet Whiteboard implementation will have its <code>init</code>
     method called for each implementation that processes this
     <code>Servlet</code>. Similarly, the <code>destroy</code> method is called
     once when the <code>Servlet</code> is shut down once for each
@@ -1368,7 +1357,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     generally not desirable, <code>Servlet</code> implementations should be
     registered as Prototype Service Factories as defined in the <xref
     linkend="intro.core.release" xrefstyle="template:%t"/>. This will ensure
-    that each Http Whiteboard implementation processing the
+    that each Servlet Whiteboard implementation processing the
     <code>Servlet</code> will use a separate instance, ensuring that only one
     <code>init</code> and <code>destroy</code> call is made per
     <code>Servlet</code> object. Servlets not registered as a Prototype
@@ -1545,7 +1534,7 @@ public class AsyncServlet extends HttpServlet {
       <title>Annotations</title>
 
       <para>Annotations defined in the Servlet API Specifications are ignored
-      by an implementation of the Http Whiteboard Specification. The OSGi
+      by an implementation of the Servlet Whiteboard Specification. The OSGi
       service model is used instead by this specification.</para>
 
       <para>Implementations of this specification <emphasis>may</emphasis>
@@ -1703,18 +1692,18 @@ public class AsyncServlet extends HttpServlet {
     osgi.http.whiteboard.filter.servlet</programlisting></para>
 
     <para>Similar to servlets, <code>Filter</code> objects are initialized by
-    a Http Whiteboard implementation before they start filtering requests. The
+    a Servlet Whiteboard implementation before they start filtering requests. The
     initialization is done by calling the
     <code>Filter.init(FilterConfig)</code> method. The
     <code>FilterConfig</code> parameter provides access to
     <code>filter.init.*</code> properties on the servlet filter service
-    registration. Once the <code>Filter</code> is no longer used by the Http
+    registration. Once the <code>Filter</code> is no longer used by the Servlet
     Whiteboard implementation, the <code>destroy</code> method is called. When
     the service properties on the servlet filter are modified, the
     <code>destroy</code> method is called and the servlet filter is
-    subsequently re-initialized, if it can still be associated with a Http
+    subsequently re-initialized, if it can still be associated with a Servlet
     Whiteboard implementation after the modification. By default, a servlet
-    filter can be used with any Servlet Context Helper or Http Whiteboard
+    filter can be used with any Servlet Context Helper or Servlet Whiteboard
     implementation. To restrict a servlet filter to a single implementation or
     a specific Servlet Context Helper, the <xref
     linkend="service.http.whiteboard.common.properties"/> can be used.</para>
@@ -1738,7 +1727,7 @@ public class AsyncServlet extends HttpServlet {
     order.</para>
 
     <para>Servlet filters are only applied to servlet requests if they are
-    bound to the same Servlet Context Helper and the same Http Whiteboard
+    bound to the same Servlet Context Helper and the same Servlet Whiteboard
     implementation.</para>
 
     <para>The example Filter below adds some text before and after the content
@@ -1806,17 +1795,17 @@ public class MyFilter implements Filter {
               <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
               <entry><para>The value of this service property is an LDAP-style
-              filter expression to select the Http Whiteboard
+              filter expression to select the Servlet Whiteboard
               implementation(s) to handle this Whiteboard service. The LDAP
               filter is used to match <xref
               linkend="org.osgi.service.http.servlet.HttpServiceRuntime"
-              xrefstyle="hyperlink"/> services. Each Http Whiteboard
+              xrefstyle="hyperlink"/> services. Each Servlet Whiteboard
               <emphasis>implementation</emphasis> exposes exactly one
               <code>HttpServiceRuntime</code> service. This property is used
-              to associate the Whiteboard service with the Http Whiteboard
+              to associate the Whiteboard service with the Servlet Whiteboard
               implementation that registered the
               <code>HttpServiceRuntime</code> service. If this property is not
-              specified, all Http Whiteboard implementations can handle the
+              specified, all Servlet Whiteboard implementations can handle the
               service. See <xref
               linkend="org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
               xrefstyle="hyperlink"/>.</para></entry>
@@ -1898,7 +1887,7 @@ public class MyPreprocessor implements Preprocessor {
     service registration property that marks it as a resource service:
     <code>osgi.http.whiteboard.resource.pattern</code>. The actual service
     object registered is not used to serve resources, it is merely used to
-    inform the Http Whiteboard implementation to serve resources from a
+    inform the Servlet Whiteboard implementation to serve resources from a
     certain source.</para>
 
     <para>The following table describes the supported service properties. In
@@ -1966,14 +1955,14 @@ public class MyPreprocessor implements Preprocessor {
 
     <para>The examples below use Declarative Services annotations to register
     a resources service. Note that this service is purely used to convey
-    information to the Http Whiteboard implementation and is never
+    information to the Servlet Whiteboard implementation and is never
     invoked.</para>
 
     <programlisting>@Component(service = MyResourceService.class)
 @HttpWhiteboardResource(pattern = "/files/*", prefix = "/www")
 public class MyResourceService {}</programlisting>
 
-    <para>A Http Whiteboard implementation configured on port 80 will serve a
+    <para>A Servlet Whiteboard implementation configured on port 80 will serve a
     request for <code>http://localhost/files/cheese.html</code> from the
     location <code>/www/cheese.html</code>.</para>
 
@@ -2014,7 +2003,7 @@ public class SomeResourceService {}</programlisting>
 
     <para>The servlet specification defines listener interfaces that can be
     implemented to receive a variety of servlet-related events. When using the
-    Http Whiteboard implementation these listeners can be registered as
+    Servlet Whiteboard implementation these listeners can be registered as
     Whiteboard services.</para>
 
     <itemizedlist>
@@ -2097,7 +2086,7 @@ public class SomeResourceService {}</programlisting>
             String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>When set to <code>true</code> this listener service
-            is handled by the Http Whiteboard implementation. When not set or
+            is handled by the Servlet Whiteboard implementation. When not set or
             set to <code>false</code> the service is ignored. Any other value
             is invalid and will be reflected in a <xref
             linkend="org.osgi.service.servlet.runtime.dto.FailedListenerDTO"
@@ -2134,7 +2123,7 @@ public class MyServletRequestListener implements ServletRequestListener {
   <section>
     <title>Life Cycle</title>
 
-    <para>If a Whiteboard service is used by a Http Whiteboard implementation,
+    <para>If a Whiteboard service is used by a Servlet Whiteboard implementation,
     the following order of actions are performed:</para>
 
     <orderedlist>
@@ -2169,7 +2158,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     <para>As servlets and servlet filters services might come and go as well
     as <code>ServletContextHelper</code> services might come and go, use of
     the Whiteboard services can be very dynamic. Therefore servlet and servlet
-    filter services might transition between bound to a Http Whiteboard
+    filter services might transition between bound to a Servlet Whiteboard
     implementation to being unbound and back to be bound. For example, when a
     matching Servlet Context Helper with the same name arrives with a higher
     ranking than the currently bound Servlet Context Helper, the servlet will
@@ -2189,12 +2178,12 @@ public class MyServletRequestListener implements ServletRequestListener {
     <section>
       <title>Whiteboard Service Dynamics and Active Requests</title>
 
-      <para>When the Http Whiteboard implementation receives a network request
+      <para>When the Servlet Whiteboard implementation receives a network request
       it establishes the processing pipeline based on the available Whiteboard
       services (servlets, servlet filters and resource services) and executes
       this pipeline. Between establishing the pipeline and finishing the
       processing, services used in this pipeline might become unregistered. It
-      is up to the Http Whiteboard implementation whether it completes the
+      is up to the Servlet Whiteboard implementation whether it completes the
       active request or throws a Servlet Exception in this case.</para>
     </section>
   </section>
@@ -2204,25 +2193,17 @@ public class MyServletRequestListener implements ServletRequestListener {
 
     <para>The <xref linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
     xrefstyle="hyperlink"/> service represents the runtime state information
-    of a Http Whiteboard implementation. This information is provided through
+    of a Servlet Whiteboard implementation. This information is provided through
     Data Transfer Objects (DTOs). The architecture of OSGi DTOs is described
     in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
-    <para>Each Http Whiteboard implementation registers exactly one
+    <para>Each Servlet Whiteboard implementation registers exactly one
     <code>HttpServiceRuntime</code> service which can be used to target
     Whiteboard services defined in this specification to a specific Http
     Whiteboard implementation.</para>
 
-    <para>Implementations of this specification that also implement the <xref
-    linkend="service.http"/> can provide runtime information for servlets
-    registered using the <code>HttpService</code> via the
-    <code>HttpServiceRuntime</code> as well. In this case the
-    <code>osgi.http.service.id</code> service property must be set to
-    associate the <code>HttpServiceRuntime</code> service with the
-    <code>HttpService</code>.</para>
-
     <para>The <code>HttpServiceRuntime</code> provides service registration
-    properties to declare its underlying Http Whiteboard implementation. These
+    properties to declare its underlying Servlet Whiteboard implementation. These
     service properties can include implementation-specific key-value pairs.
     They also include the following:</para>
 
@@ -2254,31 +2235,17 @@ public class MyServletRequestListener implements ServletRequestListener {
 
             <entry><code>String+</code></entry>
 
-            <entry><para> Endpoint(s) where this Http Whiteboard
+            <entry><para> Endpoint(s) where this Servlet Whiteboard
             implementation is listening. Registered Whiteboard services are
             made available here. Values could be provided as URLs e.g.
             <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
             <code>/myapp/</code>. Relative paths may be used if the scheme and
             authority parts of the URLs are not known such as in a bridged
-            Http Service implementation. If the Http Service is serving the
-            root context and scheme and authority are not known, the value of
-            the property is <code>/</code>. Each entry must end with a
+            Http Service implementation. If the Servlet Whiteboard implementation
+            is serving the root context and scheme and authority are not known, 
+            the value of the property is <code>/</code>. Each entry must end with a
             slash.</para><para>See <xref
             linkend="org.osgi.service.servlet.runtime.HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT"
-            xrefstyle="hyperlink"/>.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>osgi.http.service.id</code></entry>
-
-            <entry><para><code>Collection&lt;Long&gt;</code></para></entry>
-
-            <entry><para> If this Http Whiteboard implementation also
-            implements the <xref linkend="service.http"/>, this property is
-            set to hold the <code>service.id</code> values of all the
-            <code>HttpService</code> services provided by this
-            implementation.</para><para>See <xref
-            linkend="org.osgi.service.servlet.runtime.HttpServiceRuntimeConstants.HTTP_SERVICE_ID"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
@@ -2356,47 +2323,10 @@ public class MyServletRequestListener implements ServletRequestListener {
     services.</para>
   </section>
 
-  <section xml:id="service.http.whiteboard.httpservice.integration">
-    <title>Integration with Http Service Contexts</title>
-
-    <para>Some systems are implemented using a mixture of Http Whiteboard
-    services and Http Service servlets and contexts as specified in the <xref
-    linkend="service.http"/>. When a servlet is registered with the Http
-    Service it is either registered with a provided <code>HttpContext</code>
-    or it uses the default Http Context. It can be desirable to register a
-    Http Whiteboard filter, listener or error page that also acts on servlets
-    registered with the Http Service.</para>
-
-    <para>A Http Whiteboard service which should be registered with a Http
-    Context from the Http Service can achieve this by targeting a
-    <code>ServletContextHelper</code> with the registration property
-    <code>osgi.http.whiteboard.context.httpservice</code>. The value for this
-    property is not further specified. Note that this mechanism only works if
-    the Http Service is provided by the same implementation that also provides
-    the Http Whiteboard implementation.</para>
-
-    <para>The following example registers a servlet filter for all servlets
-    managed by the Http Service. <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE)
-@HttpWhiteboardFilterPattern("/*")
-@HttpWhiteboardContextSelect(HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_FILTER)
-public class MyFilter implements Filter</programlisting> This specification
-    does not provide a way to select in individual Http Context from the Http
-    Service, however a Http Whiteboard implementation may provide an
-    implementation-specific mechanism to do this. Also, the Http Service
-    implementation is not required to register the Http Context objects in the
-    service registry. The matching can be done internally by the
-    implementation.</para>
-
-    <para>Association with Http Context from the Http Service can only be done
-    for servlet filters, error pages and listeners. Servlets and resources
-    cannot be associated with Http Contexts managed by the Http Service. If
-    this is attempted this will be reflected in the failure DTOs.</para>
-  </section>
-
   <section>
     <title>Configuration Properties</title>
 
-    <para>If the Http Whiteboard implementation does not have its port values
+    <para>If the Servlet Whiteboard implementation does not have its port values
     configured through some other means, the implementation should use the
     following Framework properties to determine the port values to listen
     on.</para>
@@ -2422,13 +2352,13 @@ public class MyFilter implements Filter</programlisting> This specification
     <section>
       <title>osgi.implementation Capability</title>
 
-      <para>The Http Whiteboard implementation bundle must provide the <link
+      <para>The Servlet Whiteboard implementation bundle must provide the <link
       linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
       capability with name <code>osgi.http</code>. This capability can be used
-      by provisioning tools and during resolution to ensure that a Http
+      by provisioning tools and during resolution to ensure that a Servlet
       Whiteboard implementation is present to process the Whiteboard services
       defined in this specification. The capability must also declare a uses
-      constraint for the Servlet and OSGi Http Whiteboard packages and provide
+      constraint for the Servlet and OSGi Servlet Whiteboard packages and provide
       the version of this specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
@@ -2461,10 +2391,10 @@ public class MyFilter implements Filter</programlisting> This specification
     <section>
       <title>osgi.contract Capability</title>
 
-      <para>The Http Whiteboard implementation must provide a capability in
+      <para>The Servlet Whiteboard implementation must provide a capability in
       the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
-      namespace with name <code>JavaServlet</code> if it exports the
+      namespace with name <code>JakartaServlet</code> if it exports the
       <code>jakarta.servlet</code> and <code>jakarta.servlet.http</code> packages.
       See <xref
       linkend="service.servlet-portable.java.contracts.ref"/>.</para>
@@ -2474,7 +2404,7 @@ public class MyFilter implements Filter</programlisting> This specification
       under OSGi Semantic Versioning rules. For more details see <xref
       linkend="service.namespaces-osgi.contract.namespace"/>.</para>
 
-      <para>If the Servlet API is provided by another bundle, the Http
+      <para>If the Servlet API is provided by another bundle, the Servlet
       Whiteboard implementation must be a consumer of the API and require the
       contract.</para>
     </section>
@@ -2508,11 +2438,11 @@ public class MyFilter implements Filter</programlisting> This specification
     <section>
       <title>Service Permissions</title>
 
-      <para>Bundles that need to register Http Whiteboard services must be
+      <para>Bundles that need to register Servlet Whiteboard services must be
       granted <code>ServicePermission[interfaceName, REGISTER]</code> where
-      interface name is the Http Whiteboard service interface name.</para>
+      interface name is the Servlet Whiteboard service interface name.</para>
 
-      <para>The Http Whiteboard implementation must be granted
+      <para>The Servlet Whiteboard implementation must be granted
       <code>ServicePermission[interfaceName, GET]</code> to retrieve the Http
       Whiteboard services from the service registry.</para>
     </section>
@@ -2531,7 +2461,7 @@ public class MyFilter implements Filter</programlisting> This specification
       <title>Accessing Resources with the Default Servlet Context Helper
       Implementation</title>
 
-      <para>The Http Whiteboard implementation must be granted
+      <para>The Servlet Whiteboard implementation must be granted
       <code>AdminPermission[*,RESOURCE]</code> so that bundles may use the
       default <code>ServletContextHelper</code> implementation. This is
       necessary because the implementation of the default
@@ -2545,7 +2475,7 @@ public class MyFilter implements Filter</programlisting> This specification
       Whiteboard implementation as the result of a
       <code>ServletContextHelper.getResource</code> call. No further
       permission checks are performed when accessing bundle entry or resource
-      <code>URL</code> objects, so the Http Whiteboard implementation does not
+      <code>URL</code> objects, so the Servlet Whiteboard implementation does not
       need to be granted any additional permissions.</para>
     </section>
 
@@ -2553,21 +2483,21 @@ public class MyFilter implements Filter</programlisting> This specification
       <title>Accessing Other Types of Resources</title>
 
       <para>In order to access resources that were not returned from the
-      default <code>ServletContextHelper</code> implementation, the Http
+      default <code>ServletContextHelper</code> implementation, the Servlet
       Whiteboard implementation must be granted sufficient privileges to
       access these resources. For example, if the <code>getResource</code>
       method of a <code>ServletContextHelper</code> service returns a file
-      URL, the Http Whiteboard implementation requires the corresponding
+      URL, the Servlet Whiteboard implementation requires the corresponding
       <code>FilePermission</code> to read the file. Similarly, if the
       <code>getResource</code> method of a <code>ServletContextHelper</code>
-      service returns an HTTP URL, the Http Whiteboard implementation requires
+      service returns an HTTP URL, the Servlet Whiteboard implementation requires
       the corresponding <code>SocketPermission</code> to connect to the
       resource.</para>
 
-      <para>Therefore, in most cases, the Http Whiteboard implementation
+      <para>Therefore, in most cases, the Servlet Whiteboard implementation
       should be a privileged service that is granted sufficient permission to
       serve any bundle's resources, no matter where these resources are
-      located. Therefore, the Http Whiteboard implementation must capture the
+      located. Therefore, the Servlet Whiteboard implementation must capture the
       <code>AccessControlContext</code> object of the bundle registering a
       <code>ServletContextHelper</code> service, and then use the captured
       <code>AccessControlContext</code> object when accessing resources
@@ -2575,7 +2505,7 @@ public class MyFilter implements Filter</programlisting> This specification
       situation prevents a bundle from supplying resources that it does not
       have permission to access.</para>
 
-      <para>Therefore, the Http Whiteboard implementation should follow a
+      <para>Therefore, the Servlet Whiteboard implementation should follow a
       scheme like the following example. When using a
       <code>ServletContextHelper</code> service, it should capture the
       context.</para>
@@ -2585,7 +2515,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     .adapt(AccessControlContext.class);</programlisting>
 
       <para>When a URL returned by the <code>getResource</code> method of a
-      <code>ServletContextHelper</code> service is used by the Http Whiteboard
+      <code>ServletContextHelper</code> service is used by the Servlet Whiteboard
       implementation, the implementation must use the URL in a
       <code>doPrivileged</code> construct using the
       <code>AccessControlContext</code> object of the registering
@@ -2598,7 +2528,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
         }
     }, acc);</programlisting>
 
-      <para>This ensures the Http Whiteboard implementation can only use the
+      <para>This ensures the Servlet Whiteboard implementation can only use the
       URL if the bundle registering the <code>ServletContextHelper</code>
       service that returned the URL also has permission to use the URL. The
       use of a captured <code>AccessControlContext</code> only applies when
@@ -2607,12 +2537,12 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     </section>
 
     <section>
-      <title>Calling Http Whiteboard Services</title>
+      <title>Calling Servlet Whiteboard Services</title>
 
-      <para>This specification does not require that the Http Whiteboard
+      <para>This specification does not require that the Servlet Whiteboard
       implementation is granted All Permission or wraps calls to the Http
       Whiteboard services in a <code>doPrivileged</code> block. Therefore, it
-      is the responsibility of the Http Whiteboard service implementations to
+      is the responsibility of the Servlet Whiteboard service implementations to
       use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
     </section>
@@ -2625,16 +2555,16 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       file permissions must be granted accordingly.</para>
 
       <para>If a servlet is using the default path to store uploaded data, the
-      Http Whiteboard implementation needs <code>FilePermission[path,
+      Servlet Whiteboard implementation needs <code>FilePermission[path,
       "read,write,delete"]</code> for that path. As the servlet is reading the
       data, the bundle containing the servlet needs <code>FilePermission[path,
       "read"]</code> for that path.</para>
 
       <para>If a servlet is providing the path to store uploaded data, the
       bundle containing the servlet needs <code>FilePermission[path,
-      "read,write,delete"]</code> for that path. The Http Whiteboard
+      "read,write,delete"]</code> for that path. The Servlet Whiteboard
       implementation needs the same permissions for that path. Therefore, it
-      is the responsibility of the Http Whiteboard service implementations to
+      is the responsibility of the Servlet Whiteboard service implementations to
       use a <code>doPrivileged</code> block when performing the write
       operation.</para>
 
@@ -2684,9 +2614,9 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Specifications</title><biblioid class="uri"><link
       xlink:href="https://http2.github.io"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.servlet-i21217577"><title>Java
-      Servlet 3.1 Specification</title><biblioid class="uri"><link
-      xlink:href="https://jcp.org/aboutJava/communityprocess/final/jsr340/"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="service.servlet-i21217577"><title>Jakarta
+      Servlet 5.0 Specification</title><biblioid class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/servlet/5.0/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.servlet-portable.java.contracts.ref"><title>Portable
