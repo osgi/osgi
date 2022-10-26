@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Http Whiteboard Package Version 2.0.
+ * Servlet Whiteboard Package Version 2.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of

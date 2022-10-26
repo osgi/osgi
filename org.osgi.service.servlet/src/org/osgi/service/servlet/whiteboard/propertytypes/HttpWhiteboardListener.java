@@ -30,7 +30,7 @@ import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
  * Component Property Type for the {@code osgi.http.whiteboard.listener} service
  * property.
  * <p>
- * This annotation can be used on a Http Whiteboard listener to declare the
+ * This annotation can be used on a Servlet Whiteboard listener to declare the
  * value of the
  * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
  * HTTP_WHITEBOARD_LISTENER} service property as being {@code Boolean.TRUE}.

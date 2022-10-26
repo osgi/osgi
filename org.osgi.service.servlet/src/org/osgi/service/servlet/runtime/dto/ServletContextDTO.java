@@ -74,7 +74,7 @@ public class ServletContextDTO extends DTO {
 	 * Service property identifying the servlet context. In the case of a
 	 * servlet context backed by a
 	 * {@code org.osgi.service.servlet.context.ServletContextHelper} registered
-	 * in the service registry and picked up by a Http Whiteboard
+	 * in the service registry and picked up by a Servlet Whiteboard
 	 * Implementation, this value is not negative and corresponds to the service
 	 * id in the registry. If the servlet context is not backed by a service
 	 * registered in the service registry, the value is negative and a unique

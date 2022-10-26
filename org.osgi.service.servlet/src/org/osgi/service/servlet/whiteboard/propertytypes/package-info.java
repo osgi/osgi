@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Http Whiteboard Property Types Package Version 2.0.
+ * Servlet Whiteboard Property Types Package Version 2.0.
  * <p>
  * When used as annotations, component property types are processed by tools to
  * generate Component Descriptions which are used at runtime.

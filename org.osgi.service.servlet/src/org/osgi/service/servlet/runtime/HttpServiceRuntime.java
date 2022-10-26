@@ -23,15 +23,13 @@ import org.osgi.service.servlet.runtime.dto.RequestInfoDTO;
 import org.osgi.service.servlet.runtime.dto.RuntimeDTO;
 
 /**
- * The HttpServiceRuntime service represents the runtime information of an Http
- * Whiteboard implementation.
- *
+ * The HttpServiceRuntime service represents the runtime information of a
+ * Servlet Whiteboard implementation.
  * <p>
  * It provides access to DTOs representing the current state of the service.
  * <p>
  * The HttpServiceRuntime service must be registered with the
- * {@link HttpServiceRuntimeConstants#HTTP_SERVICE_ENDPOINT} service
- * property.
+ * {@link HttpServiceRuntimeConstants#HTTP_SERVICE_ENDPOINT} service property.
  *
  * @ThreadSafe
  * @author $Id$
@@ -50,7 +48,7 @@ public interface HttpServiceRuntime {
 	 * Return a request info DTO containing the services involved with
 	 * processing a request for the specified path.
 	 * 
-	 * @param path The request path, relative to the root of the Http Whiteboard
+	 * @param path The request path, relative to the root of the Servlet Whiteboard
 	 *        implementation.
 	 * @return The request info DTO for the specified path.
 	 */

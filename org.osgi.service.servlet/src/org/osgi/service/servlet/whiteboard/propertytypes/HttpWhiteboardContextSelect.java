@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * Component Property Type for the {@code osgi.http.whiteboard.context.select}
  * service property.
  * <p>
- * This annotation can be used on a Http Whiteboard component to declare the
+ * This annotation can be used on a Servlet Whiteboard component to declare the
  * value of the
  * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
  * HTTP_WHITEBOARD_CONTEXT_SELECT} service property.
@@ -48,7 +48,7 @@ public @interface HttpWhiteboardContextSelect {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying the select property of a Http Whiteboard
+	 * Service property identifying the select property of a Servlet Whiteboard
 	 * component.
 	 * 
 	 * @return The filter expression.

@@ -35,7 +35,7 @@ public class ListenerDTO extends DTO {
 
 	/**
 	 * Service property identifying the listener. In the case of a Listener
-	 * registered in the service registry and picked up by a Http Whiteboard
+	 * registered in the service registry and picked up by a Servlet Whiteboard
 	 * Implementation, this value is not negative and corresponds to the service
 	 * id in the registry. If the listener has not been registered in the
 	 * service registry, the value is negative and a unique negative value is
