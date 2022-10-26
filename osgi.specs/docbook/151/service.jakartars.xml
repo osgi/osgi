@@ -186,7 +186,7 @@
     <para>All Jakarta RESTful Web Services Whiteboards have a <code>default</code> application which
     is used to register resources that do not target an existing application.
     In this respect a Jakarta RESTful Web Services whiteboard application shares some similarities
-    with a Servlet Context in the <xref linkend="service.http.whiteboard"/>.
+    with a Servlet Context in the <xref linkend="service.servlet"/>.
     Resources registered with a Jakarta RESTful Web Services Whiteboard are always registered as
     part of an application. The generated name of the default application is
     <code>.default</code>, and it is mapped to the root context of the Jakarta RESTful Web Services
@@ -1909,7 +1909,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
       namespace with name <code>JakartaRest</code> if it exports the Jakarta RESTful Web Services
       specification packages. See <xref
-      linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
+      linkend="service.servlet-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
