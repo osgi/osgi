@@ -29,12 +29,12 @@ import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 
 /**
- * This annotation can be used to require the Http Whiteboard implementation. It
+ * This annotation can be used to require the Servlet Whiteboard implementation. It
  * can be used directly, or as a meta-annotation.
  * <p>
- * This annotation is applied to several of the Http Whiteboard component
+ * This annotation is applied to several of the Servlet Whiteboard component
  * property annotations meaning that it does not normally need to be applied to
- * Declarative Services components which use the Http Whiteboard.
+ * Declarative Services components which use the Servlet Whiteboard.
  * 
  * @author $Id$
  */

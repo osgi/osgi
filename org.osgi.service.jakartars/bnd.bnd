@@ -1,11 +1,11 @@
-# Since the ${p} is not a package in this project
+# Since ${p} is not a package in this project
 spec.package = ${p}.whiteboard
 # Set javac settings from JDT prefs
 -include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
 
 Export-Package: ${p}.*; -split-package:=first
 
--contract: JavaJAXRS
+-contract: JakartaRESTfulWebServices
 -buildpath: \
 	${osgi.annotation.buildpath},\
 	org.osgi.framework;maven-scope=provided;version=1.8,\

@@ -17,9 +17,9 @@
  *******************************************************************************/
 
 /**
- * Http Whiteboard Annotations Package Version 2.0.
+ * Servlet Whiteboard Annotations Package Version 2.0.
  * <p>
- * This package contains annotations that can be used to require the Http
+ * This package contains annotations that can be used to require the Servlet
  * Whiteboard implementation.
  * <p>
  * Bundles should not normally need to import this package as the annotations

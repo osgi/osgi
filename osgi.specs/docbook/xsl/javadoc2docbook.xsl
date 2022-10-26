@@ -497,7 +497,7 @@ version="1.1">
 
       <xsl:variable name="linkend">
         <xsl:choose>
-          <xsl:when test="count($target) = 0 and starts-with(@href, 'java')">
+          <xsl:when test="count($target) = 0 and (starts-with(@href, 'java') or starts-with(@href, 'jakarta'))">
             <!-- external link is not active -->
           </xsl:when>
           <xsl:when test="count($target) = 0">

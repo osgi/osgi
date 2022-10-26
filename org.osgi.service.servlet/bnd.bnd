@@ -1,8 +1,9 @@
+# Since ${p} is not a package in this project
+spec.package = ${p}.whiteboard
 # Set javac settings from JDT prefs
 -include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
 
-Export-Package:  \
-	org.osgi.service.servlet.*;-split-package:=first
+Export-Package: ${p}.*;-split-package:=first
 
 -contract: JakartaServlet
 -buildpath: \

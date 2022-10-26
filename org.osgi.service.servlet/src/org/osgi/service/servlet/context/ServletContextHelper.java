@@ -32,10 +32,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Helper service for a servlet context used by a Http Whiteboard implementation
+ * Helper service for a servlet context used by a Servlet Whiteboard implementation
  * to serve HTTP requests.
  * <p>
- * This service defines methods that the Http Whiteboard implementation may call
+ * This service defines methods that the Servlet Whiteboard implementation may call
  * to get information for a request when dealing with whiteboard services.
  * <p>
  * Each {@code ServletContextHelper} is registered with a
@@ -84,13 +84,13 @@ import jakarta.servlet.http.HttpServletResponse;
  * in the bundle of the whiteboard service, addressed from the root. This method
  * calls the whiteboard service bundle's {@code Bundle.getEntry} method, and
  * returns the appropriate URL to access the resource. On a Java runtime
- * environment that supports permissions, the Http Whiteboard implementation
+ * environment that supports permissions, the Servlet Whiteboard implementation
  * needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
  * <li>{@link #getResourcePaths(String) getResourcePaths} - Assumes that the
  * resources are in the bundle of the whiteboard service. This method calls
  * {@code Bundle.findEntries} method, and returns the found entries. On a Java
- * runtime environment that supports permissions, the Http Whiteboard
+ * runtime environment that supports permissions, the Servlet Whiteboard
  * implementation needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
  * <li>{@link #getRealPath(String) getRealPath} - Always returns
@@ -151,9 +151,9 @@ public abstract class ServletContextHelper {
 	/**
 	 * Handles security for the specified request.
 	 * <p>
-	 * The Http Whiteboard implementation calls this method prior to servicing
-	 * the specified request. This method controls whether the request is
-	 * processed in the normal manner or an error is returned.
+	 * The Servlet Whiteboard implementation calls this method prior to
+	 * servicing the specified request. This method controls whether the request
+	 * is processed in the normal manner or an error is returned.
 	 * <p>
 	 * If the request requires authentication and the {@code Authorization}
 	 * header in the request is missing or not acceptable, then this method
@@ -167,10 +167,11 @@ public abstract class ServletContextHelper {
 	 * secure protocol, then this method should set the status in the response
 	 * object to Forbidden(403) and return {@code false}.
 	 * <p>
-	 * When this method returns {@code false}, the Http Whiteboard
+	 * When this method returns {@code false}, the Servlet Whiteboard
 	 * implementation will send the response back to the client, thereby
-	 * completing the request. When this method returns {@code true}, the Http
-	 * Whiteboard implementation will proceed with servicing the request.
+	 * completing the request. When this method returns {@code true}, the
+	 * Servlet Whiteboard implementation will proceed with servicing the
+	 * request.
 	 * <p>
 	 * If the specified request has been authenticated, this method must set the
 	 * {@link #AUTHENTICATION_TYPE} request attribute to the type of
@@ -191,16 +192,17 @@ public abstract class ServletContextHelper {
 	 * <p>
 	 * If there is the need to clean up resources at the end of the request, the
 	 * method {@link #finishSecurity(HttpServletRequest, HttpServletResponse)}
-	 * can be implemented. That method is only called if this method returns {@code true}.
+	 * can be implemented. That method is only called if this method returns
+	 * {@code true}.
 	 *
 	 * @param request The HTTP request.
 	 * @param response The HTTP response.
 	 * @return {@code true} if the request should be serviced, {@code false} if
-	 *         the request should not be serviced and Http Whiteboard
+	 *         the request should not be serviced and Servlet Whiteboard
 	 *         implementation will send the response back to the client.
 	 * @throws java.io.IOException May be thrown by this method. If this occurs,
-	 *             the Http Whiteboard implementation will terminate the request
-	 *             and close the socket.
+	 *             the Servlet Whiteboard implementation will terminate the
+	 *             request and close the socket.
 	 * @see #finishSecurity(HttpServletRequest, HttpServletResponse)
 	 */
 	public boolean handleSecurity(final HttpServletRequest request,
@@ -236,11 +238,11 @@ public abstract class ServletContextHelper {
 	/**
 	 * Maps a resource name to a URL.
 	 * <p>
-	 * Called by the Http Whiteboard implementation to map the specified
-	 * resource name to a URL. For servlets, the Http Whiteboard implementation
+	 * Called by the Servlet Whiteboard implementation to map the specified
+	 * resource name to a URL. For servlets, the Servlet Whiteboard implementation
 	 * will call this method to support the {@code ServletContext} methods
 	 * {@code getResource} and {@code getResourceAsStream}. For resources, the
-	 * Http Whiteboard implementation will call this method to locate the named
+	 * Servlet Whiteboard implementation will call this method to locate the named
 	 * resource.
 	 * <p>
 	 * The context can control from where resources come. For example, the
@@ -249,7 +251,7 @@ public abstract class ServletContextHelper {
 	 * resource in the context's bundle via {@code getClass().getResource(name)}
 	 * 
 	 * @param name The name of the requested resource.
-	 * @return A URL that a Http Whiteboard implementation can use to read the
+	 * @return A URL that a Servlet Whiteboard implementation can use to read the
 	 *         resource or {@code null} if the resource does not exist.
 	 */
 	public URL getResource(String name) {
@@ -267,16 +269,16 @@ public abstract class ServletContextHelper {
 	 * Maps a name to a MIME type.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard implementation to determine the MIME type
-	 * for the specified name. For whiteboard services, the Http Whiteboard
+	 * Called by the Servlet Whiteboard implementation to determine the MIME type
+	 * for the specified name. For whiteboard services, the Servlet Whiteboard
 	 * implementation will call this method to support the
 	 * {@code ServletContext} method {@code getMimeType}. For resource servlets,
-	 * the Http Whiteboard implementation will call this method to determine the
+	 * the Servlet Whiteboard implementation will call this method to determine the
 	 * MIME type for the {@code Content-Type} header in the response.
 	 *
 	 * @param name The name for which to determine the MIME type.
 	 * @return The MIME type (e.g. text/html) of the specified name or
-	 *         {@code null} to indicate that the Http Whiteboard implementation
+	 *         {@code null} to indicate that the Servlet Whiteboard implementation
 	 *         should determine the MIME type itself.
 	 */
 	public String getMimeType(final String name) {
@@ -289,7 +291,7 @@ public abstract class ServletContextHelper {
 	 * argument.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard implementation to support the
+	 * Called by the Servlet Whiteboard implementation to support the
 	 * {@code ServletContext} method {@code getResourcePaths} for whiteboard
 	 * services.
 	 * 
@@ -316,7 +318,7 @@ public abstract class ServletContextHelper {
 	/**
 	 * Gets the real path corresponding to the given virtual path.
 	 * <p>
-	 * Called by the Http Whiteboard implementation to support the
+	 * Called by the Servlet Whiteboard implementation to support the
 	 * {@code ServletContext} method {@code getRealPath} for whiteboard
 	 * services.
 	 * 

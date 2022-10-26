@@ -86,7 +86,7 @@ public class FilterDTO extends DTO {
 
 	/**
 	 * Service property identifying the servlet filter. In the case of a servlet
-	 * filter registered in the service registry and picked up by a Http
+	 * filter registered in the service registry and picked up by a Servlet
 	 * Whiteboard Implementation, this value is not negative and corresponds to
 	 * the service id in the registry. If the servlet filter has not been
 	 * registered in the service registry, the value is negative and a unique

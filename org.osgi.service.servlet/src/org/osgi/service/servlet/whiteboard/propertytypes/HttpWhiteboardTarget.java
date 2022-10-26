@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * Component Property Type for the {@code osgi.http.whiteboard.target} service
  * property.
  * <p>
- * This annotation can be used on a Http Whiteboard service to declare the value
+ * This annotation can be used on a Servlet Whiteboard service to declare the value
  * of the
  * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_TARGET
  * HTTP_WHITEBOARD_TARGET} service property.
@@ -48,9 +48,9 @@ public @interface HttpWhiteboardTarget {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying the Http Whiteboard target.
+	 * Service property identifying the Servlet Whiteboard target.
 	 * 
-	 * @return The Http Whiteboard target filter expression.
+	 * @return The Servlet Whiteboard target filter expression.
 	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_TARGET
 	 *      HTTP_WHITEBOARD_TARGET
 	 */

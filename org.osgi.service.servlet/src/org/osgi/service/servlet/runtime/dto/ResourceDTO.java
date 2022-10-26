@@ -43,7 +43,7 @@ public class ResourceDTO extends DTO {
 
 	/**
 	 * Service property identifying the resource. In the case of a resource
-	 * registered in the service registry and picked up by a Http Whiteboard
+	 * registered in the service registry and picked up by a Servlet Whiteboard
 	 * Implementation, this value is not negative and corresponds to the service
 	 * id in the registry. If the resource has not been registered in the
 	 * service registry, the value is negative and a unique negative value is

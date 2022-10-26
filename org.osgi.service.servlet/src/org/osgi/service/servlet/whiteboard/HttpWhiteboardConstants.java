@@ -23,7 +23,7 @@ import org.osgi.framework.Filter;
 import jakarta.servlet.Servlet;
 
 /**
- * Defines standard constants for the Http Whiteboard services.
+ * Defines standard constants for the Servlet Whiteboard services.
  * 
  * @author $Id$
  */
@@ -427,11 +427,11 @@ public final class HttpWhiteboardConstants {
 	/**
 	 * Service property to mark a Listener service as a Whiteboard service.
 	 * Listener services with this property set to the string value "true" will
-	 * be treated as Whiteboard services opting in to being handled by the Http
-	 * Whiteboard implementation. If the value "false" is specified, the service
-	 * is opting out and this case is treated exactly the same as if this
-	 * property is missing. If an invalid value is specified this is treated as
-	 * a failure.
+	 * be treated as Whiteboard services opting in to being handled by the
+	 * Servlet Whiteboard implementation. If the value "false" is specified, the
+	 * service is opting out and this case is treated exactly the same as if
+	 * this property is missing. If an invalid value is specified this is
+	 * treated as a failure.
 	 * <p>
 	 * The value of this service property must be of type {@code String}. Valid
 	 * values are "true" and "false" ignoring case.
@@ -522,21 +522,18 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_RESOURCE_PREFIX				= "osgi.http.whiteboard.resource.prefix";
 
 	/**
-	 * Service property specifying the target filter to select the Http
+	 * Service property specifying the target filter to select the Servlet
 	 * Whiteboard implementation to process the service.
-	 * 
 	 * <p>
-	 * An Http Whiteboard implementation can define any number of service
+	 * An Servlet Whiteboard implementation can define any number of service
 	 * properties which can be referenced by the target filter. The service
 	 * properties should always include the
 	 * {@link org.osgi.service.servlet.runtime.HttpServiceRuntimeConstants#HTTP_SERVICE_ENDPOINT
 	 * osgi.http.endpoint} service property if the endpoint information is
 	 * known.
-	 * 
 	 * <p>
-	 * If this service property is not specified, then all Http Whiteboard
+	 * If this service property is not specified, then all Servlet Whiteboard
 	 * implementations can process the service.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String} and be
 	 * a valid {@link Filter filter string}.
@@ -567,13 +564,13 @@ public final class HttpWhiteboardConstants {
 			+ HTTP_SERVICE_CONTEXT_PROPERTY + "=*)";
 
 	/**
-	 * The name of the implementation capability for the Http Whiteboard
+	 * The name of the implementation capability for the Servlet Whiteboard
 	 * specification
 	 */
 	public static final String	HTTP_WHITEBOARD_IMPLEMENTATION						= "osgi.http";
 
 	/**
-	 * The version of the implementation capability for the Http Whiteboard
+	 * The version of the implementation capability for the Servlet Whiteboard
 	 * specification
 	 */
 	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "2.0";
