@@ -1798,7 +1798,7 @@ public class MyFilter implements Filter {
               filter expression to select the Servlet Whiteboard
               implementation(s) to handle this Whiteboard service. The LDAP
               filter is used to match <xref
-              linkend="org.osgi.service.http.servlet.HttpServiceRuntime"
+              linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
               xrefstyle="hyperlink"/> services. Each Servlet Whiteboard
               <emphasis>implementation</emphasis> exposes exactly one
               <code>HttpServiceRuntime</code> service. This property is used
@@ -2316,11 +2316,6 @@ public class MyServletRequestListener implements ServletRequestListener {
         </imageobject>
       </mediaobject>
     </figure>
-
-    <para>Where servlets registered via the <xref linkend="service.http"/> are
-    returned via this service, the Servlet DTO will report negative service
-    IDs for these servlets to distinguish them from Servlet Whiteboard
-    services.</para>
   </section>
 
   <section>
@@ -2637,6 +2632,23 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       xml:id="service.servlet-service.hook.ref"><title>Core Service
       Hooks</title>OSGi Core, Chapter 55 Service Hook Service
       Specification</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.servlet-http.whiteboard.ref"><title>Http Whiteboard
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.http.whiteboard.html"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>This specification is providing the same functionality as its
+        predecessor, <xref linkend="service.servlet-http.whiteboard.ref"/>, with
+        the switch from the Java Servlet API to the Jakarta Servlet API.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

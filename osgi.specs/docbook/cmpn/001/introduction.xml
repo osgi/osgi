@@ -130,17 +130,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.http"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.http"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.http-version"
-              linkend="service.http"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.device"
               xrefstyle="template:%n %t"/></entry>
 
@@ -427,20 +416,20 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.http.whiteboard"
+              <entry><xref linkend="service.servlet"
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.http.whiteboard"/></code></para><para><code><xref
-              linkend="org.osgi.service.http.whiteboard.annotations"/></code></para><para><code><xref
-              linkend="org.osgi.service.http.whiteboard.propertytypes"/></code></para><para><code><xref
-              linkend="org.osgi.service.http.context"/></code></para><para><code><xref
-              linkend="org.osgi.service.http.runtime"/></code></para><para><code><xref
-              linkend="org.osgi.service.http.runtime.dto"/></code></para></entry>
+              linkend="org.osgi.service.servlet.whiteboard"/></code></para><para><code><xref
+              linkend="org.osgi.service.servlet.whiteboard.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.servlet.whiteboard.propertytypes"/></code></para><para><code><xref
+              linkend="org.osgi.service.servlet.context"/></code></para><para><code><xref
+              linkend="org.osgi.service.servlet.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.servlet.runtime.dto"/></code></para></entry>
 
               <entry><code><xref
-              endterm="org.osgi.service.http.whiteboard-version"
-              linkend="service.http.whiteboard"/></code></entry>
+              endterm="org.osgi.service.servlet.whiteboard-version"
+              linkend="service.servlet"/></code></entry>
             </row>
 
             <row>
