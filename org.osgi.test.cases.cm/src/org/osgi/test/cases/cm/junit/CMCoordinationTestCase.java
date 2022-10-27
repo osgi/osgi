@@ -283,7 +283,7 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		// start a coordination
 		final Coordinator c = this.getService(Coordinator.class);
 		final Coordination coord = c.begin("cm-test1", 0);
-		final List<Boolean> events = new ArrayList<>();
+		final List<String> events = new ArrayList<>();
 
 		final String pid = this.getClass().getName() + ".mstestpid2";
 
@@ -305,8 +305,7 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 						@Override
 						public void updated(Dictionary<String, ? > properties)
 								throws ConfigurationException {
-							System.out.println(properties);
-							events.add(properties != null);
+							events.add((String) properties.get("key2"));
 						}
 
 					}, msProps);
@@ -320,11 +319,56 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 			sleep();
 			assertEquals(0, events.size());
+		} finally {
+			coord.end();
+		}
+
+		// wait and verify listener
+		sleep();
+
+		assertEquals(1, events.size());
+		// last update
+		assertEquals("value2", events.get(0));
+	}
+
+	public void test_create_managedservice_delete() throws Exception {
+		ConfigurationAdmin cm = getService(ConfigurationAdmin.class);
+		Coordinator c = getService(Coordinator.class);
+		Coordination coord = c.begin("cm-test1", 0);
+		final List<Boolean> events = new ArrayList<>();
+
+		String pid = getClass().getName() + ".mstestpid3";
+
+		try {
+			// create the configuration
+			Dictionary<String,Object> props = new Hashtable<>();
+			props.put("key", "value");
+
+			Configuration conf = cm.getConfiguration(pid);
+			conf.update(props);
+
+			// add managed service
+			Dictionary<String,Object> msProps = new Hashtable<>();
+			msProps.put(Constants.SERVICE_PID, pid);
+
+			this.registerService(ManagedService.class.getName(),
+					new ManagedService() {
+
+						@Override
+						public void updated(Dictionary<String, ? > properties)
+								throws ConfigurationException {
+							events.add(properties != null);
+						}
+
+					}, msProps);
+
+			// update configuration
+			props.put("key2", "value2");
+			conf.update(props);
 
 			// delete configuration
 			conf.delete();
 
-			sleep();
 			assertEquals(0, events.size());
 		} finally {
 			coord.end();
@@ -332,12 +376,9 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 		// wait and verify listener
 		sleep();
-		events.forEach(System.out::println);
-		assertEquals(3, events.size());
-		assertTrue(events.get(0));// we have a Configuration -> not null
-		assertTrue(events.get(1));// we update the Configuration -> not null
-		assertFalse(events.get(2));// we remove the configuration -> null
 
+		assertEquals(1, events.size());
+		assertFalse(events.get(0));// no configuration, update with null
 	}
 
 	public void testCoordinatedConfigurationOnBeforeRegisteredManagedService()
