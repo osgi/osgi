@@ -47,7 +47,7 @@ import java.util.Map;
  * For example:
  * 
  * <pre>
- * org.osgi.service.http
+ * org.osgi.service.servlet.runtime
  * </pre>
  * 
  * <p>
@@ -132,8 +132,8 @@ public final class PackagePermission extends BasicPermission {
 	 * Examples:
 	 * 
 	 * <pre>
-	 * org.osgi.service.http
-	 * javax.servlet.*
+	 * org.osgi.service.servlet.runtime
+	 * jakarta.servlet.*
 	 * *
 	 * </pre>
 	 * 

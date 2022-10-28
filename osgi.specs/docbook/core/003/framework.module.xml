@@ -3628,7 +3628,7 @@ boot-description    ::= package-name        // See <xref
       bundle resource and map URLs in this resource to other files in the same
       JAR directory.</para>
 
-      <programlisting>public class BundleResource implements HttpContext{
+      <programlisting>public class BundleResource extends ServletContextHelper {
     URL  root;  // to index.html in bundle
     URL getResource( String resource ) {
         return new URL( root, resource );
