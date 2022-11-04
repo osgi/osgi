@@ -16,3 +16,4 @@ Export-Package: ${osgi.promise.packages}
     ${template;osgi.promise.specs;${@};version=project}
 
 javadoc.title = Promise
+build.qualifier: RC1

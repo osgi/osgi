@@ -1,3 +1,4 @@
 # Common configuration for Compendium projects
 
 packaging: cmpn
+-snapshot: ${def;build.qualifier;SNAPSHOT}
