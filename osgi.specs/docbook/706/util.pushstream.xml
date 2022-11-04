@@ -1076,6 +1076,15 @@
         xrefstyle="hyperlink"/> provides basic implementations of the push
         back policies, but custom polices can be implemented to provide more
         complex behaviors.</para>
+        
+        <para>The <xref
+        linkend="org.osgi.util.pushstream.ThresholdPushbackPolicy"
+        xrefstyle="hyperlink"/> provides an implementation of a push back policy 
+        covering a common use case. In this use case back pressure needs to be 
+        applied only after the number of items in the buffer passes a certain 
+        threshold. Once this threshold is exceeded then the back pressure may 
+        be fixed, or may increase linearly based on the number of buffered 
+        items.</para>
       </section>
 
       <section xml:id="util.pushstream.building-a-stream">
@@ -1552,5 +1561,17 @@ psp.createStream(ses).
       Stream API</title><biblioid class="uri"><link
       xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#package.description"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+  
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added new push back policy implementation <xref
+        linkend="org.osgi.util.pushstream.ThresholdPushbackPolicy"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

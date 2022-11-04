@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
 
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,7 @@ import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
 import org.osgi.util.pushstream.PushbackPolicyOption;
 import org.osgi.util.pushstream.QueuePolicyOption;
+import org.osgi.util.pushstream.ThresholdPushbackPolicy;
 
 
 /**
@@ -1106,7 +1108,7 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.13.1 : enum QueuePolicyOption - DISCARD_OLDEST
+	 * {@link QueuePolicyOption#DISCARD_OLDEST}
 	 * <p/>
 	 * Attempt to add the supplied event to the queue. If the queue is unable to
 	 * immediatly accept the value then discard the value at the head of the
@@ -1183,7 +1185,7 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.13.3 : enum QueuePolicyOption - FAIL
+	 * {@link QueuePolicyOption#FAIL}
 	 * <p/>
 	 * Attempt to add the supplied event to the queue, throwing an exception if
 	 * the queue is full.
@@ -1257,12 +1259,12 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.4 1 : enum PushBackPolicyOption - FIXED
+	 * {@link PushBackPolicyOption#FIXED}
 	 * <p/>
 	 * Returns a fixed amount of back pressure, independent of how full the
 	 * buffer is
 	 * <p/>
-	 * 706.5.13.3 : enum QueuePolicyOption - BLOCK
+	 * {@link QueuePolicyOption#BLOCK}
 	 * <p/>
 	 * Attempt to add the supplied event to the queue, blocking until the
 	 * enqueue is successful.
@@ -1338,7 +1340,7 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.4 4 : enum PushBackPolicyOption - LINEAR
+	 * {@link PushBackPolicyOption#LINEAR}
 	 * <p/>
 	 * Returns zero back pressure when the buffer is empty, then it returns a
 	 * linearly increasing amount of back pressure based on how full the buffer
@@ -1416,7 +1418,7 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.4 4 : enum PushBackPolicyOption - ON_FULL_FIXED
+	 * {@link PushBackPolicyOption#ON_FULL_FIXED}
 	 * <p/>
 	 * Returns zero back pressure until the buffer is full, then it returns a
 	 * fixed value
@@ -1489,7 +1491,7 @@ public class PushStreamIntermediateOperationTest {
 	 * can be used to provide a circuit breaker, or to allow a switch of
 	 * consumer thread(s)
 	 * <p/>
-	 * 706.5.4 4 : enum PushBackPolicyOption - ON_FULL_EXPONENTIAL
+	 * {@link PushBackPolicyOption#ON_FULL_EXPONENTIAL}
 	 * <p/>
 	 * Returns zero back pressure until the buffer is full, then it returns an
 	 * exponentially increasing amount, starting with the supplied value and
@@ -1559,6 +1561,362 @@ public class PushStreamIntermediateOperationTest {
 
 		assertThat(gen.fixedBackPressure()).isFalse();
 		assertThat(gen.minBackPressure()).isEqualTo(0L);
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * buffer introduces a buffer before the next stage of the stream The buffer
+	 * can be used to provide a circuit breaker, or to allow a switch of
+	 * consumer thread(s)
+	 * <p/>
+	 * {@link ThresholdPushbackPolicy}
+	 * <p/>
+	 * Returns zero back pressure until the threshold in the buffer is reached,
+	 * then it returns an linearly increasing back pressure.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testIntermediateOperationBufferOnLinearAfterThesholdBackPressure()
+			throws Exception {
+
+		// cf PushStreamTest
+		ExtGenerator gen = new ExtGenerator(12);
+		PushStreamProvider psp = new PushStreamProvider();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
+
+		// thread overlapping detection
+		AtomicInteger threadCount = new AtomicInteger(0);
+		BinaryOperator<Integer> bo = new BinaryOperator<Integer>() {
+
+			private final ThreadLocal<Integer> COUNTER = new ThreadLocal<Integer>() {
+
+				@Override
+				public Integer initialValue() {
+					// if threads overlap the final threadCount will not be zero
+					return threadCount.addAndGet(threadCount.get() + 1);
+				}
+
+				@Override
+				public void remove() {
+					threadCount.decrementAndGet();
+					super.remove();
+				}
+			};
+
+			@Override
+			public Integer apply(Integer t, Integer u) {
+				COUNTER.get();
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
+				try {
+					Thread.sleep(250);
+
+				} catch (InterruptedException e) {
+					Thread.interrupted();
+					e.printStackTrace();
+				}
+				COUNTER.remove();
+				return result;
+			}
+		};
+		Promise<Optional<Integer>> p = ps.buildBuffer()
+				.withBuffer(new ArrayBlockingQueue<>(12))
+				.withPushbackPolicy(ThresholdPushbackPolicy
+						.createThresholdPushbackPolicy(2, 2L, 5L))
+				.withQueuePolicy(QueuePolicyOption.BLOCK)
+				.build()
+				.reduce(bo);
+
+		gen.getExecutionThread().join();
+		@SuppressWarnings("unused")
+		ExtGeneratorStatus status = gen.status();
+
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(66);
+
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
+		assertThat(gen.maxBackPressure()).isEqualTo(37L);
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * buffer introduces a buffer before the next stage of the stream The buffer
+	 * can be used to provide a circuit breaker, or to allow a switch of
+	 * consumer thread(s)
+	 * <p/>
+	 * {@link ThresholdPushbackPolicy}
+	 * <p/>
+	 * Returns zero back pressure until the threshold in the buffer is reached,
+	 * then it returns an linearly increasing back pressure.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testIntermediateOperationBufferOnLinearAfterThesholdBackPressureSimple()
+			throws Exception {
+
+		// cf PushStreamTest
+		ExtGenerator gen = new ExtGenerator(12);
+		PushStreamProvider psp = new PushStreamProvider();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
+
+		// thread overlapping detection
+		AtomicInteger threadCount = new AtomicInteger(0);
+		BinaryOperator<Integer> bo = new BinaryOperator<Integer>() {
+
+			private final ThreadLocal<Integer> COUNTER = new ThreadLocal<Integer>() {
+
+				@Override
+				public Integer initialValue() {
+					// if threads overlap the final threadCount will not be zero
+					return threadCount.addAndGet(threadCount.get() + 1);
+				}
+
+				@Override
+				public void remove() {
+					threadCount.decrementAndGet();
+					super.remove();
+				}
+			};
+
+			@Override
+			public Integer apply(Integer t, Integer u) {
+				COUNTER.get();
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
+				try {
+					Thread.sleep(250);
+
+				} catch (InterruptedException e) {
+					Thread.interrupted();
+					e.printStackTrace();
+				}
+				COUNTER.remove();
+				return result;
+			}
+		};
+		Promise<Optional<Integer>> p = ps.buildBuffer()
+				.withBuffer(new ArrayBlockingQueue<>(10))
+				.withPushbackPolicy(ThresholdPushbackPolicy
+						.createSimpleThresholdPushbackPolicy(2))
+				.withQueuePolicy(QueuePolicyOption.BLOCK)
+				.build()
+				.reduce(bo);
+
+		gen.getExecutionThread().join();
+		@SuppressWarnings("unused")
+		ExtGeneratorStatus status = gen.status();
+
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(66);
+
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
+		assertThat(gen.maxBackPressure()).isEqualTo(8L);
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * buffer introduces a buffer before the next stage of the stream The buffer
+	 * can be used to provide a circuit breaker, or to allow a switch of
+	 * consumer thread(s)
+	 * <p/>
+	 * {@link ThresholdPushbackPolicy}
+	 * <p/>
+	 * Returns zero back pressure until the threshold in the buffer is reached,
+	 * then it returns an linearly increasing back pressure.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testIntermediateOperationBufferOnLinearAfterThesholdBackPressureStep()
+			throws Exception {
+
+		// cf PushStreamTest
+		ExtGenerator gen = new ExtGenerator(12);
+		PushStreamProvider psp = new PushStreamProvider();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
+
+		// thread overlapping detection
+		AtomicInteger threadCount = new AtomicInteger(0);
+		BinaryOperator<Integer> bo = new BinaryOperator<Integer>() {
+
+			private final ThreadLocal<Integer> COUNTER = new ThreadLocal<Integer>() {
+
+				@Override
+				public Integer initialValue() {
+					// if threads overlap the final threadCount will not be zero
+					return threadCount.addAndGet(threadCount.get() + 1);
+				}
+
+				@Override
+				public void remove() {
+					threadCount.decrementAndGet();
+					super.remove();
+				}
+			};
+
+			@Override
+			public Integer apply(Integer t, Integer u) {
+				COUNTER.get();
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
+				try {
+					Thread.sleep(250);
+
+				} catch (InterruptedException e) {
+					Thread.interrupted();
+					e.printStackTrace();
+				}
+				COUNTER.remove();
+				return result;
+			}
+		};
+		Promise<Optional<Integer>> p = ps.buildBuffer()
+				.withBuffer(new ArrayBlockingQueue<>(10))
+				.withPushbackPolicy(ThresholdPushbackPolicy
+						.createIncrementalThresholdPushbackPolicy(2, 5L))
+				.withQueuePolicy(QueuePolicyOption.BLOCK)
+				.build()
+				.reduce(bo);
+
+		gen.getExecutionThread().join();
+		@SuppressWarnings("unused")
+		ExtGeneratorStatus status = gen.status();
+
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(66);
+
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
+		assertThat(gen.maxBackPressure()).isEqualTo(40L);
+	}
+
+	/**
+	 * Tests {@link ThresholdPushbackPolicy} constructor and assures an
+	 * {@link IllegalArgumentException} is thrown when the threshold is
+	 * negative.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testThresholdPushbackPolicyIllegalArgumentThreshold()
+			throws Exception {
+		Assertions.assertThatIllegalArgumentException().isThrownBy(() -> {
+			ThresholdPushbackPolicy.createThresholdPushbackPolicy(-1, 1L,
+					1L);
+		});
+	}
+
+	/**
+	 * Tests {@link ThresholdPushbackPolicy} constructor and assures an
+	 * {@link IllegalArgumentException}is thrown when the initial is negative.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testThresholdPushbackPolicyIllegalArgumentInitial()
+			throws Exception {
+		Assertions.assertThatIllegalArgumentException().isThrownBy(() -> {
+			ThresholdPushbackPolicy.createThresholdPushbackPolicy(1, -1L, 1L);
+		});
+	}
+
+	/**
+	 * Tests {@link ThresholdPushbackPolicy} constructor and assures an
+	 * {@link IllegalArgumentException}is thrown when the step size is negative.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testThresholdPushbackPolicyIllegalArgumentStep()
+			throws Exception {
+		Assertions.assertThatIllegalArgumentException().isThrownBy(() -> {
+			ThresholdPushbackPolicy.createThresholdPushbackPolicy(1, 1L, -11L);
+		});
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * buffer introduces a buffer before the next stage of the stream The buffer
+	 * can be used to provide a circuit breaker, or to allow a switch of
+	 * consumer thread(s)
+	 * <p/>
+	 * {@link ThresholdPushbackPolicy}
+	 * <p/>
+	 * Returns zero back pressure until the threshold in the buffer is reached,
+	 * then it returns a fixed value.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testIntermediateOperationBufferOnLinearAfterThesholdBackPressureFixed()
+			throws Exception {
+
+		// cf PushStreamTest
+		ExtGenerator gen = new ExtGenerator(12);
+		PushStreamProvider psp = new PushStreamProvider();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
+
+		// thread overlapping detection
+		AtomicInteger threadCount = new AtomicInteger(0);
+		BinaryOperator<Integer> bo = new BinaryOperator<Integer>() {
+
+			private final ThreadLocal<Integer> COUNTER = new ThreadLocal<Integer>() {
+
+				@Override
+				public Integer initialValue() {
+					// if threads overlap the final threadCount will not be zero
+					return threadCount.addAndGet(threadCount.get() + 1);
+				}
+
+				@Override
+				public void remove() {
+					threadCount.decrementAndGet();
+					super.remove();
+				}
+			};
+
+			@Override
+			public Integer apply(Integer t, Integer u) {
+				COUNTER.get();
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
+				try {
+					Thread.sleep(250);
+
+				} catch (InterruptedException e) {
+					Thread.interrupted();
+					e.printStackTrace();
+				}
+				COUNTER.remove();
+				return result;
+			}
+		};
+		Promise<Optional<Integer>> p = ps.buildBuffer()
+				.withBuffer(new ArrayBlockingQueue<>(10))
+				.withPushbackPolicy(ThresholdPushbackPolicy
+						.createThresholdPushbackPolicy(2, 10L, 0L))
+				.withQueuePolicy(QueuePolicyOption.BLOCK)
+				.build()
+				.reduce(bo);
+
+		gen.getExecutionThread().join();
+		@SuppressWarnings("unused")
+		ExtGeneratorStatus status = gen.status();
+
+		assertThat(p).resolvesWithin(PROMISE_RESOLVE_DURATION)
+				.hasValueThat(InstanceOfAssertFactories.optional(Integer.class))
+				.contains(66);
+
+		assertThat(gen.fixedBackPressure()).isFalse();
+		assertThat(gen.minBackPressure()).isEqualTo(0L);
+		assertThat(gen.maxBackPressure()).isEqualTo(10L);
 	}
 
 	/**
