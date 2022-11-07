@@ -25,9 +25,6 @@ org.osgi:org.osgi.service.dmt:2.0.2
 org.osgi:org.osgi.service.enocean:1.0.1
 org.osgi:org.osgi.service.event:1.4.1
 org.osgi:org.osgi.service.feature:1.0.0
-org.osgi:org.osgi.service.http:1.2.2
-org.osgi:org.osgi.service.http.whiteboard:1.1.1
-org.osgi:org.osgi.service.jaxrs:1.0.1
 org.osgi:org.osgi.service.jdbc:1.0.1
 org.osgi:org.osgi.service.jndi:1.0.1
 org.osgi:org.osgi.service.jpa:1.1.1
