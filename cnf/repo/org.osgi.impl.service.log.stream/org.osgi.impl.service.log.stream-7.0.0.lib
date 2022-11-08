@@ -1,5 +1,0 @@
-org.osgi.util.function; version=latest
-org.osgi.util.promise; version=latest
-org.osgi.util.pushstream; version=latest
-org.osgi.impl.service.log; version=latest
-org.eclipse.equinox.log.stream;version=1.0
