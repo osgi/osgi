@@ -109,7 +109,8 @@ def matrix = tasks.register("matrix") {
 	def tck_matrix = bnd.get("tck-matrix")
 	dependsOn("preptck.core", "preptck.cmpn")
 	doLast {
-		println "::set-output name=tck-matrix::${tck_matrix}"
+		File output = new File(System.getenv("GITHUB_OUTPUT"))
+		output.append("tck-matrix=${tck_matrix}\n", "UTF-8")
 	}
 }
 
