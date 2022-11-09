@@ -436,12 +436,8 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 		// wait and verify listener
 		sleep();
-		assertEquals(4, events.size());
+		assertEquals(1, events.size());
 		assertFalse(events.get(0));
-		assertTrue(events.get(1));
-		assertTrue(events.get(2));
-		assertFalse(events.get(3));
-
 	}
 
 	/**
@@ -517,11 +513,7 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 		assertTrue(checkpoint);
 		// wait and verify listener
 		sleep();
-		assertEquals(4, events.size());
+		assertEquals(1, events.size());
 		assertFalse(events.get(0));
-		assertTrue(events.get(1));
-		assertTrue(events.get(2));
-		assertFalse(events.get(3));
-
 	}
 }
