@@ -2138,6 +2138,30 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       xml:id="service.jakartars-iana.media.type.suffixes"><title>IANA Media
       Type Suffix Registrations</title><biblioid class="uri"><link
       xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/></biblioid></bibliomixed>
+          
+      <bibliomixed
+      xml:id="service.jakartars-jaxrs-whiteboard.ref"><title>JAX-RS Service Whiteboard
+      Specification</title><biblioid class="uri"><link
+      xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.jaxrs.html"/></biblioid></bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>This specification is providing the same functionality as its
+        predecessor, <xref linkend="service.jakartars-jaxrs-whiteboard.ref"/>, with
+        the switch from the JAX-RS API to the Jakarta RESTful Web Services API.</para>
+        <para>Due to the naming change numerous constants have been renamed, including
+        the service properties used in the specification. This allows the old and new
+        specifications to coexist in the same framework.</para>
+      </listitem>
+      <listitem>
+        <para>The Application Selection Filter property has changed from a single
+        String to a String+, allowing multiple filters to be supplied.</para> 
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
