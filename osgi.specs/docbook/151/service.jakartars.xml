@@ -1998,7 +1998,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <para>The Jakarta RESTful Web Services Whiteboard implementation must
       provide a capability in the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
-      namespace with name <code>JakartaRest</code> if it exports the Jakarta
+      namespace with the name <code>JakartaRESTfulWebServices</code> if it exports the Jakarta
       RESTful Web Services specification packages. See <xref
       linkend="service.servlet-portable.java.contracts.ref"/>.</para>
 
