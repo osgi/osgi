@@ -318,8 +318,18 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 			}
 		}
 		
+		// We use an *assumption* here as the specification does not mandate
+		// that the implementation provide or consume the contract capability.
+		// If no capability exists then the rest of this test does not apply.
 		assumeTrue(hasCapability,
 				"There is no osgi.contract capability for the Jakarta Restful Web Services API, so this test will be skipped");
+
+		// If there is an osgi.contract capability for JakartaRESTfulWebServices
+		// present then the specification requires that it conforms to the
+		// following tests.
+		//
+		// * it offers version 3.0,
+		// * it includes all the Jakarta spec packages in the uses directive.
 		assertTrue(version,
 				"No osgi.contract capability for the Jakarta Restful Web Services API at version 3.0");
 		assertTrue(uses,
