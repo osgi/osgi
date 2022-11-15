@@ -19,6 +19,7 @@ org.glassfish.jersey.core.jersey-client;version=3.0.8
 org.glassfish.jersey.core.jersey-common;version=3.0.8
 org.glassfish.jersey.core.jersey-server;version=3.0.8
 org.glassfish.jersey.inject.jersey-hk2;version=3.0.8
+org.glassfish.jersey.media.jersey-media-jaxb;version=3.0.8
 org.glassfish.jersey.media.jersey-media-sse;version=3.0.8
 org.glassfish.hk2.osgi-resource-locator;version=1.0.3
 

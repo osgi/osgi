@@ -19,7 +19,8 @@ package org.osgi.test.cases.jakartars.junit;
 
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.osgi.namespace.contract.ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE;
 import static org.osgi.namespace.contract.ContractNamespace.CONTRACT_NAMESPACE;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
@@ -44,9 +46,13 @@ import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Capability;
 import org.osgi.service.jakartars.client.SseEventSourceFactory;
 import org.osgi.service.jakartars.runtime.JakartarsServiceRuntime;
+import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.service.ServiceExtension;
 
 import jakarta.ws.rs.client.ClientBuilder;
 
+@ExtendWith(ServiceExtension.class)
 public class CapabilityTestCase extends AbstractJakartarsTestCase {
 	
 	private static final List<String> JAX_RS_PACKAGES = Arrays.asList(
@@ -89,17 +95,15 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 							.contains("org.osgi.service.jakartars.runtime")
 							&& packages.contains(
 									"org.osgi.service.jakartars.runtime.dto");
+					if (uses)
+						break;
 				}
-
-				break;
 			}
 		}
-		assertTrue(
-				"No osgi.service capability for the JaxrsServiceRuntime service",
-				hasCapability);
-		assertTrue(
-				"No suitable uses constraint on the runtime package for the JaxrsServiceRuntime service",
-				uses);
+		assertTrue(hasCapability,
+				"No osgi.service capability for the JaxrsServiceRuntime service");
+		assertTrue(uses,
+				"No suitable uses constraint on the runtime package for the JaxrsServiceRuntime service");
 	}
 
 	/**
@@ -109,9 +113,12 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void testJaxRsClientBuilderServiceCapability() throws Exception {
+	public void testJaxRsClientBuilderServiceCapability(@InjectService
+	ServiceAware<ClientBuilder> builderService) throws Exception {
 
-		List<BundleCapability> capabilities = runtime.getBundle()
+		List<BundleCapability> capabilities = builderService
+				.getServiceReference()
+				.getBundle()
 				.adapt(BundleWiring.class)
 				.getCapabilities(SERVICE_NAMESPACE);
 
@@ -136,17 +143,15 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 					uses = packages.contains("jakarta.ws.rs.client") &&
 							packages.contains(
 									"org.osgi.service.jakartars.client");
+					if (uses)
+						break;
 				}
-
-				break;
 			}
 		}
-		assertTrue(
-				"No osgi.service capability for the ClientBuilder service",
-				hasCapability);
-		assertTrue(
-				"No suitable uses constraint on the runtime package for the ClientBuilder service",
-				uses);
+		assertTrue(hasCapability,
+				"No osgi.service capability for the ClientBuilder service");
+		assertTrue(uses,
+				"No suitable uses constraint on the runtime package for the ClientBuilder service");
 	}
 
 	/**
@@ -157,9 +162,12 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void testSseEventSourceFactoryServiceCapability() throws Exception {
+	public void testSseEventSourceFactoryServiceCapability(@InjectService
+	ServiceAware<SseEventSourceFactory> eventSourceFactory) throws Exception {
 
-		List<BundleCapability> capabilities = runtime.getBundle()
+		List<BundleCapability> capabilities = eventSourceFactory
+				.getServiceReference()
+				.getBundle()
 				.adapt(BundleWiring.class)
 				.getCapabilities(SERVICE_NAMESPACE);
 
@@ -183,17 +191,15 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
 					uses = packages
 							.contains("org.osgi.service.jakartars.client");
+					if (uses)
+						break;
 				}
-
-				break;
 			}
 		}
-		assertTrue(
-				"No osgi.service capability for the SseEventSourceFactory service",
-				hasCapability);
-		assertTrue(
-				"No suitable uses constraint on the runtime package for the SseEventSourceFactory service",
-				uses);
+		assertTrue(hasCapability,
+				"No osgi.service capability for the SseEventSourceFactory service");
+		assertTrue(uses,
+				"No suitable uses constraint on the runtime package for the SseEventSourceFactory service");
 	}
 
 	/**
@@ -247,17 +253,14 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 			}
 		}
 
-		assertTrue(
-				"No osgi.implementation capability for the JAX-RS whiteboard implementation",
-				hasCapability);
+		assertTrue(hasCapability,
+				"No osgi.implementation capability for the JAX-RS whiteboard implementation");
 
-		assertTrue(
+		assertTrue(version,
 				"No osgi.implementation capability for the JAX-RS Whiteboard at version "
-						+ JAKARTA_RS_WHITEBOARD_SPECIFICATION_VERSION,
-				version);
-		assertTrue(
-				"The osgi.implementation capability for the JAX-RS API does not have the correct uses constraint",
-				uses);
+						+ JAKARTA_RS_WHITEBOARD_SPECIFICATION_VERSION);
+		assertTrue(uses,
+				"The osgi.implementation capability for the JAX-RS API does not have the correct uses constraint");
 	}
 
 	/**
@@ -280,8 +283,8 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 					.getCapabilities(CONTRACT_NAMESPACE);
 			
 			for (Capability cap : capabilities) {
-				hasCapability = "JavaJAXRS".equals(
-						cap.getAttributes().get(CONTRACT_NAMESPACE));
+				hasCapability = "JakartaRESTfulWebServices"
+						.equals(cap.getAttributes().get(CONTRACT_NAMESPACE));
 				if (hasCapability) {
 					Version required = Version.valueOf("2.1");
 					List<Version> toCheck = Collections.emptyList();
@@ -315,14 +318,21 @@ public class CapabilityTestCase extends AbstractJakartarsTestCase {
 			}
 		}
 		
-		assertTrue(
-				"No osgi.contract capability for the JAX-RS API",
-				hasCapability);
-		assertTrue(
-				"No osgi.contract capability for the JAX-RS API at version 2.1",
-				version);
-		assertTrue(
-				"The osgi.contract capability for the JAX-RS API does not have the correct uses constraint",
-				uses);
+		// We use an *assumption* here as the specification does not mandate
+		// that the implementation provide or consume the contract capability.
+		// If no capability exists then the rest of this test does not apply.
+		assumeTrue(hasCapability,
+				"There is no osgi.contract capability for the Jakarta Restful Web Services API, so this test will be skipped");
+
+		// If there is an osgi.contract capability for JakartaRESTfulWebServices
+		// present then the specification requires that it conforms to the
+		// following tests.
+		//
+		// * it offers version 3.0,
+		// * it includes all the Jakarta spec packages in the uses directive.
+		assertTrue(version,
+				"No osgi.contract capability for the Jakarta Restful Web Services API at version 3.0");
+		assertTrue(uses,
+				"The osgi.contract capability for the Jakarta Restful Web Services API does not have the correct uses constraint");
 	}
 }
