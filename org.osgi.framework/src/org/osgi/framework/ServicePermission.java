@@ -134,7 +134,7 @@ public final class ServicePermission extends BasicPermission {
 	 * Examples:
 	 * 
 	 * <pre>
-	 * org.osgi.service.servlet.runtim.HttpServiceRuntime
+	 * org.osgi.service.servlet.runtime.HttpServiceRuntime
 	 * org.osgi.service.servlet.runtime.*
 	 * *
 	 * </pre>
