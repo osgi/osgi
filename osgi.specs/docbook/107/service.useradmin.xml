@@ -214,7 +214,7 @@
 
       <para>An OSGi framework can have several entry points, each of which
       will be responsible for authenticating incoming requests. An example of
-      an entry point is the Servlet Whiteboard Service, which delegates authentication of
+      an entry point is the Servlet Whiteboard Specification, which delegates authentication of
       incoming requests to the <code>handleSecurity</code> method of the
       <code>ServletContextHelper</code> object that was specified when the target
       servlet or resource of the request was registered.</para>
