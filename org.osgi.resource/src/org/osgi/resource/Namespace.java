@@ -59,6 +59,21 @@ public abstract class Namespace {
 	public final static String	CAPABILITY_EFFECTIVE_DIRECTIVE		= "effective";
 
 	/**
+	 * The capability directive used to specify that the capability has been
+	 * deprecated. The value is the human-readable reason to developers for the
+	 * deprecation. This reason should include the version in which the
+	 * capability was deprecated and any removal plan.
+	 * <p>
+	 * Tooling can use the presence of this directive to provide deprecation
+	 * warnings to developers when they use a capability that has been marked
+	 * deprecated. Resolver hooks can use the deprecation information to report
+	 * on the use of deprecated capabilities in a resolution.
+	 * 
+	 * @since 1.1
+	 */
+	public final static String	CAPABILITY_DEPRECATED_DIRECTIVE		= "deprecated";
+
+	/**
 	 * The requirement directive used to specify a capability filter. This
 	 * filter is used to match against a capability's attributes.
 	 */

@@ -1,1 +1,3 @@
+# Temporarily need to use latest resource packages
+org.osgi.resource;version=latest
 org.eclipse.osgi;version=3.18
