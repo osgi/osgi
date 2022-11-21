@@ -1027,7 +1027,7 @@ ROLE_REMOVED</programlisting>
       enables applications and their underlying authentication services to
       remain independent from each other.</para>
 
-      <para>The Servlet Whiteboard Service already provides a similar feature by allowing
+      <para>The Servlet Whiteboard Specification already provides a similar feature by allowing
       servlet and resource registrations to be supported by an
       <code>ServletContextHelper</code> object, which uses a callback mechanism to
       perform any required authentication checks before granting access to the
