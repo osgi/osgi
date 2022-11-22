@@ -101,6 +101,10 @@ public class ResolverHookTests extends OSGiTestCase {
 		bundles.clear();
 	}
 
+	private void refreshBundles(Bundle... b) {
+		refreshBundles(Arrays.asList(b));
+	}
+
 	private void refreshBundles(List<Bundle> b) {
 		Wiring.synchronousRefreshBundles(getContext(), b);
 	}
@@ -522,8 +526,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		} catch (BundleException e) {
 			fail("failed to start bundle: " + tb2, e);
 		}
-		testHook.clear();
-		refreshBundles(testBundles);
+		refreshBundles(tb2);
 		// triggers should only contain tb7 and tb2 because they are the only ones active
 		triggers = testHook.getAllTriggers();
 		assertEquals("Wrong number of triggers", 2, triggers.size());
