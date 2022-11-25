@@ -156,17 +156,6 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		}
 	}
 
-	public void test_140_2_13to14() throws Exception {
-		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
-
-		assertNotNull(serviceReference);
-		assertEquals(Constants.SCOPE_BUNDLE, serviceReference.getProperty(Constants.SERVICE_SCOPE));
-		assertEquals(
-				DEFAULT,
-				serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME));
-	}
-
 	public void test_140_2_15to16() throws Exception {
 		BundleContext context = getContext();
 
@@ -181,6 +170,12 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_17to22() throws Exception {
 		final BundleContext context = getContext();
 
+		Dictionary<String, Object> contextProperties = new Hashtable<String, Object>();
+            contextProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "mycontext");
+            contextProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/");
+
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper(context.getBundle()) {}, contextProperties));
+
 		FindHook findHook = new FindHook() {
 
 			@Override
@@ -192,11 +187,11 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 					return;
 				}
 
-				// don't show default ServletContextHelper
+				// don't show custom context
 				for (Iterator<ServiceReference<?>> iterator = references.iterator(); iterator.hasNext();) {
 					ServiceReference<?> sr = iterator.next();
 
-					if (DEFAULT.equals(sr.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME))) {
+					if ("mycontext".equals(sr.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME))) {
 						iterator.remove();
 					}
 				}
@@ -207,13 +202,22 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(context.registerService(FindHook.class, findHook, null));
 
 		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+		AtomicReference<ServletContext> sc2 = new AtomicReference<ServletContext>();
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, 
+            	"(" + HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME + "=mycontext)");
 		ServiceRegistration<ServletContextListener> serviceRegistration = context.registerService(ServletContextListener.class, new MockSCL(sc1), properties);
 		serviceRegistrations.add(serviceRegistration);
 
 		assertNull(sc1.get());
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc2), properties));
+
+		assertNotNull(sc2.get());
 	}
 
 	public void test_table_140_1_HTTP_WHITEBOARD_CONTEXT_NAME_type() throws Exception {
@@ -295,17 +299,6 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
 		assertEquals(contextName, sc1.get().getServletContextName());
-	}
-
-	public void test_table_140_1_HTTP_WHITEBOARD_CONTEXT_NAME_default() throws Exception {
-		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
-
-		assertNotNull(serviceReference);
-		assertEquals(Constants.SCOPE_BUNDLE, serviceReference.getProperty(Constants.SERVICE_SCOPE));
-		assertEquals(
-				DEFAULT,
-				serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME));
 	}
 
 	public void test_table_140_1_HTTP_WHITEBOARD_CONTEXT_NAME_overrideDefault() throws Exception {
@@ -742,67 +735,64 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 	public void test_140_2_1() throws Exception {
 		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
 
-		assertNotNull(serviceReference);
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
-		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertNotNull(servletContextHelper);
+		ServletContext servletContext = sc1.get();
 
-		assertNull(servletContextHelper.getMimeType("index.html"));
+		assertNotNull(servletContext);
+
+		assertNull(servletContext.getMimeType("index.html"));
 	}
 
 	public void test_140_2_2() throws Exception {
 		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
 
-		assertNotNull(serviceReference);
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
-		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertNotNull(servletContextHelper);
+		ServletContext servletContext = sc1.get();
 
-		assertNull(servletContextHelper.getRealPath("META-INF/MANIFEST.MF"));
+		assertNotNull(servletContext);
+
+		assertNull(servletContext.getRealPath("META-INF/MANIFEST.MF"));
 	}
 
 	public void test_140_2_3() throws Exception {
 		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
-		assertNotNull(serviceReference);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+		ServletContext servletContext = sc1.get();
 
-		assertNotNull(servletContextHelper);
+		assertNotNull(servletContext);
 
-		assertNotNull(servletContextHelper.getResource("META-INF/MANIFEST.MF"));
+		assertNotNull(servletContext.getResource("META-INF/MANIFEST.MF"));
 	}
 
 	public void test_140_2_4() throws Exception {
 		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
-		assertNotNull(serviceReference);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+		ServletContext servletContext = sc1.get();
 
-		assertNotNull(servletContextHelper);
+		assertNotNull(servletContext);
 
-		assertNotNull(servletContextHelper.getResourcePaths("META-INF/"));
-	}
-
-	public void test_140_2_5() throws Exception {
-		BundleContext context = getContext();
-		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
-
-		assertNotNull(serviceReference);
-
-		ServletContextHelper servletContextHelper = context.getService(serviceReference);
-
-		assertNotNull(servletContextHelper);
-
-		assertTrue(servletContextHelper.handleSecurity(null, null));
+		assertNotNull(servletContext.getResourcePaths("META-INF/"));
 	}
 
 	public void test_140_2_6_addFilter() throws Exception {
