@@ -223,10 +223,10 @@ org.eclipse.ecf:org.eclipse.ecf.provider.jmdns:4.3.301
 
 # Jakarta RS impl
 
-org.geckoprojects.jakartars:org.gecko.rest.jersey:6.0.0-SNAPSHOT
-org.geckoprojects.jakartars:org.gecko.rest.jersey.jetty:6.0.0-SNAPSHOT
-org.geckoprojects.jakartars:org.gecko.rest.jersey.sse:6.0.0-SNAPSHOT
-org.geckoprojects.jakartars:org.gecko.rest.jersey.tck:6.0.0-SNAPSHOT
+org.geckoprojects.jakartars:org.gecko.rest.jersey:6.0.0.RC1
+org.geckoprojects.jakartars:org.gecko.rest.jersey.jetty:6.0.0.RC1
+org.geckoprojects.jakartars:org.gecko.rest.jersey.sse:6.0.0.RC1
+org.geckoprojects.jakartars:org.gecko.rest.jersey.tck:6.0.0.RC1
 
 org.glassfish.hk2:hk2-api:3.0.3
 org.glassfish.hk2:hk2-locator:3.0.3
