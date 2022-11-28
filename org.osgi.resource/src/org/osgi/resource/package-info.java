@@ -17,20 +17,19 @@
  *******************************************************************************/
 
 /**
- * Resource Package Version 1.0.
- * 
+ * Resource Package Version 1.1.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. For example:
  * 
  * <pre>
- * Import-Package: org.osgi.resource; version=&quot;[1.0,2.0)&quot;
+ * Import-Package: org.osgi.resource; version=&quot;[1.1,2.0)&quot;
  * </pre>
  * 
  * @author $Id$
  */
 
-@Version("1.0.2")
+@Version("1.1")
 package org.osgi.resource;
 
 import org.osgi.annotation.versioning.Version;
