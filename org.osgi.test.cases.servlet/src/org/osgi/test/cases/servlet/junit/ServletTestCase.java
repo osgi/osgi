@@ -60,7 +60,6 @@ import org.osgi.service.servlet.runtime.dto.RequestInfoDTO;
 import org.osgi.service.servlet.runtime.dto.ServletContextDTO;
 import org.osgi.service.servlet.runtime.dto.ServletDTO;
 import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
-import org.osgi.test.cases.servlet.junit.mock.MockServlet;
 
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.RequestDispatcher;
