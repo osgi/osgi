@@ -323,10 +323,10 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see
 
       <para>When the class is intended, its name is spelled exactly as in the
       Java source code and displayed in a fixed-width typeface: for example,
-      the "<code>HttpService</code> class", "a method in the <code>HttpContext
-      class</code>" or "a <code>javax.servlet.Servlet</code> object". A class
+      the "<code>ConfigurationAdmin</code> class", "a method in the <code>Configuration
+      class</code>" or "a <code>jakarta.servlet.Servlet</code> object". A class
       name is used in its fully qualified form, like
-      <code>javax.servlet.Servlet</code>, when the package is not obvious from
+      <code>jakarta.servlet.Servlet</code>, when the package is not obvious from
       the context, nor is it in one of the well known java packages like
       <code>java.lang</code>, <code>java.io</code>, <code>java.util</code> and
       <code>java.net</code>. Otherwise, the package is omitted like in
