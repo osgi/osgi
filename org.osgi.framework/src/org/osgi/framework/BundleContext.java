@@ -116,7 +116,6 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @return The {@code Bundle} object associated with this
 	 *         {@code BundleContext}.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	@Override
 	Bundle getBundle();
