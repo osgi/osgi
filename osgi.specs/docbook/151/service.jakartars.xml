@@ -28,6 +28,8 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Whiteboard Specification for Jakarta™ RESTful Web Services</title>
 
+  <titleabbrev>Jakarta RESTful Web Services Whiteboard</titleabbrev>
+
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jakartars.whiteboard-version"
     linkend="org.osgi.service.jakartars.whiteboard"/></releaseinfo>
@@ -1998,9 +2000,9 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <para>The Jakarta RESTful Web Services Whiteboard implementation must
       provide a capability in the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
-      namespace with the name <code>JakartaRESTfulWebServices</code> if it exports the Jakarta
-      RESTful Web Services specification packages. See <xref
-      linkend="service.servlet-portable.java.contracts.ref"/>.</para>
+      namespace with the name <code>JakartaRESTfulWebServices</code> if it
+      exports the Jakarta RESTful Web Services specification packages. See
+      <xref linkend="service.servlet-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
@@ -2024,8 +2026,10 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       and <code>org.osgi.service.jakartars.runtime.dto</code> packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.jakartars.runtime.JakartarsServiceRuntime";
-  uses:="org.osgi.service.jakartars.runtime,org.osgi.service.jakartars.runtime.dto"</programlisting>
+  objectClass:List&lt;String&gt;=
+    "org.osgi.service.jakartars.runtime.JakartarsServiceRuntime";
+  uses:="org.osgi.service.jakartars.runtime,
+         org.osgi.service.jakartars.runtime.dto"</programlisting>
 
       <para>The bundle providing the
       <code>jakarta.ws.rs.client.ClientBuilder</code> service must also
@@ -2049,7 +2053,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       package:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.jakartars.client.SseEventSourceFactory";
+  objectClass:List&lt;String&gt;=
+    "org.osgi.service.jakartars.client.SseEventSourceFactory";
   uses:="org.osgi.service.jakartars.client"</programlisting>
 
       <para>These capabilities must follow the rules defined for the <xref
@@ -2138,10 +2143,10 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       xml:id="service.jakartars-iana.media.type.suffixes"><title>IANA Media
       Type Suffix Registrations</title><biblioid class="uri"><link
       xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/></biblioid></bibliomixed>
-          
+
       <bibliomixed
-      xml:id="service.jakartars-jaxrs-whiteboard.ref"><title>JAX-RS Service Whiteboard
-      Specification</title><biblioid class="uri"><link
+      xml:id="service.jakartars-jaxrs-whiteboard.ref"><title>JAX-RS Service
+      Whiteboard Specification</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.jaxrs.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
@@ -2152,15 +2157,20 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <itemizedlist>
       <listitem>
         <para>This specification is providing the same functionality as its
-        predecessor, <xref linkend="service.jakartars-jaxrs-whiteboard.ref"/>, with
-        the switch from the JAX-RS API to the Jakarta RESTful Web Services API.</para>
-        <para>Due to the naming change numerous constants have been renamed, including
-        the service properties used in the specification. This allows the old and new
-        specifications to coexist in the same framework.</para>
+        predecessor, <xref linkend="service.jakartars-jaxrs-whiteboard.ref"/>,
+        with the switch from the JAX-RS API to the Jakarta RESTful Web
+        Services API.</para>
+
+        <para>Due to the naming change numerous constants have been renamed,
+        including the service properties used in the specification. This
+        allows the old and new specifications to coexist in the same
+        framework.</para>
       </listitem>
+
       <listitem>
-        <para>The Application Selection Filter property has changed from a single
-        String to a String+, allowing multiple filters to be supplied.</para> 
+        <para>The Application Selection Filter property has changed from a
+        single String to a String+, allowing multiple filters to be
+        supplied.</para>
       </listitem>
     </itemizedlist>
   </section>

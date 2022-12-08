@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants;
 
 /**
  * Component Property Type for the {@code osgi.jakartars.extension.select}
@@ -31,8 +32,8 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a Jakarta RESTful Web Services whiteboard
  * resource or extension to declare the value of the
- * {@link org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_EXTENSION_SELECT}
- * service property.
+ * {@link JakartarsWhiteboardConstants#JAKARTA_RS_EXTENSION_SELECT} service
+ * property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -52,7 +53,7 @@ public @interface JakartarsExtensionSelect {
 	 * extension(s) or application features which this service requires to work.
 	 * 
 	 * @return The filters for selecting the extensions to require.
-	 * @see org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_EXTENSION_SELECT
+	 * @see JakartarsWhiteboardConstants#JAKARTA_RS_EXTENSION_SELECT
 	 */
 	String[] value();
 }

@@ -24,14 +24,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants;
 
 /**
  * Component Property Type for the {@code osgi.jakartars.name} service property.
  * <p>
  * This annotation can be used on a Jakarta RESTful Web Services whiteboard
  * service to declare the value of the
- * {@link org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_NAME}
- * service property.
+ * {@link JakartarsWhiteboardConstants#JAKARTA_RS_NAME} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -51,7 +51,7 @@ public @interface JakartarsName {
 	 * service for processing by the whiteboard.
 	 * 
 	 * @return The Jakarta RESTful Web Services whiteboard service name.
-	 * @see org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_NAME
+	 * @see JakartarsWhiteboardConstants#JAKARTA_RS_NAME
 	 */
 	String value();
 }

@@ -28,6 +28,8 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Whiteboard Specification for Jakarta™ Servlet</title>
 
+  <titleabbrev>Jakarta Servlet Whiteboard</titleabbrev>
+
   <info>
     <releaseinfo><xref endterm="org.osgi.service.servlet.whiteboard-version"
     linkend="org.osgi.service.servlet.whiteboard"/></releaseinfo>
@@ -39,8 +41,8 @@
     <para>Servlets have become a popular and widely supported mechanism for
     providing dynamic content on the Internet. While servlets are defined in
     the <xref linkend="service.servlet-i21217577"/>, the Servlet Whiteboard
-    Specification provides a light and convenient way of using
-    servlets, servlet filters, servlet listeners and web resources in an OSGi
+    Specification provides a light and convenient way of using servlets,
+    servlet filters, servlet listeners and web resources in an OSGi
     environment through the use of the <xref
     linkend="service.servlet-whiteboard.pattern.ref"/>.</para>
 
@@ -95,8 +97,8 @@
     protocols if these protocols can conform to the semantics of the Jakarta
     Servlet API.</para>
 
-    <para>Implementations of this specification must support version 5.0 or later of
-    the Jakarta Servlet API.</para>
+    <para>Implementations of this specification must support version 5.0 or
+    later of the Jakarta Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -339,8 +341,8 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
     linkend="org.osgi.service.servlet.runtime.dto.FailedServletContextDTO"
     xrefstyle="hyperlink"/>. Similarly, if an alternative <code>default</code>
     Servlet Context Helper is provided, the default Servlet Context Helper
-    provided by the Servlet Whiteboard implementation is not used and represented
-    in a failure DTO.</para>
+    provided by the Servlet Whiteboard implementation is not used and
+    represented in a failure DTO.</para>
 
     <para>An example Servlet Context Helper defined using Declarative Services
     annotations can be found below, it prefixes the path with
@@ -412,22 +414,22 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <section>
       <title>Security Handling</title>
 
-      <para>The <xref
+      <para>The <link
       linkend="org.osgi.service.servlet.context.ServletContextHelper.handleSecurity-jakarta.servlet.http.HttpServletRequest-jakarta.servlet.http.HttpServletResponse-"
-      xrefstyle="hyperlink"/> method is invoked to handle
+      xrefstyle="hyperlink">handleSecurity</link> method is invoked to handle
       implementation-defined security on the request. It is invoked before the
       request is sent to the filter-servlet pipeline.</para>
 
       <para>When the request returns from the filter-servlet pipeline the
-      <xref
+      <link
       linkend="org.osgi.service.servlet.context.ServletContextHelper.finishSecurity-jakarta.servlet.http.HttpServletRequest-jakarta.servlet.http.HttpServletResponse-"
-      xrefstyle="hyperlink"/> method is called. This method can be used by the
-      security handling mechanism to clean up any context associated with the
-      current request. <code>finishSecurity</code> is only called if
-      <code>handleSecurity</code> returned <code>true</code> for the specified
-      request. If an exception occurs during processing of the pipeline,
-      <code>finishSecurity</code> is still called. This allows to clean up
-      regardless of the result of the pipeline.</para>
+      xrefstyle="hyperlink">finishSecurity</link> method is called. This
+      method can be used by the security handling mechanism to clean up any
+      context associated with the current request. <code>finishSecurity</code>
+      is only called if <code>handleSecurity</code> returned <code>true</code>
+      for the specified request. If an exception occurs during processing of
+      the pipeline, <code>finishSecurity</code> is still called. This allows
+      to clean up regardless of the result of the pipeline.</para>
 
       <para>In the case a request is dispatched either using the include or
       forward method <code>handleSecurity</code> and
@@ -902,14 +904,15 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <title>Relation to the Servlet Container</title>
 
       <para>Implementations of this specification will often be backed by
-      existing servlet containers or a Jakarta EE application server. There may
-      also exist implementations which bridge into a servlet container into
-      which the OSGi Framework has been deployed as a Web Application.</para>
+      existing servlet containers or a Jakarta EE application server. There
+      may also exist implementations which bridge into a servlet container
+      into which the OSGi Framework has been deployed as a Web
+      Application.</para>
 
-      <para>In bridged situations the Servlet Whiteboard implementation will live
-      in one servlet context and all Whiteboard services registered by this
-      implementation will be backed by the same underlying Servlet Context.
-      However, to exhibit the behavior described in <xref
+      <para>In bridged situations the Servlet Whiteboard implementation will
+      live in one servlet context and all Whiteboard services registered by
+      this implementation will be backed by the same underlying Servlet
+      Context. However, to exhibit the behavior described in <xref
       linkend="service.http.whiteboard.servletcontext.methods"
       xrefstyle="template:Table %n on page %p"/> different Servlet Context
       objects may be required. Therefore an implementation of this
@@ -934,11 +937,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para>Where <xref
       linkend="service.http.whiteboard.servletcontext.methods"
       xrefstyle="template:Table %n on page %p"/> states <emphasis>Backed by
-      the Servlet Container</emphasis> and the Servlet Whiteboard implementation
-      is deployed in bridged mode, the API call can be forwarded to the
-      top-level Servlet Context. If the Servlet Whiteboard implementation is not
-      deployed in bridged mode, it must provide another means to handle these
-      APIs.</para>
+      the Servlet Container</emphasis> and the Servlet Whiteboard
+      implementation is deployed in bridged mode, the API call can be
+      forwarded to the top-level Servlet Context. If the Servlet Whiteboard
+      implementation is not deployed in bridged mode, it must provide another
+      means to handle these APIs.</para>
 
       <para>In bridged deployments, the implementation needs to ensure the
       following: <orderedlist>
@@ -1025,9 +1028,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The value of this service property is an LDAP-style
-            filter expression to select the Servlet Whiteboard implementation(s)
-            to handle this Whiteboard service. The LDAP filter is used to
-            match <xref
+            filter expression to select the Servlet Whiteboard
+            implementation(s) to handle this Whiteboard service. The LDAP
+            filter is used to match <xref
             linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
             xrefstyle="hyperlink"/> services. Each Servlet Whiteboard
             <emphasis>implementation</emphasis> exposes exactly one
@@ -1054,8 +1057,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
   <section xml:id="service.servlet-i21223311">
     <title>Registering Servlets</title>
 
-    <para>Servlets can be registered with the Servlet Whiteboard implementation
-    by registering them as Whiteboard services. This means that
+    <para>Servlets can be registered with the Servlet Whiteboard
+    implementation by registering them as Whiteboard services. This means that
     <code>Servlet</code> implementations are registered in the Service
     Registry under the <code>jakarta.servlet.Servlet</code> interface.</para>
 
@@ -1064,8 +1067,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     pattern defines the URL context that will trigger the servlet to handle
     the request. They are defined by the <xref
     linkend="service.servlet-i21217577"/> in section 12.2,
-    <emphasis>Specification of Mappings</emphasis>.
-    The mapping rules are:</para>
+    <emphasis>Specification of Mappings</emphasis>. The mapping rules
+    are:</para>
 
     <itemizedlist>
       <listitem>
@@ -1117,8 +1120,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     have this property, the servlet name defaults to the fully qualified class
     name of the service object.</para>
 
-    <para>For example, if the Servlet Whiteboard implementation is listening on
-    port 80 on the machine <code>www.acme.com</code> and the
+    <para>For example, if the Servlet Whiteboard implementation is listening
+    on port 80 on the machine <code>www.acme.com</code> and the
     <code>Servlet</code> object is registered with the pattern
     <code>"/servlet"</code>, then the <code>Servlet</code> object's
     <code>service</code> method is called when the following URL is used from
@@ -1198,9 +1201,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
             <entry><para>The name of the servlet. This name is used as the
             value of the
-            <code>jakarta.servlet.ServletConfig.getServletName</code> method and
-            defaults to the fully qualified class name of the service object.
-            See <xref
+            <code>jakarta.servlet.ServletConfig.getServletName</code> method
+            and defaults to the fully qualified class name of the service
+            object. See <xref
             linkend="org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1256,9 +1259,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The location where files are stored on disk. Defaults
-            to the value of <code>jakarta.servlet.context.tempdir</code> servlet
-            context attribute. If this attribute is not set, the value of the
-            <code>java.io.tmpdir</code> system property will be used as
+            to the value of <code>jakarta.servlet.context.tempdir</code>
+            servlet context attribute. If this attribute is not set, the value
+            of the <code>java.io.tmpdir</code> system property will be used as
             default. If an absolute path is specified then this path is used
             as-is. If a relative path is specified, it will be used as
             relative to the default value.
@@ -1325,8 +1328,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <code>Servlet.init(ServletConfig)</code> method. The
     <code>ServletConfig</code> parameter provides access to the initialization
     parameters specified when the <code>Servlet</code> object was registered.
-    Once the servlet is no longer used by the Servlet Whiteboard implementation
-    the <code>destroy</code> method is called. Failure during
+    Once the servlet is no longer used by the Servlet Whiteboard
+    implementation the <code>destroy</code> method is called. Failure during
     <code>Servlet.init</code> will prevent the servlet from being used, which
     is reflected using a failure DTO. In such a case the system treats the
     servlet as unusable and attempts to find an alternative servlet matching
@@ -1692,15 +1695,15 @@ public class AsyncServlet extends HttpServlet {
     osgi.http.whiteboard.filter.servlet</programlisting></para>
 
     <para>Similar to servlets, <code>Filter</code> objects are initialized by
-    a Servlet Whiteboard implementation before they start filtering requests. The
-    initialization is done by calling the
+    a Servlet Whiteboard implementation before they start filtering requests.
+    The initialization is done by calling the
     <code>Filter.init(FilterConfig)</code> method. The
     <code>FilterConfig</code> parameter provides access to
     <code>filter.init.*</code> properties on the servlet filter service
-    registration. Once the <code>Filter</code> is no longer used by the Servlet
-    Whiteboard implementation, the <code>destroy</code> method is called. When
-    the service properties on the servlet filter are modified, the
-    <code>destroy</code> method is called and the servlet filter is
+    registration. Once the <code>Filter</code> is no longer used by the
+    Servlet Whiteboard implementation, the <code>destroy</code> method is
+    called. When the service properties on the servlet filter are modified,
+    the <code>destroy</code> method is called and the servlet filter is
     subsequently re-initialized, if it can still be associated with a Servlet
     Whiteboard implementation after the modification. By default, a servlet
     filter can be used with any Servlet Context Helper or Servlet Whiteboard
@@ -1751,13 +1754,13 @@ public class MyFilter implements Filter {
     <section xml:id="service.http.whiteboard.servlet.preprocessors">
       <title>Servlet Pre-Processors</title>
 
-      <para>Servlet Filters are always run after <xref
+      <para>Servlet Filters are always run after <link
       linkend="org.osgi.service.servlet.context.ServletContextHelper.handleSecurity-jakarta.servlet.http.HttpServletRequest-jakarta.servlet.http.HttpServletResponse-"
-      xrefstyle="hyperlink"/> is called. However in some cases it is necessary
-      to process servlet requests before security is handled. For example if
-      all requests must be logged, even ones that are rejected by security. In
-      other scenarios, requests may need to be prepared for the
-      <code>handleSecurity</code> call.</para>
+      xrefstyle="hyperlink">handleSecurity</link> is called. However in some
+      cases it is necessary to process servlet requests before security is
+      handled. For example if all requests must be logged, even ones that are
+      rejected by security. In other scenarios, requests may need to be
+      prepared for the <code>handleSecurity</code> call.</para>
 
       <para>A whiteboard <xref
       linkend="org.osgi.service.servlet.whiteboard.Preprocessor"
@@ -1845,11 +1848,11 @@ public class MyFilter implements Filter {
       can use the <code>FilterChain</code> to invoke the next pre-processor,
       or if the end of the chain is reached, start processing the request. The
       pre-processor can also terminate the processing and generate a response
-      directly. Before request processing returns to the pre-processors <xref
+      directly. Before request processing returns to the pre-processors <link
       linkend="org.osgi.service.servlet.context.ServletContextHelper.finishSecurity-jakarta.servlet.http.HttpServletRequest-jakarta.servlet.http.HttpServletResponse-"
-      xrefstyle="hyperlink"/> is called. If an exception is thrown during
-      request processing, the exception is propagated through the
-      pre-processors.</para>
+      xrefstyle="hyperlink">finishSecurity</link> is called. If an exception
+      is thrown during request processing, the exception is propagated through
+      the pre-processors.</para>
 
       <para>The example <code>Preprocessor</code> below logs a message before
       and after request processing:</para>
@@ -1924,8 +1927,8 @@ public class MyPreprocessor implements Preprocessor {
             <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The pattern(s) to be used to serve resources. As
-            defined by the <xref linkend="service.servlet-i21217577"/>
-            in section 12.2, <emphasis>Specification of
+            defined by the <xref linkend="service.servlet-i21217577"/> in
+            section 12.2, <emphasis>Specification of
             Mappings</emphasis>.</para><para>This property marks the service
             as a resource service. </para><para>See <xref
             linkend="org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
@@ -1962,8 +1965,8 @@ public class MyPreprocessor implements Preprocessor {
 @HttpWhiteboardResource(pattern = "/files/*", prefix = "/www")
 public class MyResourceService {}</programlisting>
 
-    <para>A Servlet Whiteboard implementation configured on port 80 will serve a
-    request for <code>http://localhost/files/cheese.html</code> from the
+    <para>A Servlet Whiteboard implementation configured on port 80 will serve
+    a request for <code>http://localhost/files/cheese.html</code> from the
     location <code>/www/cheese.html</code>.</para>
 
     <para>The following example maps requests for <code>/favicon.ico</code> to
@@ -1990,9 +1993,9 @@ public class SomeResourceService {}</programlisting>
       <code>osgi.http.whiteboard.resource.pattern</code> competes with the
       <code>osgi.http.whiteboard.servlet.pattern</code> property specified on
       servlets. If these values overlap, the rules as outlined in <xref
-      linkend="service.servlet-i21223311"/> are used to resolve
-      conflicts, where resource services are treated just like servlets.
-      Shadowed resource patterns are reported as <xref
+      linkend="service.servlet-i21223311"/> are used to resolve conflicts,
+      where resource services are treated just like servlets. Shadowed
+      resource patterns are reported as <xref
       linkend="org.osgi.service.servlet.runtime.dto.FailedResourceDTO"
       xrefstyle="hyperlink"/>.</para>
     </section>
@@ -2086,9 +2089,9 @@ public class SomeResourceService {}</programlisting>
             String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>When set to <code>true</code> this listener service
-            is handled by the Servlet Whiteboard implementation. When not set or
-            set to <code>false</code> the service is ignored. Any other value
-            is invalid and will be reflected in a <xref
+            is handled by the Servlet Whiteboard implementation. When not set
+            or set to <code>false</code> the service is ignored. Any other
+            value is invalid and will be reflected in a <xref
             linkend="org.osgi.service.servlet.runtime.dto.FailedListenerDTO"
             xrefstyle="hyperlink"/>. Note the property value is case
             independent. See <xref
@@ -2123,8 +2126,8 @@ public class MyServletRequestListener implements ServletRequestListener {
   <section>
     <title>Life Cycle</title>
 
-    <para>If a Whiteboard service is used by a Servlet Whiteboard implementation,
-    the following order of actions are performed:</para>
+    <para>If a Whiteboard service is used by a Servlet Whiteboard
+    implementation, the following order of actions are performed:</para>
 
     <orderedlist>
       <listitem>
@@ -2178,24 +2181,27 @@ public class MyServletRequestListener implements ServletRequestListener {
     <section>
       <title>Whiteboard Service Dynamics and Active Requests</title>
 
-      <para>When the Servlet Whiteboard implementation receives a network request
-      it establishes the processing pipeline based on the available Whiteboard
-      services (servlets, servlet filters and resource services) and executes
-      this pipeline. Between establishing the pipeline and finishing the
-      processing, services used in this pipeline might become unregistered. It
-      is up to the Servlet Whiteboard implementation whether it completes the
-      active request or throws a Servlet Exception in this case.</para>
+      <para>When the Servlet Whiteboard implementation receives a network
+      request it establishes the processing pipeline based on the available
+      Whiteboard services (servlets, servlet filters and resource services)
+      and executes this pipeline. Between establishing the pipeline and
+      finishing the processing, services used in this pipeline might become
+      unregistered. It is up to the Servlet Whiteboard implementation whether
+      it completes the active request or throws a Servlet Exception in this
+      case.</para>
     </section>
   </section>
 
   <section>
     <title>The Http Service Runtime Service</title>
 
-    <para>The <xref linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
+    <para>The <xref
+    linkend="org.osgi.service.servlet.runtime.HttpServiceRuntime"
     xrefstyle="hyperlink"/> service represents the runtime state information
-    of a Servlet Whiteboard implementation. This information is provided through
-    Data Transfer Objects (DTOs). The architecture of OSGi DTOs is described
-    in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+    of a Servlet Whiteboard implementation. This information is provided
+    through Data Transfer Objects (DTOs). The architecture of OSGi DTOs is
+    described in <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/>.</para>
 
     <para>Each Servlet Whiteboard implementation registers exactly one
     <code>HttpServiceRuntime</code> service which can be used to target
@@ -2203,9 +2209,9 @@ public class MyServletRequestListener implements ServletRequestListener {
     Whiteboard implementation.</para>
 
     <para>The <code>HttpServiceRuntime</code> provides service registration
-    properties to declare its underlying Servlet Whiteboard implementation. These
-    service properties can include implementation-specific key-value pairs.
-    They also include the following:</para>
+    properties to declare its underlying Servlet Whiteboard implementation.
+    These service properties can include implementation-specific key-value
+    pairs. They also include the following:</para>
 
     <table pgwide="1"
            xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
@@ -2241,10 +2247,11 @@ public class MyServletRequestListener implements ServletRequestListener {
             <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
             <code>/myapp/</code>. Relative paths may be used if the scheme and
             authority parts of the URLs are not known such as in a bridged
-            Servlet Whiteboard implementation. If the Servlet Whiteboard implementation
-            is serving the root context and scheme and authority are not known, 
-            the value of the property is <code>/</code>. Each entry must end with a
-            slash.</para><para>See <xref
+            Servlet Whiteboard implementation. If the Servlet Whiteboard
+            implementation is serving the root context and scheme and
+            authority are not known, the value of the property is
+            <code>/</code>. Each entry must end with a slash.</para><para>See
+            <xref
             linkend="org.osgi.service.servlet.runtime.HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -2321,9 +2328,9 @@ public class MyServletRequestListener implements ServletRequestListener {
   <section>
     <title>Configuration Properties</title>
 
-    <para>If the Servlet Whiteboard implementation does not have its port values
-    configured through some other means, the implementation should use the
-    following Framework properties to determine the port values to listen
+    <para>If the Servlet Whiteboard implementation does not have its port
+    values configured through some other means, the implementation should use
+    the following Framework properties to determine the port values to listen
     on.</para>
 
     <itemizedlist>
@@ -2347,19 +2354,21 @@ public class MyServletRequestListener implements ServletRequestListener {
     <section>
       <title>osgi.implementation Capability</title>
 
-      <para>The Servlet Whiteboard implementation bundle must provide the <link
+      <para>The Servlet Whiteboard implementation bundle must provide the
+      <link
       linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
       capability with name <code>osgi.http</code>. This capability can be used
       by provisioning tools and during resolution to ensure that a Servlet
       Whiteboard implementation is present to process the Whiteboard services
       defined in this specification. The capability must also declare a uses
-      constraint for the Servlet and OSGi Servlet Whiteboard packages and provide
-      the version of this specification:</para>
+      constraint for the Servlet and OSGi Servlet Whiteboard packages and
+      provide the version of this specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.http";
-       uses:="jakarta.servlet, jakarta.servlet.http, 
-              org.osgi.service.servlet.context, org.osgi.service.servlet.whiteboard";
+       uses:="jakarta.servlet, jakarta.servlet.http,
+              org.osgi.service.servlet.context,
+              org.osgi.service.servlet.whiteboard";
        version:Version="<xref
           endterm="org.osgi.service.servlet.whiteboard-version.number"
           linkend="org.osgi.service.servlet.whiteboard"/>"</programlisting>
@@ -2390,8 +2399,8 @@ public class MyServletRequestListener implements ServletRequestListener {
       the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
       namespace with name <code>JakartaServlet</code> if it exports the
-      <code>jakarta.servlet</code> and <code>jakarta.servlet.http</code> packages.
-      See <xref
+      <code>jakarta.servlet</code> and <code>jakarta.servlet.http</code>
+      packages. See <xref
       linkend="service.servlet-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
@@ -2412,8 +2421,8 @@ public class MyServletRequestListener implements ServletRequestListener {
       xrefstyle="hyperlink"/> service must provide a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace representing this service. This capability must also declare a
-      uses constraint for the <code>org.osgi.service.servlet.runtime</code> and
-      <code>org.osgi.service.servlet.runtime.dto</code> packages:</para>
+      uses constraint for the <code>org.osgi.service.servlet.runtime</code>
+      and <code>org.osgi.service.servlet.runtime.dto</code> packages:</para>
 
       <programlisting>Provide-Capability: osgi.service;
   objectClass:List&lt;String&gt;="org.osgi.service.servlet.runtime.HttpServiceRuntime";
@@ -2470,8 +2479,8 @@ public class MyServletRequestListener implements ServletRequestListener {
       Whiteboard implementation as the result of a
       <code>ServletContextHelper.getResource</code> call. No further
       permission checks are performed when accessing bundle entry or resource
-      <code>URL</code> objects, so the Servlet Whiteboard implementation does not
-      need to be granted any additional permissions.</para>
+      <code>URL</code> objects, so the Servlet Whiteboard implementation does
+      not need to be granted any additional permissions.</para>
     </section>
 
     <section>
@@ -2485,15 +2494,15 @@ public class MyServletRequestListener implements ServletRequestListener {
       URL, the Servlet Whiteboard implementation requires the corresponding
       <code>FilePermission</code> to read the file. Similarly, if the
       <code>getResource</code> method of a <code>ServletContextHelper</code>
-      service returns an HTTP URL, the Servlet Whiteboard implementation requires
-      the corresponding <code>SocketPermission</code> to connect to the
-      resource.</para>
+      service returns an HTTP URL, the Servlet Whiteboard implementation
+      requires the corresponding <code>SocketPermission</code> to connect to
+      the resource.</para>
 
       <para>Therefore, in most cases, the Servlet Whiteboard implementation
       should be a privileged service that is granted sufficient permission to
       serve any bundle's resources, no matter where these resources are
-      located. Therefore, the Servlet Whiteboard implementation must capture the
-      <code>AccessControlContext</code> object of the bundle registering a
+      located. Therefore, the Servlet Whiteboard implementation must capture
+      the <code>AccessControlContext</code> object of the bundle registering a
       <code>ServletContextHelper</code> service, and then use the captured
       <code>AccessControlContext</code> object when accessing resources
       returned by the <code>ServletContextHelper</code> service. This
@@ -2510,8 +2519,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     .adapt(AccessControlContext.class);</programlisting>
 
       <para>When a URL returned by the <code>getResource</code> method of a
-      <code>ServletContextHelper</code> service is used by the Servlet Whiteboard
-      implementation, the implementation must use the URL in a
+      <code>ServletContextHelper</code> service is used by the Servlet
+      Whiteboard implementation, the implementation must use the URL in a
       <code>doPrivileged</code> construct using the
       <code>AccessControlContext</code> object of the registering
       bundle:</para>
@@ -2523,8 +2532,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
         }
     }, acc);</programlisting>
 
-      <para>This ensures the Servlet Whiteboard implementation can only use the
-      URL if the bundle registering the <code>ServletContextHelper</code>
+      <para>This ensures the Servlet Whiteboard implementation can only use
+      the URL if the bundle registering the <code>ServletContextHelper</code>
       service that returned the URL also has permission to use the URL. The
       use of a captured <code>AccessControlContext</code> only applies when
       accessing URL objects returned by the <code>getResource</code> method of
@@ -2537,8 +2546,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <para>This specification does not require that the Servlet Whiteboard
       implementation is granted All Permission or wraps calls to the Http
       Whiteboard services in a <code>doPrivileged</code> block. Therefore, it
-      is the responsibility of the Servlet Whiteboard service implementations to
-      use a <code>doPrivileged</code> block when performing privileged
+      is the responsibility of the Servlet Whiteboard service implementations
+      to use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
     </section>
 
@@ -2559,8 +2568,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       bundle containing the servlet needs <code>FilePermission[path,
       "read,write,delete"]</code> for that path. The Servlet Whiteboard
       implementation needs the same permissions for that path. Therefore, it
-      is the responsibility of the Servlet Whiteboard service implementations to
-      use a <code>doPrivileged</code> block when performing the write
+      is the responsibility of the Servlet Whiteboard service implementations
+      to use a <code>doPrivileged</code> block when performing the write
       operation.</para>
 
       <para>If security is enabled and any of the above required permissions
@@ -2609,8 +2618,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Specifications</title><biblioid class="uri"><link
       xlink:href="https://http2.github.io"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.servlet-i21217577"><title>Jakarta
-      Servlet 5.0 Specification</title><biblioid class="uri"><link
+      <bibliomixed xml:id="service.servlet-i21217577"><title>Jakarta Servlet
+      5.0 Specification</title><biblioid class="uri"><link
       xlink:href="https://jakarta.ee/specifications/servlet/5.0/"/></biblioid></bibliomixed>
 
       <bibliomixed
@@ -2618,9 +2627,9 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Java Contract Definitions</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
 
-      <bibliomixed xml:id="service.servlet-i21220308"><title>RFC 2617:
-      HTTP Authentication: Basic and Digest Access
-      Authentication</title><biblioid class="uri"><link
+      <bibliomixed xml:id="service.servlet-i21220308"><title>RFC 2617: HTTP
+      Authentication: Basic and Digest Access Authentication</title><biblioid
+      class="uri"><link
       xlink:href="https://www.ietf.org/rfc/rfc2617.txt"/></biblioid></bibliomixed>
 
       <bibliomixed
@@ -2628,18 +2637,15 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Pattern</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
 
-      <bibliomixed
-      xml:id="service.servlet-service.hook.ref"><title>Core Service
-      Hooks</title>OSGi Core, Chapter 55 Service Hook Service
+      <bibliomixed xml:id="service.servlet-service.hook.ref"><title>Core
+      Service Hooks</title>OSGi Core, Chapter 55 Service Hook Service
       Specification</bibliomixed>
 
-      <bibliomixed
-      xml:id="service.servlet-http.whiteboard.ref"><title>Http Whiteboard
-      Specification</title><biblioid class="uri"><link
+      <bibliomixed xml:id="service.servlet-http.whiteboard.ref"><title>Http
+      Whiteboard Specification</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.http.whiteboard.html"/></biblioid></bibliomixed>
 
-      <bibliomixed
-      xml:id="service.servlet-http.ref"><title>Http Service
+      <bibliomixed xml:id="service.servlet-http.ref"><title>Http Service
       Specification</title><biblioid class="uri"><link
       xlink:href="https://docs.osgi.org/specification/osgi.cmpn/8.0.0/service.http.html"/></biblioid></bibliomixed>
     </bibliolist>
@@ -2651,12 +2657,15 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
     <itemizedlist>
       <listitem>
         <para>This specification is providing the same functionality as its
-        predecessor, <xref linkend="service.servlet-http.whiteboard.ref"/>, with
-        the switch from the Java Servlet API to the Jakarta Servlet API.</para>
+        predecessor, <xref linkend="service.servlet-http.whiteboard.ref"/>,
+        with the switch from the Java Servlet API to the Jakarta Servlet
+        API.</para>
       </listitem>
+
       <listitem>
-        <para>Removed the reference to the <xref linkend="service.servlet-http.ref"/>
-        specying the behaviour if an implementation is also implementing that specification.</para> 
+        <para>Removed the reference to the <xref
+        linkend="service.servlet-http.ref"/> specying the behaviour if an
+        implementation is also implementing that specification.</para>
       </listitem>
     </itemizedlist>
   </section>

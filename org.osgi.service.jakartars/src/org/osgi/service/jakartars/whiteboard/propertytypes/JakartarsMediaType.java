@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants;
 
 /**
  * Component Property Type for the {@code osgi.jakartars.media.type} service
@@ -31,8 +32,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a Jakarta RESTful Web Services whiteboard
  * extension or application to declare the value of the
- * {@link org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_MEDIA_TYPE}
- * service property.
+ * {@link JakartarsWhiteboardConstants#JAKARTA_RS_MEDIA_TYPE} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -52,7 +52,7 @@ public @interface JakartarsMediaType {
 	 * service.
 	 * 
 	 * @return The Jakarta RESTful Web Services media types supported.
-	 * @see org.osgi.service.jakartars.whiteboard.JakartarsWhiteboardConstants#JAKARTA_RS_MEDIA_TYPE
+	 * @see JakartarsWhiteboardConstants#JAKARTA_RS_MEDIA_TYPE
 	 */
 	String[] value();
 }
