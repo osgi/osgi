@@ -1079,7 +1079,7 @@ public class FizzResource {
       Jakarta RESTful Web Services extensions follow the same ordering rules
       as defined by the Jakarta RESTful Web Services specification. Where more
       than one extension of a particular type is available then they are
-      ordered according to their <code>javax.annotation.Priority</code>. If
+      ordered according to their <code>jakarta.annotation.Priority</code>. If
       two extensions of the same type have the same priority then the
       whiteboard implementation must break the tie by ordering the extensions
       according to the natural ordering of their service references, as

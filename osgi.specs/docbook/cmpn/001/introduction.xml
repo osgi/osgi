@@ -739,7 +739,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>Updated <xref linkend="util.pushstream"
+        <para>Updated <xref linkend="util.promise"
         xrefstyle="template:%n %t"/>.</para>
       </listitem>
 
@@ -765,8 +765,8 @@
       <listitem>
         <para><xref linkend="service.jakartars" xrefstyle="template:%n %t"/>
         updated for Jakarta EE and replaces the JaxRS Whiteboard specification
-        which is based upon the <code>javax</code>-namespace JAX-RS API.
-        </para>
+        which is based upon the <code>javax</code>-namespace JAX-RS
+        API.</para>
       </listitem>
     </itemizedlist>
   </section>
