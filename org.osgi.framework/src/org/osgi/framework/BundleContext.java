@@ -103,7 +103,6 @@ public interface BundleContext extends BundleReference {
 	 * @param key The name of the requested property.
 	 * @return The value of the requested property, or {@code null} if the
 	 *         property is undefined.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code PropertyPermission} to read the property, and the Java
 	 *         Runtime Environment supports permissions.
@@ -913,7 +912,6 @@ public interface BundleContext extends BundleReference {
 	 * @throws InvalidSyntaxException If {@code filter} contains an invalid
 	 *         filter string that cannot be parsed.
 	 * @throws NullPointerException If {@code filter} is null.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see "Framework specification for a description of the filter string syntax."
 	 * @see FrameworkUtil#createFilter(String)
 	 * @since 1.1
