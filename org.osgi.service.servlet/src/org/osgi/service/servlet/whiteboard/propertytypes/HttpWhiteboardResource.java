@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
 
 /**
@@ -31,9 +32,9 @@ import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
  * and {@code osgi.http.whiteboard.resource.prefix} service properties.
  * <p>
  * This annotation can be used on any service to declare the values of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
  * HTTP_WHITEBOARD_RESOURCE_PATTERN} and
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
  * HTTP_WHITEBOARD_RESOURCE_PREFIX} service properties.
  * 
  * @see "Component Property Types"

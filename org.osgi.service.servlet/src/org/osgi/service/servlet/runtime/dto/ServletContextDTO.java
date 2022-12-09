@@ -21,21 +21,21 @@ package org.osgi.service.servlet.runtime.dto;
 import java.util.Map;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.servlet.context.ServletContextHelper;
 
 /**
  * Represents a {@code jakarta.servlet.ServletContext} created for servlets,
  * resources, servlet Filters, and listeners associated with that servlet
  * context. The Servlet Context is usually backed by a
- * {@link org.osgi.service.servlet.context.ServletContextHelper} service.
+ * {@link ServletContextHelper} service.
  * 
  * @NotThreadSafe
  * @author $Id$
  */
 public class ServletContextDTO extends DTO {
 	/**
-	 * The name of the servlet context.
-	 * The name of the corresponding
-	 * {@link org.osgi.service.servlet.context.ServletContextHelper}.
+	 * The name of the servlet context. The name of the corresponding
+	 * {@link ServletContextHelper}.
 	 * <p>
 	 * This is the value returned by the
 	 * {@code ServletContext.getServletContextName()} method.

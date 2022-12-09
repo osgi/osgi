@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 
 /**
  * Component Property Type for the
@@ -34,17 +35,17 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * {@code osgi.http.whiteboard.servlet.multipart.maxRequestSize} service
  * properties.
  * <p>
- * This annotation can be used on a {@link jakarta.servlet.Servlet} to declare the
- * values of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED
+ * This annotation can be used on a {@link jakarta.servlet.Servlet} to declare
+ * the values of the
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED
  * HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED},
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
  * HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD},
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
  * HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION},
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
  * HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE}, and
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
  * HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE} service properties.
  * 
  * @see "Component Property Types"
@@ -64,7 +65,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * Service property identifying the multipart handling of a servlet.
 	 * 
 	 * @return Whether the servlet supports multipart handling.
-	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED
+	 * @see HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED
 	 *      HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED
 	 */
 	boolean enabled() default true;
@@ -74,7 +75,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * request handled by a servlet.
 	 * 
 	 * @return The file size threshold for a multipart request..
-	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
+	 * @see HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
 	 *      HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
 	 */
 	int fileSizeThreshold() default 0;
@@ -84,7 +85,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * by a servlet.
 	 * 
 	 * @return The location for a multipart request..
-	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
+	 * @see HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
 	 *      HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
 	 */
 	String location() default "";
@@ -94,7 +95,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * handled by a servlet.
 	 * 
 	 * @return The max file size for a multipart request..
-	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
+	 * @see HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
 	 *      HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
 	 */
 	long maxFileSize() default -1;
@@ -104,7 +105,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * handled by a servlet.
 	 * 
 	 * @return The max request size for a multipart request..
-	 * @see org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
+	 * @see HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
 	 *      HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
 	 */
 	long maxRequestSize() default -1;

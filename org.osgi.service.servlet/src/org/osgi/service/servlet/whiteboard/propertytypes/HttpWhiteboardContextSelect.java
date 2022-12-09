@@ -24,14 +24,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 
 /**
  * Component Property Type for the {@code osgi.http.whiteboard.context.select}
  * service property.
  * <p>
  * This annotation can be used on a Servlet Whiteboard component to declare the
- * value of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+ * value of the {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
  * HTTP_WHITEBOARD_CONTEXT_SELECT} service property.
  * 
  * @see "Component Property Types"
