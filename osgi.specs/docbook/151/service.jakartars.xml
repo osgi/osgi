@@ -373,10 +373,10 @@
       <title>Relation to the Servlet Container</title>
 
       <para>Implementations of this specification will often be backed by
-      existing servlet containers, such as the OSGi Http Whiteboard, or a Java
-      EE application server. There may also exist implementations which bridge
-      into a servlet container into which the OSGi Framework has been deployed
-      as a Web Application.</para>
+      existing servlet containers, such as the OSGi Http Whiteboard, or a
+      Jakarta EE application server. There may also exist implementations
+      which bridge into a servlet container into which the OSGi Framework has
+      been deployed as a Web Application.</para>
 
       <para>In bridged situations the Jakarta RESTful Web Services Whiteboard
       implementation will have limited facilities for creating new Jakarta
@@ -2121,9 +2121,9 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.jakartars-i21217577"><title>Java API for
-      RESTful Web Services Specification</title><biblioid class="uri"><link
-      xlink:href="https://jcp.org/en/jsr/detail?id=370"/></biblioid></bibliomixed>
+      <bibliomixed xml:id="service.jakartars-i21217577"><title>Jakarta RESTful
+      Web Services 3.0 Specification</title><biblioid class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/restful-ws/3.0/"/></biblioid></bibliomixed>
 
       <bibliomixed
       xml:id="service.jakartars-portable.java.contracts.ref"><title>Portable
