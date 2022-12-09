@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
 
 /**
@@ -31,8 +32,7 @@ import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
  * property.
  * <p>
  * This annotation can be used on a Servlet Whiteboard listener to declare the
- * value of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
+ * value of the {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
  * HTTP_WHITEBOARD_LISTENER} service property as being {@code Boolean.TRUE}.
  * 
  * @see "Component Property Types"

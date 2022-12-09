@@ -24,18 +24,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.context.ServletContextHelper;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 import org.osgi.service.servlet.whiteboard.annotations.RequireHttpWhiteboard;
 
 /**
  * Component Property Type for the {@code osgi.http.whiteboard.context.name} and
  * {@code osgi.http.whiteboard.context.path} service properties.
  * <p>
- * This annotation can be used on a
- * {@link org.osgi.service.servlet.context.ServletContextHelper
+ * This annotation can be used on a {@link ServletContextHelper
  * ServletContextHelper} to declare the values of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
  * HTTP_WHITEBOARD_CONTEXT_NAME} and
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
  * HTTP_WHITEBOARD_CONTEXT_PATH} service properties.
  * 
  * @see "Component Property Types"

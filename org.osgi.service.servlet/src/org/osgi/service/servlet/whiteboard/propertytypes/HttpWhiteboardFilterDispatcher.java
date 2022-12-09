@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.osgi.service.component.annotations.ComponentPropertyType;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 
 import jakarta.servlet.DispatcherType;
 
@@ -31,9 +32,9 @@ import jakarta.servlet.DispatcherType;
  * Component Property Type for the
  * {@code osgi.http.whiteboard.filter.dispatcher} service property.
  * <p>
- * This annotation can be used on a {@link jakarta.servlet.Filter} to declare the
- * value of the
- * {@link org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
+ * This annotation can be used on a {@link jakarta.servlet.Filter} to declare
+ * the value of the
+ * {@link HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
  * HTTP_WHITEBOARD_FILTER_DISPATCHER} service property.
  * 
  * @see "Component Property Types"
