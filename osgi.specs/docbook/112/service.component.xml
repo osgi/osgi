@@ -1784,20 +1784,21 @@ public class HttpResourceImpl {
         <code>java.lang.Object</code> to allow SCR to provide any service
         object.</para>
 
-        <para>For example, a component wants to track all JAX-RS Extension
-        services. JAX-RS Extension services can be registered under many
-        different service types but must be registered with the service
-        property <code>osgi.jaxrs.extension=true</code>. The following
-        component description shows how this can be done.</para>
+        <para>For example, a component wants to track all Jakarta RESTful Web
+        Services Extension services. Jakarta RESTful Web Services Extension
+        services can be registered under many different service types but must
+        be registered with the service property
+        <code>osgi.jakartars.extension=true</code>. The following component
+        description shows how this can be done.</para>
 
         <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;scr:component name="jaxrs.extension.listener"
+&lt;scr:component name="jakartars.extension.listener"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.5.0"&gt;
     &lt;implementation class="com.acme.impl.ExtensionListener"/&gt;
     &lt;reference name="EXTENSIONS"
         interface=
             "org.osgi.service.component.AnyService"
-        target="(osgi.jaxrs.extension=true)"
+        target="(osgi.jakartars.extension=true)"
         cardinality="0..n"
     /&gt;
 &lt;/scr:component&gt;</programlisting>

@@ -36,7 +36,7 @@ package org.osgi.service.component;
  * For example:
  * 
  * <pre>
- * &#64;Reference(service = AnyService.class, target = "(osgi.jaxrs.extension=true)")
+ * &#64;Reference(service = AnyService.class, target = "(osgi.jakartars.extension=true)")
  * List&lt;Object&gt; extensions;
  * </pre>
  * 
