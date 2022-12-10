@@ -140,7 +140,7 @@ jobs:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
-      if: ${{ (fromJSON(env.canonical) && (github.ref == 'refs/heads/main')) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
+      if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
       uses: actions/upload-artifact@v3
       with:
         name: OSGi-Specification-HTML
