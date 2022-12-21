@@ -37,8 +37,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
-import org.osgi.test.common.annotation.InjectService;
-import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.service.ServiceSource;
 
 public class JDBCTestCase {
@@ -77,20 +75,21 @@ public class JDBCTestCase {
 	static String				description										= "desc";
 	static String				password										= "pswd";
 	static String				user											= "usr";
-
-	@Test
+	
+	/**
+	 * Test that the JDBS service defines at least one capability
+	 * 
+	 * @param sr the service reference parameter
+	 */
+	@ParameterizedTest
+	@ServiceSource(serviceType = DataSourceFactory.class)
 	public void testMinimumOneDataSourceFactory(
-			@InjectService(cardinality = 1, filter = "("
-					+ OSGI_JDBC_DRIVER_CLASS + "=*)")
-			ServiceAware<DataSourceFactory> sa) {
-		assertThat(sa.getService()).isNotNull();
-
-		ServiceReferenceAssert.assertThat(sa.getServiceReference())
+			ServiceReference<DataSourceFactory> sr) {
+		ServiceReferenceAssert.assertThat(sr)
 				.hasServicePropertiesThat()
 				.containsKey(OSGI_JDBC_CAPABILITY)
 				.extractingByKey(OSGI_JDBC_CAPABILITY)
 				.isNotNull();
-
 	}
 
 	@ParameterizedTest
