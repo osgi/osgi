@@ -20,6 +20,7 @@ package org.osgi.test.cases.jdbc.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE;
@@ -31,10 +32,14 @@ import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION;
 
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
@@ -80,6 +85,9 @@ public class JDBCTestCase {
 	static String				password										= "pswd";
 	static String				user											= "usr";
 	
+	@InjectBundleContext
+	BundleContext bundleContext;
+	
 	/**
 	 * Test that the JDBS service defines at least one capability
 	 * 
@@ -121,66 +129,57 @@ public class JDBCTestCase {
 	}
 
 	@ParameterizedTest
-	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_CONNECTIONPOOLDATASOURCE)
-	public void testCapabilityConnectionPoolDataSource(DataSourceFactory dsf)
-			throws SQLException {
-
-		assertThatNoException()
-				.isThrownBy(() -> dsf.createConnectionPoolDataSource(null));
-
-		assertThat(dsf.createConnectionPoolDataSource(null)).isNotNull();
-
-		assertThatNoException().isThrownBy(
-				() -> dsf.createConnectionPoolDataSource(new DfltProps()));
-
-		assertThat(dsf.createConnectionPoolDataSource(new DfltProps()))
-				.isNotNull();
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testCapabilityConnectionPoolDataSource(ServiceReference<DataSourceFactory> sr)
+			throws SQLException, InvalidSyntaxException {
+		testCapability(sr, FILTER_CAPABILITY_CONNECTIONPOOLDATASOURCE, DataSourceFactory::createConnectionPoolDataSource);
 	}
 
 	@ParameterizedTest
-	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_DATASOURCE)
-	public void testCapabilityDataSource(DataSourceFactory dsf)
-			throws SQLException {
-
-		assertThatNoException().isThrownBy(() -> dsf.createDataSource(null));
-
-		assertThat(dsf.createDataSource(null)).isNotNull();
-
-		assertThatNoException()
-				.isThrownBy(() -> dsf.createDataSource(new DfltProps()));
-
-		assertThat(dsf.createDataSource(new DfltProps())).isNotNull();
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testCapabilityDataSource(ServiceReference<DataSourceFactory> sr)
+			throws SQLException, InvalidSyntaxException {
+		testCapability(sr, FILTER_CAPABILITY_DATASOURCE, DataSourceFactory::createDataSource);
 	}
 
 	@ParameterizedTest
-	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_DRIVER)
-	public void testCapabilityDriver(DataSourceFactory dsf)
-			throws SQLException {
-
-		assertThatNoException().isThrownBy(() -> dsf.createDriver(null));
-
-		assertThat(dsf.createDriver(null)).isNotNull();
-
-		assertThatNoException()
-				.isThrownBy(() -> dsf.createDriver(new Properties()));
-
-		assertThat(dsf.createDriver(new Properties())).isNotNull();
-
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testCapabilityDriver(ServiceReference<DataSourceFactory> sr)
+			throws SQLException, InvalidSyntaxException {
+		testCapability(sr, FILTER_CAPABILITY_DRIVER, DataSourceFactory::createDriver);
 	}
 
 	@ParameterizedTest
-	@ServiceSource(serviceType = DataSourceFactory.class, filter = FILTER_CAPABILITY_XADATASOURCE)
-	public void testCapabilityXADataSource(DataSourceFactory dsf)
-			throws SQLException {
-
-		assertThatNoException().isThrownBy(() -> dsf.createXADataSource(null));
-
-		assertThat(dsf.createXADataSource(null)).isNotNull();
-
-		assertThatNoException()
-				.isThrownBy(() -> dsf.createXADataSource(new DfltProps()));
-
-		assertThat(dsf.createXADataSource(new DfltProps())).isNotNull();
+	@ServiceSource(serviceType = DataSourceFactory.class)
+	public void testCapabilityXADataSource(ServiceReference<DataSourceFactory> sr)
+			throws SQLException, InvalidSyntaxException {
+		testCapability(sr, FILTER_CAPABILITY_XADATASOURCE, DataSourceFactory::createXADataSource);
+	}
+	
+	private <T> void testCapability(ServiceReference<DataSourceFactory> reference, String filter,
+			DsfCallback<DataSourceFactory, Properties, T> function) throws SQLException, InvalidSyntaxException {
+		DataSourceFactory dsf = bundleContext.getService(reference);
+		try {
+			if (FrameworkUtil.createFilter(filter).match(reference)) {
+				//if the source declares the support, it should work to create items without an exception
+				assertThatNoException().isThrownBy(() -> function.invoke(dsf, null));
+				assertThat(function.invoke(dsf, null)).isNotNull();
+				assertThatNoException().isThrownBy(() -> function.invoke(dsf, new DfltProps()));
+				assertThat(function.invoke(dsf, new DfltProps())).isNotNull();
+			} else {
+				//it is required to throw an exception here
+				assertThatExceptionOfType(SQLException.class).isThrownBy(() -> function.invoke(dsf, null));
+				assertThatExceptionOfType(SQLException.class).isThrownBy(() -> function.invoke(dsf, new DfltProps()));
+			}
+		} finally {
+			if (dsf != null) {
+				bundleContext.ungetService(reference);
+			}
+		}
+	}
+	
+	private static interface DsfCallback<T, U, R> {
+		R invoke(T t, U u) throws SQLException;
 	}
 
 }
