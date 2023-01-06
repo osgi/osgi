@@ -488,8 +488,7 @@ public abstract class PermissionTestCase extends TestCase {
 
 		@SuppressWarnings("unused")
 		public String[] getPropertyKeys() {
-			String[] result = new String[properties.size()];
-			properties.keySet().toArray(result);
+			String[] result = properties.keySet().toArray(new String[0]);
 			return result;
 		}
 	}
