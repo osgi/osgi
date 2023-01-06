@@ -36,7 +36,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
@@ -182,8 +181,8 @@ public class Activator implements BundleActivator {
 				"REGISTER_SERVICE", getServiceProps("REGISTER_SERVICE")));
 	}
 
-	private void testTrueCondition(List<String> results, BundleContext context)
-			throws InvalidSyntaxException {
+	private void testTrueCondition(List<String> results,
+			BundleContext context) {
 		ServiceReference<Condition> conditionRef = context
 				.getServiceReferences(Condition.class,
 						'(' + Condition.CONDITION_ID + '='

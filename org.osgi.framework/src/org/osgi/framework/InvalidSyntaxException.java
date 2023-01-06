@@ -33,7 +33,7 @@ package org.osgi.framework;
  * @author $Id$
  */
 
-public class InvalidSyntaxException extends Exception {
+public class InvalidSyntaxException extends RuntimeException {
 	static final long		serialVersionUID	= -4295194420816491875L;
 	/**
 	 * The invalid filter string.

@@ -81,7 +81,7 @@ public class FrameworkUtil {
 	 * 
 	 * @see Filter
 	 */
-	public static Filter createFilter(String filter) throws InvalidSyntaxException {
+	public static Filter createFilter(String filter) {
 		return FilterImpl.createFilter(filter);
 	}
 
