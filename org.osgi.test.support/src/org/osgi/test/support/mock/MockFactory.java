@@ -73,20 +73,22 @@ public class MockFactory {
 							method.getParameterTypes());
 				}
 				catch (NoSuchMethodException e) {
-					UnsupportedOperationException uoe = new UnsupportedOperationException();
-					uoe.initCause(e);
-					throw uoe;
+					throw new UnsupportedOperationException(e);
 				}
 				delegateMethod.setAccessible(true);
 				try {
-					return delegateMethod.invoke(delegate, args);
+					Object result = delegateMethod.invoke(delegate, args);
+					if (result == delegate) { // returning "this"
+						return proxy;
+					}
+					return result;
 				}
 				catch (InvocationTargetException e) {
 					Throwable cause = e.getCause();
-					if (cause == null) {
-						cause = e;
+					if (cause != null) {
+						throw cause;
 					}
-					throw cause;
+					throw e;
 				}
 			}
 		};
