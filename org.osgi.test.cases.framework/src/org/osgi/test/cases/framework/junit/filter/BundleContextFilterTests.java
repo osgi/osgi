@@ -18,12 +18,19 @@
 
 package org.osgi.test.cases.framework.junit.filter;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.junit5.context.BundleContextExtension;
 
+@ExtendWith(BundleContextExtension.class)
 public class BundleContextFilterTests extends AbstractFilterTests {
-	public Filter createFilter(String filterString)
-			throws InvalidSyntaxException {
-		return getContext().createFilter(filterString);
+	@InjectBundleContext
+	BundleContext context;
+
+	@Override
+	public Filter createFilter(String filterString) {
+		return context.createFilter(filterString);
 	}
 }

@@ -166,8 +166,7 @@ abstract class FilterImpl implements Filter {
 	 * @throws InvalidSyntaxException If the filter parameter contains an
 	 *             invalid filter string that cannot be parsed.
 	 */
-	static FilterImpl createFilter(String filterString)
-			throws InvalidSyntaxException {
+	static FilterImpl createFilter(String filterString) {
 		return new Parser(filterString).parse();
 	}
 
@@ -968,7 +967,7 @@ abstract class FilterImpl implements Filter {
 			pos = 0;
 		}
 
-		FilterImpl parse() throws InvalidSyntaxException {
+		FilterImpl parse() {
 			FilterImpl filter;
 			try {
 				filter = parse_filter();
@@ -986,7 +985,7 @@ abstract class FilterImpl implements Filter {
 			return filter;
 		}
 
-		private FilterImpl parse_filter() throws InvalidSyntaxException {
+		private FilterImpl parse_filter() {
 			FilterImpl filter;
 			skipWhiteSpace();
 
@@ -1015,7 +1014,7 @@ abstract class FilterImpl implements Filter {
 			return filter;
 		}
 
-		private FilterImpl parse_filtercomp() throws InvalidSyntaxException {
+		private FilterImpl parse_filtercomp() {
 			skipWhiteSpace();
 
 			char c = filterChars[pos];
@@ -1037,7 +1036,7 @@ abstract class FilterImpl implements Filter {
 			return parse_item();
 		}
 
-		private FilterImpl parse_and() throws InvalidSyntaxException {
+		private FilterImpl parse_and() {
 			int lookahead = pos;
 			skipWhiteSpace();
 
@@ -1056,7 +1055,7 @@ abstract class FilterImpl implements Filter {
 			return new FilterImpl.And(operands.toArray(new FilterImpl[0]));
 		}
 
-		private FilterImpl parse_or() throws InvalidSyntaxException {
+		private FilterImpl parse_or() {
 			int lookahead = pos;
 			skipWhiteSpace();
 
@@ -1075,7 +1074,7 @@ abstract class FilterImpl implements Filter {
 			return new FilterImpl.Or(operands.toArray(new FilterImpl[0]));
 		}
 
-		private FilterImpl parse_not() throws InvalidSyntaxException {
+		private FilterImpl parse_not() {
 			int lookahead = pos;
 			skipWhiteSpace();
 
@@ -1089,7 +1088,7 @@ abstract class FilterImpl implements Filter {
 			return new FilterImpl.Not(child);
 		}
 
-		private FilterImpl parse_item() throws InvalidSyntaxException {
+		private FilterImpl parse_item() {
 			String attr = parse_attr();
 
 			skipWhiteSpace();
@@ -1149,7 +1148,7 @@ abstract class FilterImpl implements Filter {
 					filterstring);
 		}
 
-		private String parse_attr() throws InvalidSyntaxException {
+		private String parse_attr() {
 			skipWhiteSpace();
 
 			int begin = pos;
@@ -1179,7 +1178,7 @@ abstract class FilterImpl implements Filter {
 			return new String(filterChars, begin, length);
 		}
 
-		private String parse_value() throws InvalidSyntaxException {
+		private String parse_value() {
 			StringBuilder sb = new StringBuilder(filterChars.length - pos);
 
 			parseloop: while (true) {
@@ -1219,7 +1218,7 @@ abstract class FilterImpl implements Filter {
 			return sb.toString();
 		}
 
-		private String[] parse_substring() throws InvalidSyntaxException {
+		private String[] parse_substring() {
 			StringBuilder sb = new StringBuilder(filterChars.length - pos);
 
 			List<String> operands = new ArrayList<>(10);

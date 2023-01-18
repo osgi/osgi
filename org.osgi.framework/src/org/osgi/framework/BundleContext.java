@@ -276,7 +276,7 @@ public interface BundleContext extends BundleReference {
 	 * @see ServiceListener
 	 * @see ServicePermission
 	 */
-	void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException;
+	void addServiceListener(ServiceListener listener, String filter);
 
 	/**
 	 * Adds the specified {@code ServiceListener} object to the context bundle's
@@ -573,7 +573,7 @@ public interface BundleContext extends BundleReference {
 	 *             an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
+	ServiceReference< ? >[] getServiceReferences(String clazz, String filter);
 
 	/**
 	 * Returns an array of {@code ServiceReference} objects. The returned array
@@ -621,7 +621,8 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
-	ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
+	ServiceReference< ? >[] getAllServiceReferences(String clazz,
+			String filter);
 
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
@@ -727,7 +728,8 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.6
 	 */
-	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException;
+	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz,
+			String filter);
 
 	/**
 	 * Returns the service object for the service referenced by the specified
@@ -916,7 +918,7 @@ public interface BundleContext extends BundleReference {
 	 * @see FrameworkUtil#createFilter(String)
 	 * @since 1.1
 	 */
-	Filter createFilter(String filter) throws InvalidSyntaxException;
+	Filter createFilter(String filter);
 
 	/**
 	 * Returns the bundle with the specified location.
