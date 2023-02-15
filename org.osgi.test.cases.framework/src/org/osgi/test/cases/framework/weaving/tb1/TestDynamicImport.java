@@ -32,7 +32,8 @@ public class TestDynamicImport {
 	 * N.B. without weaving this method will throw {@link ClassNotFoundException}
 	 */
 	public String toString() {
-		return doDynamicImport("DEFAULT");
+		return doDynamicImport(
+				"f31aa0ab-f572-4c3a-b564-4e47f5935603_a5d56cb7-8987-416e-9212-26631f2924cd");
 	}
 
 	/**
@@ -42,6 +43,8 @@ public class TestDynamicImport {
 	 * @return
 	 */
 	private String doDynamicImport(String name) {
+		// Trim any added spaces
+		name = name.trim();
 		try {
 			//If the class name is the SymbolicNameVersion class then we want the object's
 			//toString, otherwise the Class's toString is fine, and allows us to load interfaces
