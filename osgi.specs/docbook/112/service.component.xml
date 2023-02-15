@@ -1036,10 +1036,10 @@
       SCR must locate a suitable field as specified in <xref
       linkend="service.component-locating.members"/>. If no suitable field is
       located, SCR must log an error message with the Log Service, if present,
-      and no field will not be modified for the reference. If the bound
+      and no field will be modified for the reference. If the bound
       service cannot be assigned to the field because the type is
       unassignable, SCR must log an error message containing the exception
-      with the Log Service, if present, and no field will not be modified for
+      with the Log Service, if present, and no field will be modified for
       the reference.</para>
 
       <para>Care must be taken by the component implementation regarding the
