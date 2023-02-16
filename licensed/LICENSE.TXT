@@ -26,22 +26,6 @@ License					http://saxon.sourceforge.net/saxon6.5.4/conditions.html
 URL						http://prdownloads.sourceforge.net/saxon/saxon6-5-4.zip
 Modifications			NONE, library used as is
 
-BCEL--------------------------------------------------------------------
-Copyright				1999,2005 Apache Software Foundation
-Used					In OSGi jar2xml (org.osgi.tools) to create an XML file from a JAR
-File					bcel.jar
-License					licenses/ASL-1.1.txt
-URL						http://jakarta.apache.org/bcel/
-Modifications			NONE, library used as is
-
-BCEL--------------------------------------------------------------------
-Copyright				Apache Software Foundation
-Used					In weaving compliance tests
-File					org.apache.servicemix.bundles.bcel
-License					licenses/ASL-2.0.txt
-URL                     http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/servicemix/bundles/org.apache.servicemix.bundles.bcel/5.2_3/org.apache.servicemix.bundles.bcel-5.2_3.jar
-Modifications			NONE, library used as is
-
 JUNIT-------------------------------------------------------------------
 Copyright				Packaged by SpringSource, adds no copyright, or
 Used					Diverse JUNIT tests, the JUNIT perspective seems

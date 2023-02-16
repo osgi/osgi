@@ -288,8 +288,7 @@ Bundle-ClassPath: .,div.tb6.jar
     org.osgi.test.support;version=project, \
 	org.osgi.dto;maven-scope=provided;version=latest, \
 	org.osgi.resource;maven-scope=provided;version=latest, \
-	org.osgi.framework;maven-scope=provided;version=latest, \
-	org.apache.servicemix.bundles.bcel;version=5.2
+	org.osgi.framework;maven-scope=provided;version=latest
 
 -signaturetest                      = \
     org.osgi.dto, \
@@ -307,8 +306,7 @@ Bundle-ClassPath: .,div.tb6.jar
     org.osgi.framework.wiring, \
     org.osgi.framework.wiring.dto
 
--runbundles = \
-	org.apache.servicemix.bundles.bcel;version=5.2 
+-runbundles = 
 
 -runproperties = ${runproperties}, \
 	${p}.div.tb12=abc, \

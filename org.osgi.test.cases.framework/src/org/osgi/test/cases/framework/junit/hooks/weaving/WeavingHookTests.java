@@ -18,8 +18,7 @@
 
 package org.osgi.test.cases.framework.junit.hooks.weaving;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -28,10 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.Constant;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.ConstantPoolGen;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -80,6 +75,9 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	private static final String IMPORT_TEST_CLASS_NAME = IMPORT_TEST_CLASS_PKG + ".SymbolicNameVersion";
 	/** An import string used in these tests */
 	private static final String ORG_OSGI_FRAMEWORK_VERSION_1_6 = "org.osgi.framework;version=1.6";
+	/** The expected String in the compiled class file **/
+	private static final String	DEFAULT_EXPECTED				= "f31aa0ab-f572-4c3a-b564-4e47f5935603_a5d56cb7-8987-416e-9212-26631f2924cd";
+	private static final String	DEFAULT_CHANGE_TO				= "2afe3ee3-1070-40da-adc2-c598a33177cf_198da3b6-9efa-42cb-90d2-de6040636982";
 
 	/**
 	 * This class is used to weave the test classes in many of the
@@ -88,13 +86,14 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	public class ConfigurableWeavingHook implements WeavingHook {
 
 		/**
-		 * The expected value of the constant in the UTF8 pool
-		 * that needs to be changed.
+		 * The expected value of the constant in the UTF8 pool that needs to be
+		 * changed. We use a pair of UUID strings as they are unlikely to occur
+		 * as bytes anywhere else in the class file
 		 */
-		private String expected = "DEFAULT";
+		private String				expected		= DEFAULT_EXPECTED;
 
 		/** The value to change the UTF8 constant to */
-		private String changeTo = "WOVEN";
+		private String				changeTo		= DEFAULT_CHANGE_TO;
 
 		/** A list of dynamic imports to add */
 		private List<String> dynamicImports = new ArrayList<String>();
@@ -113,7 +112,24 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		 * @param expected
 		 */
 		public void setExpected(String expected) {
-			this.expected = expected;
+			this.expected = checkAndPad(expected);
+		}
+
+		private String checkAndPad(String expected) {
+			if (this.expected.length() < expected.length()) {
+				throw new IllegalArgumentException(
+						"Expected strings must be at most " + expected.length()
+								+ " characters long");
+			}
+			if (this.expected.length() > expected.length()) {
+				StringBuilder sb = new StringBuilder(expected);
+				for (int i = 0; i < (this.expected.length()
+						- expected.length()); i++) {
+					sb.append(" ");
+				}
+				expected = sb.toString();
+			}
+			return expected;
 		}
 
 		/**
@@ -121,7 +137,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		 * @param expected
 		 */
 		public void setChangeTo(String changeTo) {
-			this.changeTo = changeTo;
+			this.changeTo = checkAndPad(changeTo);
 		}
 
 		/**
@@ -169,36 +185,38 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 					}
 				}
 				// Load the class and change the UTF8 constant
-				ClassParser parser = new ClassParser(new ByteArrayInputStream(
-						wovenClass.getBytes()), null);
-
 				try {
-					//Create a new class based on the old one
-					ClassGen generator = new ClassGen(parser.parse());
+					byte[] classBytes = wovenClass.getBytes();
+					byte[] existingConstantBytes = expected
+							.getBytes(StandardCharsets.UTF_8);
 
-					//Create a new constant
-					ConstantPoolGen factory = new ConstantPoolGen();
-					Constant c = factory.getConstant(factory.addUtf8(changeTo));
-
-					//Find the old constant
-					int location = generator.getConstantPool().lookupUtf8(expected);
+					// Brute force is simple, and sufficient for our use case
+					int location = -1;
+					outer: for (int i = 0; i < classBytes.length; i++) {
+						for (int j = 0; j < existingConstantBytes.length; j++) {
+							if (classBytes[j + i] != existingConstantBytes[j]) {
+								continue outer;
+							}
+						}
+						location = i;
+						break;
+					}
 
 					if(location < 0)
 						throw new RuntimeException("Unable to locate the expected " + expected +
-								" in the constant pool " + generator.getConstantPool());
+								" in the class file.");
 
-					//Replace the constant
-					generator.getConstantPool().setConstant(location, c);
+					byte[] changeToConstantBytes = changeTo
+							.getBytes(StandardCharsets.UTF_8);
 
-					//Get the new class as a byte[]
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					generator.getJavaClass().dump(baos);
+					System.arraycopy(changeToConstantBytes, 0, classBytes,
+							location, changeToConstantBytes.length);
 
 					//Add any imports and set the new class bytes
 					for(int i = 0; i < dynamicImports.size(); i++) {
 						wovenClass.getDynamicImports().add(dynamicImports.get(i));
 					}
-					wovenClass.setBytes(baos.toByteArray());
+					wovenClass.setBytes(classBytes);
 
 				} catch (Exception e) {
 					//Throw on any IllegalArgumentException as this comes from
@@ -310,7 +328,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		try {
 			reg = new ConfigurableWeavingHook().register(getContext(), 0);
 			Class<?> clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", "WOVEN",
+			assertEquals("Weaving was unsuccessful", DEFAULT_CHANGE_TO,
 					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg != null)
@@ -434,7 +452,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			table.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 			reg2.setProperties(table);
 
-			hook2.setExpected("DEFAULT");
+			hook2.setExpected(DEFAULT_EXPECTED);
 			hook2.setChangeTo("2 Finished");
 			hook3.setExpected("2 Finished");
 			hook3.setChangeTo("3 Finished");

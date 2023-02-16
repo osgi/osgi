@@ -8,7 +8,6 @@ osgi.cmpn.api: ${sort;${filterout;${projectswhere;packaging;*cmpn*};(org\\.osgi\
 
 jar.core.tests: \
     ${osgi.core.api},\
-    org.apache.servicemix.bundles.bcel,\
     org.osgi.impl.service.cm,\
     osgi.tck.junit-platform
 

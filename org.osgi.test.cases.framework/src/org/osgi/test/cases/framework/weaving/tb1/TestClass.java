@@ -27,6 +27,7 @@ package org.osgi.test.cases.framework.weaving.tb1;
 public class TestClass {
 
 	public String toString() {
-		return "DEFAULT";
+		return "f31aa0ab-f572-4c3a-b564-4e47f5935603_a5d56cb7-8987-416e-9212-26631f2924cd"
+				.trim();
 	}
 }
