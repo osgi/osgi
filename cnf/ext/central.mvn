@@ -174,8 +174,6 @@ log4j:log4j:1.2.15
 
 com.h2database:h2:1.4.193
 
-org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_4
-
 org.easymock:easymock:2.5.1
 
 org.springframework:spring-aop:3.1.0.RELEASE

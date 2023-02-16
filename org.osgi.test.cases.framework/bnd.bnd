@@ -306,8 +306,7 @@ Bundle-ClassPath: .,div.tb6.jar
     org.osgi.framework.wiring, \
     org.osgi.framework.wiring.dto
 
--runbundles = \
-	org.apache.servicemix.bundles.bcel;version=5.2 
+-runbundles = 
 
 -runproperties = ${runproperties}, \
 	${p}.div.tb12=abc, \
