@@ -128,13 +128,13 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         log("install war file: tw1.war at context path /tw1");
         try {
             this.b = installBundle(super.getWarURL("tw1.war", options), true);
-            fail("bundle install should fail: " + Constants.BUNDLE_VERSION
+            fail("bundle install should fail: " + Constants.BUNDLE_MANIFESTVERSION
                     + " = " + MANIFESTVERSION3);
         } catch (BundleException be) {
             // expected unless the framework supports Bundle-ManifestVersion
             // greater than 2
             log("this is expected if the framework doesn't support the "
-                    + Constants.BUNDLE_VERSION + " = " + MANIFESTVERSION3);
+                    + Constants.BUNDLE_MANIFESTVERSION + " = " + MANIFESTVERSION3);
         }
         assertNull("Bundle b should be null", this.b);
 
@@ -153,7 +153,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         log("install and start war file: tw4.war at context path /tw4");
         try {
             this.b = installBundle(super.getWarURL("tw4.war", options), false);
-            fail("bundle install should fail: " + Constants.BUNDLE_VERSION
+            fail("bundle install should fail: " + Constants.BUNDLE_MANIFESTVERSION
                     + " = " + MANIFESTVERSION3);
         } catch (BundleException be) {
             // expected;
