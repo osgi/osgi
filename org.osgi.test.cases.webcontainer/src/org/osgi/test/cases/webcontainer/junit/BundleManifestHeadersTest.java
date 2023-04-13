@@ -183,7 +183,10 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
             this.b = super.installWar(options, "wm3tw5.war", true);
             fail("install bundle should fail");
         } catch (BundleException e){
-            // expected since this is a bundle
+            // 128.4.5 WAR Manifest Processing
+            // expected since this is a non-bundle, because it doesn't contain any of these headers:
+            // Bundle-SymbolicName, Bundle-Version, Bundle-ManifestVersion, Import-Package, Web-ContextPath
+            // and for non-bundles, Web-ContextPath must be specified
         }
         
     }
