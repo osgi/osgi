@@ -131,7 +131,7 @@ public class ServletContextRegistrationTest extends
         Bundle[] bundles = new Bundle[100];
         try {
             for (int i = 0; i < 100; i++) {
-                Map<String, Object> options = createOptions("1.0", "tw1_" + i + " test war", "/tw1_" + i);
+                Map<String, Object> options = createOptions("1.0", "tw1_" + i + "_test_war", "/tw1_" + i);
                 bundles[i] = super.installWar(options, "tw1.war", true);
                 registerWarBundleTest(options, "tw1.war", true, bundles[i]);
             }

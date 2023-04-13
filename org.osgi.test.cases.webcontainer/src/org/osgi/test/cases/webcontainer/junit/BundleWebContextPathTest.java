@@ -365,7 +365,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         try {
             for (int i = 0; i < 100; i++) {
                 Map<String, Object> options = createOptions(WEBCONTEXTPATH1 + "_" + i);
-                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test war");
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test_war");
                 bundles[i] = installWar(options, "tw1.war", true);
                 super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
             }
@@ -390,13 +390,13 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         try {
             for (int i = 0; i < 10; i++) {
                 Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
-                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test war");
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test_war");
                 bundles[i] = installWar(options, "tw1.war", true);
             }
 
             // bundles[0] should be working fine
             Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
-            options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_0_test war");
+            options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_0_test_war");
             super.generalHeadersQuickTest(options, "tw1.war", true, bundles[0]);
 
             for (int i = 0; i < 9; i++) {
@@ -404,7 +404,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
 				Sleep.sleep(OSGiTestCaseProperties.getTimeout()
 						* OSGiTestCaseProperties.getScaling());
                 options = createOptions(WEBCONTEXTPATH1);
-                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + (i + 1) + "_test war");
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + (i + 1) + "_test_war");
                 super.generalHeadersQuickTest(options, "tw1.war", true, bundles[i+1]);
             }
 
