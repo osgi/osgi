@@ -160,10 +160,11 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath010() throws Exception {
-        // wmtw5.war is not a wab since it doesn't have Import-Package
+        // 128.4.4 WAB Modification
+        // wmtw5.war is not a wab but it's a proper bundle, so only Web-ContextPath can be modified
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wmtw5.war", false);
-        // install should succeed, but test won't work.
+        // install should succeed, but test won't work (bundle not started).
         assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
 
         // also verify that no other headers are modified
@@ -177,14 +178,15 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath010_2() throws Exception {
-        // wmtw5.war is not a wab since it doesn't have Import-Package
+        // 128.4.4 WAB Modification
+        // wmtw5.war is not a wab but it's a proper bundle, so only Web-ContextPath can be modified
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
 		options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi TCK test wmtw5");
         try {
             this.b = super.installWar(options, "wmtw5.war", false);
-            fail("install bundle should fail");
+            fail("install bundle should fail because Bundle-SymbolicName is specified for proper bundle");
         } catch (BundleException e){
-            // expected since this is a bundle
+            // expected since this is a bundle and only Web-ContextPath can be specified in webbundle URL
         }
         assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
 
@@ -194,7 +196,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath010_3() throws Exception {
-        // wmtw5.war is not a wab since it doesn't have Import-Package
+        // 128.4.4 WAB Modification
+        // wmtw5.war is not a wab but it's a proper bundle, so only Web-ContextPath can be modified
         final Map<String, Object> options = new HashMap<String, Object>();
 		options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi TCK test wmtw5");
         try {
