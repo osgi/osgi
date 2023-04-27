@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -68,6 +69,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.Queue;
 import java.util.Set;
 import java.util.SortedMap;
@@ -190,6 +195,74 @@ public class ConverterTest {
 				converter.convert("12.3").to(Float.class));
 		assertEquals(Double.valueOf("12.3"),
 				converter.convert("12.3").to(Double.class));
+
+		// Conversions to Optional
+
+		Optional<String> s1 = converter.convert("1").to(Optional.class);
+		assertEquals("1", s1.get());
+
+		Optional<String> s2 = converter.convert("2")
+				.to(new TypeReference<Optional<String>>() {
+				});
+		assertEquals("2", s2.get());
+
+		Optional<String> n1 = converter.convert(null).to(Optional.class);
+
+		assertThat(n1).isNotNull().isEmpty();
+
+		Optional<String> n2 = converter.convert(null)
+				.to(new TypeReference<Optional<String>>() {
+				});
+		assertThat(n2).isNotNull().isEmpty();
+
+		// OptionalInt
+		OptionalInt oi1 = converter.convert("1").to(OptionalInt.class);
+		assertThat(oi1).isNotNull().isNotEmpty().hasValue(1);
+
+		OptionalInt oiNull = converter.convert(null).to(OptionalInt.class);
+		assertThat(oiNull).isNotNull().isEmpty();
+
+		assertThrows(ConversionException.class,
+				() -> converter.convert("badValue").to(OptionalInt.class));
+
+		// OptionalDouble
+		OptionalDouble od1 = converter.convert("1").to(OptionalDouble.class);
+		assertThat(od1).isNotNull().isNotEmpty().hasValue(1d);
+
+		OptionalDouble odNull = converter.convert(null)
+				.to(OptionalDouble.class);
+		assertThat(odNull).isNotNull().isEmpty();
+		assertThrows(ConversionException.class,
+				() -> converter.convert("badValue").to(OptionalDouble.class));
+
+		// OptionalLong
+		OptionalLong ol1 = converter.convert("1").to(OptionalLong.class);
+		assertThat(ol1).isNotNull().isNotEmpty().hasValue(1l);
+
+		OptionalLong olNull = converter.convert(null).to(OptionalLong.class);
+		assertThat(olNull).isNotNull().isEmpty();
+		assertThrows(ConversionException.class,
+				() -> converter.convert("badValue").to(OptionalLong.class));
+
+	}
+
+	@Test
+	public void testOptionalTyped() {
+		// String to Double to Optional
+		Optional<Double> d = converter.convert("12.3")
+				.to(new TypeReference<Optional<Double>>() {
+				});
+		assertEquals(Double.valueOf("12.3"), d.get());
+
+		Optional<Double> dNull = converter.convert(null)
+				.to(new TypeReference<Optional<Double>>() {
+				});
+
+		assertThat(dNull).isNotNull().isEmpty();
+
+		assertThrows(ConversionException.class, () -> converter.convert("12.3")
+				.to(new TypeReference<Optional<Integer>>() {
+				}));
 	}
 
 	@Test
@@ -1658,6 +1731,97 @@ public class ConverterTest {
 				.to(MyGenericInterface.class);
 		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
 				converted.charSet());
+
+	}
+
+	@Test
+	public void testMapToInterfaceWithOptional() {
+		Map<String,Object> dto = new HashMap<>();
+		dto.put("text", "foo");
+		dto.put("textOptional", Optional.of("fooOptional"));
+		dto.put("textOptionalOptional",
+				Optional.of(Optional.of("fooOptionalOptional")));
+
+		dto.put("textSetDefaultEmptyOptional", "bar");
+		dto.put("textNullSet", null);
+		dto.put("textNullSetDefaultEmptyOptional", null);
+
+		dto.put("oInt", 1);
+		dto.put("oIntNullSet", null);
+		dto.put("oIntBadValue", "badValue");
+
+
+		dto.put("oDouble", 2D);
+		dto.put("oDoubleNullSet", null);
+		dto.put("oDoubleBadValue", "badValue");
+
+
+		dto.put("oLong", 3L);
+		dto.put("oLongNullSet", null);
+		dto.put("oLongBadValue", "badValue");
+
+		MyGenericInterfaceOptional converted = converter.convert(dto)
+				.to(MyGenericInterfaceOptional.class);
+
+		assertThat(converted.text()).isNotNull().isPresent();
+		assertThat(converted.text()).get().isSameAs("foo");
+		assertThat(converted.oInt()).hasValue(1);
+		assertThat(converted.oDouble()).hasValue(2D);
+		assertThat(converted.oLong()).hasValue(3L);
+
+		assertThat(converted.textOptional()).isNotNull().isPresent();
+		assertThat(converted.textOptional().get()).isNotNull()
+				.isSameAs("fooOptional");
+
+		assertThat(converted.textOptionalOptional()).isNotNull().isPresent();
+		assertThat(converted.textOptionalOptional().get()).isNotNull()
+				.isInstanceOf(Optional.class);
+		assertThat(converted.textOptionalOptional().get().get()).isNotNull()
+				.isNotEmpty()
+				.isSameAs("fooOptionalOptional");
+
+		assertThat(converted.textSetDefaultEmptyOptional()).isNotNull()
+				.isPresent();
+		assertThat(converted.textSetDefaultEmptyOptional().get())
+				.isSameAs("bar");
+
+		assertThat(converted.textNotSetDefaultEmptyOptional()).isNotNull()
+				.isNotPresent();
+
+		assertThat(converted.textNullSetDefaultEmptyOptional()).isNotNull()
+				.isNotPresent();
+
+		assertThat(converted.optionalIntNotSetDefaultEmptyOptional())
+				.isNotNull()
+				.isNotPresent();
+		assertThat(converted.optionalDoubleNotSetDefaultEmptyOptional())
+				.isNotNull()
+				.isNotPresent();
+		assertThat(converted.optionalLongNotSetDefaultEmptyOptional())
+				.isNotNull()
+				.isNotPresent();
+
+		assertThat(converted.textNullSet()).isNotNull().isEmpty();
+		assertThat(converted.oDoubleNullSet()).isNotNull().isEmpty();
+		assertThat(converted.oLongNullSet()).isNotNull().isEmpty();
+		assertThat(converted.oIntNullSet()).isNotNull().isEmpty();
+
+		assertThrows(ConversionException.class, () -> converted.textNotSet());
+
+		assertThrows(ConversionException.class, () -> converted.oIntNotSet());
+
+		assertThrows(ConversionException.class,
+				() -> converted.oDoubleNotSet());
+
+		assertThrows(ConversionException.class, () -> converted.oLongNotSet());
+
+		// Conversion failures should be deferred when using interfaces
+		assertThrows(ConversionException.class, () -> converted.oIntBadValue());
+		assertThrows(ConversionException.class,
+				() -> converted.oDoubleBadValue());
+		assertThrows(ConversionException.class,
+				() -> converted.oLongBadValue());
+
 	}
 
 	@Test
@@ -1743,7 +1907,6 @@ public class ConverterTest {
 		}).to(AnnType.class);
 		assertThat(a.a()).isFalse();
 		assertThat(a.b()).isNull();
-
 
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.osgi.test.cases.converter.felix;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -415,6 +416,24 @@ public class ConverterMapTest {
 		assertNull(dto.count);
 		assertNull(dto.ping);
 		assertEquals(999L, dto.pong);
+	}
+
+	@Test
+	public void testCaseDTOOptionals() {
+		Dictionary<String,String> d = new Hashtable<>();
+
+		d.put("text", "NotNullText");
+
+		MyDTOwithOptionals dto = converter.convert(d)
+				.to(MyDTOwithOptionals.class);
+
+		assertThat(dto.text).isNotNull()
+				.isPresent()
+				.hasValueSatisfying("NotNullText"::equals);
+
+		assertThat(dto.textNull).isNull();
+
+		assertThat(dto.textEmptyOptional).isNotNull().isNotPresent();
 	}
 
 	@Test

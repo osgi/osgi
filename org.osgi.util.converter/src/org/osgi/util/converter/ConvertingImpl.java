@@ -52,6 +52,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.Queue;
 import java.util.Set;
 import java.util.SortedMap;
@@ -330,6 +334,44 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			return (T) res;
 
 		return convertToCollection(converter);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T convertToOptionalType(InternalConverter converter) {
+
+		if (typeArguments != null) {
+			Object o = converter.convert(object).to(typeArguments[0]);
+			return (T) Optional.ofNullable(o);
+		}
+
+		return (T) Optional.ofNullable(object);
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T convertToOptionalInt(InternalConverter converter) {
+
+		Integer i = converter.convert(object).to(Integer.class);
+		return (T) i == null ? (T) OptionalInt.empty()
+				: (T) OptionalInt.of(i.intValue());
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T convertToOptionalDouble(InternalConverter converter) {
+
+		Double d = converter.convert(object).to(Double.class);
+		return (T) d == null ? (T) OptionalDouble.empty()
+				: (T) OptionalDouble.of(d.doubleValue());
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T convertToOptionalLong(InternalConverter converter) {
+
+		Long l = converter.convert(object).to(Long.class);
+		return (T) l == null ? (T) OptionalLong.empty()
+				: (T) OptionalLong.of(l.longValue());
+
 	}
 
 	private Collection< ? > convertToCollectionDelegate(
@@ -915,6 +957,16 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			} else if (Collection.class.isAssignableFrom(cls)) {
 				return converter.convert(Collections.emptyList()).to(cls);
 			}
+			else if (Optional.class.equals(cls)) {
+				return Optional.empty();
+			} else if (OptionalInt.class.equals(cls)) {
+				return OptionalInt.empty();
+			} else if (OptionalDouble.class.equals(cls)) {
+				return OptionalDouble.empty();
+			} else if (OptionalLong.class.equals(cls)) {
+				return OptionalLong.empty();
+			}
+
 			// This is not a primitive, just return null
 			return null;
 		}
@@ -1024,6 +1076,14 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 				throw new ConversionException("Cannot convert " + object
 						+ " to marker annotation " + targetAsClass);
 			}
+		} else if (Optional.class.equals(targetAsClass)) {
+			return convertToOptionalType(converter);
+		} else if (OptionalInt.class.equals(targetAsClass)) {
+			return convertToOptionalInt(converter);
+		} else if (OptionalDouble.class.equals(targetAsClass)) {
+			return convertToOptionalDouble(converter);
+		} else if (OptionalLong.class.equals(targetAsClass)) {
+			return convertToOptionalLong(converter);
 		}
 		return null;
 	}
