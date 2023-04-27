@@ -532,6 +532,41 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         <para>Conversion to <code>Map.Entry</code> from a scalar is not
         supported.</para>
       </section>
+      <section xml:id="util.converter-special.cases.optional">
+        <title>Optional types</title>
+
+        <para>The optional types are <code>Optional</code>, <code>OptionalInt</code>,
+        <code>OptionalLong</code> and <code>OptionalDouble</code>. Conversion to an optional type is supported as follows:</para>
+        <orderedlist>
+            <listitem>
+              <para>Identify the target type of the optional - for <code>OptionalInt</code>, <code>OptionalLong</code> and 
+              <code>OptionalDouble</code> this is the wrapper type for the target primitive. For <code>Optional</code> it 
+              is the generic type.</para>
+            </listitem>
+
+            <listitem>
+              <para>Attempt to convert the value to the target type, throwing a ConversionException if conversion fails</para>
+            </listitem>
+
+            <listitem>
+              <para>If the converted result is <code>null</code>, return the relevant empty optional type.</para>
+            </listitem>
+
+            <listitem>
+              <para>If the converted result is not <code>null</code>, wrap it in the relevant optional value</para>
+            </listitem>
+          </orderedlist>
+        <para>Example:
+        <code>
+        // String "12.3" must be converted to Double.
+        // The Double must be wrapped into the Optional.
+        
+        String sValue="12.3";
+        
+		Optional&lt;Double&gt; oDouble = converter.convert(sValue)
+				.to(new TypeReference&lt;Optional&lt;Double&gt;&gt;() {
+				});</code></para>
+	  </section>
     </section>
 
     <section xml:id="util.converter-arrays.collections">
