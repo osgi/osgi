@@ -25,10 +25,12 @@ This document describes the requirements for such a specification.
 ## Terminology
 
 * *WebSocket* - The communication channel based on the WebSocket protocol.
+* *WebSocket frame* - Fragment of a WebSocket message as transferred on the WebSocket.
+* *WebSocket message* - Data or control message transferred over the WebSocket. A message can be transmitted via one or multiple frames. A data message can be text or binary. A control message can be a ping, pong or close message.
 * *WebSocket Container* - The server-side, implementation-specific, container of server WebSocket Endpoints.
-* *WebSocket Endpoint* - Handler of a WebSocket lifecycle. Can be used either on client or server side.
 * *WebSocket Session* - Description of a single client-server WebSocket connection.
-* *WebSocket (Message) Handler* - Handler notified of WebSocket frame reception. Can be used either on client or server side.
+* *WebSocket Endpoint* - Handler of a WebSocket session lifecycle: open, close, error. The endpoint registers frame listeners when the session is opened. Can be used either on client or server side.
+* *WebSocket (Message) Handler* - Handler notified of WebSocket message reception. Can be used either on client or server side.
 
 ## Problem Description
 
@@ -49,8 +51,8 @@ It would also allow an easy reuse of existing Jakarta EE WebSocket handlers.
 ## Note on *Partial* vs. *Whole* messages handlers
 
 The Jakarta WebSocket specification allows two kinds of message handlers which are described as:
-* *Whole* message handlers are notified by the container on arrival of a complete message.
-* *Partial* message handlers are notified by the implementation when it is ready to deliver parts of a whole message.
+* *Whole* message handlers are notified by the container on arrival of a complete message (all frames recombined).
+* *Partial* message handlers are notified by the implementation when it is ready to deliver frames of a whole message.
 
 As it is explicitly stated in the JavaDoc part of the specification, the *partial* message handler is implementation-dependent.
 As a result, the OSGi WebSocket Whiteboard specification should reuse the `MessageHandler.Whole` type but ignore the `MessageHandler.Partial` one and the methods that accept it as argument.
