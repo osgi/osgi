@@ -258,6 +258,8 @@ public class ApplicationLifecyleTestCase extends AbstractJakartarsTestCase {
 				"changed");
 		reg.setProperties(properties);
 
+		awaitSelection.getValue();
+
 		httpResponse = client.execute(RequestBuilder
 				.get(baseURI + "changed/annotated/whiteboard/resource")
 				.build());
