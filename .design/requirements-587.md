@@ -6,7 +6,7 @@ This documents looks into the requirements for a Whiteboard Specification for Ja
 
 Webservices are an important part in todays maschine-tomaschine communication and the [Jakarta™ XML Web Services](https://jakarta.ee/specifications/xml-web-services/4.0/jakarta-xml-ws-spec-4.0.html) specification offers a vendor neutral way of writing and using such services.
 Managing endpoints in a dynamic way with integration to different transports can be a challenging task, this specification aims to make this task much more easier using the famous [Whiteboard Pattern](https://enroute.osgi.org/FAQ/400-patterns.html#whiteboard-pattern)
-and allow integration with existing transport specifications, especially the [Whiteboard Specification for Jakarta™ Servlet](https://docs.osgi.org/specification/osgi.cmpn/8.1.0/service.servlet.html).
+and allow integration with existing transport specifications.
 
 ## Terminology
 
@@ -35,7 +35,7 @@ to inject dependecies.
 
 ## Use Cases
 
-The code below shows an example of a logging handler that wants to intercep incomming 
+The code below shows an example of a logging handler that wants to intercept incomming 
 and outgoing messages, this handler is targeted to any registered Endpoint Implementor:
 
 ```java
@@ -94,7 +94,6 @@ public class WSEcho {
 ## Requirements
 
 - WS-0010: The solution MUST make it possible to register an Endpoint Implementor to a specific endpoint address.
-- WS-0020: The solution MUST make it possible to register an Endpoint Implementor to the Whiteboard Specification for Jakarta™ Servlet.
 - WS-0030: The solution MUST support the unregistration of a Endpoint Implementors.
 - WS-0040: The solution MUST support the registration of different Handler types with an Endpoint.
 - WS-0050: The solution MUST support the unregistration of different Handler types with an Endpoint.
