@@ -74,4 +74,41 @@ public interface TypedEventBus {
 	 */
 	void deliverUntyped(String topic, Map<String, ? > event);
 
+	/**
+	 * Creates a {@link TypedEventPublisher} for the topic automatically
+	 * generated from the passed in event type.
+	 * 
+	 * @param <T> The type of events to be sent by the
+	 *            {@link TypedEventPublisher}
+	 * @param eventType The type of events to be sent by the
+	 *            {@link TypedEventPublisher}
+	 * @return A {@link TypedEventPublisher} that will publish events to the
+	 *         topic name automatically generated from {@code eventType}
+	 */
+	<T> TypedEventPublisher<T> createPublisher(Class<T> eventType);
+
+	/**
+	 * Creates a {@link TypedEventPublisher} for the supplied topic and event
+	 * type
+	 * 
+	 * @param <T> The type of events to be sent by the
+	 *            {@link TypedEventPublisher}
+	 * @param topic The topic to publish events to
+	 * @param eventType The type of events to be sent by the
+	 *            {@link TypedEventPublisher}
+	 * @return A {@link TypedEventPublisher} that will publish events to the
+	 *         supplied topic
+	 */
+	<T> TypedEventPublisher<T> createPublisher(String topic,
+			Class<T> eventType);
+
+	/**
+	 * Creates a {@link TypedEventPublisher} for the supplied topic
+	 * 
+	 * @param topic The topic to publish events to
+	 * @return A {@link TypedEventPublisher} that will publish events to the
+	 *         supplied topic
+	 */
+	TypedEventPublisher<Object> createPublisher(String topic);
+
 }
