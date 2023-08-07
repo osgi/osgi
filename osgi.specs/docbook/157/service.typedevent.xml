@@ -476,6 +476,60 @@ public class ExampleEventSource {
       <emphasis>2</emphasis>, <emphasis>6</emphasis>, <emphasis>4</emphasis>,
       <emphasis>5</emphasis>, <emphasis>3</emphasis></para>
     </section>
+    
+    <section>
+      <title>Typed Event Publishers</title>
+      <para>Typical Event Sources publish single events at irregular intervals.
+      These event sources are best served by using the <code>deliver</code>
+      methods on the <code>TypedEventBus</code>. Some Event Sources, however,
+      produce bursts of events, or frequent, regular events to a topic. In
+      these cases there can be overhead associated with validating the topic
+      and security context each time an event is published.</para>
+      
+      <para>A <code>TypedEventPublisher</code> is associated with a single
+      topic which is set during creation. All events published using the 
+      <code>TypedEventPublisher</code> are delivered to that topic. A 
+      <code>TypedEventPublisher</code> can be obtained from the
+      <code>TypedEventBus</code> using one of the <code>createPublisher</code>
+      methods.</para>
+      
+      <para> A <code>TypedEventPublisher</code> is <code>AutoCloseable</code>
+      and the <code>isOpen</code> method may be used to determine whether it
+      has been closed. Once closed the object may no longer be used to publish
+      events, and all event delivery methods will throw <code>IllegalStateException</code>.
+      </para>
+      
+      <programlisting>public class ExampleEvent {
+    public String message;
+}         
+            
+@Component
+public class ExampleEventSource {
+    @Reference
+    TypedEventBus bus;
+
+    public void sendEvents() {
+    
+        try(TypedEventPublisher&lt;ExampleEvent&gt; publisher 
+                = bus.createPublisher("my/topic/name", ExampleEvent.class)) {
+        
+            for(int i = 0; i &lt; 100; i++) {
+                ExampleEvent event = new ExampleEvent();
+                event.message = "The event is " + i;
+                publisher.deliver(event);
+            }
+        }
+    }
+}</programlisting>
+      
+      <para>Because the topic for a <code>TypedEventPublisher</code> is defined
+      at creation time the implementation may only validate it once. Also, the 
+      <code>TypedEventBus</code> implementation must check the
+      caller's permission to publish to the topic during the call to 
+      <code>createPublisher</code>, but should not check it again for each delivery.
+      Note that this means an Event Source <emphasis>must not</emphasis> share a 
+      <code>TypedEventPublisher</code> outside its own bundle.</para>
+    </section>
   </section>
 
   <section>
