@@ -838,6 +838,73 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     </section>
 
     <section>
+	  <title>Event History</title>
+      <para>Event Handlers may be registered at any time, which can lead to 
+	  ordering problems with respect to Event Sources publishing their first 
+	  events. Specifically a late arriving Event Handler may miss the first
+	  message(s) from an early registering Event Source.</para>
+	    
+	  <para>While this situation can be detected by the Event Source (for
+      example by using an Unhandled Event Handler) or by the Event Handler 
+	  (for example by using the TypedEventMonitor) doing so is relatively 
+	  verbose.</para>
+		
+	  <para>In simple situations, such as watching the value of an irregularly
+	  updating Event Source, it is much easier for the Event Handler to have
+	  the last event(s) replayed to it before it starts receiving newly 
+	  published events. This behaviour can be enabled using the
+	  <xref linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_HISTORY"
+              xrefstyle="hyperlink"/> service property of the Event Handler.</para>
+              
+      <para>The <code>event.history</code> property is of type <code>Integer</code>
+      and must be greater than or equal to zero. The value of the property defines
+      the maximum number of historical events that should be replayed to the Event
+      Handler before normal event delivery begins. If the <code>event.history</code>
+      property is not set then it should be assumed to have the value zero.</para>
+        
+      <para>When the Typed Safe Events implementation detects the registration of an
+	  Event Handler service which has requested that one or more historical events
+	  should be replayed then it should follow the following non normative steps:</para>
+		
+	  <orderedlist>
+		<listitem>
+		  <para>Register the Event Handler service, but delay any event delivery until
+		  historical event delivery has completed.</para>
+		</listitem>
+        <listitem>
+          <para>Identify events in the retained history which match the 
+		  <code>event.topics</code> defined by the Event Handler.</para>
+        </listitem>
+        <listitem>
+          <para>Filter the identified events using the <code>event.filter</code> 
+		  defined by the Event Handler.</para>
+        </listitem>
+        <listitem>
+          <para>Sort the remaining events into chronological order.</para>
+        </listitem>
+        <listitem>
+          <para>Replay the last <code>N</code> events, in chronological order, where 
+          <code>N</code> is the number of events requested by the Event Handler.</para>
+        </listitem>
+        <listitem>
+          <para>Enable the Event Handler service and begin delivering any
+		  delayed events.</para>
+        </listitem>
+      </orderedlist>
+	  
+	  <para>The above algorithm is intended to be illustrative rather than normative 
+      and it is expected that implementations will optimise their approaches.</para>
+      
+      <para>As retaining history is an optional feature of the Type Safe Events
+	  implementation, and even where history is retained there may not be any history
+	  to replay, it is possible that there will be insufficient events to supply the
+	  number requested in <code>event.history</code>. This situation is not an error,
+	  and an Event Handler service must not require that any historical events are 
+	  delivered to it. The only guarantee is that no more than <code>event.history</code>
+	  historical events will be delivered before normal event delivery commences.</para>
+	</section>
+
+    <section>
       <title>Event Handler Service Properties</title>
 
       <para>The service properties that can be used to configure an Event
@@ -903,11 +970,27 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
               <entry><para>Defines an LDAP filter which should be tested
               against the properties in the event data. Only events which pass
-              the filter will be passed to the the Event Handler service. Ths
-              service property is permitted for both
-              <code>TypedEventHandler</code> and
+              the filter will be passed to the the Event Handler service. This
+              service property is <emphasis>optional</emphasis> and permitted
+              for both <code>TypedEventHandler</code> and
               <code>UntypedEventHandler</code> services.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_FILTER"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+            
+            <row>
+              <entry><code>event.history</code></entry>
+
+              <entry><code>Integer</code></entry>
+
+              <entry><para>Defines the number of historical events which should
+			  be replayed to the Event Handler Service before normal event
+			  delivery begins. The value of this service property must be greater
+			  than or equal to zero. This service property is 
+			  <emphasis>optional</emphasis> and permitted for both
+              <code>TypedEventHandler</code> and
+              <code>UntypedEventHandler</code> services.</para><para>See <xref
+              linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_HISTORY"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
@@ -958,6 +1041,20 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         <listitem>
           <para>All Handler Types - If the <code>event.topics</code> property
           contains one or more invalid values then the Event Handler service
+          must be ignored. The implementation must write a message to the log
+          indicating which service is being ignored.</para>
+        </listitem>
+        
+        <listitem>
+          <para>All Handler Types - If the <code>event.filter</code> property
+          contains an invalid value then the Event Handler service
+          must be ignored. The implementation must write a message to the log
+          indicating which service is being ignored.</para>
+        </listitem>
+
+        <listitem>
+          <para>All Handler Types - If the <code>event.history</code> property
+          contains an invalid value then the Event Handler service
           must be ignored. The implementation must write a message to the log
           indicating which service is being ignored.</para>
         </listitem>
