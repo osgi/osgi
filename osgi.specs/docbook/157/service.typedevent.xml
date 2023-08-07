@@ -616,12 +616,22 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       <title>Wildcard Topics</title>
 
       <para>The <code>event.topics</code> property may contain one or more
-      wildcard topics. These are Strings which contain a topic name and append
-      “/*”. This value means that the Event Handler must be called for Events
-      sent to sub-topics of the named topic. For example the component:</para>
-
-      <programlisting>@Component
-@EventTopics("foo/*")
+      wildcard topics. These are Strings which contain a topic name including
+      one or more wildcards.
+      </para>
+      
+      <section>
+        <title>Single-Level Wildcards</title>
+        <para>A Single-Level wildcard is used to match all topics which differ
+        only by a single topic token within the topic String. This is done by 
+        using a “+” character to indicate the topic token which may vary. 
+        </para>
+        
+        <para>Using a single-level wildcard means that the Event Handler must
+        be called Events sent to topics matching the rest of the topic String.
+        For example the component:</para>
+        <programlisting>@Component
+@EventTopics("foo/+/foobar")
 public class ExampleUntypedConsumer implements UntypedEventHandler {
     @Override
     public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
@@ -630,20 +640,51 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
     }
 }</programlisting>
 
-      <para>would receive events sent to the topics <code>foo/bar</code> and
-      <code>foo/baz</code>, but not the topics <code>foo</code> or
-      <code>foobar/fizzbuzz</code>.</para>
+        <para>would receive events sent to the topics <code>foo/bar/foobar</code>
+        and <code>foo/baz/foobar</code>, but not the topics <code>foo/foobar</code> or
+        <code>foo/bar/foobar/baz</code>.</para>
+        
+        <para>The <code>+</code> character in a wildcard topic must always
+        be the only character in the topic token that it matches, meaning 
+        that topic names such as <code>foo+/bar</code> and <code>foo/+bar</code> 
+        are not valid. It is valid to use the topic name
+        <code>+</code> to receive events on <emphasis>all</emphasis> single 
+        level topics.</para>
+      </section>
+      
+      <section>
+        <title>The Multi-Level Wildcard</title>
+        <para>The multi-level wildcard is used to match all topics which
+        share a given prefix. This is done by appending “/*”. to the prefix.
+        This value means that the Event Handler must be called for Events
+        sent to sub-topics of the named topic. For example the component:</para>
+        
+        <programlisting>@Component
+@EventTopics("foo/*")
+public class ExampleUntypedConsumer implements UntypedEventHandler {
+    @Override
+    public void notifyUntyped(String topic, Map&lt;String,Object&gt; event) {
+        System.out.println("Event received on topic: " + topic
+                + " with message: " + event.get("message"));
+    }
+}</programlisting>
+          
+        <para>would receive events sent to the topics <code>foo/bar</code> and
+        <code>foo/baz</code>, but not the topics <code>foo</code> or
+        <code>foobar/fizzbuzz</code>.</para>
 
-      <para>The <code>*</code> character in a wildcard topic must always
-      follow a solidus <code>/</code> character, and must be the final
-      character in the topic string, meaning that topic names such as
-      <code>foo*</code> and <code>foo/*/bar</code> are not valid. The only
-      exception to this rule is that it is valid to use the topic name
-      <code>*</code> to receive events on <emphasis>all</emphasis> topics.
-      While it is valid to do so, using the topic <code>*</code> is not
-      typically recommended. For a mechanism to monitor the events flowing
-      through the system see <xref
-      linkend="service.typedevent-monitor"/>.</para>
+        <para>The <code>*</code> character in a wildcard topic must always
+        follow a solidus <code>/</code> character, and must be the final
+        character in the topic string, meaning that topic names such as
+        <code>foo*</code> and <code>foo/*/bar</code> are not valid. The only
+        exception to this rule is that it is valid to use the topic name
+        <code>*</code> to receive events on <emphasis>all</emphasis> topics.
+        While it is valid to do so, using the topic <code>*</code> is not
+        typically recommended. For a mechanism to monitor the events flowing
+        through the system see <xref
+        linkend="service.typedevent-monitor"/>.</para>
+          
+      </section>
     </section>
 
     <section>
