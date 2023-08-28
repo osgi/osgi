@@ -140,6 +140,8 @@
   
   <xi:include href="../160/service.feature.launcher.xml"/>
 
+  <xi:include href="../160/service.jakartaws.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../705/util.promise.xml"/>
