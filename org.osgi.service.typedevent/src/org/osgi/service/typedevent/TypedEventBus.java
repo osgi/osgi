@@ -84,6 +84,7 @@ public interface TypedEventBus {
 	 *            {@link TypedEventPublisher}
 	 * @return A {@link TypedEventPublisher} that will publish events to the
 	 *         topic name automatically generated from {@code eventType}
+	 * @since 1.1
 	 */
 	<T> TypedEventPublisher<T> createPublisher(Class<T> eventType);
 
@@ -98,6 +99,7 @@ public interface TypedEventBus {
 	 *            {@link TypedEventPublisher}
 	 * @return A {@link TypedEventPublisher} that will publish events to the
 	 *         supplied topic
+	 * @since 1.1
 	 */
 	<T> TypedEventPublisher<T> createPublisher(String topic,
 			Class<T> eventType);
@@ -108,6 +110,7 @@ public interface TypedEventBus {
 	 * @param topic The topic to publish events to
 	 * @return A {@link TypedEventPublisher} that will publish events to the
 	 *         supplied topic
+	 * @since 1.1
 	 */
 	TypedEventPublisher<Object> createPublisher(String topic);
 

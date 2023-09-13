@@ -42,6 +42,8 @@ public interface TypedEventMonitor {
 	/**
 	 * Get a stream of events, including up to the requested number of
 	 * historical data events.
+	 * <p>
+	 * Logically equivalent to <code>monitorEvents(history, false)</code>.
 	 *
 	 * @param history The requested number of historical events, note that fewer
 	 *            than this number of events may be returned if history is
@@ -51,8 +53,24 @@ public interface TypedEventMonitor {
 	PushStream<MonitorEvent> monitorEvents(int history);
 
 	/**
+	 * Get a stream of events, including up to the requested number of
+	 * historical data events.
+	 *
+	 * @param history The requested number of historical events, note that fewer
+	 *            than this number of events may be returned if history is
+	 *            unavailable, or if insufficient events have been sent.
+	 * @param historyOnly If <code>true</code> then the returned stream will be
+	 *            closed as soon as the available history has been delivered
+	 * @return A stream of event data
+	 * @since 1.1
+	 */
+	PushStream<MonitorEvent> monitorEvents(int history, boolean historyOnly);
+
+	/**
 	 * Get a stream of events, including historical data events prior to the
-	 * supplied time
+	 * supplied time.
+	 * <p>
+	 * Logically equivalent to <code>monitorEvents(history, false)</code>.
 	 *
 	 * @param history The requested time after which historical events, should
 	 *            be included. Note that events may have been discarded, or
@@ -60,5 +78,20 @@ public interface TypedEventMonitor {
 	 * @return A stream of event data
 	 */
 	PushStream<MonitorEvent> monitorEvents(Instant history);
+
+	/**
+	 * Get a stream of events, including historical data events prior to the
+	 * supplied time.
+	 *
+	 * @param history The requested time after which historical events, should
+	 *            be included. Note that events may have been discarded, or
+	 *            history unavailable.
+	 * @param historyOnly If <code>true</code> then the returned stream will be
+	 *            closed as soon as the available history has been delivered
+	 * @return A stream of event data
+	 * @since 1.1
+	 */
+	PushStream<MonitorEvent> monitorEvents(Instant history,
+			boolean historyOnly);
 
 }

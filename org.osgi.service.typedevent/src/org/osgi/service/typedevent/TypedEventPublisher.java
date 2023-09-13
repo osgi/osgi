@@ -35,7 +35,9 @@ import org.osgi.annotation.versioning.ProviderType;
  * @ThreadSafe
  * @author $Id$
  * @param <T> The type of events that may be sent using this publisher
+ * @since 1.1
  */
+
 @ProviderType
 public interface TypedEventPublisher<T> extends AutoCloseable {
 	/**
