@@ -1121,7 +1121,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <para>In a running system it is often useful for monitoring tools to
       replay recent data immediately after a problem has occurred. For that
       reason Typed Event Monitor instances may store past events so that they
-      can be replayed if requested. There are two <code>monitorEvents</code>
+      can be replayed if requested. There are four <code>monitorEvents</code>
       methods capable of replaying history:</para>
 
       <itemizedlist>
@@ -1130,7 +1130,18 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
           linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-int-"
           xrefstyle="hyperlink"/> takes an <code>int</code> representing the
           number of past events that should be replayed from the cached
-          history</para>
+          history. This stream remains connected after replaying history and
+          will continue to receive new events.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-int-boolean-"
+          xrefstyle="hyperlink"/> takes an <code>int</code> representing the
+          number of past events that should be replayed from the cached
+          history and a boolean indicating whether to remain connected after
+          all available history has been replayed. Passing <code>true</code>
+          will ensure that only historical events are replayed.</para>
         </listitem>
 
         <listitem>
@@ -1139,6 +1150,16 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
           xrefstyle="hyperlink"/> takes an <code>Instant</code>, representing
           the time in the past from which the stream of monitoring events
           should start.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.monitorEvents-Instant-boolean-"
+          xrefstyle="hyperlink"/> takes an <code>Instant</code>, representing
+          the time in the past from which the stream of monitoring events
+          should start and a boolean indicating whether to remain connected 
+          after all available history has been replayed. Passing <code>true</code>
+          will ensure that only historical events are replayed.</para>
         </listitem>
       </itemizedlist>
 
