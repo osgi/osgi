@@ -1,5 +1,7 @@
 # OSGi
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/osgi/osgi/badge)](https://securityscorecards.dev/viewer/?uri=github.com/osgi/osgi)
+
 This is the main git repository for the OSGi specifications, implementations and TCKs. It is a Bnd Workspace model build.
 
 ## Build
