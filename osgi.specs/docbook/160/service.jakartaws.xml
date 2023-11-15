@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+<chapter label="160" revision="$Id$" version="5.0"
+         xml:id="service.jakartaws" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Whiteboard Specification for Jakarta™ XML Web Services</title>
+
+  <titleabbrev>Jakarta™ XML Web Services Whiteboard</titleabbrev>
+
+  <info>
+    <releaseinfo>
+      <xref endterm="org.osgi.service.jakartaws.whiteboard-version"
+            linkend="org.osgi.service.jakarta.xml.ws.whiteboard"/>
+    </releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>
+     Webservices are an important part in todays maschine-to-maschine communication and the <xref linkend="service.jakartaws-i21217577"/> (formerly known as JAX-WS) specification offers a vendor neutral way of writing and using such services.
+     
+    Managing endpoints in a dynamic way with integration to different transports can be a challenging task, this specification aims to make this task much more easier using the famous <xref linkend="service.jakartaws-whiteboard.pattern.ref" />
+    and allow integration with existing transport specifications.
+    
+    
+    The <xref linkend="service.jakartaws-i21217577"/> (formerly known as JAX-WS) defines a
+    standard Java- to-WSDL mapping which determines how web service operations
+    are bound to Java methods when a SOAP message invokes an action.
+    Webservices are an important part in todays maschine-to-maschine communication and the [Jakarta™ XML Web Services](https://jakarta.ee/specifications/xml-web-services/4.0/jakarta-xml-ws-spec-4.0.html) specification offers a vendor neutral way of writing and using such services.
+Managing endpoints in a dynamic way with integration to different transports can be a challenging task, this specification aims to make this task much more easier using the famous [Whiteboard Pattern](https://enroute.osgi.org/FAQ/400-patterns.html#whiteboard-pattern)
+and allow integration with existing transport specifications.</para>
+
+    <para>The Whiteboard Specification for Jakarta™ XML Web Services supports:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Registering Web Service Implementation</emphasis> - an implementation is an annotated "implementor" of the webservice used by an ednpoint.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Publishing Endpoints</emphasis> - an "implementor" is published by an endpoint that handles the incomming and outgoing messages on the transport level</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Registering Handlers</emphasis> - a handler can intercept messages when they pass from / to endpoint and perform actions on it.</para>
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Whiteboard Specification for Jakarta™ XML Web Services implementations must support
+    at least version 4.0 of the Jakarta™ XML Web Services API and registering endpoints to the protocols provided by the used API implementation.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This specification defines the following entities:</para>
+
+   </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="service.jakartaws-i21217577">
+        <title>Jakarta™ XML Web Services Specification</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/xml-web-services/4.0/jakarta-xml-ws-spec-4.0.html"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-portable.java.contracts.ref">
+        <title>Portable Java Contract Definitions</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-whiteboard.pattern.ref">
+        <title>Whiteboard Pattern</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-iana.media.types">
+        <title>IANA Media Type Registrations</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://www.iana.org/assignments/media-types/media-types.xhtml"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-iana.media.type.suffixes">
+        <title>IANA Media Type Suffix Registrations</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/>
+        </biblioid>
+      </bibliomixed>
+
+    </bibliolist>
+  </section>
+</section>
+</chapter>
