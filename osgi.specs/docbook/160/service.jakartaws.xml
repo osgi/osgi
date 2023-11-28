@@ -76,8 +76,140 @@ and allow integration with existing transport specifications.</para>
       <title>Entities</title>
 
       <para>This specification defines the following entities:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>[Handler](https://jakarta.ee/specifications/xml-web-services/4.0/apidocs/jakarta.xml.ws/jakarta/xml/ws/handler/handler)</emphasis> - An object registered in the Service Registry
+          providing responsible for filtering or inspection of messages while they flow through the webservice processing.</para>
+        </listitem>
 
+        <listitem>
+          <para><emphasis>Endpoint Implementor</emphasis> - An implementation that  can be used to register an endpoint with and enpoint</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Publisher</emphasis> - An implementation that collects <emphasis>Handler</emphasis> and <emphasis>Endpoint Implementor</emphasis> instances and publish them for a given transport</para>
+        </listitem>
+
+      </itemizedlist>
+      
+      <figure pgwide="1" xml:id="service.jakartaws.whiteboard-overview">
+        <title>Jakarta™ XML Web Services Overview Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.313in"
+                       contentwidth="5.496in" fileref="overall.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
    </section>
+
+   <section xml:id="service.jakartaws.whiteboard">
+    <title>Jakarta™ XML Web Services Whiteboard</title>
+
+    <para>While in a traditional web application the configuration is rather static and known in advance in OSGi items can come and go anytime and code should be aware of this dynamism.
+        Also registration of listeners must happen before an endpoint is published and only weak typing makes it hard to handle this right manually.
+        As a result, the publishing of Web Services in the current state of the specification goes against the loose coupling concept usually provided by OSGi 
+        as it requires knowledge about the stakeholders involved
+        </para>
+        <para>
+         It is therefore the responsibility of the Web Services Whiteboard to handle this cases in a transparent manner so the user can focus on the actual work, 
+         use common dependency injection techniques like Declarative Services to inject dependencies.
+         </para>
+   </section>
+   
+   <section xml:id="service.jakartars.endpoint.services">
+    <title>Registering Endpoint Implementor</title>
+
+    <para>Endpoint Implementor can be registered with the Jakarta™ XML Web Services Whiteboard by registering them as Whiteboard
+    services. This means that the endpoint POJO implementations are registered in the Service Registry. As Webservice Endpoints are
+    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code>. and use any
+    annotations on endpoint object, just as it would outside of OSGi.</para>
+
+    <para>To be picked up as endpoints, the POJO they are instead registered with the
+    <code>osgi.soap.endpoint.implementor</code> service property with a value of
+    <code>"true"</code>. This property serves as a marker to the Jakarta™ XML Web Services Whiteboard
+    runtime, indicating that this OSGi service should further be processed as an endpoint.</para>
+
+      <para>The code below shows an simple echo webservice Endpoint Implementor, the `@WebService` / `@WebMethod` is 
+      a jakarta annotation and therefore not processed by the akarta™ XML Web Services Whiteboard
+      runtime:</para>
+
+      <programlisting>@WebService
+@SOAPWhiteboardEndpoint(contextpath = "/echo")
+@Component(immediate = true, service = WSEcho.class)
+public class WSEcho {
+
+	@WebMethod(operationName = "echo", action = "echo")
+	public String echo(@WebParam(name = "textIn") String text) {
+		return text;
+	}
+
+}</programlisting>
+   </section>
+   <section xml:id="service.jakartaws.handler.services">
+    <title>Registering Webservice Handlers</title>
+
+    <para>Webservice Handlers can be registered with the Jakarta™ XML Web Services Whiteboard by registering them as Whiteboard
+    services. This means that the handler POJO implementations are registered
+    in the Service Registry. As Handler Services must be registered using <emphasis>jakarta.xml.ws.handler.Handler</emphasis> 
+    as the service interface but implement any of the valid types of the Jakarta™ XML Web Services specification.
+    </para>
+
+    <para>The code below shows an example of a logging handler that wants to intercept incoming and outgoing messages,
+    this handler is targeted to any registered <emphasis>Endpoint Implementor</emphasis>:</para>
+
+      <programlisting>@Component(service = Handler.class)
+public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
+
+     public Set&lt;QName&gt; getHeaders() {
+        return null;
+    }
+
+    public boolean handleMessage(SOAPMessageContext smc) {
+        try {
+            smc.getMessage().writeTo(System.out);
+        } catch (SOAPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean handleFault(SOAPMessageContext smc) {
+        try {
+            smc.getMessage().writeTo(System.err);
+        } catch (SOAPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public void close(MessageContext messageContext) {
+    }
+}
+        </programlisting>
+    <section xml:id="service.jakartaws.handler.services.target">
+     	<title>Targeting specific Endpoint Implementor</title>
+     	<para>
+     	If a handler wants to target a specific <emphasis>Endpoint Implementor</emphasis> it can specify the <emphasis>osgi.soap.endpoint.selector</emphasis> service properties
+     	and will only be installed for such <emphasis>Endpoint Implementor</emphasis> that map the provided filter.
+     	</para>
+     	    <para>The previous example targeting an <emphasis>Endpoint Implementor</emphasis> registered with a <emphasis>wstype</emphasis> property of <emphasis>echo</emphasis> looks like this:</para>
+
+      <programlisting>@Component(service = Handler.class)
+        @EndpointSelector("(wstype=echo)")
+        public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
+
+             ... like before ...
+        }
+        </programlisting>
+     </section>
+    </section>
 
   <section>
     <title>References</title>
