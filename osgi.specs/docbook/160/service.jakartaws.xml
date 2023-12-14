@@ -131,6 +131,8 @@ and allow integration with existing transport specifications.</para>
     <code>osgi.soap.endpoint.implementor</code> service property with a value of
     <code>"true"</code>. This property serves as a marker to the Jakarta™ XML Web Services Whiteboard
     runtime, indicating that this OSGi service should further be processed as an endpoint.</para>
+    <para>Beside that the property <code>osgi.soap.endpoint.contextpath</code> can be used to specify the desired context path where this handler
+    should be registered, this might include a protocol to indicate the type of transport that is used for this endpoint in the publishing phase, if the property is not given the value <code>/</code> is assumed as a context path </para>
 
       <para>The code below shows an simple echo webservice Endpoint Implementor, the `@WebService` / `@WebMethod` is 
       a jakarta annotation and therefore not processed by the akarta™ XML Web Services Whiteboard
@@ -138,7 +140,7 @@ and allow integration with existing transport specifications.</para>
 
       <programlisting>@WebService
 @SOAPWhiteboardEndpoint(contextpath = "/echo")
-@Component(immediate = true, service = WSEcho.class)
+@Component(immediate = true, service = WSEcho.class, property = "wstype=echo")
 public class WSEcho {
 
 	@WebMethod(operationName = "echo", action = "echo")
@@ -191,8 +193,8 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
 
     public void close(MessageContext messageContext) {
     }
-}
-        </programlisting>
+    
+}</programlisting>
     <section xml:id="service.jakartaws.handler.services.target">
      	<title>Targeting specific Endpoint Implementor</title>
      	<para>
@@ -202,14 +204,50 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
      	    <para>The previous example targeting an <emphasis>Endpoint Implementor</emphasis> registered with a <emphasis>wstype</emphasis> property of <emphasis>echo</emphasis> looks like this:</para>
 
       <programlisting>@Component(service = Handler.class)
-        @EndpointSelector("(wstype=echo)")
-        public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
+@EndpointSelector("(wstype=echo)")
+public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
 
-             ... like before ...
-        }
-        </programlisting>
+       ... like before ...
+}</programlisting>
      </section>
     </section>
+    <section>
+    	<title>Jakarta™ XML Web Services Whiteboard Implementation</title>
+    	<para>
+    		The Jakarta™ XML Web Services Whiteboard implementation consists of the following parts:
+    		<itemizedlist>
+		        <listitem>
+		        	<para>The <emphasis>Endpoint Registrar</emphasis> what is responsible to track the <emphasis>Endpoint Implementor</emphasis>S and <emphasis>Handler</emphasis>S registered 
+		        		in the OSGi service factory and registering <emphasis>Endpoint</emphasis> services on their behalf.</para>
+		        	<para>The <emphasis>Endpoint Publisher</emphasis> that tracks registered <emphasis>Endpoint</emphasis> services and publish them to a concrete transport</para>
+		        </listitem>
+	        </itemizedlist>
+    	</para>
+    	 <section>
+    	 	<title>The Endpoint Registrar</title>
+	    	<para>
+	    	The responsibility of the <emphasis>Endpoint Registrar</emphasis> is the following:
+		    <itemizedlist>
+			        <listitem>
+			        	<para>Track any service registered with a service property <emphasis>osgi.soap.endpoint.implementor</emphasis> with the value <emphasis>true</emphasis> and registers <emphasis>Endpoint</emphasis> services</para>
+			        	<para>Track all registered <emphasis>jakarta.xml.ws.handler.Handler</emphasis> service and attach them to the target implementors <emphasis>Endpoint</emphasis></para>
+			        </listitem>
+	        </itemizedlist>
+	        As <emphasis>Endpoint</emphasis> instances can only be registered once with a transport and after publishing can't change its handler chain, special care has to be taken when Endpoints are created and registered.
+	        Because of this an <emphasis>Endpoint Registrar</emphasis> must ensure that each lookup of the Enpoint service will result in a fresh Endpoint instance being created, this can be archived by registering 
+	        a <emphasis>PrototypeServiceFactory</emphasis> instead of a real Endpoint instance and also has the advantage that creation of Endpoint instances is delayed until they are really used.
+	        An <emphasis>Endpoint Registrar</emphasis> must also use the current available list of <emphasis>Handler</emphasis> that matches at the point of time the Enpoint was requested, to allow for dynamic changes
+			in the framework, each change in the Handler chain must result in unregistering all <emphasis>Endpoint</emphasis> to force a refresh.
+	    	</para>
+    	 </section>
+    	 <section>
+	    	<title>The Endpoint Publisher</title>
+	    	<para>
+	    	The responsibility of the <emphasis>Endpoint Publisher</emphasis> is to track <emphasis>Endpoint</emphasis> services and publish them with a given transport.
+	    	There might be multiple Enpoint Publisher for different protocols but at least the publishing using the default enpoint publish must be supported, in addition to that implementations are encouraged
+	    	to also support publishing to the Http Whiteboard Service.
+	    	</para>
+	    </section>
 
   <section>
     <title>References</title>
