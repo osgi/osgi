@@ -195,6 +195,7 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
     }
     
 }</programlisting>
+</section>
     <section xml:id="service.jakartaws.handler.services.target">
      	<title>Targeting specific Endpoint Implementor</title>
      	<para>
@@ -249,8 +250,14 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
 	    	</para>
 	    </section>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartaws.whiteboard.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartaws.whiteboard.annotations.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartaws.whiteboard.propertytypes.xml"/>
   <section>
     <title>References</title>
+
 
     <bibliolist>
       <bibliomixed xml:id="service.jakartaws-i21217577">

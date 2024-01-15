@@ -1,31 +1,60 @@
-/*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+/*******************************************************************************
+ * Copyright (c) Contributors to the Eclipse Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0 
+ *******************************************************************************/
 package org.osgi.service.jakartaws.whiteboard;
 
+/**
+ * Defines standard constants for the Jakarta Web Services Whiteboard services.
+ * 
+ * @author $Id$
+ */
 public class SoapWhiteboardConstants {
 
     private SoapWhiteboardConstants() {
         // non-instantiable
     }
 
+	/**
+	 * TODO
+	 */
     public static final String SOAP = "osgi.soap";
+	/**
+	 * TODO
+	 */
     public static final String SOAP_PREFIX = SOAP+".";
+	/**
+	 * TODO
+	 */
     public static final String SOAP_ENDPOINT_PREFIX = SOAP + ".endpoint.";
+	/**
+	 * TODO
+	 */
     public static final String SOAP_ENDPOINT_IMPLEMENTOR = SOAP_ENDPOINT_PREFIX + "implementor";
+	/**
+	 * TODO
+	 */
     public static final String SOAP_ENDPOINT_PATH = SOAP_ENDPOINT_PREFIX + "contextpath";
+	/**
+	 * TODO
+	 */
     public static final String SOAP_ENDPOINT_SELECT = SOAP_ENDPOINT_PREFIX + "selector";
-
+	/**
+	 * TODO
+	 */
 	public static final String	SOAP_SPECIFICATION_VERSION	= "1.0";
     
 }

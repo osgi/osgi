@@ -30,7 +30,7 @@
  */
 
 @Version(SOAP_SPECIFICATION_VERSION + ".0")
-package org.osgi.service.jakartars.whiteboard.propertytypes;
+package org.osgi.service.jakartaws.whiteboard.propertytypes;
 
 import static org.osgi.service.jakartaws.whiteboard.SoapWhiteboardConstants.SOAP_SPECIFICATION_VERSION;
 
