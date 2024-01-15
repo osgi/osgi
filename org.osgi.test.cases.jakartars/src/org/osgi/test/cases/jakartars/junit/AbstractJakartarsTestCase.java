@@ -45,6 +45,7 @@ import org.osgi.service.jakartars.runtime.JakartarsServiceRuntime;
 import org.osgi.test.cases.jakartars.util.ServiceUpdateHelper;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.junit5.context.BundleContextExtension;
+import org.osgi.util.promise.Promises;
 
 /**
  * This test covers the lifecycle behaviours described in section 151.4.2
@@ -69,6 +70,16 @@ public abstract class AbstractJakartarsTestCase {
 		helper.open();
 
 		runtime = helper.awaitRuntime(5000);
+		try {
+			while (helper.awaitModification(runtime, 200)
+					.map(x -> Boolean.TRUE)
+					.fallbackTo(Promises.resolved(Boolean.FALSE))
+					.getValue())
+				;
+		} catch (Exception e) {
+			throw new IllegalStateException(
+					"Failed while waiting for the whiteboard to settle before the test");
+		}
 	}
 
 	@AfterEach

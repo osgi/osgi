@@ -161,6 +161,8 @@ public class ExtensionLifecyleTestCase extends AbstractJakartarsTestCase {
 		context.registerService(WriterInterceptor.class,
 				new BoundStringReplacer("fizz", "fizzbuzz"), properties);
 
+		awaitSelection.getValue();
+
 		String baseURI = getBaseURI();
 
 		// One method should be intercepted but not the other
