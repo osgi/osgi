@@ -27,6 +27,10 @@ import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.jakartaws.whiteboard.SoapWhiteboardConstants;
 
 
+/**
+ * Annotation that can be added to a type or package to indicate it requires the
+ * soap whiteboard extender
+ */
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
