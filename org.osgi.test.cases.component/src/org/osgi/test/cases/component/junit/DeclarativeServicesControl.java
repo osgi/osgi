@@ -7346,7 +7346,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong number of services", 1, baseReg.getReference().getUsingBundles().length);
 
 				try {
-					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object() {}));
 					failException("unget of invalid service succeeded", IllegalArgumentException.class);
 				}
 				catch (IllegalArgumentException e) {
@@ -7460,7 +7460,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				}
 				assertEquals("wrong number of services", 1, counter.get());
 				try {
-					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object() {}));
 					failException("unget of invalid service succeeded", IllegalArgumentException.class);
 				}
 				catch (IllegalArgumentException e) {
@@ -7559,7 +7559,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				}
 				assertEquals("wrong number of services", 12, counter.get());
 				try {
-					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object() {}));
 					failException("unget of invalid service succeeded", IllegalArgumentException.class);
 				}
 				catch (IllegalArgumentException e) {
