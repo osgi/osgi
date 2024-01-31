@@ -27,27 +27,26 @@ import org.osgi.service.jakartaws.whiteboard.SoapWhiteboardConstants;
 import org.osgi.service.jakartaws.whiteboard.annotations.RequireSoapWhiteboard;
 
 /**
- * Annotation that can be used to mark a service component as an object that should be considered by the SOPA Whiteboard Extender 
- *
+ * Annotation that can be used to mark a service component as an object that
+ * should be considered by the SOAP Whiteboard Extender using http on the
+ * transport level.
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 @RequireSoapWhiteboard
-public @interface SOAPWhiteboardEndpoint {
+@WhiteboardEndpoint(address = "")
+public @interface HttpWhiteboardEndpoint {
 
 	/**
 	 * prefix used for component properties
 	 */
-    String PREFIX_ = SoapWhiteboardConstants.SOAP_ENDPOINT_PREFIX;
+	String PREFIX_ = SoapWhiteboardConstants.SOAP_HTTP_ENDPOINT_PREFIX;
+
     /**
-     * @return <code>true</code> if this is an implementor for the soap whiteboard, <code>false</code> otherwise, can be used to switch an implementation on/off
-     */
-    boolean implementor() default true;
-    
-    /**
-     * @return the context path under which this endpoint should be registered
-     */
-    String contextpath() default "";
+	 * @return the http contextpath under that the endpoint should be registered
+	 *         where / represents the context root
+	 */
+	String contextpath();
 
 }

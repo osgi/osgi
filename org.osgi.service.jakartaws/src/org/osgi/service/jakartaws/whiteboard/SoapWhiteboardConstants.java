@@ -29,32 +29,42 @@ public class SoapWhiteboardConstants {
     }
 
 	/**
-	 * TODO
+	 * Base namespace for the SOAP Whiteboard specification
 	 */
     public static final String SOAP = "osgi.soap";
 	/**
-	 * TODO
+	 * Base prefix used in component property types
 	 */
     public static final String SOAP_PREFIX = SOAP+".";
 	/**
-	 * TODO
+	 * Prefix used for properties of an endpoint implementor
 	 */
-    public static final String SOAP_ENDPOINT_PREFIX = SOAP + ".endpoint.";
+	public static final String	SOAP_ENDPOINT_PREFIX		= SOAP_PREFIX
+			+ "endpoint.";
+
 	/**
 	 * TODO
 	 */
-    public static final String SOAP_ENDPOINT_IMPLEMENTOR = SOAP_ENDPOINT_PREFIX + "implementor";
-	/**
-	 * TODO
-	 */
-    public static final String SOAP_ENDPOINT_PATH = SOAP_ENDPOINT_PREFIX + "contextpath";
-	/**
-	 * TODO
-	 */
-    public static final String SOAP_ENDPOINT_SELECT = SOAP_ENDPOINT_PREFIX + "selector";
+	public static final String	SOAP_HTTP_ENDPOINT_PREFIX	= SOAP_ENDPOINT_PREFIX
+			+ "http.";
+	// /**
+	// * TODO
+	// */
+	// public static final String SOAP_ENDPOINT_IMPLEMENTOR =
+	// SOAP_ENDPOINT_PREFIX + "implementor";
+	// /**
+	// * TODO
+	// */
+	// public static final String SOAP_ENDPOINT_PATH = SOAP_ENDPOINT_PREFIX +
+	// "contextpath";
+	// /**
+	// * TODO
+	// */
+	// public static final String SOAP_ENDPOINT_SELECT = SOAP_ENDPOINT_PREFIX +
+	// "selector";
 	/**
 	 * TODO
 	 */
 	public static final String	SOAP_SPECIFICATION_VERSION	= "1.0";
-    
+
 }
