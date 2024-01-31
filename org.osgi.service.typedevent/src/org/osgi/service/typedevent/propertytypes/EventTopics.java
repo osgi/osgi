@@ -26,13 +26,15 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
+import org.osgi.service.typedevent.UnhandledEventHandler;
 import org.osgi.service.typedevent.UntypedEventHandler;
 import org.osgi.service.typedevent.annotations.RequireTypedEvent;
 
 /**
- * Component Property Type for the {@link TypedEventConstants#TYPED_EVENT_TOPICS}
- * service property of a {@link TypedEventHandler} or
- * {@link UntypedEventHandler} service.
+ * Component Property Type for the
+ * {@link TypedEventConstants#TYPED_EVENT_TOPICS} service property of a
+ * {@link TypedEventHandler}, {@link UntypedEventHandler} or
+ * {@link UnhandledEventHandler} service.
  * <p>
  * This annotation can be used on a component to declare the values of the
  * {@link TypedEventConstants#TYPED_EVENT_TOPICS} service property.
@@ -47,7 +49,8 @@ import org.osgi.service.typedevent.annotations.RequireTypedEvent;
 public @interface EventTopics {
 	/**
 	 * Service property specifying the {@code Event} topics of interest to an
-	 * {@link TypedEventHandler} or {@link UntypedEventHandler} service.
+	 * {@link TypedEventHandler}, {@link UntypedEventHandler} or
+	 * {@link UnhandledEventHandler} service.
 	 * 
 	 * @return The event topics.
 	 * @see TypedEventConstants#TYPED_EVENT_TOPICS

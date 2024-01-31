@@ -39,8 +39,8 @@ public final class TypedEventConstants {
 
 	/**
 	 * The name of the service property used to indicate the topic(s) to which
-	 * an a {@link TypedEventHandler} or {@link UntypedEventHandler} service is
-	 * listening.
+	 * an a {@link TypedEventHandler}, {@link UntypedEventHandler} or
+	 * {@link UnhandledEventHandler} service is listening.
 	 * <p>
 	 * If this service property is not present then the reified type parameter
 	 * from the TypedEventHandler implementation class will be used to determine
