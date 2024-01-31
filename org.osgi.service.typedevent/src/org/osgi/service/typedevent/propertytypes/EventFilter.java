@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
+import org.osgi.service.typedevent.UnhandledEventHandler;
 import org.osgi.service.typedevent.UntypedEventHandler;
 import org.osgi.service.typedevent.annotations.RequireTypedEvent;
 
@@ -34,9 +35,10 @@ import org.osgi.service.typedevent.annotations.RequireTypedEvent;
  * {@link TypedEventConstants#TYPED_EVENT_FILTER} service property of an Event
  * Handler service.
  * <p>
- * This annotation can be used on an {@link TypedEventHandler} or
- * {@link UntypedEventHandler} component to declare the value of the
- * {@link TypedEventConstants#TYPED_EVENT_FILTER} service property.
+ * This annotation can be used on an {@link TypedEventHandler},
+ * {@link UntypedEventHandler} or {@link UnhandledEventHandler} component to
+ * declare the value of the {@link TypedEventConstants#TYPED_EVENT_FILTER}
+ * service property.
  * 
  * @see "Component Property Types"
  * @author $Id$

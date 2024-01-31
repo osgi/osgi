@@ -168,15 +168,28 @@
       schema - event data uses field names in the class as the keys, and each
       field definition defines the permitted type of the value.</para>
 
-      <para>Type Safe Event classes are expected to conform to OSGi DTO rules.
-      The architecture of OSGi DTOs is described in <xref
-      linkend="intro.core.release" xrefstyle="template:%t"/>. All methods, all
-      static fields, and any non public instance fields of an event object
-      must be ignored by the Typed Event Service when processing the Event
-      data.</para>
+      <para>Type Safe Event classes are expected to either:</para>
+      <itemizedlist>
+        <listitem>
+          <para>Conform to OSGi DTO rules - the architecture of OSGi DTOs is described in <xref
+            linkend="intro.core.release" xrefstyle="template:%t"/>. All methods, all
+            static fields, and any non public instance fields of an event object
+            must be ignored by the Typed Event Service when processing the Event
+            data.
+          </para>
+	    </listitem>
+        <listitem>
+          <para>Be <xref linkend="service.typedevent-java.records.ref"/>. Event
+            classes that are Java Records can be identified as they are subclasses of
+            <code>java.lang.Record</code>. The Event data consists of the record
+            components. All other parts of a record must be ignored by the Typed 
+            Event Service when processing the Event data.
+          </para>
+        </listitem>
+	  </itemizedlist>
 
       <para>Some implementations of the Typed Event Service may support Type
-      Safe Event classes that do not conform to the DTO rules, transforming
+      Safe Event classes that do not conform to these rules, transforming
       them as needed in an implementation specific way. This is permitted by
       this specification, however consumers which rely on this behaviour may
       not be portable between different implementations of this
@@ -225,13 +238,13 @@
       <title>Non Standard Type Safe Events</title>
 
       <para>Some Event schemas may be represented by an existing type which
-      does not match the OSGi DTO rules. In this case there are two main
-      options:</para>
+      does not match the rules for acceptable type safe event classes. In this 
+      case there are two main options:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Create a DTO representation of the event schema, and convert
-          from the existing type into the DTO representation in code.</para>
+          <para>Create a DTO or record representation of the event schema, and convert
+          from the existing type into the new representation in code.</para>
         </listitem>
 
         <listitem>
@@ -674,7 +687,7 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       one or more wildcards.
       </para>
       
-      <section>
+      <section xml:id="service.typedevent-single.level.wildcards">
         <title>Single-Level Wildcards</title>
         <para>A Single-Level wildcard is used to match all topics which differ
         only by a single topic token within the topic String. This is done by 
@@ -942,7 +955,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
               <code>UntypedEventHandler</code> services, but
               <code>TypedEventHandler</code> services may omit it if they are
               only interested in the default topic name for their reified
-              type.</para><para>See <xref
+              type. <code>UnhandledEventHandler</code> services may use this
+              property to restrict the events that they receive.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TOPICS"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
@@ -955,7 +969,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
               <entry><para>Defines the target type into which events should be
               converted before being passed to the Event Handler service. This
               service property is <emphasis>forbidden</emphasis> for
-              <code>UntypedEventHandler</code> services, but
+              <code>UntypedEventHandler</code> and <code>UnhandledEventHandler</code> services, but
               <code>TypedEventHandler</code> services may use it if they wish
               to further refine the type of data they wish to
               receive.</para><para>See <xref
@@ -972,8 +986,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
               against the properties in the event data. Only events which pass
               the filter will be passed to the the Event Handler service. This
               service property is <emphasis>optional</emphasis> and permitted
-              for both <code>TypedEventHandler</code> and
-              <code>UntypedEventHandler</code> services.</para><para>See <xref
+              for <code>TypedEventHandler</code>, <code>UntypedEventHandler</code>
+              and <code>UnhandledEventHandler</code> services.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_FILTER"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
@@ -989,7 +1003,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 			  than or equal to zero. This service property is 
 			  <emphasis>optional</emphasis> and permitted for both
               <code>TypedEventHandler</code> and
-              <code>UntypedEventHandler</code> services.</para><para>See <xref
+              <code>UntypedEventHandler</code> services but <emphasis>not</emphasis>
+              for <code>UnhandledEventHandler</code> services.</para><para>See <xref
               linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_HISTORY"
               xrefstyle="hyperlink"/>.</para></entry>
             </row>
@@ -1319,4 +1334,61 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.monitor.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.typedevent.propertytypes.xml"/>
+  
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+
+      <bibliomixed
+      xml:id="service.typedevent-java.records.ref"><title>
+      Java Records</title><biblioid class="uri"><link
+      xlink:href="https://openjdk.org/jeps/395"/></biblioid></bibliomixed>
+
+    </bibliolist>
+  </section>
+  
+  <section>
+    <title>Changes</title>
+
+    <para>The update to version 1.1 includes numerous new features and usability enhancements:</para>
+    <itemizedlist>
+		
+      <listitem>
+        <para>Event objects may now be <xref linkend="service.typedevent-java.records.ref"/></para>
+      </listitem>
+
+      <listitem>
+        <para>Event Handler services may now use <xref linkend="service.typedevent-single.level.wildcards"/>
+        when registering to receive event data.</para>
+      </listitem>
+
+      <listitem>
+        <para>The <xref linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_HISTORY"
+          xrefstyle="hyperlink"/> service property can be used to request that historical
+          events are delivered to newly registered event handler services.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Unhandled event handler services may now use 
+			<xref linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_TOPICS"
+              xrefstyle="hyperlink"/> and
+			<xref linkend="org.osgi.service.typedevent.TypedEventConstants.TYPED_EVENT_FILTER"
+              xrefstyle="hyperlink"/> service properties to filter the events that they receive.</para>
+      </listitem>
+
+      <listitem>
+        <para>A <xref linkend="org.osgi.service.typedevent.TypedEventPublisher"
+          xrefstyle="hyperlink"/> object can be created to optimise sending
+          repeated events to the same topic.</para>
+      </listitem>
+
+      <listitem>
+        <para>The <xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor"
+          xrefstyle="hyperlink"/> service can be requested to provide only historical
+          events, terminating the event stream once all historical data has been replayed.</para>
+      </listitem>
+
+    </itemizedlist>
+  </section>
 </chapter>
