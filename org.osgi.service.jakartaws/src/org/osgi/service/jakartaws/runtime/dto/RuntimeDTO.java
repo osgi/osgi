@@ -29,17 +29,13 @@ import org.osgi.framework.dto.ServiceReferenceDTO;
  */
 public class RuntimeDTO extends DTO {
 
-	/**
-	 * The DTO for the corresponding {@code JakartarsServiceRuntime}. This value
-	 * is never {@code null}.
-	 */
 	public ServiceReferenceDTO	serviceReference;
 
 	/**
 	 * Returns the representations of the Web Services endpoints currently
 	 * known, The returned array may be empty.
 	 */
-	public EnpointDTO[]			endpoints;
+	public EndpointDTO[]			endpoints;
 
 	/**
 	 * Returns all handlers that are known and possible bound to an endpoint,

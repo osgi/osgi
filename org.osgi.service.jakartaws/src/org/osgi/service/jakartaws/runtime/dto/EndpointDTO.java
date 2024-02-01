@@ -24,7 +24,7 @@ import org.osgi.framework.dto.ServiceReferenceDTO;
  * The EndpointDTO describes the current state of an endoint implementor known
  * to the service runtime
  */
-public class EnpointDTO extends DTO {
+public class EndpointDTO extends DTO {
 	/**
 	 * The DTO for the corresponding implementor that created this endpoint.
 	 * This value is never {@code null}.

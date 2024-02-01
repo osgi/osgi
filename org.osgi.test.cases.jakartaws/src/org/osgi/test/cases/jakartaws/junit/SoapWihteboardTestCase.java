@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.jakartaws.runtime.WebserviceServiceRuntime;
-import org.osgi.service.jakartaws.runtime.dto.EnpointDTO;
+import org.osgi.service.jakartaws.runtime.dto.EndpointDTO;
 import org.osgi.service.jakartaws.runtime.dto.RuntimeDTO;
 import org.osgi.service.jakartaws.whiteboard.SoapWhiteboardConstants;
 import org.osgi.test.cases.jakartaws.webservice.WSEcho;
@@ -43,7 +43,7 @@ public class SoapWihteboardTestCase {
 			assertThat(dto.endpoints)
 					.as("Endpoints DTO")
 					.isNotNull();
-			for (EnpointDTO ep : dto.endpoints) {
+			for (EndpointDTO ep : dto.endpoints) {
 				assertThat(ep.implementor).as("Endpoint Implementor DTO")
 						.isNotNull();
 				if (ep.implementor.bundle == bundleContext.getBundle()
