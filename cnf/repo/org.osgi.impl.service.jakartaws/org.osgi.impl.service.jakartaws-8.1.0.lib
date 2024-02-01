@@ -1,0 +1,10 @@
+# Dependencies from the OSGi build
+org.osgi.service.jakartaws;version=latest
+org.osgi.util.promise;version=latest
+org.osgi.util.converter;version=latest
+org.osgi.impl.bundle.serviceloader;version=latest
+
+# Jakarta dependencies
+
+jakarta.jws-api;version=3.0
+	

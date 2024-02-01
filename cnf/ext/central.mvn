@@ -196,6 +196,7 @@ org.apache.felix:org.apache.felix.cm.json:1.0.6
 
 # Jakarta EE API
 jakarta.ws.rs:jakarta.ws.rs-api:3.0.0
+jakarta.jws:jakarta.jws-api:3.0.0
 
 # ECF RSA
 org.eclipse.platform:org.eclipse.core.jobs:3.9.3

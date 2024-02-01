@@ -47,11 +47,11 @@ public class SoapWhiteboardConstants {
 	 */
 	public static final String	SOAP_HTTP_ENDPOINT_PREFIX	= SOAP_ENDPOINT_PREFIX
 			+ "http.";
-	// /**
-	// * TODO
-	// */
-	// public static final String SOAP_ENDPOINT_IMPLEMENTOR =
-	// SOAP_ENDPOINT_PREFIX + "implementor";
+	/**
+	 * TODO
+	 */
+	public static final String	SOAP_ENDPOINT_IMPLEMENTOR	= SOAP_ENDPOINT_PREFIX
+			+ "implementor";
 	// /**
 	// * TODO
 	// */

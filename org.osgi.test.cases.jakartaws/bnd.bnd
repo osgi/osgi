@@ -12,10 +12,8 @@ Import-Package: ${-signaturetest},\
  org.apache.avalon.framework.logger;resolution:=optional,\
  org.apache.log;resolution:=optional,\
  org.apache.log4j;resolution:=optional,\
- jakarta.servlet.*;version=!;resolution:=dynamic,\
+ javax.jws.*;version=!;resolution:=dynamic,\
  *
-
--contract: JavaJAXRS
 
 -buildpath: \
 	org.osgi.test.support;version=project,\
@@ -26,19 +24,22 @@ Import-Package: ${-signaturetest},\
 	org.osgi.namespace.implementation;version=1.0,\
 	org.osgi.namespace.service;version=1.0,\
 	org.osgi.namespace.contract;version=1.0,\
-	org.osgi.service.jakartars;version=latest,\
-	jakarta.ws.rs-api;version=3.0,\
+	org.osgi.service.jakartaws;version=latest,\
+	jakarta.jws-api;version=3.0,\
 	org.apache.felix.http.servlet-api;version=2.0,\
     org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
-	org.apache.httpcomponents.httpclient;version=4.5.3
+	org.apache.httpcomponents.httpclient;version=4.5.3,\
+	org.osgi.service.component.annotations,\
+	assertj-core;version=latest
 
 -runvm: ${if;${is;-1;${vcompare;${java.specification.version};9}};;--add-opens=java.base/java.net=ALL-UNNAMED}
 
 -runbundles = \
-    org.osgi.impl.service.cm;version=latest,\
-    org.osgi.impl.service.jakartars;version=latest
+    org.osgi.impl.service.cm;version=latest, \
+    org.osgi.impl.service.jakartaws;version=latest
+    
 
--signaturetest                      = org.osgi.service.jakartars.runtime,\
-                                      org.osgi.service.jakartars.runtime.dto,\
-                                      org.osgi.service.jakartars.whiteboard
+-signaturetest                      = org.osgi.service.jakartaws.runtime,\
+                                      org.osgi.service.jakartaws.runtime.dto,\
+                                      org.osgi.service.jakartaws.whiteboard
