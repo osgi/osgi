@@ -58,6 +58,7 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 	public static final String			xmlns_scr120	= "http://www.osgi.org/xmlns/scr/v1.2.0";
 	public static final String			xmlns_scr130	= "http://www.osgi.org/xmlns/scr/v1.3.0";
 	public static final String			xmlns_scr140	= "http://www.osgi.org/xmlns/scr/v1.4.0";
+	public static final String			xmlns_scr150	= "http://www.osgi.org/xmlns/scr/v1.5.0";
 	protected Map<String,Description>	descriptions;
 
 	@Before
@@ -96,9 +97,10 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 		assertThat(clauses)
 				.as("%s header is empty", ComponentConstants.SERVICE_COMPONENT)
 				.isNotEmpty();
-		XPathExpression expr = xpath.compile("//namespace::*[.='" + xmlns_scr100
-				+ "' or .='" + xmlns_scr110 + "' or .='" + xmlns_scr120
-				+ "' or .='" + xmlns_scr130 + "' or .='" + xmlns_scr140 + "']");
+		XPathExpression expr = xpath.compile(String.format(
+				"//namespace::*[.='%s' or .='%s' or .='%s' or .='%s' or .='%s' or .='%s']",
+				xmlns_scr100, xmlns_scr110, xmlns_scr120, xmlns_scr130,
+				xmlns_scr140, xmlns_scr150));
 		for (String clause : clauses) {
 			// System.out.println(clause);
 
