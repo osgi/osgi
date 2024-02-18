@@ -71,7 +71,7 @@ class FunctioningImpl extends AbstractSpecifying<Functioning>
 		if (targetAsClass != null)
 			converter.targetAs(targetAsClass);
 		if (targetAsDTO)
-			converter.targetAsBean();
+			converter.targetAsDTO();
 		if (targetAsJavaBean)
 			converter.targetAsBean();
 

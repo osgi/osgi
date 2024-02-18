@@ -16,7 +16,11 @@
  */
 package org.osgi.test.cases.converter.felix;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.osgi.util.converter.Converter;
@@ -69,5 +73,34 @@ public class ConverterFunctionTest {
 
 		Function<Object,String> af = ac.function().to(String.class);
 		assertEquals("hi", af.apply(sa));
+	}
+
+	@Test
+	public void testConverterFunctionAsDTO() {
+
+		Map<Object,Object> mapEmb = new HashMap<>();
+		mapEmb.put("alpha", "C");
+		mapEmb.put("marco", "?");
+		mapEmb.put("polo", "123456");
+
+		Map<Object,Object> map = new HashMap<>();
+		map.put("count", "TWO");
+		map.put("ping", "someText");
+		map.put("pong", "007");
+		map.put("embedded", mapEmb);
+
+		Function<Object,MyDTO> cvf = Converters.standardConverter()
+				.function()
+				.targetAsDTO()
+				.to(MyDTO.class);
+		MyDTO myDTO = cvf.apply(map);
+		assertEquals(MyDTO.Count.TWO, myDTO.count);
+		assertEquals("someText", myDTO.ping);
+		assertEquals(7, myDTO.pong);
+		assertNotNull(myDTO.embedded);
+		assertEquals(MyEmbeddedDTO.Alpha.C, myDTO.embedded.alpha);
+		assertEquals("?", myDTO.embedded.marco);
+		assertEquals(123456, myDTO.embedded.polo);
+
 	}
 }
