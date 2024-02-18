@@ -476,15 +476,6 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 								break;
 							}
 						}
-
-						if (f == null) {
-							for (Field fs : targetAsCls.getFields()) {
-								if (fs.getName().equalsIgnoreCase(fieldName)) {
-									f = fs;
-									break;
-								}
-							}
-						}
 					}
 				}
 
