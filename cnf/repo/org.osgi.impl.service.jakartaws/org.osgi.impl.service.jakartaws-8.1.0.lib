@@ -3,6 +3,8 @@ org.osgi.service.jakartaws;version=latest
 org.osgi.util.promise;version=latest
 org.osgi.util.converter;version=latest
 org.osgi.impl.bundle.serviceloader;version=latest
+org.osgi.service.component;version=latest
+org.osgi.impl.service.component;version=latest
 
 # Jakarta dependencies
 jakarta.jws-api;version=3.0
@@ -12,5 +14,5 @@ jakarta.xml.bind-api;version=4.0.0
 jakarta.activation-api;version=2.1.0
 
 # actual implementation
-#org.eclipse.daanse.ws.runtime.registrar;version=latest
+org.eclipse.daanse.ws.runtime.registrar;version=latest
 	
