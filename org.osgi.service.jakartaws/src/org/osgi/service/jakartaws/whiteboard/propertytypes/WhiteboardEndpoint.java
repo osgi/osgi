@@ -27,8 +27,9 @@ import org.osgi.service.jakartaws.whiteboard.SoapWhiteboardConstants;
 import org.osgi.service.jakartaws.whiteboard.annotations.RequireSoapWhiteboard;
 
 /**
- * Annotation that can be used to mark a service component as an object that should be considered by the SOPA Whiteboard Extender 
- *
+ * Annotation that can be used to mark a service component as an object that
+ * should be considered by the SOPA Whiteboard Extender specifying a default
+ * address
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
@@ -45,15 +46,15 @@ public @interface WhiteboardEndpoint {
      */
     boolean implementor() default true;
     
-    /**
+	/**
 	 * A URI specifying the address and transport/protocol to use, this will be
-	 * passed to the {@link jakarta.WhiteboardEndpoint.ws.Endpoint#publish(String)}, if the
+	 * passed to the
+	 * {@link jakarta.WhiteboardEndpoint.ws.Endpoint#publish(String)}, if the
 	 * address is empty, it is assumed that there is some other way of specify
-	 * the address for example using {@link HttpWhiteboardEndpoint}
-	 * annotation
+	 * the address for example using {@link HttpWhiteboardEndpoint} annotation
 	 * 
 	 * @return the address under which this endpoint should be registered
 	 */
-	String address();
+	String address() default "";
 
 }

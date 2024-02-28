@@ -52,6 +52,13 @@ public class SoapWhiteboardConstants {
 	 */
 	public static final String	SOAP_ENDPOINT_IMPLEMENTOR	= SOAP_ENDPOINT_PREFIX
 			+ "implementor";
+
+	/**
+	 * TODO
+	 */
+	public static final String	SOAP_ENDPOINT_ADDRESS		= SOAP_ENDPOINT_PREFIX
+			+ "address";
+
 	// /**
 	// * TODO
 	// */

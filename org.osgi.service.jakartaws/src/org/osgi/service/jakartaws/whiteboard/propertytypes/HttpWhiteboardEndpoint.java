@@ -35,8 +35,6 @@ import org.osgi.service.jakartaws.whiteboard.annotations.RequireSoapWhiteboard;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 @RequireSoapWhiteboard
-// TODO why is this not inherited?!?
-@WhiteboardEndpoint(address = "")
 public @interface HttpWhiteboardEndpoint {
 
 	/**

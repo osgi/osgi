@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Hashtable;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
+import java.util.function.Function;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,48 +26,58 @@ import org.osgi.test.junit5.service.ServiceExtension;
 @ExtendWith(BundleContextExtension.class)
 public class SoapWihteboardTestCase {
 
-	private static final String	KEY_UUUD	= "UUUD";
+	private static final String	DEFAULT_PUBLISH_ADDRESS	= System.getProperty(
+			"org.osgi.test.cases.jakartaws.defaultaddress",
+			"http://localhost:8579");
+	private static final String	KEY_UUUID		= "UUUID";
 	@InjectService(timeout = 10000)
 	WebserviceServiceRuntime	runtime;
 
 	@Test
 	public void testHelloService(@InjectBundleContext
 	BundleContext bundleContext) throws Exception {
-		System.out.println("helo");
+		String id = UUID.randomUUID().toString();
 		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put(SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR, true);
-		String id = UUID.randomUUID().toString();
-		properties.put(KEY_UUUD, id);
+		properties.put(SoapWhiteboardConstants.SOAP_ENDPOINT_ADDRESS,
+				DEFAULT_PUBLISH_ADDRESS);
+		properties.put(KEY_UUUID, id);
 		bundleContext.registerService(WSEcho.class, new WSEcho(), properties);
-		waitForDTO(10, SECONDS, dto -> {
-			assertThat(dto.endpoints)
-					.as("Endpoints DTO")
-					.isNotNull();
+		EndpointDTO endpoint = waitForDTO(10, SECONDS, dto -> {
+			assertThat(dto.endpoints).as("Endpoints DTO").isNotNull();
 			for (EndpointDTO ep : dto.endpoints) {
 				assertThat(ep.implementor).as("Endpoint Implementor DTO")
 						.isNotNull();
 				if (ep.implementor.bundle == bundleContext.getBundle()
 						.getBundleId()) {
-					if (id.equals(ep.implementor.properties.get(KEY_UUUD))) {
-						return true;
+					System.out.println("Waiting for " + id + " eq "
+							+ ep.implementor.properties.get(KEY_UUUID));
+					if (id.equals(ep.implementor.properties.get(KEY_UUUID))) {
+						assertThat(ep.address).as("Publish Address")
+								.isNotNull();
+						return ep;
 					}
 				}
 			}
-			return false;
+			return null;
 		});
+		assertThat(endpoint.address).as("Endpoint Address")
+				.isEqualTo(DEFAULT_PUBLISH_ADDRESS);
 	}
 
-	private void waitForDTO(long time, TimeUnit unit,
-			Predicate<RuntimeDTO> tester) {
+	private <T> T waitForDTO(long time, TimeUnit unit,
+			Function<RuntimeDTO,T> tester) {
 		long deadline = System.currentTimeMillis() + unit.toMillis(time);
 		while (System.currentTimeMillis() < deadline) {
 			RuntimeDTO runtimeDTO = runtime.getRuntimeDTO();
 			assertThat(runtimeDTO).as("RuntimeDTO").isNotNull();
-			if (tester.test(runtimeDTO)) {
-				return;
+			T result = tester.apply(runtimeDTO);
+			if (result != null) {
+				return result;
 			}
 			Thread.yield();
 		}
 		Assertions.fail("Timeout waiting for DTO");
+		return null;
 	}
 }
