@@ -266,3 +266,25 @@ com.sun.xml.bind:jaxb-osgi:4.0.1
 # Jakarta WS impl
 jakarta.xml.ws:jakarta.xml.ws-api:4.0.1
 jakarta.xml.soap:jakarta.xml.soap-api:3.0.1
+com.sun.xml.ws:jaxws-rt:4.0.2
+com.sun.xml.bind:jaxb-impl:4.0.4
+com.sun.xml.bind:jaxb-core:4.0.4
+org.glassfish.ha:ha-api:3.1.13
+org.glassfish.external:management-api:3.2.3
+org.glassfish.gmbal:gmbal-api-only:4.0.3
+org.jvnet.staxex:stax-ex:2.1.0
+com.sun.xml.stream.buffer:streambuffer:2.1.0
+org.jvnet.mimepull:mimepull:1.10.0
+com.sun.xml.fastinfoset:FastInfoset:2.1.0
+jakarta.mail:jakarta.mail-api:2.1.2
+org.eclipse.angus:angus-activation:2.0.1
+org.eclipse.angus:angus-mail:2.0.2
+com.sun.xml.messaging.saaj:saaj-impl:3.0.3
+com.fasterxml.woodstox:woodstox-core:6.5.1
+org.codehaus.woodstox:stax2-api:4.2.2
+jakarta.activation:jakarta.activation-api:2.1.2
+jakarta.xml.ws:jakarta.xml.ws-api:4.0.1
+jakarta.xml.bind:jakarta.xml.bind-api:4.0.1
+jakarta.xml.soap:jakarta.xml.soap-api:3.0.1
+jakarta.annotation:jakarta.annotation-api:2.1.1
+
