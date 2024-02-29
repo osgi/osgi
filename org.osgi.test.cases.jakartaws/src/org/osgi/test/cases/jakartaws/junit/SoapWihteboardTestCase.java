@@ -39,8 +39,9 @@ public class SoapWihteboardTestCase {
 		String id = UUID.randomUUID().toString();
 		Hashtable<String,Object> properties = new Hashtable<>();
 		properties.put(SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR, true);
+		String publishAddress = DEFAULT_PUBLISH_ADDRESS + "/wsecho";
 		properties.put(SoapWhiteboardConstants.SOAP_ENDPOINT_ADDRESS,
-				DEFAULT_PUBLISH_ADDRESS);
+				publishAddress);
 		properties.put(KEY_UUUID, id);
 		bundleContext.registerService(WSEcho.class, new WSEcho(), properties);
 		EndpointDTO endpoint = waitForDTO(10, SECONDS, dto -> {
@@ -62,7 +63,7 @@ public class SoapWihteboardTestCase {
 			return null;
 		});
 		assertThat(endpoint.address).as("Endpoint Address")
-				.isEqualTo(DEFAULT_PUBLISH_ADDRESS);
+				.isEqualTo(publishAddress);
 	}
 
 	private <T> T waitForDTO(long time, TimeUnit unit,
