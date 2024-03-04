@@ -1184,6 +1184,135 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       implementation must provide the maximum amount of history
       available.</para>
     </section>
+    
+    <section>
+      <title>Configuring Event History</title>
+      
+      <para>It is not usually the case that the history for every event topic is
+      equally important. In fact for many topics history is unimportant, while
+      for others it is highly desirable to keep a small number of historical
+      messages indefinitely. To support this the Typed Event Service implementation
+      allows for history storage to be configured on a per-topic basis, with
+      both a minimum and maximum event requirement. The minimum requirement
+      guarantees that at least <code>N</code> events are kept for the topic and
+      not discarded in favour of events on other topics. The maximum requirement
+      provides a ceiling on the number of events that will be kept in history for
+      a given topic, ensuring that one busy topic does not dominate the whole
+      history.</para>
+      
+      <para>As the primary means of accessing historical events the Typed Event
+      Monitor service also provides the ability to introspect and customise the 
+      historical event storage.</para>
+      
+      <section>
+        <title>Introspecting Event History Configuration</title>
+        
+        <para>The most basic feature of the Event History Configuration is the
+        total event storage capacity. This is typically set in configuration
+        during startup and cannot necessarily easily be changed at runtime.
+        The total event storage capacity can be queried by calling <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getMaximumEventStorage--"
+        xrefstyle="hyperlink"/>.
+        </para>
+        
+        <para>The global history configuration is available from the <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getConfiguredHistoryStorage--"
+        xrefstyle="hyperlink"/> method. This returns the entire history retention
+        policy for the Typed Event Service, individual configuration entries can 
+        be obtained by calling <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getConfiguredHistoryStorage-String-"
+        xrefstyle="hyperlink"/>. The returned configuration provides an <code>Entry</code>
+        where the key is the minimum number of events to keep and the value is the maximum.
+        </para>
+
+        <para>Configuration entries use topic filters rather than topic names, and are
+        therefore permitted to use wildcards. This can therefore mean that more than
+        one configuration matches a given topic name. To ensure consistency between
+        implementations the following disambiguation algorithm applies:</para>
+        
+        <orderedlist>
+          <listitem><para>Identify the set of matching topic filters from the configuration</para></listitem>
+          <listitem><para>Extract the first token from each of the filters</para></listitem>
+          <listitem><para>Retain the most preferred filters based on the following preference order:</para>
+            <orderedlist>
+              <listitem><para>An exact token match</para></listitem>
+              <listitem><para>A single level wildcard token match</para></listitem>
+              <listitem><para>A multi-level wildcard match</para></listitem>
+            </orderedlist>
+          </listitem>
+          <listitem><para>If only one filter remains then this defines the configuration to use, otherwise
+          remove the leading token from the retained topic filters and repeat this algorithm from the
+          second step.</para></listitem>
+        </orderedlist>
+        
+        <para>When obtaining the global configuration it is returned as a <code>Map</code>
+        with the configured topic filters used as keys. Furthermore the keys in the
+        map are <emphasis>ordered</emphasis> such that the most specific match for
+        a given topic will <emphasis>always</emphasis> be encountered first. This
+        can be used in conjunction with the <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.topicFilterMatches-String-"
+        xrefstyle="hyperlink"/> or <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.topicFilterMatches-String-String-"
+        xrefstyle="hyperlink"/> to easily identify which policy would apply to a
+        given topic.</para>
+        
+        <para>In addition to determining the global history configuration it is
+        also possible to introspect the specific configuration for event history
+        retention. For example, to find the policy for a named topic the <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getEffectiveHistoryStorage-String-"
+        xrefstyle="hyperlink"/> method will, as for the global configuration, 
+        return an <code>Entry</code> where the key is the minimum number of 
+        events to keep and the value is the maximum. This method must take into 
+        account any wildcards and precedence in the global configuration to 
+        determine the correct policy for the supplied topic name. Note that
+        this method can only be used for topic names, and passing a topic
+        filter containing wildcards will raise an <code>IllegalArgumentException</code>.</para>
+      </section>
+      <section>
+        <title>Modifying Event History Configuration</title>
+        
+        <para>In addition to viewing the currently configured history storage
+        configuration users are able to programmatically modify the configuration
+        at runtime.</para>
+        
+        <para>Adding or changing the configuration for a given topic filter is possible
+        using the <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.configureHistoryStorage-String-int-int-"
+        xrefstyle="hyperlink"/> method. This is used to set the required minimum
+        and maximum numbers of events that should be stored for each topic that matches
+        the supplied filter. It is invalid to pass a number less than zero for either
+        the minimum or maximum number of events, and it is also invalid to set a minimum
+        greater than the maximum. In both cases an <code>IllegalArgumentException</code>
+        must be raised by the implementation.</para>
+        
+        <para>When a configuration is added or updated the implementation must ensure
+        that sufficient space exists to be able to hold at least the minimum number
+        of events for each configured topic. If the addition or update would breach
+        the <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getMaximumEventStorage--"
+        xrefstyle="hyperlink"/> then an <code>IllegalStateException</code> must be
+        thrown by the implementation. For this reason it is also invalid to set a
+        non zero minimum number of events when using a wildcard topic filter, as
+        doing so makes it impossible for the implementation to know how many topics
+        the minimum will apply to. Passing a non-zero minimum with a wildcard topic
+        filter must therefore also trigger an <code>IllegalArgumentException</code>.
+        Assuming that sufficient space is available the return value of the
+        <code>configureHistoryStorage</code> method indicates the storage space 
+        available for this topic filter. This must be at least the minimum
+        requirement, and at most the maximum requirement, and is calculated
+        by the implementation taking into account the total available storage,
+        and the pre-existing configuration.</para>
+        
+        <para>If no longer required then the configuration for a given topic filter
+        can be deleted using <xref 
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.removeHistoryStorage-String-"
+        xrefstyle="hyperlink"/>. When this method is called it may make zero or more
+        historical events eligible for removal from the history, depending on the
+        other configured filters. The implementation should ensure that any superfluous
+        events are promptly removed from the event history and must not return them in 
+        any subsequent requests for historical data.</para>
+      </section>
+    </section>
   </section>
 
   <section>
@@ -1387,6 +1516,12 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         <para>The <xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor"
           xrefstyle="hyperlink"/> service can be requested to provide only historical
           events, terminating the event stream once all historical data has been replayed.</para>
+      </listitem>
+
+      <listitem>
+        <para>Historical event storage can now be configured at runtime on a per-topic basis
+        using the <xref linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor"
+          xrefstyle="hyperlink"/>.</para>
       </listitem>
 
     </itemizedlist>
