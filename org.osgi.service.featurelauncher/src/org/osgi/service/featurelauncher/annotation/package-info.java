@@ -16,18 +16,23 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.service.feature.launcher;
-
 /**
- * Defines standard constants for the Feature Launcher specification.
+ * Feature Annotations Package Version 1.0.
+ * <p>
+ * This package contains annotations that can be used to require the Feature
+ * Service implementation.
+ * <p>
+ * Bundles should not normally need to import this package as the annotations
+ * are only used at build-time.
+ * <p>
+ * 
+ * @author $Id$
  */
-public final class LauncherConstants {
-	private LauncherConstants() {
-		// non-instantiable
-	}
 
-	/**
-	 * The version of the Feature specification.
-	 */
-	public static final String LAUNCHER_SPECIFICATION_VERSION = "1.0";
-}
+@Version(FEATURE_LAUNCHER_SPECIFICATION_VERSION)
+package org.osgi.service.featurelauncher.annotation;
+
+import static org.osgi.service.featurelauncher.FeatureLauncherConstants.FEATURE_LAUNCHER_SPECIFICATION_VERSION;
+
+import org.osgi.annotation.versioning.Version;
+
