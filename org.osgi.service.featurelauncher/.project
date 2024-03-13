@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.service.feature.launcher</name>
+	<name>org.osgi.service.featurelauncher</name>
 	<comment></comment>
 	<projects>
 	</projects>
