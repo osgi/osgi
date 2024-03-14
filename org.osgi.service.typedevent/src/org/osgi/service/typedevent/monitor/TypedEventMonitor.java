@@ -19,7 +19,6 @@ package org.osgi.service.typedevent.monitor;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.function.Predicate;
@@ -133,7 +132,7 @@ public interface TypedEventMonitor {
 	 * @return The maximum number of historic events that can be stored.
 	 * @since 1.1
 	 */
-	long getMaximumEventStorage();
+	int getMaximumEventStorage();
 
 	/**
 	 * Get the configured history storage for the Typed Events implementation.
@@ -154,14 +153,13 @@ public interface TypedEventMonitor {
 	 * ordered such that the first encountered key which matches a given topic
 	 * name is the configuration that will apply to that topic name.
 	 * <p>
-	 * The value associated with each key is an {@link Entry} where the key is
-	 * the minimum required number of stored events for the topic and the value
-	 * is the maximum number of events that will be stored.
+	 * The value associated with each key is the {@link RangePolicy} defining
+	 * the number of events that will be stored.
 	 *
 	 * @return The configured history storage
 	 * @since 1.1
 	 */
-	Map<String,Entry<Integer,Integer>> getConfiguredHistoryStorage();
+	Map<String,RangePolicy> getConfiguredHistoryStorage();
 
 	/**
 	 * Get the configured history storage for a given topic filter. This method
@@ -170,16 +168,15 @@ public interface TypedEventMonitor {
 	 * <code>null</code> is returned.
 	 * 
 	 * @param topicFilter the topic filter
-	 * @return An {@link Entry} where the key is the minimum required number of
-	 *         stored events for the topic and the value is the maximum number
-	 *         of events that will be stored. If no configuration is set for the
-	 *         topic filter then <code>null</code> will be returned.
+	 * @return The {@link RangePolicy} defining the number of stored events for
+	 *         the topic. If no configuration is set for the topic filter then
+	 *         <code>null</code> will be returned.
 	 * @throws NullPointerException if the topic filter is <code>null</code>
 	 * @throws IllegalArgumentException if the topic filter contains invalid
 	 *             syntax
 	 * @since 1.1
 	 */
-	Entry<Integer,Integer> getConfiguredHistoryStorage(String topicFilter);
+	RangePolicy getConfiguredHistoryStorage(String topicFilter);
 
 	/**
 	 * Get the history storage rule that applies to a given topic name. This
@@ -188,17 +185,15 @@ public interface TypedEventMonitor {
 	 * <code>null</code>.
 	 * 
 	 * @param topicName the topic name
-	 * @return An {@link Entry} where the key is the minimum required number of
-	 *         stored events for the topic and the value is the maximum number
-	 *         of events that will be stored. If no configuration is set for the
-	 *         topic filter then an entry with key and value set to zero will be
-	 *         returned.
+	 * @return The {@link RangePolicy} defining the number of stored events for
+	 *         the topic. If no configuration is set for the topic filter then
+	 *         an {@link RangePolicy#none()} will be returned
 	 * @throws NullPointerException if the topic name is <code>null</code>
 	 * @throws IllegalArgumentException if the topic name contains invalid
 	 *             syntax or wildcards
 	 * @since 1.1
 	 */
-	Entry<Integer,Integer> getEffectiveHistoryStorage(String topicName);
+	RangePolicy getEffectiveHistoryStorage(String topicName);
 
 	/**
 	 * Configure history storage for a given topic filter.
@@ -214,31 +209,26 @@ public interface TypedEventMonitor {
 	 * configuration then an {@link IllegalStateException} must be thrown.
 	 * 
 	 * @param topicFilter the topic filter
-	 * @param minRequired the minimum number of historical events to keep
-	 *            available for this filter
-	 * @param maxRequired the maximum number of historical events to keep
-	 *            available for this filter
+	 * @param policy the event retention policy to use
 	 * @return An int indicating the number of events that can be kept for this
 	 *         topic given the current configuration. This will always be at
-	 *         least <code>minRequired</code> and at most
-	 *         <code>maxRequired</code>.
+	 *         least <code>policy.getMin()</code> and at most
+	 *         <code>policy.getMax()</code>.
 	 * @throws NullPointerException if the topic filter is <code>null</code>
 	 * @throws IllegalArgumentException if:
 	 *             <ul>
 	 *             <li>The topic filter contains invalid syntax</li>
-	 *             <li><code>minRequired</code> or <code>maxRequired</code> are
-	 *             less than <code>0</code>.
-	 *             <li>The topic filter contains wildcard(s) and
-	 *             <code>minRequired</code> is not <code>0</code>.</li>
-	 *             <li><code>minRequired</code> is greater than
-	 *             <code>maxRequired</code></li>
+	 *             <li>The topic filter contains wildcard(s) <em>and</em>
+	 *             <code>getMaximumEventStorage</code> is not <code>-1</code>
+	 *             <em>and</em> <code>policy.getMin()</code> is not
+	 *             <code>0</code>.</li>
+	 *             </ul>
 	 * @throws IllegalStateException if there is insufficient available space to
 	 *             provide the additional <code>minRequired</code> stored
 	 *             events.
 	 * @since 1.1
 	 */
-	int configureHistoryStorage(String topicFilter, int minRequired,
-			int maxRequired);
+	int configureHistoryStorage(String topicFilter, RangePolicy policy);
 
 	/**
 	 * Delete history storage configuration for a given topic filter.
