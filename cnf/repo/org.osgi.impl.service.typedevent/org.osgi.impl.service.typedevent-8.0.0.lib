@@ -1,6 +1,6 @@
 org.osgi.service.typedevent; version=latest
 org.osgi.impl.service.component; version=latest
-org.apache.aries.typedevent.bus; version=0.0.1
+org.apache.aries.typedevent.bus; version=1.1.0
 org.osgi.util.pushstream; version=latest
 org.apache.aries.component-dsl.component-dsl; version=1.2.2
 org.osgi.util.converter; version=latest
