@@ -1193,12 +1193,16 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       for others it is highly desirable to keep a small number of historical
       messages indefinitely. To support this the Typed Event Service implementation
       allows for history storage to be configured on a per-topic basis, with
-      both a minimum and maximum event requirement. The minimum requirement
-      guarantees that at least <code>N</code> events are kept for the topic and
-      not discarded in favour of events on other topics. The maximum requirement
+      a <xref linkend="org.osgi.service.typedevent.monitor.RangePolicy"
+        xrefstyle="hyperlink"/> which defines both a minimum and maximum event 
+      requirement. The minimum requirement guarantees that at least the 
+      <code>N</code> most recent events are kept for the topic and will never be 
+      discarded in favour of events on other topics. The maximum requirement
       provides a ceiling on the number of events that will be kept in history for
       a given topic, ensuring that one busy topic does not dominate the whole
-      history.</para>
+      history. The implementation is free to discard events between the
+      minimum and maximum requirements at any time to manage its storage 
+      efficiently</para>
       
       <para>As the primary means of accessing historical events the Typed Event
       Monitor service also provides the ability to introspect and customise the 
@@ -1212,7 +1216,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         during startup and cannot necessarily easily be changed at runtime.
         The total event storage capacity can be queried by calling <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getMaximumEventStorage--"
-        xrefstyle="hyperlink"/>.
+        xrefstyle="hyperlink"/>. This method may return <code>0</code> if no
+        history storage is available or <code>-1</code> if no fixed limit is set.
         </para>
         
         <para>The global history configuration is available from the <xref 
@@ -1221,8 +1226,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         policy for the Typed Event Service, individual configuration entries can 
         be obtained by calling <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getConfiguredHistoryStorage-String-"
-        xrefstyle="hyperlink"/>. The returned configuration provides an <code>Entry</code>
-        where the key is the minimum number of events to keep and the value is the maximum.
+        xrefstyle="hyperlink"/>. The returned configuration provides the <code>RangePolicy</code>
+        where defining the minimum and maximum number of retained events.
         </para>
 
         <para>Configuration entries use topic filters rather than topic names, and are
@@ -1261,8 +1266,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         retention. For example, to find the policy for a named topic the <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getEffectiveHistoryStorage-String-"
         xrefstyle="hyperlink"/> method will, as for the global configuration, 
-        return an <code>Entry</code> where the key is the minimum number of 
-        events to keep and the value is the maximum. This method must take into 
+        return an <code>RangePolicy</code> defining the minimum and 
+        maximum number of events to keep. This method must take into 
         account any wildcards and precedence in the global configuration to 
         determine the correct policy for the supplied topic name. Note that
         this method can only be used for topic names, and passing a topic
@@ -1277,13 +1282,13 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         
         <para>Adding or changing the configuration for a given topic filter is possible
         using the <xref 
-        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.configureHistoryStorage-String-int-int-"
+        linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.configureHistoryStorage-String-RangePolicy-"
         xrefstyle="hyperlink"/> method. This is used to set the required minimum
         and maximum numbers of events that should be stored for each topic that matches
         the supplied filter. It is invalid to pass a number less than zero for either
-        the minimum or maximum number of events, and it is also invalid to set a minimum
-        greater than the maximum. In both cases an <code>IllegalArgumentException</code>
-        must be raised by the implementation.</para>
+        the minimum or maximum number of events when creating a <code>RangePolicy</code>, 
+        and it is also invalid to set a minimum greater than the maximum. In both cases an 
+        <code>IllegalArgumentException</code> is raised.</para>
         
         <para>When a configuration is added or updated the implementation must ensure
         that sufficient space exists to be able to hold at least the minimum number
@@ -1292,10 +1297,12 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getMaximumEventStorage--"
         xrefstyle="hyperlink"/> then an <code>IllegalStateException</code> must be
         thrown by the implementation. For this reason it is also invalid to set a
-        non zero minimum number of events when using a wildcard topic filter, as
+        non zero minimum number of events when using a wildcard topic filter 
+        <emphasis>unless</emphasis> there is no fixed storage limit, as
         doing so makes it impossible for the implementation to know how many topics
         the minimum will apply to. Passing a non-zero minimum with a wildcard topic
-        filter must therefore also trigger an <code>IllegalArgumentException</code>.
+        filter must therefore also trigger an <code>IllegalArgumentException</code>
+        if the implementation has a fixed history storage limit.
         Assuming that sufficient space is available the return value of the
         <code>configureHistoryStorage</code> method indicates the storage space 
         available for this topic filter. This must be at least the minimum
