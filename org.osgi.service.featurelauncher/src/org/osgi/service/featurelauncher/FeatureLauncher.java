@@ -19,6 +19,7 @@ package org.osgi.service.featurelauncher;
 
 import java.io.Reader;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.launch.Framework;
@@ -27,12 +28,11 @@ import org.osgi.service.feature.Feature;
 /**
  * The Feature launcher is the primary entry point for launching an OSGi
  * framework and set of bundles. As it is a means for launching a framework it
- * is designed to be used from outside OSGi and therefore exposes\
- * 
- * @ThreadSafe
+ * is designed to be used from outside OSGi and therefore should be obtained
+ * using the {@link ServiceLoader}.
  */
 @ProviderType
-public interface FeatureLauncher {
+public interface FeatureLauncher extends ArtifactRepositoryFactory {
     /**
 	 * Launch a framework instance based on the supplied feature
 	 * 
@@ -92,5 +92,22 @@ public interface FeatureLauncher {
 	 */
 	Framework launch(Reader jsonReader, Map<String,Object> variables,
 			Map<String,String> frameworkProperties);
+
+	/**
+	 * Add a repository to this {@link FeatureLauncher} that will be used to
+	 * locate installable artifact data.
+	 * 
+	 * @param repository the repository to add
+	 * @return <code>this</code>
+	 */
+	FeatureLauncher addRepository(ArtifactRepository repository);
+
+	/**
+	 * Configure this {@link FeatureLauncher} with the supplied properties.
+	 * 
+	 * @param configuration the repository to add
+	 * @return <code>this</code>
+	 */
+	FeatureLauncher configure(Map<String,Object> configuration);
 
 }

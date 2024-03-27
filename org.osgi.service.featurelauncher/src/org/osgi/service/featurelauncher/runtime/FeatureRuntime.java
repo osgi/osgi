@@ -22,18 +22,68 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.framework.Constants;
 import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.ID;
+import org.osgi.service.featurelauncher.ArtifactRepository;
+import org.osgi.service.featurelauncher.ArtifactRepositoryFactory;
 
 /**
  * The Feature runtime service allows features to be installed and removed
- * dynamically at runtime.
- * 
- * @ThreadSafe
+ * dynamically at runtime. This is a {@link Constants#SCOPE_PROTOTYPE} scope
+ * service and each instance maintains a separate collection of
+ * {@link ArtifactRepository} instances, allowing for additional
+ * {@link ArtifactRepository} instances to be added in order to install a single
+ * feature.
+ * <p>
+ * Instances should not be shared between threads.
  */
 @ProviderType
-public interface FeatureRuntime {
-    /**
+public interface FeatureRuntime extends ArtifactRepositoryFactory {
+
+	/**
+	 * Add an {@link ArtifactRepository} for use by this {@link FeatureRuntime}
+	 * instance. If an {@link ArtifactRepository} is already set for the given
+	 * name then it will be replaced.
+	 * 
+	 * @param name the name to use for this repository
+	 * @param repository the repository
+	 * @return <code>this</code>
+	 */
+	FeatureRuntime addRepository(String name, ArtifactRepository repository);
+
+	/**
+	 * Remove an {@link ArtifactRepository} from this {@link FeatureRuntime}.
+	 * 
+	 * @param name the name of the repository to remove
+	 * @return <code>this</code>
+	 */
+	FeatureRuntime removeRepository(String name);
+
+	/**
+	 * Get the default repositories for the {@link FeatureRuntime} service.
+	 * These are the repositories which would be used unless they were removed
+	 * using {@link #removeRepository(String)} or replaced using
+	 * {@link #addRepository(String, ArtifactRepository)}.
+	 * <p>
+	 * This method can be used to reset the repositories for a
+	 * {@link FeatureRuntime} without having to obtain a new instance from the
+	 * service registry
+	 * 
+	 * @return the default repositories
+	 */
+	Map<String,ArtifactRepository> getDefaultRepositories();
+
+	/**
+	 * Get the currently used repositories for this {@link FeatureRuntime}
+	 * service.
+	 * 
+	 * @return a {@link Map} of repositories where the key is the name given in
+	 *         {@link #addRepository(String, ArtifactRepository)}.
+	 */
+	Map<String,ArtifactRepository> getRepositories();
+
+	/**
 	 * Install a feature into the runtime
 	 * 
 	 * @param feature the feature to launch
@@ -94,5 +144,97 @@ public interface FeatureRuntime {
 	 * @param featureId the feature id
 	 */
 	void remove(String featureId);
+
+	/**
+	 * Update a feature in the runtime
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param feature the feature to launch
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(ID featureId, Feature feature);
+
+	/**
+	 * Update a feature in the runtime
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param feature the feature to launch
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(String featureId, Feature feature);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature JSON
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param jsonReader a {@link Reader} for the input Feature JSON
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(ID featureId, Reader jsonReader);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature JSON
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param jsonReader a {@link Reader} for the input Feature JSON
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(String featureId, Reader jsonReader);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature and
+	 * variables
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param feature the feature to launch
+	 * @param variables key/value pairs to set variables in the feature
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(ID featureId, Feature feature,
+			Map<String,Object> variables);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature and
+	 * variables
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param feature the feature to launch
+	 * @param variables key/value pairs to set variables in the feature
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(String featureId, Feature feature,
+			Map<String,Object> variables);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature JSON and
+	 * variables
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param jsonReader a {@link Reader} for the input Feature JSON
+	 * @param variables key/value pairs to set variables in the feature
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(ID featureId, Reader jsonReader,
+			Map<String,Object> variables);
+
+	/**
+	 * Update a feature in the runtime based on the supplied feature JSON and
+	 * variables
+	 * 
+	 * @param featureId the id of the feature to update
+	 * @param jsonReader a {@link Reader} for the input Feature JSON
+	 * @param variables key/value pairs to set variables in the feature
+	 * @return An installedFeature representing the results of updating this
+	 *         feature
+	 */
+	InstalledFeature update(String featureId, Reader jsonReader,
+			Map<String,Object> variables);
 
 }
