@@ -18,6 +18,9 @@
 
 package org.osgi.service.featurelauncher;
 
+import java.net.URI;
+import java.util.Map;
+
 import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.FeatureExtension.Kind;
 import org.osgi.service.feature.FeatureExtension.Type;
@@ -36,13 +39,13 @@ public final class FeatureLauncherConstants {
 	/**
 	 * The name of the implementation capability for the Feature specification.
 	 */
-	public static final String	FEATURE_LAUNCHER_IMPLEMENTATION			= "osgi.featurelauncher";
+	public static final String	FEATURE_LAUNCHER_IMPLEMENTATION					= "osgi.featurelauncher";
 
 	/**
 	 * The version of the implementation capability for the Feature
 	 * specification.
 	 */
-	public static final String	FEATURE_LAUNCHER_SPECIFICATION_VERSION	= "1.0";
+	public static final String	FEATURE_LAUNCHER_SPECIFICATION_VERSION			= "1.0";
 
 	/**
 	 * The name for the {@link FeatureExtension} which defines the framework
@@ -56,11 +59,74 @@ public final class FeatureLauncherConstants {
 	 * If none of the frameworks are present then an error is raised and
 	 * launching will be aborted.
 	 */
-	public static final String	LAUNCH_FRAMEWORK						= "launch-framework";
-	
+	public static final String	LAUNCH_FRAMEWORK								= "launch-framework";
+
 	/**
 	 * The name for the {@link FeatureExtension} which defines the framework
 	 * properties that should be used when launching the feature.
 	 */
-	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES			= "framework-launching-properties";
+	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES					= "framework-launching-properties";
+
+	/**
+	 * The configuration property key used to set the repository name when
+	 * creating an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_NAME					= "name";
+
+	/**
+	 * The configuration property key used to set the repository user when
+	 * creating an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_USER					= "user";
+
+	/**
+	 * The configuration property key used to set the repository password when
+	 * creating an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_PASSWORD				= "password";
+
+	/**
+	 * The configuration property key used to set the bearer token when creating
+	 * an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_BEARER_TOKEN			= "token";
+
+	/**
+	 * The configuration property key used to set that SNAPSHOT release versions
+	 * are enabled for an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED	= "snapshot";
+
+	/**
+	 * The configuration property key used to set that release versions are
+	 * enabled for an {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_RELEASES_ENABLED		= "release";
+
+	/**
+	 * The configuration property key used to set the trust store to be used
+	 * when accessing a remote {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE			= "truststore";
+
+	/**
+	 * The configuration property key used to set the trust store format to be
+	 * used when accessing a remote {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT	= "truststoreFormat";
+
+	/**
+	 * The configuration property key used to set the trust store password to be
+	 * used when accessing a remote {@link ArtifactRepository} using
+	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 */
+	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD	= "truststorePassword";
 }
