@@ -39,8 +39,8 @@ public final class TypedEventConstants {
 
 	/**
 	 * The name of the service property used to indicate the topic(s) to which
-	 * an a {@link TypedEventHandler} or {@link UntypedEventHandler} service is
-	 * listening.
+	 * an a {@link TypedEventHandler}, {@link UntypedEventHandler} or
+	 * {@link UnhandledEventHandler} service is listening.
 	 * <p>
 	 * If this service property is not present then the reified type parameter
 	 * from the TypedEventHandler implementation class will be used to determine
@@ -59,6 +59,22 @@ public final class TypedEventConstants {
 	public static final String	TYPED_EVENT_FILTER					= "event.filter";
 
 	/**
+	 * The name of the service property used to indicate that an event handler
+	 * would like to receive one or more historical events matching its
+	 * {@link #TYPED_EVENT_TOPICS} and {@link #TYPED_EVENT_FILTER} before
+	 * receiving any new data. The value of this property is an {@link Integer}
+	 * greater than or equal to zero.
+	 * <p>
+	 * If this property is set then when the event hander is discovered by the
+	 * whiteboard the event handler will deliver, in order, up to the requested
+	 * number of historical events. This will occur before the delivery of any
+	 * new events. If no history is available then zero events will be
+	 * delivered. If insufficient history is available then fewer events than
+	 * requested will be delivered.
+	 */
+	public static final String	TYPED_EVENT_HISTORY					= "event.history";
+
+	/**
 	 * The name of the implementation capability for the Typed Event
 	 * specification
 	 */
@@ -68,7 +84,7 @@ public final class TypedEventConstants {
 	 * The version of the implementation capability for the Typed Event
 	 * specification
 	 */
-	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.0";
+	public static final String	TYPED_EVENT_SPECIFICATION_VERSION	= "1.1";
 
 	/**
 	 * Private constructor to prevent instantiation
