@@ -44,21 +44,21 @@ public interface ArtifactRepositoryFactory {
 	 *             and is not a directory
 	 * @throws NullPointerException if the path is <code>null</code>
 	 */
-	ArtifactRepository localRepository(Path path);
+	ArtifactRepository createRepository(Path path);
 
 	/**
-	 * Create an {@link ArtifactRepository} using a remote Maven repository
-	 * acessible via HTTP
+	 * Create an {@link ArtifactRepository} using a remote Maven repository.
 	 * 
-	 * @param uri the URI for the repository. The scheme must be
-	 *            <code>http</code> or <code>https</code>
+	 * @param uri the URI for the repository. The <code>http</code>,
+	 *            <code>https</code> and <code>file</code> schemes must be
+	 *            supported by all implementations.
 	 * @param props the configuration properties for the remote repository. See
 	 *            {@link FeatureLauncherConstants} for standard property names
 	 * @return an {@link ArtifactRepository} using the local file system
-	 * @throws IllegalArgumentException if the uri scheme is not
-	 *             <code>http</code> or <code>https</code>
+	 * @throws IllegalArgumentException if the uri scheme is not supported by
+	 *             this implementation
 	 * @throws NullPointerException if the path is <code>null</code>
 	 */
-	ArtifactRepository remoteRepository(URI uri, Map<String,Object> props);
+	ArtifactRepository createRepository(URI uri, Map<String,Object> props);
 
 }

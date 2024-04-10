@@ -38,6 +38,7 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * 
 	 * @param feature the feature to launch
 	 * @return A running framework instance.
+	 * @throws LaunchException
 	 */
 	Framework launch(Feature feature);
 
@@ -46,6 +47,7 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * 
 	 * @param jsonReader a {@link Reader} for the input Feature JSON
 	 * @return A running framework instance.
+	 * @throws LaunchException
 	 */
 	Framework launch(Reader jsonReader);
 
@@ -55,6 +57,14 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * @param feature the feature to launch
 	 * @param variables key/value pairs to set variables in the feature
 	 * @return A running framework instance.
+	 * @throws LaunchException
+	 * @throws IllegalArgumentException if any of the variable values is not one
+	 *             of the values defined for {@link Feature#getVariables()}:
+	 *             <ul>
+	 *             <li>java.lang.String</li>
+	 *             <li>java.lang.Boolean</li>
+	 *             <li>java.math.BigDecimal</li>
+	 *             </ul>
 	 */
 	Framework launch(Feature feature, Map<String,Object> variables);
 
@@ -65,6 +75,14 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * @param jsonReader a {@link Reader} for the input Feature JSON
 	 * @param variables key/value pairs to set variables in the feature
 	 * @return A running framework instance.
+	 * @throws LaunchException if an error occurs in launching
+	 * @throws IllegalArgumentException if any of the variable values is not one
+	 *             of the values defined for {@link Feature#getVariables()}:
+	 *             <ul>
+	 *             <li>java.lang.String</li>
+	 *             <li>java.lang.Boolean</li>
+	 *             <li>java.math.BigDecimal</li>
+	 *             </ul>
 	 */
 	Framework launch(Reader jsonReader, Map<String,Object> variables);
 
@@ -77,6 +95,14 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * @param frameworkProperties set or override framework properties when
 	 *            launching the framework
 	 * @return A running framework instance.
+	 * @throws LaunchException
+	 * @throws IllegalArgumentException if any of the variable values is not one
+	 *             of the values defined for {@link Feature#getVariables()}:
+	 *             <ul>
+	 *             <li>java.lang.String</li>
+	 *             <li>java.lang.Boolean</li>
+	 *             <li>java.math.BigDecimal</li>
+	 *             </ul>
 	 */
 	Framework launch(Feature feature, Map<String,Object> variables,
 			Map<String,String> frameworkProperties);
@@ -89,6 +115,14 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 	 * @param frameworkProperties set or override framework properties when
 	 *            launching the framework
 	 * @return A running framework instance.
+	 * @throws LaunchException
+	 * @throws IllegalArgumentException if any of the variable values is not one
+	 *             of the values defined for {@link Feature#getVariables()}:
+	 *             <ul>
+	 *             <li>java.lang.String</li>
+	 *             <li>java.lang.Boolean</li>
+	 *             <li>java.math.BigDecimal</li>
+	 *             </ul>
 	 */
 	Framework launch(Reader jsonReader, Map<String,Object> variables,
 			Map<String,String> frameworkProperties);

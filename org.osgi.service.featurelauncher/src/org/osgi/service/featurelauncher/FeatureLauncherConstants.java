@@ -70,63 +70,63 @@ public final class FeatureLauncherConstants {
 	/**
 	 * The configuration property key used to set the repository name when
 	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_NAME					= "name";
 
 	/**
 	 * The configuration property key used to set the repository user when
 	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_USER					= "user";
 
 	/**
 	 * The configuration property key used to set the repository password when
 	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_PASSWORD				= "password";
 
 	/**
 	 * The configuration property key used to set the bearer token when creating
 	 * an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_BEARER_TOKEN			= "token";
 
 	/**
 	 * The configuration property key used to set that SNAPSHOT release versions
 	 * are enabled for an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED	= "snapshot";
 
 	/**
 	 * The configuration property key used to set that release versions are
 	 * enabled for an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_RELEASES_ENABLED		= "release";
 
 	/**
 	 * The configuration property key used to set the trust store to be used
 	 * when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE			= "truststore";
 
 	/**
 	 * The configuration property key used to set the trust store format to be
 	 * used when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT	= "truststoreFormat";
 
 	/**
 	 * The configuration property key used to set the trust store password to be
 	 * used when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#remoteRepository(URI, Map)}
+	 * {@link FeatureLauncher#createRepository(URI, Map)}
 	 */
 	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD	= "truststorePassword";
 }

@@ -235,7 +235,7 @@
         <itemizedlist>
           <listitem>
             <para>The root of the repository can be accessed and resolved
-            as a <code>java.nio.file.Path</code></para>
+            as a <code>java.nio.file.Path</code> or <code>file:</code> URI.</para>
           </listitem>
           <listitem>
             <para>The repository uses the Maven2 Repository Layout</para>
@@ -245,11 +245,20 @@
         
         <para>An Artifact Repository representing a Local Repository can be 
         created using the <xref 
-        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.localRepository-Path-"
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-Path-"
         xrefstyle="hyperlink"/> method, passing in the path to the root of the repository.
         A <code>NullPointerException</code> must be thrown if the path is <code>null</code>
         and an <code>IllegalArgumentException</code> must be thrown if the path does not
-        exist, or represents a file not a directory.</para>
+        exist, or represents a file which is not a directory.</para>
+        
+        <para>An Artifact Repository representing a Local Repository can also
+        be created using the <xref 
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-URI-Map-"
+        xrefstyle="hyperlink"/> method, passing a URI using the <code>file</code> scheme
+        which points to the root of the repository. A <code>NullPointerException</code> 
+        must be thrown if the URI is <code>null</code> and an <code>IllegalArgumentException</code> 
+        must be thrown if the path does not exist, or represents a file which is not a 
+        directory.</para>
         
         <para>Once created this Artifact Repository will search the supplied repository
         for any requested artifact data. Implementations are free to optimise checks using
@@ -278,7 +287,7 @@
         
         <para>An Artifact Repository representing a Remote Repository can be 
         created using the <xref 
-        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.remoteRepository-URI-Map-"
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-URI-Map-"
         xrefstyle="hyperlink"/> method, passing in the uri to the root of the repository.
         A <code>NullPointerException</code> must be thrown if the uri is <code>null</code>
         and an <code>IllegalArgumentException</code> must be thrown if the uri does not
@@ -411,9 +420,146 @@
   	  
   	  <para>Once a configured Feature Launcher instance has been created, one of
   	  the <code>launch</code> methods can be used to launch an OSGi framework 
-  	  containing the supplied Feature.</para>
+  	  containing the supplied Feature. Features can either be supplied as a
+  	  <code>Reader</code> providing access to the JSON text of a Feature document
+  	  or a parsed <xref linkend="org.osgi.service.feature.Feature" xrefstyle="hyperlink"/>.
+  	  The Feature Launcher will then return a running <code>Framework</code> instance
+  	  representing the launched OSGi framework and the Feature that it contains. If
+  	  an error occurs creating the framework, or locating and installing any of the 
+  	  feature bundles, then a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+        xrefstyle="hyperlink"/> must be thrown.</para>
+  	  
+  	  <section xml:id="service.featurelauncher-variable.overrides">
+  	    <title>Overriding Feature variables</title>
+  	    
+  	    <para>Some Feature definitions include variables which can be used to customise
+  	    their deployment. These variables are intended to be set at the point where
+  	    a Feature is installed, and may contain default values. To enable these 
+  	    variables to be overridden there are <code>launch</code> methods which 
+  	    permit a <code>Map</code> of variables to be provided. The values in
+  	    this map must be one of the types permitted by the <xref linkend="service.feature"/></para>
+  	    
+  	    <para>If a Feature declares a variable with no default value then this variable
+  	    <emphasis>must</emphasis> be provided to the Feature Launcher. If no value is
+  	    provided then the Feature Launcher must fail to launch by throwing a
+  	    <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+        xrefstyle="hyperlink"/></para>
+  	  </section>
+
+  	  <section xml:id="service.featurelauncher-framework.props">
+  	    <title>Providing Framework Launch Properties</title>
+  	    
+  	    <para>Framework launch properties are key value pairs which are passed to
+  	    the OSGi framework as it is created. They can control many behaviours,
+  	    including operations which happen before the framework starts, meaning 
+  	    that is not always possible to set them <emphasis>after</emphasis> startup.</para>
+  	    
+  	    <para>Feature definitions that require particular framework launch properties
+  	    can define them using a Feature Extension named <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.FRAMEWORK_LAUNCHING_PROPERTIES"
+          xrefstyle="hyperlink"/>. The Type of this Feature Extension must be 
+        <code>TEXT</code>, where each entry is in the form <code>key=value</code>
+        All implementations of the Feature Launcher must support this extension,
+        and use it to populate the Framework Launch Properties.</para>
+  	    
+  	    <para>In addition to Framework Launch properties defined inside the Feature,
+  	    users of the Feature Launcher can add and override Framework Launch Properties
+  	    using one of the <code>launch</code> methods which permit a <code>Map</code> of 
+  	    framework properties to be provided. Any key value pairs defined in this map 
+  	    must take precedence over those defined in the Feature. A key with a null value
+  	    must result in the removal of a key value pair if it is defined in the Feature.</para>
+  	  </section>
+  	  
+  	  <section xml:id="service.featurelauncher-select.framework">
+  	    <title>Selecting a framework implementation</title>
+  	    
+  	    <para>When defining a feature it is not always possible to be framework independent.
+  	    Sometimes specific framework APIs, or licensing restrictions, will require that a
+  	    particular implementation is used. In this case a Feature Extension named <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.LAUNCH_FRAMEWORK"
+          xrefstyle="hyperlink"/> with <code>Type</code> <code>ARTIFACTS</code> can be used
+          to list one or more artifacts representing OSGi framework implementations.
+  	    </para>
+  	    
+  	    <para>The list of artifacts is treated as a preference order, with the first listed
+  	    artifact being used if available, and so on, until a framework is found. If a
+  	    listed artifact is not an OSGi framework implementation then the Feature Launcher 
+  	    must log a warning and continue on to the next artifact in the list. If the
+  	    <code>Kind</code> of the feature is <code>MANDATORY</code> and none of
+  	    the listed artifacts are available then launching must fail with a <xref 
+  	      linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>.
+  	    </para>
+  	  </section>
   	</section>
   	
+  	<section>
+  	  <title>The Feature Launching Process</title>
+  	  
+  	  <para>The following section defines the process through which the Feature Launcher
+  	  must locate, initialize and populate an OSGi framework when launching a feature.
+  	  Unless explicitly stated implementations may perform one or more parts of this
+  	  process in a different order to that described in the specification.</para>
+
+      <section>
+        <title>Locating a framework implementation</title>
+        
+        <para>Before a framework instance can be created the Feature Launcher must identify
+        a suitable implementation using the following search order:</para>
+        
+        <orderedlist>
+          
+          <listitem><para>If any provider specific configuration has been given to the
+          Feature Launcher implementation then this should be used to identify the framework.</para></listitem>
+          
+          <listitem><para>If the Feature declares an Extension <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.LAUNCH_FRAMEWORK"
+          xrefstyle="hyperlink"/> then the Feature Launcher implementation must use the
+          first listed artifact that can be found in any configured Artifact Repositories,
+          as described in <xref linkend="service.featurelauncher-select.framework" xrefstyle="hyperlink"/>.</para>
+            <remark>Currently this only fails if the extension is mandatory</remark>
+          </listitem>
+          
+          
+          <listitem><para>If no framework implementation is found in the previous steps then the Feature
+          Launcher implementation must search the classpath using the Thread Context Class Loader,
+          or, if the Thread Context Class Loader is not set, the Class Loader which loaded the 
+          caller of the Feature Launcher's <code>launch</code> method. The first
+          suitable framework instance located is the instance that will be used.</para></listitem>
+          
+          <listitem><para>In the event that no suitable OSGi framework can be found by any
+          of the previous steps then the Feature Launcher implementation may provide a
+          default framework implementation to be used.</para></listitem>
+        </orderedlist>
+        
+        <para>If no suitable OSGi framework implementation can be found then the Feature Launcher
+        implementation must throw a <code>LaunchException</code>.</para>
+      </section>
+      
+      <section>
+        <title>Creating a Framework instance</title>
+        
+        <para>Once a suitable framework implementation has been located the Feature Launcher 
+        implementation must create and initialize a framework instance. Implementations are
+        free to use implementation specific mechanisms for framework implementations that
+        they recognise. The result of this initialization must be the same as if the
+        Feature Launcher used the <code>org.osgi.framework.launch.FrameworkFactory</code>
+        registered by the framework implementation to create the framework instance.</para>
+        
+        <para>When creating the framework any framework launch properties defined in
+        the Feature must be used. These are defined as described in <xref 
+          linkend="service.featurelauncher-framework.props" xrefstyle="hyperlink"/> and
+        must include any necessary variable replacement as defined by <xref
+          linkend="service.featurelauncher-variable.overrides" xrefstyle="hyperlink"/>.</para>
+          
+        <para>Once instantiated the framework must be initialised appropriately so that it
+        has a valid <code>BundleContext</code>. Once initialised the framework is ready for
+        the Feature Launcher implementation to begin populating the framework.</para>
+      </section>
+      <section>
+        <title>Installing bundles and configurations</title>
+        <para>TODO</para>
+      </section>  
+  	</section>
 <!--   	<para>To launch a Feature, the launcher must find or create a target environment for the 
   	Feature first. For example it can launch an OSGi framework that the Feature should run in.
   	</para>
