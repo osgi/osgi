@@ -61,7 +61,7 @@ jobs:
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
-      uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
+      uses: gradle/gradle-build-action@8baac4c8ef753599f92eeb509c246d09d6250fa6 # v3.3.0
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :buildscriptDependencies :build :osgi.specs:specifications :osgi.tck:tck.core
