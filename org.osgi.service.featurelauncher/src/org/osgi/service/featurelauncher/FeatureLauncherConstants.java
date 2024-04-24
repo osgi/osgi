@@ -21,6 +21,7 @@ package org.osgi.service.featurelauncher;
 import java.net.URI;
 import java.util.Map;
 
+import org.osgi.service.feature.FeatureConfiguration;
 import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.FeatureExtension.Kind;
 import org.osgi.service.feature.FeatureExtension.Type;
@@ -48,6 +49,26 @@ public final class FeatureLauncherConstants {
 	public static final String	FEATURE_LAUNCHER_SPECIFICATION_VERSION			= "1.0";
 
 	/**
+	 * The configuration property used to set the timeout for creating
+	 * configurations from {@link FeatureConfiguration} definitions.
+	 * <p>
+	 * The value must be a {@link Long} indicating the number of milliseconds
+	 * that the implementation should wait to be able to create configurations
+	 * for the Feature. The default is <code>5000</code>.
+	 * <p>
+	 * A value of <code>0</code> means that the configurations must be created
+	 * before the bundles in the feature are started. In general this will
+	 * require the <code>ConfigurationAdmin</code> service to be available from
+	 * outside the feature.
+	 * <p>
+	 * A value of <code>-1</code> means that the implementation must not wait to
+	 * create configurations and should return control to the user as soon as
+	 * the bundles are started, even if the configurations have not yet been
+	 * created.
+	 */
+	public static final String	CONFIGURATION_TIMEOUT							= "configuration.timeout";
+
+	/**
 	 * The name for the {@link FeatureExtension} which defines the framework
 	 * that should be used to launch the feature. The extension must be of
 	 * {@link Type#ARTIFACTS} and contain one or more {@link ID} entries
@@ -66,6 +87,12 @@ public final class FeatureLauncherConstants {
 	 * properties that should be used when launching the feature.
 	 */
 	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES					= "framework-launching-properties";
+
+	/**
+	 * The name for the {@link FeatureExtension} which defines the start level
+	 * configuration for the bundles in the feature
+	 */
+	public static final String	BUNDLE_START_LEVELS								= "bundle-start-levels";
 
 	/**
 	 * The configuration property key used to set the repository name when
