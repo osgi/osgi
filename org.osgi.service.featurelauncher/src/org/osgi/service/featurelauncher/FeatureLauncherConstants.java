@@ -83,14 +83,22 @@ public final class FeatureLauncherConstants {
 	public static final String	LAUNCH_FRAMEWORK								= "launch-framework";
 
 	/**
-	 * The name for the {@link FeatureExtension} which defines the framework
-	 * properties that should be used when launching the feature.
+	 * The name for the {@link FeatureExtension} of {@link Type#TEXT} which
+	 * defines the framework properties that should be used when launching the
+	 * feature.
 	 */
 	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES					= "framework-launching-properties";
 
 	/**
-	 * The name for the {@link FeatureExtension} which defines the start level
-	 * configuration for the bundles in the feature
+	 * The name of the metadata property used to indicate the start level of the
+	 * bundle to be installed. The value must be an integer between
+	 * <code>0</code> and {@link Integer#MAX_VALUE}.
+	 */
+	public static final String	BUNDLE_START_LEVEL_METADATA						= "bundleStartLevel";
+
+	/**
+	 * The name for the {@link FeatureExtension} of {@link Type#JSON} which
+	 * defines the start level configuration for the bundles in the feature
 	 */
 	public static final String	BUNDLE_START_LEVELS								= "bundle-start-levels";
 

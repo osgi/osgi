@@ -518,50 +518,50 @@
         OSGi core specification.</para>
         
         <para>Controlling the start levels assigned to the bundles in a feature is
-        managed through the use of a Feature Extension named <xref 
+        managed through the use of Feature Bundle metadata. Specifically the Feature
+        Launcher will look for a Feature Bundle metadata property named <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVEL_METADATA"
+          xrefstyle="hyperlink"/> which is of type integer and has a value between
+        <code>1</code> and <code>2147483647</code> inclusive. If the property does 
+        not exist then the default start level will be used. If the property does 
+        exist and is not a suitable integer then launching must fail with a <xref 
+          linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>.
+        </para>
+        
+        <para>Setting the default start level for the bundles, and the minimum start
+        level required for an installed Feature is accomplished by using a Feature Extension named <xref 
           linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVELS"
           xrefstyle="hyperlink"/> with <code>Type</code> <code>JSON</code>. The JSON
         contained in this extension is used to configure the default start level for
-        the bundles, and specific start levels for bundles in the feature.
+        the bundles, and the target start level for the framework.
         The schema of this JSON is as follows:</para>
         
         <programlisting>
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://www.osgi.org/jsonschema/featurelauncher/v1.0.0",
+  "$id": "http://www.osgi.org/jsonschema/featurelauncher/bundle-start-levels/v1.0.0",
   "title": "bundle-start-levels",
   "description": "The definition of the bundle-start-levels feature extension",
    "type": "object",
    "properties": {
+      "version": {
+        "description": "The version of the Feature Launcher extension",
+        "const": "1.0.0"
+      },
       "defaultStartLevel": {
          "description": "The default start level for bundles in the feature",
          "type": "integer",
          "minimum": 1,
          "maximum": 2147483647
       },
-		
-      "bundleLevels": {
-         "description": "Specific start levels for bundles in the feature",
-         "type": "array",
-         "items": {
-           type: "object",
-           "properties": {
-             "id": {
-               "description": "The bundle artifact id",
-               "type": "string"
-             },
-             "startLevel": {
-               "description": "The start level for the named bundles",
-               "type": "integer",
-               "minimum": 1,
-               "maximum": 2147483647
-             }
-           },
-           "required": [ "id", "startLevel" ] 
-         },
-         "uniqueItems": true
+      "minimumStartLevel": {
+         "description": "The minimum required start level for the framework after feature installation",
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 2147483647
       }
-   }
+   },
+   "required": [ "version", "defaultStartLevel", "minimumStartLevel" ]
 }
         </programlisting>
         
@@ -573,15 +573,21 @@
           linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
         must be thrown when attempting to use the feature.</para>
         
-        <para>The start level for individual bundles in the feature can be overridden by
-        using the <code>bundleLevels</code> array. Each item in this array maps a string
-        artifact id to an integer start level. If the <code>id</code> is not a valid
-        artifact identifer, or if the <code>startLevel</code> is not an integer greater
-        than zero and less than <code>Integer.MAX_INT</code>, or if the same artifact id
-        appears twice in the <code>bundleLevels</code> array then a <xref 
+        <para>The minimum final start level for the OSGi framework required by the feature
+        can be set using the <code>minimumStartLevel</code> property. of the <code>JSON</code>
+        extension. This must be an integer greater than zero and less than <code>Integer.MAX_INT</code>.
+        If the value is not valid then a <xref 
           linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
-        must be thrown when attempting to use the feature.
+        must be thrown when attempting to use the feature. This property sets the minimum
+        start level that the OSGi framework must use to complete the installation of a
+        Feature.
         </para>
+        <para>Finally the <code>version</code> property defines the version of the extension
+        schema being used. This can be used by the implementation to determine whether the 
+        Feature is targeting a newer version of the specification. If the version is not
+        understood by the implementation then a <xref 
+          linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
+        must be thrown when attempting to use the feature.</para>
       </section>
       
       <section>
@@ -678,8 +684,8 @@ fw.waitForStop(0);
         bundle start levels have been defined, as described in <xref 
         linkend="service.featurelauncher-start.levels" xrefstyle="hyperlink"/>, then
         the Feature Launcher must ensure that the start level is correctly set for
-        each installed bundle. If no start level extension is defined then all bundles
-        are installed with the framework default start level.</para>
+        each installed bundle. If no start level metadata or extension is defined 
+        then all bundles are installed with the framework default start level.</para>
 
         <para>If a Feature defines one or more Feature Configurations then these cannot be
         guaranteed to be made available until the <xref 
@@ -714,10 +720,21 @@ fw.waitForStop(0);
           xrefstyle="hyperlink"/>. The default timeout is <code>5000</code> milliseconds,
         and it determines the maximum length of time that the Feature Launcher implementation
         should wait to begin creating the configurations. A value of <code>-1</code> indicates
-        that the Feature Launcher implementation must not wait, and must return immediately,
+        that the Feature Launcher implementation must not wait, and must continue immediately,
         even if the configurations have not yet been created. If it is not possible to begin before
         the timeout expires then a  <xref linkend="org.osgi.service.featurelauncher.LaunchException"
         xrefstyle="hyperlink"/> must be thrown.</para>
+        
+        <para>Finally, if the <code>minimumStartLevel</code> has been set by the <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVELS"
+          xrefstyle="hyperlink"/> extension then the Feature Launcher implementation must check
+          the current start level of the framework. If the current start level is less than the
+          value of <code>minimumStartLevel</code> then the framework's start level must be set 
+          to this value.
+        </para>
+        
+        <para>Once the start process is complete the Framework instance must be returned
+        to the caller.</para>
         
         <para>The following failure modes must all result in a <xref 
         linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/> 
