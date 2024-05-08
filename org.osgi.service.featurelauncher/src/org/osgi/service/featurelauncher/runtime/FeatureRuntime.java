@@ -27,6 +27,7 @@ import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.ID;
 import org.osgi.service.featurelauncher.ArtifactRepository;
 import org.osgi.service.featurelauncher.ArtifactRepositoryFactory;
+import org.osgi.service.featurelauncher.LaunchException;
 
 /**
  * The Feature runtime service allows features to be installed and removed
@@ -89,6 +90,7 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 * @param feature the feature to launch
 	 * @return An installedFeature representing the results of installing this
 	 *         feature
+	 * @throws LaunchException if installation fails
 	 */
 	InstalledFeature install(Feature feature);
 
@@ -98,6 +100,7 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 * @param jsonReader a {@link Reader} for the input Feature JSON
 	 * @return An installedFeature representing the results of installing this
 	 *         feature
+	 * @throws LaunchException if installation fails
 	 */
 	InstalledFeature install(Reader jsonReader);
 
@@ -109,6 +112,7 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 * @param variables key/value pairs to set variables in the feature
 	 * @return An installedFeature representing the results of installing this
 	 *         feature
+	 * @throws LaunchException if installation fails
 	 */
 	InstalledFeature install(Feature feature, Map<String,Object> variables);
 
@@ -120,6 +124,7 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 * @param variables key/value pairs to set variables in the feature
 	 * @return An installedFeature representing the results of installing this
 	 *         feature
+	 * @throws LaunchException if installation fails
 	 */
 	InstalledFeature install(Reader jsonReader, Map<String,Object> variables);
 

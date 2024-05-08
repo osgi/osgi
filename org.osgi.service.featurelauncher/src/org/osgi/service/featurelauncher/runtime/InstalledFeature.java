@@ -23,6 +23,7 @@ import java.util.Map;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.service.feature.ID;
+import org.osgi.service.featurelauncher.FeatureLauncher;
 
 /**
  * An {@link InstalledFeature} represents the current state of a feature
@@ -39,6 +40,13 @@ public final class InstalledFeature {
 	 * The string version of the {@link ID} of the installed feature
 	 */
 	public String						featureId;
+
+	/**
+	 * <code>true</code> If this feature was installed as part of a
+	 * {@link FeatureLauncher} launch operation. <code>false</code> if it was
+	 * installed by the {@link FeatureRuntime}
+	 */
+	public boolean						initialLaunch;
 
     /**
 	 * A map with keys that are the bundles installed by this feature. The
