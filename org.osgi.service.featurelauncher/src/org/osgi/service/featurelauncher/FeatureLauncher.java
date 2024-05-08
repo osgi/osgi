@@ -33,115 +33,84 @@ import org.osgi.service.feature.Feature;
  */
 @ProviderType
 public interface FeatureLauncher extends ArtifactRepositoryFactory {
+
     /**
-	 * Launch a framework instance based on the supplied feature
+	 * Begin launching a framework instance based on the supplied feature
 	 * 
 	 * @param feature the feature to launch
 	 * @return A running framework instance.
 	 * @throws LaunchException
 	 */
-	Framework launch(Feature feature);
+	LaunchBuilder launch(Feature feature);
 
 	/**
-	 * Launch a framework instance based on the supplied feature JSON
+	 * Begin launching a framework instance based on the supplied feature JSON
 	 * 
 	 * @param jsonReader a {@link Reader} for the input Feature JSON
 	 * @return A running framework instance.
 	 * @throws LaunchException
 	 */
-	Framework launch(Reader jsonReader);
+	LaunchBuilder launch(Reader jsonReader);
 
 	/**
-	 * Launch a framework instance based on the supplied feature and variables
-	 * 
-	 * @param feature the feature to launch
-	 * @param variables key/value pairs to set variables in the feature
-	 * @return A running framework instance.
-	 * @throws LaunchException
-	 * @throws IllegalArgumentException if any of the variable values is not one
-	 *             of the values defined for {@link Feature#getVariables()}:
-	 *             <ul>
-	 *             <li>java.lang.String</li>
-	 *             <li>java.lang.Boolean</li>
-	 *             <li>java.math.BigDecimal</li>
-	 *             </ul>
+	 * A builder for configuring and triggering the launch of an OSGi framework
+	 * containing the supplied feature
+	 * <p>
+	 * {@link LaunchBuilder} instances are single use. Once they have been used
+	 * to launch a framework instance they become invalid and all methods will
+	 * throw {@link IllegalStateException}
 	 */
-	Framework launch(Feature feature, Map<String,Object> variables);
+	public interface LaunchBuilder {
 
-	/**
-	 * Launch a framework instance based on the supplied feature JSON and
-	 * variables
-	 * 
-	 * @param jsonReader a {@link Reader} for the input Feature JSON
-	 * @param variables key/value pairs to set variables in the feature
-	 * @return A running framework instance.
-	 * @throws LaunchException if an error occurs in launching
-	 * @throws IllegalArgumentException if any of the variable values is not one
-	 *             of the values defined for {@link Feature#getVariables()}:
-	 *             <ul>
-	 *             <li>java.lang.String</li>
-	 *             <li>java.lang.Boolean</li>
-	 *             <li>java.math.BigDecimal</li>
-	 *             </ul>
-	 */
-	Framework launch(Reader jsonReader, Map<String,Object> variables);
+		/**
+		 * Add a repository to this {@link LaunchBuilder} that will be used to
+		 * locate installable artifact data.
+		 * 
+		 * @param repository the repository to add
+		 * @return <code>this</code>
+		 * @throws NullPointerException if the repository is null
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withRepository(ArtifactRepository repository);
 
-	/**
-	 * Launch a framework instance based on the supplied feature, variables and
-	 * framework properties
-	 * 
-	 * @param feature the feature to launch
-	 * @param variables key/value pairs to set variables in the feature
-	 * @param frameworkProperties set or override framework properties when
-	 *            launching the framework
-	 * @return A running framework instance.
-	 * @throws LaunchException
-	 * @throws IllegalArgumentException if any of the variable values is not one
-	 *             of the values defined for {@link Feature#getVariables()}:
-	 *             <ul>
-	 *             <li>java.lang.String</li>
-	 *             <li>java.lang.Boolean</li>
-	 *             <li>java.math.BigDecimal</li>
-	 *             </ul>
-	 */
-	Framework launch(Feature feature, Map<String,Object> variables,
-			Map<String,String> frameworkProperties);
+		/**
+		 * Configure this {@link LaunchBuilder} with the supplied properties.
+		 * 
+		 * @param configuration the configuration for this implementation
+		 * @return <code>this</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withConfiguration(Map<String,Object> configuration);
 
-	/**
-	 * Launch a framework instance based on the supplied feature JSON
-	 * 
-	 * @param jsonReader a {@link Reader} for the input Feature JSON
-	 * @param variables key/value pairs to set variables in the feature
-	 * @param frameworkProperties set or override framework properties when
-	 *            launching the framework
-	 * @return A running framework instance.
-	 * @throws LaunchException
-	 * @throws IllegalArgumentException if any of the variable values is not one
-	 *             of the values defined for {@link Feature#getVariables()}:
-	 *             <ul>
-	 *             <li>java.lang.String</li>
-	 *             <li>java.lang.Boolean</li>
-	 *             <li>java.math.BigDecimal</li>
-	 *             </ul>
-	 */
-	Framework launch(Reader jsonReader, Map<String,Object> variables,
-			Map<String,String> frameworkProperties);
+		/**
+		 * Configure this {@link LaunchBuilder} with the supplied variables.
+		 * 
+		 * @param variables the variable placeholder overrides for this launch
+		 * @return <code>this</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withVariables(Map<String,Object> variables);
 
-	/**
-	 * Add a repository to this {@link FeatureLauncher} that will be used to
-	 * locate installable artifact data.
-	 * 
-	 * @param repository the repository to add
-	 * @return <code>this</code>
-	 */
-	FeatureLauncher addRepository(ArtifactRepository repository);
+		/**
+		 * Configure this {@link LaunchBuilder} with the supplied Framework
+		 * Launch Properties.
+		 * 
+		 * @param frameworkProps the launch properties to use when starting the
+		 *            framework
+		 * @return <code>this</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withFrameworkProperties(
+				Map<String,Object> frameworkProps);
 
-	/**
-	 * Configure this {@link FeatureLauncher} with the supplied properties.
-	 * 
-	 * @param configuration the repository to add
-	 * @return <code>this</code>
-	 */
-	FeatureLauncher configure(Map<String,Object> configuration);
+		/**
+		 * Launch a framework instance based on the configured builder
+		 * 
+		 * @return A running framework instance.
+		 * @throws LaunchException
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		Framework launchFramework();
+	}
 
 }

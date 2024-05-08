@@ -521,10 +521,20 @@
         </listitem>
       </itemizedlist>
       
-      <para>Once instantiated the Feature Launcher may be configured in a fluent
-        manner using the <xref linkend="org.osgi.service.featurelauncher.FeatureLauncher.configure-Map-"
+      <para>Once instantiated the Feature Launcher may be supplied with a
+      Feature, either as a <code>Reader</code> providing access to the JSON text of 
+      a Feature document or a parsed <xref linkend="org.osgi.service.feature.Feature"
+       xrefstyle="hyperlink"/> to create  a <xref
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LauncherBuilder"
+        xrefstyle="hyperlink"/>. The Launch Builder can be configured in a fluent
+        manner using the <xref 
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withConfiguration-Map-"
+         xrefstyle="hyperlink"/>, <xref
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withVariables-Map-"
+        xrefstyle="hyperlink"/>, <xref
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withFrameworkProperties-Map-"
         xrefstyle="hyperlink"/> and <xref 
-        linkend="org.osgi.service.featurelauncher.FeatureLauncher.addRepository-ArtifactRepository-"
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withRepository-ArtifactRepository-"
         xrefstyle="hyperlink"/> methods. Configuration properties for the Feature
         Launcher are implementation specific, and any unrecognised property names
         should be ignored. Artifact Repository instances may be created by the user
@@ -534,21 +544,20 @@
         <section>
           <title>Thread Safety</title>
           
-          <para>Instances of the Feature Launcher are not required to be Thread Safe, and
-            should not be shared between threads. Changing the configuration of a Feature
-            Launcher instance only affects that instance, and not any other instances that
-            exist.</para>
+          <para>Instances of the Feature Launcher and Launch Builder are not required to 
+            be Thread Safe, and should not be shared between threads. Changing the 
+            configuration of a Launch Builder instance only affects that instance, and 
+            not any other instances that exist.</para>
         </section>
     </section>
     
     <section>
       <title>Using a Feature Launcher</title>
       
-      <para>Once a configured Feature Launcher instance has been created, one of
-      the <code>launch</code> methods can be used to launch an OSGi framework 
-      containing the supplied Feature. Features can either be supplied as a
-      <code>Reader</code> providing access to the JSON text of a Feature document
-      or a parsed <xref linkend="org.osgi.service.feature.Feature" xrefstyle="hyperlink"/>.
+      <para>Once a configured Launch Builder instance has been created the <xref 
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.launchFramework--"
+        xrefstyle="hyperlink"/> method can be used to launch an OSGi framework 
+      containing the supplied Feature. 
       The Feature Launcher will then return a running <code>Framework</code> instance
       representing the launched OSGi framework and the Feature that it contains. If
       an error occurs creating the framework, or locating and installing any of the 
@@ -577,10 +586,11 @@
         
         <para>In addition to Framework Launch properties defined inside the Feature,
         users of the Feature Launcher can add and override Framework Launch Properties
-        using one of the <code>launch</code> methods which permit a <code>Map</code> of 
-        framework properties to be provided. Any key value pairs defined in this map 
-        must take precedence over those defined in the Feature. A key with a null value
-        must result in the removal of a key value pair if it is defined in the Feature.</para>
+        using one of the <code>withFrameworkProperties</code> method that permits a 
+        <code>Map</code> of framework properties to be provided. Any key value pairs 
+        defined in this map must take precedence over those defined in the Feature. A 
+        key with a <code>null</code> value must result in the removal of a key value 
+        pair if it is defined in the Feature.</para>
       </section>
       
       <section xml:id="service.featurelauncher-select.framework">
@@ -623,10 +633,13 @@ FeatureLauncher launcher = sl.iterator().next();
 		
 // Set up a repository
 ArtifactRepository localRepo = launcher.createRepository(Paths.get("bundles"));
-launcher.addRepository(localRepo);
 		
 // Launch the framework
-Framework fw = launcher.launch(Files.newBufferedReader(Paths.get("myfeature.json")));
+Framework fw = launcher
+        .launch(Files.newBufferedReader(Paths.get("myfeature.json")))
+        .withRepository(localRepo)
+        .launchFramework();
+
 fw.waitForStop(0);
 
     </programlisting>
