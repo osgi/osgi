@@ -2468,7 +2468,7 @@ ConfigurationPermission[?application,<xref
     into one as updating a Managed Service or Managed Service Factory might result
     in services being updated or unregistered what can trigger other service changes
     what might be a costly operation and therefore result in an unwanted intermediate
-    states until the system has setled again. Collapsing here means, that multiple
+    state until the system has setled again. Collapsing here means, that multiple
     updates inside a coordination are combined into exactly one update that reflects
     the final outcome, the following list gives some examples for clarification:
     </para>
