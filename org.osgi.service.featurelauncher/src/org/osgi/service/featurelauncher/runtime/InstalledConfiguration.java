@@ -27,7 +27,7 @@ import org.osgi.service.feature.ID;
  * An {@link InstalledConfiguration} represents a configuration that has been
  * installed as a result of one or more feature installations.
  * <p>
- * This type is a DTO and represents the state of the runtime when it was
+ * This type is a snapshot and represents the state of the runtime when it was
  * created. It may become out of date if additional features are installed or
  * removed.
  */
@@ -35,9 +35,9 @@ import org.osgi.service.feature.ID;
 public final class InstalledConfiguration {
 
 	/**
-	 * The string version of the {@link ID} of the installed feature
+	 * The {@link ID} of the installed feature
 	 */
-	public String				featureId;
+	public ID					featureId;
 
 	/**
 	 * The PID of the configuration
@@ -58,5 +58,5 @@ public final class InstalledConfiguration {
 	/**
 	 * The features responsible for creating this configuration
 	 */
-	public List<String>			owningFeatures;
+	public List<ID>				owningFeatures;
 }

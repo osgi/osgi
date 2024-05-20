@@ -144,13 +144,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	void remove(ID featureId);
 
 	/**
-	 * Remove an installed feature
-	 * 
-	 * @param featureId the feature id
-	 */
-	void remove(String featureId);
-
-	/**
 	 * Update a feature in the runtime
 	 * 
 	 * @param featureId the id of the feature to update
@@ -161,16 +154,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	InstalledFeature update(ID featureId, Feature feature);
 
 	/**
-	 * Update a feature in the runtime
-	 * 
-	 * @param featureId the id of the feature to update
-	 * @param feature the feature to launch
-	 * @return An installedFeature representing the results of updating this
-	 *         feature
-	 */
-	InstalledFeature update(String featureId, Feature feature);
-
-	/**
 	 * Update a feature in the runtime based on the supplied feature JSON
 	 * 
 	 * @param featureId the id of the feature to update
@@ -179,16 +162,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 *         feature
 	 */
 	InstalledFeature update(ID featureId, Reader jsonReader);
-
-	/**
-	 * Update a feature in the runtime based on the supplied feature JSON
-	 * 
-	 * @param featureId the id of the feature to update
-	 * @param jsonReader a {@link Reader} for the input Feature JSON
-	 * @return An installedFeature representing the results of updating this
-	 *         feature
-	 */
-	InstalledFeature update(String featureId, Reader jsonReader);
 
 	/**
 	 * Update a feature in the runtime based on the supplied feature and
@@ -204,19 +177,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 			Map<String,Object> variables);
 
 	/**
-	 * Update a feature in the runtime based on the supplied feature and
-	 * variables
-	 * 
-	 * @param featureId the id of the feature to update
-	 * @param feature the feature to launch
-	 * @param variables key/value pairs to set variables in the feature
-	 * @return An installedFeature representing the results of updating this
-	 *         feature
-	 */
-	InstalledFeature update(String featureId, Feature feature,
-			Map<String,Object> variables);
-
-	/**
 	 * Update a feature in the runtime based on the supplied feature JSON and
 	 * variables
 	 * 
@@ -227,19 +187,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	 *         feature
 	 */
 	InstalledFeature update(ID featureId, Reader jsonReader,
-			Map<String,Object> variables);
-
-	/**
-	 * Update a feature in the runtime based on the supplied feature JSON and
-	 * variables
-	 * 
-	 * @param featureId the id of the feature to update
-	 * @param jsonReader a {@link Reader} for the input Feature JSON
-	 * @param variables key/value pairs to set variables in the feature
-	 * @return An installedFeature representing the results of updating this
-	 *         feature
-	 */
-	InstalledFeature update(String featureId, Reader jsonReader,
 			Map<String,Object> variables);
 
 }

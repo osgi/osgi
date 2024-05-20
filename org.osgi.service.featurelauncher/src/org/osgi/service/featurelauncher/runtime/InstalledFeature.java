@@ -29,7 +29,7 @@ import org.osgi.service.featurelauncher.FeatureLauncher;
  * An {@link InstalledFeature} represents the current state of a feature
  * installed by the {@link FeatureRuntime}.
  * <p>
- * This type is a DTO and represents the state of the runtime when it was
+ * This type is a snapshot and represents the state of the runtime when it was
  * created. It may become out of date if additional features are installed or
  * removed.
  */
@@ -37,9 +37,9 @@ import org.osgi.service.featurelauncher.FeatureLauncher;
 public final class InstalledFeature {
 
 	/**
-	 * The string version of the {@link ID} of the installed feature
+	 * The {@link ID} of the installed feature
 	 */
-	public String						featureId;
+	public ID							featureId;
 
 	/**
 	 * <code>true</code> If this feature was installed as part of a
@@ -53,7 +53,7 @@ public final class InstalledFeature {
 	 * values are a {@link List} of the String {@link ID}s for each installed
 	 * feature that installed the bundle
 	 */
-	public Map<Bundle,List<String>>		installedBundles;
+	public Map<Bundle,List<ID>>			installedBundles;
 
 
 	/**

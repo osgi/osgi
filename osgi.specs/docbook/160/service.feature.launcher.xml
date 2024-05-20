@@ -525,7 +525,7 @@
       Feature, either as a <code>Reader</code> providing access to the JSON text of 
       a Feature document or a parsed <xref linkend="org.osgi.service.feature.Feature"
        xrefstyle="hyperlink"/> to create  a <xref
-        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LauncherBuilder"
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder"
         xrefstyle="hyperlink"/>. The Launch Builder can be configured in a fluent
         manner using the <xref 
          linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withConfiguration-Map-"
@@ -813,7 +813,7 @@ fw.waitForStop(0);
     an existing, running OSGi framework. The Feature Runtime Service therefore does not offer any 
     mechanism for launching a framework, but instead allows one or more features to be installed
     into the running framework. As an OSGi framework is a dynamic environment the Feature Runtime 
-    Service also provides DTOs describing the currently installed Features, allows installed 
+    Service also provides snapshots describing the currently installed Features, allows installed 
     Features to be updated, and allows Features to be removed from the system.</para>
     
     <para>An important difference between the Feature Launcher and Feature Runtime Service is
@@ -843,9 +843,10 @@ fw.waitForStop(0);
         
         <para>Despite the instances not being Thread Safe the underlying Feature
         Runtime must be Thread Safe, specifically if two instances of the Feature
-        Runtime are used at the same time then these calls should be handled
-        sequentially such that there are never partially deployed Features present
-        when installing, updating or removing a Feature.</para>
+        Runtime are used to install, update or remove features at the same time 
+        then these calls should be handled sequentially such that there are never 
+        partially deployed Features present when installing, updating or removing 
+        a Feature.</para>
       </section>
       
       <section>
@@ -855,10 +856,10 @@ fw.waitForStop(0);
         introspect the system to discover its current state. The Feature
         Runtime enables this through the <xref
          linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getInstalledFeatures--" 
-         xrefstyle="hyperlink"/> method, which returns a DTO snapshot of
+         xrefstyle="hyperlink"/> method, which returns a snapshot of
         the current state of the system.</para>
         
-        <para>The returned list of DTOs contains one <xref
+        <para>The returned list of snapshots contains one <xref
          linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature" 
          xrefstyle="hyperlink"/> entry for each installed Feature, in the order
         that they were installed, and may be empty if no Features have been 
@@ -872,17 +873,18 @@ fw.waitForStop(0);
          throw a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
           xrefstyle="hyperlink"/></para>
         
-        <para>Each Installed Feature DTO includes the id of the Feature, and a
-        <code>Map</code> referencing the bundles installed by the feature. The
-        keys of the map are the installed bundles, and the values each contain a
-        <code>List</code> of the ids of the features which <emphasis>own</emphasis>
-        the bundle. Ownership of a bundle is tracked by the Feature Runtime,
-        and it is used to identify when the same bundle forms part of more than
-        one Feature. Bundles that are owned by more than one Feature will not
-        be removed until <emphasis>all</emphasis> of the Features that own them 
+        <para>Each Installed Feature includes the <xref
+         linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
+        Feature, and a <code>Map</code> referencing the bundles installed by 
+        the feature. The keys of the map are the installed bundles, and the values 
+        each contain a <code>List</code> of the ids of the features which 
+        <emphasis>own</emphasis> the bundle. Ownership of a bundle is tracked by the 
+        Feature Runtime, and it is used to identify when the same bundle forms part 
+        of more than one Feature. Bundles that are owned by more than one Feature will 
+        not be removed until <emphasis>all</emphasis> of the Features that own them 
         are removed. In the case where a bundle was not installed by the Feature
         Runtime, but later became owned by an installed Feature, that bundle
-        will also be owned by the virtual <code>org.osgi:external:1.0.0</code> 
+        will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
         Feature to indicate that they will not be removed if the other owning
         Feature is removed.
         <remark>Make a constant for this</remark></para>
@@ -890,9 +892,9 @@ fw.waitForStop(0);
         <para>In addition to bundles Features can contain configurations. The
         InstalledFeatureDTO therefore contains a <code>List</code> of <xref
          linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
-         xrefstyle="hyperlink"/> DTOs, with each entry representing a
+         xrefstyle="hyperlink"/> snapshots, with each entry representing a
         configuration created by the Feature Runtime on behalf of the Feature.
-        The Installed Configuration DTO contains the following information:</para>
+        The Installed Configuration contains the following information:</para>
          
         <itemizedlist>
           <listitem>
@@ -1250,6 +1252,7 @@ launcher.start();</programlisting>
   <!-- Specifying merge conflict handlers -->
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.runtime.xml"/>
 
 
 </chapter>
