@@ -1,0 +1,1261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+<chapter label="160"
+         version="5.0" xml:id="service.feature.launcher"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Feature Launcher Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.featurelauncher-version"
+    linkend="org.osgi.service.featurelauncher"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The <xref linkend="service.feature"/> defines a model to 
+      design and declare Complex Applications and reusable Sub-Components that are
+      composed of multiple bundles, configurations and other metadata. These
+      models are, however, only descriptive and have no standard mechanism
+      for installing them into an OSGi framework.</para>
+      
+    <para>This specification focuses on turning these Features into a running system,
+      by introducing the Feature Launcher and Feature Runtime. The Feature Launcher 
+      takes a Feature definition, obtains a framework instance for it and then starts 
+      the Feature in that environment. The Feature Runtime extends this capability to
+      a running system, enabling one or more Features to be installed, updated, and 
+      later removed from a running OSGi framework.</para>
+      
+    <para>The Launcher and Runtime also interact with the Configuration Admin Service, 
+      that is, they provide configuration to the system if it is present in the 
+      Feature being launched or installed.</para>
+      
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Dynamic</emphasis> - The Feature Runtime dynamically
+          adds, updates and removes Features in a running system.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Parameterizable</emphasis> - Feature installation may
+          be customised using local parameters if the Feature supports it.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Zero code</emphasis> - The Feature Launcher can launch a framework
+          containing an installed Feature in an implementation independent way without a 
+          user writing any code .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <para>The following entities are used in this specification:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Feature</emphasis> - A Feature as defined by the
+          <xref linkend="service.feature"/></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Artifact Repository</emphasis> - A means of 
+          accessing the installable bytes for bundles in a Feature</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Feature Launcher</emphasis> - A Feature Launcher
+          obtains an OSGi Framework instance and installs a Feature into it.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Framework</emphasis> - A running implementation of
+          the OSGi core specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Launch Properties</emphasis> - Framework launching
+          properties defined in a Feature.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Feature Parameters</emphasis> - Key value pairs that
+          can be used to customise the installation of a Feature.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Configuration</emphasis> - A configuration 
+          for the Configuration Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Feature Runtime</emphasis> - A Feature Runtime is
+          an OSGi service capable of installing Features into the running OSGi 
+          framework, removing installed Features from the OSGi framework, and 
+          updating an installed Feature with a new Feature definition.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Installed Feature</emphasis> - A representation of
+          a Feature installed by the Feature Runtime.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Installed Configuration</emphasis> - A representation of
+          a Configuration installed by the Feature Runtime.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>Features Entity overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="5.100in"
+                       contentwidth="6.000in" fileref="feature.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>Features and Artifact Repositories</title>
+    
+    <para>OSGi Features exist either as JSON documents, or as runtime objects
+    created by the Feature Service API. The primary purpose of a Feature is 
+    to define a list of bundles and configurations that should be installed,
+    however the Feature provides no information about the location of the
+    bundle artifacts. A key challenge with installing a Feature is therefore
+    finding the appropriate artifacts to install.
+    </para>
+    
+    <para>The <xref linkend="org.osgi.service.featurelauncher.ArtifactRepository"
+      xrefstyle="hyperlink"/> interface is designed to be implemented by users
+      of the Feature Launcher Service to provide a way for the Feature Launcher
+      Service to find an installable <code>InputStream</code> of bytes for a
+      given bundle artifact using the <xref 
+      linkend="org.osgi.service.featurelauncher.ArtifactRepository.getArtifact-ID-"
+      xrefstyle="hyperlink"/> method. Artifact Repository implementations are free 
+      to use any mechanism for locating the bundle artifact data. If no artifact 
+      can be found for the supplied <code>ID</code> then the implementation of 
+      the Artifact Repository should return <code>null</code>. If the Artifact 
+      Repository throws an exception then this must be logged by the Feature 
+      Launcher Service and then treated in the same manner as a <code>null</code>
+      return value.</para>
+      
+    <section xml:id="service.featurelauncher-arf">
+      <title>The Artifact Repository Factory</title>
+      
+      <para>In order to support the <emphasis>Zero Code</emphasis> objective
+      of this specification, and to simplify usage for most users, the
+      <xref linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory"
+      xrefstyle="hyperlink"/> provides a factory for commonly used repository
+      types.</para>
+      
+      <section>
+        <title>Obtaining an Artifact Repository Factory</title>
+      
+        <para>The Artifact Repository Factory is useful both for the Feature Launcher
+        and the Feature Runtime, and as such it must be easy to access both inside
+        and outside an OSGi framework. The Feature Launcher Service implementation 
+        must provide an implementation of the Artifact Repository Factory interface. 
+        A user of the Artifact Repository Factory service may use the following ways 
+        to find an instance.
+        </para>
+      
+        <para>When outside OSGi:</para>
+        <itemizedlist>
+          <listitem>
+            <para>Using the Java ServiceLoader API to find instances of 
+            <code>org.osgi.service.featurelauncher.ArtifactRepositoryFactory</code></para>
+          </listitem>
+          <listitem>
+            <para>From configuration, and then using <code>Class.forName</code>,
+            <code>getConstructor()</code> and <code>newInstance()</code></para>
+          </listitem>
+          <listitem>
+            <para>By hard coding the implementation and using the <code>new</code>
+            operator.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>When inside an OSGi framework:</para>
+        <itemizedlist>
+          <listitem>
+            <para>Using the OSGi service registry to find instances of 
+            <code>org.osgi.service.featurelauncher.ArtifactRepositoryFactory</code></para>
+          </listitem>
+          <listitem>
+            <para>Using the Java ServiceLoader API and the OSGi Service Loader
+            Mediator to find instances of 
+            <code>org.osgi.service.featurelauncher.ArtifactRepositoryFactory</code></para>
+          </listitem>
+          <listitem>
+            <para>By hard coding the implementation type and using the <code>new</code>
+            operator.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>Local Repositories</title>
+        
+        <para>A Local Repository is one that exists on a locally accessible file
+        system. Note that this does not require that the file system is local,
+        and technologies such as NFS or other network file systems would still
+        be considered as Local Repositories. The key aspects of a Local
+        Repository are that:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>The root of the repository can be accessed and resolved
+            as a <code>java.nio.file.Path</code> or <code>file:</code> URI.</para>
+          </listitem>
+          <listitem>
+            <para>The repository uses the Maven2 Repository Layout</para>
+            <remark>Add bibliography link to https://maven.apache.org/repository/layout.html#maven2-repository-layout</remark>
+          </listitem>
+        </itemizedlist>
+        
+        <para>An Artifact Repository representing a Local Repository can be 
+        created using the <xref 
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-Path-"
+        xrefstyle="hyperlink"/> method, passing in the path to the root of the repository.
+        A <code>NullPointerException</code> must be thrown if the path is <code>null</code>
+        and an <code>IllegalArgumentException</code> must be thrown if the path does not
+        exist, or represents a file which is not a directory.</para>
+        
+        <para>An Artifact Repository representing a Local Repository can also
+        be created using the <xref 
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-URI-Map-"
+        xrefstyle="hyperlink"/> method, passing a URI using the <code>file</code> scheme
+        which points to the root of the repository. A <code>NullPointerException</code> 
+        must be thrown if the URI is <code>null</code> and an <code>IllegalArgumentException</code> 
+        must be thrown if the path does not exist, or represents a file which is not a 
+        directory.</para>
+        
+        <para>Once created this Artifact Repository will search the supplied repository
+        for any requested artifact data. Implementations are free to optimise checks using
+        repository metadata.</para>
+      </section>
+
+      <section>
+        <title>Remote Repositories</title>
+        
+        <para>A Remote Repository is one that exists with an accessible
+        <code>http</code> or <code>https</code> endpoint for retrieving artifact data.
+        Note that this does not require that the repository is on a remote machine,
+        only that the means of accessing data is via <code>HTTP</code> requests.
+        The key aspects of a Remote Repository are that:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>The root of the repository can be accessed and resolved
+            as a <code>http</code> or <code>https</code> <code>URI</code></para>
+          </listitem>
+          <listitem>
+            <para>The repository uses the Maven2 Repository Layout</para>
+            <remark>Add bibliography link to https://maven.apache.org/repository/layout.html#maven2-repository-layout</remark>
+          </listitem>
+        </itemizedlist>
+        
+        <para>An Artifact Repository representing a Remote Repository can be 
+        created using the <xref 
+        linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory.createRepository-URI-Map-"
+        xrefstyle="hyperlink"/> method, passing in the uri to the root of the repository.
+        A <code>NullPointerException</code> must be thrown if the uri is <code>null</code>
+        and an <code>IllegalArgumentException</code> must be thrown if the uri does not
+        use the <code>http</code> or <code>https</code> scheme.</para>
+        
+        <para>In addition to the repository <code>URI</code> the user may pass
+        configuration properties in a <code>Map</code>. Implementations may support custom
+        configuration properties, but those properties should use Reverse Domain Name keys.
+        Keys not using the reverse DNS naming scheme are reserved for OSGi use. Implementations
+        must ignore any configuration property keys that they do not recognise. All 
+        implementations must support the following properties:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_NAME"
+              xrefstyle="hyperlink"/> - The name for this repository</para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_USER"
+              xrefstyle="hyperlink"/> - The user name to use for authenticating with this repository</para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_PASSWORD"
+              xrefstyle="hyperlink"/> - The password to use for authenticating with this repository</para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_BEARER_TOKEN"
+              xrefstyle="hyperlink"/> - A bearer token to use when authenticating with this repository</para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED"
+              xrefstyle="hyperlink"/> - A <code>Boolean</code> indicating that SNAPSHOT versions are 
+              supported. Defaults to <code>true</code></para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_RELEASES_ENABLED"
+              xrefstyle="hyperlink"/> - A <code>Boolean</code> indicating that release versions are 
+              supported. Defaults to <code>true</code></para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE"
+              xrefstyle="hyperlink"/> - A trust store to use when validating a server certificate. May be a file
+              system path or a <code>data</code> URI.</para>
+              <remark>Add bibliography link to https://en.wikipedia.org/wiki/Data_URI_scheme</remark>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT"
+              xrefstyle="hyperlink"/> - The format of the trust store to use when validating a server certificate.</para>
+          </listitem>
+          <listitem>
+            <para><xref 
+              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD"
+              xrefstyle="hyperlink"/> - The password to use when validating the trust store integrity.</para>
+          </listitem>
+        </itemizedlist>
+        
+        <para>Once created this Artifact Repository will search the supplied repository
+        for any requested artifact data. Implementations are free to optimise checks using
+        repository metadata.</para>
+      </section>
+    </section>
+  </section>
+  
+  <section>
+    <title>Common themes</title>
+    
+    <para>This specification includes support for bootstrapping an OSGi
+    runtime, for ongoing management of an OSGi runtime, and for merging features. 
+    There are many concepts that apply across more than one of these scenarios,
+    and so they are described here.</para>
+    
+    <section xml:id="service.featurelauncher-variable.overrides">
+      <title>Overriding Feature variables</title>
+        
+      <para>Some Feature definitions include variables which can be used to customise
+      their deployment. These variables are intended to be set at the point where
+      a Feature is installed, and may contain default values. To enable these 
+      variables to be overridden there are overloaded versions of methods which 
+      permit a <code>Map</code> of variables to be provided. The keys in this 
+      map must be strings and the values must be one of the types permitted 
+      by the <xref linkend="service.feature"/></para>
+        
+      <para>If a Feature declares a variable with no default value then this variable
+      <emphasis>must</emphasis> be provided. If no value is provided then the method
+      must fail to launch by throwing a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+      xrefstyle="hyperlink"/></para>
+    </section>
+    
+    <section xml:id="service.featurelauncher-start.levels">
+      <title>Setting the bundle start levels</title>
+        
+      <para>An OSGi framework contains a number of bundles which collaborate to produce
+      a functioning application. There are times when some bundles require the system
+      to have reached a certain state before they can be started. To address this use
+      case the OSGi framework has the concept of <emphasis>start levels</emphasis>.
+        <remark>Add a link to the core specification</remark>
+      </para>
+        
+      <para>Setting the initial start level for the OSGi framework when bootstrapping
+      can easily be achieved using the framework launch property 
+      <code>org.osgi.framework.startlevel.beginning</code> as defined by the
+      OSGi core specification.</para>
+        
+      <para>Controlling the start levels assigned to the bundles in a feature is
+      managed through the use of Feature Bundle metadata. Specifically the Feature
+      Launcher will look for a Feature Bundle metadata property named <xref 
+       linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVEL_METADATA"
+       xrefstyle="hyperlink"/> which is of type integer and has a value between
+      <code>1</code> and <code>2147483647</code> inclusive. If the property does 
+      not exist then the default start level will be used. If the property does 
+      exist and is not a suitable integer then launching must fail with a <xref 
+        linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>.
+      </para>
+        
+      <para>Setting the default start level for the bundles, and the minimum start
+      level required for an installed Feature is accomplished by using a Feature Extension named <xref 
+        linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVELS"
+        xrefstyle="hyperlink"/> with <code>Type</code> <code>JSON</code>. The JSON
+      contained in this extension is used to configure the default start level for
+      the bundles, and the target start level for the framework.
+      The schema of this JSON is as follows: <remark>Add Schema in build</remark></para>
+        
+      <programlisting>
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://www.osgi.org/jsonschema/featurelauncher/bundle-start-levels/v1.0.0",
+  "title": "bundle-start-levels",
+  "description": "The definition of the bundle-start-levels feature extension",
+   "type": "object",
+   "properties": {
+      "version": {
+        "description": "The version of the Feature Launcher extension",
+        "const": "1.0.0"
+      },
+      "defaultStartLevel": {
+         "description": "The default start level for bundles in the feature",
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 2147483647
+      },
+      "minimumStartLevel": {
+         "description": "The minimum required start level for the framework after feature installation",
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 2147483647
+      }
+   },
+   "required": [ "version", "defaultStartLevel", "minimumStartLevel" ]
+}
+        </programlisting>
+        
+        
+      <para>Setting the default start level for bundles installed by the framework is
+      achieved using the <code>defaultStartLevel</code> property of the <code>JSON</code>
+      extension. This must be an integer greater than zero and less than 
+      <code>Integer.MAX_INT</code>, or the special marker value <code>null</code>. A
+      <code>null</code> value is used to indicate that the default start level for newly
+      installed bundles is the current framework start level, or <code>1</code> if the 
+      current framework start level is <code>0</code>. If the value is not valid then a <xref 
+          linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
+      must be thrown when attempting to use the feature.</para>
+        
+      <para>The minimum final start level for the OSGi framework required by the feature
+      can be set using the <code>minimumStartLevel</code> property. of the <code>JSON</code>
+      extension. This must be an integer greater than zero and less than <code>Integer.MAX_INT</code>.
+      If the value is not valid then a <xref 
+        linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
+      must be thrown when attempting to use the feature. This property sets the minimum
+      start level that the OSGi framework must use to complete the installation of a
+      Feature.</para>
+      
+      <para>Finally the <code>version</code> property defines the version of the extension
+      schema being used. This can be used by the implementation to determine whether the 
+      Feature is targeting a newer version of the specification. If the version is not
+      understood by the implementation then a <xref 
+        linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
+      must be thrown when attempting to use the feature.</para>
+    </section>
+  </section>
+  
+  <section>
+    <title>The Feature Launcher</title>
+    
+    <para>The <xref linkend="org.osgi.service.featurelauncher.FeatureLauncher"
+      xrefstyle="hyperlink"/> is the main entry point for creating a running OSGi
+      framework containing the bundles and configurations defined in a Feature.
+      As such the Feature Launcher is primarily designed for use outside of an
+      OSGi framework.</para>
+      
+    <para>To support usage in a non-OSGi environment implementations of the
+    Feature Launcher Service must register the following implementation classes 
+    with the Java ServiceLoader API, and any necessary module metadata.</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><code>org.osgi.service.featurelauncher.FeatureLauncher</code></para>
+      </listitem>
+      <listitem>
+        <para><code>org.osgi.service.featurelauncher.ArtifactRepositoryFactory</code></para>
+      </listitem>
+    </itemizedlist>    
+      
+    <section>
+      <title>Obtaining and configuring a Feature Launcher</title>
+      
+      <para>A Feature Launcher Service implementation must provide an implementation
+      of the Feature Launcher interface. A user of the Feature Launcher service may
+      use the following ways to find this class and create an instance:
+      </para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>Using the Java ServiceLoader API to find instances of 
+          <code>org.osgi.service.featurelauncher.FeatureLauncher</code></para>
+        </listitem>
+        <listitem>
+          <para>From configuration, and then using <code>Class.forName</code>,
+          <code>getConstructor()</code> and <code>newInstance()</code></para>
+        </listitem>
+        <listitem>
+          <para>By hard coding the implementation type and using the <code>new</code>
+          operator.</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>Once instantiated the Feature Launcher may be supplied with a
+      Feature, either as a <code>Reader</code> providing access to the JSON text of 
+      a Feature document or a parsed <xref linkend="org.osgi.service.feature.Feature"
+       xrefstyle="hyperlink"/> to create  a <xref
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder"
+        xrefstyle="hyperlink"/>. The Launch Builder can be configured in a fluent
+        manner using the <xref 
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withConfiguration-Map-"
+         xrefstyle="hyperlink"/>, <xref
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withVariables-Map-"
+        xrefstyle="hyperlink"/>, <xref
+         linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withFrameworkProperties-Map-"
+        xrefstyle="hyperlink"/> and <xref 
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.withRepository-ArtifactRepository-"
+        xrefstyle="hyperlink"/> methods. Configuration properties for the Feature
+        Launcher are implementation specific, and any unrecognised property names
+        should be ignored. Artifact Repository instances may be created by the user
+        using as described in <xref linkend="service.featurelauncher-arf" 
+        xrefstyle="hyperlink"/>, or using custom implementations.</para>
+        
+        <section>
+          <title>Thread Safety</title>
+          
+          <para>Instances of the Feature Launcher and Launch Builder are not required to 
+            be Thread Safe, and should not be shared between threads. Changing the 
+            configuration of a Launch Builder instance only affects that instance, and 
+            not any other instances that exist.</para>
+        </section>
+    </section>
+    
+    <section>
+      <title>Using a Feature Launcher</title>
+      
+      <para>Once a configured Launch Builder instance has been created the <xref 
+        linkend="org.osgi.service.featurelauncher.FeatureLauncher.LaunchBuilder.launchFramework--"
+        xrefstyle="hyperlink"/> method can be used to launch an OSGi framework 
+      containing the supplied Feature. 
+      The Feature Launcher will then return a running <code>Framework</code> instance
+      representing the launched OSGi framework and the Feature that it contains. If
+      an error occurs creating the framework, or locating and installing any of the 
+      feature bundles, then a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+        xrefstyle="hyperlink"/> must be thrown.</para>
+        
+      <para>Once the caller has received their framework instance they may carry on
+      with other work, or they may wait for the OSGi framework to stop using the
+      <code>waitForStop()</code> method.</para>
+      
+      <section xml:id="service.featurelauncher-framework.props">
+        <title>Providing Framework Launch Properties</title>
+        
+        <para>Framework launch properties are key value pairs which are passed to
+        the OSGi framework as it is created. They can control many behaviours,
+        including operations which happen before the framework starts, meaning 
+        that is not always possible to set them <emphasis>after</emphasis> startup.</para>
+        
+        <para>Feature definitions that require particular framework launch properties
+        can define them using a Feature Extension named <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.FRAMEWORK_LAUNCHING_PROPERTIES"
+          xrefstyle="hyperlink"/>. The Type of this Feature Extension must be 
+        <code>TEXT</code>, where each entry is in the form <code>key=value</code>
+        All implementations of the Feature Launcher must support this extension,
+        and use it to populate the Framework Launch Properties.</para>
+        
+        <para>In addition to Framework Launch properties defined inside the Feature,
+        users of the Feature Launcher can add and override Framework Launch Properties
+        using one of the <code>withFrameworkProperties</code> method that permits a 
+        <code>Map</code> of framework properties to be provided. Any key value pairs 
+        defined in this map must take precedence over those defined in the Feature. A 
+        key with a <code>null</code> value must result in the removal of a key value 
+        pair if it is defined in the Feature.</para>
+      </section>
+      
+      <section xml:id="service.featurelauncher-select.framework">
+        <title>Selecting a framework implementation</title>
+        
+        <para>When defining a feature it is not always possible to be framework independent.
+        Sometimes specific framework APIs, or licensing restrictions, will require that a
+        particular implementation is used. In this case a Feature Extension named <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.LAUNCH_FRAMEWORK"
+          xrefstyle="hyperlink"/> with <code>Type</code> <code>ARTIFACTS</code> can be used
+          to list one or more artifacts representing OSGi framework implementations.
+        </para>
+        
+        <para>The list of artifacts is treated as a preference order, with the first listed
+        artifact being used if available, and so on, until a framework is found. If a
+        listed artifact is not an OSGi framework implementation then the Feature Launcher 
+        must log a warning and continue on to the next artifact in the list. If the
+        <code>Kind</code> of the feature is <code>MANDATORY</code> and none of
+        the listed artifacts are available then launching must fail with a <xref 
+          linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>.
+        </para>
+        
+        <para>The Feature Launcher implementation may identify that an artifact is an OSGi
+        framework implementation in any way that it chooses, however it must recognise
+        framework implementations that provide the Framework Launch API using the 
+        service loader pattern.
+        <remark>Link to the framework launch API</remark>
+        </para>
+      </section>
+      
+      <section>
+        <title>A simple example</title>
+        
+        <para>The following code snippet demonstrates a simple example of using the Feature Launcher
+        to start an OSGi framework containing one or more bundles.</para>
+        
+        <programlisting>// Load the Feature Launcher
+ServiceLoader&lt;FeatureLauncher&gt; sl = ServiceLoader.load(FeatureLauncher.class);
+FeatureLauncher launcher = sl.iterator().next();
+		
+// Set up a repository
+ArtifactRepository localRepo = launcher.createRepository(Paths.get("bundles"));
+		
+// Launch the framework
+Framework fw = launcher
+        .launch(Files.newBufferedReader(Paths.get("myfeature.json")))
+        .withRepository(localRepo)
+        .launchFramework();
+
+fw.waitForStop(0);
+
+    </programlisting>
+      </section>
+    </section>
+    
+    <section>
+      <title>The Feature Launching Process</title>
+      
+      <para>The following section defines the process through which the Feature Launcher
+      must locate, initialize and populate an OSGi framework when launching a feature.
+      Unless explicitly stated implementations may perform one or more parts of this
+      process in a different order to that described in the specification.</para>
+
+      <section>
+        <title>Locating a framework implementation</title>
+        
+        <para>Before a framework instance can be created the Feature Launcher must identify
+        a suitable implementation using the following search order:</para>
+        
+        <orderedlist>
+          
+          <listitem><para>If any provider specific configuration has been given to the
+          Feature Launcher implementation then this should be used to identify the framework.</para></listitem>
+          
+          <listitem><para>If the Feature declares an Extension <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.LAUNCH_FRAMEWORK"
+          xrefstyle="hyperlink"/> then the Feature Launcher implementation must use the
+          first listed artifact that can be found in any configured Artifact Repositories,
+          as described in <xref linkend="service.featurelauncher-select.framework" xrefstyle="hyperlink"/>.</para>
+            <remark>Currently this only fails if the extension is mandatory</remark>
+          </listitem>
+          
+          
+          <listitem><para>If no framework implementation is found in the previous steps then the Feature
+          Launcher implementation must search the classpath using the Thread Context Class Loader,
+          or, if the Thread Context Class Loader is not set, the Class Loader which loaded the 
+          caller of the Feature Launcher's <code>launch</code> method. The first
+          suitable framework instance located is the instance that will be used.</para></listitem>
+          
+          <listitem><para>In the event that no suitable OSGi framework can be found by any
+          of the previous steps then the Feature Launcher implementation may provide a
+          default framework implementation to be used.</para></listitem>
+        </orderedlist>
+        
+        <para>If no suitable OSGi framework implementation can be found then the Feature Launcher
+        implementation must throw a <code>LaunchException</code>.</para>
+      </section>
+      
+      <section>
+        <title>Creating a Framework instance</title>
+        
+        <para>Once a suitable framework implementation has been located the Feature Launcher 
+        implementation must create and initialize a framework instance. Implementations are
+        free to use implementation specific mechanisms for framework implementations that
+        they recognise. The result of this initialization must be the same as if the
+        Feature Launcher used the <code>org.osgi.framework.launch.FrameworkFactory</code>
+        registered by the framework implementation to create the framework instance.</para>
+        
+        <para>When creating the framework any framework launch properties defined in
+        the Feature must be used. These are defined as described in <xref 
+          linkend="service.featurelauncher-framework.props" xrefstyle="hyperlink"/> and
+        must include any necessary variable replacement as defined by <xref
+          linkend="service.featurelauncher-variable.overrides" xrefstyle="hyperlink"/>.</para>
+          
+        <para>Once instantiated the framework must be initialised appropriately so that it
+        has a valid <code>BundleContext</code>. Once initialised the framework is ready for
+        the Feature Launcher implementation to begin populating the framework.</para>
+      </section>
+      
+      <section>
+        <title>Installing bundles and configurations</title>
+        
+        <para>The Feature Launcher must iterate through the list of bundles in the feature,
+        installing them in the same order that they are declared in the feature. If
+        bundle start levels have been defined, as described in <xref 
+        linkend="service.featurelauncher-start.levels" xrefstyle="hyperlink"/>, then
+        the Feature Launcher must ensure that the start level is correctly set for
+        each installed bundle. If no start level metadata or extension is defined 
+        then all bundles are installed with the framework default start level.</para>
+
+        <para>If a Feature defines one or more Feature Configurations then these cannot be
+        guaranteed to be made available until the <xref 
+        linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/> service
+        has been registered. A Feature Launcher implementation may provide an implementation
+        specific way to pre-register configurations, however in general the Feature Launcher
+        should listen for the registration of the <code>ConfigurationAdmin</code> service
+        and immediately create the defined configurations when it becomes available.
+        Configurations must be created in the same order as they are defined in the
+        Feature.</para>
+        
+        <para>If the <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.CONFIGURATION_TIMEOUT"
+          xrefstyle="hyperlink"/> configuration property is set to <code>0</code>, and one or more
+        Feature Configurations are defined in the Feature being installed, then the implementation
+        must throw a <xref linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
+        unless it is capable of pre-registering those configurations in an implementation specific
+        way.</para>
+      </section>
+      
+      <section>
+        <title>Starting the framework</title>
+        
+        <para>Once all of the the bundles listed in the feature are installed, and any necessary
+        configuration listener is registered, the implementation must start the OSGi framework.
+        This action will automatically start the installed bundles as defined by the initial
+        start level of the framework, and the start levels of the installed bundles.</para>
+        
+        <para>The Feature Launcher implementation must delay returning control to the caller
+        until all configurations have been created, subject to the timeout defined by <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.CONFIGURATION_TIMEOUT"
+          xrefstyle="hyperlink"/>. The default timeout is <code>5000</code> milliseconds,
+        and it determines the maximum length of time that the Feature Launcher implementation
+        should wait to begin creating the configurations. A value of <code>-1</code> indicates
+        that the Feature Launcher implementation must not wait, and must continue immediately,
+        even if the configurations have not yet been created. If it is not possible to begin before
+        the timeout expires then a  <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+        xrefstyle="hyperlink"/> must be thrown.</para>
+        
+        <para>Finally, if the <code>minimumStartLevel</code> has been set by the <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVELS"
+          xrefstyle="hyperlink"/> extension then the Feature Launcher implementation must check
+          the current start level of the framework. If the current start level is less than the
+          value of <code>minimumStartLevel</code> then the framework's start level must be set 
+          to this value.
+        </para>
+        
+        <para>Once the start process is complete the Framework instance must be returned
+        to the caller.</para>
+        
+        <para>The following failure modes must all result in a <xref 
+        linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/> 
+        being thrown:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>A bundle fails to resolve. If one of the installed bundles fails to resolve this
+            is an error <emphasis>unless</emphasis> the Feature is not complete. For Features that
+            are not complete resolution failures must be logged, but not cause a failure.</para>
+          </listitem>
+          <listitem>
+            <para>A resolved bundle fails to start. If one of the resolved bundles fails to start
+            this is an error <emphasis>unless</emphasis> the bundle is a fragment or an extension 
+            bundle, which the Feature Launcher should not attempt to start.</para>
+          </listitem>
+          <listitem>
+            <para>A configuration cannot be created. If a configuration cannot be created then
+            this must result in a start failure</para>
+          </listitem>
+        </itemizedlist>
+        
+        <para>If a launching failure is triggered by an exception, for example a <xref 
+          linkend="org.osgi.framework.BundleException" xrefstyle="hyperlink"/> then this must be
+        set as the <code>cause</code> of the <code>LaunchException</code> that is thrown.</para>
+      </section>
+      
+      <section>
+        <title>Cleanup after failure</title>
+        
+        <para>If the Feature Launcher implementation fails to launch a feature then any intermediate
+        objects must be properly closed and discarded. For example if an OSGi framework instance
+        has been created then it must be stopped and discarded.</para>
+      </section>
+    </section>
+  </section>
+  
+  <section>
+    <title>The Feature Runtime Service</title>
+    
+    <para>The Feature Runtime Service can be thought of as an equivalent of the Feature Launcher for
+    an existing, running OSGi framework. The Feature Runtime Service therefore does not offer any 
+    mechanism for launching a framework, but instead allows one or more features to be installed
+    into the running framework. As an OSGi framework is a dynamic environment the Feature Runtime 
+    Service also provides snapshots describing the currently installed Features, allows installed 
+    Features to be updated, and allows Features to be removed from the system.</para>
+    
+    <para>An important difference between the Feature Launcher and Feature Runtime Service is
+    that because the Feature Runtime Service allows multiple Features to be installed it must
+    be able to identify and resolve simple conflicts. For example if two Features include the
+    same bundle at different versions then the resolution may be to install only the higher 
+    version, or both versions.</para>
+    
+    <section>
+      <title>Using the Feature Runtime</title>
+      
+      <para>The Feature Runtime must be registered as a service in the service registry.
+      Management agents that wish to install, manage or introspect Features in the framework 
+      must obtain this service. The Feature Service Runtime service must advertise both the
+      <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime" xrefstyle="hyperlink"/>
+      and <xref linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory" 
+      xrefstyle="hyperlink"/> interfaces, and be registered with <code>prototype</code>
+      scope.</para>
+      
+      <section>
+        <title>Thread Safety</title>
+        
+        <para>Instances of the Feature Runtime are not required to be Thread Safe, and
+        should not be shared between threads. Changing the configuration, for example
+        the configured Artifact Repositories, of a Feature Runtime instance only 
+        affects that instance, and not any other instances that exist.</para>
+        
+        <para>Despite the instances not being Thread Safe the underlying Feature
+        Runtime must be Thread Safe, specifically if two instances of the Feature
+        Runtime are used to install, update or remove features at the same time 
+        then these calls should be handled sequentially such that there are never 
+        partially deployed Features present when installing, updating or removing 
+        a Feature.</para>
+      </section>
+      
+      <section>
+        <title>Introspecting the installed Features</title>
+        
+        <para>An important role for any management agent is being able to
+        introspect the system to discover its current state. The Feature
+        Runtime enables this through the <xref
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getInstalledFeatures--" 
+         xrefstyle="hyperlink"/> method, which returns a snapshot of
+        the current state of the system.</para>
+        
+        <para>The returned list of snapshots contains one <xref
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature" 
+         xrefstyle="hyperlink"/> entry for each installed Feature, in the order
+        that they were installed, and may be empty if no Features have been 
+        installed. If the framework was started using a Feature Launcher from the
+        same implementation as the Feature Runtime then the Feature Runtime may 
+        choose to represent the launched Feature in the DTO list. If the launched 
+        Feature is included in the DTO list then it must set <xref
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.initialLaunch" 
+         xrefstyle="hyperlink"/> to <code>true</code>. Launch features cannot be 
+         removed or updated by the Feature Runtime, and any attempt to do so must
+         throw a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+          xrefstyle="hyperlink"/></para>
+        
+        <para>Each Installed Feature includes the <xref
+         linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
+        Feature, and a <code>Map</code> referencing the bundles installed by 
+        the feature. The keys of the map are the installed bundles, and the values 
+        each contain a <code>List</code> of the ids of the features which 
+        <emphasis>own</emphasis> the bundle. Ownership of a bundle is tracked by the 
+        Feature Runtime, and it is used to identify when the same bundle forms part 
+        of more than one Feature. Bundles that are owned by more than one Feature will 
+        not be removed until <emphasis>all</emphasis> of the Features that own them 
+        are removed. In the case where a bundle was not installed by the Feature
+        Runtime, but later became owned by an installed Feature, that bundle
+        will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
+        Feature to indicate that they will not be removed if the other owning
+        Feature is removed.
+        <remark>Make a constant for this</remark></para>
+        
+        <para>In addition to bundles Features can contain configurations. The
+        InstalledFeatureDTO therefore contains a <code>List</code> of <xref
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
+         xrefstyle="hyperlink"/> snapshots, with each entry representing a
+        configuration created by the Feature Runtime on behalf of the Feature.
+        The Installed Configuration contains the following information:</para>
+         
+        <itemizedlist>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.featureId" 
+             xrefstyle="hyperlink"/> - The id of the Feature for which this Installed
+            Configuration was created.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.pid" 
+             xrefstyle="hyperlink"/> - The configuration pid of this configuration.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.factoryPid" 
+             xrefstyle="hyperlink"/> - The factory pid of this configuration, or
+            <code>null</code> if the configuration is not a factory configuration.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.properties" 
+             xrefstyle="hyperlink"/> - The merged configuration properties that result
+             from the full set of installed Features contributing to this configuration.
+             Note that there is no dynamic link to Configuration Admin and so any 
+             configuration changes made outside the Feature Runtime will not be reflected.</para>
+          </listitem>
+        </itemizedlist> 
+      </section>
+      
+      <section>
+        <title>Setting the available Artifact Repositories</title>
+        
+        <para>As with the Feature Launcher, in order to successfully locate the bundles
+        listed in a feature the Feature Runtime must have access to one or more Artifact 
+        Repositories capable of locating the bundles. A configured Feature Runtime freshly 
+        obtained from the service registry will typically include one or more pre-defined 
+        Artifact Repositories. These pre-defined repositories will remain available through
+        the <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getDefaultRepositories--"
+         xrefstyle="hyperlink"/> regardless of any changes made to the Artifact Repositories
+        available to the Feature Runtime instance held by the user.</para>
+        
+        <para>Additional Artifact Repositories can be added by calling the <xref 
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.addRepository-String-ArtifactRepository-"
+         xrefstyle="hyperlink"/> method. The supplied <code>name</code> is used to identify
+         the repository, and will be used as the key when returning the <code>Map</code>
+         of configured repositories from <xref 
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getRepositories--"
+         xrefstyle="hyperlink"/>. If the supplied name is already used for an existing
+         Artifact Repository then it will be replaced.</para>
+         
+         <para>Artifact Repositories can be removed using the <xref 
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.addRepository-String-ArtifactRepository-"
+         xrefstyle="hyperlink"/> method. This can be useful in the case that the caller
+         wants to completely clear the default Artifact Repositories and only use their
+         directly configured instances. The default Artifact Repositories can be reset
+         either by discarding the Feature Runtime instance and obtaining a new 
+         prototype scoped instance, or by clearing the existing Artifact Repositories
+         and re-adding the defaults from <code>getDefaultRepositories</code>.</para>
+      </section>
+      
+      <section>
+        <title>Installing a feature</title>
+        
+        <para>Installing a Feature uses one of the <code>install</code> methods present
+        on the Feature Runtime. These methods allow the caller to provide the Feature
+        to be installed, and also a <code>Map</code> of variable overrides as
+        described in <xref linkend="service.featurelauncher-variable.overrides"
+        xrefstyle="hyperlink" />. The end result of installing a Feature is
+        that all of the bundles listed in the Feature are installed, all of
+        the Feature Configurations have been created, all bundles have been marked
+        as persistently started, and the framework start level is at least the
+        minimum level required by the Feature.</para>
+        
+        <para>Start levels for the bundles in the Feature may be controlled as
+        described in <xref linkend="service.featurelauncher-start.levels"
+          xrefstyle="hyperlink"/>. If any bundles are installed with a start level 
+        higher than the current framework start level then they will be
+        marked persistently started but will not start until the framework start
+        level is changed.
+        </para>
+        
+        <para>In more complex cases, where multiple features are installed with
+        overlapping bundles or configurations then <xref 
+         linkend="service.featurelauncher-runtime.merge.strategies"
+         xrefstyle="hyperlink"/> will be applied to determine which bundles
+        are installed, and what configuration properties will be used when
+        creating or updating a configuration.</para>
+        
+        <para>Action on failure</para>
+      </section>
+      
+      <section>
+        <title>Removing a Feature</title>
+        <para>Bundles</para>
+        <para>Configurations</para>
+        <para>refreshing packages</para>
+        <para>Action on failure</para>
+      </section>
+      
+      <section>
+        <title>Updating a Feature</title>
+        <para>Bundles</para>
+        <para>Configurations</para>
+        <para>refreshing packages</para>
+        <para>Action on failure</para>
+      </section>
+    </section>
+    
+    <section>
+      <title>The Feature Runtime Behaviour</title>
+      
+      <para>The following section provides normative requirements for the
+      behaviour of the Feature Runtime when it is used. This includes the
+      necessary end states after installation, update and removal of
+      Features.</para>
+      
+      <section>
+        <title>The Feature installation process</title>
+        
+        <para>The Feature Installation process has three main phases:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>The the bundle installation phase, where Feature bundles are installed</para>
+          </listitem>
+          <listitem>
+            <para>The the configuration creation phase, where Feature Configurations are created</para>
+          </listitem>
+          <listitem>
+            <para>The the Feature Start phase, where Bundles are started.</para>
+          </listitem>
+        </itemizedlist>
+        
+        <para>The the bundle installation phase and the configuration creation
+        phase may happen in any order, or even with interleaved steps, however
+        the Feature Start phase must not begin until the bundle installation
+        and configuration creation phases are complete.</para>
+        
+        <section>
+          <title>Bundle Installation</title>
+          <para>When a feature is being installed the Feature Runtime identifies the
+          bundles to be installed. The Feature Runtime also gathers the set of bundles
+          that are already installed, and then computes the overlap between these. Bundles
+          are deemed to overlap if they have the same group id, artifact id, type and
+          classifier but they may differ in version.</para>
+        
+          <para>If the overlap list contains entries 
+          which overlap exactly, that is they have the same version in the runtime and the
+          Feature being installed, then those bundles are removed from the list of bundles
+          to be installed and the existing bundles are marked as <emphasis>owned</emphasis>
+          by the Feature being installed. If the marked bundles were not previously
+          owned by any other feature then they also marked as owned by the 
+          osgi.external Feature to indicate that they will not be removed if the
+          Feature being installed is removed.
+          <remark>Make a constant for this</remark></para>
+        
+          <para>Any remaining overlap entries are processed according to the merge
+          strategy for the feature, as described in <xref 
+           linkend="service.featurelauncher-runtime.merge.strategies.bundles"
+           xrefstyle="hyperlink"/>. The final list of bundles to install, which
+          excludes any already installed bundles, is then installed in the same order 
+          as it was defined by the feature. Each bundle in the feature, including
+          bundles that were already installed, is then marked as owned by the 
+          installing feature.</para>
+        </section>
+        
+        <section>
+          <title>Configuration Creation</title>
+          <para>As part of the initial Feature installation the Feature Runtime
+          must also process and create any Feature Configurations that are defined in
+          the Feature. Feature Configurations cannot be guaranteed to be made available 
+          until a <xref linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/>
+          service has been registered. A Feature Runtime implementation should therefore
+          listen for the registration of a <code>ConfigurationAdmin</code> service
+          and immediately create or update any pending configurations when it becomes available.
+          Configurations must be created or updated in the same order as they are defined in the
+          Feature.</para> 
+        
+          <para>If the same configuration, as identified by its configuration pid, 
+          is defined in one or more existing installed Features then the configuration
+          properties to be used are determined by merging the previous configuration
+          properties with the new properties defined in the Feature, as described in <xref 
+           linkend="service.featurelauncher-runtime.merge.strategies.configs"
+           xrefstyle="hyperlink"/>.
+          If at the point where the FeatureRuntime attempts to create or update a
+          Feature Configuration there are already configuration properties defined in
+          <code>ConfigurationAdmin</code> then these must be ignored and replaced using
+          <xref linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
+           xrefstyle="hyperlink"/> unless the <code>Configuration</code> is marked as <xref
+           linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
+           xrefstyle="hyperlink"/>. If a <code>READ_ONLY</code> configuration does exist
+           then the Feature Runtime must log a warning and skip that configuration.
+          </para>
+        </section>
+        
+        <section>
+          <title>Feature Start</title>
+          <para>Once all of the bundles listed by the feature are installed then the 
+          bundles' start levels are assigned as described in <xref 
+            linkend="service.featurelauncher-start.levels"  xrefstyle="hyperlink"/>. 
+          This includes any pre-existing bundles and the results of any merge operations. 
+          If no start level configuration is defined in the feature for a particular bundle 
+          then the start level for that bundle is set to the current start level of the 
+          framework.</para>
+          
+          <para>The Feature Runtime must then identify the lowest start level referenced
+          in the Feature, and repeatedly run through the list of bundles, in the order that
+          they are defined in the Feature, looking for bundles which match the identified 
+          start level. For each bundle the Feature Runtime must:</para>
+          
+          <itemizedlist>
+            <listitem>
+              <para>If the bundle was installed in the Bundle Installation phase then set the
+              start level for the bundle.</para>
+            </listitem>
+            <listitem>
+              <para>If the bundle was already installed then update the start level for the bundle
+             if, and only if, the new start level is lower than the existing start level.</para>
+            </listitem>
+            <listitem>
+              <para>Mark the bundle as persistently started unless it is a 
+              <emphasis>fragment</emphasis> bundle.</para>
+            </listitem>
+          </itemizedlist>
+          
+          <para>The Feature Runtime must then identify the next lowest start level referenced
+          in the Feature and repeat this process until all bundles have been persistently
+          started. Once this process is complete then the framework start level must be
+          increased to the minimum start level required by the Feature.</para>
+          
+        </section>
+        
+        <section>
+          <title>Failure scenarios</title>
+          <para><remark>TODO</remark></para>
+          <para>Missing bundles</para>
+          <para>Merge failure</para>
+          <para>Missing variables</para>
+          <para>Start failures</para>
+        </section>
+      </section>
+    </section>
+    
+    <section xml:id="service.featurelauncher-runtime.merge.strategies">
+      <title>Merging strategies</title>
+      <para><remark>TODO</remark></para>
+      <section xml:id="service.featurelauncher-runtime.merge.strategies.bundles">
+        <title>Merging Bundles</title>
+        <para>Bundles</para>
+      </section>
+      <section xml:id="service.featurelauncher-runtime.merge.strategies.configs">
+        <title>Merging Configurations</title>
+        <para>Configurations</para>
+      </section>
+    </section>
+  </section>
+
+<!--   <section>
+    <title>Handling Bundles</title>
+    <para>All bundles listed in the Feature will first be installed, then resolved
+    and finally started in the Framework chosen by the launcher.</para>
+    
+    <para>Bundle fragments are installed and resolved and attached to their host(s).
+    </para>
+    
+    <para>If a Bundle cannot resolve or start a <code>LauncherException</code> must be
+    thrown.</para>
+  </section>
+
+  <section>
+    <title>Handling Configuration</title>
+    <para>If configuration is found in the Feature then it is passed to the Configuration
+    Admin service. If a Feature contains a <code>configuration</code> section but the Configuration
+    Admin service is not found in the running system, the launcher will abort with an 
+    <code>LauncherException</code>.</para>
+  </section>
+
+  <section>
+    <title>Specifying Framework Properties</title>
+    <para>Framework Launching Properties can be provided in the Feature through
+    the <code>framework-launching-properties</code> extension.
+    The launcher must ensure that the Framework it provides for the feature has these
+    properties set. If it cannot provide a Framework with the requested Framework properties
+    set it must fail with a <code>LauncherException</code>.</para>
+    
+    <para>For example, to ensure the <code>org.osgi.framework.bsnversion</code> Framework
+    property is set for the Feature, specify the following in the Feature: 
+    <programlisting>  "extensions": {
+    "framework-launching-properties": {
+      "type": "json",
+      "kind": "mandatory",
+      "json": {
+          "org.osgi.framework.bsnversion": "multiple"
+      }
+    }
+  }</programlisting>      
+    </para>
+  </section>
+
+  <section>
+    <title>Specifying Runtime Preconditions</title>
+    <para>A Feature can specify the preconditions it places on its runtime environment. That is,
+    the Framework used to run the Feature in, must satisfy these constraints. If the Launcher
+    cannot provide a Framework with the specified conditions, it must fail.</para>
+    
+    <para>
+    Preconditions are specified as requirements in the Feature.
+    If no preconditions are specified, the Launcher is free to choose a Java and OSGi implementation
+    of its choice.
+    </para>
+    
+    <para>For example:<programlisting>  "requirements": [
+    {
+      "namespace": "osgi.ee", 
+      "filter":    "(&amp;(osgi.ee=JavaSE)(version=11))"
+    }, {
+      "namespace": "osgi.wiring.package", 
+      "filter":    "(&amp;(osgi.wiring.package=org.osgi.framework)(version=1.10))"    
+    }
+  ]</programlisting>
+    </para>
+  </section>
+
+  <section>
+    <title>Specifying Variables</title>
+    <para>Variables allow for late binding of configuration values and Framework properties.
+    Variables are provided through the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
+    xrefstyle="hyperlink"/>:
+    <programlisting>Map&lt;String,Object&gt; variables = new HashMap&lt;&gt;();
+variables.put("user.name", "scott");
+variables.put("db.driver", "postgresql");
+    
+LauncherFactory factory = ... // From Service Registry or Service Loader
+Launcher launcher = factory.newLauncher(
+  new URL("https://repo.maven.apache.org/maven2/org/foo/Bar/1.0.0/Bar-1.0.0.osgifeature"),
+  variables);
+  
+launcher.start();</programlisting>
+    </para>
+  </section>
+
+  <section>
+    <title>Specifying Extension Handlers</title>
+    <para></para>
+    <remark>TODO</remark>
+  </section>
+
+  <section>
+    <title>Specifying Post-processors</title>
+    <para></para>
+    <remark>TODO</remark>
+  </section>  -->
+  
+  <!-- Specifying merge conflict handlers -->
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.runtime.xml"/>
+
+
+</chapter>
+
+
+
