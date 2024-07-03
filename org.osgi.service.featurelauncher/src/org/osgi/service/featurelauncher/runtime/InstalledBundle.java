@@ -20,40 +20,43 @@ package org.osgi.service.featurelauncher.runtime;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.framework.Bundle;
 import org.osgi.service.feature.ID;
-import org.osgi.service.featurelauncher.FeatureLauncher;
 
 /**
- * An {@link InstalledFeature} represents the current state of a feature
- * installed by the {@link FeatureRuntime}.
+ * An {@link InstalledBundle} represents a configuration that has been
+ * installed as a result of one or more feature installations.
  * <p>
  * This type is a snapshot and represents the state of the runtime when it was
  * created. It may become out of date if additional features are installed or
  * removed.
  */
 @ProviderType
-public final class InstalledFeature {
+public final class InstalledBundle {
 
 	/**
-	 * The {@link ID} of the installed feature
+	 * The {@link ID} of the bundle that has been installed
 	 */
-	public ID							featureId;
+	public ID					bundleId;
 
 	/**
-	 * <code>true</code> If this feature was installed as part of a
-	 * {@link FeatureLauncher} launch operation. <code>false</code> if it was
-	 * installed by the {@link FeatureRuntime}
+	 * Any known IDs which correspond to the same bundle
 	 */
-	public boolean						initialLaunch;
-
-    /**
-	 * A {@link List} of the bundles installed by this feature
-	 */
-	public List<InstalledBundle>		installedBundles;
-
+	public List<ID>				aliases;
 
 	/**
-	 * A list of the configurations that were installed by this feature
+	 * The actual bundle installed in the framework
 	 */
-	public List<InstalledConfiguration>	installedConfigurations;
+	public Bundle				bundle;
+
+	/**
+	 * The start level for this bundle
+	 */
+	public int					startLevel;
+
+	/**
+	 * The features responsible for this bundle being installed, in installation
+	 * order
+	 */
+	public List<ID>				owningFeatures;
 }

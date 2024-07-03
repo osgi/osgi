@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.feature.runtime; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.featurelauncher.runtime; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.feature.runtime; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.featurelauncher.runtime; version="[1.0,1.1)"}
  */
 @Version(FEATURE_LAUNCHER_SPECIFICATION_VERSION)
 package org.osgi.service.featurelauncher.runtime;

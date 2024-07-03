@@ -35,11 +35,6 @@ import org.osgi.service.feature.ID;
 public final class InstalledConfiguration {
 
 	/**
-	 * The {@link ID} of the installed feature
-	 */
-	public ID					featureId;
-
-	/**
 	 * The PID of the configuration
 	 */
 	public String				pid;
@@ -51,12 +46,14 @@ public final class InstalledConfiguration {
 	public String				factoryPid;
 
 	/**
-	 * The merged configuration properties for this configuration
+	 * The merged configuration properties for this configuration, may be null
+	 * if the configuration should not be created
 	 */
 	public Map<String,Object>	properties;
 
 	/**
-	 * The features responsible for creating this configuration
+	 * The features responsible for creating this configuration, in installation
+	 * order
 	 */
 	public List<ID>				owningFeatures;
 }

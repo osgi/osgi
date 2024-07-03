@@ -145,7 +145,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.featurelauncher-ar">
     <title>Features and Artifact Repositories</title>
     
     <para>OSGi Features exist either as JSON documents, or as runtime objects
@@ -720,6 +720,12 @@ fw.waitForStop(0);
         the Feature Launcher must ensure that the start level is correctly set for
         each installed bundle. If no start level metadata or extension is defined 
         then all bundles are installed with the framework default start level.</para>
+        
+        <para>If the installation of a bundle fails because it is determined by
+        the framework to be a duplicate of an existing bundle then the Feature Launcher
+        must treat the installation as a success. The start level of such a bundle
+        must be set to the lower of its current value and the start level defined
+        for the feature bundle that failed to install.</para>
 
         <para>If a Feature defines one or more Feature Configurations then these cannot be
         guaranteed to be made available until the <xref 
@@ -827,25 +833,23 @@ fw.waitForStop(0);
       
       <para>The Feature Runtime must be registered as a service in the service registry.
       Management agents that wish to install, manage or introspect Features in the framework 
-      must obtain this service. The Feature Service Runtime service must advertise both the
+      must obtain this service. The Feature Service Runtime service must advertise the
       <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime" xrefstyle="hyperlink"/>
-      and <xref linkend="org.osgi.service.featurelauncher.ArtifactRepositoryFactory" 
-      xrefstyle="hyperlink"/> interfaces, and be registered with <code>prototype</code>
-      scope.</para>
+      interface.</para>
       
       <section>
         <title>Thread Safety</title>
         
-        <para>Instances of the Feature Runtime are not required to be Thread Safe, and
-        should not be shared between threads. Changing the configuration, for example
-        the configured Artifact Repositories, of a Feature Runtime instance only 
-        affects that instance, and not any other instances that exist.</para>
+        <para>Instances of the Feature Runtime are Thread Safe, regardless of whether the
+        service is implemented as a singleton or otherwise. Any <xref
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.OperationBuilder"
+         xrefstyle="hyperlink"/> instances created by the Feature Runtime are
+        <emphasis>not</emphasis> thread safe and must not be shared between threads.</para>
         
-        <para>Despite the instances not being Thread Safe the underlying Feature
-        Runtime must be Thread Safe, specifically if two instances of the Feature
-        Runtime are used to install, update or remove features at the same time 
-        then these calls should be handled sequentially such that there are never 
-        partially deployed Features present when installing, updating or removing 
+        <para>Despite the Operation Builders not being Thread Safe the underlying Feature
+        Runtime must remain Thread Safe, specifically if two Operation Builders complete
+        at the same time then these calls should be handled sequentially such that there
+        are never partially deployed Features present when installing, updating or removing 
         a Feature.</para>
       </section>
       
@@ -865,44 +869,74 @@ fw.waitForStop(0);
         that they were installed, and may be empty if no Features have been 
         installed. If the framework was started using a Feature Launcher from the
         same implementation as the Feature Runtime then the Feature Runtime may 
-        choose to represent the launched Feature in the DTO list. If the launched 
-        Feature is included in the DTO list then it must set <xref
+        choose to represent the launched Feature in the snapshot list. If the launched 
+        Feature is included in the snapshot list then it must set <xref
          linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.initialLaunch" 
          xrefstyle="hyperlink"/> to <code>true</code>. Launch features cannot be 
          removed or updated by the Feature Runtime, and any attempt to do so must
-         throw a <xref linkend="org.osgi.service.featurelauncher.LaunchException"
+         throw a <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntimeException"
           xrefstyle="hyperlink"/></para>
         
         <para>Each Installed Feature includes the <xref
          linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
-        Feature, and a <code>Map</code> referencing the bundles installed by 
-        the feature. The keys of the map are the installed bundles, and the values 
-        each contain a <code>List</code> of the ids of the features which 
-        <emphasis>own</emphasis> the bundle. Ownership of a bundle is tracked by the 
-        Feature Runtime, and it is used to identify when the same bundle forms part 
-        of more than one Feature. Bundles that are owned by more than one Feature will 
-        not be removed until <emphasis>all</emphasis> of the Features that own them 
-        are removed. In the case where a bundle was not installed by the Feature
-        Runtime, but later became owned by an installed Feature, that bundle
-        will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
-        Feature to indicate that they will not be removed if the other owning
-        Feature is removed.
-        <remark>Make a constant for this</remark></para>
+        Feature, and a <code>List</code> referencing the bundles installed by 
+        the feature. The items in the list are <xref
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
+         xrefstyle="hyperlink"/> snapshots, with each item representing a bundle
+        installed by the Feature Runtime on behalf of the Feature.
+        The Installed Bundle contains the following information:</para>
         
+        <itemizedlist>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.bundleId" 
+             xrefstyle="hyperlink"/> - The <code>ID</code> of the bundle that was installed.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.aliases" 
+             xrefstyle="hyperlink"/> - A <code>List</code> of one or more <code>ID</code>s that
+             are known to correspond to this bundle. This list will always contain the 
+             <code>bundleId</code> and may contain additional IDs if their attempted 
+             installation resulted in a collision.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.bundle" 
+             xrefstyle="hyperlink"/> - The actual bundle that was installed into the runtime.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.startLevel" 
+             xrefstyle="hyperlink"/> - The calculated start level for this bundle. Note that
+             this start level may have been affected by other features.</para>
+          </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.owningFeatures" 
+             xrefstyle="hyperlink"/> - A <code>List</code> of the ids of the features which 
+             <emphasis>own</emphasis> the installed bundle. Ownership of a bundle is tracked 
+             by the Feature Runtime, and it is used to identify when the same bundle forms 
+             part of more than one Feature. Bundles that are owned 
+             by more than one Feature will not be removed until <emphasis>all</emphasis> of the 
+             Features that own them are removed.</para>
+             <para>In the case where a bundle was not installed by the Feature
+             Runtime, but later became owned by an installed Feature, that bundle
+             will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
+             Feature to indicate that they will not be removed if the other owning
+             Feature is removed.
+             <remark>Make a constant for this</remark></para>
+          </listitem>
+        </itemizedlist> 
+      
         <para>In addition to bundles Features can contain configurations. The
-        InstalledFeatureDTO therefore contains a <code>List</code> of <xref
+        Installed Feature snapshot therefore contains a <code>List</code> of <xref
          linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
          xrefstyle="hyperlink"/> snapshots, with each entry representing a
         configuration created by the Feature Runtime on behalf of the Feature.
         The Installed Configuration contains the following information:</para>
          
         <itemizedlist>
-          <listitem>
-            <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.featureId" 
-             xrefstyle="hyperlink"/> - The id of the Feature for which this Installed
-            Configuration was created.</para>
-          </listitem>
           <listitem>
             <para><xref
              linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.pid" 
@@ -922,52 +956,58 @@ fw.waitForStop(0);
              Note that there is no dynamic link to Configuration Admin and so any 
              configuration changes made outside the Feature Runtime will not be reflected.</para>
           </listitem>
+          <listitem>
+            <para><xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.owningFeatures" 
+             xrefstyle="hyperlink"/> - A <code>List</code> of the ids of the features which 
+             <emphasis>own</emphasis> the configuration. Ownership of a configuration is tracked 
+             by the Feature Runtime, and it is used to identify when the same configuration, as
+             defined by its pid, forms part of more than one Feature. Configurations that are owned 
+             by more than one Feature will not be removed until <emphasis>all</emphasis> of the 
+             Features that own them are removed.</para>
+             <para>In the case where a configuration was not installed by the Feature
+             Runtime, but later became owned by an installed Feature, that configuration
+             will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
+             Feature to indicate that they will not be deleted if the other owning
+             Feature is removed.
+             <remark>Make a constant for this</remark></para>
+          </listitem>
         </itemizedlist> 
       </section>
       
-      <section>
-        <title>Setting the available Artifact Repositories</title>
-        
-        <para>As with the Feature Launcher, in order to successfully locate the bundles
-        listed in a feature the Feature Runtime must have access to one or more Artifact 
-        Repositories capable of locating the bundles. A configured Feature Runtime freshly 
-        obtained from the service registry will typically include one or more pre-defined 
-        Artifact Repositories. These pre-defined repositories will remain available through
-        the <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getDefaultRepositories--"
-         xrefstyle="hyperlink"/> regardless of any changes made to the Artifact Repositories
-        available to the Feature Runtime instance held by the user.</para>
-        
-        <para>Additional Artifact Repositories can be added by calling the <xref 
-         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.addRepository-String-ArtifactRepository-"
-         xrefstyle="hyperlink"/> method. The supplied <code>name</code> is used to identify
-         the repository, and will be used as the key when returning the <code>Map</code>
-         of configured repositories from <xref 
-         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getRepositories--"
-         xrefstyle="hyperlink"/>. If the supplied name is already used for an existing
-         Artifact Repository then it will be replaced.</para>
-         
-         <para>Artifact Repositories can be removed using the <xref 
-         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.addRepository-String-ArtifactRepository-"
-         xrefstyle="hyperlink"/> method. This can be useful in the case that the caller
-         wants to completely clear the default Artifact Repositories and only use their
-         directly configured instances. The default Artifact Repositories can be reset
-         either by discarding the Feature Runtime instance and obtaining a new 
-         prototype scoped instance, or by clearing the existing Artifact Repositories
-         and re-adding the defaults from <code>getDefaultRepositories</code>.</para>
-      </section>
       
       <section>
         <title>Installing a feature</title>
         
         <para>Installing a Feature uses one of the <code>install</code> methods present
         on the Feature Runtime. These methods allow the caller to provide the Feature
-        to be installed, and also a <code>Map</code> of variable overrides as
-        described in <xref linkend="service.featurelauncher-variable.overrides"
-        xrefstyle="hyperlink" />. The end result of installing a Feature is
-        that all of the bundles listed in the Feature are installed, all of
-        the Feature Configurations have been created, all bundles have been marked
-        as persistently started, and the framework start level is at least the
-        minimum level required by the Feature.</para>
+        to be installed and return an <xref
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.InstallOperationBuilder"
+         xrefstyle="hyperlink"/> to allow the caller to configure their installation
+        operation. Configuration of operations includes:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para><xref linkend="service.featurelauncher-runtime.variable-overrides" 
+             xrefstyle="hyperlink"/>.
+          </para></listitem>
+          <listitem>
+            <para><xref linkend="service.featurelauncher-runtime.artifact-repositories" xrefstyle="hyperlink"/></para>
+          </listitem>
+          <listitem>
+            <para>Adding <xref linkend="service.featurelauncher-runtime.merge.strategies"
+             xrefstyle="hyperlink"/>
+            </para>
+          </listitem>
+        </itemizedlist> 
+        
+        <para>Once the operation is fully configured then the caller uses the
+        <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.InstallOperationBuilder.install--"
+         xrefstyle="hyperlink"/> method to begin the installation. The end result of 
+        installing a Feature is that all of the bundles listed in the Feature are 
+        installed, all of the Feature Configurations have been created, all bundles 
+        have been marked as persistently started, and the framework start level is at 
+        least the minimum level required by the Feature.</para>
         
         <para>Start levels for the bundles in the Feature may be controlled as
         described in <xref linkend="service.featurelauncher-start.levels"
@@ -984,20 +1024,271 @@ fw.waitForStop(0);
         are installed, and what configuration properties will be used when
         creating or updating a configuration.</para>
         
-        <para>Action on failure</para>
+        <para>If a failure occurs during the installation of a Feature then the
+        Feature Runtime must make every effort to return the system to its pre-existing
+        state. After a failure no new bundles should be installed, any altered configurations
+        returned to their previous states, and the framework start level should be the same 
+        as it was prior to the failed installation.</para>
       </section>
       
-      <section>
-        <title>Removing a Feature</title>
-        <para>Bundles</para>
-        <para>Configurations</para>
-        <para>refreshing packages</para>
-        <para>Action on failure</para>
+      <section xml:id="service.featurelauncher-runtime.artifact-repositories">
+        <title>Setting the available Artifact Repositories</title>
+        
+        <para>As with the Feature Launcher, in order to successfully locate the bundles
+        listed in a feature the Feature Runtime must have access to one or more Artifact 
+        Repositories capable of locating the bundles. These Artifact Repositories are
+        configured into each Operation Builder by the user.</para>
+        
+        
+        <para>A configured Feature Runtime will typically include one or more pre-defined 
+        Artifact Repositories. These pre-defined repositories are available to view via
+        the <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.getDefaultRepositories--"
+         xrefstyle="hyperlink"/>. By default all Operation Builders will have access to
+        these repositories when completing. This behaviour can be changed using the
+        <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.OperationBuilder.useDefaultRepositories-boolean-"
+         xrefstyle="hyperlink"/> method.</para>
+        
+        <para>Additional Artifact Repositories can be added to an Operation Builder by calling the <xref 
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.OperationBuilder.addRepository-String-ArtifactRepository-"
+         xrefstyle="hyperlink"/> method. The supplied <code>name</code> is used to identify
+         the repository. If the supplied name is already used for an existing
+         Artifact Repository then it will be replaced or, if the supplied Artifact Repository
+         is <code>null</code>, removed. A named Artifact Repository added in this way will
+         override a default Artifact Repository with the same name.</para>
+      </section>
+      
+      <section xml:id="service.featurelauncher-runtime.variable-overrides">
+        <title>Setting variable overrides</title>
+        
+        <para>As described in <xref linkend="service.featurelauncher-variable.overrides"
+         xrefstyle="hyperlink" /> a feature may define zero or more overridable properties
+        which can be used to alter the deployment of the feature. These properties may be
+        configured into each Operation Builder by calling the <xref 
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.OperationBuilder.withVariables-Map-"
+         xrefstyle="hyperlink"/> method. The supplied <code>Map</code> contains the
+         keys and values that will override the variables in the Feature.</para>
+      
+      </section>
+      
+      <section xml:id="service.featurelauncher-runtime.merge.strategies">
+        <title>Merging strategies</title>
+        <para>Merge operations occur when two or more features reference the same, or 
+        similar, items to be installed. The purpose of a merge operation is to avoid
+        unnecessary duplication, and to resolve conflicts.</para>
+        
+        <para>Merging potentially applies whenever a Feature is installed, updated or 
+        removed, and may result in different outcomes depending on the strategy used.
+        All runtime merge functions therefore receive a <xref
+         linkend="org.osgi.service.featurelauncher.runtime.MergeOperationType"
+         xrefstyle="hyperlink"/> indicating which type of operation is currently 
+         running.</para>
+        <section xml:id="service.featurelauncher-runtime.merge.strategies.bundles">
+          <title>Merging Bundles</title>
+          <para>Features may define bundles to be installed by including Feature Bundle
+          entries. If two or more Features include Feature Bundles which have IDs with
+          the same group id and artifact id, but which are not the same, then this 
+          situation requires a merge to resolve the possible conflict. Determining
+          whether two IDs are the same is accomplished by checking whether they
+          return equal strings from <code>toString()</code>.</para>
+          
+          <para>When a possible conflict is detected the Feature Runtime must call a <xref
+            linkend="org.osgi.service.featurelauncher.runtime.RuntimeBundleMerge"
+           xrefstyle="hyperlink"/> to identify the correct actions to take. These actions
+           include:</para>
+           
+           <itemizedlist>
+            <listitem>
+              <para>Whether to install the candidate Feature Bundle or not</para>
+            </listitem>
+            <listitem>
+              <para>Whether to re-designate the ownership of any existing Installed Bundles</para>
+            </listitem>
+            <listitem>
+              <para>Whether to remove any existing Feature Bundles</para>
+            </listitem>
+          </itemizedlist>
+          
+          <para>Although the obvious time for a bundle merge operation to occur is during
+          an <code>INSTALL</code> operation, merges may also occur during <code>UPDATE</code>
+          and <code>REMOVE</code> operations. During an <code>UPDATE</code> the existing
+          bundles from the Feature being updated will remain available so that the updated
+          Feature may be merged into the existing runtime. During a <code>REMOVE</code>
+          a merge will occur to allow Feature ownership to be re-allocated if a shared bundle
+          is being removed.</para>
+          
+          <para>Merges are resolved by the <code>mergeBundle</code> method which receives:</para>
+           
+          <itemizedlist>
+            <listitem>
+              <para>The type of the operation, one of <code>INSTALL</code>, <code>UPDATE</code>
+              or <code>REMOVE</code>.</para>
+            </listitem>
+            <listitem>
+              <para>The Feature being operated on</para>
+            </listitem>
+            <listitem>
+              <para>The Feature Bundle which requires merging</para>
+            </listitem>
+            <listitem>
+              <para>A <code>List</code> of Installed Bundles representing the currently installed bundles
+              which have an overlapping <code>groupId</code> and <code>artifactId</code>. Note that
+              in the case of an <code>UPDATE</code> or <code>REMOVE</code> operation the Feature being updated
+              or removed will not be present in the list of owning features for any of the Installed Bundles.</para>
+            </listitem>
+            <listitem>
+              <para>A Map of Feature Bundles to Features representing the existing Features which form
+              part of the merge operation. Note that in the case of an <code>UPDATE</code> or <code>REMOVE</code>
+              operation the Feature Bundle being updated or removed will not be present in the map.</para>
+            </listitem>
+          </itemizedlist>
+          
+          <para>The result of the merge function is a map of bundle <code>ID</code> to <code>List</code> of feature 
+          <code>ID</code>. The keys must only be values found as <code>bundleId</code>s in the list of Installed 
+          Bundles or, in the case of an <code>INSTALL</code> or <code>UPDATE</code> operation, the <code>id</code> of the
+          Feature Bundle being merged. The values must contain the <code>id</code> of every Feature in the supplied Map,
+          and, in the case of an <code>INSTALL</code> or <code>UPDATE</code> operation, the <code>id</code> of the
+          Feature being merged. If the <code>id</code> of any Installed Bundle is not present in the returned map
+          then that bundle will be removed as part of the ongoing operation.</para>
+          
+          <para>A simple example of a merge strategy which combines configurations by upgrading Features to the
+          highest compatible version could be implemented as follows:</para>
+          
+          <programlisting>
+public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
+        Feature feature, FeatureBundle toMerge, List&lt;InstalledBundle&gt; installedBundles,
+        Map&lt;FeatureBundle,Feature&gt; existingFeatureBundles) {
+
+    Map&lt;ID,List&lt;ID&gt;&gt; result;
+
+	if(operation == MergeOperationType.REMOVE) {
+		// Just keep everything the same
+		result = installedBundles.stream()
+			.filter(i -&gt; !i.owningFeatures.isEmpty())
+			.collect(Collectors.toMap(i -&gt; i.bundleId, i -&gt; i.owningFeatures));
+	} else {
+		// Find the Installed bundles we might replace
+		Version v = RuntimeMerges.getOSGiVersion(toMerge.getID());
+		
+		List&lt;InstalledBundle&gt; sameMajor = new ArrayList&lt;&gt;();
+		List&lt;InstalledBundle&gt; differentMajor = new ArrayList&lt;&gt;();
+				
+		installedBundles.forEach(i -&gt; {
+				if(i.bundle.getVersion().getMajor() == v.getMajor()) {
+					sameMajor.add(i);
+				} else {
+					differentMajor.add(i);
+				}
+			});
+		
+		// Bundles with a different major version stay the same
+		result = differentMajor.stream()
+			.filter(i -&gt; !i.owningFeatures.isEmpty())
+			.collect(Collectors.toMap(i -&gt; i.bundleId, i -&gt; i.owningFeatures));
+		
+		// Find the biggest existing version and see if it's bigger than v
+		Optional&lt;InstalledBundle&gt; max = sameMajor.stream()
+			.max((a,b) -> a.bundle.getVersion().compareTo(b.bundle.getVersion()))
+			.filter(m -> m.bundle.getVersion().compareTo(v) &gt;= 0);
+
+		// Use the old version if it's bigger, or the new if not
+		ID key = max.isPresent() ? max.get().bundleId : toMerge.getID();
+
+		Stream&lt;ID&gt; featureIds = sameMajor.stream()
+				.flatMap(i -&gt; i.owningFeatures.stream());
+
+		result.put(key,
+				Stream.concat(Stream.of(feature.getID()), featureIds)
+						.collect(Collectors.toList()));
+	}
+	return result;
+}</programlisting>
+        </section>
+        
+        <section xml:id="service.featurelauncher-runtime.merge.strategies.configs">
+          <title>Merging Configurations</title>
+          <para>Features may define configurations by including Feature Configuration
+          entries. If two or more Features include properties for the same configuration
+          PID then this situation requires a merge to resolve the conflict.</para>
+          
+          <para>Merges are resolved by a <xref 
+           linkend="org.osgi.service.featurelauncher.runtime.RuntimeConfigurationMerge"
+           xrefstyle="hyperlink"/> which receives:</para>
+           
+          <itemizedlist>
+            <listitem>
+              <para>The type of the operation, one of <code>INSTALL</code>, <code>UPDATE</code>
+              or <code>REMOVE</code>.</para>
+            </listitem>
+            <listitem>
+              <para>The Feature being operated on</para>
+            </listitem>
+            <listitem>
+              <para>The Feature Configuration which requires merging</para>
+            </listitem>
+            <listitem>
+              <para>The Installed Configuration representing the current state of the configuration. Note that
+              in the case of an <code>UPDATE</code> or <code>REMOVE</code> operation the Feature being updated
+              or removed will not be present in the list of owning features.</para>
+            </listitem>
+            <listitem>
+              <para>A Map of Feature Configurations to Features representing the existing Features which form
+              part of the merge operation. Note that in the case of an <code>UPDATE</code> or <code>REMOVE</code>
+              operation the Feature Configuration being updated or removed will not be present in the map.</para>
+            </listitem>
+          </itemizedlist>
+          
+          <para>The result of the merge function is a map of configuration properties that should be used to
+          update the configuration. If the map is <code>null</code> then the configuration should be deleted.</para>
+          
+          <para>A simple example of a merge strategy which combines configurations by overlaying each in turn
+          and ignoring <code>null</code> configurations could be implemented as follows:</para>
+          
+          <programlisting>
+public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
+        Feature feature, FeatureConfiguration toMerge, InstalledConfiguration configuration,
+        Map&lt;FeatureConfiguration,Feature&gt; existingFeatureConfigurations) {
+
+    boolean addedSomething = false;
+
+    Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();
+
+    for (ID id : configuration.owningFeatures) {
+        Optional&lt;FeatureConfiguration&gt; opt = findFeatureConfigurationForFeatureWithId(
+                existingFeatureConfigurations, id);
+        if (opt.isPresent()) {
+            FeatureConfiguration fc = opt.get();
+            if(fc.getValues() != null) {
+                result.putAll(fc.getValues());
+                addedSomething = true;
+            }
+        }
+    }
+			
+    if(operation != MergeOperationType.REMOVE &amp;&amp; toMerge.getValues() != null) {
+        result.putAll(toMerge.getValues());
+        addedSomething = true;
+    }
+
+    return addedSomething ? result : null;
+}</programlisting>
+          
+        </section>
       </section>
       
       <section>
         <title>Updating a Feature</title>
         <para>Bundles</para>
+        <para>Configurations</para>
+        <para>refreshing packages</para>
+        <para>Action on failure</para>
+      </section>
+
+      <section>
+        <title>Removing a Feature</title>
+        <para>Removing a feature is a comparatively simple operation, and therefore does 
+        not require the configuration of an <xref
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.OperationBuilder"
+         xrefstyle="hyperlink"/>.</para>
         <para>Configurations</para>
         <para>refreshing packages</para>
         <para>Action on failure</para>
@@ -1060,6 +1351,17 @@ fw.waitForStop(0);
           as it was defined by the feature. Each bundle in the feature, including
           bundles that were already installed, is then marked as owned by the 
           installing feature.</para>
+          
+          <para>If the installation of a bundle fails because it is determined by
+          the framework to be a duplicate of an existing bundle then the Feature Runtime
+          must treat the installation as a success and add the ID as an alias for the existing
+          Installed Bundle. The start level of such a bundle
+          must be set to the lower of its current value and the start level defined
+          for the feature bundle that failed to install.</para>
+          
+          <para>Once the installation of bundles is complete the Feature Runtime must
+          uninstall any bundles which were identified for removal as part of any 
+          merge processes.</para>
         </section>
         
         <section>
@@ -1124,7 +1426,10 @@ fw.waitForStop(0);
           <para>The Feature Runtime must then identify the next lowest start level referenced
           in the Feature and repeat this process until all bundles have been persistently
           started. Once this process is complete then the framework start level must be
-          increased to the minimum start level required by the Feature.</para>
+          increased to the minimum start level required by the Feature, or returned to the
+          original framework start level if this is higher and was decreased as part of
+          <xref linkend="service.featurelauncher-runtime.merge.strategies.bundles"
+           xrefstyle="hyperlink"/>.</para>
           
         </section>
         
@@ -1139,18 +1444,7 @@ fw.waitForStop(0);
       </section>
     </section>
     
-    <section xml:id="service.featurelauncher-runtime.merge.strategies">
-      <title>Merging strategies</title>
-      <para><remark>TODO</remark></para>
-      <section xml:id="service.featurelauncher-runtime.merge.strategies.bundles">
-        <title>Merging Bundles</title>
-        <para>Bundles</para>
-      </section>
-      <section xml:id="service.featurelauncher-runtime.merge.strategies.configs">
-        <title>Merging Configurations</title>
-        <para>Configurations</para>
-      </section>
-    </section>
+    
   </section>
 
 <!--   <section>
