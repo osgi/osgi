@@ -242,6 +242,9 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 			assertEquals(provider, emfBuilder.getPersistenceProviderName());
 
 			Bundle providerBundle = emfBuilder.getPersistenceProviderBundle();
+			assertNotNull(
+					"EntityManagerFactoryBuilder returned null for PersistenceProviderBundle",
+					providerBundle);
 
 			boolean found = false;
 			for (ServiceReference< ? > ref : providerBundle
