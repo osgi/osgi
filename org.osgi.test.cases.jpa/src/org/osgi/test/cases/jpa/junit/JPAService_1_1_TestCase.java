@@ -53,8 +53,8 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactoryBuilder.class, true);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class, true);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class,
 					"(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull(
@@ -102,8 +102,8 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
-		waitForService(EntityManagerFactoryBuilder.class, true);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class, true);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class,
 					"(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull(
@@ -160,8 +160,8 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 				Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
 				EntityManagerFactoryBuilder emfBuilder = null;
-				waitForService(EntityManagerFactoryBuilder.class, true);
 				try {
+					waitForService(EntityManagerFactoryBuilder.class, true);
 					emfBuilder = getService(EntityManagerFactoryBuilder.class,
 							"(osgi.unit.name=emfBuilderTestUnit)");
 					assertNotNull(
@@ -227,8 +227,8 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactoryBuilder.class, true);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class, true);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class,
 					"(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull(

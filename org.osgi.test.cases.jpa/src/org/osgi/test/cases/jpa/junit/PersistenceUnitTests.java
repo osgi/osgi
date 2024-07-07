@@ -44,8 +44,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testDefaultPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			persistenceUnit = getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
@@ -61,8 +61,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testNonStandardPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nonStandardPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			persistenceUnit = getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit2)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
@@ -79,8 +79,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("multiplePersistenceLocations.jar");
 		EntityManagerFactoryBuilder persistenceUnit1 = null;
 		EntityManagerFactoryBuilder persistenceUnit2 = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			persistenceUnit1 = getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit3)");
 			if (persistenceUnit1 == null) {
 				fail("Failed to retrieve the specified persistence unit.");
@@ -104,8 +104,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testNestedJarPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nestedJarPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			persistenceUnit = getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit5)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
@@ -145,8 +145,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testPersistenceWithUnavailableDatasource() throws Exception {
 		Bundle persistenceBundle = installBundle("unavailableDatasourceBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=unavailableDSTestUnit)");
 			assertNotNull("The EntityManagerFactoryBuilder should be registered even if the datasource is unavailable", emfBuilder);
 		} finally {
@@ -182,8 +182,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 
 	public void testPesistenceUnitServiceProperties() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			ServiceReference< ? > unitRef = getContext().getServiceReference(
 					EntityManagerFactoryBuilder.class.getName());
 			String unitName = (String) unitRef.getProperty("osgi.unit.name");
@@ -216,7 +216,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		}
 	}
 
-	public <S> void waitForService(Class<S> cls) {
+	public <S> S waitForService(Class<S> cls) {
 		ServiceTracker<S,S> tracker = new ServiceTracker<>(getContext(), cls,
 				null);
         tracker.open();
@@ -230,5 +230,6 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
         tracker.close();
         assertNotNull("Service for " + cls.getName() + " was not registered after waiting " +
             SERVICE_WAIT_TIME + " milliseconds", service);
+		return service;
     }
 }
