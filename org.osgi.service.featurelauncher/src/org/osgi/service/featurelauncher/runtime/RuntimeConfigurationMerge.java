@@ -17,10 +17,12 @@
  *******************************************************************************/
 package org.osgi.service.featurelauncher.runtime;
 
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.service.feature.Feature;
+import org.osgi.service.feature.FeatureBundle;
 import org.osgi.service.feature.FeatureConfiguration;
 
 /**
@@ -42,16 +44,16 @@ import org.osgi.service.feature.FeatureConfiguration;
  * When any merge operation occurs the merge function will be provided with the
  * {@link Feature} being operated upon, the {@link FeatureConfiguration} which
  * needs to be merged, the {@link InstalledConfiguration} representing the
- * current configuration, and a map of {@link FeatureConfiguration} keys to
- * {@link Feature} values representing the installed features participating in
- * the merge. All Feature Configurations will have the same PID.
+ * current configuration, and a list of {@link FeatureConfigurationDefinition}s
+ * representing the installed features participating in the merge. All Feature
+ * Configurations will have the same PID.
  * <p>
  * If an <code>UPDATE</code> or <code>REMOVE</code> operation is underway then
  * the Feature being updated or removed will already have been removed from the
- * Installed Configuration and the map of existing FeatureConfigurations. For an
- * <code>UPDATE</code> this may result in the
- * {@link InstalledConfiguration#owningFeatures} being an empty list, and the
- * map of existing installed Feature Configurations being empty.
+ * Installed Configuration and the list of existing Feature Configuration
+ * Definitions. For an <code>UPDATE</code> this may result in the
+ * {@link InstalledConfiguration#getOwningFeatures()} being an empty list, and
+ * the map of existing installed Feature Configurations being empty.
  * <p>
  * The returned result from the merge function is a map of configuration
  * properties that should be used to complete the operation. This may be null if
@@ -80,15 +82,19 @@ public interface RuntimeConfigurationMerge {
 	 *            Note that this value will be <code>null</code> if the
 	 *            configuration does not exist to differentiate it from an empty
 	 *            configuration dictionary
-	 * @param existingFeatureConfigurations An immutable map of existing Feature
+	 * @param existingFeatureConfigurations An immutable list of
+	 *            {@link FeatureConfigurationDefinition}s which are part of this
+	 *            merge operation. The entries are in the same order as the
+	 *            Features were installed.
+	 *            <p>
+	 *            This list may be empty in the case of an <code>UPDATE</code>
+	 *            operation. Note that all Feature Configuration Definitions
+	 *            will refer to the same PID, and this will match the PID of
+	 *            <code>toMerge</code>. An immutable map of existing Feature
 	 *            Configurations which are part of this merge operation. The
 	 *            keys in the map are the Feature Configurations involved in the
 	 *            merge and the values are the Features which contain the
 	 *            Feature Configuration.
-	 *            <p>
-	 *            This Map will always contain at least one entry. Note that all
-	 *            Feature Configuration keys will refer to the same PID, and
-	 *            this will match the PID of <code>toMerge</code>.
 	 * @return A map of configuration properties to use. Returning
 	 *         <code>null</code> indicates that the configuration should be
 	 *         deleted.
@@ -98,5 +104,23 @@ public interface RuntimeConfigurationMerge {
 			Feature feature,
 			FeatureConfiguration toMerge,
 			InstalledConfiguration configuration,
-			Map<FeatureConfiguration,Feature> existingFeatureConfigurations);
+			List<FeatureConfigurationDefinition> existingFeatureConfigurations);
+	
+	/**
+	 * A {@link FeatureConfigurationDefinition} is used to show which
+	 * {@link FeatureConfiguration}(s) are being merged, and the {@link Feature}
+	 * that they relate to.
+	 */
+	public interface FeatureConfigurationDefinition {
+		/**
+		 * @return The {@link FeatureBundle} being merged
+		 */
+		public FeatureConfiguration getFeatureConfiguration();
+		
+		/**
+		 * @return The {@link Feature} containing the
+		 *         {@link FeatureConfiguration}
+		 */
+		public Feature getFeature();
+	}
 }

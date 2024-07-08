@@ -17,15 +17,12 @@
  *******************************************************************************/
 package org.osgi.service.featurelauncher.runtime;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.ListIterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Version;
@@ -33,6 +30,8 @@ import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.FeatureBundle;
 import org.osgi.service.feature.FeatureConfiguration;
 import org.osgi.service.feature.ID;
+import org.osgi.service.featurelauncher.runtime.RuntimeBundleMerge.BundleMapping;
+import org.osgi.service.featurelauncher.runtime.RuntimeConfigurationMerge.FeatureConfigurationDefinition;
 
 /**
  * Merge operations occur when two or more features reference the same (or
@@ -73,12 +72,20 @@ public final class RuntimeMerges {
 				return unchangedAddNew(feature, toMerge, installedBundles);
 			}
 			
-			if(installedBundles.stream().noneMatch(i -> v.getMajor() == i.bundle.getVersion().getMajor())) {
+			if (installedBundles.stream()
+					.noneMatch(i -> v.getMajor() == i.getBundle()
+							.getVersion()
+							.getMajor())) {
 				// No existing bundles with the right major version
 				return unchangedAddNew(feature, toMerge, installedBundles);
 			}
 			
-			if(installedBundles.stream().noneMatch(i -> v.getMajor() == i.bundle.getVersion().getMajor() && v.getMinor() <= i.bundle.getVersion().getMinor())) {
+			if (installedBundles.stream()
+					.noneMatch(i -> v
+							.getMajor() == i.getBundle().getVersion().getMajor()
+							&& v.getMinor() <= i.getBundle()
+									.getVersion()
+									.getMinor())) {
 				// No existing bundles with the same major version and equal or
 				// higher minor version
 				return unchangedAddNew(feature, toMerge, installedBundles);
@@ -86,21 +93,25 @@ public final class RuntimeMerges {
 			
 			// Find the highest version bundle with the right major version
 			Optional<InstalledBundle> first = installedBundles.stream()
-					.filter(i -> v.getMajor() == i.bundle.getVersion()
+					.filter(i -> v.getMajor() == i.getBundle()
+							.getVersion()
 							.getMajor())
-					.sorted((a, b) -> a.bundle.getVersion()
-							.compareTo(b.bundle.getVersion()))
+					.sorted((a, b) -> a.getBundle()
+							.getVersion()
+							.compareTo(b.getBundle().getVersion()))
 					.findFirst();
 
 			if (first.isPresent()) {
-				// Create an identical map but add feature as an owner of first
-				// Note that we cannot use #unchangedWithoutEmpty() as that
-				// might remove the bundle we want during an update
-				Map<ID,List<ID>> unchanged = installedBundles.stream()
-						.collect(Collectors.toMap(i -> i.bundleId,
-								i -> new ArrayList<>(i.owningFeatures)));
-				unchanged.get(first.get().bundleId).add(feature.getID());
-				unchanged.values().removeIf(Collection::isEmpty);
+				// Create an identical mapping but include feature as an owner
+				// of first
+				InstalledBundle ib = first.get();
+				Stream<BundleMapping> unchanged = installedBundles.stream()
+						.map(i -> new BundleMapping(i.getBundleId(),
+								Stream.concat(i.getOwningFeatures().stream(),
+										i == ib ? Stream.of(feature.getID())
+												: Stream.empty())
+										.collect(Collectors.toList())))
+						.filter(bm -> bm.owningFeatures.isEmpty());
 				return unchanged;
 			} else {
 				// This should be impossible, fall back to installing toMerge
@@ -109,11 +120,14 @@ public final class RuntimeMerges {
 		};
 	}
 
-	private static Map<ID,List<ID>> unchangedAddNew(Feature feature,
-			FeatureBundle toMerge, List<InstalledBundle> installedBundles) {
-		Map<ID,List<ID>> unchanged = unchangedWithoutEmpty(installedBundles);
-		unchanged.put(toMerge.getID(), Arrays.asList(feature.getID()));
-		return unchanged;
+	private static Stream<BundleMapping> unchangedAddNew(Feature feature,
+			FeatureBundle toMerge,
+			Collection<InstalledBundle> installedBundles) {
+		Stream<BundleMapping> unchanged = unchangedWithoutEmpty(
+				installedBundles);
+		BundleMapping newMapping = new BundleMapping(toMerge.getID(),
+				Collections.singletonList(feature.getID()));
+		return Stream.concat(unchanged, Stream.of(newMapping));
 	}
 
 	/**
@@ -168,12 +182,12 @@ public final class RuntimeMerges {
 				version.substring(from));
 	}
 
-	private static Map<ID,List<ID>> unchangedWithoutEmpty(
-			List<InstalledBundle> installedBundles) {
+	private static Stream<BundleMapping> unchangedWithoutEmpty(
+			Collection<InstalledBundle> installedBundles) {
 		return installedBundles.stream()
-				.filter(i -> !i.owningFeatures.isEmpty())
-				.collect(Collectors.toMap(i -> i.bundleId,
-						i -> new ArrayList<>(i.owningFeatures)));
+				.filter(i -> !i.getOwningFeatures().isEmpty())
+				.map(i -> new BundleMapping(i.getBundleId(),
+						i.getOwningFeatures()));
 	}
 
 	/**
@@ -182,7 +196,7 @@ public final class RuntimeMerges {
 	 * {@link FeatureConfiguration}.
 	 * <p>
 	 * Removal is more complex and relies on the fact that the
-	 * {@link InstalledConfiguration#owningFeatures} are in installation order.
+	 * <code>existingFeatureConfigurations</code> are in installation order.
 	 * This means that we can descend the list looking for the previous
 	 * configuration properties and apply them
 	 * 
@@ -194,14 +208,10 @@ public final class RuntimeMerges {
 
 			if (operation == MergeOperationType.REMOVE) {
 				// Find the latest Feature and use those properties
-				ListIterator<ID> it = configuration.owningFeatures
-						.listIterator(configuration.owningFeatures.size() - 1);
+				ListIterator<FeatureConfigurationDefinition> it = existingFeatureConfigurations
+						.listIterator(existingFeatureConfigurations.size() - 1);
 				while (it.hasPrevious()) {
-					Optional<FeatureConfiguration> first = findFeatureConfigurationForFeatureWithId(
-							existingFeatureConfigurations, it.previous());
-					if (first.isPresent()) {
-						return first.get().getValues();
-					}
+					return it.previous().getFeatureConfiguration().getValues();
 				}
 				// Unable to find any FeatureConfiguration so it must be null
 				return null;
@@ -211,17 +221,4 @@ public final class RuntimeMerges {
 			}
 		};
 	}
-
-	private static <T> Optional<T> findFeatureConfigurationForFeatureWithId(
-			Map<T,Feature> existingFeatureConfigurations, ID id) {
-		return existingFeatureConfigurations.entrySet()
-				.stream()
-				.filter(e -> e.getValue()
-						.getID()
-						.toString()
-						.equals(id.toString()))
-				.map(Entry::getKey)
-				.findFirst();
-	}
-
 }

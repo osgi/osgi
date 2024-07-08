@@ -871,49 +871,73 @@ fw.waitForStop(0);
         same implementation as the Feature Runtime then the Feature Runtime may 
         choose to represent the launched Feature in the snapshot list. If the launched 
         Feature is included in the snapshot list then it must set <xref
-         linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.initialLaunch" 
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.isInitialLaunch--" 
          xrefstyle="hyperlink"/> to <code>true</code>. Launch features cannot be 
          removed or updated by the Feature Runtime, and any attempt to do so must
          throw a <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntimeException"
           xrefstyle="hyperlink"/></para>
         
-        <para>Each Installed Feature includes the <xref
-         linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
-        Feature, and a <code>List</code> referencing the bundles installed by 
-        the feature. The items in the list are <xref
-         linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
-         xrefstyle="hyperlink"/> snapshots, with each item representing a bundle
-        installed by the Feature Runtime on behalf of the Feature.
-        The Installed Bundle contains the following information:</para>
+        <para>Each Installed Feature provides:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>The <xref
+             linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
+            Feature from <xref
+             linkend="rg.osgi.service.featurelauncher.runtime.InstalledFeature.getFeatureId--" 
+             xrefstyle="hyperlink"/>
+            </para>
+          </listitem>
+          <listitem>
+            <para>The <code>List</code> of <xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle" xrefstyle="hyperlink"/> 
+            from <xref
+             linkend="rg.osgi.service.featurelauncher.runtime.InstalledFeature.getInstalledBundles--" 
+             xrefstyle="hyperlink"/> listing the bundles installed by the Runtime on behalf of the Feature.</para>
+          </listitem>
+          <listitem>
+            <para>The <code>List</code> of <xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" xrefstyle="hyperlink"/> 
+            from <xref
+             linkend="rg.osgi.service.featurelauncher.runtime.InstalledFeature.getInstalledConfigurations--" 
+             xrefstyle="hyperlink"/> listing the configurations installed by the feature.</para>
+          </listitem>
+        </itemizedlist>
+             
+        <para>The <xref
+         linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle" 
+         xrefstyle="hyperlink"/> snapshots each represent a bundle installed
+        by the Feature Runtime on behalf of the Feature. The Installed Bundle 
+        contains the following information:</para>
         
         <itemizedlist>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.bundleId" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.getBundleId--" 
              xrefstyle="hyperlink"/> - The <code>ID</code> of the bundle that was installed.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.aliases" 
-             xrefstyle="hyperlink"/> - A <code>List</code> of one or more <code>ID</code>s that
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.getAliases--" 
+             xrefstyle="hyperlink"/> - A <code>Collection</code> of one or more <code>ID</code>s that
              are known to correspond to this bundle. This list will always contain the 
              <code>bundleId</code> and may contain additional IDs if their attempted 
              installation resulted in a collision.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.bundle" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.getBundle--" 
              xrefstyle="hyperlink"/> - The actual bundle that was installed into the runtime.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.startLevel" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.getStartLevel--" 
              xrefstyle="hyperlink"/> - The calculated start level for this bundle. Note that
              this start level may have been affected by other features.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.owningFeatures" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledBundle.getOwningFeatures--" 
              xrefstyle="hyperlink"/> - A <code>List</code> of the ids of the features which 
              <emphasis>own</emphasis> the installed bundle. Ownership of a bundle is tracked 
              by the Feature Runtime, and it is used to identify when the same bundle forms 
@@ -929,28 +953,27 @@ fw.waitForStop(0);
           </listitem>
         </itemizedlist> 
       
-        <para>In addition to bundles Features can contain configurations. The
-        Installed Feature snapshot therefore contains a <code>List</code> of <xref
+        <para>In addition to bundles Features can contain configurations. The <xref
          linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration" 
-         xrefstyle="hyperlink"/> snapshots, with each entry representing a
+         xrefstyle="hyperlink"/> snapshots each represent a
         configuration created by the Feature Runtime on behalf of the Feature.
         The Installed Configuration contains the following information:</para>
          
         <itemizedlist>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.pid" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.getPid--" 
              xrefstyle="hyperlink"/> - The configuration pid of this configuration.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.factoryPid" 
-             xrefstyle="hyperlink"/> - The factory pid of this configuration, or
-            <code>null</code> if the configuration is not a factory configuration.</para>
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.getFactoryPid--" 
+             xrefstyle="hyperlink"/> - The factory pid of this configuration, or an empty
+            <code>Optional</code> if the configuration is not a factory configuration.</para>
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.properties" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.getProperties--" 
              xrefstyle="hyperlink"/> - The merged configuration properties that result
              from the full set of installed Features contributing to this configuration.
              Note that there is no dynamic link to Configuration Admin and so any 
@@ -958,7 +981,7 @@ fw.waitForStop(0);
           </listitem>
           <listitem>
             <para><xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.owningFeatures" 
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledConfiguration.getOwningFeatures--" 
              xrefstyle="hyperlink"/> - A <code>List</code> of the ids of the features which 
              <emphasis>own</emphasis> the configuration. Ownership of a configuration is tracked 
              by the Feature Runtime, and it is used to identify when the same configuration, as
@@ -1130,78 +1153,89 @@ fw.waitForStop(0);
               <para>The Feature Bundle which requires merging</para>
             </listitem>
             <listitem>
-              <para>A <code>List</code> of Installed Bundles representing the currently installed bundles
+              <para>A <code>Collection</code> of Installed Bundles representing the currently installed bundles
               which have an overlapping <code>groupId</code> and <code>artifactId</code>. Note that
               in the case of an <code>UPDATE</code> or <code>REMOVE</code> operation the Feature being updated
-              or removed will not be present in the list of owning features for any of the Installed Bundles.</para>
+              or removed will not be present in the collection of owning features for any of the Installed Bundles.</para>
             </listitem>
             <listitem>
-              <para>A Map of Feature Bundles to Features representing the existing Features which form
+              <para>A <code>List</code> of <xref 
+               linkend="org.osgi.service.featurelauncher.runtime.RuntimeBundleMerge.FeatureBundleDefinition"
+               xrefstyle="hyperlink"/> representing the existing Features which form
               part of the merge operation. Note that in the case of an <code>UPDATE</code> or <code>REMOVE</code>
-              operation the Feature Bundle being updated or removed will not be present in the map.</para>
+              operation the Feature Bundle being updated or removed will not be present in the list.
+              Entries in the list are present in the order that the Features were installed into the runtime.
+              </para>
             </listitem>
           </itemizedlist>
-          
-          <para>The result of the merge function is a map of bundle <code>ID</code> to <code>List</code> of feature 
-          <code>ID</code>. The keys must only be values found as <code>bundleId</code>s in the list of Installed 
+          <para>The result of the merge function is a <code>Stream</code> of <xref 
+           linkend="org.osgi.service.featurelauncher.runtime.RuntimeBundleMerge.BundleMapping"
+           xrefstyle="hyperlink"/>. Each Bundle Mapping links a bundle <code>ID</code> to <code>List</code> of feature 
+          <code>ID</code>s. The Bundle Mapping's bundle id must only be a <code>bundleId</code> found in the list of Installed 
           Bundles or, in the case of an <code>INSTALL</code> or <code>UPDATE</code> operation, the <code>id</code> of the
-          Feature Bundle being merged. The values must contain the <code>id</code> of every Feature in the supplied Map,
-          and, in the case of an <code>INSTALL</code> or <code>UPDATE</code> operation, the <code>id</code> of the
-          Feature being merged. If the <code>id</code> of any Installed Bundle is not present in the returned map
-          then that bundle will be removed as part of the ongoing operation.</para>
+          Feature Bundle being merged. The mapped Feature ids must contain the <code>id</code> of every Feature in the supplied 
+          Feature Bundle Definitions, and, in the case of an <code>INSTALL</code> or <code>UPDATE</code> operation, the <code>id</code> of the
+          Feature being merged. If the <code>id</code> of any Installed Bundle is not present in the returned Stream
+          then that bundle will be removed as part of the ongoing operation. If the same bundle id is present more than once
+          the the two mappings will be combined using the union of the mapped Feature ids.</para>
           
           <para>A simple example of a merge strategy which combines configurations by upgrading Features to the
           highest compatible version could be implemented as follows:</para>
           
           <programlisting>
 public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
-        Feature feature, FeatureBundle toMerge, List&lt;InstalledBundle&gt; installedBundles,
-        Map&lt;FeatureBundle,Feature&gt; existingFeatureBundles) {
+		Feature feature, FeatureBundle toMerge,
+		List&lt;InstalledBundle&gt; installedBundles,
+		Map&lt;FeatureBundle,Feature&gt; existingFeatureBundles) {
 
-    Map&lt;ID,List&lt;ID&gt;&gt; result;
+	Map&lt;ID,List&lt;ID&gt;&gt; result;
 
-	if(operation == MergeOperationType.REMOVE) {
+	if (operation == MergeOperationType.REMOVE) {
 		// Just keep everything the same
 		result = installedBundles.stream()
-			.filter(i -&gt; !i.owningFeatures.isEmpty())
-			.collect(Collectors.toMap(i -&gt; i.bundleId, i -&gt; i.owningFeatures));
+				.filter(i -&gt; !i.getOwningFeatures().isEmpty())
+				.collect(Collectors.toMap(i -&gt; i.getBundleId(),
+						i -&gt; i.getOwningFeatures()));
 	} else {
 		// Find the Installed bundles we might replace
 		Version v = RuntimeMerges.getOSGiVersion(toMerge.getID());
-		
+
 		List&lt;InstalledBundle&gt; sameMajor = new ArrayList&lt;&gt;();
 		List&lt;InstalledBundle&gt; differentMajor = new ArrayList&lt;&gt;();
-				
+
 		installedBundles.forEach(i -&gt; {
-				if(i.bundle.getVersion().getMajor() == v.getMajor()) {
-					sameMajor.add(i);
-				} else {
-					differentMajor.add(i);
-				}
-			});
-		
+			if (i.getBundle().getVersion().getMajor() == v.getMajor()) {
+				sameMajor.add(i);
+			} else {
+				differentMajor.add(i);
+			}
+		});
+
 		// Bundles with a different major version stay the same
 		result = differentMajor.stream()
-			.filter(i -&gt; !i.owningFeatures.isEmpty())
-			.collect(Collectors.toMap(i -&gt; i.bundleId, i -&gt; i.owningFeatures));
-		
+				.filter(i -&gt; !i.getOwningFeatures().isEmpty())
+				.collect(Collectors.toMap(i -&gt; i.getBundleId(),
+						i -&gt; i.getOwningFeatures()));
+
 		// Find the biggest existing version and see if it's bigger than v
 		Optional&lt;InstalledBundle&gt; max = sameMajor.stream()
-			.max((a,b) -> a.bundle.getVersion().compareTo(b.bundle.getVersion()))
-			.filter(m -> m.bundle.getVersion().compareTo(v) &gt;= 0);
+				.max((a, b) -&gt; a.getBundle().getVersion()
+						.compareTo(b.getBundle().getVersion()))
+				.filter(m -&gt; m.getBundle().getVersion().compareTo(v) &gt;= 0);
 
 		// Use the old version if it's bigger, or the new if not
-		ID key = max.isPresent() ? max.get().bundleId : toMerge.getID();
+		ID key = max.isPresent() ? max.get().getBundleId() : toMerge.getID();
 
 		Stream&lt;ID&gt; featureIds = sameMajor.stream()
-				.flatMap(i -&gt; i.owningFeatures.stream());
+				.flatMap(i -&gt; i.getOwningFeatures().stream());
 
 		result.put(key,
 				Stream.concat(Stream.of(feature.getID()), featureIds)
 						.collect(Collectors.toList()));
 	}
 	return result;
-}</programlisting>
+}
+</programlisting>
         </section>
         
         <section xml:id="service.featurelauncher-runtime.merge.strategies.configs">
@@ -1231,9 +1265,12 @@ public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
               or removed will not be present in the list of owning features.</para>
             </listitem>
             <listitem>
-              <para>A Map of Feature Configurations to Features representing the existing Features which form
+              <para>A <code>List</code> of <xref 
+               linkend="org.osgi.service.featurelauncher.runtime.RuntimeConfigurationMerge.FeatureConfigurationDefinition"
+               xrefstyle="hyperlink"/> representing the existing Features which form
               part of the merge operation. Note that in the case of an <code>UPDATE</code> or <code>REMOVE</code>
-              operation the Feature Configuration being updated or removed will not be present in the map.</para>
+              operation the Feature Configuration being updated or removed will not be present in the list.
+              Entries in the list are present in the order that the Features were installed into the runtime.</para>
             </listitem>
           </itemizedlist>
           
@@ -1245,31 +1282,27 @@ public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
           
           <programlisting>
 public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
-        Feature feature, FeatureConfiguration toMerge, InstalledConfiguration configuration,
-        Map&lt;FeatureConfiguration,Feature&gt; existingFeatureConfigurations) {
+		Feature feature, FeatureConfiguration toMerge, InstalledConfiguration configuration,
+		List&lt;FeatureConfigurationDefinition&gt; existingFeatureConfigurations) {
 
-    boolean addedSomething = false;
+	boolean addedSomething = false;
 
-    Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();
+	Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();
 
-    for (ID id : configuration.owningFeatures) {
-        Optional&lt;FeatureConfiguration&gt; opt = findFeatureConfigurationForFeatureWithId(
-                existingFeatureConfigurations, id);
-        if (opt.isPresent()) {
-            FeatureConfiguration fc = opt.get();
-            if(fc.getValues() != null) {
-                result.putAll(fc.getValues());
-                addedSomething = true;
-            }
-        }
-    }
-			
-    if(operation != MergeOperationType.REMOVE &amp;&amp; toMerge.getValues() != null) {
-        result.putAll(toMerge.getValues());
-        addedSomething = true;
-    }
+	for (FeatureConfigurationDefinition fcd : existingFeatureConfigurations) {
+		FeatureConfiguration fc = fcd.getFeatureConfiguration();
+		if(fc.getValues() != null) {
+			result.putAll(fc.getValues());
+			addedSomething = true;
+		}
+	}
+				
+	if(operation != MergeOperationType.REMOVE &amp;&amp; toMerge.getValues() != null) {
+		result.putAll(toMerge.getValues());
+		addedSomething = true;
+	}
 
-    return addedSomething ? result : null;
+	return addedSomething ? result : null;
 }</programlisting>
           
         </section>

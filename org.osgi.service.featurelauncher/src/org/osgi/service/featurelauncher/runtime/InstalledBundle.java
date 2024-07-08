@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.osgi.service.featurelauncher.runtime;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -32,31 +33,42 @@ import org.osgi.service.feature.ID;
  * removed.
  */
 @ProviderType
-public final class InstalledBundle {
+public interface InstalledBundle {
 
 	/**
-	 * The {@link ID} of the bundle that has been installed
+	 * Get the {@link ID} of the bundle that has been installed
+	 * 
+	 * @return the id of the bundle that was installed
 	 */
-	public ID					bundleId;
+	public ID getBundleId();
 
 	/**
-	 * Any known IDs which correspond to the same bundle
+	 * Get any known IDs which correspond to the same bundle
+	 * 
+	 * @return an immutable collection of aliases for this bundle. Always
+	 *         includes the id returned by {@link #getBundleId()}
 	 */
-	public List<ID>				aliases;
+	public Collection<ID> getAliases();
 
 	/**
 	 * The actual bundle installed in the framework
+	 * 
+	 * @return the {@link Bundle} installed for this {@link #getBundleId()}
 	 */
-	public Bundle				bundle;
+	public Bundle getBundle();
 
 	/**
 	 * The start level for this bundle
+	 * 
+	 * @return the start level
 	 */
-	public int					startLevel;
+	public int getStartLevel();
 
 	/**
 	 * The features responsible for this bundle being installed, in installation
 	 * order
+	 * 
+	 * @return A list of Feature {@link ID}s
 	 */
-	public List<ID>				owningFeatures;
+	public List<ID> getOwningFeatures();
 }

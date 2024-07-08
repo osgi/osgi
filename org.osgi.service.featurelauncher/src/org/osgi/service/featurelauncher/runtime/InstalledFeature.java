@@ -32,28 +32,35 @@ import org.osgi.service.featurelauncher.FeatureLauncher;
  * removed.
  */
 @ProviderType
-public final class InstalledFeature {
+public interface InstalledFeature {
 
 	/**
-	 * The {@link ID} of the installed feature
+	 * @return The {@link ID} of the installed feature
 	 */
-	public ID							featureId;
+	public ID getFeatureId();
 
 	/**
-	 * <code>true</code> If this feature was installed as part of a
-	 * {@link FeatureLauncher} launch operation. <code>false</code> if it was
-	 * installed by the {@link FeatureRuntime}
+	 * Is this a feature installed by {@link FeatureLauncher}
+	 * 
+	 * @return <code>true</code> If this feature was installed as part of a
+	 *         {@link FeatureLauncher} launch operation. <code>false</code> if
+	 *         it was installed by the {@link FeatureRuntime}
 	 */
-	public boolean						initialLaunch;
+	public boolean isInitialLaunch();
 
     /**
-	 * A {@link List} of the bundles installed by this feature
+	 * Get the bundles installed by this feature
+	 * 
+	 * @return A {@link List} of the bundles installed by this feature, in the
+	 *         order they were declared by the feature
 	 */
-	public List<InstalledBundle>		installedBundles;
-
+	public List<InstalledBundle> getInstalledBundles();
 
 	/**
-	 * A list of the configurations that were installed by this feature
+	 * Get the configurations installed by this feature
+	 * 
+	 * @return A {@link List} of the configurations installed by this feature,
+	 *         in the order they were declared by the feature
 	 */
-	public List<InstalledConfiguration>	installedConfigurations;
+	public List<InstalledConfiguration> getInstalledConfigurations();
 }

@@ -19,6 +19,7 @@ package org.osgi.service.featurelauncher.runtime;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.feature.ID;
@@ -32,28 +33,36 @@ import org.osgi.service.feature.ID;
  * removed.
  */
 @ProviderType
-public final class InstalledConfiguration {
+public interface InstalledConfiguration {
 
 	/**
-	 * The PID of the configuration
+	 * Get the PID of the configuration
+	 * 
+	 * @return the full PID of this configuration
 	 */
-	public String				pid;
+	public String getPid();
 
 	/**
-	 * The factory PID of the configuration, or <code>null</code> if this is not
-	 * a factory configuration
+	 * Get the factory PID of the configuration
+	 * 
+	 * @return the factory PID of this configuration, or an empty optional if
+	 *         this is not a factory configuration
 	 */
-	public String				factoryPid;
+	public Optional<String> getFactoryPid();
 
 	/**
-	 * The merged configuration properties for this configuration, may be null
-	 * if the configuration should not be created
+	 * Get the merged configuration properties for this configuration
+	 * 
+	 * @return The properties associated with this configuration, may be
+	 *         <code>null</code> if the configuration should not be created
 	 */
-	public Map<String,Object>	properties;
+	public Map<String,Object> getProperties();
 
 	/**
 	 * The features responsible for creating this configuration, in installation
 	 * order
+	 * 
+	 * @return A list of Feature {@link ID}s
 	 */
-	public List<ID>				owningFeatures;
+	public List<ID> getOwningFeatures();
 }
