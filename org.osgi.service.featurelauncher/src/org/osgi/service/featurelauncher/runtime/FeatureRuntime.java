@@ -23,10 +23,13 @@ import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.feature.Feature;
+import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.ID;
-import org.osgi.service.featurelauncher.ArtifactRepository;
-import org.osgi.service.featurelauncher.ArtifactRepositoryFactory;
 import org.osgi.service.featurelauncher.LaunchException;
+import org.osgi.service.featurelauncher.decorator.FeatureDecorator;
+import org.osgi.service.featurelauncher.decorator.FeatureExtensionHandler;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
+import org.osgi.service.featurelauncher.repository.ArtifactRepositoryFactory;
 
 /**
  * The Feature runtime service allows features to be installed and removed
@@ -106,12 +109,46 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 	UpdateOperationBuilder update(ID featureId, Reader jsonReader);
 
 	/**
-	 * A Common super-interface for the various operation builders used in the
-	 * {@link FeatureRuntime}
+	 * An {@link OperationBuilder} is used to configure the installation or
+	 * update of a {@link Feature} by the {@link FeatureRuntime}. Instances are
+	 * not thread safe and must not be shared.
+	 * <p>
+	 * Once the {@link #complete()} method is called the operation will be run
+	 * by the feature runtime and the operation builder will be invalidated,
+	 * with all methods throwing {@link IllegalStateException}.
 	 * 
-	 * @param <T> the reified type of the operation builder
+	 * @param <T>
 	 */
-	public interface MergeOperationBuilder<T extends MergeOperationBuilder<T>> {
+	public interface OperationBuilder<T extends OperationBuilder<T>> {
+
+		/**
+		 * Add an {@link ArtifactRepository} for use by this
+		 * {@link OperationBuilder} instance. If an {@link ArtifactRepository}
+		 * is already set for the given name then it will be replaced. Passing a
+		 * <code>null</code> {@link ArtifactRepository} will remove the
+		 * repository from this operation.
+		 * 
+		 * @param name the name to use for this repository
+		 * @param repository the repository
+		 * @return <code>this</code>
+		 * @throws IllegalStateException if the builder has been completed
+		 */
+		T addRepository(String name,
+				ArtifactRepository repository);
+
+		/**
+		 * Include the default repositories when completing this operation. This
+		 * value defaults to <code>true</code>. If any
+		 * {@link ArtifactRepository} added using
+		 * {@link #addRepository(String, ArtifactRepository)} has the same name
+		 * as a default repository then the added repository will override the
+		 * default repository.
+		 * 
+		 * @param include
+		 * @return <code>this</code>
+		 * @throws IllegalStateException if the builder has been completed
+		 */
+		T useDefaultRepositories(boolean include);
 
 		/**
 		 * Use The supplied {@link RuntimeBundleMerge} to resolve any bundle
@@ -131,66 +168,6 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 		 * @return <code>this</code>
 		 */
 		T withConfigurationMerge(RuntimeConfigurationMerge merge);
-	}
-
-	/**
-	 * The {@link OperationBuilder} for a {@link FeatureRuntime#remove(ID)}
-	 * operation. Instances are not thread safe and must not be shared.
-	 * <p>
-	 * Once the {@link #remove()} method is called the operation will be run by
-	 * the feature runtime and the builder will be invalidated, with all methods
-	 * throwing {@link IllegalStateException}.
-	 */
-	public interface RemoveOperationBuilder
-			extends MergeOperationBuilder<RemoveOperationBuilder> {
-		/**
-		 * Complete the operation and remove the feature
-		 */
-		void remove();
-	}
-
-	/**
-	 * An {@link OperationBuilder} is used to configure the installation or
-	 * update of a {@link Feature} by the {@link FeatureRuntime}. Instances are
-	 * not thread safe and must not be shared.
-	 * <p>
-	 * Once the {@link #complete()} method is called the operation will be run
-	 * by the feature runtime and the operation builder will be invalidated,
-	 * with all methods throwing {@link IllegalStateException}.
-	 * 
-	 * @param <T>
-	 */
-	public interface OperationBuilder<T extends OperationBuilder<T>>
-			extends MergeOperationBuilder<T> {
-
-		/**
-		 * Add an {@link ArtifactRepository} for use by this
-		 * {@link OperationBuilder} instance. If an {@link ArtifactRepository}
-		 * is already set for the given name then it will be replaced. Passing a
-		 * <code>null</code> {@link ArtifactRepository} will remove the
-		 * repository from this operation.
-		 * 
-		 * @param name the name to use for this repository
-		 * @param repository the repository
-		 * @return <code>this</code>
-		 * @throws IllegalStateException if the builder has been completed
-		 */
-		OperationBuilder<T> addRepository(String name,
-				ArtifactRepository repository);
-
-		/**
-		 * Include the default repositories when completing this operation. This
-		 * value defaults to <code>true</code>. If any
-		 * {@link ArtifactRepository} added using
-		 * {@link #addRepository(String, ArtifactRepository)} has the same name
-		 * as a default repository then the added repository will override the
-		 * default repository.
-		 * 
-		 * @param include
-		 * @return <code>this</code>
-		 * @throws IllegalStateException if the builder has been completed
-		 */
-		OperationBuilder<T> useDefaultRepositories(boolean include);
 
 		/**
 		 * Configure this {@link OperationBuilder} with the supplied variables.
@@ -199,7 +176,38 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 		 * @return <code>this</code>
 		 * @throws IllegalStateException if the builder has been completed
 		 */
-		OperationBuilder<T> withVariables(Map<String,Object> variables);
+		T withVariables(Map<String,Object> variables);
+
+		/**
+		 * Add a {@link FeatureDecorator} to this {@link OperationBuilder} that
+		 * will be used to decorate the feature. If called multiple times then
+		 * the supplied decorators will be called in the same order that they
+		 * were added to this builder.
+		 * 
+		 * @param decorator the decorator to add
+		 * @return <code>this</code>
+		 * @throws NullPointerException if the decorator is <code>null</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		T withDecorator(FeatureDecorator decorator);
+
+		/**
+		 * Add a {@link FeatureExtensionHandler} to this
+		 * {@link OperationBuilder} that will be used to process the named
+		 * {@link FeatureExtension} if it is found in the {@link Feature}. If
+		 * called multiple times for the same <code>extensionName</code> then
+		 * later calls will replace the <code>extensionHandler</code> to be
+		 * used.
+		 * 
+		 * @param extensionName the name of the extension to handle
+		 * @param extensionHandler the extensionHandler to add
+		 * @return <code>this</code>
+		 * @throws NullPointerException if the extension name or decorator is
+		 *             <code>null</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		T withExtensionHandler(String extensionName,
+				FeatureExtensionHandler extensionHandler);
 
 		/**
 		 * Complete the operation by installing or updating the feature

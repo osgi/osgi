@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Feature Launcher Merge Package Version 1.0.
+ * Feature Launcher Decorator Package Version 1.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,14 +26,14 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.featurelauncher.merge; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.featurelauncher.decorator; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.featurelauncher.merge; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.featurelauncher.decorator; version="[1.0,1.1)"}
  */
 @Version(FEATURE_LAUNCHER_SPECIFICATION_VERSION)
-package org.osgi.service.featurelauncher.merge;
+package org.osgi.service.featurelauncher.decorator;
 
 import static org.osgi.service.featurelauncher.FeatureLauncherConstants.FEATURE_LAUNCHER_SPECIFICATION_VERSION;
 

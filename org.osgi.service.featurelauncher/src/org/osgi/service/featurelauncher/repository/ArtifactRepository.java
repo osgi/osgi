@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
-package org.osgi.service.featurelauncher;
+package org.osgi.service.featurelauncher.repository;
 
 import java.io.InputStream;
 

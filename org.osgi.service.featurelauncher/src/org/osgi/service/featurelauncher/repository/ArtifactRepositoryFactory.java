@@ -15,13 +15,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
-package org.osgi.service.featurelauncher;
+package org.osgi.service.featurelauncher.repository;
 
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.featurelauncher.FeatureLauncherConstants;
 
 /**
  * A {@link ArtifactRepositoryFactory} is used to create implementations of

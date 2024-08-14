@@ -24,6 +24,11 @@ import java.util.ServiceLoader;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.launch.Framework;
 import org.osgi.service.feature.Feature;
+import org.osgi.service.feature.FeatureExtension;
+import org.osgi.service.featurelauncher.decorator.FeatureDecorator;
+import org.osgi.service.featurelauncher.decorator.FeatureExtensionHandler;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
+import org.osgi.service.featurelauncher.repository.ArtifactRepositoryFactory;
 
 /**
  * The Feature launcher is the primary entry point for launching an OSGi
@@ -102,6 +107,36 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 		 */
 		LaunchBuilder withFrameworkProperties(
 				Map<String,Object> frameworkProps);
+
+		/**
+		 * Add a {@link FeatureDecorator} to this {@link LaunchBuilder} that
+		 * will be used to decorate the feature being launched. If called
+		 * multiple times then the supplied decorators will be called in the
+		 * same order that they were added to this builder.
+		 * 
+		 * @param decorator the decorator to add
+		 * @return <code>this</code>
+		 * @throws NullPointerException if the decorator is <code>null</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withDecorator(FeatureDecorator decorator);
+
+		/**
+		 * Add a {@link FeatureExtensionHandler} to this {@link LaunchBuilder}
+		 * that will be used to process the named {@link FeatureExtension} if it
+		 * is found in the {@link Feature} being launched. If called multiple
+		 * times for the same <code>extensionName</code> then later calls will
+		 * replace the <code>extensionHandler</code> to be used.
+		 * 
+		 * @param extensionName the name of the extension to handle
+		 * @param extensionHandler the extensionHandler to add
+		 * @return <code>this</code>
+		 * @throws NullPointerException if the extension name or decorator is
+		 *             <code>null</code>
+		 * @throws IllegalStateException if the builder has been launched
+		 */
+		LaunchBuilder withExtensionHandler(String extensionName,
+				FeatureExtensionHandler extensionHandler);
 
 		/**
 		 * Launch a framework instance based on the configured builder

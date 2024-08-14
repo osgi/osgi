@@ -25,6 +25,7 @@ import org.osgi.service.feature.FeatureConfiguration;
 import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.FeatureExtension.Kind;
 import org.osgi.service.feature.FeatureExtension.Type;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 import org.osgi.service.feature.ID;
 
 /**
