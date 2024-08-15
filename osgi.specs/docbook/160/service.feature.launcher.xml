@@ -1895,6 +1895,66 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
     
     
   </section>
+  
+  <section>
+    <title>Capabilities</title>
+
+    <para>The Feature Launcher must provide the following capabilities.</para>
+    
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the Feature Runtime service must provide
+      capabilities in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing the services it is required to register. This
+      capability must also declare uses constraints for the relevant service
+      packages:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.featurelauncher.runtime.FeatureRuntime";
+ uses:="org.osgi.service.featurelauncher.runtime",
+ osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.featurelauncher.repository.ArtifactRepositoryFactory";
+ uses:="org.osgi.service.featurelauncher.repository"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+    <para>When Java permissions are enabled, the following security procedures apply.</para>
+
+    <section>
+      <title>Required Permissions</title>
+
+      <para>Bundles that need to make use of the Feature Runtime or Artifact Repository Factory
+      services must be granted permission to get the relevant service, for example
+      <code>ServicePermission[ org.osgi.service.featurelauncher.runtime.FeatureRuntime,
+      GET]</code> so that they may retrieve the service and use it.</para>
+
+      <para>Only a bundle that provides a Feature Runtime implementation should be
+      granted <code>ServicePermission[
+      org.osgi.service.featurelauncher.runtime.FeatureRuntime, REGISTER]</code> and
+      <code>ServicePermission[
+      org.osgi.service.featurelauncher.repository.ArtifactRepositoryFactory, REGISTER]</code>
+      to register the services defined by this specification.</para>
+
+      <para>The Feature Runtime implementation must also be granted
+      <code>ServicePermission[org.osgi.service.cm.ConfigurationAdmin,
+      GET]</code>,
+      <code>AdminPermission[*, execute]</code>,
+      <code>AdminPermission[*, lifecycle]</code>,
+      <code>AdminPermission[*, metadata]</code>,
+      <code>AdminPermission[*, resolve]</code>,
+      <code>AdminPermission[*, startlevel]</code>,
+      <code>AdminPermission[*, context]</code>,
+      as these actions are all required to implement the
+      specification.</para>
+    </section>
+  </section>
 
 <!--   <section>
     <title>Handling Bundles</title>
