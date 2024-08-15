@@ -1,0 +1,35 @@
+# Dependencies from the OSGi build
+org.osgi.service.jakarta.xml.ws;version=latest
+org.osgi.util.promise;version=latest
+org.osgi.util.converter;version=latest
+org.osgi.impl.bundle.serviceloader;version=latest
+org.osgi.service.component;version=latest
+org.osgi.impl.service.component;version=latest
+
+# Jakarta dependencies
+org.glassfish.hk2.osgi-resource-locator;version=1.0.3
+com.sun.xml.ws.jaxws-rt;version=4.0.2
+com.sun.xml.bind.jaxb-impl;version=4.0.4
+com.sun.xml.bind.jaxb-core;version=4.0.4
+org.glassfish.ha.ha-api;version=3.1.13
+org.glassfish.external.management-api;version=3.2.3
+org.glassfish.gmbal.gmbal-api-only;version=4.0.3
+org.jvnet.staxex.stax-ex;version=2.1.0
+com.sun.xml.stream.buffer.streambuffer;version=2.1.0
+org.jvnet.mimepull;version=1.10.0
+com.sun.xml.fastinfoset.FastInfoset;version=2.1.0
+jakarta.mail-api;version=2.1.2
+angus-activation;version=2.0.1
+org.eclipse.angus.mail;version=2.0.2
+com.sun.xml.messaging.saaj.impl;version=3.0.3
+com.fasterxml.woodstox.woodstox-core;version=6.5.1
+stax2-api;version=4.2.2
+jakarta.activation-api;version=2.1.2
+jakarta.xml.ws-api;version=4.0.1
+jakarta.xml.bind-api;version=4.0.1
+jakarta.xml.soap-api;version=3.0.1
+jakarta.annotation-api;version=2.1.1
+
+# actual implementation
+org.eclipse.daanse.ws.runtime.registrar;version=latest
+	
