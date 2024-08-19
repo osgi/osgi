@@ -238,8 +238,8 @@
             as a <code>java.nio.file.Path</code> or <code>file:</code> URI.</para>
           </listitem>
           <listitem>
-            <para>The repository uses the Maven2 Repository Layout</para>
-            <remark>Add bibliography link to https://maven.apache.org/repository/layout.html#maven2-repository-layout</remark>
+            <para>The repository uses <xref linkend="service.featurelauncher-maven2.layout"
+             xrefstyle="hyperlink"/></para>
           </listitem>
         </itemizedlist>
         
@@ -280,8 +280,8 @@
             as a <code>http</code> or <code>https</code> <code>URI</code></para>
           </listitem>
           <listitem>
-            <para>The repository uses the Maven2 Repository Layout</para>
-            <remark>Add bibliography link to https://maven.apache.org/repository/layout.html#maven2-repository-layout</remark>
+            <para>The repository uses <xref linkend="service.featurelauncher-maven2.layout"
+             xrefstyle="hyperlink"/></para>
           </listitem>
         </itemizedlist>
         
@@ -337,8 +337,8 @@
             <para><xref 
               linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE"
               xrefstyle="hyperlink"/> - A trust store to use when validating a server certificate. May be a file
-              system path or a <code>data</code> URI.</para>
-              <remark>Add bibliography link to https://en.wikipedia.org/wiki/Data_URI_scheme</remark>
+              system path or a <code>data</code> URI as defined by <xref linkend="service.featurelauncher-data.uri"
+               xrefstyle="hyperlink"/>.</para>
           </listitem>
           <listitem>
             <para><xref 
@@ -390,8 +390,9 @@
       <para>An OSGi framework contains a number of bundles which collaborate to produce
       a functioning application. There are times when some bundles require the system
       to have reached a certain state before they can be started. To address this use
-      case the OSGi framework has the concept of <emphasis>start levels</emphasis>.
-        <remark>Add a link to the core specification</remark>
+      case the OSGi framework has the concept of <emphasis>start levels</emphasis>
+      as described in the Start Level API Specification chapter of 
+      <xref linkend="intro.core.release" xrefstyle="template:%t"/>..
       </para>
         
       <para>Setting the initial start level for the OSGi framework when bootstrapping
@@ -742,8 +743,8 @@
         <para>The Feature Launcher implementation may identify that an artifact is an OSGi
         framework implementation in any way that it chooses, however it must recognise
         framework implementations that provide the Framework Launch API using the 
-        service loader pattern.
-        <remark>Link to the framework launch API</remark>
+        service loader pattern, as described in the Launching and Controlling a Framework 
+        section of <xref linkend="intro.core.release" xrefstyle="template:%t"/>.
         </para>
       </section>
       
@@ -845,7 +846,6 @@ fw.waitForStop(0);
           xrefstyle="hyperlink"/> then the Feature Launcher implementation must use the
           first listed artifact that can be found in any configured Artifact Repositories,
           as described in <xref linkend="service.featurelauncher-select.framework" xrefstyle="hyperlink"/>.</para>
-            <remark>Currently this only fails if the extension is mandatory</remark>
           </listitem>
           
           
@@ -972,8 +972,8 @@ fw.waitForStop(0);
           </listitem>
         </itemizedlist>
         
-        <para>If a launching failure is triggered by an exception, for example a <xref 
-          linkend="org.osgi.framework.BundleException" xrefstyle="hyperlink"/> then this must be
+        <para>If a launching failure is triggered by an exception, for example a
+        <code>BundleException</code> then this must be
         set as the <code>cause</code> of the <code>LaunchException</code> that is thrown.</para>
       </section>
       
@@ -1121,10 +1121,10 @@ fw.waitForStop(0);
              Features that own them are removed.</para>
              <para>In the case where a bundle was not installed by the Feature
              Runtime, but later became owned by an installed Feature, that bundle
-             will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
-             Feature to indicate that they will not be removed if the other owning
-             Feature is removed.
-             <remark>Make a constant for this</remark></para>
+             will also be owned by the <xref
+              linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntimeConstants.EXTERNAL_FEATURE_ID"
+              xrefstyle="hyperlink"/> to indicate that they will not be removed if the other owning
+             Feature is removed.</para>
           </listitem>
         </itemizedlist> 
       
@@ -1165,10 +1165,10 @@ fw.waitForStop(0);
              Features that own them are removed.</para>
              <para>In the case where a configuration was not installed by the Feature
              Runtime, but later became owned by an installed Feature, that configuration
-             will also be owned by the virtual <code>org.osgi.service.featurelauncher:external:1.0.0</code> 
-             Feature to indicate that they will not be deleted if the other owning
-             Feature is removed.
-             <remark>Make a constant for this</remark></para>
+             will also be owned by the <xref
+              linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntimeConstants.EXTERNAL_FEATURE_ID"
+              xrefstyle="hyperlink"/> to indicate that they will not be deleted if the other owning
+             Feature is removed.</para>
           </listitem>
         </itemizedlist> 
       </section>
@@ -1517,10 +1517,69 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
 
       <section>
         <title>Updating a Feature</title>
-        <para>Bundles</para>
-        <para>Configurations</para>
-        <para>refreshing packages</para>
-        <para>Action on failure</para>
+        
+        <para>Updating a Feature uses one of the <code>update</code> methods present
+        on the Feature Runtime. These methods allow the caller to indicate which feature
+        should be updated, and provider the new Feature definition to replace it with.
+        The methods return an <xref
+         linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.UpdateOperationBuilder"
+         xrefstyle="hyperlink"/> to allow the caller to configure their update
+        operation. Configuration of operations includes:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para><xref linkend="service.featurelauncher-runtime.variable-overrides" 
+             xrefstyle="hyperlink"/>.
+          </para></listitem>
+          <listitem>
+            <para><xref linkend="service.featurelauncher-runtime.artifact-repositories" xrefstyle="hyperlink"/></para>
+          </listitem>
+          <listitem>
+            <para><xref linkend="service.featurelauncher-feature.decoration" xrefstyle="hyperlink"/></para>
+          </listitem>
+          <listitem>
+            <para>Adding <xref linkend="service.featurelauncher-runtime.merge.strategies"
+             xrefstyle="hyperlink"/>
+            </para>
+          </listitem>
+        </itemizedlist> 
+        
+        <para>Once the operation is fully configured then the caller uses the
+        <xref linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntime.UpdateOperationBuilder.update--"
+         xrefstyle="hyperlink"/> method to begin the update. The end result of 
+        updating a Feature is that all of the bundles listed in the new Feature are 
+        installed, all of the Feature Configurations in the new Feature have been created, all bundles 
+        have been marked as persistently started, and the framework start level is at 
+        least the minimum level required by the new Feature. In addition, any bundles
+        and configurations from the old Feature that are not present in the new Feature
+        will have been removed, and any configurations present in both the old and new
+        Features will have been updated with new any new content.</para>
+        
+        <para>At a high level an update operation is therefore superficially similar to 
+        performing a <code>remove</code> operation followed by an <code>install</code>
+        operation. The key difference, however, is that any bundles and configurations
+        shared by both features, or identified by a merge strategy, will not be removed,
+        and instead will become owned by the new Feature.</para>
+        
+        <para>As for installation, start levels for the bundles in the new Feature
+        will be determined as described in <xref linkend="service.featurelauncher-start.levels"
+          xrefstyle="hyperlink"/>. If any bundles are installed with a start level 
+        higher than the current framework start level then they will be
+        marked persistently started but will not start until the framework start
+        level is changed.
+        </para>
+        
+        <para>Where the feature update includes overlapping bundles or configurations then
+         <xref linkend="service.featurelauncher-runtime.merge.strategies"
+         xrefstyle="hyperlink"/> will be applied to determine which bundles
+        are installed, and what configuration properties will be used when
+        creating or updating a configuration.</para>
+        
+        <para>If a failure occurs during the update of a Feature then the
+        Feature Runtime must make every effort to return the system to its pre-existing
+        state. After a failure no new bundles should be installed, any altered configurations
+        returned to their previous states, and the framework start level should be the same 
+        as it was prior to the failed installation.</para>
       </section>
     </section>
     
@@ -1558,7 +1617,7 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
         the Feature Start phase must not begin until the bundle installation
         and configuration creation phases are complete.</para>
         
-        <section>
+        <section xml:id="service.featurelauncher-runtime.feature.decoration">
           <title>Feature Decoration</title>
           <para>The first stage of the operation is to determine the feature that
           should be used by running the configured feature decoration handlers.</para>
@@ -1620,10 +1679,10 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
           Feature being installed, then those bundles are removed from the list of bundles
           to be installed and the existing bundles are marked as <emphasis>owned</emphasis>
           by the Feature being installed. If the marked bundles were not previously
-          owned by any other feature then they also marked as owned by the 
-          osgi.external Feature to indicate that they will not be removed if the
-          Feature being installed is removed.
-          <remark>Make a constant for this</remark></para>
+          owned by any other feature then they also marked as owned by the <xref
+              linkend="org.osgi.service.featurelauncher.runtime.FeatureRuntimeConstants.EXTERNAL_FEATURE_ID"
+              xrefstyle="hyperlink"/> to indicate that they will not be removed if the
+          Feature being installed is removed.</para>
         
           <para>Any remaining overlap entries are processed according to the merge
           strategy for the feature, as described in <xref 
@@ -1646,7 +1705,7 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
           merge processes.</para>
         </section>
         
-        <section>
+        <section xml:id="service.featurelauncher-runtime.feature.config.install">
           <title>Configuration Creation</title>
           <para>As part of the initial Feature installation the Feature Runtime
           must also process and create any Feature Configurations that are defined in
@@ -1808,21 +1867,19 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
           the framework start level is set to the newly identified start level. 
           </para>
           
-          <para>For each installed bundle updated in <xref 
-           linkend="service.featurelauncher-runtime.feature.removal" xrefstyle="hyperlink"/>
-          the Feature Runtime checks to see whether there are now zero owners for the installed
-          bundle. If there are then this bundle becomes eligible for removal.</para> 
-          
-          <para>Bundles that are eligible for removal are then stopped in the reverse order
-          in which they were started by <xref
+          <para>The list of bundles eligible to be stopped, as determined in <xref 
+           linkend="service.featurelauncher-runtime.feature.removal" xrefstyle="hyperlink"/>,
+          is used to peristently stop any remaining bundles. Bundles that are eligible for
+          removal are stopped in the reverse order in which they were started by <xref
            linkend="service.featurelauncher-runtime.feature.start" xrefstyle="hyperlink"/>.
           This is accomplished by stopping the bundles with the highest start level first,
           using the reverse order of declaration in the feature where the start level is the
-          same. If an eligible bundle is already stopped then they may be skipped.
+          same. If an eligible bundle is already stopped due to its start level then it must
+          still be persistently stopped.
           </para>
         </section>
         
-        <section>
+        <section xml:id="service.featurelauncher-runtime.config.removal">
           <title>Configuration Removal</title>
           
           <para>Once the <xref 
@@ -1891,9 +1948,193 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
           </itemizedlist>
         </section>
       </section>
+      <section>
+        <para>The Feature Update Process</para>
+      
+        <para>The Feature Update Process can be viewed as an interleaved remove and installation operation,
+        following the phases present in both.</para>
+      
+        <itemizedlist>
+          <listitem>
+            <para>The feature decoration phase, where the new Feature is decorated and validated</para>
+          </listitem>
+          <listitem>
+            <para>The feature removal phase, where the existing feature is removed from the Feature Runtime.</para>
+          </listitem>
+          <listitem>
+            <para>The bundle installation phase, where the new Feature bundles are installed</para>
+          </listitem>
+          <listitem>
+            <para>The bundle stop phase, where Installed Bundles without owners are stopped.</para>
+          </listitem>
+          <listitem>
+            <para>The configuration creation and update phase, where the new Feature Configurations are created or updated</para>
+          </listitem>
+          <listitem>
+            <para>The configuration deletion phase, where Installed Configurations without owners are removed</para>
+          </listitem>
+          <listitem>
+            <para>The Feature Start phase, where Bundles in the new feature are started.</para>
+          </listitem>
+          <listitem>
+            <para>The bundle removal phase, stopped bundles are uninstalled</para>
+          </listitem>
+        </itemizedlist>
+        
+        <section>
+          <title>Decorating the new Feature</title>
+          <para>Decorating the new feature proceeds exactly as if a new feature is being installed, as
+          described in <xref linkend="service.featurelauncher-runtime.feature.decoration" xrefstyle="hyperlink"/>.</para>
+        </section>
+        <section>
+          <title>Removing the existing Feature</title>
+          <para>Removing the existing feature proceeds exactly as if a new feature is being removed, as
+          described in <xref linkend="service.featurelauncher-runtime.feature.removal" xrefstyle="hyperlink"/>.</para>
+        </section>
+        <section xml:id="service.featurelauncher-runtime.update.bundle.install">
+          <title>Installing the new bundles</title>
+          <para>Installing the bundles from the new feature proceeds as if a new feature is being removed, as
+          described in <xref linkend="service.featurelauncher-runtime.feature.bundle.install" xrefstyle="hyperlink"/>,
+          but with two important differences.
+          </para>
+          <para>The first important difference is that bundles being installed must be prevented from wiring
+          to bundles that are eligible for removal. This may be accomplished through the use of a Resolver Hook.
+          As the resolver may attempt to resolve bundles at any time this restriction must be enforced by the
+          Feature Runtime until after all of the eligible bundles are uninstalled.</para>
+
+          <para>
+          The second important difference is that any Installed Bundles that are eligible for removal are
+          <emphasis>still available</emphasis> in the runtime. This means that they <emphasis>must be
+          considered</emphasis> when determining whether bundles are already installed, or whether they need
+          to be merged. This may lead to one or more Installed Bundles that were eligible for removal becoming
+          <emphasis>ineligible</emphasis> for removal as they become owned by the new feature. Any Installed
+          Bundles for which this is the case must be removed from the list of eligible bundles, and immediately
+          become available for wiring by newly installed bundles.</para>
+        </section>
+        <section xml:id="service.featurelauncher-runtime.update.stop">
+          <title>Stopping the eligible bundles</title>
+          <para>Stopping the eligible bundles proceeds exactly as described in <xref 
+           linkend="service.featurelauncher-runtime.bundle.stop" xrefstyle="hyperlink"/>. Note that if the
+           existing feature used start levels then this process will likely result in one or more bundles
+           shared between the old and new features being stopped temporarily.</para>
+           <para>Care must be taken in this phase to persistently stop all eligible bundles. Failing to do
+           so may result in eligible bundles being accidentally restarted in later phases.</para>
+        </section>
+        <section>
+          <title>Creating and Updating Configurations</title>
+          <para>Creating and updating configurations proceeds as described in <xref 
+           linkend="service.featurelauncher-runtime.feature.config.install" xrefstyle="hyperlink"/>, but
+           with one important difference.</para>
+           
+          <para>Any Installed Configurations that are eligible for removal are <emphasis>still available</emphasis>
+          in the runtime. This means that they <emphasis>must be considered</emphasis> when determining whether
+          they need to be merged. This may lead to one or more Installed Configurations that were eligible for
+          removal becoming <emphasis>ineligible</emphasis> for removal as they become owned by the new feature.
+          Any Installed Configurations for which this is the case must be removed from the list of eligible
+          configurations.</para>
+        </section>
+        <section>
+          <title>Removing Configurations</title>
+          <para>Removing eligible configurations proceeds exactly as described in <xref 
+           linkend="service.featurelauncher-runtime.config.removal" xrefstyle="hyperlink"/>.</para>
+        </section>
+        <section xml:id="service.featurelauncher-runtime.feature.update.start">
+          <title>Starting the new feature</title>
+          <para>Starting the new feature proceeds exactly as described in <xref 
+           linkend="service.featurelauncher-runtime.feature.start" xrefstyle="hyperlink"/>.
+          As all bundles eligible for removal were persistently stopped in an earier phase they
+          will remain stopped during this phase, and must not be started again.</para>
+        </section>
+        <section xml:id="service.featurelauncher-runtime.update.removal">
+          <title>Uninstalling the eligible bundles</title>
+          <para>Until the Feature Runtime reaches this phase of an update it must
+          fail by attempting to roll back to the previous feature. Once this
+          phase has been reached this failure mode changes, and the Feature Runtime
+          must retain the new Feature, attempting to continue despite failures.</para>
+          
+          <para>Removing the eligible bundles proceeds exactly as described in <xref 
+           linkend="service.featurelauncher-runtime.bundle.removal" xrefstyle="hyperlink"/>.</para>
+        </section>
+        
+        <section>
+          <title>Failure scenarios</title>
+          <para>The following is a non-exhaustive list of possible failure scenarios that
+          must be handled.</para>
+          <itemizedlist>
+            <listitem>
+              <para>The feature being updated is not known to the Feature Runtime. This must
+              not make any changes and should immediately throw a <code>FeatureRuntimeException</code>.</para>
+            </listitem>
+            <listitem>
+              <para>A Feature Bundle cannot be found by any configured <xref 
+               linkend="org.osgi.service.featurelauncher.repository.ArtifactRepository" xrefstyle="hyperlink"/>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>A <code>BundleException</code> is thrown during <xref 
+               linkend="service.featurelauncher-runtime.update.bundle.install" xrefstyle="hyperlink"/>.
+               This should result in the imediate failure of the operation,
+               rolling back to the pre-update state, with a <code>FeatureRuntimeException</code> thrown
+               to the caller.
+              </para>
+            </listitem>
+            <listitem>
+              <para>A <code>BundleException</code> is thrown during <xref 
+               linkend="service.featurelauncher-runtime.feature.update.start" xrefstyle="hyperlink"/>.
+               This should result in the imediate failure of the operation,
+               rolling back to the pre-update state, with a <code>FeatureRuntimeException</code> thrown
+               to the caller.
+              </para>
+            </listitem>
+            <listitem>
+              <para>A Feature Configuration cannot be created by the <xref 
+               linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/> service.
+               This should result in the imediate failure of the operation,
+               rolling back to the pre-update state, with a <code>FeatureRuntimeException</code> thrown
+               to the caller.
+              </para>
+            </listitem>
+            <listitem>
+              <para>An <code>Exception</code> is thrown by any configured <xref 
+               linkend="org.osgi.service.featurelauncher.repository.ArtifactRepository" xrefstyle="hyperlink"/>,
+               <xref linkend="org.osgi.service.featurelauncher.runtime.RuntimeBundleMerge" xrefstyle="hyperlink"/>
+              or <xref linkend="org.osgi.service.featurelauncher.runtime.RuntimeConfigurationMerge"
+               xrefstyle="hyperlink"/>. This should result in the imediate failure of the operation,
+               rolling back to the pre-update state, with a <code>FeatureRuntimeException</code> thrown
+               to the caller.
+               </para>
+            </listitem>
+            <listitem>
+              <para>One or more <code>BundleExceptions</code> are thrown during <xref 
+               linkend="service.featurelauncher-runtime.update.stop" xrefstyle="hyperlink"/>.
+              These exceptions should be logged when they occur, but then ignored.</para>
+            </listitem>
+            <listitem>
+              <para>One or more <code>BundleExceptions</code> are thrown during <xref 
+               linkend="service.featurelauncher-runtime.update.removal" xrefstyle="hyperlink"/>.
+              These exceptions should be logged when they occur, with the Feature Runtime 
+              continuing despite the errors. Once the feature removal is complete the
+              failures may be used in creating the <code>FeatureRuntimeException</code>
+              that must be thrown by this method.</para>
+            </listitem>
+            <listitem>
+              <para>One or more Installed Configurations are missing from the <xref 
+               linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/> service.
+              These missing configurations should be logged with a warning, but not treated
+              as an error.</para>
+            </listitem>
+            <listitem>
+              <para>One or more Installed Configurations cannot be deleted missing from the <xref 
+               linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/> service.
+              These exceptions should be logged when they occur, with the Feature Runtime 
+              continuing despite the errors. Once the feature removal is complete the
+              failures may be used in creating the <code>FeatureRuntimeException</code>
+              that must be thrown by this method.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+      </section>
     </section>
-    
-    
   </section>
   
   <section>
@@ -1956,111 +2197,25 @@ public Map&lt;String,Object&gt; mergeConfiguration(MergeOperationType operation,
     </section>
   </section>
 
-<!--   <section>
-    <title>Handling Bundles</title>
-    <para>All bundles listed in the Feature will first be installed, then resolved
-    and finally started in the Framework chosen by the launcher.</para>
-    
-    <para>Bundle fragments are installed and resolved and attached to their host(s).
-    </para>
-    
-    <para>If a Bundle cannot resolve or start a <code>LauncherException</code> must be
-    thrown.</para>
-  </section>
-
-  <section>
-    <title>Handling Configuration</title>
-    <para>If configuration is found in the Feature then it is passed to the Configuration
-    Admin service. If a Feature contains a <code>configuration</code> section but the Configuration
-    Admin service is not found in the running system, the launcher will abort with an 
-    <code>LauncherException</code>.</para>
-  </section>
-
-  <section>
-    <title>Specifying Framework Properties</title>
-    <para>Framework Launching Properties can be provided in the Feature through
-    the <code>framework-launching-properties</code> extension.
-    The launcher must ensure that the Framework it provides for the feature has these
-    properties set. If it cannot provide a Framework with the requested Framework properties
-    set it must fail with a <code>LauncherException</code>.</para>
-    
-    <para>For example, to ensure the <code>org.osgi.framework.bsnversion</code> Framework
-    property is set for the Feature, specify the following in the Feature: 
-    <programlisting>  "extensions": {
-    "framework-launching-properties": {
-      "type": "json",
-      "kind": "mandatory",
-      "json": {
-          "org.osgi.framework.bsnversion": "multiple"
-      }
-    }
-  }</programlisting>      
-    </para>
-  </section>
-
-  <section>
-    <title>Specifying Runtime Preconditions</title>
-    <para>A Feature can specify the preconditions it places on its runtime environment. That is,
-    the Framework used to run the Feature in, must satisfy these constraints. If the Launcher
-    cannot provide a Framework with the specified conditions, it must fail.</para>
-    
-    <para>
-    Preconditions are specified as requirements in the Feature.
-    If no preconditions are specified, the Launcher is free to choose a Java and OSGi implementation
-    of its choice.
-    </para>
-    
-    <para>For example:<programlisting>  "requirements": [
-    {
-      "namespace": "osgi.ee", 
-      "filter":    "(&amp;(osgi.ee=JavaSE)(version=11))"
-    }, {
-      "namespace": "osgi.wiring.package", 
-      "filter":    "(&amp;(osgi.wiring.package=org.osgi.framework)(version=1.10))"    
-    }
-  ]</programlisting>
-    </para>
-  </section>
-
-  <section>
-    <title>Specifying Variables</title>
-    <para>Variables allow for late binding of configuration values and Framework properties.
-    Variables are provided through the <xref linkend="org.osgi.service.feature.launcher.LauncherFactory"
-    xrefstyle="hyperlink"/>:
-    <programlisting>Map&lt;String,Object&gt; variables = new HashMap&lt;&gt;();
-variables.put("user.name", "scott");
-variables.put("db.driver", "postgresql");
-    
-LauncherFactory factory = ... // From Service Registry or Service Loader
-Launcher launcher = factory.newLauncher(
-  new URL("https://repo.maven.apache.org/maven2/org/foo/Bar/1.0.0/Bar-1.0.0.osgifeature"),
-  variables);
-  
-launcher.start();</programlisting>
-    </para>
-  </section>
-
-  <section>
-    <title>Specifying Extension Handlers</title>
-    <para></para>
-    <remark>TODO</remark>
-  </section>
-
-  <section>
-    <title>Specifying Post-processors</title>
-    <para></para>
-    <remark>TODO</remark>
-  </section>  -->
-  
-  <!-- Specifying merge conflict handlers -->
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.xml"/>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.annotation.xml"/>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.decorator.xml"/>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.repository.xml"/>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.featurelauncher.runtime.xml"/>
 
+ <section>
+    <title>References</title>
 
+    <bibliolist>
+      <bibliomixed xml:id="service.featurelauncher-maven2.layout">
+      <title>The Maven 2 Repository Layout</title><biblioid class="uri"><link
+      xlink:href="https://maven.apache.org/repository/layout.html#maven2-repository-layout"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="service.featurelauncher-data.uri">
+      <title>The Data URI scheme</title><biblioid class="uri"><link
+      xlink:href="https://en.wikipedia.org/wiki/Data_URI_scheme"/></biblioid></bibliomixed>
+    </bibliolist>
+  </section>
 </chapter>
 
 
