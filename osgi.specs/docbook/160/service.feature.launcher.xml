@@ -417,37 +417,10 @@
         xrefstyle="hyperlink"/> with <code>Type</code> <code>JSON</code>. The JSON
       contained in this extension is used to configure the default start level for
       the bundles, and the target start level for the framework.
-      The schema of this JSON is as follows: <remark>Add Schema in build</remark></para>
-        
-      <programlisting>
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://www.osgi.org/jsonschema/featurelauncher/bundle-start-levels/v1.0.0",
-  "title": "bundle-start-levels",
-  "description": "The definition of the bundle-start-levels feature extension",
-   "type": "object",
-   "properties": {
-      "version": {
-        "description": "The version of the Feature Launcher extension",
-        "const": "1.0.0"
-      },
-      "defaultStartLevel": {
-         "description": "The default start level for bundles in the feature",
-         "type": "integer",
-         "minimum": 1,
-         "maximum": 2147483647
-      },
-      "minimumStartLevel": {
-         "description": "The minimum required start level for the framework after feature installation",
-         "type": "integer",
-         "minimum": 1,
-         "maximum": 2147483647
-      }
-   },
-   "required": [ "version", "defaultStartLevel", "minimumStartLevel" ]
-}
-        </programlisting>
-        
+      The schema of this JSON is as follows:</para>
+      
+      <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/json.schema/featurelauncher/v1.0.0/bundle-start-levels.json" parse="text"/></programlisting>
         
       <para>Setting the default start level for bundles installed by the framework is
       achieved using the <code>defaultStartLevel</code> property of the <code>JSON</code>
