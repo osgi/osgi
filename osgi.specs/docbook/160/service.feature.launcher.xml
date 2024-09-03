@@ -405,7 +405,7 @@
       Launcher will look for a Feature Bundle metadata property named <xref 
        linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.BUNDLE_START_LEVEL_METADATA"
        xrefstyle="hyperlink"/> which is of type integer and has a value between
-      <code>1</code> and <code>2147483647</code> inclusive. If the property does 
+      <code>1</code> and <code>Integer.MAX_VALUE</code> inclusive. If the property does 
       not exist then the default start level will be used. If the property does 
       exist and is not a suitable integer then launching must fail with a <xref 
         linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>.
@@ -425,7 +425,7 @@
       <para>Setting the default start level for bundles installed by the framework is
       achieved using the <code>defaultStartLevel</code> property of the <code>JSON</code>
       extension. This must be an integer greater than zero and less than 
-      <code>Integer.MAX_INT</code>, or the special marker value <code>null</code>. A
+      <code>Integer.MAX_VALUE</code>, or the special marker value <code>null</code>. A
       <code>null</code> value is used to indicate that the default start level for newly
       installed bundles is the current framework start level, or <code>1</code> if the 
       current framework start level is <code>0</code>. If the value is not valid then a <xref 
@@ -472,8 +472,9 @@
       object passed into them. This will cause the operation to continue as normal. Decorators may 
       also block an operation from proceeding by throwing an <xref
        linkend="org.osgi.service.featurelauncher.decorator.AbandonOperationException"
-       xrefstyle="hyperlink"/>. This will cause the operation to be immediately halted, and
-       an exception thrown to the caller who requested the operation.</para>
+       xrefstyle="hyperlink"/>. This will cause the operation to be immediately halted, but must be
+       treated as an error when logging. Abandoned operations must result in
+       an exception being thrown to the caller who requested the operation.</para>
       
       <section>
         <title>Building decorated features</title>
@@ -882,8 +883,7 @@ fw.waitForStop(0);
         specific way to pre-register configurations, however in general the Feature Launcher
         should listen for the registration of the <code>ConfigurationAdmin</code> service
         and immediately create the defined configurations when it becomes available.
-        Configurations must be created in the same order as they are defined in the
-        Feature.</para>
+        As Configuration Admin is asynchronous configurations may be created and delivered in any order.</para>
         
         <para>If the <xref 
           linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.CONFIGURATION_TIMEOUT"
@@ -1334,19 +1334,19 @@ fw.waitForStop(0);
           highest compatible version could be implemented as follows:</para>
           
           <programlisting>
-public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
+public Stream&lt;BundleMapping&gt; mergeBundle(MergeOperationType operation,
 		Feature feature, FeatureBundle toMerge,
-		List&lt;InstalledBundle&gt; installedBundles,
-		Map&lt;FeatureBundle,Feature&gt; existingFeatureBundles) {
+		Collection&lt;InstalledBundle&gt; installedBundles,
+		List&lt;FeatureBundleDefinition&gt; existingFeatureBundles) {
 
-	Map&lt;ID,List&lt;ID&gt;&gt; result;
+	Stream&lt;BundleMapping&gt; result;
 
 	if (operation == MergeOperationType.REMOVE) {
 		// Just keep everything the same
 		result = installedBundles.stream()
 				.filter(i -&gt; !i.getOwningFeatures().isEmpty())
-				.collect(Collectors.toMap(i -&gt; i.getBundleId(),
-						i -&gt; i.getOwningFeatures()));
+				.map(i -&gt; new BundleMapping(i.getBundleId(),
+						i.getOwningFeatures()));
 	} else {
 		// Find the Installed bundles we might replace
 		Version v = RuntimeMerges.getOSGiVersion(toMerge.getID());
@@ -1364,25 +1364,27 @@ public Map&lt;ID,List&lt;ID&gt;&gt; mergeBundle(MergeOperationType operation,
 
 		// Bundles with a different major version stay the same
 		result = differentMajor.stream()
-				.filter(i -&gt; !i.getOwningFeatures().isEmpty())
-				.collect(Collectors.toMap(i -&gt; i.getBundleId(),
-						i -&gt; i.getOwningFeatures()));
+			.filter(i -&gt; !i.getOwningFeatures().isEmpty())
+			.map(i -&gt; new BundleMapping(i.getBundleId(),
+						i.getOwningFeatures()));
 
 		// Find the biggest existing version and see if it's bigger than v
 		Optional&lt;InstalledBundle&gt; max = sameMajor.stream()
-				.max((a, b) -&gt; a.getBundle().getVersion()
+				.max((a, b) -&gt; a.getBundle()
+						.getVersion()
 						.compareTo(b.getBundle().getVersion()))
 				.filter(m -&gt; m.getBundle().getVersion().compareTo(v) &gt;= 0);
 
 		// Use the old version if it's bigger, or the new if not
-		ID key = max.isPresent() ? max.get().getBundleId() : toMerge.getID();
+		ID key = max.isPresent() ? max.get().getBundleId()
+				: toMerge.getID();
 
-		Stream&lt;ID&gt; featureIds = sameMajor.stream()
-				.flatMap(i -&gt; i.getOwningFeatures().stream());
+		List&lt;ID&gt; featureIds = sameMajor.stream()
+				.flatMap(i -&gt; i.getOwningFeatures().stream())
+				.collect(Collectors.toList());
 
-		result.put(key,
-				Stream.concat(Stream.of(feature.getID()), featureIds)
-						.collect(Collectors.toList()));
+		result = Stream.concat(result,
+				Stream.of(new BundleMapping(key, featureIds)));
 	}
 	return result;
 }
