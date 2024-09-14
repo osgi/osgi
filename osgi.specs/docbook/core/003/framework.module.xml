@@ -3114,6 +3114,23 @@ B: Bundle-SymbolicName: B
       definitions of a bundle. For namespaces other than
       <code>osgi.wiring.package</code>, a requirement definition of a bundle
       may be wired to a capability definition of that same bundle.</para>
+
+      <para>
+	  	  Notes on <emphasis>External</emphasis>: If the resolver 
+		  choses to resolve to an export statement in another bundle 
+		  the framework must <emphasis>discard</emphasis> the export package
+		  of the current bundle. This can lead to cases where consumers 
+		  for a version of the current bundle (e.g. because of the specific version) 
+		  are now <emphasis>unresolvable</emphasis>. 
+		  This effect can happen if the import has <emphasis>no</emphasis> version range 
+		  or a too wide version range specified.
+      </para>  
+      <para>
+		  A recommendation for library bundles would be to not import the packages they export. 
+		  Bundles should only import a package if they are willing to get that package 
+		  from an unknown source and omit their own export from the framework.
+      </para>	  
+	 
     </section>
   </section>
 
