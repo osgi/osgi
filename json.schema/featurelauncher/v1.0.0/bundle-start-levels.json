@@ -10,17 +10,17 @@
         "const": "1.0.0"
       },
       "defaultStartLevel": {
-         "description": "The default start level for bundles in the feature",
+         "description": "The default start level to use for bundles in this feature.",
          "type": "integer",
          "minimum": 1,
          "maximum": 2147483647
       },
       "minimumStartLevel": {
-         "description": "The minimum required start level for the framework after feature installation",
+         "description": "The minimum required framework start level after installing this feature",
          "type": "integer",
          "minimum": 1,
          "maximum": 2147483647
       }
    },
-   "required": [ "version", "defaultStartLevel", "minimumStartLevel" ]
+   "required": [ "version" ]
 }

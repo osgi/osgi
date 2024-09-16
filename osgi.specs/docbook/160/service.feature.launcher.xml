@@ -422,29 +422,31 @@
       <programlisting role="pgwide"><xi:include encoding="utf-8"
         href="../../generated/json.schema/featurelauncher/v1.0.0/bundle-start-levels.json" parse="text"/></programlisting>
         
-      <para>Setting the default start level for bundles installed by the framework is
+      <para>Setting the default start level for bundles installed by the feature is
       achieved using the <code>defaultStartLevel</code> property of the <code>JSON</code>
       extension. This must be an integer greater than zero and less than 
-      <code>Integer.MAX_VALUE</code>, or the special marker value <code>null</code>. A
-      <code>null</code> value is used to indicate that the default start level for newly
-      installed bundles is the current framework start level, or <code>1</code> if the 
-      current framework start level is <code>0</code>. If the value is not valid then a <xref 
+      <code>Integer.MAX_VALUE</code>. If the <code>defaultStartLevel</code> property is not
+      present then the current framework start level is used as the default start level for newly
+      installed bundles, or <code>1</code> if the 
+      current framework start level is <code>0</code>. If the value of <code>defaultStartLevel</code>
+      is not valid then a <xref 
           linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
       must be thrown when attempting to use the feature.</para>
         
-      <para>The minimum final start level for the OSGi framework required by the feature
-      can be set using the <code>minimumStartLevel</code> property. of the <code>JSON</code>
+      <para>The minimum start level required to start the feature 
+      can be set using the <code>minimumStartLevel</code> property of the <code>JSON</code>
       extension. This must be an integer greater than zero and less than <code>Integer.MAX_INT</code>.
-      If the value is not valid then a <xref 
+      If the <code>minimumStartLevel</code> property is not set then the minimum required start level
+      is set to the current framework start level, meaning that the framework start level will not
+      change when the feature is started.
+      If the value of the <code>minimumStartLevel</code> property is not valid then a <xref 
         linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
-      must be thrown when attempting to use the feature. This property sets the minimum
-      start level that the OSGi framework must use to complete the installation of a
-      Feature.</para>
+      must be thrown when attempting to use the feature.</para>
       
       <para>Finally the <code>version</code> property defines the version of the extension
       schema being used. This can be used by the implementation to determine whether the 
-      Feature is targeting a newer version of the specification. If the version is not
-      understood by the implementation then a <xref 
+      Feature is targeting a newer version of the specification. If the version is missing,
+      or not understood by the implementation then a <xref 
         linkend="org.osgi.service.featurelauncher.LaunchException" xrefstyle="hyperlink"/>
       must be thrown when attempting to use the feature.</para>
     </section>
