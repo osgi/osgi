@@ -24,6 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.FeatureBundle;
 import org.osgi.service.feature.FeatureConfiguration;
+import org.osgi.service.feature.ID;
 
 /**
  * The {@link BaseFeatureDecorationBuilder} is used to allow a user to customize
@@ -36,6 +37,12 @@ import org.osgi.service.feature.FeatureConfiguration;
  */
 @ProviderType
 public interface BaseFeatureDecorationBuilder<T extends BaseFeatureDecorationBuilder<T>> {
+
+	/**
+	 * The default classifier for decorated features created by this
+	 * {@link BaseFeatureDecorationBuilder}
+	 */
+	String DEFAULT_DECORATED_CLASSIFIER = "osgi.feature.decorated";
 
 	/**
 	 * Replace the bundles in the Feature, discarding the current values.
@@ -74,6 +81,19 @@ public interface BaseFeatureDecorationBuilder<T extends BaseFeatureDecorationBui
 	 * @throws IllegalArgumentException if a value is of an invalid type.
 	 */
 	T setVariables(Map<String,Object> variables);
+
+	/**
+	 * Set the classifier for this feature. This will replace any previously set
+	 * classifier. If not set then the value
+	 * {@link #DEFAULT_DECORATED_CLASSIFIER} will be used.
+	 * <p>
+	 * When the Feature is built using the {@link #build()} method then this
+	 * classifier will be used in the {@link ID} of the built Feature.
+	 * 
+	 * @param classifier - the classifier to use for the decorated feature.
+	 * @return This builder.
+	 */
+	T setClassifier(String classifier);
 
     /**
 	 * Build the Feature. Can only be called once. After calling this method the

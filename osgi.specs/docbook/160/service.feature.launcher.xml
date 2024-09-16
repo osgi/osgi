@@ -501,7 +501,8 @@
              <para>The builder is pre-populated with the information from the existing feature, such that
              immediately calling <xref 
               linkend="org.osgi.service.featurelauncher.decorator.BaseFeatureDecorationBuilder.build--"
-              xrefstyle="hyperlink"/> would create a feature with identical content to the original.</para>
+              xrefstyle="hyperlink"/> would create a feature with a different <code>ID</code> but
+              otherwise identical content to the original.</para>
            </listitem>
            <listitem>
              <para>Except where explicitly stated the builder configuration methods
@@ -518,7 +519,14 @@
          linkend="org.osgi.service.feature.FeatureBuilder" xrefstyle="hyperlink"/> instances.</para>
          
          <para>By using these two builders a decorated feature can be configured and created.
-         This decorated feature can then be returned from the decorator. Note that the
+         This decorated feature can then be returned from the decorator. The ID of a decorated
+         feature will always share the <code>groupId</code>, <code>artifactId</code>, <code>version</code>
+         and <code>type</code> of the original feature, however the <code>classifier</code> may be
+         changed using the <xref 
+          linkend="org.osgi.service.featurelauncher.decorator.BaseFeatureDecorationBuilder.setClassifier-String-"
+          xrefstyle="hyperlink"/> method, and will default to <xref 
+         linkend="org.osgi.service.featurelauncher.decorator.BaseFeatureDecorationBuilder.DEFAULT_DECORATED_CLASSIFIER"
+         xrefstyle="hyperlink"/>. Note that the
          <emphasis>only</emphasis> valid way to create a decorated feature is by using the builder.
          Any attempt to return a feature object which is not either:</para>
          
