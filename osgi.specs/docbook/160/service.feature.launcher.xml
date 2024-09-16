@@ -683,9 +683,36 @@
         can define them using a Feature Extension named <xref 
           linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.FRAMEWORK_LAUNCHING_PROPERTIES"
           xrefstyle="hyperlink"/>. The Type of this Feature Extension must be 
-        <code>TEXT</code>, where each entry is in the form <code>key=value</code>
+        <code>JSON</code>, where the value is a single <code>JSON</code> object.
+        Each <code>JSON</code> property in this object represents a single Framework Launch Property.
+        The name of each <code>JSON</code> property must be used as the name of a
+        Framework Launch Property, unless the name starts with a single underscore <code>_</code>.
+        The value of each property is used as the value of the Framework Launch Property,
+        and must be a scalar type, that is a <code>JSON</code> <code>string</code>,
+        <code>number</code> or <code>boolean</code>. If the value is a different <code>JSON</code>
+        type then this must be treated as an error.</para>
+        
+        <para>
+        If the <code>JSON</code> property starts with a single underscore then it may be
+        used for implementation specific behaviour, with the prefix <code>_osgi</code>
+        reserved for future specifications. Implementation specific behaviours may
+        permit <code>JSON</code> values to be any value <code>JSON</code> type.</para>
+        
+        <para>
+        If users require their Framework Launch Property name to start with an underscore
+        then they must use two underscores <code>__</code> in the <code>JSON</code> property
+        name. When the implementation detects more than one underscore at the beginning of
+        a <code>JSON</code> property defined in this extension the leading underscore must
+        be removed, and the remaining string used as the Framework Launch Property name.
+        </para>
+        
+        <para>
         All implementations of the Feature Launcher must support this extension,
-        and use it to populate the Framework Launch Properties.</para>
+        and use it to populate the Framework Launch Properties. The version of
+        this extension is <code>1.0.0</code>, and may be declared in the extension
+        <code>JSON</code> using the property <xref 
+          linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.FRAMEWORK_LAUNCHING_PROPERTIES_VERSION"
+          xrefstyle="hyperlink"/>.</para>
         
         <para>In addition to Framework Launch properties defined inside the Feature,
         users of the Feature Launcher can add and override Framework Launch Properties

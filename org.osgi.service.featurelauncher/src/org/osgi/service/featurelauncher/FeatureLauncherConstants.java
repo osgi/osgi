@@ -25,8 +25,8 @@ import org.osgi.service.feature.FeatureConfiguration;
 import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.FeatureExtension.Kind;
 import org.osgi.service.feature.FeatureExtension.Type;
-import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 import org.osgi.service.feature.ID;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 
 /**
  * Defines standard constants for the Feature Launcher specification.
@@ -84,11 +84,17 @@ public final class FeatureLauncherConstants {
 	public static final String	LAUNCH_FRAMEWORK								= "launch-framework";
 
 	/**
-	 * The name for the {@link FeatureExtension} of {@link Type#TEXT} which
+	 * The name for the {@link FeatureExtension} of {@link Type#JSON} which
 	 * defines the framework properties that should be used when launching the
 	 * feature.
 	 */
 	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES					= "framework-launching-properties";
+
+	/**
+	 * The property name for the <code>JSON<code> property which defines the
+	 * version of the framework properties extension used in this feature.
+	 */
+	public static final String	FRAMEWORK_LAUNCHING_PROPERTIES_VERSION			= "_osgi_featurelauncher_launchprops_version";
 
 	/**
 	 * The name of the metadata property used to indicate the start level of the
