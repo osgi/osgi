@@ -265,7 +265,7 @@
         repository metadata.</para>
       </section>
 
-      <section>
+      <section xml:id="service.featurelauncher-arf-remote">
         <title>Remote Repositories</title>
         
         <para>A Remote Repository is one that exists with an accessible
@@ -781,6 +781,121 @@ Framework fw = launcher
 fw.waitForStop(0);
 
     </programlisting>
+      </section>
+      
+      <section>
+        <title>The Feature Launcher Command Line</title>
+        
+        <para>In order to support the <emphasis>Zero Code</emphasis> goal of the Feature Launcher
+        Service it is not sufficient to provide a Java API, it must also be possible to launch a
+        feature from the command line in a standard way. To support this implementations of the
+        Feature Launcher must provide an executable <code>JAR</code> file which allows a Feature
+        to be launched from the command line. The general syntax for this command is:</para>
+        
+        <programlisting>java -jar &lt;impl jar&gt; [opts] [&lt;feature json&gt;]</programlisting>
+        
+        <para>In the above definition <code>&lt;feature json&gt;</code> is the JSON representation of
+        the Feature to be launched, and <code>opts</code> are command line options. 
+        The following options must be supported:</para>
+        
+        <table pgwide="1">
+          <title>Command line options for the Feature Launcher</title>
+
+          <tgroup cols="3">
+            <colspec colnum="1" colwidth="1.6*"/>
+
+            <colspec colnum="2" colwidth="1.4*"/>
+
+            <colspec colnum="3" colwidth="3.8*"/>
+
+            <thead>
+              <row>
+                <entry>Option Name</entry>
+
+                <entry>Option Value</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><para><code>-f</code></para><para><code>--feature-file</code></para></entry>
+
+                <entry><para>file path</para></entry>
+
+                <entry><para>Specifies the location of a file containing the feature JSON. 
+                If used then the <code>&lt;feature json&gt;</code> must be omitted. This provides
+                the feature that must be launched.</para></entry>
+              </row>
+
+              <row>
+                <entry><para><code>-a</code></para><para><code>--artifact-repository</code></para></entry>
+
+                <entry><para><code>uri</code>[,key=value]</para></entry>
+
+                <entry><para>Specifies an artifact repository <code>URI</code> and optionally one or
+                more configuration properties for that artifact repository, such as those described
+                in <xref linkend="service.featurelauncher-arf-remote" xrefstyle="hyperlink"/>.
+                This property may be repeated to add more than one artifact repository.</para></entry>
+              </row>
+
+              <row>
+                <entry><para><code>-d</code></para><para><code>--decorator</code></para></entry>
+
+                <entry><para>A class name</para></entry>
+
+                <entry><para>Provides the name of a decorator class that should be used when launching
+                the feature. The decorator class must be public, available on the classpath, and have a
+                public zero-argument constructor. This property may be repeated to add more than one 
+                decorator.</para></entry>
+              </row>
+              
+              <row>
+                <entry><para><code>-e</code></para><para><code>--extension-handler</code></para></entry>
+
+                <entry><para>&lt;extension&#160;name&gt;,
+                &lt;class&#160;name&gt;</para></entry>
+
+                <entry><para>Provides the name of an extension, and the extension handler class that should
+                be used to handle the extension when launching the feature. The extension handler class must 
+                be public, available on the classpath, and have a public zero-argument constructor. This 
+                property may be repeated to add more than one extension handler.</para></entry>
+              </row>
+
+              <row>
+                <entry><para><code>-l</code></para><para><code>--launch-property</code></para></entry>
+
+                <entry><para>key=value[,key=value]</para></entry>
+
+                <entry><para>Provides one or more launch properties that should be passed to the
+                framework when it is launched.</para></entry>
+              </row>
+              
+              <row>
+                <entry><para><code>-v</code></para><para><code>--variable-override</code></para></entry>
+
+                <entry><para>key=value[,key=value]</para></entry>
+
+                <entry><para>Provides one or more variables that should be used to set or
+                override variables defined in the feature.</para></entry>
+              </row>
+
+              <row>
+                <entry><para><code>-c</code></para><para><code>--configuration</code></para></entry>
+
+                <entry><para>key=value[,key=value]</para></entry>
+
+                <entry><para>Provides one or more configuration properties that should be 
+                used to control implementation specific behaviour.</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        
+        <para>If implementations wish to support any additional options these must only use long-form option
+        names starting with <code>--impl-</code> to ensure that users know the launch command is not portable,
+        and to avoid possible name clashes in future versions of the specification.</para>
       </section>
     </section>
     
