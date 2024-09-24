@@ -123,10 +123,35 @@
       </figure>
    	</section>
    </section>
+   <section xml:id="service.jakartars.endpoint.services">
+    <title>Registering Server Endpoint Implementor</title>
+
+    <para>Server Endpoint Implementor can be registered with the Jakarta™ Websockets Services Whiteboard by registering them as Whiteboard
+    services. This means that the endpoint POJO implementations are registered in the Service Registry. As Server Endpoints are
+    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code> and use any
+    annotations on endpoint object, just as it would outside of OSGi.</para>
+
+    <para>To be picked up as endpoints, the POJO they are instead registered with the
+    <code>osgi.jakarta.webservice.endpoint.implementor</code> service property with a value of
+    <code>"true"</code>. This property serves as a marker to the Jakarta™ Websocket Whiteboard
+    runtime, indicating that this OSGi service should further be processed as an endpoint.</para>
+
+    <para>The code below shows an simple echo Endpoint Implementor, the `@ServerEndpoint` / `@OnMessage` is 
+      a jakarta annotation and therefore not processed by the Whiteboard runtime:
+    </para>
+
+      <programlisting>@WhiteboardEndpoint
+@ServerEndpoint("/hello")
+public class MyHelloServer {
+	
+	@OnMessage
+	public String handleMessage(String message) {
+		return "Got your message (" + message + "). Thanks !";
+	}
+}</programlisting>
+   </section>
    <section>
     <title>References</title>
-
-
     <bibliolist>
       <bibliomixed xml:id="service.jakartawebsocket-spec">
         <title>Jakarta™ Jakarta WebSocket Specification</title>
@@ -140,9 +165,6 @@
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-annotations"/>
         </biblioid>
       </bibliomixed>
-      
-      https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#annotated-endpoints
-      
       <bibliomixed xml:id="service.jakartaws-whiteboard.pattern.ref">
         <title>Whiteboard Pattern</title>
         <biblioid class="uri">
