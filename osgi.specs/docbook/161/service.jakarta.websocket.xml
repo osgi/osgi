@@ -123,7 +123,7 @@
       </figure>
    	</section>
    </section>
-   <section xml:id="service.jakartars.endpoint.services">
+   <section>
     <title>Registering Server Endpoint Implementor</title>
 
     <para>Server Endpoint Implementor can be registered with the Jakarta™ Websockets Services Whiteboard by registering them as Whiteboard
@@ -142,14 +142,88 @@
 
       <programlisting>@WhiteboardEndpoint
 @ServerEndpoint("/hello")
+@Component(service = MyHelloServer.class, immediate = true)
 public class MyHelloServer {
-	
 	@OnMessage
 	public String handleMessage(String message) {
 		return "Got your message (" + message + "). Thanks !";
 	}
 }</programlisting>
    </section>
+     <section>
+    <title>Acquire WebSocketContainer and initiate client connection</title>
+    <para>To initiate a session and connect a client endpoint to a websocket server one needs to use a <emphasis>WebSocketContainer</emphasis>.
+    This would usually be performed through the <emphasis>ContainerProvider</emphasis> but as this does not account for the dynamic nature of OSGi clients should instead 
+    track the <emphasis>WebSocketContainer Service</emphasis> published by the runtime. Once the service is obtained, it can be used as described in 
+    <xref linkend="service.jakartawebsocket-spec.client-deploy"></xref> of the Jakarta WebSocket specification. As described by the API, no further dependency injection is
+    to be expected and clients must use whatever mechanism fits for them to prepare their instance before initiation of a peer connection.
+    </para>
+     <para>The code below shows an simple client endpoint that is capable of sending a message to an websocket server endpoint and simply prints any incoming message
+    </para>
+
+      <programlisting>@Component(service = HelloService.class)
+public class MyHelloClient implements HelloService {
+
+
+	private Session session;
+
+	@Activate
+	public MyHelloClient(WebSocketContainer container) throws DeploymentException, IOException, URISyntaxException {
+		session = container.connectToServer(this, new URI("ws://localhost:3000/hello"));
+	}
+
+	@Deactivate
+	public void close() throws IOException {
+		session.close(new CloseReason(CloseCodes.GOING_AWAY, "service shut down"));
+	}
+
+	@Override
+	public void sayHello(String message) throws IOException {
+		session.getBasicRemote().sendText(message);
+	}
+
+	@OnMessage
+	public void processMessage(String message) {
+		System.out.println("Received message in client: " + message);
+	}
+
+}</programlisting>
+    <para>
+    	Even though outside the scope of this specification, clients can also initiate connections using for example <xref linkend="service.jakartawebsocket-spec.jdk-client"></xref>
+    	as there is no dependency between client and server that requires using the same technology stack.
+    </para>
+     <para>The code below shows the same client using <xref linkend="service.jakartawebsocket-spec.jdk-client"></xref>
+    </para>
+
+      <programlisting>@Component(service = HelloService.class)
+public class MyHelloClientJdk implements HelloService, Listener {
+
+	private CompletableFuture&lt;WebSocket&gt; client;
+
+	@Activate
+	public void start() {
+		client = HttpClient.newHttpClient().newWebSocketBuilder().buildAsync(URI.create("ws://localhost:3000/hello"),
+				this);
+	}
+
+	@Deactivate
+	public void close() throws IOException {
+		client.join().abort();
+	}
+
+	@Override
+	public void sayHello(String message) throws IOException {
+		client.thenAccept(ws -> ws.sendText(message, true));
+	}
+
+	@Override
+	public CompletionStage&lt;?&gt; onText(WebSocket webSocket, CharSequence data, boolean last) {
+		System.out.println("Received message in client: " + data);
+		return CompletableFuture.completedStage(null);
+	}
+
+}</programlisting>
+    </section>
    <section>
     <title>References</title>
     <bibliolist>
@@ -163,6 +237,18 @@ public class MyHelloServer {
         <title>Annotated Endpoints</title>
         <biblioid class="uri">
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-annotations"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.client-deploy">
+        <title>Client Deployment on JRE</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#client-deployment-on-jdk"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.jdk-client">
+        <title>JDK WebSocket Client</title>
+        <biblioid class="uri">
+          <link xlink:href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/WebSocket.html"/>
         </biblioid>
       </bibliomixed>
       <bibliomixed xml:id="service.jakartaws-whiteboard.pattern.ref">
