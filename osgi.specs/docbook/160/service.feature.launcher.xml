@@ -652,6 +652,12 @@
         using as described in <xref linkend="service.featurelauncher-arf" 
         xrefstyle="hyperlink"/>, or using custom implementations.</para>
         
+        <para>The <code>withConfiguration</code>, <code>withVariables</code> and <code>withFrameworkProperties</code>
+        builder methods encapsulate a single element within the builder, meaning that calling any of those
+        methods again will replace the previous value. The <code>withRepositor</code>, <code>withDecorator</code>
+        and <code>withExtensionHandler</code> methods encapsulate a multiple element within the builder, meaning
+        that calling any of those methods multiple times can result in multiple values being registered.</para>
+        
         <section>
           <title>Thread Safety</title>
           

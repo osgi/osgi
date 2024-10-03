@@ -69,7 +69,9 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 
 		/**
 		 * Add a repository to this {@link LaunchBuilder} that will be used to
-		 * locate installable artifact data.
+		 * locate installable artifact data. If called multiple times then the
+		 * supplied repositories will be searched in the same order that they
+		 * were added to this builder.
 		 * 
 		 * @param repository the repository to add
 		 * @return <code>this</code>
@@ -81,7 +83,7 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 		/**
 		 * Configure this {@link LaunchBuilder} with the supplied properties.
 		 * 
-		 * @param configuration the configuration for this implementation
+		 * @param configuration the configuration for this implementation.
 		 * @return <code>this</code>
 		 * @throws IllegalStateException if the builder has been launched
 		 */
@@ -90,7 +92,12 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 		/**
 		 * Configure this {@link LaunchBuilder} with the supplied variables.
 		 * 
-		 * @param variables the variable placeholder overrides for this launch
+		 * @param variables the variable placeholder overrides for this launch.
+		 *            All variable overrides must have <code>String</code> keys
+		 *            and the values must be <code>String</code>,
+		 *            <code>Boolean</code> or <code>BigDecimal</code> for
+		 *            numbers. The value {@code null} is not permitted in the
+		 *            map.
 		 * @return <code>this</code>
 		 * @throws IllegalStateException if the builder has been launched
 		 */
@@ -101,12 +108,13 @@ public interface FeatureLauncher extends ArtifactRepositoryFactory {
 		 * Launch Properties.
 		 * 
 		 * @param frameworkProps the launch properties to use when starting the
-		 *            framework
+		 *            framework. All framework properties must have
+		 *            <code>String</code> keys and <code>String</code> values.
 		 * @return <code>this</code>
 		 * @throws IllegalStateException if the builder has been launched
 		 */
 		LaunchBuilder withFrameworkProperties(
-				Map<String,Object> frameworkProps);
+				Map<String,String> frameworkProps);
 
 		/**
 		 * Add a {@link FeatureDecorator} to this {@link LaunchBuilder} that
