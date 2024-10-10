@@ -77,7 +77,7 @@ jobs:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
-      uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-TCK
         if-no-files-found: error
@@ -116,7 +116,7 @@ jobs:
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Generated-Repo
         path: |
@@ -141,13 +141,13 @@ jobs:
         arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
       if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
-      uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
@@ -199,7 +199,7 @@ jobs:
         java -jar jar/bnd.jar --exceptions runtests --title ${{ matrix.tck }} --reportdir reports/${{ matrix.tck }} ${{ matrix.tck }}.bnd
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
-      uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |
