@@ -303,51 +303,51 @@
         <itemizedlist>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_NAME"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_NAME"
               xrefstyle="hyperlink"/> - The name for this repository</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_USER"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_USER"
               xrefstyle="hyperlink"/> - The user name to use for authenticating with this repository</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_PASSWORD"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_PASSWORD"
               xrefstyle="hyperlink"/> - The password to use for authenticating with this repository</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_BEARER_TOKEN"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_BEARER_TOKEN"
               xrefstyle="hyperlink"/> - A bearer token to use when authenticating with this repository</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED"
               xrefstyle="hyperlink"/> - A <code>Boolean</code> indicating that SNAPSHOT versions are 
               supported. Defaults to <code>true</code></para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_RELEASES_ENABLED"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_RELEASES_ENABLED"
               xrefstyle="hyperlink"/> - A <code>Boolean</code> indicating that release versions are 
               supported. Defaults to <code>true</code></para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_TRUST_STORE"
               xrefstyle="hyperlink"/> - A trust store to use when validating a server certificate. May be a file
               system path or a <code>data</code> URI as defined by <xref linkend="service.featurelauncher-data.uri"
                xrefstyle="hyperlink"/>.</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT"
               xrefstyle="hyperlink"/> - The format of the trust store to use when validating a server certificate.</para>
           </listitem>
           <listitem>
             <para><xref 
-              linkend="org.osgi.service.featurelauncher.FeatureLauncherConstants.REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD"
+              linkend="org.osgi.service.featurelauncher.repository.ArtifactRepositoryConstants.ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD"
               xrefstyle="hyperlink"/> - The password to use when validating the trust store integrity.</para>
           </listitem>
         </itemizedlist>
@@ -849,7 +849,7 @@ fw.waitForStop(0);
               <row>
                 <entry><para><code>-d</code></para><para><code>--decorator</code></para></entry>
 
-                <entry><para>A class name</para></entry>
+                <entry><para>A&#160;class&#160;name[,&lt;class&#160;name&gt;]</para></entry>
 
                 <entry><para>Provides the name of a decorator class that should be used when launching
                 the feature. The decorator class must be public, available on the classpath, and have a
@@ -860,8 +860,9 @@ fw.waitForStop(0);
               <row>
                 <entry><para><code>-e</code></para><para><code>--extension-handler</code></para></entry>
 
-                <entry><para>&lt;extension&#160;name&gt;,
-                &lt;class&#160;name&gt;</para></entry>
+                <entry><para>&lt;extension&#160;name&gt;=
+                &lt;class&#160;name&gt;[,&lt;extension&#160;name&gt;=
+                &lt;class&#160;name&gt;]</para></entry>
 
                 <entry><para>Provides the name of an extension, and the extension handler class that should
                 be used to handle the extension when launching the feature. The extension handler class must 
@@ -1187,10 +1188,23 @@ fw.waitForStop(0);
         
         <itemizedlist>
           <listitem>
-            <para>The <xref
-             linkend="org.osgi.service.feature.ID" xrefstyle="hyperlink"/> of the 
-            Feature from <xref
-             linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.getFeatureId--" 
+            <para>The installed <xref
+             linkend="org.osgi.service.feature.Feature" xrefstyle="hyperlink"/> from <xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.getFeature--" 
+             xrefstyle="hyperlink"/>. This will include any decoration as described in <xref
+             linkend="service.featurelauncher-feature.decoration" xrefstyle="hyperlink"/>
+            </para>
+          </listitem>
+          <listitem>
+            <para>The original undecorated <xref
+             linkend="org.osgi.service.feature.Feature" xrefstyle="hyperlink"/> from <xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.getOriginalFeature--" 
+             xrefstyle="hyperlink"/>
+            </para>
+          </listitem>
+          <listitem>
+            <para>Whether this installed feature was decorated using <xref
+             linkend="org.osgi.service.featurelauncher.runtime.InstalledFeature.isDecorated--" 
              xrefstyle="hyperlink"/>
             </para>
           </listitem>
