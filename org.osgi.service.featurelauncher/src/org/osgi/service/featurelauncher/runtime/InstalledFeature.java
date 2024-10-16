@@ -20,7 +20,7 @@ package org.osgi.service.featurelauncher.runtime;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.feature.ID;
+import org.osgi.service.feature.Feature;
 import org.osgi.service.featurelauncher.FeatureLauncher;
 
 /**
@@ -35,9 +35,30 @@ import org.osgi.service.featurelauncher.FeatureLauncher;
 public interface InstalledFeature {
 
 	/**
-	 * @return The {@link ID} of the installed feature
+	 * @return The {@link Feature} that was installed. This will be identical to
+	 *         {@link #getOriginalFeature()} unless the feature was decorated
+	 *         during installation. If decoration did occur then
+	 *         {@link #isDecorated()} will return <code>true</code> and this
+	 *         method will return the decorated feature.
 	 */
-	public ID getFeatureId();
+	public Feature getFeature();
+
+	/**
+	 * @return The undecorated {@link Feature} that was originally used in the
+	 *         operation. If no decoration occurred then {@link #isDecorated()}
+	 *         will return <code>false</code> and this method will return the
+	 *         same value as {@link #getFeature()};
+	 */
+	public Feature getOriginalFeature();
+
+	/**
+	 * @return <code>true</code> if the original feature was decorated by one or
+	 *         more decorators. If <code>true</code> then the undecorated
+	 *         feature will be available from {@link #getOriginalFeature()} and
+	 *         the actual feature used will be available from
+	 *         {@link #getFeature()}.
+	 */
+	public boolean isDecorated();
 
 	/**
 	 * Is this a feature installed by {@link FeatureLauncher}

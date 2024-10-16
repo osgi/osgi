@@ -18,15 +18,11 @@
 
 package org.osgi.service.featurelauncher;
 
-import java.net.URI;
-import java.util.Map;
-
 import org.osgi.service.feature.FeatureConfiguration;
 import org.osgi.service.feature.FeatureExtension;
 import org.osgi.service.feature.FeatureExtension.Kind;
 import org.osgi.service.feature.FeatureExtension.Type;
 import org.osgi.service.feature.ID;
-import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 
 /**
  * Defines standard constants for the Feature Launcher specification.
@@ -108,67 +104,4 @@ public final class FeatureLauncherConstants {
 	 * defines the start level configuration for the bundles in the feature
 	 */
 	public static final String	BUNDLE_START_LEVELS								= "bundle-start-levels";
-
-	/**
-	 * The configuration property key used to set the repository name when
-	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_NAME					= "name";
-
-	/**
-	 * The configuration property key used to set the repository user when
-	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_USER					= "user";
-
-	/**
-	 * The configuration property key used to set the repository password when
-	 * creating an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_PASSWORD				= "password";
-
-	/**
-	 * The configuration property key used to set the bearer token when creating
-	 * an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_BEARER_TOKEN			= "token";
-
-	/**
-	 * The configuration property key used to set that SNAPSHOT release versions
-	 * are enabled for an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_SNAPSHOTS_ENABLED	= "snapshot";
-
-	/**
-	 * The configuration property key used to set that release versions are
-	 * enabled for an {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_RELEASES_ENABLED		= "release";
-
-	/**
-	 * The configuration property key used to set the trust store to be used
-	 * when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE			= "truststore";
-
-	/**
-	 * The configuration property key used to set the trust store format to be
-	 * used when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_FORMAT	= "truststoreFormat";
-
-	/**
-	 * The configuration property key used to set the trust store password to be
-	 * used when accessing a remote {@link ArtifactRepository} using
-	 * {@link FeatureLauncher#createRepository(URI, Map)}
-	 */
-	public static final String	REMOTE_ARTIFACT_REPOSITORY_TRUST_STORE_PASSWORD	= "truststorePassword";
 }

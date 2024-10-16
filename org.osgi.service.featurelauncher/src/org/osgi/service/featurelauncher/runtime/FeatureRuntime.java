@@ -127,6 +127,10 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 		 * is already set for the given name then it will be replaced. Passing a
 		 * <code>null</code> {@link ArtifactRepository} will remove the
 		 * repository from this operation.
+		 * <p>
+		 * {@link ArtifactRepository} instances are stored in the order that
+		 * they are added, and this order defines the order in which they will
+		 * be queried.
 		 * 
 		 * @param name the name to use for this repository
 		 * @param repository the repository
@@ -143,6 +147,10 @@ public interface FeatureRuntime extends ArtifactRepositoryFactory {
 		 * {@link #addRepository(String, ArtifactRepository)} has the same name
 		 * as a default repository then the added repository will override the
 		 * default repository.
+		 * <p>
+		 * Default repositories are always added after any added by
+		 * {@link #addRepository(String, ArtifactRepository)}, and are therefore
+		 * the last to be queried.
 		 * 
 		 * @param include
 		 * @return <code>this</code>
