@@ -139,7 +139,9 @@
   <xi:include href="../159/service.feature.xml"/>
   
   <xi:include href="../160/service.feature.launcher.xml"/>
-
+  
+  <xi:include href="../161/service.jakartapersistence.xml"/>
+  
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../705/util.promise.xml"/>

@@ -1,0 +1,1623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+<chapter label="161"
+         revision="$Id$"
+         version="5.0" xml:id="service.jakartapersistence"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Jakarta Persistence Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.jakartapersistence-version"
+    linkend="org.osgi.service.jakartapersistence"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Jakarta Persistence is a specification that sets a
+    standard for persistently storing objects in enterprise and non-enterprise
+    Java based environments. JPA provides an Object Relational Mapping (ORM)
+    model that is configured through persistence descriptors. This Java
+    Persistence Service specification defines how persistence units can be
+    published in an OSGi framework, how client bundles can find these
+    persistence units, how database drivers are found with the <xref
+    linkend="service.jdbc"/>, as well as how Jakarta Persistence providers can be made
+    available within an OSGi framework.</para>
+
+    <para>Applications can be managed or they can be unmanaged. Managed
+    applications run inside a Jakarta EE Container and unmanaged applications run
+    in a Java SE environment. The managed case requires a provider interface
+    that can be used by the container, while in the unmanaged case the Jakarta Persistence
+    provider is responsible for supporting the client directly. This
+    specification is about the unmanaged model of Jakarta Persistence except in the areas
+    where the managed model is explicitly mentioned. Additionally, multiple
+    concurrent providers for the unmanaged case are not supported.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Dependencies</emphasis> - There must be a way for
+          persistence clients, if they so require, to manage their
+          dependencies on a compatible persistence unit.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Compatibility</emphasis> - The Persistence Unit
+          service must be able to function in non-managed mode according to
+          existing standards and interfaces outlined in the Jakarta Persistence
+          specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Modularity</emphasis> - Persistent classes and their
+          accompanying configuration can exist in a separate bundle from the
+          client that is operating on them using the Persistence Unit
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JDBC</emphasis> - Leverage the <xref
+          linkend="service.jdbc"/> for access to the database.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Jakarta Persistence</emphasis> - The Jakarta Persistence, <xref
+          linkend="i3075842.1"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Jakarta Persistence Provider</emphasis> - An implementation of Jakarta Persistence,
+          providing the Persistence Provider and Jakarta Persistence Services to Jakrta EE
+          Containers and Client Bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Interface Bundle</emphasis> - A bundle containing
+          the interfaces and classes in the <code>javax.persistence</code>
+          namespace (and its sub-namespaces) that are defined by the Jakarta Persistence
+          specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Persistence Bundle</emphasis> - A bundle that
+          includes, a Meta-Persistence header, one or more Persistence
+          Descriptor resources, and the entity classes specified by the
+          Persistence Units in those resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Client Bundle</emphasis> - The bundle that uses the
+          Persistence Bundle to retrieve and store objects.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Persistence Descriptor</emphasis> - A resource
+          describing one or more Persistence Units.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Persistence Unit</emphasis> - A named configuration
+          for the object-relational mappings and database access as defined in
+          a Persistence Descriptor.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Entity Manager</emphasis> - The interface that
+          provides the control point of retrieving and persisting objects in a
+          relational database based on a single Persistence Unit for a single
+          session.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Entity Manager Factory</emphasis> - A service that
+          can create Entity Managers based on a Persistence Unit for different
+          sessions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Entity Manager Factory Builder</emphasis> - A
+          service that can build an Entity Manager Factory for a specific
+          Persistence Unit with extra configuration parameters.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Managed Client</emphasis> - A Client Bundle that is
+          managed by a Container</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Static Client</emphasis> - A Client that uses the
+          static factory methods in the Persistence class instead of
+          services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Static Persistence</emphasis> - The actor that
+          enables the use of the <code>Persistence</code> class static factory
+          methods to obtain an Entity Manager Factory.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JDBC Provider</emphasis> - The bundle providing a
+          Data Source Factory service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Jakarta Persistence Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="4.229in"
+                       contentwidth="7.000in" fileref="jpa-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section xml:id="i3113425">
+      <title>Dependencies</title>
+
+      <para>This specification requires a minimum Jakarta Persistence version of 3.1.
+      Implementations may choose to support newer versions of Jakarta Persistence, for example
+      version 3.2, but must offer the JakartaPersistence contract at version 3.1 as well
+      as any future versions that they support.</para>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>A Jakarta Persistence Provider tracks Persistence Bundles; a Persistence Bundle
+      contains a Meta-Persistence manifest header. This manifest header
+      enumerates the Persistence Descriptor resources in the Persistence
+      Bundle. Each resource's XML schema is defined by the Jakarta Persistence specification.
+      The Jakarta Persistence Provider reads the resource accordingly and extracts the
+      information for one or more Persistence Units. For each found
+      Persistence Unit, the Jakarta Persistence Provider registers an Entity Manager Factory
+      Builder service. If the database is defined in the Persistence Unit,
+      then the Jakarta Persistence Provider registers an Entity Manager Factory service during
+      the availability of the corresponding Data Source Factory.</para>
+
+      <para>The identification of these services is handled through a number
+      of service properties. The Entity Manager Factory service is named by
+      the standard Jakarta Persistence interface, the Builder version is OSGi specific; it is
+      used when the Client Bundle needs to create an Entity Manager Factory
+      based on configuration properties.</para>
+
+      <para>A Client Bundle that wants to persist or retrieve its entity
+      classes depends on an Entity Manager Factory (Builder) service that
+      corresponds to a Persistence Unit that lists the entity classes. If such
+      a service is available, the client can use this service to get an Entity
+      Manager, allowing the client to retrieve and persist objects as long as
+      the originating Entity Manager Factory (Builder) service is
+      registered.</para>
+
+      <para>In a non-OSGi environment, it is customary to get an Entity
+      Manager Factory through the <code>Persistence</code> class. This
+      <code>Persistence</code> class provides a number of static methods that
+      give access to any locally available Jakarta Persistence providers. This approach is not
+      recommended in an OSGi environment due to class loading and start
+      ordering issues. However, OSGi environments can support access through
+      this static factory with a Static Persistence bundle.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Jakarta Persistence Overview</title>
+
+    <para>Jakarta Persistence is a specification that is part of <xref
+    linkend="i3091015"/>. This OSGi Specification is based on <xref
+    linkend="i3075794"/>, <xref linkend="i3075842"/> and <xref
+    linkend="i3075842.1"/>. This section provides an overview of JPA as
+    specified in the JCP. The purpose of this section is to introduce the
+    concepts behind Jakarta Persistence and define the terminology that will be used in the
+    remainder of the chapter.</para>
+
+    <para>The purpose of Jakarta Persistence is to simplify access to relational databases for
+    applications on the object-oriented Java platform. Jakarta Persistence provides support
+    for storing and retrieving objects in a relational database. The Jakarta Persistence
+    specification defines in detail how objects are mapped to tables and
+    columns under the full control of the application. The core classes
+    involved are depicted in <xref linkend="i3105110"/>.</para>
+
+    <figure pgwide="1" xml:id="i3105110">
+      <title>Jakarta Persistence Client View</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.800in"
+                     contentwidth="6.246in" fileref="client-view.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The Jakarta Persistence specifications define a number of concepts that are defined
+    in this section for the purpose of this OSGi specification. However, the
+    full syntax and semantics are defined in the Jakarta Persistence specifications.</para>
+
+    <section>
+      <title>Persistence</title>
+
+      <para>Classes that are stored and retrieved through Jakarta Persistence are called the
+      <emphasis>entity classes</emphasis>. In this specification, the concept
+      of entity classes includes the <emphasis>embeddable</emphasis> classes,
+      which are classes that do not have any persistent identity, and mapped
+      super classes that allow mappings, but are not themselves persistent.
+      Entity classes are not required to implement any interface or extend a
+      specific superclass, they are Plain Old Java Objects (POJOs). It is the
+      responsibility of the <emphasis>Jakarta Persistence Provider</emphasis> to connect to a
+      database and map the store and retrieve operations of the entity classes
+      to their tables and columns. For performance reasons, the entity classes
+      are sometimes <emphasis>enhanced</emphasis>. This enhancement can take
+      place during build time, deploy time, or during class loading time. Some
+      enhancements use byte code weaving, some enhancements are based on
+      sub-classing.</para>
+
+      <para>The Jakarta Persistence Provider cannot automatically perform its persistence
+      tasks; it requires configuration information. This configuration
+      information is stored in the <emphasis>Persistence
+      Descriptor</emphasis>. A Persistence Descriptor is an XML file according
+      of one of the two following namespaces:</para>
+
+      <programlisting>http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd
+http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
+
+      <para>The Jakarta Persistence standard Persistence Descriptor must be stored in
+      <code>META-INF/persistence.xml</code>. It is usually in the same class
+      path entry (like a JAR or directory) as the entity classes.</para>
+
+      <para>The Jakarta Persistence Provider parses the Persistence Descriptor and extracts
+      one or more <emphasis>Persistence Units</emphasis>. A Persistence Unit
+      includes the following aspects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Name</emphasis> - Every Persistence Unit must have a
+          name to identify it to clients. For example:
+          <code>Accounting</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Provider Selection</emphasis> - Restriction to a
+          specific Jakarta Persistence Provider, usually because there are dependencies in the
+          application code on provider specific functionality.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JDBC Driver Selection</emphasis> - Selects the JDBC
+          driver, the principal and the credentials for selecting and
+          accessing a relational database. See <xref
+          linkend="i3112211"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Properties</emphasis> - Standard and Jakarta Persistence Provider
+          specific properties.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The object-relational mappings are stored in special mapping
+      resources or are specified in annotations.</para>
+
+      <para>A Persistence Unit can be <emphasis>complete</emphasis> or
+      <emphasis>incomplete</emphasis>. A complete Persistence Unit identifies
+      the database driver that is needed for the Persistence Unit, though it
+      does not have to contain the credentials. An incomplete Persistence Unit
+      lacks this information.</para>
+
+      <para>The relations between the class path, its entries, the entity
+      classes, the Persistence Descriptor and the Persistence Unit is depicted
+      in <xref linkend="i3092836"
+      xrefstyle="template:Figure %n on page %p"/>.</para>
+
+      <figure xml:id="i3092836">
+        <title>Jakarta Persistence Configuration</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.800in"
+                       contentwidth="6.264in" fileref="configuration.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Jakarta Persistence recognizes the concept of a <emphasis>persistence
+      root</emphasis>. The persistence root is the root of the JAR (or
+      directory) on the class path that contains the
+      <code>META-INF/persistence.xml</code> resource.</para>
+    </section>
+
+    <section>
+      <title>Jakarta Persistence Provider</title>
+
+      <para>The Jakarta Persistence specifications provide support for multiple Jakarta Persistence Providers
+      in the same application. An Application selects a Jakarta Persistence Provider through
+      the <code>Persistence</code> class, using static factory methods. One of
+      these methods accepts a map with <emphasis>configuration
+      properties</emphasis>. Configuration properties can override information
+      specified in a Persistence Unit or these properties add new information
+      to the Persistence Unit.</para>
+
+      <para>The default implementation of the <code>Persistence</code> class
+      discovers providers through the Jakarta EE services model, this model
+      requires a text resource in the class path entry called:</para>
+
+      <programlisting> <code>META-INF/services/jakarta.persistence.PersistenceProvider</code> </programlisting>
+
+      <para>This text resource contains the name of the Jakarta Persistence Provider
+      implementation class.</para>
+
+      <para>The <code>Persistence</code> class
+      <code>createEntityManagerFactory</code> method provides the Jakarta Persistence Provider
+      with the name of a Persistence Unit. The Jakarta Persistence Provider must then scan the
+      class path for any <code>META-INF/persistence.xml</code> entries, these
+      are the available Persistence Descriptors. It then extracts the
+      Persistence Units to find the requested Persistence Unit. If no such
+      Persistence Unit can be found, or the Jakarta Persistence Provider is restricted from
+      servicing this Persistence Unit, then <code>null</code> is returned. The
+      Persistence class will then continue to try the next found or registered
+      Jakarta Persistence Provider.</para>
+
+      <para>A Persistence Unit can restrict Jakarta Persistence Providers by specifying a
+      <emphasis>Jakarta Persistence Provider class</emphasis>, this introduces a
+      <emphasis>provider dependency</emphasis>. The specified Jakarta Persistence Provider
+      class must implement the <code>PersistenceProvider</code> interface.
+      This <emphasis>implementation class name</emphasis> must be available
+      from the Jakarta Persistence Provider's documentation. Jakarta Persistence Providers that do not own the
+      specified Jakarta Persistence Provider class must ignore such a Persistence Unit.</para>
+
+      <para>Otherwise, if the Persistence Unit is not restricted, the Jakarta Persistence
+      Provider is <emphasis>assigned</emphasis> to this Persistence Unit; it
+      must be ready to provide an <code>EntityManagerFactory</code> object
+      when the application requests one.</para>
+
+      <para>The Jakarta Persistence Provider uses the Persistence Unit, together with any
+      additional configuration properties, to construct an <emphasis>Entity
+      Manager Factory</emphasis>. The application then uses this Entity
+      Manager Factory to construct an <emphasis>Entity Manager</emphasis>,
+      optionally providing additional configuration properties. The Entity
+      Manager then provides the operations for the application to store and
+      retrieve entity classes from the database.</para>
+
+      <para>The additional configuration properties provided with the creation
+      of the Entity Manager Factory or the Entity Manager are often used to
+      specify the database driver and the credentials. This allows the
+      Persistence Unit to be specified without committing to a specific
+      database, leaving the choice to the application at runtime.</para>
+
+      <para>The relations between the application, Entity Manager, Entity
+      Manager Factory and the Jakarta Persistence Provider are depicted in <xref
+      linkend="i3094282" xrefstyle="template:Figure %n on page %p"/>.</para>
+
+      <figure xml:id="i3094282">
+        <title>Jakarta Persistence Dynamic Model</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.200in"
+                       contentwidth="6.264in" fileref="dynamic-model.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section xml:id="i3112132">
+      <title>Managed and Unmanaged</title>
+
+      <para>The Jakarta Persistence specifications make a distinction between a
+      <emphasis>managed</emphasis> and an <emphasis>unmanaged</emphasis> mode.
+      In the managed mode the presence of a Jakarta EE Container is assumed. Such
+      a container provides many services for its contained applications like
+      transaction handling, dependency injection, etc. One of these aspects
+      can be the interface to the relational database. The Jakarta Persistence specifications
+      therefore have defined a special method for Jakarta EE Containers to manage
+      the persistence aspects of their Managed Clients. This method is the
+      <code>createContainerEntityManagerFactory</code> method on the
+      <code>PersistenceProvider</code> interface. This method is purely
+      intended for Jakarta EE Containers and should not be used in other
+      environments.</para>
+
+      <para>The other method on the <code>PersistenceProvider</code> interface
+      is intended to be used by the <code>Persistence</code> class static
+      factory methods. The Persistence class searches for an appropriate Jakarta Persistence
+      Provider by asking all available Jakarta Persistence Providers to create an Entity
+      Manager Factory based on configuration properties. The first Jakarta Persistence
+      Provider that is capable of providing an Entity Manager Factory wins.
+      The use of these static factory methods is called the
+      <emphasis>unmanaged mode</emphasis>. It requires a Jakarta Persistence Provider to scan
+      the class path to find the assigned Persistence Units.</para>
+    </section>
+
+    <section xml:id="i3112211">
+      <title>JDBC Access in Jakarta Persistence</title>
+
+      <para>A Persistence Unit is configured to work with a relational
+      database. Jakarta Persistence Providers communicate with a relational database through
+      compliant JDBC database drivers. The database and driver parameters are
+      specified in the Persistence Unit or configured during Entity Manager
+      Factory or Entity Manager creation with the configuration properties.
+      The configuration properties for selecting a database in non-managed
+      mode were proprietary in JPA 1.0 but have been standardized in version
+      2.0 of JPA:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
+          name of the driver class</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
+          to indicate database information</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.user</code> - User name to use
+          when obtaining connections</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.password</code> - Password to use
+          when obtaining connections</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Bundles with Persistence</title>
+
+    <para>The primary goal of this specification is to simplify the
+    programming model for bundles that need persistence. In this specification
+    there are two application roles:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Persistence Bundle</emphasis> - A Persistence Bundle
+        contains the entity classes and one or more Persistence Descriptors,
+        each providing one or more Persistence Units.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Client Bundle</emphasis> -A Client Bundle contains the
+        code that manipulates the entity classes and uses an Entity Manager to
+        store and retrieve these entity classes with a relational database.
+        The Client Bundle obtains the required Entity Manager(s) via a service
+        based model.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These roles can be combined in a single bundle.</para>
+
+    <section xml:id="i3096192">
+      <title>Services</title>
+
+      <para>A Jakarta Persistence Provider uses Persistence Units to provide Client Bundles
+      with a configured <emphasis>Entity Manager Factory</emphasis> service
+      and/or an <emphasis>Entity Manager Factory Builder</emphasis> service
+      for each assigned Persistence Unit:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Entity Manager Factory service</emphasis> - Provides
+          an <code>EntityManagerFactory</code> object that depends on a
+          complete Persistence Unit. That is, it is associated with a
+          registered Data Source Factory service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Entity Manager Factory Builder service</emphasis> -
+          The Entity Manager Factory Builder service provides the capability
+          of creating an <code>EntityManagerFactory</code> object with
+          additional configuration properties. The Entity Manager Factory
+          Builder service also provides information about the Jakarta Persistence Provider
+          that will be used to create the <code>EntityManagerFactory</code>
+          object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These services are collectively called the <emphasis>Jakarta Persistence
+      Services</emphasis>. Entity Managers obtained from such Jakarta Persistence Services can
+      only be used to operate on entity classes associated with their
+      corresponding Persistence Unit.</para>
+    </section>
+
+    <section>
+      <title>Persistence Bundle</title>
+
+      <para>A <emphasis>Persistence Bundle</emphasis> is a bundle that
+      specifies the Meta-Persistence header, see <xref linkend="i3088219"/>.
+      This header refers to one or more Persistence Descriptors in the
+      Persistence Bundle. Commonly, this is the
+      <code>META-INF/persistence.xml</code> resource. This location is the
+      standard for non-OSGi environments, however an OSGi bundle can also use
+      other locations as well as multiple resources.</para>
+
+      <para>For example, the contents of a simple Persistence Bundle with a
+      single <code>Person</code> entity class could look like:</para>
+
+      <programlisting>META-INF/
+META-INF/MANIFEST.MF
+OSGI-INF/address.xml
+com/acme/Person.class</programlisting>
+
+      <para>The corresponding manifest would then look like:</para>
+
+      <programlisting>Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Meta-Persistence: OSGI-INF/address.xml
+Bundle-SymbolicName: com.acme.simple.persistence
+Bundle-Version: 3.2.4.200912231004</programlisting>
+
+      <para>A Persistence Bundle is a normal bundle; it must follow all the
+      rules of OSGi and can use all OSGi constructs like Bundle-ClassPath,
+      fragment bundles, import packages, export packages, etc. However, there
+      is one limitation: any entity classes must originate in the bundle's
+      JAR, it cannot come from a fragment. This requirement is necessary to
+      simplify enhancing entity classes.</para>
+    </section>
+
+    <section>
+      <title>Client Bundles</title>
+
+      <para>A Client Bundle uses the entity classes from a Persistence Bundle
+      to provide its required functionality. To store and retrieve these
+      entity classes a Client Bundle requires an Entity Manager that is
+      configured for the corresponding Persistence Unit.</para>
+
+      <para>An Entity Manager is intended to be used by a single session, it
+      is not thread safe. Therefore, a client needs an Entity Manager Factory
+      to create an Entity Manager. In an OSGi environment, there are multiple
+      routes to obtain an Entity Manager Factory.</para>
+
+      <para>A Jakarta Persistence Provider must register an Entity Manager Factory service for
+      each assigned Persistence Unit that is <emphasis>complete</emphasis>.
+      Complete means that it is a configured Persistence Unit, including the
+      reference to the relational database. The Entity Manager Factory service
+      is therefore bound to a Data Source Factory service and Client Bundles
+      should not attempt to rebind the Data Source Factory with the
+      configuration properties of the <code>createEntityManager(Map)</code>
+      method. See <xref linkend="i3115644"/> for the consequences. If the Data
+      Source Factory must be bound by the Client Bundle then the Client Bundle
+      should use the <xref linkend="i3095031"/>.</para>
+
+      <para>The Entity Manager Factory service must be registered with the
+      service properties as defined in <xref linkend="i3087143"/>. These
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>osgi.unit.name</code> - (<code>String</code>) The name
+          of the Persistence Unit</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.unit.version</code> - (<code>String</code>) The
+          version of the associated Persistence Bundle</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.unit.provider</code> - (<code>String</code>) The
+          implementation class name of the Jakarta Persistence Provider</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The life cycle of the Entity Manager Factory service is bound to
+      the Persistence Bundle, the Jakarta Persistence Provider, and the selected Data Source
+      Factory service.</para>
+
+      <para>A Client Bundle that wants to use an Entity Manager Factory
+      service should therefore use an appropriate filter to select the Entity
+      Manager Factory service that corresponds to its required Persistence
+      Unit. For example, the following snippet uses Declarative Services, see
+      <xref linkend="service.component"/>, to statically depend on such a
+      service:</para>
+
+      <programlisting>&lt;reference name="accounting"
+   target="(&amp;amp;(osgi.unit.name=Accounting)(osgi.unit.version=3.2.*))"
+    interface="jakarta.persistence.EntityManagerFactory"/&gt;</programlisting>
+    </section>
+
+    <section xml:id="i3095031">
+      <title>Custom Configured Entity Manager</title>
+
+      <para>If a Client Bundle needs to provide configuration properties for
+      the creation of an Entity Manager Factory it should use the
+      <emphasis>Entity Manager Factory Builder</emphasis> service. This can
+      for example be used to provide the database selection properties when
+      the Persistence Unit is incomplete or if the database selection needs to
+      be overridden. The Entity Manager Factory Builder service also provides
+      information about the Jakarta Persistence Provider that will be used to create the
+      Entity Manager Factory. This information can be used by the Client
+      Bundle when determining what (if any) Jakarta Persistence Provider implementation
+      specific configuration that the Client Bundle will provide.</para>
+
+      <para>The Entity Manager Factory Builder service's life cycle must not
+      depend on the availability of any Data Source Factory, even if a JDBC
+      driver class name is specified in the Persistence Descriptor. The Entity
+      Manager Factory Builder service is registered with the same service
+      properties as the corresponding Entity Factory service, see <xref
+      linkend="i3087143"/>.</para>
+
+      <para>The following methods are defined on the
+      <code>EntityManagerFactoryBuilder</code> interface:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.createEntityManagerFactory-Map-"
+          xrefstyle="hyperlink"/> - Returns a custom configured
+          <code>EntityManagerFactory</code> instance for the Persistence Unit
+          associated with the service. Accepts a map with the configuration
+          properties to be applied during Entity Manager Factory creation. The
+          method must return a proper Entity Manager Factory or throw an
+          Exception.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.getPersistenceProviderName--"
+          xrefstyle="hyperlink"/> - Returns the name of the
+          <code>PersistenceProvider</code> implementation class used in Entity
+          Manager Factory creation. This name will be the same as the value of
+          the <xref
+          linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.JPA_UNIT_PROVIDER"
+          xrefstyle="hyperlink"/> service property.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.getPersistenceProviderBundle--"
+          xrefstyle="hyperlink"/> - Returns the bundle Jakarta Persistence Provider
+          implementation bundle which provides the
+          <code>PersistenceProvider</code>. If the Persistence Provider was
+          provided as an OSGi service then this method must return the bundle
+          which registered the service. Otherwise this method must return the
+          bundle which loaded the <code>PersistenceProvider</code>
+          implementation class.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>createEntityManagerFactory</code> method allows standard
+      and vendor-specific properties to be passed in and applied to the Entity
+      Manager Factory being created. However, some properties cannot be
+      honored by the aforementioned method. For example, the
+      <code>jakarta.persistence.provider</code> Jakarta Persistence property, as a means to
+      specify a specific Jakarta Persistence Provider at runtime, cannot be supported because
+      the Jakarta Persistence Provider has already been decided; it is the Jakarta Persistence Provider that
+      registered the Entity Manager Factory Builder service. A Jakarta Persistence Provider
+      should throw an Exception if it recognizes the property but it cannot
+      use the property when specified through the builder. Unrecognized
+      properties must be ignored.</para>
+
+      <para>Once an Entity Manager Factory is created the specified Data
+      Source becomes associated with the Entity Manager Factory. It is
+      therefore not possible to re-associate an Entity Manager Factory with
+      another Data Source by providing different properties. A Jakarta Persistence Provider
+      must throw an Exception when an attempt is made to re-specify the
+      database properties. See <xref linkend="i3115644"/> for further
+      information.</para>
+
+      <para>As an example, a sample snippet of a client that wants to operate
+      on a persistence unit named <code>Accounting</code> and pass in the JDBC
+      user name and password properties is:</para>
+
+      <programlisting>ServiceReference[] refs = context.getServiceReferences(
+    EntityManagerFactoryBuilder.class.getName(),
+    "(osgi.unit.name=Accounting)");
+if ( refs != null ) {
+    EntityManagerFactoryBuilder emfBuilder = 
+        (EntityManagerFactoryBuilder) context.getService(refs[0]);
+    if ( emfBuilder != null ) {
+      Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
+      props.put("javax.persistence.jdbc.user", userString);
+      props.put("javax.persistence.jdbc.password",passwordString);
+      EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);
+      EntityManager em = emf.createEntityManager();
+     ...
+}</programlisting>
+
+      <para>The example does not handle the dynamic dependencies on the
+      associated Data Source Factory service.</para>
+
+      <section xml:id="service.jakartapersistence-std.config.props">
+        <title>Supported configuration properties</title>
+
+        <para>The <xref linkend="i3075842.1"/> specification adds a
+        significant number of standard property names. These properties are
+        used both for runtime control, and also for configuring Jakarta Persistence
+        persistence units as they are created.</para>
+
+        <para>The EntityManagerFactoryBuilder service must support the defined
+        property names as per the Jakarta Persistence specification. In most cases this will
+        be accomplished by passing the values directly to the Persistence
+        Provider, but in some cases it may require further action from the Jakarta Persistence
+        Service implementation.</para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="i3097804">
+    <title>Extending a Persistence Bundle</title>
+
+    <para>A Persistence Bundle is identified by its Meta-Persistence manifest
+    header that references a number of Persistence Descriptor resources.
+    Persistence bundles must be detected by a Jakarta Persistence Provider. The Jakarta Persistence Provider
+    must parse any Persistence Descriptors in these bundles and detect the
+    assigned Persistence Units. For each assigned Persistence Unit, the Jakarta Persistence
+    Provider must register an Entity Manager Factory Builder service when the
+    Persistence Bundle is ready, see <xref linkend="i3100956"/>.</para>
+
+    <para>For complete and assigned Persistence Units, the Jakarta Persistence Provider must
+    find the required Data Source Factory service based on the driver name.
+    When the Persistence Bundle is ready and the selected Data Source Factory
+    is available, the Jakarta Persistence Provider must have an Entity Manager Factory service
+    registered that is linked to that Data Source Factory.</para>
+
+    <para>When the Persistence Bundle is stopped (or the Jakarta Persistence Provider stops),
+    the Jakarta Persistence Provider must close all connections and cleanup any resources
+    associated with the Persistence Bundle.</para>
+
+    <para>This process is outlined in detail in the following sections.</para>
+
+    <section>
+      <title>Class Space Consistency</title>
+
+      <para>A Jakarta Persistence Provider must ignore Persistence Bundles that are in another
+      class space for the <code>jakarta.persistence.*</code> packages. Such a
+      Jakarta Persistence Provider cannot create Jakarta Persistence Services that would be visible and usable
+      by the Client Bundles.</para>
+    </section>
+
+    <section xml:id="i3088219">
+      <title>Meta Persistence Header</title>
+
+      <para>A <emphasis>Persistence Bundle</emphasis> is a bundle that
+      contains the Meta-Persistence header. If this header is not present,
+      then this specification does not apply and a Jakarta Persistence Provider should ignore
+      the corresponding bundle.</para>
+
+      <para>The persistence root of a Persistence Unit is the root of the
+      Persistence Bundle's JAR</para>
+
+      <para>The Meta-Persistence header has a syntax of:</para>
+
+      <programlisting>Meta-Persistence ::= ( jar-path ( ',' jar-path)* )?
+jar-path         ::= path ( '!/' spath )? 
+spath            ::= path   // must not start with solidus ('/' \u002F)</programlisting>
+
+      <para>The header may include zero or more comma-separated
+      <code>jar-paths</code>, each a path to a Persistence Descriptor resource
+      in the bundle. Paths may optionally be prefixed with the solidus
+      (<code>'/' \u002F</code>) character. The Jakarta Persistence Provider must always
+      include the <code>META-INF/persistence.xml</code> first if it is not one
+      of the listed paths. Wildcards in directories are not supported. The
+      <code>META-INF/persistence.xml</code> is therefore the default location
+      for an empty header.</para>
+
+      <para>For example:</para>
+
+      <programlisting>Meta-Persistence: META-INF/jpa.xml, persistence/jpa.xml</programlisting>
+
+      <para>The previous example will instruct the Jakarta Persistence Provider to process the
+      <code>META-INF/persistence.xml</code> resource first, even though it is
+      not explicitly listed. The Jakarta Persistence Provider must then subsequently process
+      <code>META-INF/jpa.xml</code> and the <code>persistence/jpa.xml</code>
+      resources.</para>
+
+      <para>The paths in the Meta-Persistence header must be used with the
+      <code>Bundle.getEntry()</code> method, or a mechanism with similar
+      semantics, to obtain the corresponding resource. The
+      <code>getEntry</code> method does not force the bundle to resolve when
+      still unresolved; resolving might interfere with the efficiency of any
+      required entity class enhancements. However, the use of the
+      <code>getEntry</code> method implies that fragment bundles cannot be
+      used to contain Persistence Descriptors nor entity classes.</para>
+
+      <para>Paths in the Meta-Persistence header can reference JAR files that
+      are nested in the bundle by using the <code>!/ jar:</code> URL syntax to
+      separate the JAR file from the path within the JAR, for example:</para>
+
+      <programlisting>Meta-Persistence: embedded.jar!/META-INF/persistence.xml</programlisting>
+
+      <para>This example refers to a resource in the <code>embedded.jar</code>
+      resource, located in the <code>META-INF</code> directory of
+      <code>embedded.jar</code>.</para>
+
+      <para>The <code>!/</code> splits the <code>jar-path</code> in a prefix
+      and a suffix:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Prefix</emphasis> - The prefix is a path to a JAR
+          resource in the bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Suffix</emphasis> - The suffix is a path to a
+          resource in the JAR identified by the prefix.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example:</para>
+
+      <programlisting>embedded.jar!/META-INF/persistence.xml
+prefix:     embedded.jar
+suffix:     META-INF/persistence.xml</programlisting>
+
+      <para>It is not required that all listed or implied resources are
+      present in the bundle's JAR. For example, it is valid that the default
+      <code>META-INF/persistence.xml</code> resource is absent. However, if no
+      Persistence Units are found at all then the absence of any Persistence
+      Unit is regarded as an error that should be logged. In this case, the
+      Persistence Bundle is further ignored.</para>
+    </section>
+
+    <section>
+      <title>Processing</title>
+
+      <para>A Jakarta Persistence Provider can detect a Persistence Bundle as early as its
+      installation time. This early detection allows the Jakarta Persistence Provider to
+      validate the Persistence Bundle as well as prepare any mechanisms to
+      enhance the classes for better performance. However, this process can
+      also be delayed until the bundle is started.</para>
+
+      <para>The Jakarta Persistence Provider must validate the Persistence Bundle. A valid
+      Persistence Bundle must:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Have no parsing errors of the Persistence Descriptors</para>
+        </listitem>
+
+        <listitem>
+          <para>Validate all Persistence Descriptors against their
+          schemas</para>
+        </listitem>
+
+        <listitem>
+          <para>Have at least one assigned Persistence Unit</para>
+        </listitem>
+
+        <listitem>
+          <para>Have all entity classes mentioned in the assigned Persistence
+          Units on the Persistence Bundle's JAR.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A Persistence Bundle that uses multiple providers for its
+      Persistence Units could become incompatible with future versions of this
+      specification.</para>
+
+      <para>If any validation fails, then this is an error and should be
+      logged. Such a bundle is ignored completely even if it also contains
+      valid assigned Persistence Units. Only a bundle update can recover from
+      this state.</para>
+
+      <para>Persistence Units can restrict Jakarta Persistence Providers by specifying a
+      provider dependency. Jakarta Persistence Providers that do not own this Jakarta Persistence Provider
+      implementation class must ignore such a Persistence Unit completely.
+      Otherwise, if the Jakarta Persistence Provider can service a Persistence Unit, it
+      assigns itself to this Persistence Unit.</para>
+
+      <para>If after the processing of all Persistence Descriptors, the Jakarta Persistence
+      Provider has no assigned Persistence Units, then the Jakarta Persistence Provider must
+      further ignore the Persistence Bundle.</para>
+    </section>
+
+    <section xml:id="i3100956">
+      <title>Ready Phase</title>
+
+      <para>A Persistence Bundle is <emphasis>ready</emphasis> when its state
+      is <code>ACTIVE</code> or, when a <code>lazy</code> activation policy is
+      used, <code>STARTING</code>. A Jakarta Persistence Provider must track the ready state
+      of Persistence Bundles that contain assigned Persistence Units.</para>
+
+      <para>While a Persistence Bundle is ready, the Jakarta Persistence Provider must have,
+      for each assigned Persistence Unit, an Entity Manager Factory Builder
+      service registered to allow Client Bundles to create new
+      <code>EntityManagerFactory</code> objects. The Jakarta Persistence Provider must also
+      register an Entity Manager Factory for each assigned and complete
+      Persistence Unit that has its corresponding Data Source available in the
+      service registry.</para>
+
+      <para>The service registration process is asynchronous with the
+      Persistence Bundle start because a Jakarta Persistence Provider could start after a
+      Persistence Bundle became ready.</para>
+    </section>
+
+    <section xml:id="i3087143">
+      <title>Service Registrations</title>
+
+      <para>The Jakarta Persistence Services must be registered through the Bundle Context of
+      the corresponding Persistence Bundle to ensure proper class space
+      consistency checks by the OSGi Framework.</para>
+
+      <para>Jakarta Persistence Services are always related to an assigned Persistence Unit.
+      To identify this Persistence Unit and the assigned Jakarta Persistence Provider, each
+      Jakarta Persistence Service must have the following service properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>osgi.unit.name</code> - (<code>String</code>) The name
+          of the Persistence Unit. This property corresponds to the
+          <code>name</code> attribute of the <code>persistence-unit</code>
+          element in the Persistence Descriptor. It is used by Client Bundles
+          as the primary filter criterion to obtain a Jakarta Persistence Service for a
+          required Persistence Unit. There can be multiple Jakarta Persistence Services
+          registered under the same <code>osgi.unit.name</code>, each
+          representing a different version of the Persistence Unit.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.unit.version</code> - (<code>String</code>) The
+          version of the Persistence Bundle, as specified in Bundle-Version
+          header, that provides the corresponding Persistence Unit. Client
+          Bundles can filter their required Jakarta Persistence Services based on a particular
+          Persistence Unit version.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.unit.provider</code> - (<code>String</code>) The
+          Jakarta Persistence Provider implementation class name that registered the service.
+          The <code>osgi.unit.provider</code> property allows Client Bundles
+          to know the Jakarta Persistence Provider that is servicing the Persistence Unit.
+          Client Bundles should be careful when filtering on this property,
+          however, since the Jakarta Persistence Provider that is assigned a Persistence Unit
+          may not be known by the Client Bundle ahead of time. If there is a
+          Jakarta Persistence Provider dependency, it is better to specify this dependency in
+          the Persistence Unit because other Jakarta Persistence Providers are then not
+          allowed to assign such a Persistence Unit and will therefore not
+          register a service.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i3083073">
+      <title>Registering the Entity Manager Factory Builder Service</title>
+
+      <para>Once the Persistence Bundle is ready, a Jakarta Persistence Provider must register
+      an Entity Manager Factory Builder service for each assigned Persistence
+      Unit from that Persistence Bundle.</para>
+
+      <para>The Entity Manager Factory Builder service must be registered with
+      the service properties listed in <xref linkend="i3087143"/>. The Entity
+      Manager Factory Builder service is registered under the
+      <code>org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder</code> name. This
+      interface is using the Jakarta Persistence packages and is therefore bound to one of the
+      two supported versions, see <xref linkend="i3113425"/>.</para>
+
+      <para>The Entity Manager Factory Builder service enables the creation of
+      a parameterized version of an Entity Factory Manager by allowing the
+      caller to specify configuration properties. This approach is necessary
+      if, for example, the Persistence Unit is not complete.</para>
+    </section>
+
+    <section xml:id="i3097403">
+      <title>Registering the Entity Manager Factory</title>
+
+      <para>A complete Persistence Unit is configured with a specific
+      relational database driver, see <xref linkend="i3112211"/>. A Jakarta Persistence
+      Provider must have an Entity Manager Factory service registered for each
+      assigned and complete Persistence Unit when:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The originating Persistence Bundle is ready, and</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>matching</emphasis> Data Source Factory service is
+          available. Matching a Data Source Factory service to a Persistence
+          Unit is discussed in <xref linkend="i3097361"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A Jakarta Persistence Provider must track the life cycle of the matching Data
+      Source Factory service; while this service is unavailable the Entity
+      Manager Factory service must also be unavailable. Any active Entity
+      Managers created by the Entity Manager Factory service become invalid to
+      use at that time.</para>
+
+      <para>The Entity Manager Factory service must be registered with the
+      same service properties as described for the Entity Manager Factory
+      Builder service, see <xref linkend="i3087143"/>. It should be registered
+      under the following name:</para>
+
+      <programlisting> <code>jakarta.persistence.EntityManagerFactory</code></programlisting>
+
+      <para>The <code>EntityManagerFactory</code> interface is from the Jakarta Persistence
+      packages and is therefore bound to one of the two supported versions,
+      see <xref linkend="i3113425"/>.</para>
+
+      <para>An Entity Manager Factory is bound to a Data Source Factory
+      service because its assigned Persistence Unit was complete. However, a
+      Client Bundle could still provide JDBC configuration properties for the
+      <code>createEntityManager(Map)</code> method. This not always possible,
+      see <xref linkend="i3115644"/>.</para>
+
+      <para>In the case of an incomplete Persistence Unit no Entity Manager
+      Factory can be initially registered, however once configured using an
+      Entity Manager Factory Builder service the Jakarta Persistence Service must register the
+      created Entity Manager Factory as a service. The registered service must
+      include any supplied configuration properties that match the recommended
+      OSGi service property types as service properties. The
+      <code>javax.persistence.jdbc.password</code> property must be omitted
+      from these service properties.</para>
+
+      <para>If the Entity Manager Factory Builder service is later used to
+      change the configuration being used by the Entity Manager Factory
+      Service then the registered Entity Manager Factory service must be
+      unregistered and closed. The newly created Entity Manager Factory object
+      must then be registered as a service.</para>
+    </section>
+
+    <section>
+      <title>Stopping</title>
+
+      <para>If a Persistence Bundle is being stopped, then the Jakarta Persistence Provider
+      must ensure that any resources allocated on behalf of the Persistence
+      Bundle are cleaned up and all open connections are closed. This cleanup
+      must happen synchronously with the <code>STOPPING</code> event. Any
+      Exceptions being thrown while cleaning up should be logged but must not
+      stop any further clean up.</para>
+
+      <para>If the Jakarta Persistence Provider is being stopped, the Jakarta Persistence Provider must
+      unregister all Jakarta Persistence Services that it registered through the Persistence
+      Bundles and clean up as if those bundles were stopped.</para>
+    </section>
+
+    <section>
+      <title>Entity Manager Factory Life Cycle</title>
+
+      <para>The Entity Manager Factory object has a <code>close</code> method.
+      This method closes the EntityManagerFactory and all associated Entity
+      Manager instances. As an OSGi framework is a multi-tenant environment it
+      should not be possible for one user of an Entity Manager Factory service
+      to break the valid usage of another. Therefore calls to the
+      <code>close</code> method of the EntityManagerFactory registered in the
+      service registry <emphasis>must not</emphasis> close the Entity Manager
+      Factory.</para>
+
+      <para>When an Entity Manager Factory Builder service is used to create
+      an Entity Manager Factory the same rules apply to the resulting Entity
+      Manager Factory service, however the object returned by the Entity
+      Manager Factory Builder behaves differently. This object has a working
+      close method which must unregister the Entity Manager Factory service
+      and close the Entity Manager Factory. This allows callers of the Entity
+      Manager Factory Builder to invalidate the Entity Manager Factories that
+      they create if, for example, a configuration changes, or a Data Source
+      becomes invalid.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Jakarta Persistence Provider</title>
+
+    <para>Jakarta Persistence Providers supply the implementation of the Jakarta Persistence Services and the
+    Persistence Provider service. It is the responsibility of a Jakarta Persistence Provider
+    to store and retrieve the entity classes from a relational database. It is
+    the responsibility of the Jakarta Persistence Provider to register a Persistence Provider
+    and start tracking Persistence Bundles, see <xref
+    linkend="i3097804"/>.</para>
+
+    <section>
+      <title>Managed Model</title>
+
+      <para>A Jakarta Persistence Provider that supports running in managed mode should
+      register a specific service for the Jakarta EE Containers: the Persistence
+      Provider service. The interface is the standard Jakarta Persistence
+      <code>PersistenceProvider</code> interface. See <xref
+      linkend="i3113425"/> for the issues around the multiple versions that
+      this specification supports.</para>
+
+      <para>The service must be registered with the following service
+      property:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>jakarta.persistence.provider</code> - The Jakarta Persistence Provider
+          implementation class name, a documented name for all Jakarta Persistence
+          Providers.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Persistence Provider service enables a Jakarta EE Container to
+      find a particular Jakarta Persistence Provider. This service is intended for containers
+      only, not for Client Bundles because there are implicit assumptions in
+      the Jakarta Persistence Providers about the Jakarta EE environment. A Jakarta EE Container
+      must obey the life cycle of the Persistence Provider service. If this
+      service is unregistered then it must close all connections and clean up
+      the corresponding resources.</para>
+    </section>
+
+    <section xml:id="i3097361">
+      <title>Database Access</title>
+
+      <para>A Persistence Unit is configured to work with a relational
+      database. Jakarta Persistence Providers must communicate with a relational database
+      through a compliant JDBC database driver. The database and driver
+      parameters are specified with properties in the Persistence Unit or the
+      configuration properties when a Entity Manager Factory Builder is used
+      to build an Entity Manager Factory. All Jakarta Persistence Providers, regardless of
+      version, in an OSGi environment must support the following properties
+      for database access:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
+          name of the driver class.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
+          to indicate database information</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.user</code> - User name to use
+          when obtaining connections</para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.persistence.jdbc.password</code> - Password to use
+          when obtaining connections</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are severe limitations in specifying these properties after
+      the Entity Manager Factory is created for the first time, see <xref
+      linkend="i3115644"/>.</para>
+    </section>
+
+    <section>
+      <title>Data Source Factory Service Matching</title>
+
+      <para>Providers must use the <code>javax.persistence.jdbc.driver</code>
+      property, as defined in <xref linkend="i3112211"/>, to obtain a Data
+      Source Factory service. The Data Source Factory is specified in <xref
+      linkend="service.jdbc"/>. The <code>javax.persistence.jdbc.driver</code>
+      property must be matched with the value of the Data Source Factory
+      service property named <code>osgi.jdbc.driver.class</code>.</para>
+
+      <para>The Data Source Factory service is registered with the
+      <code>osgi.jdbc.driver.class</code> service property that holds the
+      class name of the driver. This property must match the
+      <code>javax.persistence.jdbc.driver</code> service property of the
+      Persistence Unit.</para>
+
+      <para>For example, if the Persistence Unit specifies the
+      <code>com.acme.db.Driver</code> database driver in the
+      <code>javax.persistence.jdbc.driver property</code> (or in the
+      Persistence Descriptor <code>property</code> element), then the
+      following filter would select an appropriate <code>Data Source
+      Factory:</code></para>
+
+      <programlisting>(&amp;(objectClass=org.osgi.service.jdbc.DataSourceFactory)
+   (<code>osgi.jdbc.driver.class=com.acme.db.Driver))</code></programlisting>
+
+      <para>Once the Data Source Factory is obtained, the Jakarta Persistence Provider must
+      obtain a <code>DataSource</code> object. This Data Source object must
+      then be used for all relational database access.</para>
+
+      <para>In <xref linkend="i3075794"/> the Jakarta Persistence JDBC properties were not
+      standardized. Jakarta Persistence Providers typically defined a set of JDBC properties,
+      similar to those defined in Jakarta Persistence 3.0, to configure JDBC driver access.
+      Jakarta Persistence Providers for version 3.0 must look up the Data Source Factory service first
+      using the Jakarta Persistence 3.0 JDBC properties. If these properties are not defined
+      then they should fall back to their proprietary driver
+      properties.</para>
+    </section>
+
+    <section xml:id="i3115644">
+      <title>Rebinding</title>
+
+      <para>In this specification, the Entity Manager Factory service is only
+      registered when the Persistence Unit is complete and a matching Data
+      Source Factory service is available. However, the API of the Entity
+      Manager Factory Builder allows the creation of an Entity Manager Factory
+      with configuration properties. Those configuration properties could
+      contain the JDBC properties to bind to another Data Source Factory
+      service than it had already selected.</para>
+
+      <para>This case must not be supported by a Jakarta Persistence Provider, an Illegal
+      Argument Exception must be thrown. If such a case would be supported
+      then the life cycle of the Entity Manager Factory service would still be
+      bound to the first Data Source Factory. There would be no way for the
+      Jakarta Persistence Provider to signal to the Client Bundle that the returned Entity
+      Manager Factory is no longer valid because the rebound Data Source
+      Factory was unregistered.</para>
+
+      <para>Therefore, when an Entity Manager Factory is being created using
+      the Entity Manager Factory Builder, a Jakarta Persistence Provider must verify that the
+      new properties are compatible with the properties of the already created
+      Entity Manager Factory. If no, then an Exception must be thrown. If they
+      are compatible, then an instance of the previous Entity Manager Factory
+      should be returned.</para>
+    </section>
+
+    <section>
+      <title>Enhancing Entity Classes</title>
+
+      <para>Jakarta Persistence Providers may choose to implement the Jakarta Persistence specifications using
+      various implementation approaches and techniques. This promotes
+      innovation in the area, but also opens the door to limitations and
+      constraints arising due to implementation choices. For example, there
+      are Jakarta Persistence Providers that perform byte code weaving during the entity class
+      loading. Dynamic byte code weaving requires that the entity classes are
+      not loaded until the Jakarta Persistence Provider is first able to intercept the loading
+      of the entity class and be given an opportunity to do its weaving. It
+      also implies that the Persistence Bundle and any other bundles that
+      import packages from that bundle must be refreshed if the Jakarta Persistence Provider
+      needs to be changed.</para>
+
+      <para>This is necessary because the Jakarta Persistence Services are registered against
+      the Bundle Contexts of the Persistence Bundles and not the Bundle
+      Context of the Jakarta Persistence Providers. Client Bundles must then unget the service
+      to unbind themselves from the uninstalled Jakarta Persistence Provider. However, since
+      most Jakarta Persistence Providers perform some kind of weaving or class transformation
+      on the entity classes, the Persistence Bundle will likely need to be
+      refreshed. This will cause the Client Bundles to be refreshed also
+      because they depend on the packages of the entity classes.</para>
+    </section>
+
+    <section>
+      <title>Class Loading</title>
+
+      <para>Jakarta Persistence Providers cannot have package dependencies on entity classes
+      in Persistence Bundles because they cannot know at install time what
+      Persistence Bundles they will be servicing. However, when a Jakarta Persistence Provider
+      is servicing a Persistence Bundle, it must be able to load classes and
+      resources from that Persistence Bundle according to the OSGi bundle
+      rules. To do this class loading it must obtain a class loader that has
+      the same visibility as the Persistence Bundle's bundle class loader.
+      This will also allow it to load and manage metadata for the entity
+      classes and resources for that Persistence Bundle's assigned Persistence
+      Units. These resources and entity classes must reside directly in the
+      Persistence Bundle, they must be accessed using the
+      <code>getEntry</code> method. Entity classes and resources must not
+      reside in fragments.</para>
+    </section>
+
+    <section>
+      <title>Validation</title>
+
+      <para>There is not yet an OSGi service specification defined for
+      validation providers. If validation is required, the validation
+      implementation will need to be included with the Jakarta Persistence Provider
+      bundle.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Static Access</title>
+
+    <para>Non-managed client usage of Jakarta Persistence has traditionally been achieved
+    through the <code>Persistence</code> class. Invoking a static method on
+    the <code>Persistence</code> class is a dependency on the returned Jakarta Persistence
+    Provider that cannot be managed by the OSGi framework.</para>
+
+    <para>However, such an unmanaged dependency is supported in this
+    specification by the Static Persistence bundle. This bundle provides
+    backwards compatibility for programs that use existing Jakarta Persistence access
+    patterns. However, usage of this static model requires that the deployer
+    ensures that the actors needed are in place at the appropriate times by
+    controlling the life cycles of all participating bundles. The normal OSGi
+    safe-guards and dependency handling do not work in the case of static
+    access.</para>
+
+    <para>A Static Persistence Bundle must provide static access from the
+    <code>Persistence</code> class to the Jakarta Persistence Services.</para>
+
+    <section>
+      <title>Access</title>
+
+      <para>There are two methods on the <code>Persistence</code>
+      class:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>createEntityManagerFactory(String)</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>createEntityManagerFactory(String,Map)</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Both methods take the name of a Persistence Unit. The last method
+      also takes a map that contains extra configuration properties. To
+      support the usage of the static methods on the <code>Persistence</code>
+      class, the implementation of the
+      <code>Persistence.createEntityManagerFactory</code> method family must
+      do a lookup of one of the Jakarta Persistence Services associated with the selected
+      Persistence Unit.</para>
+
+      <para>If no configuration properties are specified, the Static
+      Persistence Bundle must look for an Entity Manager Factory service with
+      the <code>osgi.unit.name</code> property set to the given name. The
+      default service should be used because no selector for a version is
+      provided. If no such service is available, <code>null</code> must be
+      returned. Provisioning of multiple versioned Persistence Units is not
+      supported. Deployers should ensure only a single version of a
+      Persistence Unit with the same name is present in an OSGi framework at
+      any moment in time.</para>
+
+      <para>Otherwise, if configuration properties are provided, the Static
+      Access implementation must look for an Entity Manager Factory Builder
+      service with the <code>osgi.unit.name</code> property set to the given
+      Persistence Unit name. If no such service exists, <code>null</code> must
+      be returned. Otherwise, the default service must be used to create an
+      Entity Manager Factory with the given configuration properties. The
+      result must be returned to the caller.</para>
+
+      <para>For service lookups, the Static Persistence Bundle must use its
+      own Bundle Context, it must not attempt to use the Bundle Context of the
+      caller. All exceptions should be passed to the caller.</para>
+
+      <para>The class space of the Entity Manager Factory and the class space
+      of the client cannot be enforced to be consistent by the framework
+      because it is the <code>Persistence</code> class that is doing the
+      lookup of the service, and not the actual calling Client Bundle that
+      will be using the Entity Manager Factory. The framework cannot make the
+      connection and therefore cannot enforce that the class spaces
+      correspond. Deployers should therefore ensure that the involved class
+      spaces are correctly wired.</para>
+    </section>
+  </section>
+
+  <section xml:id="service.jakartapersistence-capabilities">
+    <title>Capabilities</title>
+
+    <para>The Jakarta Persistence Service Implementation must supply a number of capabilities
+    for use by client bundles and Deployers.</para>
+
+    <section>
+      <title>The Extender Capability</title>
+
+      <para>A Jakarta Persistence Service implementation must provide an extender which finds
+      and extends persistence bundles. The bundle providing this extender must
+      provide a capability in the <link
+      linkend="service.namespaces-osgi.extender.namespace">
+      <code>osgi.extender</code></link> namespace declaring an extender with
+      the name <xref
+      linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.JPA_CAPABILITY_NAME"
+      xrefstyle="hyperlink"/>. This capability must also declare a uses
+      constraint for the <code>org.osgi.service.jpa</code> and
+      <code>jakarta.persistence</code> packages. For example:</para>
+
+      <programlisting>Provide-Capability: osgi.extender;
+    osgi.extender="osgi.jakartapersistence";
+    version:Version="<xref endterm="org.osgi.service.jakartapersistence-version.number"
+          linkend="org.osgi.service.jakartapersistence"/>";
+    uses:="org.osgi.service.jakartapersistence,jakarta.persistence"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.extender.namespace"/>.</para>
+
+      <para>All persistence bundles should require the
+      <code>osgi.extender</code> capability from the Jakarta Persistence Service. This
+      requirement will wire the persistence bundle to the Jakarta Persistence Service
+      implementation and ensure that the Jakarta Persistence service is using the same API
+      packages as the persistence bundle.</para>
+
+      <programlisting>Require-Capability: osgi.extender;
+  filter:="(&amp;(osgi.extender=osgi.jakartapersistence)(version&gt;=<xref
+          endterm="org.osgi.service.jakartapersistence-version.number"
+          linkend="org.osgi.service.jakartapersistence"/>)(!(version&gt;=2.0)))"</programlisting>
+
+      <para>This requirement can be easily generated using the <xref
+      linkend="org.osgi.service.jakartapersistence.annotations.RequireJPAExtender"
+      xrefstyle="hyperlink"/> annotation.</para>
+
+      <para>The Jakarta Persistence extender must only process a persistence bundle's
+      persistence units if the following is true:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The bundle's wiring has a required wire for at least one
+          <code>osgi.extender</code> capability with the name
+          <code>osgi.jakartapersistence</code> and the first of these required wires is wired
+          to the JPA extender.</para>
+        </listitem>
+
+        <listitem>
+          <para>The bundle's wiring has no required wire for an
+          <code>osgi.extender</code> capability with the name
+          <code>osgi.jakartapersistence</code>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Otherwise, the Jakarta Persistence Service extender must not process the
+      persistence bundle</para>
+    </section>
+
+    <section>
+      <title>The Jakarta Persistence Contract Capability</title>
+
+      <para>Previous versions of this specification recommended that the Jakarta Persistence
+      API packages were versioned using the OSGi recommended semantic
+      versioning policy. Whilst this would have been an excellent way to
+      ensure compatibility between Jakarta Persistence persistence bundles, client bundles,
+      and Jakarta Persistence providers, in practice few bundles followed this versioning
+      policy. As a result the various actors in the Jakarta Persistence service can easily be
+      created with have clashing version ranges.</para>
+
+      <para>This problem is not isolated to Jakarta Persistence, and so a general solution was
+      created called <xref
+      linkend="service.jakartapersistence-portable.java.contracts.ref"/>. These define a
+      capability namespace called <link
+      linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link></para>
+
+      <para>In order to permit Jakarta Persistence clients to reliably work when paired with
+      newer versions of Jakarta Persistence there needs to be a defined contract upon which
+      the clients and persistence units can rely, otherwise a JPA 1.0
+      compatible client cannot declare a dependency which also accepts the
+      backward compatible JPA 2.0 API. For Jakarta Persistence the following three contracts
+      exist:</para>
+
+      <programlisting>osgi.contract;osgi.contract=JakartaPersistence;version:Version=3.1;
+    uses:="jakarta.persistence,jakarta.persistence.spi"
+      </programlisting>
+
+      <programlisting>osgi.contract;osgi.contract=JakartaPersistence;version:Version=3.2;
+    uses:="jakarta.persistence,jakarta.persistence.criteria,
+    jakarta.persistence.metamodel,jakarta.persistence.spi"
+      </programlisting>
+
+      <para>Jakarta Persistence API providers must declare the full set of API contract
+      versions with which they are compatible. As Jakarta Persistence API versions are
+      backward compatible this will typically result in the provider exposing
+      all versions of a contract. Note that when a provider offers multiple
+      versions of a contract then all of the contract versions must be offered
+      by a single capability. For example:</para>
+
+      <programlisting>Export-Package: jakarta.persistence,jakarta.persistence.criteria,
+ jakarta.persistence.metamodel,jakarta.persistence.spi
+Provide-Capability: osgi.contract;osgi.contract=JakartaPersistence;
+ version:List&gt;Version&lt;="3.1,3,1"; uses:="jakarta.persistence,
+ jakarta.persistence.criteria,jakarta.persistence.metamodel,jakarta.persistence.spi"</programlisting>
+
+      <para>The contract capability means that clients can safely import the
+      API using the contract and no import version. For example:</para>
+
+      <programlisting>Import-Package: javax.persistence,javax.persistence.criteria
+Require-Capability: osgi.contract;
+ filter:="(&amp;(osgi.contract=JakartaPersistence)(version=3.1))"</programlisting>
+    </section>
+
+    <section>
+      <title>Service capabilities</title>
+
+      <para>The Jakarta Persistence Service implementation is responsible for registering both
+      an <code>EntityManagerFactoryBuilder</code> service and a
+      <code>EntityManagerFactory</code> service on behalf of the persistence
+      bundle. The persistence bundle should therefore provide two capabilities
+      in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace, one representing the <xref
+      linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder"
+      xrefstyle="hyperlink"/> service, and another representing the
+      <code>javax.persistence.EntityManagerFactory</code> service. These
+      capabilities must also declare uses constraints for the packages that
+      they expose. For example:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;=
+      "org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder";
+    uses:="org.osgi.service.jakartapersistence",
+    osgi.service;objectClass:List&lt;String&gt;=
+      "jakarta.persistence.EntityManagerFactory";
+    uses:="jakarta.persistence"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>When Java permissions are enabled, the Jakarta Persistence service must perform the
+    following security procedures.</para>
+
+    <section>
+      <title>Service Permissions</title>
+
+      <para>The Jakarta Persistence service is built upon the existing OSGi service
+      infrastructure. This means that Service Permission applies regarding the
+      ability to publish services. A persistence bundle therefore must have
+      <code>ServicePermission[&lt;interface&gt;, REGISTER]</code> for both the
+      <code>EntityManagerFactory</code> and
+      <code>EntityManagerFactoryBuilder</code> services.</para>
+
+      <para>If a persistence bundle specifies a complete persistence unit then
+      the persistence bundle must either have
+      <code>ServicePermission[&lt;org.osgi.service.jdbc.DataSourceFactory&gt;,
+      GET]</code>, or be able to directly load the configured database
+      driver.</para>
+
+      <para>Client bundles that wish to configure a persistence unit using the
+      <code>EntityManagerFactoryBuilder</code> service must have
+      <code>ServicePermission[&lt;org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder&gt;,
+      GET]</code>. Furthermore, if this service is used to configure an
+      incomplete persistence unit with a database driver name then it is the
+      getter of the <code>EntityManagerFactoryBuilder</code> service whose
+      permissions must be checked when obtaining the
+      <code>DataSourceFactory</code> service. If the caller of the
+      EntityManagerFactory Builder passes a ready constructed database
+      <code>Driver</code> or <code>DataSource</code> then no permission check
+      is required.</para>
+    </section>
+
+    <section>
+      <title>Required Admin Permission</title>
+
+      <para>The Jakarta Persistence service implementation requires
+      <code>AdminPermission[*,CONTEXT]</code> because it needs access to the
+      bundle's Bundle Context object with the
+      <code>Bundle.getBundleContext()</code> method.</para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartapersistence.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakartapersistence.annotations.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i3075794"><title>Jakarta Persistence 3.0</title><biblioid
+      class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/persistence/3.0/"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="i3075842"><title>Jakarta Persistence 3.1</title><biblioid
+      class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/persistence/3.1/"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="i3075842.1"><title>Jakarta Persistence 3.2</title><biblioid
+      class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/persistence/3.2/"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="i3091015"><title>Jakarta EE 10</title><biblioid
+      class="uri"><link
+      xlink:href="https://jakarta.ee/specifications/platform/10/"/></biblioid></bibliomixed>
+
+      <bibliomixed
+      xml:id="service.jakartapersistence-portable.java.contracts.ref"><title>Portable Java
+      Contract Definitions</title><biblioid class="uri"><link
+      xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/></biblioid></bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
