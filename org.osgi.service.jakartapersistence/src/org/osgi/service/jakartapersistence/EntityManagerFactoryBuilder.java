@@ -106,7 +106,7 @@ public interface EntityManagerFactoryBuilder {
 	 * Otherwise this method must return the bundle which loaded the
 	 * {@link PersistenceProvider} implementation class.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 * @return The Bundle which provides the {@link PersistenceProvider}
 	 *         implementation used by this {@link EntityManagerFactoryBuilder}.
 	 */
