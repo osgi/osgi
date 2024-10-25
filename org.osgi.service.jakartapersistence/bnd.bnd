@@ -1,0 +1,13 @@
+# Set javac settings from JDT prefs
+-include: ${includes}/jdt.bnd, ${includes}/companion.bnd, ${includes}/cmpn.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath = \
+    ${osgi.annotation.buildpath}, \
+    org.osgi.framework;maven-scope=provided;version=1.8, \
+    org.osgi.resource;maven-scope=provided;version=1.0, \
+    org.osgi.namespace.extender;version=1.0.1, \
+    jakarta.persistence-api;version='3.2.0'
+
+-contract: JakartaPersistence
