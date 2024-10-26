@@ -17,10 +17,10 @@
  *******************************************************************************/
 
 /**
- * JPA Service Annotations Package Version 1.1.
+ * Jakarta Persistence Service Annotations Package Version 2.0.
  * <p>
- * This package contains annotations that can be used to require the JPA Service
- * implementation.
+ * This package contains annotations that can be used to require the Jakarta
+ * Persistence Service implementation.
  * <p>
  * Bundles should not normally need to import this package as the annotations
  * are only used at build-time.
@@ -29,10 +29,10 @@
  * @author $Id$
  */
 
-@Version(JPA_SPECIFICATION_VERSION)
-package org.osgi.service.jpa.annotations;
+@Version(PERSISTENCE_SPECIFICATION_VERSION)
+package org.osgi.service.jakartapersistence.annotations;
 
-import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
+import static org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.PERSISTENCE_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 
