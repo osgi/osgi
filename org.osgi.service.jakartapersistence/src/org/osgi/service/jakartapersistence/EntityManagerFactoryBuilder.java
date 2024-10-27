@@ -16,15 +16,15 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.service.jpa;
+package org.osgi.service.jakartapersistence;
 
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceProvider;
-
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
+
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.spi.PersistenceProvider;
 
 /**
  * This service interface offers JPA clients the ability to create instances of
@@ -44,32 +44,32 @@ public interface EntityManagerFactoryBuilder {
 	/**
 	 * The name of the persistence unit.
 	 */
-	public static final String	JPA_UNIT_NAME		= "osgi.unit.name";
+	public static final String	PERSISTENCE_UNIT_NAME				= "osgi.unit.name";
 
 	/**
 	 * The version of the persistence unit bundle.
 	 */
-	public static final String	JPA_UNIT_VERSION	= "osgi.unit.version";
+	public static final String	PERSISTENCE_UNIT_VERSION			= "osgi.unit.version";
 
 	/**
 	 * The class name of the provider that registered the service and implements
 	 * the JPA javax.persistence.PersistenceProvider interface.
 	 */
-	public static final String	JPA_UNIT_PROVIDER	= "osgi.unit.provider";
+	public static final String	PERSISTENCE_UNIT_PROVIDER			= "osgi.unit.provider";
 
 	/**
 	 * The name of the JPA extender capability.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
-	public static final String	JPA_CAPABILITY_NAME	= "osgi.jpa";
+	public static final String	PERSISTENCE_CAPABILITY_NAME			= "osgi.jakartapersistence";
 
 	/**
 	 * The version of the extender capability for the JPA Service specification
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
-	public static final String	JPA_SPECIFICATION_VERSION	= "1.1";
+	public static final String	PERSISTENCE_SPECIFICATION_VERSION	= "2.0";
 
 	/**
 	 * Return an EntityManagerFactory instance configured according to the
@@ -89,9 +89,9 @@ public interface EntityManagerFactoryBuilder {
 	 * This method returns the name of the {@link PersistenceProvider}
 	 * implementation that is used by this {@link EntityManagerFactoryBuilder}.
 	 * The returned value will be the same as the value of the
-	 * {@link #JPA_UNIT_PROVIDER} service property.
+	 * {@link #PERSISTENCE_UNIT_PROVIDER} service property.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 * @return the name of the {@link PersistenceProvider} implementation
 	 */
 	String getPersistenceProviderName();
@@ -106,7 +106,7 @@ public interface EntityManagerFactoryBuilder {
 	 * Otherwise this method must return the bundle which loaded the
 	 * {@link PersistenceProvider} implementation class.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 * @return The Bundle which provides the {@link PersistenceProvider}
 	 *         implementation used by this {@link EntityManagerFactoryBuilder}.
 	 */

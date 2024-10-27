@@ -16,11 +16,11 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.service.jpa.annotations;
+package org.osgi.service.jakartapersistence.annotations;
 
 import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
-import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_CAPABILITY_NAME;
-import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
+import static org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.PERSISTENCE_CAPABILITY_NAME;
+import static org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.PERSISTENCE_SPECIFICATION_VERSION;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -42,8 +42,8 @@ import org.osgi.annotation.bundle.Requirement;
 		ElementType.TYPE, ElementType.PACKAGE
 })
 @Requirement(namespace = EXTENDER_NAMESPACE, //
-		name = JPA_CAPABILITY_NAME, //
-		version = JPA_SPECIFICATION_VERSION)
+		name = PERSISTENCE_CAPABILITY_NAME, //
+		version = PERSISTENCE_SPECIFICATION_VERSION)
 public @interface RequireJPAExtender {
 	// A marker annotation indicating a JPA service extender requirement
 }

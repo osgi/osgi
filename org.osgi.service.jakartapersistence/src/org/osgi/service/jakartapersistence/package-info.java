@@ -17,29 +17,28 @@
  *******************************************************************************/
 
 /**
- * JPA Package Version 1.1.
+ * Jakarta Persistence Package Version 2.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
  * users: the consumers that use the API in this package and the providers that
  * implement the API in this package.
- * 
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.jpa; version="[1.1,2.0)"}
+ * {@code  Import-Package: org.osgi.service.jakartapersistence; version="[2.0,3.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.jpa; version="[1.1,1.2)"}
+ * {@code  Import-Package: org.osgi.service.jakartapersistence; version="[2.0,2.1)"}
  * 
  * @author $Id$
  */
 
-@Version(JPA_SPECIFICATION_VERSION + ".1")
-package org.osgi.service.jpa;
+@Version(PERSISTENCE_SPECIFICATION_VERSION + ".1")
+package org.osgi.service.jakartapersistence;
 
-import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
+import static org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder.PERSISTENCE_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 
