@@ -16,7 +16,7 @@
    
     SPDX-License-Identifier: Apache-2.0 
  -->
-<chapter label="161"
+<chapter label="162"
          revision="$Id$"
          version="5.0" xml:id="service.jakartapersistence"
          xmlns="http://docbook.org/ns/docbook"
@@ -188,9 +188,9 @@
     <section xml:id="i3113425">
       <title>Dependencies</title>
 
-      <para>This specification requires a minimum Jakarta Persistence version of 3.1.
+      <para>This specification requires a minimum Jakarta Persistence version of 3.0.
       Implementations may choose to support newer versions of Jakarta Persistence, for example
-      version 3.2, but must offer the JakartaPersistence contract at version 3.1 as well
+      version 3.2, but must offer the JakartaPersistence contract at version 3.0 as well
       as any future versions that they support.</para>
     </section>
 
@@ -467,27 +467,26 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
       specified in the Persistence Unit or configured during Entity Manager
       Factory or Entity Manager creation with the configuration properties.
       The configuration properties for selecting a database in non-managed
-      mode were proprietary in JPA 1.0 but have been standardized in version
-      2.0 of JPA:</para>
+      mode have been standardized in version 3.0 of the Jakarta Persistence:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
+          <para><code>jakarta.persistence.jdbc.driver</code> - Fully-qualified
           name of the driver class</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
+          <para><code>jakarta.persistence.jdbc.url</code> - Driver-specific URL
           to indicate database information</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.user</code> - User name to use
+          <para><code>jakarta.persistence.jdbc.user</code> - User name to use
           when obtaining connections</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.password</code> - Password to use
+          <para><code>jakarta.persistence.jdbc.password</code> - Password to use
           when obtaining connections</para>
         </listitem>
       </itemizedlist>
@@ -740,8 +739,8 @@ if ( refs != null ) {
         (EntityManagerFactoryBuilder) context.getService(refs[0]);
     if ( emfBuilder != null ) {
       Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
-      props.put("javax.persistence.jdbc.user", userString);
-      props.put("javax.persistence.jdbc.password",passwordString);
+      props.put("jakarta.persistence.jdbc.user", userString);
+      props.put("jakarta.persistence.jdbc.password",passwordString);
       EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);
       EntityManager em = emf.createEntityManager();
      ...
@@ -1072,7 +1071,7 @@ suffix:     META-INF/persistence.xml</programlisting>
       created Entity Manager Factory as a service. The registered service must
       include any supplied configuration properties that match the recommended
       OSGi service property types as service properties. The
-      <code>javax.persistence.jdbc.password</code> property must be omitted
+      <code>jakarta.persistence.jdbc.password</code> property must be omitted
       from these service properties.</para>
 
       <para>If the Entity Manager Factory Builder service is later used to
@@ -1175,22 +1174,22 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
+          <para><code>jakarta.persistence.jdbc.driver</code> - Fully-qualified
           name of the driver class.</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
+          <para><code>jakarta.persistence.jdbc.url</code> - Driver-specific URL
           to indicate database information</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.user</code> - User name to use
+          <para><code>jakarta.persistence.jdbc.user</code> - User name to use
           when obtaining connections</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.password</code> - Password to use
+          <para><code>jakarta.persistence.jdbc.password</code> - Password to use
           when obtaining connections</para>
         </listitem>
       </itemizedlist>
@@ -1203,22 +1202,22 @@ suffix:     META-INF/persistence.xml</programlisting>
     <section>
       <title>Data Source Factory Service Matching</title>
 
-      <para>Providers must use the <code>javax.persistence.jdbc.driver</code>
+      <para>Providers must use the <code>jakarta.persistence.jdbc.driver</code>
       property, as defined in <xref linkend="i3112211"/>, to obtain a Data
       Source Factory service. The Data Source Factory is specified in <xref
-      linkend="service.jdbc"/>. The <code>javax.persistence.jdbc.driver</code>
+      linkend="service.jdbc"/>. The <code>jakarta.persistence.jdbc.driver</code>
       property must be matched with the value of the Data Source Factory
       service property named <code>osgi.jdbc.driver.class</code>.</para>
 
       <para>The Data Source Factory service is registered with the
       <code>osgi.jdbc.driver.class</code> service property that holds the
       class name of the driver. This property must match the
-      <code>javax.persistence.jdbc.driver</code> service property of the
+      <code>jakarta.persistence.jdbc.driver</code> service property of the
       Persistence Unit.</para>
 
       <para>For example, if the Persistence Unit specifies the
       <code>com.acme.db.Driver</code> database driver in the
-      <code>javax.persistence.jdbc.driver property</code> (or in the
+      <code>jakarta.persistence.jdbc.driver property</code> (or in the
       Persistence Descriptor <code>property</code> element), then the
       following filter would select an appropriate <code>Data Source
       Factory:</code></para>
@@ -1511,7 +1510,7 @@ Provide-Capability: osgi.contract;osgi.contract=JakartaPersistence;
       <para>The contract capability means that clients can safely import the
       API using the contract and no import version. For example:</para>
 
-      <programlisting>Import-Package: javax.persistence,javax.persistence.criteria
+      <programlisting>Import-Package: jakarta.persistence,jakarta.persistence.criteria
 Require-Capability: osgi.contract;
  filter:="(&amp;(osgi.contract=JakartaPersistence)(version=3.1))"</programlisting>
     </section>
@@ -1528,7 +1527,7 @@ Require-Capability: osgi.contract;
       namespace, one representing the <xref
       linkend="org.osgi.service.jakartapersistence.EntityManagerFactoryBuilder"
       xrefstyle="hyperlink"/> service, and another representing the
-      <code>javax.persistence.EntityManagerFactory</code> service. These
+      <code>jakarta.persistence.EntityManagerFactory</code> service. These
       capabilities must also declare uses constraints for the packages that
       they expose. For example:</para>
 
