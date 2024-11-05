@@ -2201,20 +2201,20 @@ package-names   ::= package-name                // See <xref
       <para>Bundles that collaborate require the same class loader 
       for the types used in their interaction. 
       When multiple bundles export the same package containing collaboration types, 
-      they may end up in separate class-spaces, which can hinder collaboration. 
+      they will end up in separate class-spaces, which prevents those collaboration types being shared between those bundles. 
       Bundles willing to import exported packages allow the framework to
       <emphasis>substitute</emphasis> exports for imports and increase collaboration,
-      by trying to avoid separate class-spaces.
+      by trying to avoid separate class-spaces. This is achieved by <emphasis>disabling</emphasis> the export in one or more bundles, replacing it with an import instead. The resulting class-space is larger, increasing collaboration, because there are fewer class loaders loading the exported package.
       </para>
 
       <para>
       The use of substitutable exports had historical advantages:
-      Implementation bundles embedded and provided the 
-      API packages by OSGi specifications that they implement, 
+      Implementation bundles typically embedded and provided the 
+      API packages of the OSGi specifications that they implemented
       to make themselves easier to deploy. 
-      Instead going forward you should consider not embedding API packages and declare them as dependencies 
+      Modern deployment tools mean that deploying bundles with separate API is now far simpler. Therefore you should now consider <emphasis>not</emphasis> embedding API packages and instead consume them
       using valid <code>Import-Package</code> manifest headers with a version range. 
-      At runtime, simply use the API runtime bundles provided by OSGi. 
+      At runtime the API can be provided by an API bundle, such as the specification API bundles provided by OSGi. 
       </para>
 
       <para>
@@ -2256,23 +2256,23 @@ package-names   ::= package-name                // See <xref
       <note>
       <para>
 		  Bundles should only import such an exported package if they are willing to get that package 
-		  from another (unknown) bundle and omit their own export from the framework.
+		  from another (unknown) bundle and omit their own export from the framework. By definition, this means that a bundle with a subsitutable export may never load that package, rendering its class files and resources invisible to that bundle's class loader.
       </para>
       
       <para>
-      Multiple bundles provide the same API packages 
+      Multiple bundles providing the same API packages 
       can lead to conflicts in non-OSGi environments.
-      But also in OSGi environments resolution conflicts can happen 
+      In OSGi environments these scenarios can often be supported, but resolution conflicts can still occur
       when multiple versions of the same bundle are present (see <xref linkend="framework.module-import.export.same.package"/>).
       </para>
       
       <para>
-      If you need do embed the API packages in an implementation bundle 
+      If you need to embed exported API packages in an implementation bundle 
       then be sure to only embed the API packages you directly implement.  
-      In most all cases you should not embed the APIs that you use but do not implement.  
-      For example, if you use the <emphasis>OSGi Log Service</emphasis> you should avoid 
-      embedding the <code>org.osgi.service.log</code> package 
-      unless your bundle is actually providing the implementation of the Log Service.
+      You should not embed and export APIs that you use but do not implement.  
+      For example, if you use the <emphasis>OSGi Configuration Admin Service</emphasis> you should avoid 
+      embedding the <code>org.osgi.service.cm</code> package 
+      unless your bundle is actually providing an implementation of the Configuration Admin Service.
       </para>
 
       </note>	  
