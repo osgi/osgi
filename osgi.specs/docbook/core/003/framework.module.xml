@@ -2201,7 +2201,7 @@ package-names   ::= package-name                // See <xref
       <para>Bundles that collaborate require the same class loader 
       for the types used in their interaction. 
       When multiple bundles export the same package containing collaboration types, 
-      they will end up in separate class-spaces, which prevents those collaboration types being shared between those bundles. 
+      they will end up in separate class-spaces, which prevents those collaboration types being shared between those bundles or their consumers. 
       Bundles willing to import exported packages allow the framework to
       <emphasis>substitute</emphasis> exports for imports and increase collaboration,
       by trying to avoid separate class-spaces. This is achieved by <emphasis>disabling</emphasis> the export in one or more bundles, replacing it with an import instead. The resulting class-space is larger, increasing collaboration, because there are fewer class loaders loading the exported package.
@@ -2213,7 +2213,7 @@ package-names   ::= package-name                // See <xref
       API packages of the OSGi specifications that they implemented
       to make themselves easier to deploy. 
       Modern deployment tools mean that deploying bundles with separate API is now far simpler. Therefore you should now consider <emphasis>not</emphasis> embedding API packages and instead consume them
-      using valid <code>Import-Package</code> manifest headers with a version range. 
+      using a <code>Import-Package</code> manifest headers with a proper version range (either provider or consumer). 
       At runtime the API can be provided by an API bundle, such as the specification API bundles provided by OSGi. 
       </para>
 
@@ -2242,7 +2242,7 @@ package-names   ::= package-name                // See <xref
       and implementation in the same package making it impossible to
       substitute the API packages.
       Developers of general-purpose Java libraries that include OSGi metadata, 
-      but were not originally designed for OSGi, should avoid importing exported packages.
+      but were not originally designed with OSGi in mind, should generally avoid importing exported packages.
       </para>
 
       <para>Importing an exported package <emphasis role="bold">must</emphasis> use a version range according
@@ -2261,9 +2261,8 @@ package-names   ::= package-name                // See <xref
       
       <para>
       Multiple bundles providing the same API packages 
-      can lead to conflicts in non-OSGi environments.
-      In OSGi environments these scenarios can often be supported, but resolution conflicts can still occur
-      when multiple versions of the same bundle are present (see <xref linkend="framework.module-import.export.same.package"/>).
+      can lead to conflicts in when used outside OSGi environments (e.g. JPMS) and therefore might hinder further use of such bundles.
+      Even though OSGi supports these scenarios, it might lead to resolution conflicts can when multiple versions of the same bundle are present (see <xref linkend="framework.module-import.export.same.package"/>) and consumers are having tight version range constraints or large dependency chains.
       </para>
       
       <para>
