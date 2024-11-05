@@ -36,12 +36,13 @@
     Managing endpoints in a dynamic way can be a challenging task, this specification aims to make this task much more easier using the famous <xref linkend="service.jakartaws-whiteboard.pattern.ref" />
     and allow integration with existing transport specifications.
     
-    Even though the Http transport is often used in conjunction with websockets that is not mandatory for an implementation,
-    therefore this specification also focuses on the Http transport only and define a way to interact with it, implementations are free to support other kinds of transports as well.
+    Even though the Http transport is often used in conjunction with websockets that is not mandatory for an implementation, and
+    therefore this specification does not focuses on the Http transport but implementations are free to support this and any other kinds of transports.
     </para>
 
-    <para>Terminology</para>
+    <para>Terminology
 	As per the <xref linkend="service.jakartawebsocket-spec"/> we will use the following term
+	</para>
     <itemizedlist>
       <listitem>
         <para>
@@ -106,7 +107,7 @@
         </listitem>
         
         <listitem>
-          <para><emphasis>WebSocketContainer Service</emphasis> - A service registered that implement the <emphasis>WebSocketContainer</emphasis> interface that can be used for client to establish a connection.</para>
+          <para><emphasis>WebSocketContainer Service</emphasis> - A service registered that implement the <emphasis>WebSocketContainer</emphasis> interface that can be used for clients to establish a connection.</para>
         </listitem>
 
       </itemizedlist>
@@ -224,11 +225,39 @@ public class MyHelloClientJdk implements HelloService, Listener {
 
 }</programlisting>
     </section>
+     <section>
+    	<title>Jakarta™ XML Websocket Services Whiteboard Runtime Implementation</title>
+    	<para>
+    		akarta™ XML Websocket Services Whiteboard Runtime Implementation consists of the following parts:
+    		<itemizedlist>
+		        <listitem>
+		        	<para>The <emphasis>Endpoint Registrar</emphasis> what is responsible to track the <emphasis>Endpoint Implementor</emphasis>S in the OSGi service factory
+		        	and registering them with the web socket server</para>
+		        </listitem>
+		        <listitem>
+		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service factory so it can be discovered by clients that want to use it</para>
+		        </listitem>
+		        <listitem>
+		        	<para>The <emphasis>JakartaWebsocketServiceRuntime</emphasis> registered in the OSGi service factory so it can be discovered by clients that want to use it to query the current state of the runtime</para>
+		        </listitem>
+	        </itemizedlist>
+    	</para>
+    	<section>
+    		<title>The Endpoint Registrar</title>
+    		<para>
+    		...
+    		</para>
+    	</section>
+   </section>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.runtime.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.annotations.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.propertytypes.xml"/>
    <section>
     <title>References</title>
     <bibliolist>
       <bibliomixed xml:id="service.jakartawebsocket-spec">
-        <title>Jakarta™ Jakarta WebSocket Specification</title>
+        <title>Jakarta™ WebSocket Specification</title>
         <biblioid class="uri">
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2"/>
         </biblioid>
