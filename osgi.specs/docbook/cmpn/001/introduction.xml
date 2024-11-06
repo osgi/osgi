@@ -768,6 +768,11 @@
         which is based upon the <code>javax</code>-namespace JAX-RS
         API.</para>
       </listitem>
+      
+      <listitem>
+        <para>Added <xref linkend="service.jakarta.websocket" xrefstyle="template:%n %t"/>.      
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>
