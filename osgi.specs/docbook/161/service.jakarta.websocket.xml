@@ -169,7 +169,7 @@ public class MyHelloClient implements HelloService {
 	private Session session;
 
 	@Activate
-	public MyHelloClient(WebSocketContainer container) throws DeploymentException, IOException, URISyntaxException {
+	public MyHelloClient(@Reference WebSocketContainer container) throws DeploymentException, IOException, URISyntaxException {
 		session = container.connectToServer(this, new URI("ws://localhost:3000/hello"));
 	}
 
