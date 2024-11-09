@@ -139,6 +139,27 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 	}
 
 	@Test
+	public void testComponentPropertyTypesWithEmptyArray() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as(() -> {
+			try {
+				return toString(description.getElement());
+			} catch (Exception e) {
+				return e.toString();
+			}
+		})
+				.isNotNull()
+				.as("component %s", name)
+				.hasCount("property", 1)
+				.hasPropertyValue("adaptableClass", "String",
+						"java.lang.Runnable")
+				.doesNotContain("property[@name='adapterNames']")
+				.hasValue("implementation/@class",
+						"org.osgi.impl.bundle.component.annotations.ComponentPropertyTypesWithEmptyArray");
+	}
+
+	@Test
 	public void testActivationFields() throws Exception {
 		String name = testName.getMethodName();
 		Description description = descriptions.get(name);
