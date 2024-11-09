@@ -527,7 +527,7 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 				.hasOptionalValue("reference[@name='multiple']/@scope",
 						"bundle")
 				.doesNotContain("reference[@name='multiple']/@target")
-				.hasValue("reference[@name='multiple']/@field-collection-type",
+				.hasOptionalValue("reference[@name='multiple']/@field-collection-type",
 						"service")
 
 				.hasValue("reference[@name='optional']/@interface",
