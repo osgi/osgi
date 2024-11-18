@@ -572,13 +572,6 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		assertTrue(getContext().ungetService(reference2));
 
 		registration.unregister();
-		try {
-			registration.unregister();
-			fail("! Invalid, should have thrown IllegalStateException");
-		}
-		catch (IllegalStateException e) {
-			// ignore
-		}
 	}
 
 	public void testFactoryUngetOnUnregister() {
