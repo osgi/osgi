@@ -261,3 +261,7 @@ org.slf4j:slf4j-api:1.7.36
 org.slf4j:slf4j-simple:1.7.36
 com.sun.activation:jakarta.activation:2.0.1
 com.sun.xml.bind:jaxb-osgi:4.0.1
+
+# Jakarta WS
+jakarta.xml.ws:jakarta.xml.ws-api:4.0.1
+

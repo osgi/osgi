@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+<chapter label="160" revision="$Id$" version="5.0"
+         xml:id="service.jakartaws" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Whiteboard Specification for Jakarta™ XML Web Services</title>
+
+  <titleabbrev>Jakarta™ XML Web Services Whiteboard</titleabbrev>
+
+  <info>
+    <releaseinfo>
+      <xref endterm="org.osgi.service.jakartaws.whiteboard-version"
+            linkend="org.osgi.service.webservice.whiteboard"/>
+    </releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>
+    Webservices are an important part in todays maschine-to-maschine communication and the <xref linkend="service.jakartaws-i21217577"/> (formerly known as JAX-WS) specification offers a vendor neutral way of writing and using such services. 
+    It defines a standard Java-to-WSDL mapping which determines how web service operations are bound to Java methods when a SOAP message invokes an action.
+     
+    Managing endpoints in a dynamic way with integration to different listeners and transports can be a challenging task, this specification aims to make this task much more easier using the famous <xref linkend="service.jakartaws-whiteboard.pattern.ref" />
+    and allow integration with existing transport specifications.
+    
+    Even though different transports are supported, the most common one is the Http transport and also the only one that is mandatory for a <xref linkend="service.jakartaws-i21217577"/> implementation,
+    therefore this specification also focuses on the Http transport only and define a way to interact with it, implementations are free to support other kinds of transports as well.
+    </para>
+
+    <para>The Whiteboard Specification for Jakarta™ XML Web Services supports:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+            <emphasis>Registering Web Service Implementation</emphasis> - an implementation is an annotated "implementor" of the webservice used by an endpoint,  an "implementor" is published by an 
+            Endpoint that handles the incomming and outgoing messages on the transport level.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Registering Handlers</emphasis> - a handler can intercept messages when they pass from / to Endpoints and perform actions on it.</para>
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Whiteboard Specification for Jakarta™ XML Web Services implementations must support
+    at least version 4.0 of the Jakarta™ XML Web Services API and registering endpoints to the protocols provided by the used API implementation, that is http as a minimum.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This specification defines the following entities:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis><xref linkend="service.jakartaws-handler"/></emphasis> - An object registered in the Service Registry
+          providing responsible for filtering or inspection of messages while they flow through the webservice processing.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Implementor</emphasis> - An implementation that can be used to registered as an <xref linkend="service.jakartaws-endpoint"/></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Registrar</emphasis> - An implementation that collects <emphasis>Handler</emphasis> and <emphasis>Endpoint Implementor</emphasis> instances and publish them for a given transport</para>
+        </listitem>
+
+      </itemizedlist>
+      
+      <figure pgwide="1" xml:id="service.jakartaws.whiteboard-overview">
+        <title>Jakarta™ XML Web Services Overview Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.313in"
+                       contentwidth="5.496in" fileref="overall.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+   </section>
+
+   <section xml:id="service.jakartaws.whiteboard">
+    <title>Jakarta™ XML Web Services Whiteboard</title>
+
+    <para>While in a traditional web application the configuration is rather static and known in advance in OSGi items can come and go anytime and code should be aware of this dynamism.
+        Also registration of listeners must happen before an endpoint is published and only weak typing makes it hard to handle this right manually.
+        As a result, the publishing of Web Services in the current state of the specification goes against the loose coupling concept usually provided by OSGi 
+        as it requires knowledge about the stakeholders involved
+        </para>
+        <para>
+         It is therefore the responsibility of the Web Services Whiteboard to handle this cases in a transparent manner so the user can focus on the actual work and 
+         use common dependency injection techniques like Declarative Services to inject dependencies.
+         </para>
+   </section>
+   
+   <section xml:id="service.jakartars.endpoint.services">
+    <title>Registering Endpoint Implementor</title>
+
+    <para>Endpoint Implementor can be registered with the Jakarta™ XML Web Services Whiteboard by registering them as Whiteboard
+    services. This means that the endpoint POJO implementations are registered in the Service Registry. As Webservice Endpoints are
+    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code> and use any
+    annotations on endpoint object, just as it would outside of OSGi.</para>
+
+    <para>To be picked up as endpoints, the POJO they are instead registered with the
+    <code>osgi.jakarta.xml.ws.endpoint.implementor</code> service property with a value of
+    <code>"true"</code>. This property serves as a marker to the Jakarta™ XML Web Services Whiteboard
+    runtime, indicating that this OSGi service should further be processed as an endpoint.</para>
+    <para>Beside that the property <code>osgi.jakarta.xml.ws.endpoint.address</code> can be specified as a way to tell at what address an Endpoint has to be published.
+    If given this must be passed to the Endpoint.publish(String) method, if it is not specified or is empty it is assumed that
+    there is some other property available to allow the Whiteboard runtime to derive the publishing address or context.
+    In the scope of this specification there is the <emphasis>osgi.jakarta.xml.ws.endpoint.http.contextpath</emphasis>
+    that defines that the endpoint has to be published to http transport where / represents the root, what host or port is chosen is defined by the configuration of the implementation. 
+    </para>
+
+    <para>The code below shows an simple echo webservice Endpoint Implementor, the `@WebService` / `@WebMethod` is 
+      a jakarta annotation and therefore not processed by the Whiteboard runtime:
+    </para>
+
+      <programlisting>@WebService
+@WhiteboardEndpoint(address = "http://localhost/echo")
+@Component(immediate = true, service = WSEcho.class, property = "wstype=echo")
+public class WSEcho {
+
+    @WebMethod(operationName = "echo", action = "echo")
+    public String echo(@WebParam(name = "textIn") String text) {
+        return text;
+    }
+
+}</programlisting>
+   </section>
+   
+   <section xml:id="service.jakartaws.handler.services">
+    <title>Registering Webservice Handlers</title>
+
+    <para>Webservice Handlers can be registered with the Jakarta™ XML Web Services Whiteboard by registering them as Whiteboard
+    services. This means that the handler POJO implementations are registered
+    in the Service Registry. As Handler Services must be registered using <emphasis>jakarta.xml.ws.handler.Handler</emphasis> 
+    as the service interface but implement any of the valid types of the Jakarta™ XML Web Services specification, 
+    registering any invalid handler will result in an error of the matching endpoints.
+    To be recognized by the whiteboard registrar, the service must be registered with a boolean property of 
+    <emphasis>osgi.jakarta.xml.ws.handler.extension</emphasis> of value <emphasis>true</emphasis>.
+    
+    </para>
+
+    <para>The code below shows an example of a logging handler that wants to intercept incoming and outgoing messages,
+    this handler is targeted to any registered <emphasis>Endpoint Implementor</emphasis>:</para>
+
+      <programlisting>@Component(service = Handler.class)
+@WhiteboardHandler()
+public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
+
+     public Set&lt;QName&gt; getHeaders() {
+        return null;
+    }
+
+    public boolean handleMessage(SOAPMessageContext smc) {
+         smc.getMessage().writeTo(System.out);
+        return true;
+    }
+
+    public boolean handleFault(SOAPMessageContext smc) {
+        smc.getMessage().writeTo(System.err);
+        return true;
+    }
+
+    public void close(MessageContext messageContext) {
+    }
+    
+}</programlisting>
+</section>
+    <section xml:id="service.jakartaws.handler.services.target">
+         <title>Targeting specific Endpoint Implementor</title>
+         <para>
+         If a handler wants to target a specific <emphasis>Endpoint Implementor</emphasis> it can specify the <emphasis>osgi.jakarta.xml.ws.handler.filter</emphasis> service properties
+         and will only be installed for such <emphasis>Endpoint Implementor</emphasis> that match the provided filter.
+         </para>
+             <para>The previous example targeting an <emphasis>Endpoint Implementor</emphasis> registered with a <emphasis>wstype</emphasis> property of <emphasis>echo</emphasis> looks like this:</para>
+
+      <programlisting>@Component(service = Handler.class)
+@WhiteboardHandler(filter="(wstype=echo)")
+public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt; {
+
+       ... like before ...
+}</programlisting>
+     </section>
+    </section>
+    <section>
+        <title>Jakarta™ XML Web Services Whiteboard Implementation</title>
+        <para>
+            The Jakarta™ XML Web Services Whiteboard implementation consists of the following parts:
+            <itemizedlist>
+                <listitem>
+                    <para>The <emphasis>Endpoint Registrar</emphasis> what is responsible to track the <emphasis>Endpoint Implementor</emphasis>S and <emphasis>Handler</emphasis>S registered 
+                        in the OSGi service factory and creating <emphasis>Endpoint</emphasis>s from these.</para>
+                    <para>The <emphasis>Endpoint Publisher</emphasis> that uses such <emphasis>Endpoint</emphasis> and publish them to a concrete transport</para>
+                </listitem>
+            </itemizedlist>
+        </para>
+         <section>
+             <title>The Endpoint Registrar</title>
+            <para>
+            The responsibility of the <emphasis>Endpoint Registrar</emphasis> is the following:
+            <itemizedlist>
+                    <listitem>
+                        <para>Track any service registered with a service property <emphasis>osgi.jakarta.xml.ws.endpoint.implementor</emphasis> with the value <emphasis>true</emphasis> and registers <emphasis>Endpoint</emphasis> services</para>
+                        <para>Track all registered <emphasis>jakarta.xml.ws.handler.Handler</emphasis> service and attach them to the target implementors <emphasis>Endpoint</emphasis></para>
+                    </listitem>
+            </itemizedlist>
+            As <emphasis>Endpoint</emphasis> instances can only be registered once with a transport and after publishing can't change its handler chain, special care has to be taken when Endpoints are created and published.
+            Because of this an <emphasis>Endpoint Registrar</emphasis> must ensure that each Enpoint will be refreshed when the Implementor or any Handler changes.
+            </para>
+         </section>
+         <section>
+            <title>The Endpoint Publisher</title>
+            <para>
+            The responsibility of the <emphasis>Endpoint Publisher</emphasis> is to use the <emphasis>Endpoint</emphasis> and publish them with a given transport.
+            An implementation might use different techniques to discover a suitable way and support for different protocols but at least the publishing using the default enpoint publish must be supported, in addition to that implementations are encouraged
+            to also support publishing to the Http Whiteboard Service using property <emphasis>osgi.jakarta.xml.ws.endpoint.http.contextpath</emphasis> as described in <emphasis>Registering Endpoint Implementor</emphasis>
+            </para>
+        </section>
+        <section>
+            <title>Whiteboard Error Handling</title>
+        
+            <para>
+            There are a number of error cases where the Jakarta Webservice
+            whiteboard may be unable to correctly register an endpoint or use a given handler.
+            All of these cases must result in a failure DTO being created with the
+            appropriate error code.
+            </para>
+            <section>
+                <title>General Error Codes</title>
+                <itemizedlist>
+                  <!-- generic error codes -->    
+                  <listitem>
+                    <para>
+                    <emphasis>Unknown Failure</emphasis> - Outside of the predefined error conditions there might still errors occurring during the construction of the objects,
+                    the implementation can use the error code <code>0</code> to indicate that.
+                    The implementation can use own error codes to but to prevent clash with codes specified in later specification versions, such an error code must
+                    be equal or larger than <code>1000</code>.
+                    In all cases an additional error message might be used to further describe the nature of the failure and give users of the DTO a hint what's going on.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para><emphasis>Failure to obtain a service instance</emphasis> - In
+                    the case where a published service is unable to be obtained by the
+                    Jakarta Webservice whiteboard then the service is deny
+                    listed by the container. A failure DTO is made available from the
+                    WebserviceServiceRuntime representing the deny listed service
+                    object. The error code in this case is <code>1</code>.</para>
+                  </listitem>
+                </itemizedlist>
+            </section>
+            <section>
+                <title>Handler Error Codes</title>
+                <itemizedlist>
+                  <listitem>
+                    <para><emphasis>No matching endpoints</emphasis> - If a handler is currently not matching any endpoint implementor it is considered failed as it can't
+                    perform its work. The error code in this case is <code>100</code>.
+                    </para>
+                  </listitem>
+                   <listitem>
+                    <para><emphasis>Invalid filter</emphasis> - If a handler is specify an invalid filter it is considered failed as it can't be decided if a handler matches or not.
+                    The error code in this case is <code>101</code> and the message should include the parsing error.
+                    </para>
+                  </listitem>
+                </itemizedlist>
+            </section>
+             <section>
+                <title>Endpoint Implementor Error Codes</title>
+                <itemizedlist>
+                  <listitem>
+                    <para><emphasis>Endpoint creation failed</emphasis> - an implementation needs to transform the implementor into an Webservice Endpoint, this endpoint can then be further published
+                    with the jakarta xml webservices api. If this transformation fails, then the Endpoint is considered failed as no futher handling is possible.
+                    The error code in this case is <code>200</code>.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para><emphasis>Setting handlers not supported</emphasis> - if there are any matching handler but setting Handlers for the created Webservice Endpoint is not supported
+                    then the Endpoint is considered failed.
+                    The error code in this case is <code>201</code>.
+                    </para>
+                  </listitem>
+                     <listitem>
+                    <para><emphasis>Setting handlers failed</emphasis> - if there are any matching handler but using them for the created Webservice Endpoint for example they are incompatible
+                    then the Endpoint is considered failed.
+                    The error code in this case is <code>202</code>.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para><emphasis>Publishing failed</emphasis> - after creation and setup of handlers an Endpoint is finally published with a transport, if this fails
+                    then the Endpoint is considered failed.
+                    The error code in this case is <code>203</code>.
+                    </para>
+                  </listitem>
+                </itemizedlist>
+            </section>
+          </section>
+                
+
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.webservice.runtime.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.webservice.runtime.dto.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.webservice.whiteboard.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.webservice.whiteboard.annotations.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.webservice.whiteboard.propertytypes.xml"/>
+  
+  <section>
+    <title>References</title>
+
+
+    <bibliolist>
+      <bibliomixed xml:id="service.jakartaws-i21217577">
+        <title>Jakarta™ XML Web Services Specification</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/xml-web-services/4.0/jakarta-xml-ws-spec-4.0.html"/>
+        </biblioid>
+      </bibliomixed>
+      
+      <bibliomixed xml:id="service.jakartaws-handler">
+        <title>Handler</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/xml-web-services/4.0/apidocs/jakarta.xml.ws/jakarta/xml/ws/handler/handler"/>
+        </biblioid>
+      </bibliomixed>
+      
+      <bibliomixed xml:id="service.jakartaws-endpoint">
+        <title>Endpoint</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/xml-web-services/4.0/apidocs/jakarta.xml.ws/jakarta/xml/ws/endpoint"/>
+        </biblioid>
+      </bibliomixed>
+      
+      
+
+      <bibliomixed xml:id="service.jakartaws-portable.java.contracts.ref">
+        <title>Portable Java Contract Definitions</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://docs.osgi.org/reference/portable-java-contracts.html"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-whiteboard.pattern.ref">
+        <title>Whiteboard Pattern</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-iana.media.types">
+        <title>IANA Media Type Registrations</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://www.iana.org/assignments/media-types/media-types.xhtml"/>
+        </biblioid>
+      </bibliomixed>
+
+      <bibliomixed xml:id="service.jakartaws-iana.media.type.suffixes">
+        <title>IANA Media Type Suffix Registrations</title>
+
+        <biblioid class="uri">
+          <link xlink:href="https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml"/>
+        </biblioid>
+      </bibliomixed>
+
+    </bibliolist>
+  </section>
+</section>
+</chapter>
