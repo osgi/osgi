@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Servlet Whiteboard Package Version 2.0.
+ * Servlet Whiteboard Package Version 3.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,13 +26,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.whiteboard; version="[2.0,3.0)"}
+ * {@code  Import-Package: org.osgi.service.servlet.whiteboard; version="[3.0,4.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.whiteboard; version="[2.0,2.1)"}
+ * {@code  Import-Package: org.osgi.service.servlet.whiteboard; version="[3.0,3.1)"}
  * 
- * @author $Id$
+ * @author $Id: 082bf9fd1373d9fcf1a58e5de76bc76bb448cfad $
  */
 
 @Version(HttpWhiteboardConstants.HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")
