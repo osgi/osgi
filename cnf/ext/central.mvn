@@ -270,4 +270,30 @@ commons-logging:commons-logging:1.3.5
 org.apache.derby:derby:10.14.2.0
 
 # Jakarta WS
+jakarta.xml.soap:jakarta.xml.soap-api:3.0.1
 jakarta.xml.ws:jakarta.xml.ws-api:4.0.1
+jakarta.xml.bind:jakarta.xml.bind-api:4.0.2
+com.sun.xml.ws:jaxws-rt:4.0.2
+com.fasterxml.woodstox:woodstox-core:6.7.0
+org.codehaus.woodstox:stax2-api:4.2.2
+com.sun.istack:istack-commons-runtime:4.1.2
+com.sun.istack:istack-commons-tools:4.1.2
+com.sun.xml.stream.buffer:streambuffer:2.1.0
+org.glassfish.external:management-api:3.2.3
+org.glassfish.gmbal:gmbal-api-only:4.0.3
+org.glassfish.ha:ha-api:3.1.9
+org.jvnet.mimepull:mimepull:1.10.0
+
+
+com.sun.xml.fastinfoset:FastInfoset:2.1.1
+org.jvnet.staxex:stax-ex:2.1.0
+
+
+#org.glassfish.metro:webservices-osgi:4.0.4
+#org.glassfish.jaxb:codemodel:4.0.5
+#jakarta.mail:jakarta.mail-api:2.1.3
+#org.apache.santuario:xmlsec:4.0.3
+#commons-codec:commons-codec:1.17.1
+
+com.sun.xml.bind:jaxb-core:4.0.1
+com.sun.xml.bind:jaxb-impl:4.0.1
