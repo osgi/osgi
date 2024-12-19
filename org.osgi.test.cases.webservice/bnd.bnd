@@ -1,0 +1,46 @@
+# Set javac settings from JDT prefs
+-include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/cmpn.bnd
+
+-conditionalpackage = org.osgi.test.support.*,\
+ com.sun.xml.messaging.saaj.*,\
+ org.apache.http.*,\
+ org.apache.commons.codec.*,\
+ org.apache.commons.logging.*
+-privatepackage						=  \
+	${p}.*
+Import-Package: ${-signaturetest},\
+ com.sun.xml.fastinfoset.*;resolution:=optional,\
+ org.apache.avalon.framework.logger;resolution:=optional,\
+ org.apache.log;resolution:=optional,\
+ org.apache.log4j;resolution:=optional,\
+ *
+
+DynamicImport-Package: jakarta.xml.bind, jakarta.xml.bind.*
+
+-buildpath: \
+	${osgi.annotation.buildpath},\
+	org.osgi.test.support;version=project,\
+	org.osgi.framework;maven-scope=provided;version='1.8',\
+	org.osgi.namespace.implementation;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.resource;version=latest,\
+	org.osgi.service.webservice;version=latest,\
+	jakarta.xml.soap-api;version='3.0.1',\
+	jakarta.xml.ws-api;version='4.0.1',\
+	org.apache.commons.logging;version='1.2',\
+	org.apache.httpcomponents.httpcore;version='4.4.6',\
+	org.apache.httpcomponents.httpclient;version='4.5.3'
+
+-runbundles = \
+    org.osgi.impl.service.webservice;version=latest
+
+-runproperties = ${runproperties}, \
+	org.apache.felix.http.host=127.0.0.1, \
+	org.osgi.service.http.port=8080, \
+	org.apache.felix.http.whiteboard.changecount.delay=0
+
+-signaturetest = \
+  org.osgi.service.webservice.runtime, \
+  org.osgi.service.webservice.runtime.dto,\
+  org.osgi.service.webservice.whiteboard
+
