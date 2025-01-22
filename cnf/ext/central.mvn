@@ -261,3 +261,13 @@ org.slf4j:slf4j-api:1.7.36
 org.slf4j:slf4j-simple:1.7.36
 com.sun.activation:jakarta.activation:2.0.1
 com.sun.xml.bind:jaxb-osgi:4.0.1
+
+org.eclipse.osgi-technology.featurelauncher:runtime:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.repository:artifact.maven:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.repository:common.osgi:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.repository:spi:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.launch:launcher:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.launch:secondstage:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.launch:all.lite:1.0.0-SNAPSHOT
+org.eclipse.osgi-technology.featurelauncher.launch:all.maven:1.0.0-SNAPSHOT
+
