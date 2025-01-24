@@ -2258,6 +2258,12 @@ package-names   ::= package-name                // See <xref
 		  Bundles should only import such an exported package if they are willing to get that package 
 		  from another (unknown) bundle and omit their own export from the framework. By definition, this means that a bundle with a subsitutable export may never load that package, rendering its class files and resources invisible to that bundle's class loader.
       </para>
+
+      <para>When importing an exported package you 
+      should <emphasis role="bold">not</emphasis> make your <code>Import-Package</code> statement <code>resolution:="optional"</code>. 
+      As your bundle is exporting the package there is no possibility of it not being available at runtime, 
+      meaning that making the import optional serves no purpose.
+      </para>
       
       <para>
       Multiple bundles providing the same API packages 
