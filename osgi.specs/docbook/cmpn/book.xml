@@ -137,6 +137,8 @@
   <xi:include href="../158/service.log.stream.xml"/>
 
   <xi:include href="../159/service.feature.xml"/>
+  
+  <xi:include href="../160/service.jakartaws.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 
