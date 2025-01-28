@@ -346,7 +346,11 @@
       that must match the <code>effective</code> directive.</para>
 
       <para>For the OSGi Framework, the name <code>resolve</code> is reserved,
-      this is also the default. The syntax is therefore:</para>
+      this is also the default. Requirements and Capabilities may specify another
+      value, such as <code>active</code> for requirements that must be present for
+      a bundle to become active executable (that is for example services it needs to consume)
+      but for the OSGi Framework the only value that makes the Requirement or Capability effective is the <code>resolve</code> value.
+      The syntax is therefore:</para>
 
       <programlisting>effective ::= &lt;name&gt;</programlisting>
     </section>
