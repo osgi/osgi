@@ -18,10 +18,25 @@ The only thing you need to build OSGi is Java.
 We require Java 8.
 If your main JDK is higher than 8 you can set it on each run by adding `-Dorg.gradle.java.home=<pathToYourJDK8>` to the Gradle command.
 
+### Building with gradle
+
 We use Gradle to build and the repository includes `gradlew`.
 
 - `./gradlew :build :publish` - Builds and releases the artifacts into `cnf/generated/repo`.
 - `./gradlew :osgi.specs:specifications` - Builds the specifications into `osgi.specs/generated`.
+
+### Building with Maven (experimental)
+
+As an alternative, you can use Maven to build the sources, this is currently experimental and might not work for all but most features
+and is suitable for example when adjusting only small parts of the code.
+
+- go into the directory of interest you want to build (e.g. `osgi.core`)
+- `mvn clean verify` compiles and possibly run tests
+
+Tests can be skipped with `-DskipTests`, multiple projects can be build with `-pl <list of projects>` (e.g. `-pl osgi.core,org.osgi.dto`), 
+add `-T1C` to speedup build when building multiple projects at once.
+
+### CI Verification
 
 We use [GitHub Actions](https://github.com/osgi/osgi/actions?query=workflow%3A%22CI%20Build%22) for continuous integration and the repo includes a `.github/workflows/cibuild.yml` file to build via GitHub Actions.
 
