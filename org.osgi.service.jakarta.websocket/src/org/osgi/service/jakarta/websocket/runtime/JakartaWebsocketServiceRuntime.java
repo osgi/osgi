@@ -19,6 +19,7 @@
 package org.osgi.service.jakarta.websocket.runtime;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO;
 
 /**
  * 
@@ -29,5 +30,10 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface JakartaWebsocketServiceRuntime {
-
+	/**
+	 * Return the runtime DTO representing the current state.
+	 * 
+	 * @return The runtime DTO.
+	 */
+	RuntimeDTO getRuntimeDTO();
 }

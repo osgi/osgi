@@ -29,7 +29,7 @@ public class FailedEndpointDTO extends FailedDTO {
 	 * The endpoint is invalid, for example does not contain required
 	 * annotations
 	 **/
-	public static final int		FAILURE_REASON_INVALID	= 200;
+	public static final int		FAILURE_REASON_INVALID	= 100;
 
 	/**
 	 * The DTO for the corresponding implementor that created this endpoint.

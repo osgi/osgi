@@ -27,13 +27,13 @@ public class FailedDTO extends DTO {
 	/**
 	 * Failure reason is unknown.
 	 */
-	public static final int	FAILURE_REASON_UNKNOWN	= 0;
+	public static final int	FAILURE_REASON_UNKNOWN				= 1;
 
 	/**
 	 * The service is registered in the service registry but getting the service
 	 * fails as it returns {@code null}.
 	 */
-	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE	= 1;
+	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE	= 2;
 
 	/**
 	 * Contains a code to indicate why the handler failed

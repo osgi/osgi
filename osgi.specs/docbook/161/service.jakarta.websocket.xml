@@ -228,14 +228,10 @@ public class MyHelloClientJdk implements HelloService, Listener {
      <section>
     	<title>Jakarta™ XML Websocket Services Whiteboard Runtime Implementation</title>
     	<para>
-    		akarta™ XML Websocket Services Whiteboard Runtime Implementation consists of the following parts:
+    		Jakarta™ XML Websocket Services Whiteboard Runtime Implementation consists of the following parts:
     		<itemizedlist>
 		        <listitem>
-		        	<para>The <emphasis>Endpoint Registrar</emphasis> what is responsible to track the <emphasis>Endpoint Implementor</emphasis>S in the OSGi service factory
-		        	and registering them with the web socket server</para>
-		        </listitem>
-		        <listitem>
-		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service factory so it can be discovered by clients that want to use it</para>
+		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it</para>
 		        </listitem>
 		        <listitem>
 		        	<para>The <emphasis>JakartaWebsocketServiceRuntime</emphasis> registered in the OSGi service factory so it can be discovered by clients that want to use it to query the current state of the runtime</para>
@@ -243,11 +239,60 @@ public class MyHelloClientJdk implements HelloService, Listener {
 	        </itemizedlist>
     	</para>
     	<section>
-    		<title>The Endpoint Registrar</title>
+    		<title>The WebSocketContainer Service</title>
     		<para>
-    		...
+    		 The runtime needs to register a WebSocketContainer service in the OSGi service registry, so it can be discovered by clients that want to use it to open client connection if they like to.
+    		 The service must be a prototype service as it potentially contains modifiable state through its setter methods but and as the API contract a single WebSocketContainer may be accessed by
+    		 concurrent threads, so implementations must ensure the integrity of its mutable attributes in such circumstances.
     		</para>
     	</section>
+    	<section>
+    		<title>The JakartaWebsocketServiceRuntime Service</title>
+    		<para>
+    		 The runtime needs to register a JakartaWebsocketServiceRuntime service that can be queried for the current state of endpoints registered, for example to find if they failed or not.
+    		</para>
+    	</section>
+    	<section>
+        <title>Whiteboard Error Handling</title>
+		    <para>
+		    There are a number of error cases where the Jakarta Websocket whiteboard may be unable to correctly register an endpoint. 
+		    All of these cases must result in a failure DTO being created with the appropriate error code.
+		    </para>
+    	    <section>
+		    	<title>General Error Codes</title>
+			    <itemizedlist>
+			      <!-- generic error codes -->	
+			      <listitem>
+			        <para>
+			        <emphasis>Unknown Failure</emphasis> - Outside of the predefined error conditions there might still errors occurring during the construction of the objects,
+			        the implementation can use the error code <code>1</code> to indicate that.
+			        The implementation can use own error codes to but to prevent clash with codes specified in later specification versions, such an error code must
+			        be equal or larger than <code>1000</code>.
+			        In all cases an additional error message might be used to further describe the nature of the failure and give users of the DTO a hint what's going on.
+			        </para>
+			      </listitem>
+			      <listitem>
+			        <para><emphasis>Failure to obtain a service instance</emphasis> - In
+			        the case where a published service is unable to be obtained by the
+			        Jakarta Websocket whiteboard then the service is deny
+			        listed by the container. A failure DTO is made available from the
+			        WebserviceSocketRuntime representing the deny listed service
+			        object. The error code in this case is <code>2</code>.</para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		     <section>
+		    	<title>Endpoint Implementor Error Codes</title>
+			    <itemizedlist>
+			      <listitem>
+			        <para><emphasis>Invalid Endpoint</emphasis> -  The endpoint is invalid, for example does not contain required annotations,
+			        then Endpoint is considered failed as no futher handling is possible.
+			        The error code in this case is <code>100</code>.
+			        </para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		  </section>
    </section>
 	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.xml"/>
 	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.runtime.xml"/>
