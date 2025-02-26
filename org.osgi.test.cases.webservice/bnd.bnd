@@ -20,7 +20,9 @@ DynamicImport-Package: jakarta.xml.bind, jakarta.xml.bind.*
 -buildpath: \
 	${osgi.annotation.buildpath},\
 	org.osgi.test.support;version=project,\
-	org.osgi.framework;maven-scope=provided;version='1.8',\
+	org.osgi.util.tracker;version=project,\
+	org.osgi.framework;maven-scope=provided;version='1.9',\
+	org.osgi.dto;maven-scope=provided;version='1.1',\
 	org.osgi.namespace.implementation;version=latest,\
 	org.osgi.namespace.service;version=latest,\
 	org.osgi.resource;version=latest,\
