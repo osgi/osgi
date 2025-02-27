@@ -17,16 +17,35 @@
  *******************************************************************************/
 package org.osgi.test.cases.webservice.webservices;
 
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebService;
+import static java.util.Collections.emptySet;
 
-@WebService(targetNamespace = WSEcho.ECHO_NS)
-public class WSEcho {
-    public static final String ECHO_NS = "http://echo.webservice.osgi.org";
+import java.util.Set;
 
-	@WebMethod(operationName = "echoAction", action = "echo")
-    public String echo(@WebParam(name = "textIn") String text) {
-    	return text;
-    }
+import javax.xml.namespace.QName;
+
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.soap.SOAPHandler;
+import jakarta.xml.ws.handler.soap.SOAPMessageContext;
+
+public class SOAPHandlerImpl implements SOAPHandler<SOAPMessageContext> {
+
+	@Override
+	public boolean handleMessage(SOAPMessageContext context) {
+		return true;
+	}
+
+	@Override
+	public boolean handleFault(SOAPMessageContext context) {
+		return true;
+	}
+
+	@Override
+	public void close(MessageContext context) {
+	}
+
+	@Override
+	public Set<QName> getHeaders() {
+		return emptySet();
+	}
+
 }

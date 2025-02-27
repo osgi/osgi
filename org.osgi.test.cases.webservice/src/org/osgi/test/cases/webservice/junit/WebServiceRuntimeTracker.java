@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) Contributors to the Eclipse Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0 
+ *******************************************************************************/
 package org.osgi.test.cases.webservice.junit;
 
 import java.util.concurrent.Callable;
@@ -14,6 +31,14 @@ import org.osgi.service.webservice.runtime.WebserviceServiceRuntime;
 import org.osgi.service.webservice.runtime.dto.RuntimeDTO;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * This tracker is used to:
+ * 
+ * <ul>
+ *   <li>Track a {@link WebserviceServiceRuntime}</li>
+ *   <li>Wait for the {@link WebserviceServiceRuntime} changecount to change so that the caller can react to updates</li>
+ *   <li>Register <em>setup</em>, <em>test</em> and <em>error</em> functions to allow for simple reactive tests</li>
+ */
 public class WebServiceRuntimeTracker {
 
 	private final ServiceTracker<WebserviceServiceRuntime, WebserviceServiceRuntime> tracker;
@@ -22,7 +47,7 @@ public class WebServiceRuntimeTracker {
 	
 	private long updateCount = Long.MIN_VALUE;
 	
-	private boolean hasChanged = false;
+	private boolean hasChangeCount = false;
 	
 	/**
 	 * Used to synchronise when we need to deal with 
@@ -30,6 +55,11 @@ public class WebServiceRuntimeTracker {
 	 */
 	private final Object lock = new Object();
 	
+	/**
+	 * Create a tracker for the supplied {@link WebserviceServiceRuntime} reference
+	 * @param ctx
+	 * @param ref
+	 */
 	public WebServiceRuntimeTracker(BundleContext ctx, ServiceReference<WebserviceServiceRuntime> ref) {
 		
 		tracker = new ServiceTracker<WebserviceServiceRuntime, WebserviceServiceRuntime>(ctx, ref, null) {
@@ -40,10 +70,12 @@ public class WebServiceRuntimeTracker {
 				
 				if(count instanceof Long) {
 					synchronized (lock) {
-						hasChanged = true;
+						hasChangeCount = true;
 						updateCount = (Long) count; 
 						updateNotifier.release();
 					}
+				} else {
+					hasChangeCount = false;
 				}
 				return ctx.getService(ref);
 			}
@@ -57,10 +89,13 @@ public class WebServiceRuntimeTracker {
 						long newCount = (Long) update;
 						// The count must increase
 						if(newCount > updateCount) {
-							hasChanged = true;
+							hasChangeCount = true;
 							updateCount = newCount;
 							updateNotifier.release();
 						}
+					} else {
+						updateCount = Long.MIN_VALUE;
+						hasChangeCount = false;
 					}
 				}
 			}
@@ -73,18 +108,32 @@ public class WebServiceRuntimeTracker {
 		return tracker.getService();
 	}
 	
+	/**
+	 * @return a snapshot of the current change count
+	 */
 	public long getCurrentChangeCount() {
 		synchronized (lock) {
 			return updateCount;
 		}
 	}
 	
-	public boolean hasChanged() {
+	/**
+	 * @return <code>true</code> if the service has a change count set
+	 */
+	public boolean hasChangeCount() {
 		synchronized (lock) {
-			return hasChanged;
+			return hasChangeCount;
 		}
 	}
 	
+	/**
+	 * Pauses processing until the {@link WebserviceServiceRuntime} change count has stabilised
+	 * and remained the same for given time period. Commonly used to ensure stability when preparing tests.
+	 * @param time
+	 * @param maxTime
+	 * @param unit
+	 * @throws InterruptedException
+	 */
 	public void waitForQuiet(long time, long maxTime, TimeUnit unit) throws InterruptedException {
 		long start = System.nanoTime();
 		
@@ -103,10 +152,29 @@ public class WebServiceRuntimeTracker {
 		}
 	}
 	
+	/**
+	 * Performs the supplied action and then waits indefinitely for the {@link WebserviceServiceRuntime}
+	 * change count to change.
+	 * @param <T>
+	 * @param action The action to perform before waiting
+	 * @return the result of calling <code>action</code>
+	 * @throws Exception
+	 */
 	public <T> T waitForChange(Callable<T> action) throws Exception {
 		return waitForChange(action, (x,y) -> true);
 	}
 
+	/**
+	 * Performs the supplied action and then waits indefinitely for the {@link WebserviceServiceRuntime}
+	 * change count to change. Each time it changes the supplied test is run. If the test returns <code>true</code>
+	 * then control will return to the caller.
+	 * @param <T>
+	 * @param action The action to perform before waiting
+	 * @param test The test to run to see whether the update has completed. Receives the result of <code>action.call()</code> and
+	 * the latest snapshot of the {@link RuntimeDTO}
+	 * @return the result of calling <code>action</code>
+	 * @throws Exception
+	 */
 	public <T> T waitForChange(Callable<T> action, BiPredicate<T,RuntimeDTO> test) throws Exception {
 		synchronized (lock) {
 			updateNotifier.drainPermits();
@@ -121,16 +189,54 @@ public class WebServiceRuntimeTracker {
 		return t;
 	}
 	
+	/**
+	 * Performs the supplied action and then waits for up to the specified time for the {@link WebserviceServiceRuntime}
+	 * change count to change.
+	 * @param <T>
+	 * @param action The action to perform before waiting
+	 * @param maxTime the maximum time to wait
+	 * @param unit the time unit for <code>maxTime</code>
+	 * @return the result of calling <code>action</code>
+	 * @throws Exception if no change occurred before the time expires
+	 */
 	public <T> T waitForChange(Callable<T> action, long maxTime, TimeUnit unit) throws Exception {
 		return waitForChange(action, (x,y) -> true, maxTime, unit);
 	}
 
+	/**
+	 * Performs the supplied action and then waits for up to the specified time for the {@link WebserviceServiceRuntime}
+	 * change count to change. Each time it changes the supplied test is run. If the test returns <code>true</code>
+	 * then control will return to the caller.
+	 * @param <T>
+	 * @param action The action to perform before waiting
+	 * @param test The test to run to see whether the update has completed. Receives the result of <code>action.call()</code> and
+	 * the latest snapshot of the {@link RuntimeDTO}
+	 * @param maxTime the maximum time to wait
+	 * @param unit the time unit for <code>maxTime</code>
+	 * @return the result of calling <code>action</code>
+	 * @throws Exception if no change occurred before the time expires
+	 */
 	public <T> T waitForChange(Callable<T> action, BiPredicate<T,RuntimeDTO> test,
  			long maxTime, TimeUnit unit) throws Exception {
 		return waitForChange(action, (x,y) -> true,
 				(x,y) -> "The WebserviceServiceRuntime did not update within " + maxTime + " " + unit,
 				maxTime, unit);
 	}
+	
+	/**
+	 * Performs the supplied action and then waits for up to the specified time for the {@link WebserviceServiceRuntime}
+	 * change count to change. Each time it changes the supplied test is run. If the test returns <code>true</code>
+	 * then control will return to the caller.
+	 * @param <T>
+	 * @param action The action to perform before waiting
+	 * @param test The test to run to see whether the update has completed. Receives the result of <code>action.call()</code> and
+	 * the latest snapshot of the {@link RuntimeDTO}
+	 * @param errorMessage called when the timeout occurs to generate an error message
+	 * @param maxTime the maximum time to wait
+	 * @param unit the time unit for <code>maxTime</code>
+	 * @return the result of calling <code>action</code>
+	 * @throws Exception if no change occurred before the time expires
+	 */
 	public <T> T waitForChange(Callable<T> action, BiPredicate<T,RuntimeDTO> test,
 			BiFunction<T, RuntimeDTO, String> errorMessage, long maxTime, TimeUnit unit) throws Exception {
 		synchronized (lock) {
@@ -141,7 +247,7 @@ public class WebServiceRuntimeTracker {
 		long remaining = unit.toNanos(maxTime);
 		for(;;) {
 			if(!updateNotifier.tryAcquire(remaining, TimeUnit.NANOSECONDS)) {
-				Assertions.fail();
+				Assertions.fail(errorMessage.apply(t, getServiceRuntime().getRuntimeDTO()));
 			} else {
 				if(test.test(t, getServiceRuntime().getRuntimeDTO())) {
 					break;
@@ -153,11 +259,31 @@ public class WebServiceRuntimeTracker {
 		return t;
 	}
 
+	/**
+	 * Wait for the specified time, failing if the change count is updated
+	 * @param <T>
+	 * @param action
+	 * @param maxTime
+	 * @param unit
+	 * @return
+	 * @throws Exception
+	 */
 	public <T> T waitForNoChange(Callable<T> action,
 			long maxTime, TimeUnit unit) throws Exception {
 		return waitForNoChange(action, (x,y) -> false, maxTime, unit);
 	}
 	
+	/**
+	 * Wait for the specified time, failing if the {@link WebserviceServiceRuntime} change count
+	 * updates and the supplied test fails
+	 * @param <T>
+	 * @param action
+	 * @param test
+	 * @param maxTime
+	 * @param unit
+	 * @return
+	 * @throws Exception
+	 */
 	public <T> T waitForNoChange(Callable<T> action, BiPredicate<T,RuntimeDTO> test,
 			long maxTime, TimeUnit unit) throws Exception {
 		synchronized (lock) {

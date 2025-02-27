@@ -20,11 +20,12 @@ package org.osgi.test.cases.webservice.junit;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
 import static org.osgi.namespace.implementation.ImplementationNamespace.CAPABILITY_VERSION_ATTRIBUTE;
+import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
 import static org.osgi.namespace.service.ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE;
 import static org.osgi.namespace.service.ServiceNamespace.SERVICE_NAMESPACE;
 import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
+import static org.osgi.service.webservice.whiteboard.WebserviceWhiteboardConstants.WEBSERVICE_IMPLEMENTATION;
 import static org.osgi.service.webservice.whiteboard.WebserviceWhiteboardConstants.WEBSERVICE_SPECIFICATION_VERSION;
 
 import java.util.ArrayList;
@@ -127,7 +128,7 @@ public class CapabilityTestCase {
 					.getCapabilities(IMPLEMENTATION_NAMESPACE);
 
 			for (Capability cap : capabilities) {
-				hasCapability = "osgi.webservice".equals(
+				hasCapability = WEBSERVICE_IMPLEMENTATION.equals(
 						cap.getAttributes().get(IMPLEMENTATION_NAMESPACE));
 				if (hasCapability) {
 					Version required = Version
@@ -158,10 +159,10 @@ public class CapabilityTestCase {
 		}
 
 		assertTrue(hasCapability,
-				"No osgi.implementation capability for the JAX-RS whiteboard implementation");
+				"No osgi.implementation capability for the Web Service whiteboard implementation");
 
 		assertTrue(version,
-				"No osgi.implementation capability for the JAX-RS Whiteboard at version "
+				"No osgi.implementation capability for the Web Service Whiteboard at version "
 						+ WEBSERVICE_SPECIFICATION_VERSION);
 		assertTrue(uses,
 				"The osgi.implementation capability for the JAX-RS API does not have the correct uses constraint");
