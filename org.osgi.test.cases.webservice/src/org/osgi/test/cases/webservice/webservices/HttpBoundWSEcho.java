@@ -20,9 +20,12 @@ package org.osgi.test.cases.webservice.webservices;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
+import jakarta.xml.ws.BindingType;
+import jakarta.xml.ws.http.HTTPBinding;
 
-@WebService(targetNamespace = WSEcho.ECHO_NS)
-public class WSEcho {
+@BindingType(HTTPBinding.HTTP_BINDING)
+@WebService(targetNamespace = HttpBoundWSEcho.ECHO_NS)
+public class HttpBoundWSEcho {
     public static final String ECHO_NS = "http://echo.webservice.osgi.org";
 
 	@WebMethod(operationName = "echoAction", action = "echo")

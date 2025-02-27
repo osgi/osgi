@@ -21,7 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.service.webservice.runtime.dto.FailedDTO.FAILURE_REASON_SERVICE_NOT_GETTABLE;
+import static org.osgi.service.webservice.runtime.dto.FailedEndpointDTO.FAILURE_REASON_CREATE_FAILED;
+import static org.osgi.service.webservice.runtime.dto.FailedEndpointDTO.FAILURE_REASON_PUBLISH_FAILED;
+import static org.osgi.service.webservice.runtime.dto.FailedEndpointDTO.FAILURE_REASON_SET_HANDLER_FAILED;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
 
@@ -38,15 +42,20 @@ import org.osgi.service.webservice.runtime.WebserviceServiceRuntime;
 import org.osgi.service.webservice.runtime.dto.EndpointDTO;
 import org.osgi.service.webservice.runtime.dto.FailedEndpointDTO;
 import org.osgi.service.webservice.whiteboard.WebserviceWhiteboardConstants;
+import org.osgi.test.cases.webservice.webservices.BadBinding;
+import org.osgi.test.cases.webservice.webservices.HttpBoundWSEcho;
+import org.osgi.test.cases.webservice.webservices.SOAPHandlerImpl;
 import org.osgi.test.cases.webservice.webservices.WSEcho;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.support.map.Maps;
 
+import jakarta.xml.ws.handler.Handler;
+
 public class EndpointRegistrationTests {
 	
-	private static final String ECHO_URI = "http://127.0.0.1:56780/echo";
+	static final String ECHO_URI = "http://127.0.0.1:56780/echo";
 
 	@InjectBundleContext 
 	BundleContext ctx;
@@ -58,7 +67,7 @@ public class EndpointRegistrationTests {
 			throws InterruptedException {
 		webServiceRuntimeTracker = new WebServiceRuntimeTracker(ctx, runtime.getServiceReference());
 		webServiceRuntimeTracker.waitForQuiet(1, 5, TimeUnit.SECONDS);
-		assertTrue(webServiceRuntimeTracker.hasChanged(), "No Change Count detected for the WebserviceServiceRuntime");
+		assertTrue(webServiceRuntimeTracker.hasChangeCount(), "No Change Count detected for the WebserviceServiceRuntime");
 	}
 	
 	@AfterEach
@@ -165,5 +174,83 @@ public class EndpointRegistrationTests {
 				(reg,dto) -> "The endpoint with id " + getServiceId(reg) + " was not present in the failed DTO endpoints with code " + 
 				FAILURE_REASON_SERVICE_NOT_GETTABLE + ": " + dto,
 				6, TimeUnit.SECONDS);
+	}
+
+	@Test
+	public void testNotCreatableEndpoint() throws Exception {
+		
+		webServiceRuntimeTracker.waitForChange(
+				() -> {
+					Hashtable<String, Object> props = new Hashtable<>();
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_IMPLEMENTOR, Boolean.TRUE);
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_ADDRESS, ECHO_URI);
+					return ctx.registerService(Object.class, new BadBinding(), props);
+				},
+				(reg,dto) -> {
+					for(FailedEndpointDTO e : dto.failedEndpoints) {
+						if(getServiceId(reg).equals(e.implementor.id)) {
+							assertEquals(FAILURE_REASON_CREATE_FAILED, e.failureCode, "Endpoint service should not be gettable");
+							return true;
+						}
+					}
+					return false;
+				},
+				(reg,dto) -> "The endpoint with id " + getServiceId(reg) + " was not present in the failed DTO endpoints with code " + 
+						FAILURE_REASON_CREATE_FAILED + ": " + dto,
+						6, TimeUnit.SECONDS);
+	}
+	
+	@Test
+	public void testNotPublishableEndpoint() throws Exception {
+		
+		webServiceRuntimeTracker.waitForChange(
+				() -> {
+					Hashtable<String, Object> props = new Hashtable<>();
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_IMPLEMENTOR, Boolean.TRUE);
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_ADDRESS, ECHO_URI);
+					return ctx.registerService(Object.class, new Object(), props);
+				},
+				(reg,dto) -> {
+					for(FailedEndpointDTO e : dto.failedEndpoints) {
+						if(getServiceId(reg).equals(e.implementor.id)) {
+							assertEquals(FAILURE_REASON_PUBLISH_FAILED, e.failureCode, "Endpoint service should not be gettable");
+							return true;
+						}
+					}
+					return false;
+				},
+				(reg,dto) -> "The endpoint with id " + getServiceId(reg) + " was not present in the failed DTO endpoints with code " + 
+						FAILURE_REASON_PUBLISH_FAILED + ": " + dto,
+						6, TimeUnit.SECONDS);
+	}
+
+	@Test
+	public void testNotSettableHandler() throws Exception {
+		
+		webServiceRuntimeTracker.waitForChange(
+				() -> {
+					Hashtable<String, Object> props = new Hashtable<>();
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_IMPLEMENTOR, Boolean.TRUE);
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_ENDPOINT_ADDRESS, ECHO_URI);
+					ServiceRegistration<?> reg = ctx.registerService(Object.class, new HttpBoundWSEcho(), props);
+					
+					props = new Hashtable<>();
+					props.put(WebserviceWhiteboardConstants.WEBSERVICE_HANDLER_EXTENSION, Boolean.TRUE);
+					ServiceRegistration<?> reg2 = ctx.registerService(Handler.class, new SOAPHandlerImpl(), props);
+					return Arrays.asList(reg, reg2);
+					
+				},
+				(reg,dto) -> {
+					for(FailedEndpointDTO e : dto.failedEndpoints) {
+						if(getServiceId(reg.get(0)).equals(e.implementor.id)) {
+							assertEquals(FAILURE_REASON_SET_HANDLER_FAILED, e.failureCode, "Endpoint service should not be gettable");
+							return true;
+						}
+					}
+					return false;
+				},
+				(reg,dto) -> "The endpoint with id " + getServiceId(reg.get(0)) + " was not present in the failed DTO endpoints with code " + 
+						FAILURE_REASON_SET_HANDLER_FAILED + ": " + dto,
+						6, TimeUnit.SECONDS);
 	}
 }

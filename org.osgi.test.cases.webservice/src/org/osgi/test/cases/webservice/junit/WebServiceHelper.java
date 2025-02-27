@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) Contributors to the Eclipse Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0 
+ *******************************************************************************/
 package org.osgi.test.cases.webservice.junit;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -25,11 +42,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+/**
+ * This helper class creates SOAP messages and extracts SOAP responses
+ */
 public class WebServiceHelper {
 
 	public static final String SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 	
-	public static String createSOAPMessage(String namespaceURI, String rootElement, Map<String, Object> childElements) throws Exception {
+	/**
+	 * Create a SOAP message for the supplied namespace, root element name, and child parameters
+	 * @param namespaceURI
+	 * @param rootElement
+	 * @param childElements  a map where the keys will be used as element names and the values
+	 * as the text content of those elements
+	 * @return the SOAP message
+	 * @throws Exception
+	 */
+	public static String createSOAPMessage(String namespaceURI, String rootElement, Map<String, String> childElements) throws Exception {
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
@@ -61,6 +90,13 @@ public class WebServiceHelper {
 		return sw.toString();
 	}
 
+	/**
+	 * Submit a SOAP message to the supplied uri
+	 * @param uri
+	 * @param soapMessage
+	 * @return
+	 * @throws Exception
+	 */
 	public static String getSoapResponse(String uri, String soapMessage) throws Exception {
 		URL url = new URL(uri);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -84,6 +120,13 @@ public class WebServiceHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * Get the actual response from a SOAP response 
+	 * @param responseName
+	 * @param xmlResponse
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	public static String extractResponse(String responseName, String xmlResponse) throws XPathExpressionException {
 		XPathExpression xpath = XPathFactory.newInstance().newXPath().compile(
 				"/*[local-name() = 'Envelope']/*[local-name() = 'Body']/*[local-name() = '" 
