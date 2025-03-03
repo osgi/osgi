@@ -21,6 +21,10 @@ Import-Package: ${-signaturetest}, *
 -runvm: ${if;${is;-1;${vcompare;${java.specification.version};9}};;--add-opens=java.base/java.lang=ALL-UNNAMED}
 
 -runbundles						= \
+	org.objectweb.asm;version=latest,\
+	org.objectweb.asm.util;version=latest,\
+	org.objectweb.asm.tree;version=latest,\
+	org.objectweb.asm.tree.analysis;version=latest,\
 	org.osgi.service.async;version=latest,\
 	org.osgi.impl.service.async;version=latest
 
