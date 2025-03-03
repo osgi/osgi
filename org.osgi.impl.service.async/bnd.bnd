@@ -7,19 +7,22 @@ Bundle-Activator				= ${p}.Activator
 
 -conditionalpackage				= net.sf.cglib.*
 
-Import-Package					= !net.sf.cglib.asm.util, *
+Import-Package: \
+	!net.sf.cglib.asm.util,\
+	org.apache.tools.ant*;'resolution:'=optional,\
+	*
 
 -includeresource: OSGI-INF/=permissions
 
 Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.async.Async";uses:="org.osgi.service.async",\
 	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async,org.osgi.service.async.delegate"
 
--buildpath:  \
+-buildpath: \
 	org.osgi.service.async;version=latest,\
-	org.osgi.framework;maven-scope=provided;version=1.8,\
-    org.osgi.resource;maven-scope=provided;version=1.0, \
-	org.osgi.util.tracker;maven-scope=provided;version=1.5,\
-	org.osgi.util.function;version=1.0,\
-	org.osgi.util.promise;version=1.0,\
-	org.osgi.service.log;version=1.3,\
-	com.springsource.net.sf.cglib
+	org.osgi.framework;maven-scope=provided;version='1.8',\
+	org.osgi.resource;maven-scope=provided;version='1.0',\
+	org.osgi.util.tracker;maven-scope=provided;version='1.5',\
+	org.osgi.util.function;version='1.0',\
+	org.osgi.util.promise;version='1.0',\
+	org.osgi.service.log;version='1.3',\
+	cglib:cglib;version='3.3'

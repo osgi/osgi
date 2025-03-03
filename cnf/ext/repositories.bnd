@@ -14,11 +14,6 @@
         index=${.}/central.mvn;\
         readOnly=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
-        name='SpringSource EBR';\
-        releaseUrl="http://repository.springsource.com/maven/bundles/external";\
-        index=${.}/springsource.mvn;\
-        readOnly=true,\
-    aQute.bnd.repository.maven.provider.MavenBndRepository;\
         name='Local';\
         noupdateOnRelease=true,\
     aQute.bnd.repository.maven.provider.MavenBndRepository;\
