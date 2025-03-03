@@ -545,6 +545,25 @@
       </section>
       
       <section>
+        <title>Customizing the Artifact Repositories</title>
+        
+        <para>In addition to being able to modify a Feature a decorator may also
+        influence the installation or update operation by customizing the list of
+        Artifact Repositories used in the operation. To support this all decorators
+        are passed a <code>List</code> containing all of the Artifact Repositories
+        configured for the current operation. This elements in this list may be 
+        used as part of the decoration operation, and they may also be added to.
+        </para>
+        
+        <para>To support full customization of the install or update operation 
+        the supplied List is <emphasis>partially</emphasis> mutable, such that
+        it allows elements to be added or inserted but not removed or replaced.
+        This requires the Feature Launcher implementation to provide a custom 
+        <code>List</code> implementation which prevents removal or replacement
+        operations.</para>
+      </section>
+      
+      <section>
         <title>Using Decorators</title>
         
         <para>Decorators may be included using one of the relevant builder methods for
