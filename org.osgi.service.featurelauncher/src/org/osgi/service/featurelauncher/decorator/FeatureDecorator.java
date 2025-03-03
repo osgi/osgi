@@ -23,6 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.FeatureExtension;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 
 /**
  * A {@link FeatureDecorator} is used to pre-process a Feature before it is
@@ -42,6 +43,10 @@ public interface FeatureDecorator {
 	 * updated
 	 * 
 	 * @param feature the feature to be installed or updated
+	 * @param artifactRepositories the list of artifact repositories to be used
+	 *            in this operation. This list is partially mutable, no elements
+	 *            may be removed, but additional elements may be appended, or
+	 *            inserted at any index in the list.
 	 * @param decoratedFeatureBuilder a builder that can be used to produce a
 	 *            decorated feature with updated values
 	 * @param factory - a factory allowing users to create values for use with
@@ -55,6 +60,7 @@ public interface FeatureDecorator {
 	 *             operation must not continue
 	 */
 	public Feature decorate(Feature feature,
+			List<ArtifactRepository> artifactRepositories,
 			FeatureDecoratorBuilder decoratedFeatureBuilder,
 			DecoratorBuilderFactory factory) throws AbandonOperationException;
 

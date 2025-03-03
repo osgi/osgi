@@ -17,10 +17,13 @@
  *******************************************************************************/
 package org.osgi.service.featurelauncher.decorator;
 
+import java.util.List;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.feature.Feature;
 import org.osgi.service.feature.FeatureExtension;
+import org.osgi.service.featurelauncher.repository.ArtifactRepository;
 
 /**
  * A {@link FeatureExtensionHandler} is used to check and pre-process a Feature
@@ -42,6 +45,10 @@ public interface FeatureExtensionHandler {
 	 * @param feature the feature to be installed or updated
 	 * @param extension the feature extension which caused this handler to be
 	 *            called
+	 * @param artifactRepositories the list of artifact repositories to be used
+	 *            in this operation. This list is partially mutable, no elements
+	 *            may be removed, but additional elements may be appended, or
+	 *            inserted at any index in the list.
 	 * @param decoratedFeatureBuilder a builder that can be used to produce a
 	 *            decorated feature with updated values
 	 * @param factory - a factory allowing users to create values for use with
@@ -55,6 +62,7 @@ public interface FeatureExtensionHandler {
 	 *             operation must not continue
 	 */
 	public Feature handle(Feature feature, FeatureExtension extension,
+			List<ArtifactRepository> artifactRepositories,
 			FeatureExtensionHandlerBuilder decoratedFeatureBuilder,
 			DecoratorBuilderFactory factory) throws AbandonOperationException;
 
