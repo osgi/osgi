@@ -114,7 +114,7 @@ def rdmtsummary = tasks.register("rdmtsummary") {
 }
 
 def xmlns = tasks.register("xmlns", Copy.class) {
-	description = "Build the docbook flavored schemas."
+	description = "Build the docbook flavored XML schemas."
 	group = "documentation"
 
 	from(parent.file("xmlns"))
@@ -130,6 +130,16 @@ def xmlns = tasks.register("xmlns", Copy.class) {
 			fileset("dir": destinationDir, "includes": "**/*.xsd")
 		}
 	}
+}
+
+def jsonschema = tasks.register("jsonschema", Copy.class) {
+	description = "Build the docbook flavored JSON schemas."
+	group = "documentation"
+
+	from(parent.file("json.schema"))
+	into(layout.getBuildDirectory().dir("json.schema"))
+	include("**/*.json")
+	includeEmptyDirs = false
 }
 
 def specifications = tasks.register("specifications") {
@@ -159,6 +169,7 @@ books.forEach { book ->
 		inputs.files(runtimeClasspath).withNormalizer(ClasspathNormalizer.class).withPropertyName("runtimeClasspath")
 		inputs.files(javadoc).withPropertyName(javadoc.name)
 		inputs.files(xmlns).withPropertyName(xmlns.name)
+		inputs.files(jsonschema).withPropertyName(jsonschema.name)
 		if (book != "core") {
 			inputs.files(rdmtsummary).withPropertyName(rdmtsummary.name)
 		}

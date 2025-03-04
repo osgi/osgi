@@ -46,8 +46,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("staticAccessBundle.jar");
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
 		try {
+			waitForService(EntityManagerFactory.class);
 			emf = Persistence.createEntityManagerFactory("staticAccessTestUnit");
 			assertNotNull("Unable to create the specified EntityManagerFactory", emf);
 		} finally {
@@ -63,8 +63,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("staticAccessWithMapBundle.jar");
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			DataSourceFactory dsf = getService(DataSourceFactory.class);
 			ServiceReference< ? > dsfRef = getServiceReference(dsf);
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
@@ -84,8 +84,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBundle.jar");
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
 		try {
+			waitForService(EntityManagerFactory.class);
 			emf = getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
 		} finally {
@@ -101,8 +101,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 	public void testEntityManagerFactoryWithIncompletePersistenceUnit() throws Exception {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("incompletePersistenceUnitBundle.jar");
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			ServiceReference< ? >[] emfRefs = getContext().getServiceReferences(
 					EntityManagerFactory.class.getName(),
 					"(osgi.unit.name=incompleteTestUnit)");
@@ -118,8 +118,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		EntityManagerFactoryBuilder emfBuilder = null;
 		@SuppressWarnings("unused")
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactoryBuilder", emfBuilder);
 			DataSourceFactory dsf = getService(DataSourceFactory.class);
@@ -147,8 +147,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		EntityManagerFactory emf1 = null;
 		@SuppressWarnings("unused")
 		EntityManagerFactory emf2 = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderRebindingTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactroyBuilder", emfBuilder);
 			DataSourceFactory dsf = getService(DataSourceFactory.class);
@@ -178,9 +178,9 @@ public class JPATestCase extends DefaultTestBundleControl {
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf1 = null;
 		EntityManagerFactory emf2 = null;
-		waitForService(EntityManagerFactory.class);
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactory.class);
+			waitForService(EntityManagerFactoryBuilder.class);
 			emf1 = getService(EntityManagerFactory.class, "(osgi.unit.name=emfRebindingWithBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf1);
 			assertTrue(emf1.isOpen());
@@ -214,8 +214,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("configPropertiesBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactoryBuilder.class);
 		try {
+			waitForService(EntityManagerFactoryBuilder.class);
 			emfBuilder = getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=configPropertiesTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactoryBuilder.", emfBuilder);
 			DataSourceFactory dsf = getService(DataSourceFactory.class);
@@ -242,8 +242,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		Bundle emfBundle = installBundle("dsfEMFBundle.jar");
 		Bundle dsfBundle = null;
 		EntityManagerFactoryBuilder emfBuilder = null;
-		waitForService(EntityManagerFactory.class);
 		try {
+			waitForService(EntityManagerFactory.class);
 			DataSourceFactory dsf = getService(DataSourceFactory.class);
 			ServiceReference< ? > dsfRef = getServiceReference(dsf);
 			ungetService(dsf);
@@ -270,8 +270,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBundle.jar");
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
 		try {
+			waitForService(EntityManagerFactory.class);
 			emf = getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
 			uninstallBundle(persistenceBundle);
@@ -290,8 +290,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Reinstall the bundle and go through the motions again to make sure nothing that conflicts was left behind
 		Bundle reinstalledBundle = installBundle("emfBundle.jar");
 		emf = null;
-		waitForService(EntityManagerFactory.class);
 		try {
+			waitForService(EntityManagerFactory.class);
 			emf = getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
 		} finally {
@@ -310,7 +310,7 @@ public class JPATestCase extends DefaultTestBundleControl {
 		assertNotNull("The javax.persistence.provider service property should be registered alongside the PersistenceProvider service", javaxPersistenceProvider);
 	}
 
-	public <S> void waitForService(Class<S> cls) {
+	public <S> S waitForService(Class<S> cls) {
 		ServiceTracker<S,S> tracker = new ServiceTracker<>(getContext(), cls,
 				null);
         tracker.open();
@@ -324,5 +324,6 @@ public class JPATestCase extends DefaultTestBundleControl {
         tracker.close();
         assertNotNull("Service for " + cls.getName() + " was not registered after waiting " +
             SERVICE_WAIT_TIME + " milliseconds", service);
+		return service;
     }
 }

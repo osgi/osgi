@@ -59,14 +59,14 @@ jobs:
       tck-matrix: ${{ steps.build.outputs.tck-matrix }}
     steps:
     - name: Git Checkout
-      uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
     - name: Git Unshallow
       if: ${{ fromJSON(env.canonical) }}
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
     - name: Set up Java
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -77,7 +77,7 @@ jobs:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-TCK
         if-no-files-found: error
@@ -86,7 +86,7 @@ jobs:
           !osgi.tck/generated/osgi.tck.*.jar
     - name: Configure settings.xml for Publish
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -116,7 +116,7 @@ jobs:
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Generated-Repo
         path: |
@@ -127,9 +127,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Git Checkout
-      uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
     - name: Set up Java
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -141,13 +141,13 @@ jobs:
         arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
       if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
@@ -161,7 +161,7 @@ jobs:
       contents: write
     steps:
     - name: Download Specification HTML
-      uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html
@@ -184,12 +184,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set up Java
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Download TCK
-      uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         name: OSGi-TCK
     - name: Run TCK
@@ -199,7 +199,7 @@ jobs:
         java -jar jar/bnd.jar --exceptions runtests --title ${{ matrix.tck }} --reportdir reports/${{ matrix.tck }} ${{ matrix.tck }}.bnd
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |
