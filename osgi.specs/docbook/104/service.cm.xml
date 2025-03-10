@@ -2464,6 +2464,30 @@ ConfigurationPermission[?application,<xref
     fails or terminates regularly. Registered synchronous listeners will be
     informed immediately when the change happens regardless of a
     coordination.</para>
+    <para>The intend of this integration is that multiple events are collapsed
+    into one as updating a Managed Service or Managed Service Factory might result
+    in services being updated or unregistered what can trigger other service changes
+    what might be a costly operation and therefore result in an unwanted intermediate
+    state until the system has setled again. Collapsing here means, that multiple
+    updates inside a coordination are combined into exactly one update that reflects
+    the final outcome, the following list gives some examples for clarification:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>If a configuration exists and it has currently the values <code>{key: value}</code>
+         and a coordination starts where it is first updated to <code>{key: something else}</code>
+         and later again to <code>{key: value}</code>, then after the coordination terminates
+         one update is delivered with <code>{key: value}</code> even though the configuration has
+         not changed, see <xref linkend="service.cm-updating.configuration" />.
+         </para>
+         <para>If no configuration exists and a coordination starts where it is first updated to
+         <code>{key: something else}</code> and later is deleted, then after the coordination
+         terminates one update is delivered with <code>null</code> even though the Managed Service
+         or Managed Service Factory has not changed this is a special case of the blindly update
+         case described in <xref linkend="service.cm-updating.configuration" />.
+         </para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="service.cm-capabilities">
