@@ -1,17 +1,15 @@
 org.osgi.service.featurelauncher; version=latest
+org.osgi.impl.service.cm; version=latest
 org.osgi.impl.service.component; version=latest
+org.osgi.impl.service.feature; version=latest
 
 org.eclipse.osgi-technology.featurelauncher.runtime;version=latest
 org.eclipse.osgi-technology.featurelauncher.repository.artifact.maven;version=latest
 org.eclipse.osgi-technology.featurelauncher.repository.common.osgi;version=latest
 org.eclipse.osgi-technology.featurelauncher.repository.spi;version=latest
 
+org.glassfish.jakarta.json;version=2.0.1
 
-org.osgi.service.feature;version=latest
-org.apache.felix.feature;version=latest
-org.json;version=1.0.0
-org.apache.geronimo.specs.geronimo-json_1.1_spec;version=1.5.0
-org.apache.johnzon.core;version=1.2.14
-org.apache.felix.cm.json;version=1.0.6
-slf4j.api;version=1.7.7
-slf4j.simple;version=1.7.7
+
+slf4j.api;version=2.0.11
+slf4j.simple;version=2.0.11

@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.test.cases.typedevent.junit;
+package org.osgi.test.cases.featurelauncher.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.osgi.namespace.implementation.ImplementationNamespace.*;
@@ -37,7 +37,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.featurelauncher.FeatureLauncher;
 import org.osgi.service.featurelauncher.FeatureLauncherConstants;
-import org.osgi.service.featurelauncher.repository.ArtifactRepository;
+import org.osgi.service.featurelauncher.repository.ArtifactRepositoryFactory;
 import org.osgi.service.featurelauncher.runtime.FeatureRuntime;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.junit5.context.BundleContextExtension;
@@ -52,7 +52,8 @@ public class TypedEventCapabilityTestCase {
 
 	@ParameterizedTest
 	@ValueSource(classes = {
-			FeatureLauncher.class, ArtifactRepository.class,
+			/* Not a service FeatureLauncher.class, */
+			ArtifactRepositoryFactory.class,
 			FeatureRuntime.class
 	})
 	public void test_service_capability(Class< ? > clz) {
