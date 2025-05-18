@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -386,6 +387,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected final Collection<Resource> allResources;
 		protected final Map<Resource,Wiring>	wirings;
 		protected final Map<Requirement,List<Capability>>	matchingCapabilities	= new HashMap<>();
+		private final Set<List<Capability>>	returnedLists	= Collections.newSetFromMap(new IdentityHashMap<>());
 		protected final Map<Resource,Collection<Resource>>	relatedResources		= new HashMap<>();
 		protected final Set<Requirement> callbackMemory = new HashSet<Requirement>();
 		protected final Set<Wiring>								callGetSubstitutionWires	= new HashSet<>();
@@ -538,11 +540,13 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 
 		@Override
 		public List<Capability> findProviders(final Requirement requirement) {
+			assertNotNull("The requirement must not be null", requirement);
 			firstCalled.compareAndSet(null, ResolveContextMethod.findProviders);
 			callbackMemory.add(requirement);
 
 			List<Capability> matching = matchingCapabilities.get(requirement);
 			if (matching != null) {
+				returnedLists.add(matching);
 				return matching;
 			}
 			final List<Capability> result = new ArrayList<Capability>();
@@ -557,7 +561,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 					}
 				}
 			}
-
+			returnedLists.add(result);
 			return result;
 		}
 
@@ -595,9 +599,14 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		@Override
 		public int insertHostedCapability(final List<Capability> capabilities,
 				HostedCapability hostedCapability) {
+			assertNotNull("The List<Capability> must not be null", capabilities);
 			firstCalled.compareAndSet(null,
 					ResolveContextMethod.insertHostedCapability);
 			insertHostedCapabilityCalled = true;
+			assertTrue(
+					"The list passed to this method was never returned by findProviders",
+					returnedLists.contains(capabilities));
+			capabilities.add(0, hostedCapability);
 			return 0;
 		}
 
