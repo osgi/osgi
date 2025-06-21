@@ -2004,6 +2004,42 @@ public class MyComponent {
     </section>
 
     <section>
+      <title>Component Activation Policy Header</title>
+
+      <para>A Bundle might specify the Bundle-ActivationPolicy header with a value of 'lazy' to indicate it want delay its activation and possible execution of the BundleActivator.
+      In such a case an additional Component-ActivationPolicy might be specified to control how the Component Runtime should handle components declared in such a bundle.</para>
+
+      <programlisting>Component-ActivationPolicy ::= (eager | reluctant | ignore )</programlisting>
+
+      <para>The Component-ActivationPolicy header has no architected directives or
+      properties. If the header is not specified eager policy is assumed.</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>eager</code> - The component runtime will eagerly activate components whenever they become satisfied what might lead to class loading and final activation of the lazy bundle.</para>
+        </listitem>
+        <listitem>
+          <para><code>reluctant</code> - The component runtime only activates such components that provide at laest one service so these can be found in the service registry, 
+          what then might lead to class loading and final activation of the lazy bundle, any other component is only activated once the bundle becomes active.</para>
+        </listitem>
+        <listitem>
+          <para><code>ignore</code> - The component runtime never activate any components unless the bundle becomes active and therefore never trigger any clasloads before that point.</para>
+        </listitem>
+      </itemizedlist>
+      <para>The main purpose of this header is to control the point where a bundle becomes actively participating in the OSGi system, while 'eager' is the most common one it could easily defeat the purpose of
+       the lazy bundle activation because any immediate component will always fully activate the bundle. But even with 'reluctant' this might happen if the bundle implements a service that is collected as part
+        of the whiteboardpattern because there will always be a demand on that service from the extender. For this purpose the 'ignore' policy is a good choice what will only let the bundle start participating
+        as soon as some other party access the bundles classes and from now on wants to make its services available, this is mostly an equivalent to registering the services in an Activator and can therefore
+        act as a migration strategy as well unless a system reaches a full dynamic state where bundle activation is no longer a concern.
+      </para>
+      <para>
+        Another usual case for this is in the context of an UI framework. Such a framework will most probably delay the loading of its view classes until to the point where the user shows a view.
+        Such view bundle wants to use lazy bundle activation policy to not participate unless it has something to show, but might want to get notified about changes e.g. by some whiteboard listener pattern.
+        A view itself might even want to collect additional services what can trigger other bundles/components to activate as well,
+        therefore it has the demand to delay its interaction to the latest possible time and therefore the 'reluctant' or 'ignore' policy is to be used here depending on the use-case.
+      </para>
+    </section>
+    <section>
       <title>XML Document</title>
 
       <para>A component description must be in a well-formed XML document,
@@ -6375,4 +6411,12 @@ public class MyComponent implements AcmeService {}</programlisting>
       xlink:href="https://docs.oracle.com/javase/specs/jls/se8/html/index.html"/></biblioid></bibliomixed>
     </bibliolist>
   </section>
+  <section>
+    <title>Changes</title>
+    <itemizedlist>
+      <listitem>
+        <para>Add Component Activation Policy Header to control how to handle lazy activation.</para>
+      </listitem>
+    </itemizedlist>
+   </section>
 </chapter>
