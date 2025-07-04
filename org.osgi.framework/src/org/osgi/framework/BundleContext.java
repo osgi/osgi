@@ -20,8 +20,10 @@ package org.osgi.framework;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Optional;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -899,6 +901,45 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	File getDataFile(String filename);
+
+	/**
+	 * Creates a {@code Path} object for a file in the persistent storage area
+	 * provided for this bundle by the Framework. This method will return an
+	 * empty {@link Optional} if the platform does not have storage support,
+	 * this bundle is a fragment bundle or this bundle has been uninstalled.
+	 * <p>
+	 * A {@code Path} object for the base directory of the persistent storage
+	 * area provided for this bundle by the Framework can be obtained by calling
+	 * this method with an empty string as {@code filename}.
+	 * <p>
+	 * If the Java Runtime Environment supports permissions and the storage
+	 * points to the default file-system, the Framework will ensure that this
+	 * bundle has the {@code java.io.FilePermission} with actions
+	 * {@code read},{@code write},{@code delete} for all files (recursively) in
+	 * the persistent storage area provided for this bundle. Additional
+	 * permission checks might or might not be performed for other file systems
+	 * and are implementation dependent.
+	 * 
+	 * @param filename A relative name to the file to be accessed.
+	 * @return An {@link Optional} describing the {@code Path} object that
+	 *         represents the requested file or an empty {@link Optional} if the
+	 *         platform does not have storage support, this bundle is a fragment
+	 *         bundle or this bundle has been uninstalled.
+	 * @implNote the default implementation calls {@link #getDataFile(String)}
+	 *           and transform the result by calling {@link File#toPath()}
+	 *           handling the case of {@link IllegalStateException} thrown.
+	 *           Implementors might override this method to support other
+	 *           storage locations like in-memory, zif file systems or even
+	 *           distributed storage like network file shares.
+	 * @since 1.11
+	 */
+	default Optional<Path> getDataPath(String filename) {
+		try {
+			return Optional.ofNullable(getDataFile(filename)).map(File::toPath);
+		} catch (IllegalStateException e) {
+			return Optional.empty();
+		}
+	}
 
 	/**
 	 * Creates a {@code Filter} object. This {@code Filter} object may be used
