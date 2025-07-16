@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-package org.osgi.test.cases.typedevent.junit;
+package org.osgi.test.cases.featurelauncher.junit;
 
 public class SignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {

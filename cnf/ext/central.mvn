@@ -271,3 +271,7 @@ org.eclipse.osgi-technology.featurelauncher.launch:secondstage:1.0.0-SNAPSHOT
 org.eclipse.osgi-technology.featurelauncher.launch:all.lite:1.0.0-SNAPSHOT
 org.eclipse.osgi-technology.featurelauncher.launch:all.maven:1.0.0-SNAPSHOT
 
+# Feature Launcher
+org.glassfish:jakarta.json:2.0.1
+org.slf4j:slf4j-api:2.0.11
+org.slf4j:slf4j-simple:2.0.11

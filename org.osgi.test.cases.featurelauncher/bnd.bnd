@@ -20,4 +20,6 @@ Import-Package: ${-signaturetest}, *
     org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.featurelauncher;version=latest
 
+-runproperties = ${runproperties}
+
 -signaturetest                      = org.osgi.service.featurelauncher
