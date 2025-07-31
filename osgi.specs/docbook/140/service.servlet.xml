@@ -2384,7 +2384,7 @@ public class MyServletRequestListener implements ServletRequestListener {
        filter:="(&amp;(osgi.implementation=osgi.http)
                  (version&gt;=<xref
           endterm="org.osgi.service.servlet.whiteboard-version.number"
-          linkend="org.osgi.service.servlet.whiteboard"/>)(!(version&gt;=2.0)))"
+          linkend="org.osgi.service.servlet.whiteboard"/>)(!(version&gt;=3.0)))"
       </programlisting>
 
       <para>To simplify the creation of this requirement, the <xref
