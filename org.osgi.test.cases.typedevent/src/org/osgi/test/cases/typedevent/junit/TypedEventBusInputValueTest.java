@@ -97,7 +97,9 @@ public class TypedEventBusInputValueTest {
 	@ParameterizedTest
 	@ValueSource(strings = {
 			"*", "%", "/", "//", "a//b", "//b", "a//", "a/", "a/*/*/b",
-			"a/b/c/", "a/*/*", " /*", " ", "a/ /b", " / ", "(/)", "[/]", "{/}"
+			"a/b/c/", "a/*/*", " /*", " ", "a/ /b", " / ", "(/)", "[/]", "{/}",
+			"foo+/bar", "foo/+bar", "foo/bar+", "+foo", "foo+", "a/+*/b",
+			"a/*/+/b", "+/*/+/*"
 	})
 	public void test_deliver_2_topic_invalid_should_throws_exception(
 			String invalidTopic) {
