@@ -73,15 +73,30 @@ public final class TopicPermission extends Permission {
 	private final static int			ACTION_SUBSCRIBE	= 0x00000002;
 	private final static int			ACTION_ALL			= ACTION_PUBLISH | ACTION_SUBSCRIBE;
 	private final static int			ACTION_NONE			= 0;
+
+	private final static String[]		EMPTY_SEGMENTS		= new String[0];
 	/**
 	 * The actions mask.
 	 */
 	private transient int				action_mask;
 
 	/**
-	 * prefix if the name is wildcarded.
+	 * prefix if the name is wildcarded. will only ever contain literals e.g.
+	 * "*" or + => "" "foo/+/foobar" or foo/* => "foo/"
 	 */
-	private transient volatile String	prefix;
+	private transient String			prefix;
+
+	/**
+	 * Additional topic segments to check after intitial Each segment starts
+	 * with a '/' and is preceded by a single level wildcard, e.g.
+	 * "foo/+/foobar/fizz/+/fizzbuzz/done" => ["/foobar/fizz/","/fizzbuzz/done"]
+	 **/
+	private transient String[]			additionalSegments;
+
+	/**
+	 * True if there is a trailing multi-level wildcard (*)
+	 */
+	private transient boolean			isMultiLevelWildcard;
 
 	/**
 	 * The actions in canonical form.
@@ -99,6 +114,9 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <pre>
 	 *    org/osgi/service/fooFooEvent/ACTION
+	 *    org/osgi/service/fooFooEvent/+
+	 *    org/osgi/+/fooFooEvent/*
+	 *    org/osgi/service/+/ACTION
 	 *    com/isv/*
 	 *    *
 	 * </pre>
@@ -133,7 +151,7 @@ public final class TopicPermission extends Permission {
 	 * @param name topic name
 	 * @param mask action mask
 	 */
-	private synchronized void setTransients(final int mask) {
+	private void setTransients(final int mask) {
 		final String name = getName();
 		if ((name == null) || name.length() == 0) {
 			throw new IllegalArgumentException("invalid name");
@@ -146,11 +164,38 @@ public final class TopicPermission extends Permission {
 
 		if (name.equals("*")) {
 			prefix = "";
+			additionalSegments = EMPTY_SEGMENTS;
+			isMultiLevelWildcard = true;
 		} else {
+			String topicPrefix;
 			if (name.endsWith("/*")) {
-				prefix = name.substring(0, name.length() - 1);
+				isMultiLevelWildcard = true;
+				topicPrefix = name.substring(0, name.length() - 1);
 			} else {
-				prefix = null;
+				isMultiLevelWildcard = false;
+				topicPrefix = name;
+			}
+			int singleLevelIdx = topicPrefix.indexOf('+');
+			if (singleLevelIdx < 0) {
+				// No single level wildcards
+				prefix = topicPrefix;
+				additionalSegments = EMPTY_SEGMENTS;
+			} else {
+				prefix = topicPrefix.substring(0, singleLevelIdx);
+				List<String> segments = new ArrayList<>();
+				for (;;) {
+					int nextIdx = topicPrefix.indexOf('+', singleLevelIdx + 1);
+					if (nextIdx < 0) {
+						segments.add(topicPrefix.substring(singleLevelIdx + 1));
+						break;
+					} else {
+						segments.add(topicPrefix.substring(singleLevelIdx + 1,
+								nextIdx));
+						singleLevelIdx = nextIdx;
+					}
+				}
+				additionalSegments = segments
+						.toArray(new String[segments.size()]);
 			}
 		}
 	}
@@ -272,12 +317,46 @@ public final class TopicPermission extends Permission {
 			int requestedMask = requested.getActionsMask();
 			if ((getActionsMask() & requestedMask) == requestedMask) {
 				String requestedName = requested.getName();
-				String pre = prefix;
-				if (pre != null) {
-					return requestedName.startsWith(pre);
-				}
+				if (additionalSegments.length == 0) {
+					if (isMultiLevelWildcard) {
+						// Simple multi-level wildcard
+						return requestedName.startsWith(prefix);
+					} else {
+						// No wildcards
+						return requestedName.equals(getName());
+					}
+				} else if (requestedName.startsWith(prefix)) {
+					// We matched the prefix, now check the extra segments
+					int startIdx = prefix.length();
+					for (String segment : additionalSegments) {
+						// First, skip the single level wildcard
+						startIdx = requestedName.indexOf('/', startIdx);
+						if (startIdx < 0) {
+							startIdx = requestedName.length();
+						}
+						if (requestedName.regionMatches(startIdx, segment, 0,
+								segment.length())) {
+							// Check the next segment
+							startIdx += segment.length();
+						} else {
+							// Doesn't match the segment
+							return false;
+						}
+					}
 
-				return requestedName.equals(getName());
+					// Success if we consumed the whole topic and it
+					// didn't end in a wildcard, or we end in a wildcard
+					// and they have a next topic segment
+					if ((startIdx == requestedName.length()
+							&& !requestedName.endsWith("*"))
+							|| (isMultiLevelWildcard && requestedName
+									.charAt(startIdx - 1) == '/')) {
+						// We consumed the whole topic, or the remaining tokens
+						// were accepted by a multi-level wildcard, so this is a
+						// match.
+						return true;
+					}
+				}
 			}
 		}
 		return false;
