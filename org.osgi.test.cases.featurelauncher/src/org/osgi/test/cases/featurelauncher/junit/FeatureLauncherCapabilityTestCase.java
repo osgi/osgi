@@ -45,7 +45,7 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
-public class TypedEventCapabilityTestCase {
+public class FeatureLauncherCapabilityTestCase {
 
 	@InjectBundleContext
 	BundleContext ctx;
