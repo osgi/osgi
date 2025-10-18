@@ -253,10 +253,109 @@ public class TopicPermissionTests extends PermissionTestCase {
 		assertImplies(subscribe, subscribe);
 	}
 
+	public void testSingleLevelWildcards() {
+		TopicPermission p31 = new TopicPermission("com/foo/service3",
+				"subscribe");
+		TopicPermission p32 = new TopicPermission("com/+/service3",
+				"subscribe");
+		TopicPermission p33 = new TopicPermission("com/+/+", "subscribe");
+		TopicPermission p34 = new TopicPermission("+", "subscribe");
+		TopicPermission p35 = new TopicPermission("+/foo/+", "subscribe");
+
+		// Specific topic implies itself
+		assertImplies(p31, p31);
+
+		// Single-level wildcard implies specific matching topic
+		assertImplies(p32, p31);
+
+		// Multiple single-level wildcards imply matching topics
+		assertImplies(p33, p31);
+		assertImplies(p33, p32);
+
+		// + alone only implies single-level topics
+		assertNotImplies(p34, p31);
+		assertNotImplies(p34, p32);
+		assertNotImplies(p34, p33);
+
+		// Specific topic does not imply wildcard
+		assertNotImplies(p31, p32);
+		assertNotImplies(p31, p33);
+		assertNotImplies(p31, p34);
+
+		// More specific single-level wildcard does not imply less specific
+		assertNotImplies(p32, p33);
+		assertNotImplies(p32, p35);
+
+		// Test with permission collection
+		PermissionCollection pc = p31.newPermissionCollection();
+
+		assertAddPermission(pc, p31);
+		assertImplies(pc, p31);
+		assertNotImplies(pc, p32);
+		assertNotImplies(pc, p33);
+
+		assertAddPermission(pc, p32);
+		assertImplies(pc, p31);
+		assertImplies(pc, p32);
+		assertNotImplies(pc, p33);
+
+		assertAddPermission(pc, p33);
+		assertImplies(pc, p31);
+		assertImplies(pc, p32);
+		assertImplies(pc, p33);
+
+		assertSerializable(p31);
+		assertSerializable(p32);
+		assertSerializable(p33);
+		assertSerializable(p34);
+		assertSerializable(p35);
+	}
+
+	public void testSingleLevelWildcardWithMultiLevel() {
+		TopicPermission p41 = new TopicPermission("com/foo/bar/baz",
+				"subscribe");
+		TopicPermission p42 = new TopicPermission("com/+/*", "subscribe");
+		TopicPermission p43 = new TopicPermission("com/foo/*", "subscribe");
+		TopicPermission p44 = new TopicPermission("+/*", "subscribe");
+		TopicPermission p45 = new TopicPermission("com/+/+", "subscribe");
+		TopicPermission p46 = new TopicPermission("com/foo", "subscribe");
+
+		// Single-level wildcard + multi-level wildcard implies matching topics
+		assertImplies(p42, p41);
+		assertImplies(p44, p41);
+
+		// Multi-level wildcard alone implies matching topics
+		assertImplies(p43, p41);
+
+		// More specific does not imply less specific
+		assertNotImplies(p41, p42);
+		assertNotImplies(p41, p43);
+		assertNotImplies(p41, p44);
+		assertNotImplies(p43, p42);
+		assertNotImplies(p43, p44);
+
+		// com/+/* implies com/foo/*
+		assertImplies(p42, p43);
+		// com/+/* implies com/+/+ but com/+/+ does not imply com/+/*
+		assertImplies(p42, p45);
+		assertNotImplies(p45, p42);
+
+		// neither com/+/* nor com/+/+ imply com/foo
+		assertNotImplies(p42, p46);
+		assertNotImplies(p45, p46);
+
+		assertSerializable(p41);
+		assertSerializable(p42);
+		assertSerializable(p43);
+		assertSerializable(p44);
+		assertSerializable(p45);
+		assertSerializable(p46);
+	}
+
 	private void invalidTopicPermission(String name, String actions) {
 		try {
 			TopicPermission p = new TopicPermission(name, actions);
-			fail(p + " created with invalid actions"); 
+			fail(p + " created with invalid actions");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
