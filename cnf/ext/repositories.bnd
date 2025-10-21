@@ -30,8 +30,8 @@
 -plugin.repositories.ossrh: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name='OSSRH'; \
-        snapshotUrl="${first;${env;OSSRH_SNAPSHOT};https://oss.sonatype.org/content/repositories/snapshots/}"; \
-        releaseUrl="${first;${env;OSSRH_RELEASE};https://oss.sonatype.org/service/local/staging/deploy/maven2/}"; \
+        snapshotUrl="${first;${env;OSSRH_SNAPSHOT};https://central.sonatype.com/repository/maven-snapshots/}"; \
+        releaseUrl="${first;${env;OSSRH_RELEASE};https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/}"; \
         noupdateOnRelease=true
 
 publishrepo: ${if;${env;OSSRH_USERNAME};OSSRH}
