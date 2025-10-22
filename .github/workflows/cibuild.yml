@@ -108,7 +108,7 @@ jobs:
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Complete Maven Publish
       if: ${{ fromJSON(env.canonical) }}
-      run: curl -X POST https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.osgi?publishing_type=automatic
+      run: curl -X POST -u $OSSRH_USERNAME:$OSSRH_PASSWORD https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.osgi?publishing_type=automatic
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
