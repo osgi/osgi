@@ -27,8 +27,6 @@ pluginManagement {
 		id "biz.aQute.bnd.workspace" version bnd_version
 	}
 	repositories {
-		mavenCentral()
-		gradlePluginPortal()
 		maven {
 			name = "Bnd Snapshots"
 			url = uri(bnd_snapshots)
@@ -43,6 +41,8 @@ pluginManagement {
 				releasesOnly()
 			}
 		}
+		mavenCentral()
+		gradlePluginPortal()
 	}
 	rootProject.name = "osgi"
 	gradle.ext.bndWorkspaceConfigure = { workspace ->
