@@ -59,16 +59,18 @@ public class ComponentPropertyTypeWithConstants {
 	 * Component using the property type with constant values specified.
 	 */
 	@Component(name = "testComponentPropertyTypeWithConstants")
-	@PropertyTypeWithConstants(stringProperty = Constants.SPECIFIED_STRING_VALUE, intProperty = Constants.SPECIFIED_INT_VALUE, anotherProperty = "literal.specified.value")
+	@PropertyTypeWithConstants(stringProperty = Constants.SPECIFIED_STRING_VALUE,
+			intProperty = Constants.SPECIFIED_INT_VALUE,
+			anotherProperty = "literal.specified.value")
 	public static class TestComponent {
 		@Activate
 		private void activate() {
-			System.out.println("Component with property type constants activated!");
+			// Activation logic
 		}
 
 		@Deactivate
 		private void deactivate() {
-			System.out.println("Component with property type constants deactivated!");
+			// Deactivation logic
 		}
 	}
 }
