@@ -2326,6 +2326,39 @@ public class MyComponent {
               one method which is to be used as the modified
               method.</para></entry>
             </row>
+
+            <row>
+              <entry><code>retention-policy</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Component.retentionPolicy--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ComponentRetentionPolicy.DISCARD"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ComponentRetentionPolicy.KEEP"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>Controls whether a component should be retained
+              (kept activated) or discarded (deactivated) when its use count
+              drops to zero. This allows components to maintain state and
+              avoid expensive reactivation cycles.</para><itemizedlist>
+                  <listitem>
+                    <para><code>discard</code> - (default) Deactivate and
+                    discard the component when its use count drops to zero.
+                    This is the current behavior.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>keep</code> - Keep the component activated
+                    even when its use count drops to zero. The component will
+                    still be deactivated if required services become
+                    unavailable or if other deactivation conditions
+                    occur.</para>
+                  </listitem>
+                </itemizedlist><para>This attribute is only meaningful when
+              the component provides a service and <code>immediate</code> is
+              <code>false</code>.</para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -3584,14 +3617,36 @@ public class FooImpl implements Foo {
       when it stops being used as a service object since the component
       configuration must not be reused as a service object. If the service has
       the <code>scope</code> attribute set to <code>singleton</code> or
-      <code>bundle</code>, SCR must deactivate a component configuration when
-      it stops being used as a service object after a delay since the
-      component configuration may be reused as a service object in the near
-      future. This allows SCR implementations to reclaim component
-      configurations not in use while attempting to avoid deactivating a
-      component configuration only to have to quickly activate a new component
-      configuration for a new service request. The delay amount is
-      implementation specific and may be zero.</para>
+      <code>bundle</code>, the behavior when a component configuration stops
+      being used as a service object depends on the
+      <code>retention-policy</code> attribute:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If <code>retention-policy</code> is set to
+          <code>discard</code> (the default), SCR must deactivate a component
+          configuration when it stops being used as a service object after a
+          delay since the component configuration may be reused as a service
+          object in the near future. This allows SCR implementations to
+          reclaim component configurations not in use while attempting to
+          avoid deactivating a component configuration only to have to quickly
+          activate a new component configuration for a new service request.
+          The delay amount is implementation specific and may be zero.</para>
+        </listitem>
+
+        <listitem>
+          <para>If <code>retention-policy</code> is set to <code>keep</code>,
+          SCR must not deactivate the component configuration when it stops
+          being used as a service object. The component configuration remains
+          activated and available for reuse. This allows components that are
+          expensive to activate or deactivate, or that maintain caches of
+          data, to avoid repeated activation cycles. The component
+          configuration will still be deactivated if it becomes unsatisfied
+          for other reasons, such as required services becoming unavailable,
+          configuration being deleted, the component being disabled, or the
+          bundle being stopped.</para>
+        </listitem>
+      </itemizedlist>
 
       <figure xml:id="i1462979">
         <title>Delayed Component Configuration</title>
