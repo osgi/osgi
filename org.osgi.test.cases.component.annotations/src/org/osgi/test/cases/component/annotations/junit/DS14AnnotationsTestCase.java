@@ -729,4 +729,26 @@ public class DS14AnnotationsTestCase extends AnnotationsTestCase {
 
 		;
 	}
+
+	/**
+	 * Test case for component property type with constants.
+	 * This tests the scenario described in
+	 * https://github.com/osgi/osgi/issues/648 where constants are used as
+	 * annotation attribute values in component property types.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testComponentPropertyTypeWithConstants() throws Exception {
+		String name = testName.getMethodName();
+		Description description = descriptions.get(name);
+		assertThat(description).as("component %s", name)
+				.hasCount("property", 3)
+				.hasPropertyValue("constant.prefix.stringProperty", "String",
+						"specified.constant.value")
+				.hasPropertyValue("constant.prefix.intProperty", "Integer",
+						"200")
+				.hasPropertyValue("constant.prefix.anotherProperty", "String",
+						"literal.specified.value");
+	}
 }
