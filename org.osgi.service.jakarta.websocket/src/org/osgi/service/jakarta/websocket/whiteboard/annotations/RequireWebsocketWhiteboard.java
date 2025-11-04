@@ -28,8 +28,19 @@ import org.osgi.service.jakarta.websocket.whiteboard.JakartaWebsocketWhiteboardC
 
 
 /**
- * Annotation that can be added to a type or package to indicate it requires the
- * websocket whiteboard extender
+ * This annotation can be used to require the Jakarta WebSocket Whiteboard
+ * implementation. It can be used on a bundle or service to ensure that the
+ * WebSocket Whiteboard extender is present before the annotated element is
+ * activated.
+ * <p>
+ * This annotation results in a requirement on the
+ * {@code osgi.implementation} namespace with a filter requiring an
+ * implementation of {@code osgi.jakarta.websocket} at version
+ * {@code 1.0} or higher.
+ * 
+ * @see JakartaWebsocketWhiteboardConstants#WEBSOCKET
+ * @see JakartaWebsocketWhiteboardConstants#JAKARTA_WEBSOCKET_WHITEBOARD_SPECIFICATION_VERSION
+ * @author $Id$
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)

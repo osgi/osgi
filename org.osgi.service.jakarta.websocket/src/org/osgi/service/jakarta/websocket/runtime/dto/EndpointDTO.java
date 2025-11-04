@@ -21,19 +21,27 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * The EndpointDTO describes the current state of an endoint implementor known
- * to the service runtime
+ * Represents a Jakarta WebSocket endpoint that is successfully registered
+ * with the runtime.
+ * <p>
+ * This DTO describes the current state of an endpoint implementor known to the
+ * service runtime.
+ * 
+ * @NotThreadSafe
+ * @author $Id$
  */
 public class EndpointDTO extends DTO {
 	/**
-	 * The DTO for the corresponding implementor that created this endpoint.
+	 * The DTO for the corresponding service that implements this endpoint.
+	 * <p>
 	 * This value is never {@code null}.
 	 */
 	public ServiceReferenceDTO	implementor;
 
 	/**
-	 * The full resolved address this endpoint is published to This value is
-	 * never {@code null}.
+	 * The full resolved URI path at which this endpoint is published.
+	 * <p>
+	 * This value is never {@code null}.
 	 */
 	public String				address;
 

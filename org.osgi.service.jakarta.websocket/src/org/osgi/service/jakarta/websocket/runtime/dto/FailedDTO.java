@@ -20,29 +20,47 @@ package org.osgi.service.jakarta.websocket.runtime.dto;
 import org.osgi.dto.DTO;
 
 /**
- * Base class representing a failure with a code and optional message
+ * Base class for DTOs representing a failure, containing a failure code and an
+ * optional failure message.
+ * <p>
+ * This is used to communicate why a particular WebSocket endpoint or other
+ * service could not be successfully processed by the runtime.
+ * 
+ * @NotThreadSafe
+ * @author $Id$
  */
 public class FailedDTO extends DTO {
 
 	/**
 	 * Failure reason is unknown.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final int	FAILURE_REASON_UNKNOWN				= 1;
 
 	/**
 	 * The service is registered in the service registry but getting the service
 	 * fails as it returns {@code null}.
+	 * <p>
+	 * This can happen if the service has already been unregistered or if the
+	 * service factory returns {@code null}.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE	= 2;
 
 	/**
-	 * Contains a code to indicate why the handler failed
+	 * The failure code indicating why the service failed to be processed.
+	 * <p>
+	 * This will be one of the {@code FAILURE_REASON_*} constants defined in
+	 * this class or its subclasses.
 	 */
 	public int		failureCode;
 
 	/**
-	 * Contains a message that describes the failure further, might be
-	 * <code>null</code> in case there is no such message available
+	 * A human-readable message that describes the failure in more detail.
+	 * <p>
+	 * This value may be {@code null} if no additional information is available.
 	 */
 	public String	failureMessage;
 }

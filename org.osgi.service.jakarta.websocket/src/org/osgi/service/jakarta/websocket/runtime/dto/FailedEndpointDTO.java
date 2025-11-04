@@ -20,19 +20,28 @@ package org.osgi.service.jakarta.websocket.runtime.dto;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * The EndpointDTO describes the current state of an endoint implementor known
- * to the service runtime
+ * Represents a Jakarta WebSocket endpoint that failed to be registered with
+ * the runtime.
+ * <p>
+ * This DTO describes an endpoint implementor that is known to the service
+ * runtime but could not be successfully registered due to an error.
+ * 
+ * @NotThreadSafe
+ * @author $Id$
  */
 public class FailedEndpointDTO extends FailedDTO {
 
 	/**
-	 * The endpoint is invalid, for example does not contain required
-	 * annotations
+	 * The endpoint is invalid, for example because it does not contain the
+	 * required annotations or does not implement the correct interfaces.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 **/
 	public static final int		FAILURE_REASON_INVALID	= 100;
 
 	/**
-	 * The DTO for the corresponding implementor that created this endpoint.
+	 * The DTO for the corresponding service that implements this endpoint.
+	 * <p>
 	 * This value is never {@code null}.
 	 */
 	public ServiceReferenceDTO	implementor;

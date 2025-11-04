@@ -22,8 +22,13 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO;
 
 /**
- * 
- * 
+ * The JakartaWebsocketServiceRuntime service represents the runtime information
+ * of a Jakarta WebSocket Whiteboard implementation.
+ * <p>
+ * It provides access to DTOs representing the current state of the service.
+ * <p>
+ * The JakartaWebsocketServiceRuntime service must be registered with the
+ * {@code osgi.jakarta.websocket.endpoint} service property.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -31,9 +36,11 @@ import org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO;
 @ProviderType
 public interface JakartaWebsocketServiceRuntime {
 	/**
-	 * Return the runtime DTO representing the current state.
+	 * Return the runtime DTO representing the current state of the Jakarta
+	 * WebSocket Whiteboard implementation.
 	 * 
-	 * @return The runtime DTO.
+	 * @return The runtime DTO. The returned DTO is a snapshot of the runtime
+	 *         state and will not be updated if the state changes.
 	 */
 	RuntimeDTO getRuntimeDTO();
 }

@@ -22,7 +22,10 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * Represents the state of a Jakarta Websocket Runtime.
+ * Represents the state of a Jakarta WebSocket Whiteboard Service Runtime.
+ * <p>
+ * This DTO provides a snapshot of the runtime state, including all registered
+ * endpoints and any endpoints that failed to register.
  * 
  * @NotThreadSafe
  * @author $Id$
@@ -30,20 +33,25 @@ import org.osgi.framework.dto.ServiceReferenceDTO;
 
 public class RuntimeDTO extends DTO {
 	/**
-	 * Returns the current service reference under that the runtime is
-	 * registered
+	 * The DTO for the corresponding {@code JakartaWebsocketServiceRuntime}.
+	 * <p>
+	 * This value is never {@code null}.
 	 */
 	public ServiceReferenceDTO	serviceReference;
 
 	/**
-	 * Returns the representations of the Web Services endpoints currently
-	 * registered, The returned array may be empty.
+	 * The representations of the WebSocket endpoints currently registered with
+	 * the runtime.
+	 * <p>
+	 * The returned array may be empty if no endpoints are currently registered.
 	 */
 	public EndpointDTO[]		endpoints;
 
 	/**
-	 * Returns the representations of the Web Services endpoints currently known
-	 * but failed to register, The returned array may be empty.
+	 * The representations of the WebSocket endpoints that are known to the
+	 * runtime but failed to register.
+	 * <p>
+	 * The returned array may be empty if all endpoints registered successfully.
 	 */
 	public FailedEndpointDTO[]	failedEndpoints;
 }

@@ -19,8 +19,8 @@
 package org.osgi.service.jakarta.websocket.whiteboard;
 
 /**
- * Defines standard constants for the JakartaWebsocket Services Whiteboard
- * services.
+ * Defines standard constants for the Jakarta WebSocket Services Whiteboard
+ * specification.
  * 
  * @author $Id$
  */
@@ -30,28 +30,49 @@ public final class JakartaWebsocketWhiteboardConstants {
 	}
 
 	/**
-	 * The version of the implementation capability for the Whiteboard
-	 * Specification for Jakarta RESTful Web Services.
+	 * The version of the Jakarta WebSocket Whiteboard Specification.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final String JAKARTA_WEBSOCKET_WHITEBOARD_SPECIFICATION_VERSION = "1.0";
 
 	/**
-	 * Base namespace for the Webservice Whiteboard specification
+	 * The name of the implementation capability for the Jakarta WebSocket
+	 * Whiteboard Specification.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final String	WEBSOCKET											= "osgi.jakarta.websocket";
+	
 	/**
-	 * Base prefix used in component property types
+	 * The base prefix for property names in the Jakarta WebSocket Whiteboard
+	 * Specification.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final String	WEBSOCKET_PREFIX									= WEBSOCKET
 			+ ".";
+	
 	/**
-	 * Prefix used for properties of an endpoint implementor
+	 * The prefix for property names specific to WebSocket endpoint services.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final String	WEBSOCKET_ENDPOINT_PREFIX							= WEBSOCKET_PREFIX
 			+ "endpoint.";
 
 	/**
-	 * property used to mark a service as an endpoint implementor
+	 * Service property specifying that a service should be processed as a
+	 * WebSocket endpoint implementor by the whiteboard.
+	 * <p>
+	 * A service providing this property must be a valid Jakarta WebSocket
+	 * endpoint (annotated with {@code @ServerEndpoint} or implementing
+	 * {@code jakarta.websocket.Endpoint}).
+	 * <p>
+	 * The value of this service property must be of type {@code String} or
+	 * {@link Boolean} and set to &quot;true&quot; or {@code true}.
+	 * <p>
+	 * The value of this constant is {@value}.
 	 */
 	public static final String	WEBSOCKET_ENDPOINT_IMPLEMENTOR						= WEBSOCKET_ENDPOINT_PREFIX
 			+ "implementor";

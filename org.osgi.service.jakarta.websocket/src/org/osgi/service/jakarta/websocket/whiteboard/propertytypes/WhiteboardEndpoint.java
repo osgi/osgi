@@ -27,8 +27,21 @@ import org.osgi.service.jakarta.websocket.whiteboard.JakartaWebsocketWhiteboardC
 import org.osgi.service.jakarta.websocket.whiteboard.annotations.RequireWebsocketWhiteboard;
 
 /**
- * Annotation that can be used to mark a service component as an object that
- * should be considered by the Websocket Whiteboard Extender
+ * Component Property Type for the
+ * {@link JakartaWebsocketWhiteboardConstants#WEBSOCKET_ENDPOINT_IMPLEMENTOR
+ * osgi.jakarta.websocket.endpoint.implementor} service property.
+ * <p>
+ * This annotation can be used on a Jakarta WebSocket endpoint component to
+ * declare that it should be processed by the WebSocket Whiteboard
+ * implementation.
+ * <p>
+ * A service annotated with this annotation must be a valid Jakarta WebSocket
+ * endpoint, either by being annotated with
+ * {@code @jakarta.websocket.server.ServerEndpoint} or by implementing
+ * {@code jakarta.websocket.Endpoint}.
+ * 
+ * @see JakartaWebsocketWhiteboardConstants#WEBSOCKET_ENDPOINT_IMPLEMENTOR
+ * @author $Id$
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
@@ -37,12 +50,21 @@ import org.osgi.service.jakarta.websocket.whiteboard.annotations.RequireWebsocke
 public @interface WhiteboardEndpoint {
 
 	/**
-	 * prefix used for component properties
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
 	 */
 	String PREFIX_ = JakartaWebsocketWhiteboardConstants.WEBSOCKET_ENDPOINT_PREFIX;
-    /**
-     * @return <code>true</code> if this is an implementor for the soap whiteboard, <code>false</code> otherwise, can be used to switch an implementation on/off
-     */
-    boolean implementor() default true;
+	
+	/**
+	 * Service property identifying the WebSocket endpoint implementor.
+	 * <p>
+	 * When {@code true}, this service will be processed as a WebSocket endpoint
+	 * by the whiteboard. This can be used to enable or disable an endpoint
+	 * implementation.
+	 * 
+	 * @return {@code true} if this is an implementor for the WebSocket
+	 *         whiteboard, {@code false} otherwise.
+	 */
+	boolean implementor() default true;
     
 }
