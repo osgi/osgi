@@ -346,13 +346,30 @@
       that must match the <code>effective</code> directive.</para>
 
       <para>For the OSGi Framework, the name <code>resolve</code> is reserved,
-      this is also the default. Requirements and Capabilities may specify another
-      value, such as <code>active</code> for requirements that must be present for
-      a bundle to become active executable (that is for example services it needs to consume)
-      but for the OSGi Framework the only value that makes the Requirement or Capability effective is the <code>resolve</code> value.
+      this is also the default. This is the only value that makes a Requirement 
+      or Capability effective during the OSGi Framework's standard resolve process.
       The syntax is therefore:</para>
 
       <programlisting>effective ::= &lt;name&gt;</programlisting>
+
+      <para>Requirements and Capabilities may specify alternative values for the
+      <code>effective</code> directive. A widely adopted convention is the value
+      <code>active</code>, which is defined in the 
+      <code>org.osgi.resource.Namespace.EFFECTIVE_ACTIVE</code> constant. 
+      This value can be used to indicate requirements that must be present for a 
+      bundle to be active and executable, such as runtime service dependencies. 
+      However, requirements and capabilities with <code>effective:=active</code> 
+      are ignored by the OSGi Framework's standard resolve process.</para>
+
+      <para>The <code>active</code> effective time is a convention that enables 
+      tooling providers to share a common vocabulary when working with runtime 
+      dependencies. For example, build and provisioning tools like bnd can use 
+      this convention to distinguish between compile-time resolve dependencies and 
+      runtime active dependencies. When applications use the <xref 
+      linkend="service.resolver"/> directly, they can specify which 
+      <code>effective</code> values to consider during resolution through the 
+      <code>ResolveContext.isEffective</code> method, as described in <xref 
+      linkend="service.resolver"/>.</para>
     </section>
 
     <section>

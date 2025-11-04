@@ -697,8 +697,13 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
       <para>However, Resolvers can use the <code>effective</code> directive to
       run the Resolver at other times than the standard OSGi framework
-      resolve. For example, it could be possible to define an <emphasis>active
-      time</emphasis> to resolve the service dependencies.</para>
+      resolve. For example, the widely adopted convention <code>active</code> 
+      (defined in <code>org.osgi.resource.Namespace.EFFECTIVE_ACTIVE</code>) can 
+      be used to resolve runtime service dependencies. As described in 
+      <xref linkend="framework.resource"/>, the <code>active</code> effective 
+      time is a convention that enables tooling to distinguish between compile-time 
+      and runtime dependencies, but it is not processed by the OSGi Framework's 
+      standard resolve operation.</para>
 
       <para>For this reason, the Resolver is designed to be agnostic for this
       directive, it will always ask the <xref
@@ -722,6 +727,12 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
   String e = requirement.getDirectives().get( "effective");
   return e==null || "resolve".equals( e );
 }</programlisting>
+
+      <para>To resolve requirements with <code>effective:=active</code>, 
+      the Resolve Context implementation would need to return <code>true</code> 
+      from <code>isEffective</code> for such requirements. This allows build and 
+      provisioning tools to perform custom resolution operations beyond the OSGi 
+      Framework's standard resolve behavior.</para>
     </section>
 
     <section xml:id="i3344346">
