@@ -302,6 +302,28 @@ This model creates a "tunnel" or "onion layer" pattern where each handler wraps 
 and unwrapping it on the way back in. This is particularly important for SOAP-based web services where message integrity,
 security, and proper protocol layering are critical.
 </para>
+
+<para>
+To illustrate this execution flow, consider a complete request-response cycle between a client and server, where both use a handler chain consisting of handlers A, B, and C (ordered by service ranking with A having the highest rank):
+</para>
+
+<figure pgwide="1" xml:id="service.jakartaws.handler-execution-flow">
+  <title>Handler Execution Flow: Complete Request-Response Cycle</title>
+  
+  <mediaobject>
+    <imageobject>
+      <imagedata align="center" contentdepth="4.0in"
+                 contentwidth="6.0in" fileref="handler-execution-flow.svg"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
+<para>
+As shown in <xref linkend="service.jakartaws.handler-execution-flow"/>, the handler chain is traversed in different directions
+depending on whether the message is inbound or outbound, and whether it is being processed on the client or server side.
+This symmetric execution model ensures that complementary operations (such as encryption/decryption or signing/verification)
+are performed by the same handler in the appropriate order.
+</para>
 </section>
 
 <section>
