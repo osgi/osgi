@@ -31,18 +31,35 @@
     <title>Introduction</title>
 
     <para>
-    WebSockets allow a two-way communication between two endpoints, this specification aims at bring that technology based on <xref linkend="service.jakartawebsocket-spec"/> to offers a vendor neutral way of writing and using such protocol. 
-         
-    Managing endpoints in a dynamic way can be a challenging task, this specification aims to make this task much more easier using the famous <xref linkend="service.jakartaws-whiteboard.pattern.ref" />
-    and allow integration with existing transport specifications.
+    The <xref linkend="service.jakartawebsocket-spec"/> defines the WebSocket API for Java applications.
+    WebSocket is a protocol that provides full-duplex communication channels over a single TCP connection, enabling
+    bidirectional, real-time communication between client and server endpoints. The Jakarta WebSocket API provides
+    a standard way to integrate WebSocket into Java applications, supporting both annotated and programmatic endpoint
+    definitions.
+    </para>
     
-    Even though the Http transport is often used in conjunction with websockets that is not mandatory for an implementation, and
-    therefore this specification does not focuses on the Http transport but implementations are free to support this and any other kinds of transports.
+    <para>
+    WebSockets allow two-way communication between two endpoints. This specification aims to bring that technology to 
+    OSGi in a vendor-neutral way by leveraging the Jakarta WebSocket API. Managing endpoints in a dynamic environment 
+    can be challenging. This specification makes this task much easier by using the well-known 
+    <xref linkend="service.jakartaws-whiteboard.pattern.ref"/> and allowing integration with existing transport specifications.
+    </para>
+    
+    <para>
+    Even though the HTTP transport is often used in conjunction with WebSockets, that is not mandatory for an implementation. 
+    Therefore, this specification does not focus exclusively on the HTTP transport, and implementations are free to support 
+    this and any other kinds of transports.
     </para>
 
-    <para>Terminology
-	As per the <xref linkend="service.jakartawebsocket-spec"/> we will use the following term
-	</para>
+    <para>Whiteboard Specification for Jakarta™ WebSocket Services implementations must support
+    at least version 2.2 of the Jakarta™ WebSocket API. Implementations must support registration of <emphasis>annotated server endpoints</emphasis> using the whiteboard pattern and allow client endpoints to
+    establish connections using the <emphasis>WebSocketContainer</emphasis> interface.</para>
+
+    <section>
+      <title>Terminology</title>
+      <para>
+      As per the <xref linkend="service.jakartawebsocket-spec"/>, this specification uses the following terms:
+      </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -61,7 +78,7 @@
       </listitem>
       <listitem>
         <para>
-        	<emphasis>session</emphasis> The term WebSocket session is used to represent a sequence of WebSocket interactions between an endpoint and a single peer.
+        	<emphasis>session</emphasis> - The term WebSocket session (see <xref linkend="service.jakartawebsocket-spec.session"/>) is used to represent a sequence of WebSocket interactions between an endpoint and a single peer.
         </para>
       </listitem>
       <listitem>
@@ -71,26 +88,23 @@
       </listitem>
       <listitem>
         <para>
-        	<emphasis>server endpoints</emphasis>A server endpoint is one that accepts WebSocket connections from peers but does not initiate connections to peers.
+        	<emphasis>server endpoints</emphasis> - A server endpoint is one that accepts WebSocket connections from peers but does not initiate connections to peers.
         </para>
       </listitem>
       <listitem>
         <para>
-        	<emphasis>programmatic endpoint</emphasis> A programmatic endpoint is one  implement certain of the API classes from the Jakarta WebSocket API with the required behavior to handle the endpoint lifecycle,
-        	 consume and send messages, publish itself, or connect to a peer. 
+        	<emphasis>programmatic endpoint</emphasis> - A programmatic endpoint (see <xref linkend="service.jakartawebsocket-spec.programmatic"/>) is one that implements certain API classes from the Jakarta WebSocket API with the required behavior to handle the endpoint lifecycle,
+        	consume and send messages, publish itself, or connect to a peer. 
         </para>
       </listitem>
       <listitem>
         <para>
-        	<emphasis>annotated endpoint</emphasis> An <xref linkend="service.jakartawebsocket-spec.annotated"/> is a Plain Old Java Object (POJO) decorated with certain of the annotations from the Jakarta WebSocket API.
+        	<emphasis>annotated endpoint</emphasis> - An <xref linkend="service.jakartawebsocket-spec.annotated"/> is a Plain Old Java Object (POJO) decorated with annotations from the Jakarta WebSocket API.
         	The implementation then takes these annotated classes and creates the appropriate objects at runtime to deploy the POJO as a WebSocket endpoint. 
         </para>
       </listitem>
     </itemizedlist>
-
-    <para>Whiteboard Specification for Jakarta™ WebSocket Services implementations must support
-    at least version 2.2 of the Jakarta™ XML Web Services API and registering of <emphasis>annotated server endpoints</emphasis> using the whiteboard pattern and allowing client endpoints
-    establishing connections using the <emphasis>WebSocketContainer</emphasis> interface.</para>
+    </section>
 
     <section>
       <title>Entities</title>
@@ -99,21 +113,21 @@
       
       <itemizedlist>
         <listitem>
-          <para><emphasis>Server Endpoint Implementor</emphasis> - An implementation that can be used to registered as an annotated server endpoint and is published to the OSGi service registry.</para>
+          <para><emphasis>Server Endpoint Implementor</emphasis> - An implementation that can be registered as an annotated server endpoint and is published to the OSGi service registry.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Registrar</emphasis> - An implementation that collects <emphasis>Server Endpoint Implementor</emphasis> and publish them for a given transport</para>
+          <para><emphasis>Endpoint Registrar</emphasis> - An implementation that collects <emphasis>Server Endpoint Implementors</emphasis> and publishes them for a given transport.</para>
         </listitem>
         
         <listitem>
-          <para><emphasis>WebSocketContainer Service</emphasis> - A service registered that implement the <emphasis>WebSocketContainer</emphasis> interface that can be used for clients to establish a connection.</para>
+          <para><emphasis>WebSocketContainer Service</emphasis> - A service that implements the <emphasis>WebSocketContainer</emphasis> interface that can be used by clients to establish connections.</para>
         </listitem>
 
       </itemizedlist>
       
       <figure pgwide="1" xml:id="service.jakartawebsocket.whiteboard-overview">
-        <title>Jakarta™ XML Web Services Overview Diagram</title>
+        <title>Jakarta™ WebSocket Whiteboard Overview Diagram</title>
 
         <mediaobject>
           <imageobject>
@@ -127,18 +141,18 @@
    <section>
     <title>Registering Server Endpoint Implementor</title>
 
-    <para>Server Endpoint Implementor can be registered with the Jakarta™ Websockets Services Whiteboard by registering them as Whiteboard
+    <para>Server Endpoint Implementors can be registered with the Jakarta™ WebSocket Services Whiteboard by registering them as Whiteboard
     services. This means that the endpoint POJO implementations are registered in the Service Registry. As Server Endpoints are
-    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code> and use any
-    annotations on endpoint object, just as it would outside of OSGi.</para>
+    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code>, and use any
+    annotations on the endpoint object, just as they would outside of OSGi.</para>
 
-    <para>To be picked up as endpoints, the POJO they are instead registered with the
-    <code>osgi.jakarta.webservice.endpoint.implementor</code> service property with a value of
-    <code>"true"</code>. This property serves as a marker to the Jakarta™ Websocket Whiteboard
-    runtime, indicating that this OSGi service should further be processed as an endpoint.</para>
+    <para>To be picked up as endpoints, they are registered with the
+    <code>osgi.jakarta.websocket.endpoint.implementor</code> service property with a value of
+    <code>"true"</code>. This property serves as a marker to the Jakarta™ WebSocket Whiteboard
+    runtime, indicating that this OSGi service should be further processed as an endpoint.</para>
 
-    <para>The code below shows an simple echo Endpoint Implementor, the `@ServerEndpoint` / `@OnMessage` is 
-      a jakarta annotation and therefore not processed by the Whiteboard runtime:
+    <para>The code below shows a simple echo Endpoint Implementor. The <code>@ServerEndpoint</code> / <code>@OnMessage</code> annotations are 
+      Jakarta annotations and therefore not processed by the Whiteboard runtime:
     </para>
 
       <programlisting>@WhiteboardEndpoint
@@ -153,13 +167,13 @@ public class MyHelloServer {
    </section>
      <section>
     <title>Acquire WebSocketContainer and initiate client connection</title>
-    <para>To initiate a session and connect a client endpoint to a websocket server one needs to use a <emphasis>WebSocketContainer</emphasis>.
-    This would usually be performed through the <emphasis>ContainerProvider</emphasis> but as this does not account for the dynamic nature of OSGi clients should instead 
+    <para>To initiate a session and connect a client endpoint to a WebSocket server, one needs to use a <emphasis>WebSocketContainer</emphasis>.
+    This would usually be performed through the <emphasis>ContainerProvider</emphasis>, but as this does not account for the dynamic nature of OSGi, clients should instead 
     track the <emphasis>WebSocketContainer Service</emphasis> published by the runtime. Once the service is obtained, it can be used as described in 
-    <xref linkend="service.jakartawebsocket-spec.client-deploy"></xref> of the Jakarta WebSocket specification. As described by the API, no further dependency injection is
-    to be expected and clients must use whatever mechanism fits for them to prepare their instance before initiation of a peer connection.
+    <xref linkend="service.jakartawebsocket-spec.client-deploy"/> of the Jakarta WebSocket specification. As described by the API, no further dependency injection is
+    to be expected, and clients must use whatever mechanism fits for them to prepare their instance before initiating a peer connection.
     </para>
-     <para>The code below shows an simple client endpoint that is capable of sending a message to an websocket server endpoint and simply prints any incoming message
+     <para>The code below shows a simple client endpoint that is capable of sending a message to a WebSocket server endpoint and simply prints any incoming message:
     </para>
 
       <programlisting>@Component(service = HelloService.class)
@@ -190,10 +204,10 @@ public class MyHelloClient implements HelloService {
 
 }</programlisting>
     <para>
-    	Even though outside the scope of this specification, clients can also initiate connections using for example <xref linkend="service.jakartawebsocket-spec.jdk-client"></xref>
+    	Even though outside the scope of this specification, clients can also initiate connections using, for example, <xref linkend="service.jakartawebsocket-spec.jdk-client"/>
     	as there is no dependency between client and server that requires using the same technology stack.
     </para>
-     <para>The code below shows the same client using <xref linkend="service.jakartawebsocket-spec.jdk-client"></xref>
+     <para>The code below shows the same client using <xref linkend="service.jakartawebsocket-spec.jdk-client"/>:
     </para>
 
       <programlisting>@Component(service = HelloService.class)
@@ -226,36 +240,36 @@ public class MyHelloClientJdk implements HelloService, Listener {
 }</programlisting>
     </section>
      <section>
-    	<title>Jakarta™ XML Websocket Services Whiteboard Runtime Implementation</title>
+    	<title>Jakarta™ WebSocket Services Whiteboard Runtime Implementation</title>
     	<para>
-    		Jakarta™ XML Websocket Services Whiteboard Runtime Implementation consists of the following parts:
+    		Jakarta™ WebSocket Services Whiteboard Runtime Implementation consists of the following parts:
     		<itemizedlist>
 		        <listitem>
-		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it</para>
+		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it.</para>
 		        </listitem>
 		        <listitem>
-		        	<para>The <emphasis>JakartaWebsocketServiceRuntime</emphasis> registered in the OSGi service factory so it can be discovered by clients that want to use it to query the current state of the runtime</para>
+		        	<para>The <emphasis>JakartaWebsocketServiceRuntime</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it to query the current state of the runtime.</para>
 		        </listitem>
 	        </itemizedlist>
     	</para>
     	<section>
     		<title>The WebSocketContainer Service</title>
     		<para>
-    		 The runtime needs to register a WebSocketContainer service in the OSGi service registry, so it can be discovered by clients that want to use it to open client connection if they like to.
-    		 The service must be a prototype service as it potentially contains modifiable state through its setter methods but and as the API contract a single WebSocketContainer may be accessed by
+    		 The runtime needs to register a <code>WebSocketContainer</code> service in the OSGi service registry so it can be discovered by clients that want to use it to open client connections.
+    		 The service must be a prototype service as it potentially contains modifiable state through its setter methods. As per the API contract, a single <code>WebSocketContainer</code> may be accessed by
     		 concurrent threads, so implementations must ensure the integrity of its mutable attributes in such circumstances.
     		</para>
     	</section>
     	<section>
     		<title>The JakartaWebsocketServiceRuntime Service</title>
     		<para>
-    		 The runtime needs to register a JakartaWebsocketServiceRuntime service that can be queried for the current state of endpoints registered, for example to find if they failed or not.
+    		 The runtime needs to register a <code>JakartaWebsocketServiceRuntime</code> service that can be queried for the current state of registered endpoints, for example to determine if they failed.
     		</para>
     	</section>
     	<section>
         <title>Whiteboard Error Handling</title>
 		    <para>
-		    There are a number of error cases where the Jakarta Websocket whiteboard may be unable to correctly register an endpoint. 
+		    There are a number of error cases where the Jakarta WebSocket whiteboard may be unable to correctly register an endpoint. 
 		    All of these cases must result in a failure DTO being created with the appropriate error code.
 		    </para>
     	    <section>
@@ -264,19 +278,18 @@ public class MyHelloClientJdk implements HelloService, Listener {
 			      <!-- generic error codes -->	
 			      <listitem>
 			        <para>
-			        <emphasis>Unknown Failure</emphasis> - Outside of the predefined error conditions there might still errors occurring during the construction of the objects,
-			        the implementation can use the error code <code>1</code> to indicate that.
-			        The implementation can use own error codes to but to prevent clash with codes specified in later specification versions, such an error code must
-			        be equal or larger than <code>1000</code>.
-			        In all cases an additional error message might be used to further describe the nature of the failure and give users of the DTO a hint what's going on.
+			        <emphasis>Unknown Failure</emphasis> - Outside of the predefined error conditions, there might still be errors occurring during the construction of the objects.
+			        The implementation can use error code <code>1</code> to indicate that.
+			        The implementation can use its own error codes, but to prevent clash with codes specified in later specification versions, such an error code must
+			        be equal to or larger than <code>1000</code>.
+			        In all cases, an additional error message might be used to further describe the nature of the failure and give users of the DTO a hint about what is happening.
 			        </para>
 			      </listitem>
 			      <listitem>
 			        <para><emphasis>Failure to obtain a service instance</emphasis> - In
 			        the case where a published service is unable to be obtained by the
-			        Jakarta Websocket whiteboard then the service is deny
-			        listed by the container. A failure DTO is made available from the
-			        WebserviceSocketRuntime representing the deny listed service
+			        Jakarta WebSocket whiteboard, then the service is denylisted by the container. A failure DTO is made available from the
+			        <code>JakartaWebsocketServiceRuntime</code> representing the denylisted service
 			        object. The error code in this case is <code>2</code>.</para>
 			      </listitem>
 			    </itemizedlist>
@@ -285,8 +298,8 @@ public class MyHelloClientJdk implements HelloService, Listener {
 		    	<title>Endpoint Implementor Error Codes</title>
 			    <itemizedlist>
 			      <listitem>
-			        <para><emphasis>Invalid Endpoint</emphasis> -  The endpoint is invalid, for example does not contain required annotations,
-			        then Endpoint is considered failed as no futher handling is possible.
+			        <para><emphasis>Invalid Endpoint</emphasis> - If the endpoint is invalid, for example does not contain required annotations,
+			        then the Endpoint is considered failed as no further handling is possible.
 			        The error code in this case is <code>100</code>.
 			        </para>
 			      </listitem>
@@ -307,10 +320,22 @@ public class MyHelloClientJdk implements HelloService, Listener {
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2"/>
         </biblioid>
       </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.programmatic">
+        <title>Programmatic Endpoints</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-api"/>
+        </biblioid>
+      </bibliomixed>
       <bibliomixed xml:id="service.jakartawebsocket-spec.annotated">
         <title>Annotated Endpoints</title>
         <biblioid class="uri">
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-annotations"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.session">
+        <title>WebSocket Session</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#sessions"/>
         </biblioid>
       </bibliomixed>
       <bibliomixed xml:id="service.jakartawebsocket-spec.client-deploy">
