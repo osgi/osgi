@@ -27,7 +27,7 @@ import jakarta.servlet.Servlet;
 /**
  * Defines standard constants for the Servlet Whiteboard services.
  * 
- * @author $Id$
+ * @author $Id: 1fab177e78d5732583b53bbf73b5ca9836d3b9ca $
  */
 public final class HttpWhiteboardConstants {
 	private HttpWhiteboardConstants() {
@@ -571,5 +571,5 @@ public final class HttpWhiteboardConstants {
 	 * The version of the implementation capability for the Servlet Whiteboard
 	 * specification
 	 */
-	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "2.0";
+	public static final String	HTTP_WHITEBOARD_SPECIFICATION_VERSION				= "3.0";
 }
