@@ -1,0 +1,64 @@
+#*******************************************************************************
+# Copyright (c) Contributors to the Eclipse Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#*******************************************************************************
+
+name: Maven Build
+
+concurrency: 
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+  push:
+    branches-ignore:
+    - 'dependabot/**'
+    paths:
+    - '**'
+    - '!.design/**'
+    - '!*.md'
+    - '!.github/**'
+    - '.github/**/*ci*'
+  pull_request:
+    paths:
+    - '**'
+    - '!.design/**'
+    - '!*.md'
+    - '!.github/**'
+    - '.github/**/*ci*'
+
+env:
+  LC_ALL: en_US.UTF-8
+  java_version: 17
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.java_version }}
+          distribution: 'temurin'
+      - run: mvn --batch-mode --update-snapshots -T1C clean package
