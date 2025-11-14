@@ -176,6 +176,104 @@ public class MyHelloServer {
 	}
 }</programlisting>
    </section>
+   <section>
+    <title>Service Lifecycle and Session Management</title>
+    
+    <para>The Jakarta™ WebSocket specification defines in <xref linkend="service.jakartawebsocket-spec.endpoint-lifecycle"/> 
+    that by default each WebSocket session results in a new endpoint instance being created, allowing endpoints to be stateful. 
+    This specification adapts this lifecycle model to work with OSGi services while maintaining compatibility with the Jakarta 
+    WebSocket semantics.</para>
+    
+    <section>
+      <title>Service Reference Tracking</title>
+      
+      <para>An implementation of this specification MUST track <emphasis>service references</emphasis> for Server Endpoint 
+      Implementors registered with the <code>osgi.jakarta.websocket.endpoint.implementor</code> service property. The 
+      implementation MUST NOT obtain the actual service object from the service registry until an endpoint instance is required.</para>
+      
+      <para>This lazy service acquisition pattern ensures that service lifecycle is properly aligned with WebSocket session 
+      lifecycle and allows implementations to respect the service scope defined by the service provider.</para>
+    </section>
+    
+    <section>
+      <title>Service Acquisition and Release</title>
+      
+      <para>The implementation MUST obtain the service object only when a WebSocket session is created. More formally, service 
+      acquisition occurs when an endpoint instance is created through <code>ServerEndpointConfig.Configurator.getEndpointInstance(Class&lt;T&gt;)</code> 
+      as specified in the Jakarta™ WebSocket specification.</para>
+      
+      <para>After the WebSocket session is closed, the implementation MUST release the service object by calling the appropriate 
+      unget method on the <code>BundleContext</code> or <code>ServiceObjects</code> that was used to obtain the service.</para>
+      
+      <para>This ensures that service lifecycle is properly managed and that resources can be cleaned up when sessions end.</para>
+    </section>
+    
+    <section>
+      <title>Service Scope</title>
+      
+      <para>By leveraging OSGi's service scoping mechanisms, endpoint providers can control the lifecycle and sharing of 
+      endpoint instances. The implementation can choose different strategies based on how the service is registered:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Singleton Instance</emphasis> - When the service is registered as a regular singleton service 
+          (service scope <code>singleton</code>), all WebSocket sessions will share the same endpoint instance. 
+          This is appropriate for stateless endpoints or when explicit synchronization is used.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Instance per Bundle</emphasis> - When the service is registered using a <code>ServiceFactory</code> 
+          (service scope <code>bundle</code>), each bundle that accesses the endpoint will receive 
+          its own instance. This provides bundle-level isolation.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Instance per Lookup</emphasis> - When the service is registered using a <code>PrototypeServiceFactory</code> 
+          (service scope <code>prototype</code>), each service acquisition will result in a 
+          new instance. This matches the default Jakarta™ WebSocket behavior where each session gets its own endpoint 
+          instance, making endpoints naturally stateful.</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>When using Declarative Services to implement Server Endpoint Implementors, the service scope can be controlled 
+      using the <xref linkend="org.osgi.service.component.annotations.ServiceScope" xrefstyle="hyperlink"/> annotation 
+      as described in <xref linkend="service.component"/>. For example:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.SINGLETON" xrefstyle="hyperlink"/> - 
+          Provides a single shared instance across all sessions</para>
+        </listitem>
+        
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.BUNDLE" xrefstyle="hyperlink"/> - 
+          Provides an instance per bundle</para>
+        </listitem>
+        
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.PROTOTYPE" xrefstyle="hyperlink"/> - 
+          Provides a new instance for each session, matching the default Jakarta™ WebSocket behavior</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>The following example shows an endpoint configured with prototype scope to ensure each WebSocket session 
+      receives its own instance:</para>
+      
+      <programlisting>@WhiteboardEndpoint
+@ServerEndpoint("/stateful")
+@Component(service = MyStatefulEndpoint.class, 
+           scope = ServiceScope.PROTOTYPE)
+public class MyStatefulEndpoint {
+    private int messageCount = 0;
+    
+    @OnMessage
+    public String handleMessage(String message) {
+        messageCount++;
+        return "Message #" + messageCount + ": " + message;
+    }
+}</programlisting>
+    </section>
+   </section>
      <section>
     <title>Acquire WebSocketContainer and initiate client connection</title>
     <para>To initiate a session and connect a client endpoint to a WebSocket server, one needs to use a <emphasis>WebSocketContainer</emphasis>.
@@ -401,6 +499,12 @@ public class MyHelloClientJdk implements HelloService, Listener {
         <title>WebSocket Session</title>
         <biblioid class="uri">
           <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#sessions"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.endpoint-lifecycle">
+        <title>Endpoint Lifecycle</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoint-lifecycle"/>
         </biblioid>
       </bibliomixed>
       <bibliomixed xml:id="service.jakartawebsocket-spec.client-deploy">
