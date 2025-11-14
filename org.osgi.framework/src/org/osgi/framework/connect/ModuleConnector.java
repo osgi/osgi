@@ -18,6 +18,7 @@
 package org.osgi.framework.connect;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,6 +67,39 @@ public interface ModuleConnector {
 	 *            instance.
 	 */
 	void initialize(File storage, Map<String,String> configuration);
+
+	/**
+	 * Initializes this {@code ModuleConnector} with the
+	 * {@link Constants#FRAMEWORK_STORAGE framework persistent storage} file and
+	 * framework properties configured for a {@link Framework} instance.
+	 * <p>
+	 * This method is called once by a {@link Framework} instance and is called
+	 * before any other methods on this module connector are called.
+	 * 
+	 * @param storage The persistent storage area used by the {@link Framework}
+	 *            or {@code null} if the platform does not have file system
+	 *            support.
+	 * @param configuration An unmodifiable map of framework configuration
+	 *            properties that were used to configure the new framework
+	 *            instance.
+	 * @implNote the default implementation try to convert the given
+	 *           {@link Path} into a {@link File} and then calls
+	 *           {@link #initialize(File, Map)}, implementors should override
+	 *           this method to get access to other file system implementations
+	 */
+	default void initialize(Path storage, Map<String,String> configuration) {
+		if (storage == null) {
+			initialize((File) null, configuration);
+		} else {
+			File file;
+			try {
+				file = storage.toFile();
+			} catch (UnsupportedOperationException e) {
+				file = null;
+			}
+			initialize(file, configuration);
+		}
+	}
 
 	/**
 	 * Connects a bundle location with a {@link ConnectModule}.
