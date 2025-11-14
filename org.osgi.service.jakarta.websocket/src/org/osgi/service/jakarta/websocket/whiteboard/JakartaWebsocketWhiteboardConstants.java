@@ -96,4 +96,49 @@ public final class JakartaWebsocketWhiteboardConstants {
 	public static final String	WEBSOCKET_ENDPOINT_PATH								= WEBSOCKET_ENDPOINT_PREFIX
 			+ "path";
 
+	/**
+	 * The prefix for property names specific to WebSocket configurator
+	 * services.
+	 * <p>
+	 * The value of this constant is {@value}.
+	 */
+	public static final String	WEBSOCKET_CONFIGURATOR_PREFIX						= WEBSOCKET_PREFIX
+			+ "configurator.";
+
+	/**
+	 * Service property specifying that a service should be processed as a
+	 * ServerEndpointConfig.Configurator implementor by the whiteboard.
+	 * <p>
+	 * A service providing this property must be a valid
+	 * {@code ServerEndpointConfig.Configurator}.
+	 * <p>
+	 * The value of this service property must be of type {@code String} or
+	 * {@link Boolean} and set to &quot;true&quot; or {@code true}.
+	 * <p>
+	 * The value of this constant is {@value}.
+	 */
+	public static final String	WEBSOCKET_CONFIGURATOR_IMPLEMENTOR					= WEBSOCKET_CONFIGURATOR_PREFIX
+			+ "implementor";
+
+	/**
+	 * Service property specifying the endpoint path that a configurator should
+	 * match.
+	 * <p>
+	 * When this property is present and not empty, the configurator will be
+	 * used for endpoints whose path matches this value. If multiple
+	 * configurators match the same endpoint path, the one with the highest
+	 * service ranking (or lowest service ID if rankings are equal) will be
+	 * selected.
+	 * <p>
+	 * A configurator matching an endpoint path takes precedence over any
+	 * configurator specified in the {@code @ServerEndpoint} annotation's
+	 * {@code configurator()} attribute.
+	 * <p>
+	 * The value of this service property must be of type {@code String}.
+	 * <p>
+	 * The value of this constant is {@value}.
+	 */
+	public static final String	WEBSOCKET_CONFIGURATOR_ENDPOINT_PATH				= WEBSOCKET_CONFIGURATOR_PREFIX
+			+ "endpointPath";
+
 }

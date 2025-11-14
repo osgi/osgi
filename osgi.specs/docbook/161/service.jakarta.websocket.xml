@@ -414,6 +414,159 @@ public class BackupChat { ... }
     </section>
    </section>
    <section>
+    <title>Custom ServerEndpointConfig.Configurator Registration</title>
+    
+    <para>The Jakarta™ WebSocket specification allows endpoints to specify a custom
+    <code>ServerEndpointConfig.Configurator</code> through the <code>@ServerEndpoint</code>
+    annotation's <code>configurator()</code> attribute. However, this approach is static and
+    defined at compile time. To support the dynamic nature of OSGi, the Jakarta™ WebSocket
+    Services Whiteboard specification allows <code>ServerEndpointConfig.Configurator</code>
+    implementations to be registered as services that can be dynamically matched to endpoints.</para>
+    
+    <section>
+      <title>Registering Configurator Services</title>
+      
+      <para>A <code>ServerEndpointConfig.Configurator</code> can be registered as a whiteboard
+      service by setting the <code>osgi.jakarta.websocket.configurator.implementor</code>
+      service property to <code>true</code>. The configurator must also specify an
+      <code>osgi.jakarta.websocket.configurator.endpointPath</code> property that identifies
+      which endpoint path it should match.</para>
+      
+      <para>The following example shows a custom configurator registered as a service using
+      the <code>@ServerConfiguratorEndpoint</code> annotation:</para>
+      
+      <programlisting>@ServerConfiguratorEndpoint(endpointPath = "/chat")
+@Component(service = MyChatConfigurator.class)
+public class MyChatConfigurator extends ServerEndpointConfig.Configurator {
+    @Override
+    public &lt;T&gt; T getEndpointInstance(Class&lt;T&gt; endpointClass) 
+            throws InstantiationException {
+        // Custom endpoint instantiation logic
+        return super.getEndpointInstance(endpointClass);
+    }
+}</programlisting>
+      
+      <para>Alternatively, the configurator can be registered programmatically:</para>
+      
+      <programlisting>Dictionary&lt;String, Object&gt; properties = new Hashtable&lt;&gt;();
+properties.put("osgi.jakarta.websocket.configurator.implementor", true);
+properties.put("osgi.jakarta.websocket.configurator.endpointPath", "/chat");
+bundleContext.registerService(
+    ServerEndpointConfig.Configurator.class, 
+    new MyChatConfigurator(), 
+    properties);</programlisting>
+    </section>
+    
+    <section>
+      <title>Configurator Matching and Selection</title>
+      
+      <para>When an endpoint is registered, the runtime matches it against all registered
+      configurator services based on the endpoint's path. If a configurator's
+      <code>endpointPath</code> property matches the endpoint's path, that configurator is
+      considered for use with the endpoint.</para>
+      
+      <para>If multiple configurators match the same endpoint path, the runtime selects
+      the configurator with the highest service ranking. If service rankings are equal,
+      the configurator with the lowest service ID (which was registered first) is selected.
+      All other matching configurators are marked as failed with the
+      <code>FAILURE_REASON_NOT_SELECTED</code> error code.</para>
+      
+      <para>A configurator matched to an endpoint through the service registry takes
+      precedence over any configurator specified in the <code>@ServerEndpoint</code>
+      annotation's <code>configurator()</code> attribute. This allows dynamic configuration
+      to override static annotation-based configuration.</para>
+    </section>
+    
+    <section>
+      <title>Configurator Service Lifecycle</title>
+      
+      <para>The lifecycle of a configurator service is managed by the whiteboard runtime:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>When a configurator service is registered, the runtime evaluates all
+          registered endpoints to find matching paths</para>
+        </listitem>
+        <listitem>
+          <para>If a matching endpoint is found and the configurator has the highest ranking,
+          it becomes the active configurator for that endpoint</para>
+        </listitem>
+        <listitem>
+          <para>If no matching endpoint exists, the configurator is marked as failed with
+          the <code>FAILURE_REASON_NO_MATCHING_ENDPOINT</code> error code</para>
+        </listitem>
+        <listitem>
+          <para>When a configurator service is unregistered or its properties change, the
+          runtime re-evaluates all matching endpoints and may select a different configurator</para>
+        </listitem>
+        <listitem>
+          <para>If the configurator service cannot be obtained from the service registry
+          (returns <code>null</code>), it is marked as failed with the
+          <code>FAILURE_REASON_SERVICE_NOT_GETTABLE</code> error code</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Configurator Error Codes</title>
+      
+      <para>Configurator services that cannot be successfully registered are represented
+      in the Runtime DTO's <code>failedConfigurators</code> array with one of the following
+      error codes:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>No Matching Endpoint</emphasis> - The configurator's
+          <code>endpointPath</code> does not match any currently registered endpoint.
+          This may be a temporary condition if the endpoint is registered later.
+          The error code in this case is <code>200</code>.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Not Selected</emphasis> - A higher ranked configurator exists
+          for the same endpoint path. The configurator with the highest service ranking
+          (or lowest service ID if rankings are equal) is selected, and all others are
+          marked as failed with this error code. The error code in this case is
+          <code>201</code>.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Service Not Gettable</emphasis> - The service is registered
+          in the service registry but getting the service fails as it returns
+          <code>null</code>. This can happen if the service has already been unregistered
+          or if the service factory returns <code>null</code>. The error code in this
+          case is <code>2</code>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Runtime DTO Representation</title>
+      
+      <para>The runtime state of configurator services is reflected in the
+      <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO"
+      xrefstyle="hyperlink"/> through two arrays:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>configurators</code> - Contains
+          <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.ConfiguratorDTO"
+          xrefstyle="hyperlink"/> instances for configurators that are successfully
+          matched to endpoints and selected for use</para>
+        </listitem>
+        <listitem>
+          <para><code>failedConfigurators</code> - Contains
+          <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.FailedConfiguratorDTO"
+          xrefstyle="hyperlink"/> instances for configurators that are known to the
+          runtime but could not be successfully used, along with the failure reason</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>Additionally, each <xref
+      linkend="org.osgi.service.jakarta.websocket.runtime.dto.EndpointDTO"
+      xrefstyle="hyperlink"/> includes a <code>configurator</code> field that references
+      the service reference of the active configurator for that endpoint, if any.</para>
+    </section>
+   </section>
+   <section>
     <title>Service Lifecycle and Session Management</title>
     
     <para>The Jakarta™ WebSocket specification defines in <xref linkend="service.jakartawebsocket-spec.endpoint-lifecycle"/> 
@@ -710,6 +863,23 @@ public class MyHelloClientJdk implements HelloService, Listener {
 			        When a service ranking property changes at runtime, all endpoints sharing the same effective path are re-evaluated, 
 			        and the losing endpoints are marked as failed with this error code. See <xref linkend="service.jakartaws.path-collision"/> 
 			        for detailed collision resolution rules.
+			        </para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		     <section>
+		    	<title>Configurator Implementor Error Codes</title>
+			    <itemizedlist>
+			      <listitem>
+			        <para><emphasis>No Matching Endpoint</emphasis> - If the configurator's endpoint path does not match 
+			        any currently registered endpoint, the configurator is marked as failed. This may be a temporary condition 
+			        if the endpoint is registered later. The error code in this case is <code>200</code>.
+			        </para>
+			      </listitem>
+			      <listitem>
+			        <para><emphasis>Not Selected</emphasis> - If multiple configurators match the same endpoint path, 
+			        the configurator with the highest service ranking (or lowest service ID if rankings are equal) is selected. 
+			        All other matching configurators are marked as failed with this error code. The error code in this case is <code>201</code>.
 			        </para>
 			      </listitem>
 			    </itemizedlist>

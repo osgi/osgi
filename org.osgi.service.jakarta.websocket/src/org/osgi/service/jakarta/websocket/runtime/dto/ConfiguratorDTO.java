@@ -21,38 +21,28 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * Represents a Jakarta WebSocket endpoint that is successfully registered
- * with the runtime.
+ * Represents a ServerEndpointConfig.Configurator that is successfully
+ * registered with the runtime and matched to an endpoint.
  * <p>
- * This DTO describes the current state of an endpoint implementor known to the
- * service runtime.
+ * This DTO describes the current state of a configurator implementor known to
+ * the service runtime.
  * 
  * @NotThreadSafe
  * @author $Id$
  */
-public class EndpointDTO extends DTO {
+public class ConfiguratorDTO extends DTO {
 	/**
-	 * The DTO for the corresponding service that implements this endpoint.
+	 * The DTO for the corresponding service that implements this configurator.
 	 * <p>
 	 * This value is never {@code null}.
 	 */
 	public ServiceReferenceDTO	implementor;
 
 	/**
-	 * The full resolved URI path at which this endpoint is published.
+	 * The endpoint path that this configurator matches.
 	 * <p>
 	 * This value is never {@code null}.
 	 */
-	public String				address;
-
-	/**
-	 * The DTO for the corresponding configurator service that is used for this
-	 * endpoint.
-	 * <p>
-	 * This value may be {@code null} if no custom configurator service is
-	 * matched to this endpoint, in which case the default configurator or the
-	 * one specified in the annotation is used.
-	 */
-	public ServiceReferenceDTO	configurator;
+	public String				endpointPath;
 
 }

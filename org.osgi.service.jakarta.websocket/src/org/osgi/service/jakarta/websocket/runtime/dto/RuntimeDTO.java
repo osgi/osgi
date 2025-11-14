@@ -54,4 +54,22 @@ public class RuntimeDTO extends DTO {
 	 * The returned array may be empty if all endpoints registered successfully.
 	 */
 	public FailedEndpointDTO[]	failedEndpoints;
+
+	/**
+	 * The representations of the ServerEndpointConfig.Configurator services
+	 * currently registered with the runtime and matched to endpoints.
+	 * <p>
+	 * The returned array may be empty if no configurators are currently
+	 * registered.
+	 */
+	public ConfiguratorDTO[]	configurators;
+
+	/**
+	 * The representations of the ServerEndpointConfig.Configurator services
+	 * that are known to the runtime but failed to register.
+	 * <p>
+	 * The returned array may be empty if all configurators registered
+	 * successfully.
+	 */
+	public FailedConfiguratorDTO[]	failedConfigurators;
 }
