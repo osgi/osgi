@@ -2198,18 +2198,29 @@ package-names   ::= package-name                // See <xref
     <section xml:id="i3238802">
       <title>Importing Exported Packages</title>
 
-      <para>Bundles that collaborate require the same class loader for types
-      used in the collaboration. If multiple bundles export packages with
-      collaboration types then they will have to be placed in disjoint
-      class-spaces, making collaboration impossible. Collaboration is
-      significantly improved when bundles are willing to import exported
-      packages; these imports will allow a framework to
-      <emphasis>substitute</emphasis> exports for imports.</para>
+      <para>Bundles that collaborate require the same class loader 
+      for the types used in their interaction. 
+      When multiple bundles export the same package containing collaboration types, 
+      they will end up in separate class-spaces, which prevents those collaboration types being shared between those bundles or their consumers. 
+      Bundles willing to import exported packages allow the framework to
+      <emphasis>substitute</emphasis> exports for imports and increase collaboration,
+      by trying to avoid separate class-spaces. This is achieved by <emphasis>disabling</emphasis> the export in one or more bundles, replacing it with an import instead. The resulting class-space is larger, increasing collaboration, because there are fewer class loaders loading the exported package.
+      </para>
 
-      <para>Though substitution is recommended to increase collaboration, it
-      is not always possible. Importing exported packages can only work when
-      those packages are pure API and not encumbered with implementation
-      details. Import of exported packages should only be done when:</para>
+      <para>
+      The use of substitutable exports had historical advantages:
+      Implementation bundles typically embedded and provided the 
+      API packages of the OSGi specifications that they implemented
+      to make themselves easier to deploy. 
+      Modern deployment tools mean that deploying bundles with separate API is now far simpler. Therefore you should now consider <emphasis>not</emphasis> embedding API packages and instead consume them
+      using a <code>Import-Package</code> manifest headers with a proper version range (either provider or consumer). 
+      At runtime the API can be provided by an API bundle, such as the specification API bundles provided by OSGi. 
+      </para>
+
+      <para>
+      Thus, substitution, while being allowed as a method of bundle collaboration, should be avoided and only used in rare cases.
+      It may only be viable when the packages in question consist of pure API without any implementation details. 
+      Given these limitations, the import of exported packages should be considered only in situations where:</para>
 
       <itemizedlist>
         <listitem>
@@ -2229,12 +2240,49 @@ package-names   ::= package-name                // See <xref
       clean API-implementation separation. OSGi services are carefully
       designed to be as standalone as possible. Many libraries intertwine API
       and implementation in the same package making it impossible to
-      substitute the API packages.</para>
+      substitute the API packages.
+      Developers of general-purpose Java libraries that include OSGi metadata, 
+      but were not originally designed with OSGi in mind, should generally avoid importing exported packages.
+      </para>
 
-      <para>Importing an exported package must use a version range according
+      <para>Importing an exported package <emphasis role="bold">must</emphasis> use a version range according
       to its compatibility requirements, being either a consumer or a provider
       of that API. See <xref linkend="framework.module-semantic.versioning"/>
       for more information.</para>
+
+      <para>Also see the section about <xref linkend="framework.module-import.export.same.package"/> 
+      for more information about how the resolver handles this and what problems could arise with substitution.</para>
+
+      <note>
+      <para>
+		  Bundles should only import such an exported package if they are willing to get that package 
+		  from another (unknown) bundle and omit their own export from the framework. By definition, this means that a bundle with a subsitutable export may never load that package, rendering its class files and resources invisible to that bundle's class loader.
+      </para>
+
+      <para>When importing an exported package you 
+      should <emphasis role="bold">not</emphasis> make your <code>Import-Package</code> statement <code>resolution:="optional"</code>. 
+      As your bundle is exporting the package there is no possibility of it not being available at runtime, 
+      meaning that making the import optional serves no purpose.
+      </para>
+      
+      <para>
+      Multiple bundles providing the same API packages 
+      can lead to conflicts in when used outside OSGi environments (e.g. JPMS) and therefore might hinder further use of such bundles.
+      Even though OSGi supports these scenarios, it might lead to resolution conflicts can when multiple versions of the same bundle are present (see <xref linkend="framework.module-import.export.same.package"/>) and consumers are having tight version range constraints or large dependency chains.
+      </para>
+      
+      <para>
+      If you need to embed exported API packages in an implementation bundle 
+      then be sure to only embed the API packages you directly implement.  
+      You should not embed and export APIs that you use but do not implement.  
+      For example, if you use the <emphasis>OSGi Configuration Admin Service</emphasis> you should avoid 
+      embedding the <code>org.osgi.service.cm</code> package 
+      unless your bundle is actually providing an implementation of the Configuration Admin Service.
+      </para>
+
+      </note>	  
+
+      
     </section>
 
     <section>
@@ -3110,10 +3158,20 @@ B: Bundle-SymbolicName: B
         </listitem>
       </itemizedlist>
 
-      <para>The above only applies to the import and export package
+      <para>The above only applies to the <code>Import-Package</code> and <code>Export-Package</code>
       definitions of a bundle. For namespaces other than
       <code>osgi.wiring.package</code>, a requirement definition of a bundle
       may be wired to a capability definition of that same bundle.</para>
+
+      <para>
+	  	<emphasis role="bold">Notes on <emphasis>External</emphasis></emphasis>: 
+      If the resolver choses to resolve to an export statement in another bundle,
+		  the framework must <emphasis>discard</emphasis> the export package
+		  of the current bundle. This can lead to cases where consumers 
+		  for a version of the current bundle become <emphasis>unresolvable</emphasis>. 
+      See <xref linkend="i3238802"/> for more information about package substitution.
+      </para>  
+      
     </section>
   </section>
 

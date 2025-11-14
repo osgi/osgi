@@ -1,0 +1,981 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+<chapter label="161" revision="$Id$" version="5.0"
+         xml:id="service.jakartaws" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Whiteboard Specification for Jakarta™ WebSocket</title>
+  
+
+  <section>
+    <title>Introduction</title>
+
+    <para>
+    The <xref linkend="service.jakartawebsocket-spec"/> defines the WebSocket API for Java applications.
+    WebSocket is a protocol that provides full-duplex communication channels over a single TCP connection, enabling
+    bidirectional, real-time communication between client and server endpoints. The Jakarta WebSocket API provides
+    a standard way to integrate WebSocket into Java applications, supporting both annotated and programmatic endpoint
+    definitions.
+    </para>
+    
+    <para>
+    It is important to note that <xref linkend="service.websocket-rfc6455-intro"/> defines the WebSocket Protocol as 
+    an <emphasis>independent TCP-based protocol</emphasis>. While WebSocket connections often begin with an HTTP-like 
+    handshake for compatibility with existing web infrastructure (as specified in 
+    <xref linkend="service.websocket-rfc6455-opening"/>), the protocol itself is distinct from HTTP. The initial 
+    handshake is designed to appear to an HTTP server as a regular GET request with an Upgrade offer 
+    (see <xref linkend="service.websocket-rfc6455-design"/>), but once the WebSocket connection is established, 
+    the communication follows the WebSocket protocol. A WebSocket server typically only supports the WebSocket 
+    handshake and subsequent WebSocket protocol messages, not general HTTP requests.
+    </para>
+    
+    <para>
+    WebSockets allow two-way communication between two endpoints. This specification aims to bring that technology to 
+    OSGi in a vendor-neutral way by leveraging the Jakarta WebSocket API. Managing endpoints in a dynamic environment 
+    can be challenging. This specification makes this task much easier by using the well-known 
+    <xref linkend="service.jakartaws-whiteboard.pattern.ref"/> and allowing integration with existing transport specifications.
+    </para>
+    
+    <para>
+    Even though the HTTP transport is often used in conjunction with WebSockets for the initial handshake, 
+    that is not mandatory for an implementation. Therefore, this specification does not focus exclusively on 
+    the HTTP transport, and implementations are free to support this and any other kinds of transports.
+    </para>
+
+    <para>Whiteboard Specification for Jakarta™ WebSocket Services implementations must support
+    at least version 2.2 of the Jakarta™ WebSocket API. Implementations must support registration of <emphasis>annotated server endpoints</emphasis> using the whiteboard pattern and allow client endpoints to
+    establish connections using the <emphasis>WebSocketContainer</emphasis> interface.</para>
+
+    <section>
+      <title>Terminology</title>
+      <para>
+      As per the <xref linkend="service.jakartawebsocket-spec"/>, this specification uses the following terms:
+      </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+        	<emphasis>endpoint</emphasis> A WebSocket endpoint is a Java component that represents one side of a sequence of WebSocket interactions between two connected peers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>connection</emphasis> A WebSocket connection is the networking connection between the two endpoints which are interacting using the WebSocket protocol.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>peer</emphasis> Used in the context of a WebSocket endpoint, the WebSocket peer is used to represent another participant of the WebSocket interactions with the endpoint.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>session</emphasis> - The term WebSocket session (see <xref linkend="service.jakartawebsocket-spec.session"/>) is used to represent a sequence of WebSocket interactions between an endpoint and a single peer.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>client endpoints</emphasis> A client endpoint is one that initiates a connection to a peer but does not accept new ones. 
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>server endpoints</emphasis> - A server endpoint is one that accepts WebSocket connections from peers but does not initiate connections to peers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>programmatic endpoint</emphasis> - A programmatic endpoint (see <xref linkend="service.jakartawebsocket-spec.programmatic"/>) is one that implements certain API classes from the Jakarta WebSocket API with the required behavior to handle the endpoint lifecycle,
+        	consume and send messages, publish itself, or connect to a peer. 
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        	<emphasis>annotated endpoint</emphasis> - An <xref linkend="service.jakartawebsocket-spec.annotated"/> is a Plain Old Java Object (POJO) decorated with annotations from the Jakarta WebSocket API.
+        	The implementation then takes these annotated classes and creates the appropriate objects at runtime to deploy the POJO as a WebSocket endpoint. 
+        </para>
+      </listitem>
+    </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This specification defines the following entities:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Server Endpoint Implementor</emphasis> - An implementation that can be registered as an annotated server endpoint and is published to the OSGi service registry.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Registrar</emphasis> - An implementation that collects <emphasis>Server Endpoint Implementors</emphasis> and publishes them for a given transport.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>WebSocketContainer Service</emphasis> - A service that implements the <emphasis>WebSocketContainer</emphasis> interface that can be used by clients to establish connections.</para>
+        </listitem>
+
+      </itemizedlist>
+      
+      <figure pgwide="1" xml:id="service.jakartawebsocket.whiteboard-overview">
+        <title>Jakarta™ WebSocket Whiteboard Overview Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.313in"
+                       contentwidth="5.496in" fileref="overall.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+   	</section>
+   </section>
+   <section>
+    <title>Registering Server Endpoint Implementor</title>
+
+    <para>Server Endpoint Implementors can be registered with the Jakarta™ WebSocket Services Whiteboard by registering them as Whiteboard
+    services. This means that the endpoint POJO implementations are registered in the Service Registry. As Server Endpoints are
+    POJOs they may be registered using <emphasis>any</emphasis> valid service interface, including <code>Object</code>, and use any
+    annotations on the endpoint object, just as they would outside of OSGi.</para>
+
+    <para>To be picked up as endpoints, they are registered with the
+    <code>osgi.jakarta.websocket.endpoint.implementor</code> service property with a value of
+    <code>"true"</code>. This property serves as a marker to the Jakarta™ WebSocket Whiteboard
+    runtime, indicating that this OSGi service should be further processed as an endpoint.</para>
+
+    <para>The code below shows a simple echo Endpoint Implementor. The <code>@ServerEndpoint</code> / <code>@OnMessage</code> annotations are 
+      Jakarta annotations and therefore not processed by the Whiteboard runtime:
+    </para>
+
+      <programlisting>@WhiteboardEndpoint
+@ServerEndpoint("/hello")
+@Component(service = MyHelloServer.class, immediate = true)
+public class MyHelloServer {
+	@OnMessage
+	public String handleMessage(String message) {
+		return "Got your message (" + message + "). Thanks !";
+	}
+}</programlisting>
+   </section>
+   <section>
+    <title>Endpoint Path Configuration</title>
+    
+    <para>While the <code>@ServerEndpoint</code> annotation's <code>value()</code> attribute provides a way to 
+    specify the URI path or URI template for an endpoint, this approach is static and defined at compile time. 
+    To support the dynamic nature of OSGi, the Jakarta™ WebSocket Services Whiteboard specification allows 
+    the endpoint path to be configured via service properties.</para>
+    
+    <para>The <code>osgi.jakarta.websocket.endpoint.path</code> service property can be used to override 
+    the path specified in the <code>@ServerEndpoint</code> annotation. When this property is present and 
+    not empty, its value takes precedence over the annotation's <code>value()</code> attribute.</para>
+    
+    <para>This dynamic path configuration enables several use cases:
+    <itemizedlist>
+      <listitem>
+        <para>Configuration-driven deployment where endpoint paths can be changed without recompiling</para>
+      </listitem>
+      <listitem>
+        <para>Multi-tenancy scenarios where the same endpoint implementation serves different paths</para>
+      </listitem>
+      <listitem>
+        <para>Dynamic path generation based on runtime conditions</para>
+      </listitem>
+    </itemizedlist>
+    </para>
+    
+    <section>
+      <title>Path Property Behavior</title>
+      
+      <para>When the <code>osgi.jakarta.websocket.endpoint.path</code> service property is used:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>If the property is present and not empty, it completely replaces the path specified 
+          in the <code>@ServerEndpoint</code> annotation</para>
+        </listitem>
+        <listitem>
+          <para>If the property is absent or empty, the path from the <code>@ServerEndpoint</code> 
+          annotation is used</para>
+        </listitem>
+        <listitem>
+          <para>The property value must follow the same syntax rules as the <code>@ServerEndpoint</code> 
+          annotation's <code>value()</code> attribute, including support for URI templates</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Dynamic Path Updates</title>
+      
+      <para>An important aspect of dynamic path configuration is the ability to change the path at runtime 
+      by updating service properties. When the <code>osgi.jakarta.websocket.endpoint.path</code> service 
+      property is modified:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>All currently running WebSocket sessions for this endpoint MUST be immediately terminated</para>
+        </listitem>
+        <listitem>
+          <para>The endpoint MUST be unregistered from its current path</para>
+        </listitem>
+        <listitem>
+          <para>The endpoint MUST be registered at the new path specified by the updated property</para>
+        </listitem>
+        <listitem>
+          <para>New connections can then be established to the endpoint at its new path</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>This behavior ensures that there is no ambiguity about which path an endpoint is available on, 
+      and prevents stale sessions from continuing after a path change.</para>
+    </section>
+    
+    <section>
+      <title>Examples</title>
+    
+      <para>The following example shows an endpoint using the <code>@WhiteboardEndpoint</code> annotation 
+      to specify a dynamic path that overrides the <code>@ServerEndpoint</code> annotation:</para>
+      
+      <programlisting>@WhiteboardEndpoint(path = "/dynamic/hello")
+@ServerEndpoint("/static/hello")
+@Component(service = MyDynamicEndpoint.class)
+public class MyDynamicEndpoint {
+    @OnMessage
+    public String handleMessage(String message) {
+        return "Echo: " + message;
+    }
+}</programlisting>
+      
+      <para>In this example, the endpoint will be available at <code>/dynamic/hello</code> rather than 
+      <code>/static/hello</code> because the <code>path</code> attribute of <code>@WhiteboardEndpoint</code> 
+      takes precedence.</para>
+      
+      <para>The path can also be configured programmatically without using the annotation:</para>
+      
+      <programlisting>Dictionary&lt;String, Object&gt; properties = new Hashtable&lt;&gt;();
+properties.put("osgi.jakarta.websocket.endpoint.implementor", true);
+properties.put("osgi.jakarta.websocket.endpoint.path", "/configured/hello");
+bundleContext.registerService(MyEndpoint.class, new MyEndpoint(), properties);</programlisting>
+    </section>
+   </section>
+   <section xml:id="service.jakartaws.path-collision">
+    <title>Path Collision Handling</title>
+    
+    <para>When multiple Server Endpoint Implementors are registered with the Jakarta™ WebSocket 
+    Whiteboard, they may have paths that overlap or collide. The runtime MUST resolve such collisions 
+    using a well-defined set of rules to ensure predictable behavior.</para>
+    
+    <section>
+      <title>Path Specificity Rules</title>
+      
+      <para>The runtime MUST apply the following rules in order to determine which endpoint handles 
+      requests to a given path:</para>
+      
+      <orderedlist>
+        <listitem>
+          <para><emphasis>Longest Matching Path</emphasis> - When an endpoint path request is made, 
+          the endpoint with the most specific (longest) matching path takes precedence. For example, 
+          if Service 1 is registered at path <code>/a/b/c</code> and Service 2 at path 
+          <code>/a/b</code>, a client request to <code>/a/b/c</code> will be handled by Service 1.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Exact Path Over Template Path</emphasis> - When comparing paths of the same 
+          length, an exact path takes precedence over a URI template path. URI templates are defined 
+          in <xref linkend="service.rfc6570"/>. For example, if Service 1 is registered at 
+          <code>/a/b</code> and Service 2 at <code>/a/{var}</code>, a client request to 
+          <code>/a/b</code> will be handled by Service 1. However, a request to <code>/a/b/c</code> 
+          would still be handled by a more specific path if available.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Service Ranking and Service ID</emphasis> - If there is a full collision 
+          that cannot be resolved by the above rules (for example, Service 1 at <code>/chat</code> 
+          and Service 2 at <code>/chat</code>, or Service 1 at <code>/chat/{x}</code> and Service 2 
+          at <code>/chat/{y}</code>), then the service with the highest service ranking takes 
+          precedence. Service ranking is defined in the OSGi Core specification 
+          (<xref linkend="framework.service.properties"/>). If the service rankings are equal, 
+          the service with the lowest service ID (which was registered first) takes precedence. 
+          Service ID is defined in the OSGi Core specification 
+          (<xref linkend="framework.service.properties"/>). All losing services in such collisions 
+          MUST be marked as failed with the <code>FAILURE_REASON_PATH_CLASH</code> error code 
+          and reflected in the <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.FailedEndpointDTO" 
+          xrefstyle="hyperlink"/>.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+    
+    <section>
+      <title>Dynamic Service Ranking Changes</title>
+      
+      <para>The service ranking property of an endpoint service may be changed at runtime. When the 
+      <code>service.ranking</code> property of any endpoint service changes, the runtime MUST:</para>
+      
+      <orderedlist>
+        <listitem>
+          <para>Immediately terminate all WebSocket sessions associated with all endpoints that share 
+          the same effective path (after applying path specificity rules)</para>
+        </listitem>
+        
+        <listitem>
+          <para>Re-evaluate the path collision resolution rules using the updated service ranking 
+          values</para>
+        </listitem>
+        
+        <listitem>
+          <para>Make the winning endpoint (the one with highest ranking, or lowest service ID if 
+          rankings are equal) available for new connections</para>
+        </listitem>
+        
+        <listitem>
+          <para>Mark all losing endpoints as failed with the <code>FAILURE_REASON_PATH_CLASH</code> 
+          error code</para>
+        </listitem>
+      </orderedlist>
+      
+      <para>This ensures that there is no ambiguity about which endpoint is handling a particular 
+      path, and prevents stale sessions from continuing with potentially incorrect endpoint 
+      assignments.</para>
+    </section>
+    
+    <section>
+      <title>Path Collision Examples</title>
+      
+      <para>The following examples illustrate the path collision resolution rules:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Example 1: Longest Path Wins</emphasis></para>
+          <programlisting>// Service 1
+@ServerEndpoint("/api/chat/room")
+@Component(service = ChatRoomEndpoint.class)
+public class ChatRoomEndpoint { ... }
+
+// Service 2
+@ServerEndpoint("/api/chat")
+@Component(service = ChatEndpoint.class)
+public class ChatEndpoint { ... }
+
+// Client request to "/api/chat/room" → handled by Service 1
+// Client request to "/api/chat" → handled by Service 2</programlisting>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Example 2: Exact Path Over Template</emphasis></para>
+          <programlisting>// Service 1
+@ServerEndpoint("/api/users")
+@Component(service = UsersEndpoint.class)
+public class UsersEndpoint { ... }
+
+// Service 2
+@ServerEndpoint("/api/{resource}")
+@Component(service = GenericEndpoint.class)
+public class GenericEndpoint { ... }
+
+// Client request to "/api/users" → handled by Service 1 (exact match)
+// Client request to "/api/products" → handled by Service 2 (template match)</programlisting>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Example 3: Service Ranking Resolves Collision</emphasis></para>
+          <programlisting>// Service 1 with higher ranking
+@ServerEndpoint("/chat")
+@Component(service = PrimaryChat.class, property = "service.ranking:Integer=100")
+public class PrimaryChat { ... }
+
+// Service 2 with lower ranking
+@ServerEndpoint("/chat")
+@Component(service = BackupChat.class, property = "service.ranking:Integer=50")
+public class BackupChat { ... }
+
+// Client request to "/chat" → handled by Service 1 (higher ranking)
+// Service 2 is marked as failed with FAILURE_REASON_PATH_CLASH</programlisting>
+        </listitem>
+      </itemizedlist>
+    </section>
+   </section>
+   <section>
+    <title>Custom ServerEndpointConfig.Configurator Registration</title>
+    
+    <para>The Jakarta™ WebSocket specification allows endpoints to specify a custom
+    <code>ServerEndpointConfig.Configurator</code> through the <code>@ServerEndpoint</code>
+    annotation's <code>configurator()</code> attribute. However, this approach is static and
+    defined at compile time. To support the dynamic nature of OSGi, the Jakarta™ WebSocket
+    Services Whiteboard specification allows <code>ServerEndpointConfig.Configurator</code>
+    implementations to be registered as services that can be dynamically matched to endpoints.</para>
+    
+    <section>
+      <title>Registering Configurator Services</title>
+      
+      <para>A <code>ServerEndpointConfig.Configurator</code> can be registered as a whiteboard
+      service by setting the <code>osgi.jakarta.websocket.configurator.implementor</code>
+      service property to <code>true</code>. The configurator must also specify an
+      <code>osgi.jakarta.websocket.configurator.endpointPath</code> property that identifies
+      which endpoint path it should match.</para>
+      
+      <para>The following example shows a custom configurator registered as a service using
+      the <code>@ServerConfiguratorEndpoint</code> annotation:</para>
+      
+      <programlisting>@ServerConfiguratorEndpoint(endpointPath = "/chat")
+@Component(service = MyChatConfigurator.class)
+public class MyChatConfigurator extends ServerEndpointConfig.Configurator {
+    @Override
+    public &lt;T&gt; T getEndpointInstance(Class&lt;T&gt; endpointClass) 
+            throws InstantiationException {
+        // Custom endpoint instantiation logic
+        return super.getEndpointInstance(endpointClass);
+    }
+}</programlisting>
+      
+      <para>Alternatively, the configurator can be registered programmatically:</para>
+      
+      <programlisting>Dictionary&lt;String, Object&gt; properties = new Hashtable&lt;&gt;();
+properties.put("osgi.jakarta.websocket.configurator.implementor", true);
+properties.put("osgi.jakarta.websocket.configurator.endpointPath", "/chat");
+bundleContext.registerService(
+    ServerEndpointConfig.Configurator.class, 
+    new MyChatConfigurator(), 
+    properties);</programlisting>
+    </section>
+    
+    <section>
+      <title>Configurator Matching and Selection</title>
+      
+      <para>When an endpoint is registered, the runtime matches it against all registered
+      configurator services based on the endpoint's path. If a configurator's
+      <code>endpointPath</code> property matches the endpoint's path, that configurator is
+      considered for use with the endpoint.</para>
+      
+      <para>If multiple configurators match the same endpoint path, the runtime selects
+      the configurator with the highest service ranking. If service rankings are equal,
+      the configurator with the lowest service ID (which was registered first) is selected.
+      All other matching configurators are marked as failed with the
+      <code>FAILURE_REASON_NOT_SELECTED</code> error code.</para>
+      
+      <para>A configurator matched to an endpoint through the service registry takes
+      precedence over any configurator specified in the <code>@ServerEndpoint</code>
+      annotation's <code>configurator()</code> attribute. This allows dynamic configuration
+      to override static annotation-based configuration.</para>
+    </section>
+    
+    <section>
+      <title>Configurator Service Lifecycle</title>
+      
+      <para>The lifecycle of a configurator service is managed by the whiteboard runtime:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>When a configurator service is registered, the runtime evaluates all
+          registered endpoints to find matching paths</para>
+        </listitem>
+        <listitem>
+          <para>If a matching endpoint is found and the configurator has the highest ranking,
+          it becomes the active configurator for that endpoint</para>
+        </listitem>
+        <listitem>
+          <para>If no matching endpoint exists, the configurator is marked as failed with
+          the <code>FAILURE_REASON_NO_MATCHING_ENDPOINT</code> error code</para>
+        </listitem>
+        <listitem>
+          <para>When a configurator service is unregistered or its properties change, the
+          runtime re-evaluates all matching endpoints and may select a different configurator</para>
+        </listitem>
+        <listitem>
+          <para>If the configurator service cannot be obtained from the service registry
+          (returns <code>null</code>), it is marked as failed with the
+          <code>FAILURE_REASON_SERVICE_NOT_GETTABLE</code> error code</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Configurator Error Codes</title>
+      
+      <para>Configurator services that cannot be successfully registered are represented
+      in the Runtime DTO's <code>failedConfigurators</code> array with one of the following
+      error codes:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>No Matching Endpoint</emphasis> - The configurator's
+          <code>endpointPath</code> does not match any currently registered endpoint.
+          This may be a temporary condition if the endpoint is registered later.
+          The error code in this case is <code>200</code>.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Not Selected</emphasis> - A higher ranked configurator exists
+          for the same endpoint path. The configurator with the highest service ranking
+          (or lowest service ID if rankings are equal) is selected, and all others are
+          marked as failed with this error code. The error code in this case is
+          <code>201</code>.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Service Not Gettable</emphasis> - The service is registered
+          in the service registry but getting the service fails as it returns
+          <code>null</code>. This can happen if the service has already been unregistered
+          or if the service factory returns <code>null</code>. The error code in this
+          case is <code>2</code>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Runtime DTO Representation</title>
+      
+      <para>The runtime state of configurator services is reflected in the
+      <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO"
+      xrefstyle="hyperlink"/> through two arrays:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>configurators</code> - Contains
+          <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.ConfiguratorDTO"
+          xrefstyle="hyperlink"/> instances for configurators that are successfully
+          matched to endpoints and selected for use</para>
+        </listitem>
+        <listitem>
+          <para><code>failedConfigurators</code> - Contains
+          <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.FailedConfiguratorDTO"
+          xrefstyle="hyperlink"/> instances for configurators that are known to the
+          runtime but could not be successfully used, along with the failure reason</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>Additionally, each <xref
+      linkend="org.osgi.service.jakarta.websocket.runtime.dto.EndpointDTO"
+      xrefstyle="hyperlink"/> includes a <code>configurator</code> field that references
+      the service reference of the active configurator for that endpoint, if any.</para>
+    </section>
+   </section>
+   <section>
+    <title>Service Lifecycle and Session Management</title>
+    
+    <para>The Jakarta™ WebSocket specification defines in <xref linkend="service.jakartawebsocket-spec.endpoint-lifecycle"/> 
+    that by default each WebSocket session results in a new endpoint instance being created, allowing endpoints to be stateful. 
+    This specification adapts this lifecycle model to work with OSGi services while maintaining compatibility with the Jakarta 
+    WebSocket semantics.</para>
+    
+    <section>
+      <title>Service Reference Tracking</title>
+      
+      <para>An implementation of this specification MUST track <emphasis>service references</emphasis> for Server Endpoint 
+      Implementors registered with the <code>osgi.jakarta.websocket.endpoint.implementor</code> service property. The 
+      implementation MUST NOT obtain the actual service object from the service registry until an endpoint instance is required.</para>
+      
+      <para>This lazy service acquisition pattern ensures that service lifecycle is properly aligned with WebSocket session 
+      lifecycle and allows implementations to respect the service scope defined by the service provider.</para>
+    </section>
+    
+    <section>
+      <title>Service Acquisition and Release</title>
+      
+      <para>The implementation MUST obtain the service object only when a WebSocket session is created. More formally, service 
+      acquisition occurs when an endpoint instance is created through <code>ServerEndpointConfig.Configurator.getEndpointInstance(Class&lt;T&gt;)</code> 
+      as specified in the Jakarta™ WebSocket specification.</para>
+      
+      <para>After the WebSocket session is closed, the implementation MUST release the service object by calling the appropriate 
+      unget method on the <code>BundleContext</code> or <code>ServiceObjects</code> that was used to obtain the service.</para>
+      
+      <para>This ensures that service lifecycle is properly managed and that resources can be cleaned up when sessions end.</para>
+    </section>
+    
+    <section>
+      <title>Service Scope</title>
+      
+      <para>By leveraging OSGi's service scoping mechanisms, endpoint providers can control the lifecycle and sharing of 
+      endpoint instances. The implementation can choose different strategies based on how the service is registered:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Singleton Instance</emphasis> - When the service is registered as a regular singleton service 
+          (service scope <code>singleton</code>), all WebSocket sessions will share the same endpoint instance. 
+          This is appropriate for stateless endpoints or when explicit synchronization is used.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Instance per Bundle</emphasis> - When the service is registered using a <code>ServiceFactory</code> 
+          (service scope <code>bundle</code>), each bundle that accesses the endpoint will receive 
+          its own instance. This provides bundle-level isolation.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Instance per Lookup</emphasis> - When the service is registered using a <code>PrototypeServiceFactory</code> 
+          (service scope <code>prototype</code>), each service acquisition will result in a 
+          new instance. This matches the default Jakarta™ WebSocket behavior where each session gets its own endpoint 
+          instance, making endpoints naturally stateful.</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>When using Declarative Services to implement Server Endpoint Implementors, the service scope can be controlled 
+      using the <xref linkend="org.osgi.service.component.annotations.ServiceScope" xrefstyle="hyperlink"/> annotation 
+      as described in <xref linkend="service.component"/>. For example:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.SINGLETON" xrefstyle="hyperlink"/> - 
+          Provides a single shared instance across all sessions</para>
+        </listitem>
+        
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.BUNDLE" xrefstyle="hyperlink"/> - 
+          Provides an instance per bundle</para>
+        </listitem>
+        
+        <listitem>
+          <para><xref linkend="org.osgi.service.component.annotations.ServiceScope.PROTOTYPE" xrefstyle="hyperlink"/> - 
+          Provides a new instance for each session, matching the default Jakarta™ WebSocket behavior</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>The following example shows an endpoint configured with prototype scope to ensure each WebSocket session 
+      receives its own instance:</para>
+      
+      <programlisting>@WhiteboardEndpoint
+@ServerEndpoint("/stateful")
+@Component(service = MyStatefulEndpoint.class, 
+           scope = ServiceScope.PROTOTYPE)
+public class MyStatefulEndpoint {
+    private int messageCount = 0;
+    
+    @OnMessage
+    public String handleMessage(String message) {
+        messageCount++;
+        return "Message #" + messageCount + ": " + message;
+    }
+}</programlisting>
+    </section>
+   </section>
+     <section>
+    <title>Acquire WebSocketContainer and initiate client connection</title>
+    <para>To initiate a session and connect a client endpoint to a WebSocket server, one needs to use a <emphasis>WebSocketContainer</emphasis>.
+    This would usually be performed through the <emphasis>ContainerProvider</emphasis>, but as this does not account for the dynamic nature of OSGi, clients should instead 
+    track the <emphasis>WebSocketContainer Service</emphasis> published by the runtime. Once the service is obtained, it can be used as described in 
+    <xref linkend="service.jakartawebsocket-spec.client-deploy"/> of the Jakarta WebSocket specification. As described by the API, no further dependency injection is
+    to be expected, and clients must use whatever mechanism fits for them to prepare their instance before initiating a peer connection.
+    </para>
+     <para>The code below shows a simple client endpoint that is capable of sending a message to a WebSocket server endpoint and simply prints any incoming message:
+    </para>
+
+      <programlisting>@Component(service = HelloService.class)
+public class MyHelloClient implements HelloService {
+
+
+	private Session session;
+
+	@Activate
+	public MyHelloClient(@Reference WebSocketContainer container) throws DeploymentException, IOException, URISyntaxException {
+		session = container.connectToServer(this, new URI("ws://localhost:3000/hello"));
+	}
+
+	@Deactivate
+	public void close() throws IOException {
+		session.close(new CloseReason(CloseCodes.GOING_AWAY, "service shut down"));
+	}
+
+	@Override
+	public void sayHello(String message) throws IOException {
+		session.getBasicRemote().sendText(message);
+	}
+
+	@OnMessage
+	public void processMessage(String message) {
+		System.out.println("Received message in client: " + message);
+	}
+
+}</programlisting>
+    <para>
+    	Even though outside the scope of this specification, clients can also initiate connections using, for example, <xref linkend="service.jakartawebsocket-spec.jdk-client"/>
+    	as there is no dependency between client and server that requires using the same technology stack.
+    </para>
+     <para>The code below shows the same client using <xref linkend="service.jakartawebsocket-spec.jdk-client"/>:
+    </para>
+
+      <programlisting>@Component(service = HelloService.class)
+public class MyHelloClientJdk implements HelloService, Listener {
+
+	private CompletableFuture&lt;WebSocket&gt; client;
+
+	@Activate
+	public void start() {
+		client = HttpClient.newHttpClient().newWebSocketBuilder().buildAsync(URI.create("ws://localhost:3000/hello"),
+				this);
+	}
+
+	@Deactivate
+	public void close() throws IOException {
+		client.join().abort();
+	}
+
+	@Override
+	public void sayHello(String message) throws IOException {
+		client.thenAccept(ws -> ws.sendText(message, true));
+	}
+
+	@Override
+	public CompletionStage&lt;?&gt; onText(WebSocket webSocket, CharSequence data, boolean last) {
+		System.out.println("Received message in client: " + data);
+		return CompletableFuture.completedStage(null);
+	}
+
+}</programlisting>
+    </section>
+     <section>
+    	<title>Jakarta™ WebSocket Services Whiteboard Runtime Implementation</title>
+    	<para>
+    		Jakarta™ WebSocket Services Whiteboard Runtime Implementation consists of the following parts:
+    		<itemizedlist>
+		        <listitem>
+		        	<para>The <emphasis>WebSocketContainer Service</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it.</para>
+		        </listitem>
+		        <listitem>
+		        	<para>The <emphasis>JakartaWebsocketServiceRuntime</emphasis> registered in the OSGi service registry so it can be discovered by clients that want to use it to query the current state of the runtime.</para>
+		        </listitem>
+	        </itemizedlist>
+    	</para>
+    	<section>
+    		<title>The WebSocketContainer Service</title>
+    		<para>
+    		 The runtime needs to register a <code>WebSocketContainer</code> service in the OSGi service registry so it can be discovered by clients that want to use it to open client connections.
+    		 The service must be a prototype service as it potentially contains modifiable state through its setter methods. As per the API contract, a single <code>WebSocketContainer</code> may be accessed by
+    		 concurrent threads, so implementations must ensure the integrity of its mutable attributes in such circumstances.
+    		</para>
+    	</section>
+    	<section>
+    		<title>The JakartaWebsocketServiceRuntime Service</title>
+    		<para>
+    		 The runtime needs to register a <code>JakartaWebsocketServiceRuntime</code> service that can be queried for the current state of registered endpoints, for example to determine if they failed.
+    		</para>
+    	</section>
+    	<section>
+    		<title>Inspecting the Runtime DTOs</title>
+    		
+    		<para>The Jakarta WebSocket Service Runtime service provides
+    		information about registered Whiteboard services through the <xref
+    		linkend="org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO"
+    		xrefstyle="hyperlink"/>.</para>
+    		
+    		<para>The Runtime DTO provides information about services that have been
+    		successfully registered as well as information about the Jakarta WebSocket
+    		Whiteboard services that were not successfully registered.
+    		Jakarta WebSocket Whiteboard services that have the required
+    		properties set but cannot be processed, are reflected in the failure
+    		DTOs. Jakarta WebSocket Whiteboard services of interfaces
+    		described in this specification that do not have the required properties
+    		set are ignored and not reflected in the failure DTOs.</para>
+    		
+    		<para>The Runtime DTO can be obtained using the <xref
+    		linkend="org.osgi.service.jakarta.websocket.runtime.JakartaWebsocketServiceRuntime.getRuntimeDTO--"
+    		xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a
+    		snapshot of the state of the Jakarta WebSocket Runtime,
+    		including the Jakarta WebSocket Whiteboard endpoints that are active.
+    		The Runtime DTO also includes information about Whiteboard
+    		services which could not be activated.</para>
+    		
+    		<section>
+    			<title>DTO properties</title>
+    			
+    			<para>When whiteboard services are registered with the whiteboard they
+    			must be introspected and this information reflected in the DTO(s) for
+    			that service. This introspection will include looking for annotations
+    			such as <code>@ServerEndpoint</code> and <code>@OnMessage</code> both at a class and
+    			method level. The values associated with these annotations must then
+    			be appropriately recorded in the DTO.</para>
+    		</section>
+    		
+    		<section>
+    			<title>Failure DTOs</title>
+    			
+    			<para>There are a variety of reasons that whiteboard services may not
+    			be able to be used by the whiteboard. For example, if the whiteboard
+    			service cannot be retrieved from the service registry, or if the
+    			whiteboard service provides invalid annotations.</para>
+    			
+    			<para>In these cases the failed services are represented in the
+    			Runtime DTO under one of the failed DTO properties. Depending upon the
+    			failure reason one or more of the properties of the failed DTO may be
+    			unavailable. For example if the service cannot be retrieved from the
+    			service registry then it cannot be introspected for annotations. A
+    			failure DTO will always contain the service id for the failed service
+    			and the failure reason. The whiteboard implementation must then fill
+    			in other DTO properties on a best effort basis.</para>
+    		</section>
+    	</section>
+    	<section>
+        <title>Whiteboard Error Handling</title>
+		    <para>
+		    There are a number of error cases where the Jakarta WebSocket whiteboard may be unable to correctly register an endpoint. 
+		    All of these cases must result in a failure DTO being created with the appropriate error code.
+		    </para>
+    	    <section>
+		    	<title>General Error Codes</title>
+			    <itemizedlist>
+			      <!-- generic error codes -->	
+			      <listitem>
+			        <para>
+			        <emphasis>Unknown Failure</emphasis> - Outside of the predefined error conditions, there might still be errors occurring during the construction of the objects.
+			        The implementation can use error code <code>1</code> to indicate that.
+			        The implementation can use its own error codes, but to prevent clash with codes specified in later specification versions, such an error code must
+			        be equal to or larger than <code>1000</code>.
+			        In all cases, an additional error message might be used to further describe the nature of the failure and give users of the DTO a hint about what is happening.
+			        </para>
+			      </listitem>
+			      <listitem>
+			        <para><emphasis>Failure to obtain a service instance</emphasis> - In
+			        the case where a published service is unable to be obtained by the
+			        Jakarta WebSocket whiteboard, then the service is denylisted by the container. A failure DTO is made available from the
+			        <code>JakartaWebsocketServiceRuntime</code> representing the denylisted service
+			        object. The error code in this case is <code>2</code>.</para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		     <section>
+		    	<title>Endpoint Implementor Error Codes</title>
+			    <itemizedlist>
+			      <listitem>
+			        <para><emphasis>Invalid Endpoint</emphasis> - If the endpoint is invalid, for example does not contain required annotations,
+			        then the Endpoint is considered failed as no further handling is possible.
+			        The error code in this case is <code>100</code>.
+			        </para>
+			      </listitem>
+			      <listitem>
+			        <para><emphasis>Path Clash</emphasis> - If multiple endpoints have paths that collide and cannot be resolved 
+			        by path specificity rules (longest path or exact path over template), the endpoint with the lower service ranking 
+			        (or higher service ID if rankings are equal) is marked as failed. The error code in this case is <code>101</code>. 
+			        When a service ranking property changes at runtime, all endpoints sharing the same effective path are re-evaluated, 
+			        and the losing endpoints are marked as failed with this error code. See <xref linkend="service.jakartaws.path-collision"/> 
+			        for detailed collision resolution rules.
+			        </para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		     <section>
+		    	<title>Configurator Implementor Error Codes</title>
+			    <itemizedlist>
+			      <listitem>
+			        <para><emphasis>No Matching Endpoint</emphasis> - If the configurator's endpoint path does not match 
+			        any currently registered endpoint, the configurator is marked as failed. This may be a temporary condition 
+			        if the endpoint is registered later. The error code in this case is <code>200</code>.
+			        </para>
+			      </listitem>
+			      <listitem>
+			        <para><emphasis>Not Selected</emphasis> - If multiple configurators match the same endpoint path, 
+			        the configurator with the highest service ranking (or lowest service ID if rankings are equal) is selected. 
+			        All other matching configurators are marked as failed with this error code. The error code in this case is <code>201</code>.
+			        </para>
+			      </listitem>
+			    </itemizedlist>
+		    </section>
+		  </section>
+   </section>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.runtime.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.annotations.xml"/>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jakarta.websocket.whiteboard.propertytypes.xml"/>
+   <section>
+    <title>References</title>
+    <bibliolist>
+      <bibliomixed xml:id="service.jakartawebsocket-spec">
+        <title>Jakarta™ WebSocket Specification</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.programmatic">
+        <title>Programmatic Endpoints</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-api"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.annotated">
+        <title>Annotated Endpoints</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoints-using-websocket-annotations"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.session">
+        <title>WebSocket Session</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#sessions"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.endpoint-lifecycle">
+        <title>Endpoint Lifecycle</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#endpoint-lifecycle"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.client-deploy">
+        <title>Client Deployment on JRE</title>
+        <biblioid class="uri">
+          <link xlink:href="https://jakarta.ee/specifications/websocket/2.2/jakarta-websocket-spec-2.2#client-deployment-on-jdk"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartawebsocket-spec.jdk-client">
+        <title>JDK WebSocket Client</title>
+        <biblioid class="uri">
+          <link xlink:href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/WebSocket.html"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.jakartaws-whiteboard.pattern.ref">
+        <title>Whiteboard Pattern</title>
+        <biblioid class="uri">
+          <link xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455">
+        <title>RFC 6455 - The WebSocket Protocol</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-intro">
+        <title>RFC 6455 - Introduction</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.7"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-opening">
+        <title>RFC 6455 - Opening Handshake</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.3"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-design">
+        <title>RFC 6455 - Relationship to TCP and HTTP</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.8"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.rfc6570">
+        <title>RFC 6570 - URI Template</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6570"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="framework.service.properties">
+        <title>OSGi Core Specification - Service Properties</title>
+        <para>See the OSGi Core Specification, Chapter 5 (Services), section on Service Properties 
+        for details on <code>service.ranking</code> and <code>service.id</code> properties.</para>
+      </bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

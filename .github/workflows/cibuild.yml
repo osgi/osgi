@@ -59,25 +59,25 @@ jobs:
       tck-matrix: ${{ steps.build.outputs.tck-matrix }}
     steps:
     - name: Git Checkout
-      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
     - name: Git Unshallow
       if: ${{ fromJSON(env.canonical) }}
       run: |
         git fetch --prune --unshallow
         git describe --dirty --always --abbrev=9
     - name: Set up Java
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
-      uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :buildscriptDependencies :build
     - name: Upload TCK
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: OSGi-TCK
         if-no-files-found: error
@@ -86,7 +86,7 @@ jobs:
           !osgi.tck/generated/osgi.tck.*.jar
     - name: Configure settings.xml for Publish
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
@@ -95,28 +95,23 @@ jobs:
         server-password: OSSRH_PASSWORD
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg-passphrase: GPG_PASSPHRASE
-    - name: Create Staging Repository
-      if: ${{ fromJSON(env.canonical) && (github.ref == 'refs/heads/release') }}
-      run: |
-        ./.github/scripts/cistaging.sh org.osgi
-      env:
-        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
     - name: Publish
       id: publish
       if: ${{ fromJSON(env.canonical) }}
-      uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: :publish
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        OSSRH_RELEASE: ${{ env.OSSRH_STAGINGREPOSITORY_org_osgi }}
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+    - name: Complete Maven Publish
+      if: ${{ fromJSON(env.canonical) }}
+      run: curl -X POST https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.osgi?publishing_type=automatic
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: OSGi-Generated-Repo
         path: |
@@ -127,27 +122,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Git Checkout
-      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
     - name: Set up Java
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Build
       id: build
-      uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
       with:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: --continue :osgi.specs:specifications
     - name: Upload Specification HTML
       if: ${{ fromJSON(env.canonical) || ((github.repository != 'osgi/osgi') && (github.event_name != 'pull_request')) }}
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html/
     - name: Upload Specification PDF
       if: ${{ fromJSON(env.canonical) }}
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: OSGi-Specification-PDF
         path: osgi.specs/generated/*.pdf
@@ -161,7 +156,7 @@ jobs:
       contents: write
     steps:
     - name: Download Specification HTML
-      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
       with:
         name: OSGi-Specification-HTML
         path: osgi.specs/generated/html
@@ -184,12 +179,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set up Java
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
     - name: Download TCK
-      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
       with:
         name: OSGi-TCK
     - name: Run TCK
@@ -199,7 +194,7 @@ jobs:
         java -jar jar/bnd.jar --exceptions runtests --title ${{ matrix.tck }} --reportdir reports/${{ matrix.tck }} ${{ matrix.tck }}.bnd
     - name: Upload TCK Test Reports
       if: ${{ always() && ((steps.tck.outcome == 'success') || (steps.tck.outcome == 'failure')) }}
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: TCK-${{ matrix.tck }}-reports
         path: |

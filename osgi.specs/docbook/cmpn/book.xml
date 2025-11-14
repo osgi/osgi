@@ -139,6 +139,8 @@
   <xi:include href="../159/service.feature.xml"/>
   
   <xi:include href="../160/service.feature.launcher.xml"/>
+  
+  <xi:include href="../161/service.jakarta.websocket.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 

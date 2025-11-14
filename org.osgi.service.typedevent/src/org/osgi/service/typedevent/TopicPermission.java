@@ -57,7 +57,7 @@ import java.util.Map;
  * {@code subscribe}.
  * 
  * @ThreadSafe
- * @author $Id$
+ * @author $Id: e8b84b90a74c47698f20ed9eb3d2cbf278c42046 $
  */
 public final class TopicPermission extends Permission {
 	static final long					serialVersionUID	= -5855563886961618300L;
@@ -73,15 +73,30 @@ public final class TopicPermission extends Permission {
 	private final static int			ACTION_SUBSCRIBE	= 0x00000002;
 	private final static int			ACTION_ALL			= ACTION_PUBLISH | ACTION_SUBSCRIBE;
 	private final static int			ACTION_NONE			= 0;
+
+	private final static String[]		EMPTY_SEGMENTS		= new String[0];
 	/**
 	 * The actions mask.
 	 */
 	private transient int				action_mask;
 
 	/**
-	 * prefix if the name is wildcarded.
+	 * prefix if the name is wildcarded. will only ever contain literals e.g.
+	 * "*" or + => "" "foo/+/foobar" or foo/* => "foo/"
 	 */
-	private transient volatile String	prefix;
+	private transient String			prefix;
+
+	/**
+	 * Additional topic segments to check after intitial Each segment starts
+	 * with a '/' and is preceded by a single level wildcard, e.g.
+	 * "foo/+/foobar/fizz/+/fizzbuzz/done" => ["/foobar/fizz/","/fizzbuzz/done"]
+	 **/
+	private transient String[]			additionalSegments;
+
+	/**
+	 * True if there is a trailing multi-level wildcard (*)
+	 */
+	private transient boolean			isMultiLevelWildcard;
 
 	/**
 	 * The actions in canonical form.
@@ -99,6 +114,9 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <pre>
 	 *    org/osgi/service/fooFooEvent/ACTION
+	 *    org/osgi/service/fooFooEvent/+
+	 *    org/osgi/+/fooFooEvent/*
+	 *    org/osgi/service/+/ACTION
 	 *    com/isv/*
 	 *    *
 	 * </pre>
@@ -129,30 +147,147 @@ public final class TopicPermission extends Permission {
 
 	/**
 	 * Called by constructors and when deserialized.
-	 * 
-	 * @param name topic name
+	 * Initializes the transient fields by parsing the topic name pattern.
+	 *
 	 * @param mask action mask
 	 */
-	private synchronized void setTransients(final int mask) {
+	private void setTransients(final int mask) {
 		final String name = getName();
+		validateName(name);
+		validateAndSetActionMask(mask);
+		parseTopicPattern(name);
+	}
+
+	/**
+	 * Validates that the topic name is not null or empty.
+	 *
+	 * @param name The topic name to validate
+	 * @throws IllegalArgumentException if name is null or empty
+	 */
+	private void validateName(String name) {
 		if ((name == null) || name.length() == 0) {
 			throw new IllegalArgumentException("invalid name");
 		}
+	}
 
+	/**
+	 * Validates the action mask and sets the action_mask field.
+	 *
+	 * @param mask The action mask to validate and set
+	 * @throws IllegalArgumentException if mask is invalid
+	 */
+	private void validateAndSetActionMask(int mask) {
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 		action_mask = mask;
+	}
 
-		if (name.equals("*")) {
-			prefix = "";
+	/**
+	 * Parses the topic name pattern and sets prefix, additionalSegments, and isMultiLevelWildcard.
+	 * Handles three cases:
+	 * <ul>
+	 * <li>"*" - matches all topics</li>
+	 * <li>Patterns with multi-level wildcard "/*" suffix</li>
+	 * <li>Patterns with single-level wildcards "+"</li>
+	 * </ul>
+	 *
+	 * @param name The topic name pattern
+	 */
+	private void parseTopicPattern(String name) {
+		if (isMatchAllPattern(name)) {
+			setMatchAllPattern();
+			return;
+		}
+
+		String topicPrefix = removeWildcardSuffix(name);
+		parseSingleLevelWildcards(topicPrefix);
+	}
+
+	/**
+	 * Checks if the pattern is the special "*" match-all pattern.
+	 *
+	 * @param name The topic name pattern
+	 * @return true if the pattern matches all topics
+	 */
+	private boolean isMatchAllPattern(String name) {
+		return name.equals("*");
+	}
+
+	/**
+	 * Configures the fields for a match-all "*" pattern.
+	 */
+	private void setMatchAllPattern() {
+		prefix = "";
+		additionalSegments = EMPTY_SEGMENTS;
+		isMultiLevelWildcard = true;
+	}
+
+	/**
+	 * Removes the multi-level wildcard suffix if present. Sets the
+	 * isMultiLevelWildcard flag appropriately.
+	 *
+	 * @param name The topic name pattern
+	 * @return The name without the "*" suffix
+	 */
+	private String removeWildcardSuffix(String name) {
+		if (name.endsWith("/*")) {
+			isMultiLevelWildcard = true;
+			// Remove the "*" but keep the "/" as part of the prefix
+			return name.substring(0, name.length() - 1);
 		} else {
-			if (name.endsWith("/*")) {
-				prefix = name.substring(0, name.length() - 1);
+			isMultiLevelWildcard = false;
+			return name;
+		}
+	}
+
+	/**
+	 * Parses single-level wildcards ("+") from the topic prefix.
+	 * Sets the prefix and additionalSegments fields.
+	 *
+	 * @param topicPrefix The topic prefix (without multi-level wildcard)
+	 */
+	private void parseSingleLevelWildcards(String topicPrefix) {
+		int firstWildcardIndex = topicPrefix.indexOf('+');
+
+		if (firstWildcardIndex < 0) {
+			// No single-level wildcards found
+			prefix = topicPrefix;
+			additionalSegments = EMPTY_SEGMENTS;
+		} else {
+			// Has single-level wildcards - split into prefix and segments
+			prefix = topicPrefix.substring(0, firstWildcardIndex);
+			additionalSegments = extractSegmentsBetweenWildcards(topicPrefix, firstWildcardIndex);
+		}
+	}
+
+	/**
+	 * Extracts the literal segments that appear between (and after) single-level wildcards.
+	 * For example, "foo/+/bar/+/baz" produces ["/bar/", "/baz"]
+	 *
+	 * @param topicPrefix The topic prefix containing wildcards
+	 * @param firstWildcardIndex Index of the first '+' character
+	 * @return Array of literal segments
+	 */
+	private String[] extractSegmentsBetweenWildcards(String topicPrefix, int firstWildcardIndex) {
+		List<String> segments = new ArrayList<>();
+		int currentWildcardIndex = firstWildcardIndex;
+
+		while (true) {
+			int nextWildcardIndex = topicPrefix.indexOf('+', currentWildcardIndex + 1);
+
+			if (nextWildcardIndex < 0) {
+				// No more wildcards - add the remaining segment
+				segments.add(topicPrefix.substring(currentWildcardIndex + 1));
+				break;
 			} else {
-				prefix = null;
+				// Found another wildcard - add the segment between them
+				segments.add(topicPrefix.substring(currentWildcardIndex + 1, nextWildcardIndex));
+				currentWildcardIndex = nextWildcardIndex;
 			}
 		}
+
+		return segments.toArray(new String[segments.size()]);
 	}
 
 	/**
@@ -247,39 +382,162 @@ public final class TopicPermission extends Permission {
 
 	/**
 	 * Determines if the specified permission is implied by this object.
-	 * 
+	 *
 	 * <p>
 	 * This method checks that the topic name of the target is implied by the
 	 * topic name of this object. The list of {@code TopicPermission} actions
 	 * must either match or allow for the list of the target object to imply the
 	 * target {@code TopicPermission} action.
-	 * 
+	 *
 	 * <pre>
 	 *    x/y/*,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot; is true
 	 *    *,&quot;subscribe&quot; -&gt; x/y,&quot;subscribe&quot;   is true
 	 *    *,&quot;publish&quot; -&gt; x/y,&quot;subscribe&quot;     is false
 	 *    x/y,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot;   is false
 	 * </pre>
-	 * 
+	 *
 	 * @param p The target permission to interrogate.
 	 * @return {@code true} if the specified {@code TopicPermission} action is
 	 *         implied by this object; {@code false} otherwise.
 	 */
 	@Override
 	public boolean implies(Permission p) {
-		if (p instanceof TopicPermission) {
-			TopicPermission requested = (TopicPermission) p;
-			int requestedMask = requested.getActionsMask();
-			if ((getActionsMask() & requestedMask) == requestedMask) {
-				String requestedName = requested.getName();
-				String pre = prefix;
-				if (pre != null) {
-					return requestedName.startsWith(pre);
-				}
-
-				return requestedName.equals(getName());
-			}
+		if (!(p instanceof TopicPermission)) {
+			return false;
 		}
+
+		TopicPermission requested = (TopicPermission) p;
+
+		// First check: do we have the required actions?
+		if (!hasRequiredActions(requested)) {
+			return false;
+		}
+
+		// Second check: does the topic name match?
+		return impliesTopicName(requested.getName());
+	}
+
+	/**
+	 * Checks if this permission has all the actions required by the requested permission.
+	 *
+	 * @param requested The permission to check against
+	 * @return {@code true} if this permission has all required actions
+	 */
+	private boolean hasRequiredActions(TopicPermission requested) {
+		int requestedMask = requested.getActionsMask();
+		return (getActionsMask() & requestedMask) == requestedMask;
+	}
+
+	/**
+	 * Checks if this permission's topic pattern matches the requested topic name.
+	 * Handles three cases:
+	 * <ul>
+	 * <li>No wildcards: exact match required</li>
+	 * <li>Multi-level wildcard only: prefix match required</li>
+	 * <li>Single-level wildcards: complex pattern matching</li>
+	 * </ul>
+	 *
+	 * @param requestedName The topic name to check
+	 * @return {@code true} if the topic name matches this permission's pattern
+	 */
+	private boolean impliesTopicName(String requestedName) {
+		// Check if the requested name starts with our prefix
+		if (!requestedName.startsWith(prefix)) {
+			return false;
+		}
+
+		// Case 1: Is multilevel or exact match
+		if (additionalSegments.length == 0) {
+			return isMultiLevelWildcard || requestedName.equals(getName());
+		}
+
+		// Case 2: Has single-level wildcards - need complex matching
+		return impliesWithSingleLevelWildcards(requestedName);
+	}
+
+	/**
+	 * Handles matching when there are single-level wildcards (+ symbols).
+	 * Each + matches exactly one topic level (between slashes).
+	 *
+	 * @param requestedName The topic name to check
+	 * @return {@code true} if the name matches the pattern with single-level wildcards
+	 */
+	private boolean impliesWithSingleLevelWildcards(String requestedName) {
+		int currentIndex = prefix.length();
+
+		// Match each segment after a single-level wildcard
+		for (String segment : additionalSegments) {
+			// Skip one topic level (the part matched by the + wildcard)
+			currentIndex = skipOneTopicLevel(requestedName, currentIndex);
+			if (currentIndex < 0) {
+				// No topic level found where we expected one
+				return false;
+			}
+
+			// Check if the literal segment matches at this position
+			if (!requestedName.regionMatches(currentIndex, segment, 0,
+					segment.length())) {
+				return false;
+			}
+
+			// Move past the matched segment
+			currentIndex += segment.length();
+		}
+
+		// Check if we've consumed the entire requested name correctly
+		return isCompleteMatch(requestedName, currentIndex);
+	}
+
+	/**
+	 * Skips one topic level in the requested name, starting from the given index.
+	 * A topic level is the text between two slashes, or from current position to next slash.
+	 *
+	 * @param requestedName The topic name
+	 * @param startIndex Where to start looking
+	 * @return The index after the next slash, or the end of string if no slash found,
+	 *         or -1 if we're already at the end
+	 */
+	private int skipOneTopicLevel(String requestedName, int startIndex) {
+		if (startIndex >= requestedName.length()) {
+			return -1;
+		}
+
+		int nextSlashIndex = requestedName.indexOf('/', startIndex);
+		if (nextSlashIndex < 0) {
+			// No more slashes - return end of string
+			return requestedName.length();
+		}
+
+		return nextSlashIndex;
+	}
+
+	/**
+	 * Checks if we've successfully matched the entire requested topic name.
+	 * Success means either:
+	 * <ul>
+	 * <li>We consumed the entire name and it doesn't end with "*"</li>
+	 * <li>We have a trailing multi-level wildcard and there's at least one more level</li>
+	 * </ul>
+	 *
+	 * @param requestedName The topic name being checked
+	 * @param currentIndex Current position in the name
+	 * @return {@code true} if this is a complete and valid match
+	 */
+	private boolean isCompleteMatch(String requestedName, int currentIndex) {
+		boolean consumedEntireName = (currentIndex == requestedName.length());
+		boolean nameEndsWithWildcard = requestedName.endsWith("*");
+
+		if (consumedEntireName && !nameEndsWithWildcard) {
+			// We matched everything and the requested name is concrete
+			return true;
+		}
+
+		if (isMultiLevelWildcard && currentIndex > 0
+				&& requestedName.charAt(currentIndex - 1) == '/') {
+			// Our pattern ends with /* and there are remaining topic levels to match
+			return true;
+		}
+
 		return false;
 	}
 
