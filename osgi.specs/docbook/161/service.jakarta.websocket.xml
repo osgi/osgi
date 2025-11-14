@@ -278,6 +278,60 @@ public class MyHelloClientJdk implements HelloService, Listener {
     		</para>
     	</section>
     	<section>
+    		<title>Inspecting the Runtime DTOs</title>
+    		
+    		<para>The Jakarta WebSocket Service Runtime service provides
+    		information about registered Whiteboard services through the <xref
+    		linkend="org.osgi.service.jakarta.websocket.runtime.dto.RuntimeDTO"
+    		xrefstyle="hyperlink"/>.</para>
+    		
+    		<para>The Runtime DTO provides information about services that have been
+    		successfully registered as well as information about the Jakarta WebSocket
+    		Whiteboard services that were not successfully registered.
+    		Jakarta WebSocket Whiteboard services that have the required
+    		properties set but cannot be processed, are reflected in the failure
+    		DTOs. Jakarta WebSocket Whiteboard services of interfaces
+    		described in this specification that do not have the required properties
+    		set are ignored and not reflected in the failure DTOs.</para>
+    		
+    		<para>The Runtime DTO can be obtained using the <xref
+    		linkend="org.osgi.service.jakarta.websocket.runtime.JakartaWebsocketServiceRuntime.getRuntimeDTO--"
+    		xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a
+    		snapshot of the state of the Jakarta WebSocket Runtime,
+    		including the Jakarta WebSocket Whiteboard endpoints that are active.
+    		The Runtime DTO also includes information about Whiteboard
+    		services which could not be activated.</para>
+    		
+    		<section>
+    			<title>DTO properties</title>
+    			
+    			<para>When whiteboard services are registered with the whiteboard they
+    			must be introspected and this information reflected in the DTO(s) for
+    			that service. This introspection will include looking for annotations
+    			such as <code>@ServerEndpoint</code> and <code>@OnMessage</code> both at a class and
+    			method level. The values associated with these annotations must then
+    			be appropriately recorded in the DTO.</para>
+    		</section>
+    		
+    		<section>
+    			<title>Failure DTOs</title>
+    			
+    			<para>There are a variety of reasons that whiteboard services may not
+    			be able to be used by the whiteboard. For example, if the whiteboard
+    			service cannot be retrieved from the service registry, or if the
+    			whiteboard service provides invalid annotations.</para>
+    			
+    			<para>In these cases the failed services are represented in the
+    			Runtime DTO under one of the failed DTO properties. Depending upon the
+    			failure reason one or more of the properties of the failed DTO may be
+    			unavailable. For example if the service cannot be retrieved from the
+    			service registry then it cannot be introspected for annotations. A
+    			failure DTO will always contain the service id for the failed service
+    			and the failure reason. The whiteboard implementation must then fill
+    			in other DTO properties on a best effort basis.</para>
+    		</section>
+    	</section>
+    	<section>
         <title>Whiteboard Error Handling</title>
 		    <para>
 		    There are a number of error cases where the Jakarta WebSocket whiteboard may be unable to correctly register an endpoint. 
