@@ -177,6 +177,107 @@ public class MyHelloServer {
 }</programlisting>
    </section>
    <section>
+    <title>Endpoint Path Configuration</title>
+    
+    <para>While the <code>@ServerEndpoint</code> annotation's <code>value()</code> attribute provides a way to 
+    specify the URI path or URI template for an endpoint, this approach is static and defined at compile time. 
+    To support the dynamic nature of OSGi, the Jakarta™ WebSocket Services Whiteboard specification allows 
+    the endpoint path to be configured via service properties.</para>
+    
+    <para>The <code>osgi.jakarta.websocket.endpoint.path</code> service property can be used to override 
+    the path specified in the <code>@ServerEndpoint</code> annotation. When this property is present and 
+    not empty, its value takes precedence over the annotation's <code>value()</code> attribute.</para>
+    
+    <para>This dynamic path configuration enables several use cases:
+    <itemizedlist>
+      <listitem>
+        <para>Configuration-driven deployment where endpoint paths can be changed without recompiling</para>
+      </listitem>
+      <listitem>
+        <para>Multi-tenancy scenarios where the same endpoint implementation serves different paths</para>
+      </listitem>
+      <listitem>
+        <para>Dynamic path generation based on runtime conditions</para>
+      </listitem>
+    </itemizedlist>
+    </para>
+    
+    <section>
+      <title>Path Property Behavior</title>
+      
+      <para>When the <code>osgi.jakarta.websocket.endpoint.path</code> service property is used:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>If the property is present and not empty, it completely replaces the path specified 
+          in the <code>@ServerEndpoint</code> annotation</para>
+        </listitem>
+        <listitem>
+          <para>If the property is absent or empty, the path from the <code>@ServerEndpoint</code> 
+          annotation is used</para>
+        </listitem>
+        <listitem>
+          <para>The property value must follow the same syntax rules as the <code>@ServerEndpoint</code> 
+          annotation's <code>value()</code> attribute, including support for URI templates</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Dynamic Path Updates</title>
+      
+      <para>An important aspect of dynamic path configuration is the ability to change the path at runtime 
+      by updating service properties. When the <code>osgi.jakarta.websocket.endpoint.path</code> service 
+      property is modified:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>All currently running WebSocket sessions for this endpoint MUST be immediately terminated</para>
+        </listitem>
+        <listitem>
+          <para>The endpoint MUST be unregistered from its current path</para>
+        </listitem>
+        <listitem>
+          <para>The endpoint MUST be registered at the new path specified by the updated property</para>
+        </listitem>
+        <listitem>
+          <para>New connections can then be established to the endpoint at its new path</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>This behavior ensures that there is no ambiguity about which path an endpoint is available on, 
+      and prevents stale sessions from continuing after a path change.</para>
+    </section>
+    
+    <section>
+      <title>Examples</title>
+    
+      <para>The following example shows an endpoint using the <code>@WhiteboardEndpoint</code> annotation 
+      to specify a dynamic path that overrides the <code>@ServerEndpoint</code> annotation:</para>
+      
+      <programlisting>@WhiteboardEndpoint(path = "/dynamic/hello")
+@ServerEndpoint("/static/hello")
+@Component(service = MyDynamicEndpoint.class)
+public class MyDynamicEndpoint {
+    @OnMessage
+    public String handleMessage(String message) {
+        return "Echo: " + message;
+    }
+}</programlisting>
+      
+      <para>In this example, the endpoint will be available at <code>/dynamic/hello</code> rather than 
+      <code>/static/hello</code> because the <code>path</code> attribute of <code>@WhiteboardEndpoint</code> 
+      takes precedence.</para>
+      
+      <para>The path can also be configured programmatically without using the annotation:</para>
+      
+      <programlisting>Dictionary&lt;String, Object&gt; properties = new Hashtable&lt;&gt;();
+properties.put("osgi.jakarta.websocket.endpoint.implementor", true);
+properties.put("osgi.jakarta.websocket.endpoint.path", "/configured/hello");
+bundleContext.registerService(MyEndpoint.class, new MyEndpoint(), properties);</programlisting>
+    </section>
+   </section>
+   <section>
     <title>Service Lifecycle and Session Management</title>
     
     <para>The Jakarta™ WebSocket specification defines in <xref linkend="service.jakartawebsocket-spec.endpoint-lifecycle"/> 

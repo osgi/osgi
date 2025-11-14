@@ -77,4 +77,23 @@ public final class JakartaWebsocketWhiteboardConstants {
 	public static final String	WEBSOCKET_ENDPOINT_IMPLEMENTOR						= WEBSOCKET_ENDPOINT_PREFIX
 			+ "implementor";
 
+	/**
+	 * Service property specifying the URI path or URI template at which the
+	 * endpoint should be published.
+	 * <p>
+	 * When this property is present and not empty, it overrides the value
+	 * specified in the {@code @ServerEndpoint} annotation's {@code value()}
+	 * attribute.
+	 * <p>
+	 * Changing this property will result in immediate termination of all
+	 * currently running sessions for this endpoint, and the endpoint will be
+	 * made available under the new path.
+	 * <p>
+	 * The value of this service property must be of type {@code String}.
+	 * <p>
+	 * The value of this constant is {@value}.
+	 */
+	public static final String	WEBSOCKET_ENDPOINT_PATH								= WEBSOCKET_ENDPOINT_PREFIX
+			+ "path";
+
 }

@@ -66,5 +66,22 @@ public @interface WhiteboardEndpoint {
 	 *         whiteboard, {@code false} otherwise.
 	 */
 	boolean implementor() default true;
+	
+	/**
+	 * Service property specifying the URI path or URI template at which the
+	 * endpoint should be published.
+	 * <p>
+	 * When this property is present and not empty, it overrides the value
+	 * specified in the {@code @ServerEndpoint} annotation's {@code value()}
+	 * attribute.
+	 * <p>
+	 * Changing this property will result in immediate termination of all
+	 * currently running sessions for this endpoint, and the endpoint will be
+	 * made available under the new path.
+	 * 
+	 * @return The URI path or URI template for the endpoint, or an empty string
+	 *         to use the value from the {@code @ServerEndpoint} annotation.
+	 */
+	String path() default "";
     
 }
