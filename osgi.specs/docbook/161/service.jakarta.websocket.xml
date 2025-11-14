@@ -277,6 +277,142 @@ properties.put("osgi.jakarta.websocket.endpoint.path", "/configured/hello");
 bundleContext.registerService(MyEndpoint.class, new MyEndpoint(), properties);</programlisting>
     </section>
    </section>
+   <section xml:id="service.jakartaws.path-collision">
+    <title>Path Collision Handling</title>
+    
+    <para>When multiple Server Endpoint Implementors are registered with the Jakarta™ WebSocket 
+    Whiteboard, they may have paths that overlap or collide. The runtime MUST resolve such collisions 
+    using a well-defined set of rules to ensure predictable behavior.</para>
+    
+    <section>
+      <title>Path Specificity Rules</title>
+      
+      <para>The runtime MUST apply the following rules in order to determine which endpoint handles 
+      requests to a given path:</para>
+      
+      <orderedlist>
+        <listitem>
+          <para><emphasis>Longest Matching Path</emphasis> - When an endpoint path request is made, 
+          the endpoint with the most specific (longest) matching path takes precedence. For example, 
+          if Service 1 is registered at path <code>/a/b/c</code> and Service 2 at path 
+          <code>/a/b</code>, a client request to <code>/a/b/c</code> will be handled by Service 1.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Exact Path Over Template Path</emphasis> - When comparing paths of the same 
+          length, an exact path takes precedence over a URI template path. URI templates are defined 
+          in <xref linkend="service.rfc6570"/>. For example, if Service 1 is registered at 
+          <code>/a/b</code> and Service 2 at <code>/a/{var}</code>, a client request to 
+          <code>/a/b</code> will be handled by Service 1. However, a request to <code>/a/b/c</code> 
+          would still be handled by a more specific path if available.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Service Ranking and Service ID</emphasis> - If there is a full collision 
+          that cannot be resolved by the above rules (for example, Service 1 at <code>/chat</code> 
+          and Service 2 at <code>/chat</code>, or Service 1 at <code>/chat/{x}</code> and Service 2 
+          at <code>/chat/{y}</code>), then the service with the highest service ranking takes 
+          precedence. Service ranking is defined in the OSGi Core specification 
+          (<xref linkend="framework.service.properties"/>). If the service rankings are equal, 
+          the service with the lowest service ID (which was registered first) takes precedence. 
+          Service ID is defined in the OSGi Core specification 
+          (<xref linkend="framework.service.properties"/>). All losing services in such collisions 
+          MUST be marked as failed with the <code>FAILURE_REASON_PATH_CLASH</code> error code 
+          and reflected in the <xref linkend="org.osgi.service.jakarta.websocket.runtime.dto.FailedEndpointDTO" 
+          xrefstyle="hyperlink"/>.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+    
+    <section>
+      <title>Dynamic Service Ranking Changes</title>
+      
+      <para>The service ranking property of an endpoint service may be changed at runtime. When the 
+      <code>service.ranking</code> property of any endpoint service changes, the runtime MUST:</para>
+      
+      <orderedlist>
+        <listitem>
+          <para>Immediately terminate all WebSocket sessions associated with all endpoints that share 
+          the same effective path (after applying path specificity rules)</para>
+        </listitem>
+        
+        <listitem>
+          <para>Re-evaluate the path collision resolution rules using the updated service ranking 
+          values</para>
+        </listitem>
+        
+        <listitem>
+          <para>Make the winning endpoint (the one with highest ranking, or lowest service ID if 
+          rankings are equal) available for new connections</para>
+        </listitem>
+        
+        <listitem>
+          <para>Mark all losing endpoints as failed with the <code>FAILURE_REASON_PATH_CLASH</code> 
+          error code</para>
+        </listitem>
+      </orderedlist>
+      
+      <para>This ensures that there is no ambiguity about which endpoint is handling a particular 
+      path, and prevents stale sessions from continuing with potentially incorrect endpoint 
+      assignments.</para>
+    </section>
+    
+    <section>
+      <title>Path Collision Examples</title>
+      
+      <para>The following examples illustrate the path collision resolution rules:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Example 1: Longest Path Wins</emphasis></para>
+          <programlisting>// Service 1
+@ServerEndpoint("/api/chat/room")
+@Component(service = ChatRoomEndpoint.class)
+public class ChatRoomEndpoint { ... }
+
+// Service 2
+@ServerEndpoint("/api/chat")
+@Component(service = ChatEndpoint.class)
+public class ChatEndpoint { ... }
+
+// Client request to "/api/chat/room" → handled by Service 1
+// Client request to "/api/chat" → handled by Service 2</programlisting>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Example 2: Exact Path Over Template</emphasis></para>
+          <programlisting>// Service 1
+@ServerEndpoint("/api/users")
+@Component(service = UsersEndpoint.class)
+public class UsersEndpoint { ... }
+
+// Service 2
+@ServerEndpoint("/api/{resource}")
+@Component(service = GenericEndpoint.class)
+public class GenericEndpoint { ... }
+
+// Client request to "/api/users" → handled by Service 1 (exact match)
+// Client request to "/api/products" → handled by Service 2 (template match)</programlisting>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Example 3: Service Ranking Resolves Collision</emphasis></para>
+          <programlisting>// Service 1 with higher ranking
+@ServerEndpoint("/chat")
+@Component(service = PrimaryChat.class, property = "service.ranking:Integer=100")
+public class PrimaryChat { ... }
+
+// Service 2 with lower ranking
+@ServerEndpoint("/chat")
+@Component(service = BackupChat.class, property = "service.ranking:Integer=50")
+public class BackupChat { ... }
+
+// Client request to "/chat" → handled by Service 1 (higher ranking)
+// Service 2 is marked as failed with FAILURE_REASON_PATH_CLASH</programlisting>
+        </listitem>
+      </itemizedlist>
+    </section>
+   </section>
    <section>
     <title>Service Lifecycle and Session Management</title>
     
@@ -567,6 +703,15 @@ public class MyHelloClientJdk implements HelloService, Listener {
 			        The error code in this case is <code>100</code>.
 			        </para>
 			      </listitem>
+			      <listitem>
+			        <para><emphasis>Path Clash</emphasis> - If multiple endpoints have paths that collide and cannot be resolved 
+			        by path specificity rules (longest path or exact path over template), the endpoint with the lower service ranking 
+			        (or higher service ID if rankings are equal) is marked as failed. The error code in this case is <code>101</code>. 
+			        When a service ranking property changes at runtime, all endpoints sharing the same effective path are re-evaluated, 
+			        and the losing endpoints are marked as failed with this error code. See <xref linkend="service.jakartaws.path-collision"/> 
+			        for detailed collision resolution rules.
+			        </para>
+			      </listitem>
 			    </itemizedlist>
 		    </section>
 		  </section>
@@ -649,6 +794,17 @@ public class MyHelloClientJdk implements HelloService, Listener {
         <biblioid class="uri">
           <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.8"/>
         </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.rfc6570">
+        <title>RFC 6570 - URI Template</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6570"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="framework.service.properties">
+        <title>OSGi Core Specification - Service Properties</title>
+        <para>See the OSGi Core Specification, Chapter 5 (Services), section on Service Properties 
+        for details on <code>service.ranking</code> and <code>service.id</code> properties.</para>
       </bibliomixed>
     </bibliolist>
   </section>

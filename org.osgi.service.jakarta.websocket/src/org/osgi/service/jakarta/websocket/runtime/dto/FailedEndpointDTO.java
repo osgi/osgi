@@ -40,6 +40,16 @@ public class FailedEndpointDTO extends FailedDTO {
 	public static final int		FAILURE_REASON_INVALID	= 100;
 
 	/**
+	 * The endpoint path clashes with another endpoint and could not be resolved
+	 * by path specificity. The endpoint with higher service ranking (or higher
+	 * service ID if rankings are equal) will be active, and all others will be
+	 * marked as failed with this reason.
+	 * <p>
+	 * The value of this constant is {@value}.
+	 **/
+	public static final int		FAILURE_REASON_PATH_CLASH	= 101;
+
+	/**
 	 * The DTO for the corresponding service that implements this endpoint.
 	 * <p>
 	 * This value is never {@code null}.
