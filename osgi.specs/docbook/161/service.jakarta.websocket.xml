@@ -39,6 +39,17 @@
     </para>
     
     <para>
+    It is important to note that <xref linkend="service.websocket-rfc6455-intro"/> defines the WebSocket Protocol as 
+    an <emphasis>independent TCP-based protocol</emphasis>. While WebSocket connections often begin with an HTTP-like 
+    handshake for compatibility with existing web infrastructure (as specified in 
+    <xref linkend="service.websocket-rfc6455-opening"/>), the protocol itself is distinct from HTTP. The initial 
+    handshake is designed to appear to an HTTP server as a regular GET request with an Upgrade offer 
+    (see <xref linkend="service.websocket-rfc6455-design"/>), but once the WebSocket connection is established, 
+    the communication follows the WebSocket protocol. A WebSocket server typically only supports the WebSocket 
+    handshake and subsequent WebSocket protocol messages, not general HTTP requests.
+    </para>
+    
+    <para>
     WebSockets allow two-way communication between two endpoints. This specification aims to bring that technology to 
     OSGi in a vendor-neutral way by leveraging the Jakarta WebSocket API. Managing endpoints in a dynamic environment 
     can be challenging. This specification makes this task much easier by using the well-known 
@@ -46,9 +57,9 @@
     </para>
     
     <para>
-    Even though the HTTP transport is often used in conjunction with WebSockets, that is not mandatory for an implementation. 
-    Therefore, this specification does not focus exclusively on the HTTP transport, and implementations are free to support 
-    this and any other kinds of transports.
+    Even though the HTTP transport is often used in conjunction with WebSockets for the initial handshake, 
+    that is not mandatory for an implementation. Therefore, this specification does not focus exclusively on 
+    the HTTP transport, and implementations are free to support this and any other kinds of transports.
     </para>
 
     <para>Whiteboard Specification for Jakarta™ WebSocket Services implementations must support
@@ -354,6 +365,30 @@ public class MyHelloClientJdk implements HelloService, Listener {
         <title>Whiteboard Pattern</title>
         <biblioid class="uri">
           <link xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455">
+        <title>RFC 6455 - The WebSocket Protocol</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-intro">
+        <title>RFC 6455 - Introduction</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.7"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-opening">
+        <title>RFC 6455 - Opening Handshake</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.3"/>
+        </biblioid>
+      </bibliomixed>
+      <bibliomixed xml:id="service.websocket-rfc6455-design">
+        <title>RFC 6455 - Relationship to TCP and HTTP</title>
+        <biblioid class="uri">
+          <link xlink:href="https://datatracker.ietf.org/doc/html/rfc6455#section-1.8"/>
         </biblioid>
       </bibliomixed>
     </bibliolist>
