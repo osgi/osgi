@@ -52,12 +52,13 @@
     significant challenges in modular environments like OSGi. The ServiceLoader's
     visibility and discovery mechanism is fundamentally based on traditional
     Java class loaders, which assume a flat classpath model where all resources
-    are visible within a single classloader hierarchy. In contrast, OSGi's
-    Module Layer enforces strict visibility boundaries between bundles, ensuring
-    proper encapsulation and versioning of packages. This architectural difference
-    means that the ServiceLoader, when called from within an OSGi bundle, cannot
-    discover service implementations located in other bundles, even when those
-    bundles properly export the relevant packages and types.</para>
+    are visible within a single classloader hierarchy. In contrast, the OSGi
+    <xref linkend="framework.module" xrefstyle="select: title"/> enforces strict
+    visibility boundaries between bundles, ensuring proper encapsulation and
+    versioning of packages. This architectural difference means that the
+    ServiceLoader, when called from within an OSGi bundle, cannot discover
+    service implementations located in other bundles, even when those bundles
+    properly export the relevant packages and types.</para>
 
     <para>The impedance mismatch between the ServiceLoader's classloader-based
     discovery and OSGi's module-based visibility has created significant
@@ -67,11 +68,11 @@
     XML Binding), JAX-RS (Java API for RESTful Web Services), and WebSocket
     implementations. When these libraries are deployed in OSGi environments,
     they often fail to discover their required service implementations, leading
-    to runtime failures. While solutions such as the Service Loader Mediator
-    specification and implementations like Apache Aries SPI Fly have addressed
-    this problem through bytecode weaving and OSGi-specific metadata, these
-    approaches require additional bundles, configuration, and sometimes
-    modification of existing JARs.</para>
+    to runtime failures. While solutions such as the <xref linkend="service.loader"
+    xrefstyle="select: title"/> and implementations like Apache Aries SPI Fly
+    have addressed this problem through bytecode weaving and OSGi-specific
+    metadata, these approaches require additional bundles, configuration, and
+    sometimes modification of existing JARs.</para>
 
     <para>This specification defines native support for Java SPI in the OSGi
     Core Framework, eliminating the need for bytecode weaving, special mediators,
@@ -159,11 +160,12 @@
     <section>
       <title>Relationship to Service Loader Mediator</title>
 
-      <para>The Service Loader Mediator Specification (Compendium chapter 133)
-      provides a higher-level integration between Java SPI and OSGi services,
-      automatically registering SPI implementations as OSGi services and managing
-      their lifecycle. That specification requires bundles to declare
-      capabilities and requirements using OSGi-specific metadata.</para>
+      <para>The <xref linkend="service.loader" xrefstyle="select: title"/>
+      (Compendium chapter 133) provides a higher-level integration between
+      Java SPI and OSGi services, automatically registering SPI implementations
+      as OSGi services and managing their lifecycle. That specification requires
+      bundles to declare capabilities and requirements using OSGi-specific
+      metadata.</para>
 
       <para>In contrast, this Java SPI Support specification operates at the
       framework level, providing transparent support for standard ServiceLoader
@@ -177,9 +179,9 @@
         </listitem>
 
         <listitem>
-          <para>The Service Loader Mediator enables OSGi bundles to consume
-          SPI implementations as OSGi services, providing dynamic service
-          tracking and lifecycle management.</para>
+          <para>The <xref linkend="service.loader" xrefstyle="select: title"/>
+          enables OSGi bundles to consume SPI implementations as OSGi services,
+          providing dynamic service tracking and lifecycle management.</para>
         </listitem>
       </itemizedlist>
 
@@ -206,11 +208,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>Bundle.getResource(String name)</code></para>
+          <para><xref linkend="org.osgi.framework.Bundle.getResource-String-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><code>Bundle.getResources(String name)</code></para>
+          <para><xref linkend="org.osgi.framework.Bundle.getResources-String-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
@@ -238,8 +242,10 @@
 
       <para>If the service interface class is successfully loaded, the framework
       determines which bundles are wired to provide that class. This is determined
-      by examining the package wirings of the requesting bundle to identify all
-      bundles that export the package containing the service interface class.</para>
+      by examining the package wirings of the requesting bundle using the
+      <xref linkend="framework.wiring" xrefstyle="select: title"/> API to
+      identify all bundles that export the package containing the service
+      interface class.</para>
     </section>
 
     <section>
@@ -433,15 +439,23 @@ loader.forEach(plugins::add);
       </listitem>
 
       <listitem>
-        <para>OSGi Service Loader Mediator Specification (Compendium Chapter 133)</para>
+        <para><xref linkend="service.loader" xrefstyle="select: title"/>
+        (Compendium Chapter 133)</para>
       </listitem>
 
       <listitem>
-        <para>OSGi Module Layer (Core Chapter 3)</para>
+        <para><xref linkend="framework.module" xrefstyle="select: title"/>
+        (Core <xref linkend="framework.module" xrefstyle="select: labelnumber"/>)</para>
       </listitem>
 
       <listitem>
-        <para>OSGi Bundle Wiring API (Core Chapter 7)</para>
+        <para><xref linkend="framework.wiring" xrefstyle="select: title"/>
+        (Core <xref linkend="framework.wiring" xrefstyle="select: labelnumber"/>)</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="framework.service" xrefstyle="select: title"/>
+        (Core <xref linkend="framework.service" xrefstyle="select: labelnumber"/>)</para>
       </listitem>
     </itemizedlist>
   </section>
