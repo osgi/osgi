@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+
+<chapter label="11" revision="$Id$"
+         version="5.0" xml:id="framework.spi"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Java SPI Support Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.framework-version"
+    linkend="org.osgi.framework"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Java SE 6 introduced the <code>java.util.ServiceLoader</code> class,
+    a standardized service-provider loading facility designed to support
+    extensible applications and libraries. The Service Provider Interface (SPI)
+    pattern allows applications to discover and load implementations of service
+    interfaces at runtime without compile-time dependencies on specific
+    implementations. The Java ServiceLoader mechanism enables JAR files to
+    advertise service implementations via configuration files in
+    <code>META-INF/services/</code> directories, where each file is named
+    after the service interface and contains the fully qualified names of
+    implementation classes.</para>
+
+    <para>While the ServiceLoader provides a simple and standardized approach
+    to extensibility in plain Java SE environments, its design presents
+    significant challenges in modular environments like OSGi. The ServiceLoader's
+    visibility and discovery mechanism is fundamentally based on traditional
+    Java class loaders, which assume a flat classpath model where all resources
+    are visible within a single classloader hierarchy. In contrast, OSGi's
+    Module Layer enforces strict visibility boundaries between bundles, ensuring
+    proper encapsulation and versioning of packages. This architectural difference
+    means that the ServiceLoader, when called from within an OSGi bundle, cannot
+    discover service implementations located in other bundles, even when those
+    bundles properly export the relevant packages and types.</para>
+
+    <para>The impedance mismatch between the ServiceLoader's classloader-based
+    discovery and OSGi's module-based visibility has created significant
+    practical difficulties for OSGi applications. Many widely-used Java and
+    Jakarta EE specifications and implementations rely heavily on the ServiceLoader
+    mechanism, including JPA (Java Persistence API), JAXB (Java Architecture for
+    XML Binding), JAX-RS (Java API for RESTful Web Services), and WebSocket
+    implementations. When these libraries are deployed in OSGi environments,
+    they often fail to discover their required service implementations, leading
+    to runtime failures. While solutions such as the Service Loader Mediator
+    specification and implementations like Apache Aries SPI Fly have addressed
+    this problem through bytecode weaving and OSGi-specific metadata, these
+    approaches require additional bundles, configuration, and sometimes
+    modification of existing JARs.</para>
+
+    <para>This specification defines native support for Java SPI in the OSGi
+    Core Framework, eliminating the need for bytecode weaving, special mediators,
+    or bundle metadata modifications. By integrating SPI support directly into
+    the framework's resource loading and class loading mechanisms, OSGi frameworks
+    can transparently make ServiceLoader work as expected while respecting OSGi's
+    module boundaries and maintaining compatibility with existing Java libraries.
+    This approach leverages the framework's internal knowledge of bundle wirings
+    and package imports to dynamically locate SPI resources and implementation
+    classes across bundle boundaries when appropriate.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Transparency</emphasis> - Standard Java ServiceLoader
+          API calls must work without modification in OSGi environments, allowing
+          existing libraries to function without code changes.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>No Special Metadata</emphasis> - Bundles should not
+          require OSGi-specific manifest headers, capabilities, or requirements
+          to participate in SPI discovery, beyond standard package imports and
+          exports.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Module Awareness</emphasis> - SPI discovery must respect
+          OSGi's module boundaries, only discovering implementations from bundles
+          that are properly wired through package imports.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Compatibility</emphasis> - The mechanism must be
+          compatible with existing OSGi specifications and not interfere with
+          other resource and class loading mechanisms.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Performance</emphasis> - SPI resource and class loading
+          should not significantly impact bundle loading times or runtime
+          performance.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>SPI Interface</emphasis> - A Java interface or abstract
+          class that defines a service contract, typically loaded through
+          <code>ServiceLoader.load()</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SPI Provider</emphasis> - A bundle containing an
+          implementation of an SPI interface and declaring it in a
+          <code>META-INF/services/</code> configuration file.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SPI Consumer</emphasis> - A bundle that uses
+          <code>ServiceLoader</code> to discover and load implementations of
+          an SPI interface.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SPI Resource</emphasis> - A configuration file in
+          <code>META-INF/services/</code> directory that lists implementation
+          classes for a specific service interface.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Cross-Bundle SPI Discovery</emphasis> - The framework
+          mechanism that enables SPI consumers to discover resources and classes
+          from wired bundles.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Relationship to Service Loader Mediator</title>
+
+      <para>The Service Loader Mediator Specification (Compendium chapter 133)
+      provides a higher-level integration between Java SPI and OSGi services,
+      automatically registering SPI implementations as OSGi services and managing
+      their lifecycle. That specification requires bundles to declare
+      capabilities and requirements using OSGi-specific metadata.</para>
+
+      <para>In contrast, this Java SPI Support specification operates at the
+      framework level, providing transparent support for standard ServiceLoader
+      API calls without requiring any OSGi-specific metadata. The two specifications
+      serve complementary purposes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>This specification enables standard Java libraries using
+          ServiceLoader to work transparently in OSGi without modification.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Service Loader Mediator enables OSGi bundles to consume
+          SPI implementations as OSGi services, providing dynamic service
+          tracking and lifecycle management.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Frameworks may implement both specifications, and bundles may
+      benefit from both mechanisms simultaneously.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>SPI Resource Discovery</title>
+
+    <para>When a bundle requests resources whose path begins with
+    <code>META-INF/services/</code>, the framework must perform cross-bundle
+    SPI resource discovery. This section describes the resource loading behavior
+    that enables ServiceLoader to discover implementations across bundle
+    boundaries.</para>
+
+    <section>
+      <title>Resource Path Detection</title>
+
+      <para>The framework must detect when a bundle requests resources with
+      paths matching the pattern <code>META-INF/services/*</code>. This
+      detection applies to all resource loading methods but not to findEntries method:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>Bundle.getResource(String name)</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Bundle.getResources(String name)</code></para>
+        </listitem>
+
+        <listitem>
+          <para>Class loader resource methods such as
+          <code>ClassLoader.getResource()</code> and
+          <code>ClassLoader.getResources()</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>When such a resource request is detected, the framework extracts
+      the service interface name from the resource path. For example, a request
+      for <code>META-INF/services/javax.persistence.spi.PersistenceProvider</code>
+      indicates that the bundle is attempting to discover implementations of
+      the <code>javax.persistence.spi.PersistenceProvider</code> interface.</para>
+    </section>
+
+    <section>
+      <title>Service Interface Resolution</title>
+
+      <para>Upon detecting an SPI resource request, the framework must attempt
+      to load the service interface class from the requesting bundle. If the
+      service interface class cannot be loaded, the framework proceeds with
+      normal resource loading (returning only resources from the requesting
+      bundle itself).</para>
+
+      <para>If the service interface class is successfully loaded, the framework
+      determines which bundles are wired to provide that class. This is determined
+      by examining the package wirings of the requesting bundle to identify all
+      bundles that export the package containing the service interface class.</para>
+    </section>
+
+    <section>
+      <title>Cross-Bundle Resource Aggregation</title>
+
+      <para>For each bundle identified as a potential SPI provider (including
+      the requesting bundle itself), the framework searches for the SPI resource
+      file. All located SPI resources must be aggregated and returned to the
+      caller. The order of resources in the aggregated result is not defined
+      by this specification and may vary between framework implementations.</para>
+
+      <para>When multiple bundles provide SPI resources for the same service
+      interface, the framework returns an enumeration or stream that includes
+      all resources from all wired bundles. This aggregated view enables
+      ServiceLoader to discover all available implementations.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>SPI Class Loading</title>
+
+    <para>After discovering SPI resources, the ServiceLoader reads the
+    configuration files to obtain implementation class names and attempts to
+    load these classes. This section describes how the framework enables
+    loading of SPI implementation classes from provider bundles.</para>
+
+    <section>
+      <title>Implementation Class Recording</title>
+
+      <para>When the framework detects and aggregates SPI resources during
+      resource discovery, it must parse the content of these resources to
+      extract implementation class names. Each implementation class name found
+      in an SPI resource must be recorded along with the bundle from which that
+      resource originated. This mapping is maintained by the framework to
+      support subsequent class loading requests.</para>
+
+      <para>The format of SPI resource files follows the ServiceLoader
+      specification: each line contains either a fully qualified class name
+      or a comment (lines starting with '#'). Whitespace before and after
+      class names should be ignored.</para>
+    </section>
+
+    <section>
+      <title>Dynamic Class Loading</title>
+
+      <para>When a bundle attempts to load a class and normal class loading
+      mechanisms (including the bundle's own classes, imported packages, and
+      required bundles) fail to locate the class, the framework must check
+      whether the class name matches a recorded SPI implementation class. If
+      a match is found, the framework must load the class from the provider
+      bundle that originally declared it in an SPI resource.</para>
+
+      <para>This dynamic class loading mechanism effectively creates a
+      dynamic "wire" between the consumer bundle and the provider bundle
+      for the specific SPI implementation class. The class is loaded with
+      the provider bundle's class loader, ensuring that any dependencies of
+      the implementation class are resolved correctly within the provider
+      bundle's module space.</para>
+    </section>
+
+    <section>
+      <title>Class Loading Constraints</title>
+
+      <para>The framework's SPI class loading support must respect OSGi's
+      class loading consistency rules. If multiple provider bundles export
+      different versions of the same package and both contain SPI implementation
+      classes, the framework must ensure that each implementation class is
+      loaded from its declaring bundle while maintaining proper package
+      consistency for shared types.</para>
+
+      <para>SPI implementation classes loaded through this mechanism must have
+      the same class loader visibility and security permissions as if they
+      were loaded through a dynamic import. However, unlike dynamic imports,
+      SPI class loading is selective and applies only to classes explicitly
+      declared in SPI resource files.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Framework Implementation Requirements</title>
+
+    <para>This section specifies requirements for OSGi Framework implementations
+    to support Java SPI.</para>
+
+    <section>
+      <title>Optional Feature</title>
+
+      <para>Support for Java SPI as defined by this specification is optional
+      for framework implementations. Frameworks that do not implement this
+      specification will continue to work correctly, but ServiceLoader calls
+      will only discover implementations within the calling bundle itself.</para>
+
+      <para>Framework implementations that support this specification should
+      document this capability and may provide configuration options to enable
+      or disable the feature.</para>
+    </section>
+
+    <section>
+      <title>Performance Considerations</title>
+
+      <para>Framework implementations should cache SPI resource mappings and
+      implementation class mappings to minimize performance impact. Resource
+      discovery and parsing should occur lazily when SPI resources are first
+      requested, not during bundle installation or resolution.</para>
+
+      <para>The framework should also consider that SPI resources and
+      implementation classes may change when bundles are updated. Cached
+      mappings must be invalidated when relevant bundles are updated, refreshed,
+      or uninstalled.</para>
+    </section>
+
+    <section>
+      <title>Security</title>
+
+      <para>SPI class loading must respect Java security manager permissions
+      if a security manager is active. The framework should verify that the
+      consumer bundle has appropriate permissions to load classes from provider
+      bundles. Standard OSGi security policies apply to cross-bundle class
+      loading.</para>
+
+      <para>The framework should also ensure that resource access follows
+      standard OSGi security policies. SPI resource discovery does not bypass
+      bundle isolation or security boundaries.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Usage Examples</title>
+
+    <para>This section provides examples of how Java SPI support works in
+    practice.</para>
+
+    <section>
+      <title>Simple SPI Provider and Consumer</title>
+
+      <para>Consider a simple example with a JPA persistence provider bundle
+      and an application bundle that uses JPA:</para>
+
+      <programlisting><![CDATA[// In provider bundle: META-INF/services/javax.persistence.spi.PersistenceProvider
+org.example.jpa.MyPersistenceProvider
+
+// In consumer bundle: Application code
+ServiceLoader<PersistenceProvider> loader = 
+    ServiceLoader.load(PersistenceProvider.class);
+for (PersistenceProvider provider : loader) {
+    // Framework enables discovery of MyPersistenceProvider
+    // from the provider bundle
+}]]></programlisting>
+
+      <para>Without this specification, the ServiceLoader would only search
+      the consumer bundle and would not find MyPersistenceProvider. With this
+      specification, the framework detects the SPI resource request, identifies
+      that the consumer bundle imports javax.persistence.spi, discovers the
+      provider bundle's SPI resource, and enables loading of MyPersistenceProvider
+      class from the provider bundle.</para>
+    </section>
+
+    <section>
+      <title>Multiple Providers</title>
+
+      <para>When multiple bundles provide implementations of the same SPI:</para>
+
+      <programlisting><![CDATA[// Provider Bundle A: META-INF/services/com.example.Plugin
+com.example.provider.a.PluginImplA
+
+// Provider Bundle B: META-INF/services/com.example.Plugin
+com.example.provider.b.PluginImplB
+
+// Consumer Bundle:
+ServiceLoader<Plugin> loader = ServiceLoader.load(Plugin.class);
+// Framework returns both implementations
+List<Plugin> plugins = new ArrayList<>();
+loader.forEach(plugins::add);
+// plugins contains instances from both provider bundles]]></programlisting>
+
+      <para>The framework aggregates SPI resources from all wired bundles,
+      allowing the ServiceLoader to discover all available implementations.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <para>This specification builds upon and relates to the following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Java Platform ServiceLoader documentation: <link
+        xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">
+        https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html</link></para>
+      </listitem>
+
+      <listitem>
+        <para>OSGi Service Loader Mediator Specification (Compendium Chapter 133)</para>
+      </listitem>
+
+      <listitem>
+        <para>OSGi Module Layer (Core Chapter 3)</para>
+      </listitem>
+
+      <listitem>
+        <para>OSGi Bundle Wiring API (Core Chapter 7)</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>
