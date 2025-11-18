@@ -1263,6 +1263,32 @@ public interface Constants {
 	 */
 	String	FRAMEWORK_BUNDLE_PARENT_FRAMEWORK		= "framework";
 
+	/**
+	 * Framework launching property specifying the fully qualified class name of
+	 * the {@code ResolverFactory} implementation to use for obtaining the
+	 * resolver instance.
+	 * <p>
+	 * If this property is specified, the framework must use the specified
+	 * {@code org.osgi.service.resolver.ResolverFactory} implementation class to
+	 * obtain its resolver. The factory class must be accessible from the
+	 * framework's class loader and must have a public no-argument constructor.
+	 * <p>
+	 * This property allows plugging alternative resolver implementations into
+	 * the framework, which can be useful for testing, debugging, or using
+	 * specialized resolution strategies. If the specified class cannot be found
+	 * or instantiated, the framework may fall back to its default resolver or
+	 * fail to initialize, depending on the implementation.
+	 * <p>
+	 * If this property is not specified, the framework should use its default
+	 * resolver implementation.
+	 * <p>
+	 * The value of this property must be of type {@code String}.
+	 * 
+	 * @since 1.10
+	 * @see org.osgi.service.resolver.ResolverFactory
+	 */
+	String	FRAMEWORK_RESOLVER_CLASS				= "osgi.resolver.class";
+
 	/*
 	 * Service properties.
 	 */
