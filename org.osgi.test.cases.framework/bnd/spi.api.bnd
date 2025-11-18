@@ -1,0 +1,5 @@
+-nouses=true
+Bundle-Name:                             ${p}.spi.api
+Bundle-SymbolicName:                     ${p}.spi.api
+Bundle-Version: 1.0.0
+Export-Package:                         ${p}.spi.api
