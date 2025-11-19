@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.spi.providerB
+Bundle-SymbolicName:                     ${p}.spi.providerB
+Bundle-Version: 1.0.0
+Export-Package:                         ${p}.spi.providerB
+Import-Package: ${p}.spi.api
+-includeresource: META-INF/services/=${p}/spi/providerB/META-INF/services/
