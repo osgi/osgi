@@ -888,8 +888,14 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				invoked.set(true);
-				Class<?> exception = (Class<?>) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
-				response.getWriter().write((exception == null) ? "" : exception.getName());
+				Object exceptionType = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
+				String exceptionName = "";
+				if (exceptionType instanceof Class) {
+					exceptionName = ((Class<?>) exceptionType).getName();
+				} else if (exceptionType instanceof String) {
+					exceptionName = (String) exceptionType;
+				}
+				response.getWriter().write(exceptionName);
 			}
 
 		}
