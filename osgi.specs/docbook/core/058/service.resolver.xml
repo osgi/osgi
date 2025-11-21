@@ -107,6 +107,12 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Visibility</emphasis> - Allow resolve contexts to
+          receive logging information about the resolution process to aid
+          debugging and diagnostics.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Scoped Repositories</emphasis> - Allow the
           environment to control the repositories to use.</para>
         </listitem>
@@ -722,6 +728,105 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
   String e = requirement.getDirectives().get( "effective");
   return e==null || "resolve".equals( e );
 }</programlisting>
+    </section>
+
+    <section>
+      <title>Logging</title>
+
+      <para>The resolution process can be complex and time-consuming, especially
+      when dealing with large dependency graphs or multiple potential solutions.
+      To provide visibility into what the resolver is doing during a resolve
+      operation, the <xref linkend="org.osgi.service.resolver.ResolveContext"
+      xrefstyle="hyperlink"/> provides a <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
+      xrefstyle="hyperlink"/> method that returns an {@code Optional&lt;Logger&gt;}.
+      </para>
+
+      <para>If a <xref linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/>
+      is provided by the resolve context, the resolver implementation may use it
+      to emit diagnostic and informational messages during the resolve operation.
+      This allows management agents and provisioning tools to gain insight into:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Which resources are being processed and in what order</para>
+        </listitem>
+
+        <listitem>
+          <para>How requirements are being matched to capabilities</para>
+        </listitem>
+
+        <listitem>
+          <para>Why certain resolution paths are being explored or rejected</para>
+        </listitem>
+
+        <listitem>
+          <para>Performance characteristics such as time spent evaluating
+          different solutions</para>
+        </listitem>
+
+        <listitem>
+          <para>Statistics about the resolution process, such as the number of
+          resources considered or the depth of the dependency tree</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The default implementation of <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
+      xrefstyle="hyperlink"/> returns an empty {@code Optional}, indicating that
+      no logger is available. This maintains backward compatibility with existing
+      resolve context implementations. Resolve contexts that wish to receive log
+      messages should override this method to return a non-empty {@code Optional}
+      containing a Logger instance.</para>
+
+      <para>The resolver is not required to call the <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
+      xrefstyle="hyperlink"/> method or to use the logger even if one is
+      provided. However, resolver implementations are encouraged to provide
+      meaningful log output when a logger is available, as this significantly
+      aids in debugging complex resolution scenarios. The log level used should
+      be appropriate to the information being logged: {@code TRACE} for detailed
+      step-by-step information, {@code DEBUG} for general resolution progress,
+      {@code INFO} for significant milestones, and {@code WARN} for potential
+      issues that don't prevent resolution from completing.</para>
+
+      <para>Since the resolver may call the <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
+      xrefstyle="hyperlink"/> method multiple times during a resolve operation,
+      implementations should ensure that the method is efficient and returns the
+      same Logger instance consistently throughout a single resolve operation.
+      The returned Logger must be thread-safe, as the resolver may use multiple
+      threads during resolution.</para>
+
+      <para>The following example shows how a resolve context can provide a
+      logger:</para>
+
+      <programlisting>import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
+import java.util.Optional;
+
+public class MyResolveContext extends ResolveContext {
+  private final Logger logger;
+
+  public MyResolveContext(LoggerFactory loggerFactory) {
+    this.logger = loggerFactory.getLogger(MyResolveContext.class);
+  }
+
+  @Override
+  public Optional&lt;Logger&gt; getLogger() {
+    return Optional.of(logger);
+  }
+
+  // ... other ResolveContext methods
+}</programlisting>
+
+      <para>For management agents that want to capture resolver logging without
+      having a full OSGi <xref linkend="service.log" xrefstyle="select: title"/>
+      implementation available, a simple Logger implementation can be provided
+      that forwards to another logging framework or writes directly to output
+      streams. See <xref linkend="service.log"/> for details on the Logger
+      interface and its methods.</para>
     </section>
 
     <section xml:id="i3344346">
