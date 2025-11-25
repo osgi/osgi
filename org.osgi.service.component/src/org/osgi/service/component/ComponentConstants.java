@@ -151,7 +151,7 @@ public interface ComponentConstants {
 	 * 
 	 * @since 1.4
 	 */
-	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.5";
+	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.6";
 
 	/**
 	 * Reference name for a component's satisfying condition.
