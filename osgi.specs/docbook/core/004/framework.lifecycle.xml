@@ -619,6 +619,29 @@
             </row>
 
             <row>
+              <entry><code>osgi.resolver.class</code></entry>
+
+              <entry><para>The fully qualified class name of the
+              <code>org.osgi.service.resolver.ResolverFactory</code>
+              implementation to use for obtaining the resolver instance. If
+              specified, the framework must use the specified
+              <code>ResolverFactory</code> implementation class to obtain its
+              resolver. The factory class must be accessible from the
+              framework's class loader and must have a public no-argument
+              constructor.</para><para>This property allows plugging
+              alternative resolver implementations into the framework, which
+              can be useful for testing, debugging, or using specialized
+              resolution strategies. If the specified class cannot be found or
+              instantiated, the framework may fall back to its default
+              resolver or fail to initialize, depending on the
+              implementation.</para><para>If this property is not specified,
+              the framework uses its default resolver
+              implementation.</para><para>See <xref linkend="service.resolver"/>
+              for details on the Resolver Service and <code>ResolverFactory</code>.
+              </para></entry>
+            </row>
+
+            <row>
               <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;windowsystem</code></para></entry>
 
               <entry><para>Provide the name of the current window system. This
