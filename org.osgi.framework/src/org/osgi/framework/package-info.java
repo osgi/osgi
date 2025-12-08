@@ -17,19 +17,19 @@
  *******************************************************************************/
 
 /**
- * Framework Package Version 1.10.
+ * Framework Package Version 1.11.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest.
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework; version="[1.10,2.0)"}
+ * {@code  Import-Package: org.osgi.framework; version="[1.11,2.0)"}
  * 
  * @author $Id$
  */
 
-@Version("1.10.1")
+@Version("1.11.0")
 package org.osgi.framework;
 
 import org.osgi.annotation.versioning.Version;

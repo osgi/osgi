@@ -27,6 +27,11 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -1206,4 +1211,182 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @since 1.6
 	 */
 	File getDataFile(String filename);
+
+	/**
+	 * Returns an {@code Optional} containing the URL to the entry at the
+	 * specified path in this bundle. This is a modern alternative to
+	 * {@link #getEntry(String)} that never returns {@code null} and never
+	 * throws {@code IllegalStateException}.
+	 * 
+	 * <p>
+	 * This bundle's class loader is not used to search for the entry. Only the
+	 * contents of this bundle are searched for the entry.
+	 * 
+	 * <p>
+	 * The specified path is always relative to the root of this bundle and may
+	 * begin with &quot;/&quot;. A path value of &quot;/&quot; indicates the
+	 * root of this bundle.
+	 * 
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents do
+	 * not contain directory entries.
+	 * 
+	 * @param path The path name of the entry.
+	 * @return An {@code Optional} containing a URL to the entry, or an empty
+	 *         {@code Optional} if no entry could be found, if the caller does
+	 *         not have the appropriate {@code AdminPermission[this,RESOURCE]}
+	 *         and the Java Runtime Environment supports permissions, or if this
+	 *         bundle has been uninstalled.
+	 * @since 1.11
+	 */
+	default Optional<URL> entry(String path) {
+		try {
+			return Optional.ofNullable(getEntry(path));
+		} catch (IllegalStateException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Returns a {@code Stream} of all the paths to entries within this bundle
+	 * whose longest sub-path matches the specified path. This is a modern
+	 * alternative to {@link #getEntryPaths(String)} that never returns
+	 * {@code null} and never throws {@code IllegalStateException}.
+	 * 
+	 * <p>
+	 * This bundle's class loader is not used to search for entries. Only the
+	 * contents of this bundle are searched.
+	 * 
+	 * <p>
+	 * The specified path is always relative to the root of this bundle and may
+	 * begin with a &quot;/&quot;. A path value of &quot;/&quot; indicates the
+	 * root of this bundle.
+	 * 
+	 * <p>
+	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
+	 * The returned paths are all relative to the root of this bundle and must
+	 * not begin with &quot;/&quot;.
+	 * 
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * Paths to directory entries will not be returned if the bundle contents do
+	 * not contain directory entries.
+	 * 
+	 * @param path The path name for which to return entry paths.
+	 * @return A {@code Stream} of the entry paths, or an empty {@code Stream}
+	 *         if no entry could be found, if the caller does not have the
+	 *         appropriate {@code AdminPermission[this,RESOURCE]} and the Java
+	 *         Runtime Environment supports permissions, or if this bundle has
+	 *         been uninstalled.
+	 * @since 1.11
+	 */
+	default Stream<String> entryPaths(String path) {
+		try {
+			Enumeration<String> enumeration = getEntryPaths(path);
+			if (enumeration == null) {
+				return Stream.empty();
+			}
+			return StreamSupport.stream(
+					Spliterators.spliteratorUnknownSize(new java.util.Iterator<String>() {
+						@Override
+						public boolean hasNext() {
+							return enumeration.hasMoreElements();
+						}
+
+						@Override
+						public String next() {
+							return enumeration.nextElement();
+						}
+					}, Spliterator.ORDERED),
+					false);
+		} catch (IllegalStateException e) {
+			return Stream.empty();
+		}
+	}
+
+	/**
+	 * Returns a {@code Stream} of entries in this bundle and its attached
+	 * fragments. This is a modern alternative to {@link #findEntries(String,
+	 * String, boolean)} that never returns {@code null} and never throws
+	 * {@code IllegalStateException}.
+	 * 
+	 * <p>
+	 * This bundle's class loader is not used to search for entries. Only the
+	 * contents of this bundle and its attached fragments are searched for the
+	 * specified entries.
+	 * 
+	 * <p>
+	 * If this bundle's state is {@code INSTALLED}, this method must attempt to
+	 * resolve this bundle before attempting to find entries.
+	 * 
+	 * <p>
+	 * This method is intended to be used to obtain configuration, setup,
+	 * localization and other information from this bundle. This method takes
+	 * into account that the &quot;contents&quot; of this bundle can be extended
+	 * with fragments. This &quot;bundle space&quot; is not a namespace with
+	 * unique members; the same entry name can be present multiple times. This
+	 * method therefore returns a stream of URL objects. These URLs can come
+	 * from different JARs but have the same path name. This method can either
+	 * return only entries in the specified path or recurse into subdirectories
+	 * returning entries in the directory tree beginning at the specified path.
+	 * Fragments can be attached after this bundle is resolved, possibly
+	 * changing the set of URLs returned by this method. If this bundle is not
+	 * resolved, only the entries in the JAR file of this bundle are returned.
+	 * 
+	 * <p>
+	 * URLs for directory entries must have their path end with &quot;/&quot;.
+	 * 
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents do
+	 * not contain directory entries.
+	 * 
+	 * @param path The path name in which to look. The path is always relative
+	 *        to the root of this bundle and may begin with &quot;/&quot;. A
+	 *        path value of &quot;/&quot; indicates the root of this bundle.
+	 * @param filePattern The file name pattern for selecting entries in the
+	 *        specified path. The pattern is only matched against the last
+	 *        element of the entry path. If the entry is a directory then the
+	 *        trailing &quot;/&quot; is not used for pattern matching. Substring
+	 *        matching is supported, as specified in the Filter specification,
+	 *        using the wildcard character (&quot;*&quot;). If null is
+	 *        specified, this is equivalent to &quot;*&quot; and matches all
+	 *        files.
+	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
+	 *        only return entries from the specified path.
+	 * @return A {@code Stream} of URL objects for each matching entry, or an
+	 *         empty {@code Stream} if no matching entry could be found, if the
+	 *         caller does not have the appropriate
+	 *         {@code AdminPermission[this,RESOURCE]} and the Java Runtime
+	 *         Environment supports permissions, or if this bundle has been
+	 *         uninstalled. The URLs are sorted such that entries from this
+	 *         bundle are returned first followed by the entries from attached
+	 *         fragments in attachment order. If this bundle is a fragment, then
+	 *         only matching entries in this fragment are returned.
+	 * @since 1.11
+	 */
+	default Stream<URL> entries(String path, String filePattern, boolean recurse) {
+		try {
+			Enumeration<URL> enumeration = findEntries(path, filePattern, recurse);
+			if (enumeration == null) {
+				return Stream.empty();
+			}
+			return StreamSupport.stream(
+					Spliterators.spliteratorUnknownSize(new java.util.Iterator<URL>() {
+						@Override
+						public boolean hasNext() {
+							return enumeration.hasMoreElements();
+						}
+
+						@Override
+						public URL next() {
+							return enumeration.nextElement();
+						}
+					}, Spliterator.ORDERED),
+					false);
+		} catch (IllegalStateException e) {
+			return Stream.empty();
+		}
+	}
 }
