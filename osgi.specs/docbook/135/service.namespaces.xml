@@ -592,6 +592,33 @@ DynamicImport-Package:
       </tgroup>
     </table>
 
+    <para>For example, a bundle that provides the Log Service could declare
+    its capability with the following manifest header:</para>
+
+    <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;="org.osgi.service.log.LogService";
+    uses:="org.osgi.service.log"</programlisting>
+
+    <para>A bundle that depends on the Log Service should require such a
+    service with the following manifest header:</para>
+
+    <programlisting>Require-Capability: osgi.service;
+    filter:="(objectClass=org.osgi.service.log.LogService)"</programlisting>
+
+    <para>Services can also have custom attributes. For example, a bundle
+    providing a servlet with a specific context path could declare:</para>
+
+    <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;="javax.servlet.Servlet";
+    osgi.http.whiteboard.servlet.pattern="/myapp/*";
+    uses:="javax.servlet"</programlisting>
+
+    <para>A bundle requiring a servlet with a specific context path could
+    then use:</para>
+
+    <programlisting>Require-Capability: osgi.service;
+    filter:="(&amp;(objectClass=javax.servlet.Servlet)(osgi.http.whiteboard.servlet.pattern=/myapp/*))"</programlisting>
+
     <section>
       <title>Versioning</title>
 
@@ -727,6 +754,29 @@ DynamicImport-Package:
         </tbody>
       </tgroup>
     </table>
+
+    <para>A bundle that requires an implementation of the Asynchronous Service
+    Specification should declare this requirement with the following manifest
+    header:</para>
+
+    <programlisting>Require-Capability: osgi.implementation;
+    filter:="(&amp;(osgi.implementation=osgi.async)(version&gt;=1.0)(!(version&gt;=2.0)))"</programlisting>
+
+    <para>When custom attributes are provided, they can be used for more
+    specific matching. For example, an implementation might provide additional
+    attributes:</para>
+
+    <programlisting>Provide-Capability: osgi.implementation;
+    osgi.implementation="osgi.jpa";
+    version:Version="2.2";
+    javax.persistence.provider="org.hibernate.jpa.HibernatePersistenceProvider";
+    uses:="org.osgi.service.jpa,javax.persistence"</programlisting>
+
+    <para>A bundle requiring a specific JPA provider implementation could
+    then use:</para>
+
+    <programlisting>Require-Capability: osgi.implementation;
+    filter:="(&amp;(osgi.implementation=osgi.jpa)(version&gt;=2.2)(!(version&gt;=3.0))(javax.persistence.provider=org.hibernate.jpa.HibernatePersistenceProvider))"</programlisting>
   </section>
 
   <section xml:id="service.namespaces-osgi.unresolvable.namespace">
