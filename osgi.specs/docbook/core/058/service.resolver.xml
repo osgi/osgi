@@ -138,11 +138,6 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Frameworks</emphasis> - Allow Frameworks to provide
-          their resolver as a service.</para>
-        </listitem>
-
-        <listitem>
           <para><emphasis>Standalone Access</emphasis> - Enable obtaining
           resolver instances outside OSGi frameworks using standard Java
           Service Provider mechanism.</para>
@@ -1422,22 +1417,14 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
   </section>
 
   <section>
-    <title>Obtaining Resolvers Outside OSGi</title>
+    <title>Obtaining Resolvers Using SPI</title>
 
     <para>While the <xref linkend="org.osgi.service.resolver.Resolver"
     xrefstyle="hyperlink"/> service is typically obtained from the OSGi
     service registry when running within an OSGi framework, there are many
-    scenarios where a resolver is needed before or outside an OSGi framework
-    runtime:</para>
+    scenarios where a resolver is needed outside an OSGi runtime:</para>
 
     <itemizedlist>
-      <listitem>
-        <para><emphasis>Framework Initialization</emphasis> - The OSGi
-        framework itself needs a resolver during its own initialization to
-        resolve bundle dependencies before the service registry is
-        available.</para>
-      </listitem>
-
       <listitem>
         <para><emphasis>Build Tools</emphasis> - Build tools such as Maven,
         Gradle, or bnd need to resolve project dependencies at build time,
@@ -1470,47 +1457,42 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
     implementation class creates tight coupling and prevents the use of
     alternative resolver implementations. To address this, resolver
     implementations can be discovered using the Java Service Provider
-    mechanism, similar to how <xref
-    linkend="org.osgi.framework.launch.FrameworkFactory"
-    xrefstyle="hyperlink"/> enables framework discovery.</para>
+    mechanism.</para>
 
     <section>
-      <title>The ResolverFactory Interface</title>
+      <title>The Resolver SPI</title>
 
-      <para>The <xref linkend="org.osgi.service.resolver.ResolverFactory"
-      xrefstyle="hyperlink"/> interface provides a standard way to obtain
-      <xref linkend="org.osgi.service.resolver.Resolver"
-      xrefstyle="hyperlink"/> instances without requiring an OSGi runtime.
-      Resolver implementation providers must implement this interface and
-      register it using the Java Service Provider mechanism.</para>
+      <para>The <xref linkend="org.osgi.service.resolver.Resolver"
+      xrefstyle="hyperlink"/> interface serves as the Service Provider
+      Interface (SPI) for resolver implementations. Resolver implementation
+      providers must implement this interface and register it using the Java
+      Service Provider mechanism.</para>
 
       <para>A resolver implementation JAR must contain the following
       resource:</para>
 
-      <programlisting>META-INF/services/org.osgi.service.resolver.ResolverFactory</programlisting>
+      <programlisting>META-INF/services/org.osgi.service.resolver.Resolver</programlisting>
 
       <para>This UTF-8 encoded resource must contain the fully qualified name
-      of the ResolverFactory implementation class. The format follows the
-      standard Java Service Provider configuration format: each line contains
-      either a class name or a comment (lines starting with '#'). Space and
-      tab characters, including blank lines, must be ignored.</para>
+      of the Resolver implementation class. The format follows the standard
+      Java Service Provider configuration format: each line contains either a
+      class name or a comment (lines starting with '#'). Space and tab
+      characters, including blank lines, must be ignored.</para>
 
-      <para>For example, if the <code>com.acme.osgi</code> framework includes
-      a resolver factory class <code>com.acme.osgi.ResolverFactoryImpl</code>,
+      <para>For example, if the <code>com.acme.osgi</code> package includes
+      a resolver implementation class <code>com.acme.osgi.ResolverImpl</code>,
       it should have the following resource:</para>
 
-      <programlisting>META-INF/services/org.osgi.service.resolver.ResolverFactory</programlisting>
+      <programlisting>META-INF/services/org.osgi.service.resolver.Resolver</programlisting>
 
       <para>With the contents:</para>
 
       <programlisting># ACME Resolver Implementation
-com.acme.osgi.ResolverFactoryImpl</programlisting>
+com.acme.osgi.ResolverImpl</programlisting>
 
-      <para>The ResolverFactory implementation class must have a public,
-      no-argument constructor. The factory's <xref
-      linkend="org.osgi.service.resolver.ResolverFactory.getResolver--"
-      xrefstyle="hyperlink"/> method returns a new Resolver instance that is
-      independent of any OSGi framework.</para>
+      <para>The Resolver implementation class must have a public, no-argument
+      constructor. Each instance is independent and can be used to perform
+      resolution operations.</para>
     </section>
 
     <section>
@@ -1522,112 +1504,28 @@ com.acme.osgi.ResolverFactoryImpl</programlisting>
 
       <programlisting>import java.util.ServiceLoader;
 import org.osgi.service.resolver.Resolver;
-import org.osgi.service.resolver.ResolverFactory;
 
-ServiceLoader&lt;ResolverFactory&gt; loader = 
-    ServiceLoader.load(ResolverFactory.class);
+ServiceLoader&lt;Resolver&gt; loader = 
+    ServiceLoader.load(Resolver.class);
 
-for (ResolverFactory factory : loader) {
-    Resolver resolver = factory.getResolver();
+for (Resolver resolver : loader) {
     // Use the resolver
     break; // Use first available
 }</programlisting>
 
       <para>If multiple resolver implementations are available on the
       classpath, the application can select a specific one based on
-      implementation-specific criteria, or simply use the first one found.
-      When running in an environment where the OSGi framework implementation
-      is on the classpath, the framework's resolver is typically the most
-      appropriate choice as it will use the same resolution algorithm as the
-      runtime framework.</para>
-    </section>
-
-    <section>
-      <title>Framework Resolver Exposure</title>
-
-      <para>OSGi framework implementations should expose their internal
-      resolver through the ResolverFactory mechanism. This ensures that
-      tooling can use the same resolution algorithm as the target runtime
-      framework, providing consistent behavior between development-time
-      analysis and runtime resolution.</para>
-
-      <para>When a framework exposes its resolver via ResolverFactory, the
-      resolver must implement the complete OSGi resolution algorithm including
-      all standard namespaces (such as <code>osgi.wiring.package</code>,
-      <code>osgi.wiring.bundle</code>, <code>osgi.wiring.host</code>, etc.)
-      and must enforce uses constraints as specified in <xref
-      linkend="framework.module"/>.</para>
-
-      <para>The resolver obtained from a framework's ResolverFactory operates
-      independently of any framework instance. It does not access or modify
-      the state of any running framework, making it safe to use for analysis
-      and planning purposes.</para>
-    </section>
-
-    <section>
-      <title>Framework Resolver Selection</title>
-
-      <para>When an OSGi framework starts, it may need to select which
-      resolver implementation to use if multiple ResolverFactory
-      implementations are available on its classpath. The framework should
-      support the following framework launching property to allow explicit
-      resolver selection:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><code>osgi.resolver.class</code> - The fully qualified name of
-          the ResolverFactory implementation class that the framework should
-          use. If this property is specified, the framework must use the
-          specified ResolverFactory to obtain its resolver instance. If the
-          specified class cannot be found or instantiated, the framework may
-          fall back to its default resolver or fail to initialize, depending
-          on the implementation.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>This property allows framework users to plug in alternative
-      resolver implementations, which can be useful for:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Testing different resolution strategies</para>
-        </listitem>
-
-        <listitem>
-          <para>Using specialized resolvers for specific deployment
-          scenarios</para>
-        </listitem>
-
-        <listitem>
-          <para>Debugging resolution issues with enhanced diagnostic
-          resolvers</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The following example shows how to specify a resolver when
-      launching a framework:</para>
-
-      <programlisting>Map&lt;String, String&gt; config = new HashMap&lt;&gt;();
-config.put("osgi.resolver.class", 
-    "com.example.DiagnosticResolverFactory");
-
-Framework framework = frameworkFactory.newFramework(config);
-framework.start();</programlisting>
-
-      <para>If the <code>osgi.resolver.class</code> property is not specified,
-      the framework should use its default resolver implementation. Frameworks
-      are not required to support pluggable resolvers through this mechanism,
-      but it is recommended for maximum flexibility.</para>
+      implementation-specific criteria, or simply use the first one
+      found.</para>
     </section>
 
     <section>
       <title>Resolver Consistency</title>
 
-      <para>Applications that use resolvers obtained through ResolverFactory
-      must be aware that different resolver implementations may have different
-      performance characteristics and may make different decisions when
-      multiple valid resolutions exist. However, all conforming resolver
-      implementations must:</para>
+      <para>Applications that use resolvers must be aware that different
+      resolver implementations may have different performance characteristics
+      and may make different decisions when multiple valid resolutions exist.
+      However, all conforming resolver implementations must:</para>
 
       <itemizedlist>
         <listitem>
@@ -1653,11 +1551,6 @@ framework.start();</programlisting>
           xrefstyle="hyperlink"/> when no valid resolution exists</para>
         </listitem>
       </itemizedlist>
-
-      <para>When the same resolver is used for both tooling and runtime (by
-      obtaining it from the same framework implementation's ResolverFactory),
-      resolution results should be identical given the same input context,
-      ensuring predictable behavior.</para>
     </section>
   </section>
 
