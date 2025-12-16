@@ -592,7 +592,7 @@ DynamicImport-Package:
       </tgroup>
     </table>
 
-    <para>For example, a bundle that provides the Log Service could declare
+    <para>For example, a bundle that provides the Log Service should declare
     its capability with the following manifest header:</para>
 
     <programlisting>Provide-Capability: osgi.service;
@@ -603,21 +603,23 @@ DynamicImport-Package:
     service with the following manifest header:</para>
 
     <programlisting>Require-Capability: osgi.service;
-    filter:="(objectClass=org.osgi.service.log.LogService)"</programlisting>
+    filter:="(objectClass=org.osgi.service.log.LogService)";
+    effective:="active"</programlisting>
 
     <para>Services can also have custom attributes. For example, a bundle
     providing a servlet with a specific context path could declare:</para>
 
     <programlisting>Provide-Capability: osgi.service;
-    objectClass:List&lt;String&gt;="javax.servlet.Servlet";
+    objectClass:List&lt;String&gt;="jakarta.servlet.Servlet";
     osgi.http.whiteboard.servlet.pattern="/myapp/*";
-    uses:="javax.servlet"</programlisting>
+    uses:="jakarta.servlet"</programlisting>
 
     <para>A bundle requiring a servlet with a specific context path could
     then use:</para>
 
     <programlisting>Require-Capability: osgi.service;
-    filter:="(&amp;(objectClass=javax.servlet.Servlet)(osgi.http.whiteboard.servlet.pattern=/myapp/*))"</programlisting>
+    filter:="(&amp;(objectClass=jakarta.servlet.Servlet)(osgi.http.whiteboard.servlet.pattern=/myapp/*))";
+    effective:="active"</programlisting>
 
     <section>
       <title>Versioning</title>
