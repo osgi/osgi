@@ -68,6 +68,8 @@
 
   <xi:include href="010/framework.api.xml"/>
 
+  <xi:include href="011/framework.spi.xml"/>
+
   <xi:include href="050/service.condpermadmin.xml"/>
 
   <xi:include href="051/service.permissionadmin.xml"/>

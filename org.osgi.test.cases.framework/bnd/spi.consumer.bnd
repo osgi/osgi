@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name:                             ${p}.spi.consumer
+Bundle-SymbolicName:                     ${p}.spi.consumer
+Bundle-Version: 1.0.0
+Bundle-Activator: ${p}.spi.consumer.Activator
+Import-Package: org.osgi.framework, ${p}.spi.api
