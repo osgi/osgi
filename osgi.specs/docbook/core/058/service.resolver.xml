@@ -739,13 +739,18 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       operation, the <xref linkend="org.osgi.service.resolver.ResolveContext"
       xrefstyle="hyperlink"/> provides a <xref
       linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
-      xrefstyle="hyperlink"/> method that returns an {@code Optional&lt;Logger&gt;}.
+      xrefstyle="hyperlink"/> method that returns an {@code Optional&lt;FormatterLogger&gt;}.
       </para>
 
-      <para>If a <xref linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/>
+      <para>If a <xref linkend="org.osgi.service.log.FormatterLogger" xrefstyle="hyperlink"/>
       is provided by the resolve context, the resolver implementation may use it
       to emit diagnostic and informational messages during the resolve operation.
-      This allows management agents and provisioning tools to gain insight into:
+      The FormatterLogger interface is preferred over the plain Logger interface
+      because it supports printf-style format strings (as described in
+      {@link java.util.Formatter}), which are more powerful and easier to implement
+      than SLF4J-style positional arguments when not already using a logger
+      implementation. This allows management agents and provisioning tools to gain
+      insight into:
       </para>
 
       <itemizedlist>
@@ -778,7 +783,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       no logger is available. This maintains backward compatibility with existing
       resolve context implementations. Resolve contexts that wish to receive log
       messages should override this method to return a non-empty {@code Optional}
-      containing a Logger instance.</para>
+      containing a FormatterLogger instance.</para>
 
       <para>The resolver is not required to call the <xref
       linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
@@ -795,26 +800,26 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       linkend="org.osgi.service.resolver.ResolveContext.getLogger--"
       xrefstyle="hyperlink"/> method multiple times during a resolve operation,
       implementations should ensure that the method is efficient and returns the
-      same Logger instance consistently throughout a single resolve operation.
-      The returned Logger must be thread-safe, as the resolver may use multiple
+      same FormatterLogger instance consistently throughout a single resolve operation.
+      The returned FormatterLogger must be thread-safe, as the resolver may use multiple
       threads during resolution.</para>
 
       <para>The following example shows how a resolve context can provide a
       logger:</para>
 
-      <programlisting>import org.osgi.service.log.Logger;
+      <programlisting>import org.osgi.service.log.FormatterLogger;
 import org.osgi.service.log.LoggerFactory;
 import java.util.Optional;
 
 public class MyResolveContext extends ResolveContext {
-  private final Logger logger;
+  private final FormatterLogger logger;
 
   public MyResolveContext(LoggerFactory loggerFactory) {
     this.logger = loggerFactory.getLogger(MyResolveContext.class);
   }
 
   @Override
-  public Optional&lt;Logger&gt; getLogger() {
+  public Optional&lt;FormatterLogger&gt; getLogger() {
     return Optional.of(logger);
   }
 
@@ -823,10 +828,46 @@ public class MyResolveContext extends ResolveContext {
 
       <para>For management agents that want to capture resolver logging without
       having a full OSGi <xref linkend="service.log" xrefstyle="select: title"/>
-      implementation available, a simple Logger implementation can be provided
+      implementation available, a simple FormatterLogger implementation can be provided
       that forwards to another logging framework or writes directly to output
-      streams. See <xref linkend="service.log"/> for details on the Logger
+      streams. See <xref linkend="service.log"/> for details on the FormatterLogger
       interface and its methods.</para>
+
+      <section>
+        <title>Import Range Considerations</title>
+
+        <para>When implementing a resolve context that uses the logger feature,
+        careful consideration must be given to the import range of the
+        {@code org.osgi.service.log} package to ensure that the resolver and the
+        resolve context operate in a consistent class space.</para>
+
+        <para>If a resolve context is only creating loggers using a
+        {@code LoggerFactory} provided by the OSGi Log Service, it can use the
+        standard consumer import range. For example:</para>
+
+        <programlisting>Import-Package: org.osgi.service.log; version="[1.4,2.0)"</programlisting>
+
+        <para>However, if a resolve context supplies its own
+        {@code FormatterLogger} implementation (for example, when wrapping another
+        logging framework or providing custom logging behavior), it must use a
+        provider import range to ensure that both the resolver and the resolve
+        context use compatible logger API classes. For example:</para>
+
+        <programlisting>Import-Package: org.osgi.service.log; version="[1.4,1.5)"</programlisting>
+
+        <para>This is necessary because when a resolve context provides its own
+        logger implementation, it is effectively acting as a provider of the logger
+        API to the resolver. Using a provider range ensures that both the resolver
+        and the resolve context use the same version of the logger API, preventing
+        potential {@code ClassCastException} or {@code NoSuchMethodError} issues
+        that could arise from API incompatibilities.</para>
+
+        <para>For non-OSGi usage scenarios, users must manually ensure that the
+        logger API used by both the resolver implementation and the resolve context
+        implementation comes from a compatible class space. This typically means
+        ensuring that both components use the same version of the
+        {@code org.osgi.service.log} package on the classpath.</para>
+      </section>
     </section>
 
     <section xml:id="i3344346">
