@@ -97,7 +97,7 @@
         <listitem>
           <para><emphasis>Remote versus Local Management</emphasis> - The
           Configuration Admin service must allow for a remotely managed OSGi
-          framework, and must not assume that con-figuration information is
+          framework, and must not assume that configuration information is
           stored locally. Nor should it assume that the Configuration Admin
           service is always done remotely. Both implementation approaches
           should be viable.</para>
@@ -2468,7 +2468,7 @@ ConfigurationPermission[?application,<xref
     into one, as updating a Managed Service or Managed Service Factory might result
     in services being updated or unregistered which could then trigger additional service changes.
     This may be a costly operation and therefore result in an unwanted intermediate
-    state until the system has setled again. Collapsing here means that multiple
+    state until the system has settled again. Collapsing here means that multiple
     updates inside a coordination are combined into exactly one update that reflects
     the final outcome. The following list gives some examples for clarification:
     </para>
