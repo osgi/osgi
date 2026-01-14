@@ -2383,7 +2383,33 @@ public class MyComponent {
       the component instance.</para>
 
       <para>If the component description specifies a service, the class must
-      implement all interfaces that are provided by the service.</para>
+      either implement all interfaces that are provided by the service, or,
+      if the component provides exactly one service interface, the class may
+      implement <code>ServiceFactory&lt;S&gt;</code> or
+      <code>PrototypeServiceFactory&lt;S&gt;</code> where <code>S</code> is
+      the single service interface being provided. When a component
+      implements <code>ServiceFactory</code> or
+      <code>PrototypeServiceFactory</code>, SCR must register the component
+      instance directly with the OSGi Framework as a service factory, and the
+      Framework will call the component instance's <code>getService</code>
+      and <code>ungetService</code> methods as defined in the OSGi Core
+      specification. See <xref linkend="framework.service.serviceFactory"/>
+      and <xref linkend="framework.service.prototypeServiceFactory"/>. This
+      allows components to provide services whose implementation classes are
+      not directly instantiable by SCR, such as final classes requiring
+      constructor arguments, Java records, or classes with invisible
+      constructors that can only be instantiated via static factory
+      methods.</para>
+
+      <para>When a component implements <code>ServiceFactory&lt;S&gt;</code>
+      or <code>PrototypeServiceFactory&lt;S&gt;</code>, the
+      <code>scope</code> attribute specified in the component description is
+      ignored. The service scope is determined by the type of factory
+      implemented: <code>ServiceFactory</code> provides bundle scope
+      semantics, and <code>PrototypeServiceFactory</code> provides prototype
+      scope semantics, as defined in the OSGi Core specification. See <xref
+      linkend="framework.service.serviceFactory"/> and <xref
+      linkend="framework.service.prototypeServiceFactory"/>.</para>
     </section>
 
     <section xml:id="service.component-property.properties.elements">
@@ -2743,11 +2769,17 @@ public class FooImpl {
               specified Java class should be an interface rather than a class,
               however specifying a class is supported. The component
               implementation class must implement all the specified service
-              interfaces.</para><para>The Component annotation can specify the
-              provided services, if this element is not specified all directly
-              implemented interfaces on the component's type are defined as
-              service interfaces. Specifying an empty array indicates that no
-              service should be registered.</para></entry>
+              interfaces, or, if exactly one service interface is provided, the
+              component implementation class may implement
+              <code>ServiceFactory&lt;S&gt;</code> or
+              <code>PrototypeServiceFactory&lt;S&gt;</code> where
+              <code>S</code> is the single service interface. See <xref
+              linkend="service.component-implementation.element"/>.</para><para>The
+              Component annotation can specify the provided services, if this
+              element is not specified all directly implemented interfaces on
+              the component's type are defined as service interfaces. Specifying
+              an empty array indicates that no service should be
+              registered.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2766,6 +2798,36 @@ public class FooImpl {
 
       <programlisting>@Component
 public class Foo implements EventHandler { ... }</programlisting>
+
+      <para>Alternatively, a component can implement a service factory when
+      providing exactly one service. This is useful when the service
+      implementation class cannot be directly instantiated by SCR, such as
+      final classes, Java records, or classes with invisible
+      constructors:</para>
+
+      <programlisting>&lt;service&gt;
+    &lt;provide interface="com.example.DataService"/&gt;
+&lt;/service&gt;</programlisting>
+
+      <programlisting>@Component
+public class DataServiceFactoryComponent 
+    implements ServiceFactory&lt;DataService&gt; {
+    
+    @Override
+    public DataService getService(Bundle bundle, 
+                                   ServiceRegistration&lt;DataService&gt; reg) {
+        // Create and return the actual service object
+        // which may be a final class, record, etc.
+        return new DataServiceImpl(/* constructor args */);
+    }
+    
+    @Override
+    public void ungetService(Bundle bundle, 
+                             ServiceRegistration&lt;DataService&gt; reg,
+                             DataService service) {
+        // Clean up the service object if needed
+    }
+}</programlisting>
     </section>
 
     <section xml:id="service.component-reference.element">
@@ -3558,6 +3620,18 @@ public class FooImpl implements Foo {
       consist of the component properties as defined in <xref
       linkend="service.component-service.properties"/>.</para>
 
+      <para>When the component implementation class itself implements
+      <code>ServiceFactory&lt;S&gt;</code> or
+      <code>PrototypeServiceFactory&lt;S&gt;</code>, SCR must register the
+      component instance directly with the Framework when the component
+      configuration becomes satisfied. The Framework will then call the
+      component instance's <code>getService</code> and
+      <code>ungetService</code> methods according to the semantics defined in
+      the OSGi Core specification for <code>ServiceFactory</code> or
+      <code>PrototypeServiceFactory</code>. See <xref
+      linkend="framework.service.serviceFactory"/> and <xref
+      linkend="framework.service.prototypeServiceFactory"/>.</para>
+
       <para>The activation of a component configuration must be delayed until
       its service is requested. When the service is requested, if the service
       has the <code>scope</code> attribute set to <code>bundle</code>, SCR
@@ -3572,6 +3646,13 @@ public class FooImpl implements Foo {
       <xref
       linkend="org.osgi.service.component.ComponentContext.getUsingBundle--"
       xrefstyle="hyperlink"/> method on the Component Context.</para>
+
+      <para>When the component implementation class implements
+      <code>ServiceFactory&lt;S&gt;</code> or
+      <code>PrototypeServiceFactory&lt;S&gt;</code>, the <code>scope</code>
+      attribute is ignored, and the service registration behavior is
+      determined by the type of factory implemented as described in the OSGi
+      Core specification.</para>
 
       <para>The activation of delayed components is depicted in a state
       diagram in <xref linkend="i1462979"/>. Notice that multiple component

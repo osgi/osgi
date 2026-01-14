@@ -47,6 +47,7 @@ Import-Package: ${-signaturetest}, *
 	tb30.jar, \
 	tb31.jar, \
 	tb32.jar, \
+	tb33.jar, \
 	tbf1.jar
 	
 -signaturetest = \
