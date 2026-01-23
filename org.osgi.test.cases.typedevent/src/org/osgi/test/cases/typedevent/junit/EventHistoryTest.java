@@ -24,6 +24,9 @@ import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +37,6 @@ import org.mockito.InOrder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.typedevent.TypedEventBus;
 import org.osgi.service.typedevent.TypedEventConstants;
 import org.osgi.service.typedevent.TypedEventHandler;
@@ -45,6 +47,7 @@ import org.osgi.test.cases.typedevent.common.EventA;
 import org.osgi.test.cases.typedevent.common.TypedEventHandlerA;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
 
@@ -54,22 +57,25 @@ import org.osgi.test.junit5.service.ServiceExtension;
 public class EventHistoryTest {
 
 	@InjectBundleContext
-	BundleContext context;
+	BundleContext					context;
 
-	@InjectService
-	TypedEventBus eventBus;
-
-	@InjectService
-	TypedEventMonitor monitor;
-
-	protected static final String TOPIC_A = EventA.class.getName()
+	protected static final String	TOPIC_A	= EventA.class.getName()
 			.replace(".", "/");
 
 	@BeforeEach
-	public void reinit() throws BundleException {
-		Bundle bundle = FrameworkUtil.getBundle(TypedEventBus.class);
-		bundle.stop();
-		bundle.start();
+	public void reinit(@InjectService
+	ServiceAware<TypedEventBus> eventBus, @InjectService
+	ServiceAware<TypedEventMonitor> monitor) throws BundleException {
+		Set<Bundle> bundlesToRestart = Stream
+				.of(eventBus.getServiceReference().getBundle(),
+						monitor.getServiceReference().getBundle())
+				.collect(Collectors.toSet());
+		for (Bundle b : bundlesToRestart) {
+			b.stop();
+		}
+		for (Bundle b : bundlesToRestart) {
+			b.start();
+		}
 	}
 
 	@DisplayName("TYPED_EVENT_HISTORY Property")
@@ -77,8 +83,10 @@ public class EventHistoryTest {
 	class TypedEventHistoryPropertyTest {
 
 		@Test
-		public void handlerReceivesHistoricalEventsBeforeNewEvents()
-				throws InterruptedException {
+		public void handlerReceivesHistoricalEventsBeforeNewEvents(
+				@InjectService
+				TypedEventMonitor monitor, @InjectService
+				TypedEventBus eventBus) throws InterruptedException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
 			EventA historicalEvent = new EventA();
@@ -89,8 +97,7 @@ public class EventHistoryTest {
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_HISTORY, 1));
 
@@ -99,16 +106,19 @@ public class EventHistoryTest {
 			eventBus.deliver(newEvent);
 
 			InOrder inOrder = inOrder(handler);
-			inOrder.verify(handler, timeout(1000)).notify(eq(TOPIC_A),
-					eq(historicalEvent));
-			inOrder.verify(handler, timeout(1000)).notify(eq(TOPIC_A),
-					eq(newEvent));
+			inOrder.verify(handler, timeout(1000))
+					.notify(eq(TOPIC_A),
+							argThat(evA -> "historical".equals(evA.a)));
+			inOrder.verify(handler, timeout(1000))
+					.notify(eq(TOPIC_A), argThat(evA -> "new".equals(evA.a)));
 		}
 
 		@Test
-		public void handlerReceivesRequestedNumberOfHistoricalEvents()
-				throws InterruptedException {
-			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.range(10,100));
+		public void handlerReceivesRequestedNumberOfHistoricalEvents(
+				@InjectService
+				TypedEventMonitor monitor, @InjectService
+				TypedEventBus eventBus) throws InterruptedException {
+			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.range(10, 100));
 
 			for (int i = 1; i <= 5; i++) {
 				EventA event = new EventA();
@@ -120,8 +130,7 @@ public class EventHistoryTest {
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_HISTORY, 3));
 
@@ -130,8 +139,10 @@ public class EventHistoryTest {
 		}
 
 		@Test
-		public void handlerReceivesAllAvailableHistoryWhenRequestedMoreThanAvailable()
-				throws InterruptedException {
+		public void handlerReceivesAllAvailableHistoryWhenRequestedMoreThanAvailable(
+				@InjectService
+				TypedEventMonitor monitor, @InjectService
+				TypedEventBus eventBus) throws InterruptedException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
 			EventA event1 = new EventA();
@@ -146,8 +157,7 @@ public class EventHistoryTest {
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_HISTORY, 10));
 
@@ -156,8 +166,9 @@ public class EventHistoryTest {
 		}
 
 		@Test
-		public void handlerReceivesNoHistoryWhenHistoryIsZero()
-				throws InterruptedException {
+		public void handlerReceivesNoHistoryWhenHistoryIsZero(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
 			EventA historicalEvent = new EventA();
@@ -168,8 +179,7 @@ public class EventHistoryTest {
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_HISTORY, 0));
 
@@ -182,14 +192,14 @@ public class EventHistoryTest {
 		}
 
 		@Test
-		public void handlerReceivesNoHistoryWhenNoEventsAvailable()
-				throws InterruptedException {
+		public void handlerReceivesNoHistoryWhenNoEventsAvailable(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_HISTORY, 5));
 
@@ -207,19 +217,20 @@ public class EventHistoryTest {
 	class HistoryWithTopicsAndFiltersTest {
 
 		@Test
-		public void historyRespectsTopicSubscription()
-				throws InterruptedException {
+		public void historyRespectsTopicSubscription(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			String topicA = "topic/a";
 			String topicB = "topic/b";
 
 			monitor.configureHistoryStorage(topicA, RangePolicy.atLeast(10));
 			monitor.configureHistoryStorage(topicB, RangePolicy.atLeast(10));
 
-			Map<String, Object> eventA = new HashMap<>();
+			Map<String,Object> eventA = new HashMap<>();
 			eventA.put("value", "a");
 			eventBus.deliverUntyped(topicA, eventA);
 
-			Map<String, Object> eventB = new HashMap<>();
+			Map<String,Object> eventB = new HashMap<>();
 			eventB.put("value", "b");
 			eventBus.deliverUntyped(topicB, eventB);
 
@@ -227,8 +238,7 @@ public class EventHistoryTest {
 
 			UntypedEventHandler handler = mock(UntypedEventHandler.class);
 			context.registerService(UntypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TOPICS, topicA,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TOPICS, topicA,
 							TypedEventConstants.TYPED_EVENT_HISTORY, 10));
 
 			verify(handler, timeout(1000).times(1)).notifyUntyped(eq(topicA),
@@ -236,7 +246,9 @@ public class EventHistoryTest {
 		}
 
 		@Test
-		public void historyRespectsEventFilter() throws InterruptedException {
+		public void historyRespectsEventFilter(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
 			EventA matchingEvent = new EventA();
@@ -251,8 +263,7 @@ public class EventHistoryTest {
 
 			TypedEventHandler<EventA> handler = mock(TypedEventHandlerA.class);
 			context.registerService(TypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TYPE,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TYPE,
 							EventA.class.getName(),
 							TypedEventConstants.TYPED_EVENT_FILTER, "(a=match)",
 							TypedEventConstants.TYPED_EVENT_HISTORY, 10));
@@ -262,17 +273,19 @@ public class EventHistoryTest {
 		}
 
 		@Test
-		public void historyWithWildcardTopic() throws InterruptedException {
+		public void historyWithWildcardTopic(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			String topic1 = "events/type1";
 			String topic2 = "events/type2";
 
 			monitor.configureHistoryStorage("events/*", RangePolicy.atMost(10));
 
-			Map<String, Object> event1 = new HashMap<>();
+			Map<String,Object> event1 = new HashMap<>();
 			event1.put("type", "1");
 			eventBus.deliverUntyped(topic1, event1);
 
-			Map<String, Object> event2 = new HashMap<>();
+			Map<String,Object> event2 = new HashMap<>();
 			event2.put("type", "2");
 			eventBus.deliverUntyped(topic2, event2);
 
@@ -280,20 +293,22 @@ public class EventHistoryTest {
 
 			UntypedEventHandler handler = mock(UntypedEventHandler.class);
 			context.registerService(UntypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TOPICS, "events/*",
-							TypedEventConstants.TYPED_EVENT_HISTORY, 10));
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TOPICS,
+							"events/*", TypedEventConstants.TYPED_EVENT_HISTORY,
+							10));
 
 			verify(handler, timeout(1000).times(2)).notifyUntyped(any(), any());
 		}
 
 		@Test
-		public void historyWithSingleLevelWildcard() throws InterruptedException {
+		public void historyWithSingleLevelWildcard(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			String topic = "events/foo/bar";
 
 			monitor.configureHistoryStorage(topic, RangePolicy.atLeast(10));
 
-			Map<String, Object> event = new HashMap<>();
+			Map<String,Object> event = new HashMap<>();
 			event.put("key", "value");
 			eventBus.deliverUntyped(topic, event);
 
@@ -301,8 +316,8 @@ public class EventHistoryTest {
 
 			UntypedEventHandler handler = mock(UntypedEventHandler.class);
 			context.registerService(UntypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TOPICS, "events/+/bar",
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TOPICS,
+							"events/+/bar",
 							TypedEventConstants.TYPED_EVENT_HISTORY, 10));
 
 			verify(handler, timeout(1000).times(1)).notifyUntyped(eq(topic),
@@ -315,11 +330,13 @@ public class EventHistoryTest {
 	class UntypedEventHandlerHistoryTest {
 
 		@Test
-		public void untypedHandlerReceivesHistory() throws InterruptedException {
+		public void untypedHandlerReceivesHistory(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus) throws InterruptedException {
 			String topic = "untyped/topic";
 			monitor.configureHistoryStorage(topic, RangePolicy.atLeast(10));
 
-			Map<String, Object> historicalEvent = new HashMap<>();
+			Map<String,Object> historicalEvent = new HashMap<>();
 			historicalEvent.put("key", "historical");
 			eventBus.deliverUntyped(topic, historicalEvent);
 
@@ -327,11 +344,10 @@ public class EventHistoryTest {
 
 			UntypedEventHandler handler = mock(UntypedEventHandler.class);
 			context.registerService(UntypedEventHandler.class, handler,
-					dictionaryOf(
-							TypedEventConstants.TYPED_EVENT_TOPICS, topic,
+					dictionaryOf(TypedEventConstants.TYPED_EVENT_TOPICS, topic,
 							TypedEventConstants.TYPED_EVENT_HISTORY, 1));
 
-			Map<String, Object> newEvent = new HashMap<>();
+			Map<String,Object> newEvent = new HashMap<>();
 			newEvent.put("key", "new");
 			eventBus.deliverUntyped(topic, newEvent);
 

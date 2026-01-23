@@ -36,7 +36,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.typedevent.TypedEventBus;
 import org.osgi.service.typedevent.monitor.MonitorEvent;
 import org.osgi.service.typedevent.monitor.RangePolicy;
@@ -44,6 +43,7 @@ import org.osgi.service.typedevent.monitor.TypedEventMonitor;
 import org.osgi.test.cases.typedevent.common.EventA;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
+import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
 import org.osgi.util.promise.Promise;
@@ -54,20 +54,16 @@ import org.osgi.util.promise.Promise;
 public class TypedEventMonitorConfigurationTest {
 
 	@InjectBundleContext
-	BundleContext context;
+	BundleContext					context;
 
-	@InjectService
-	TypedEventBus eventBus;
-
-	@InjectService
-	TypedEventMonitor monitor;
-
-	protected static final String TOPIC_A = EventA.class.getName()
+	protected static final String	TOPIC_A	= EventA.class.getName()
 			.replace(".", "/");
 
 	@BeforeEach
-	public void reinit() throws BundleException {
-		Bundle bundle = FrameworkUtil.getBundle(TypedEventBus.class);
+	public void reinit(@InjectService
+	ServiceAware<TypedEventMonitor> monitor) throws BundleException {
+
+		Bundle bundle = monitor.getServiceReference().getBundle();
 		bundle.stop();
 		bundle.start();
 	}
@@ -77,7 +73,8 @@ public class TypedEventMonitorConfigurationTest {
 	class HistoryStorageConfigurationTest {
 
 		@Test
-		public void configureHistoryStorageForExactTopic() {
+		public void configureHistoryStorageForExactTopic(@InjectService
+		TypedEventMonitor monitor) {
 			String topic = "test/topic";
 			RangePolicy policy = RangePolicy.exact(100);
 
@@ -88,21 +85,26 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void getConfiguredHistoryStorageReturnsAllConfigurations() {
+		public void getConfiguredHistoryStorageReturnsAllConfigurations(
+				@InjectService
+				TypedEventMonitor monitor) {
 			String topic1 = "test/topic1";
 			String topic2 = "test/topic2";
 
 			monitor.configureHistoryStorage(topic1, RangePolicy.exact(50));
 			monitor.configureHistoryStorage(topic2, RangePolicy.exact(100));
 
-			Map<String, RangePolicy> config = monitor.getConfiguredHistoryStorage();
+			Map<String,RangePolicy> config = monitor
+					.getConfiguredHistoryStorage();
 
 			assertThat(config).containsKey(topic1);
 			assertThat(config).containsKey(topic2);
 		}
 
 		@Test
-		public void getConfiguredHistoryStorageForSpecificTopicFilter() {
+		public void getConfiguredHistoryStorageForSpecificTopicFilter(
+				@InjectService
+				TypedEventMonitor monitor) {
 			String topic = "test/specific";
 			RangePolicy policy = RangePolicy.range(10, 50);
 
@@ -116,7 +118,9 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void getConfiguredHistoryStorageReturnsNullForUnknownFilter() {
+		public void getConfiguredHistoryStorageReturnsNullForUnknownFilter(
+				@InjectService
+				TypedEventMonitor monitor) {
 			RangePolicy policy = monitor
 					.getConfiguredHistoryStorage("unknown/topic");
 
@@ -124,7 +128,9 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void getEffectiveHistoryStorageReturnsMatchingPolicy() {
+		public void getEffectiveHistoryStorageReturnsMatchingPolicy(
+				@InjectService
+				TypedEventMonitor monitor) {
 			String topicFilter = "events/*";
 			monitor.configureHistoryStorage(topicFilter,
 					RangePolicy.atMost(100));
@@ -137,7 +143,13 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void getEffectiveHistoryStorageReturnsNoneForUnconfiguredTopic() {
+		public void getEffectiveHistoryStorageReturnsNoneForUnconfiguredTopic(
+				@InjectService
+				TypedEventMonitor monitor) {
+			monitor.getConfiguredHistoryStorage()
+					.keySet()
+					.stream()
+					.forEach(monitor::removeHistoryStorage);
 			RangePolicy effective = monitor
 					.getEffectiveHistoryStorage("unconfigured/topic");
 
@@ -147,7 +159,8 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void removeHistoryStorageDeletesConfiguration() {
+		public void removeHistoryStorageDeletesConfiguration(@InjectService
+		TypedEventMonitor monitor) {
 			String topic = "test/removable";
 
 			monitor.configureHistoryStorage(topic, RangePolicy.exact(50));
@@ -158,7 +171,9 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void configureHistoryStorageOverwritesPreviousConfiguration() {
+		public void configureHistoryStorageOverwritesPreviousConfiguration(
+				@InjectService
+				TypedEventMonitor monitor) {
 			String topic = "test/overwrite";
 
 			monitor.configureHistoryStorage(topic, RangePolicy.exact(50));
@@ -175,7 +190,8 @@ public class TypedEventMonitorConfigurationTest {
 	class MaximumEventStorageTest {
 
 		@Test
-		public void getMaximumEventStorageReturnsValidValue() {
+		public void getMaximumEventStorageReturnsValidValue(@InjectService
+		TypedEventMonitor monitor) {
 			int maxStorage = monitor.getMaximumEventStorage();
 
 			assertThat(maxStorage).isGreaterThanOrEqualTo(-1);
@@ -187,7 +203,8 @@ public class TypedEventMonitorConfigurationTest {
 	class WildcardConfigurationRulesTest {
 
 		@Test
-		public void wildcardConfigurationWithZeroMinimumIsAllowed() {
+		public void wildcardConfigurationWithZeroMinimumIsAllowed(@InjectService
+		TypedEventMonitor monitor) {
 			String wildcardFilter = "events/*";
 			RangePolicy policy = RangePolicy.atMost(100);
 
@@ -198,7 +215,8 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void exactTopicConfigurationWithMinimumIsAllowed() {
+		public void exactTopicConfigurationWithMinimumIsAllowed(@InjectService
+		TypedEventMonitor monitor) {
 			String exactTopic = "events/specific";
 			RangePolicy policy = RangePolicy.atLeast(50);
 
@@ -213,14 +231,14 @@ public class TypedEventMonitorConfigurationTest {
 	class ConfigurationPrecedenceTest {
 
 		@Test
-		public void exactMatchTakesPrecedenceOverWildcard() {
+		public void exactMatchTakesPrecedenceOverWildcard(@InjectService
+		TypedEventMonitor monitor) {
 			String exactTopic = "events/specific";
 			String wildcardFilter = "events/*";
 
 			monitor.configureHistoryStorage(wildcardFilter,
 					RangePolicy.atMost(50));
-			monitor.configureHistoryStorage(exactTopic,
-					RangePolicy.exact(100));
+			monitor.configureHistoryStorage(exactTopic, RangePolicy.exact(100));
 
 			RangePolicy effective = monitor
 					.getEffectiveHistoryStorage(exactTopic);
@@ -230,12 +248,13 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void singleLevelWildcardTakesPrecedenceOverMultiLevel() {
+		public void singleLevelWildcardTakesPrecedenceOverMultiLevel(
+				@InjectService
+				TypedEventMonitor monitor) {
 			String singleLevel = "events/+/data";
 			String multiLevel = "events/*";
 
-			monitor.configureHistoryStorage(multiLevel,
-					RangePolicy.atMost(50));
+			monitor.configureHistoryStorage(multiLevel, RangePolicy.atMost(50));
 			monitor.configureHistoryStorage(singleLevel,
 					RangePolicy.atMost(100));
 
@@ -251,44 +270,51 @@ public class TypedEventMonitorConfigurationTest {
 	class ErrorHandlingTest {
 
 		@Test
-		public void nullTopicFilterThrowsNullPointerException() {
-			assertThatThrownBy(
-					() -> monitor.configureHistoryStorage(null,
-							RangePolicy.exact(10)))
+		public void nullTopicFilterThrowsNullPointerException(@InjectService
+		TypedEventMonitor monitor) {
+			assertThatThrownBy(() -> monitor.configureHistoryStorage(null,
+					RangePolicy.exact(10)))
+							.isInstanceOf(NullPointerException.class);
+		}
+
+		@Test
+		public void invalidTopicFilterSyntaxThrowsIllegalArgumentException(
+				@InjectService
+				TypedEventMonitor monitor) {
+			assertThatThrownBy(() -> monitor.configureHistoryStorage(
+					"invalid//topic", RangePolicy.exact(10)))
+							.isInstanceOf(IllegalArgumentException.class);
+		}
+
+		@Test
+		public void getConfiguredHistoryStorageWithNullThrowsNullPointerException(
+				@InjectService
+				TypedEventMonitor monitor) {
+			assertThatThrownBy(() -> monitor.getConfiguredHistoryStorage(null))
 					.isInstanceOf(NullPointerException.class);
 		}
 
 		@Test
-		public void invalidTopicFilterSyntaxThrowsIllegalArgumentException() {
-			assertThatThrownBy(
-					() -> monitor.configureHistoryStorage("invalid//topic",
-							RangePolicy.exact(10)))
-					.isInstanceOf(IllegalArgumentException.class);
-		}
-
-		@Test
-		public void getConfiguredHistoryStorageWithNullThrowsNullPointerException() {
-			assertThatThrownBy(
-					() -> monitor.getConfiguredHistoryStorage(null))
+		public void getEffectiveHistoryStorageWithNullThrowsNullPointerException(
+				@InjectService
+				TypedEventMonitor monitor) {
+			assertThatThrownBy(() -> monitor.getEffectiveHistoryStorage(null))
 					.isInstanceOf(NullPointerException.class);
 		}
 
 		@Test
-		public void getEffectiveHistoryStorageWithNullThrowsNullPointerException() {
-			assertThatThrownBy(
-					() -> monitor.getEffectiveHistoryStorage(null))
-					.isInstanceOf(NullPointerException.class);
-		}
-
-		@Test
-		public void getEffectiveHistoryStorageWithWildcardThrowsIllegalArgumentException() {
+		public void getEffectiveHistoryStorageWithWildcardThrowsIllegalArgumentException(
+				@InjectService
+				TypedEventMonitor monitor) {
 			assertThatThrownBy(
 					() -> monitor.getEffectiveHistoryStorage("topic/*"))
-					.isInstanceOf(IllegalArgumentException.class);
+							.isInstanceOf(IllegalArgumentException.class);
 		}
 
 		@Test
-		public void removeHistoryStorageWithNullThrowsNullPointerException() {
+		public void removeHistoryStorageWithNullThrowsNullPointerException(
+				@InjectService
+				TypedEventMonitor monitor) {
 			assertThatThrownBy(() -> monitor.removeHistoryStorage(null))
 					.isInstanceOf(NullPointerException.class);
 		}
@@ -299,7 +325,9 @@ public class TypedEventMonitorConfigurationTest {
 	class HistoryOnlyStreamsTest {
 
 		@Test
-		public void monitorEventsWithHistoryOnlyByCount()
+		public void monitorEventsWithHistoryOnlyByCount(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus)
 				throws InterruptedException, InvocationTargetException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
@@ -325,7 +353,9 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void monitorEventsWithHistoryOnlyByInstant()
+		public void monitorEventsWithHistoryOnlyByInstant(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus)
 				throws InterruptedException, InvocationTargetException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
@@ -349,7 +379,9 @@ public class TypedEventMonitorConfigurationTest {
 		}
 
 		@Test
-		public void historyOnlyStreamClosesAfterDelivery()
+		public void historyOnlyStreamClosesAfterDelivery(@InjectService
+		TypedEventMonitor monitor, @InjectService
+		TypedEventBus eventBus)
 				throws InterruptedException, InvocationTargetException {
 			monitor.configureHistoryStorage(TOPIC_A, RangePolicy.atLeast(10));
 
