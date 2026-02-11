@@ -1102,6 +1102,11 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         </listitem>
 
         <listitem>
+          <para><code>NullPointerException</code> if the topic is
+          <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
           <para><code>IllegalArgumentException</code> if a topic name is
           supplied and it violates the topic name syntax.</para>
         </listitem>

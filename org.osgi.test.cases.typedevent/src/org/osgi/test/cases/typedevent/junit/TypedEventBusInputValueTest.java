@@ -63,7 +63,7 @@ public class TypedEventBusInputValueTest {
 	@Test
 	public void test_deliver_2_topic_null_should_throws_exception() {
 
-		assertThatIllegalArgumentException().isThrownBy(() -> {
+		assertThatNullPointerException().isThrownBy(() -> {
 			typedEventBus.deliver(null, dto);
 		});
 
@@ -81,7 +81,7 @@ public class TypedEventBusInputValueTest {
 	@Test
 	public void test_deliveruntyped_topic_null_should_throws_exception() {
 
-		assertThatIllegalArgumentException().isThrownBy(() -> {
+		assertThatNullPointerException().isThrownBy(() -> {
 			typedEventBus.deliverUntyped(null, new HashMap<>());
 		});
 	}

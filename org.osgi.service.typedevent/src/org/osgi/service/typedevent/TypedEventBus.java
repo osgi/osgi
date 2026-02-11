@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * this service and call one of the event delivery methods.
  * 
  * @ThreadSafe
- * @author $Id$
+ * @author $Id: 8c3d712804626b7c14c5ec563fad9ddde3e1d13b $
  */
 @ProviderType
 public interface TypedEventBus {
@@ -56,6 +56,7 @@ public interface TypedEventBus {
 	 * @param topic The topic to which this event should be sent.
 	 * @param event The event to send to all listeners which subscribe to the
 	 *            topic.
+	 * @throws NullPointerException if the topic is null
 	 * @throws NullPointerException if the event object is null
 	 * @throws IllegalArgumentException if the topic name is not valid
 	 */
@@ -69,6 +70,7 @@ public interface TypedEventBus {
 	 * @param topic The topic to which this event should be sent.
 	 * @param event A Map representation of the event data to send to all
 	 *            listeners which subscribe to the topic.
+	 * @throws NullPointerException if the topic is null
 	 * @throws NullPointerException if the event map is null
 	 * @throws IllegalArgumentException if the topic name is not valid
 	 */
