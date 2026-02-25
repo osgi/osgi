@@ -138,6 +138,11 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Frameworks</emphasis> - Allow Frameworks to provide
+          their resolver as a service.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Standalone Access</emphasis> - Enable obtaining
           resolver instances outside OSGi frameworks using standard Java
           Service Provider mechanism.</para>
@@ -1444,13 +1449,6 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         repositories to download and provision bundles often need resolution
         capabilities but do not themselves run within OSGi.</para>
       </listitem>
-
-      <listitem>
-        <para><emphasis>Feature Launchers</emphasis> - Tools that construct
-        and launch OSGi frameworks based on feature definitions (see <xref
-        linkend="service.featurelauncher"/>) need to resolve features before
-        the framework starts.</para>
-      </listitem>
     </itemizedlist>
 
     <para>For these use cases, obtaining a resolver by referencing a specific
@@ -1459,99 +1457,20 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
     implementations can be discovered using the Java Service Provider
     mechanism.</para>
 
-    <section>
-      <title>The Resolver SPI</title>
+    <para>The resolver implementation name is obtained by reading the content
+    of the configuration resource with the path
+    <code>META-INF/services/org.osgi.service.resolver.Resolver</code></para>
 
-      <para>The <xref linkend="org.osgi.service.resolver.Resolver"
-      xrefstyle="hyperlink"/> interface serves as the Service Provider
-      Interface (SPI) for resolver implementations. Resolver implementation
-      providers must implement this interface and register it using the Java
-      Service Provider mechanism.</para>
+    <para>For example, if the <code>com.acme.osgi</code> package includes
+    a resolver implementation class <code>com.acme.osgi.ResolverImpl</code>,
+    then it should have the following resource:</para>
 
-      <para>A resolver implementation JAR must contain the following
-      resource:</para>
+    <programlisting>META-INF/services/org.osgi.service.resolver.Resolver</programlisting>
 
-      <programlisting>META-INF/services/org.osgi.service.resolver.Resolver</programlisting>
+    <para>And the contents should be:</para>
 
-      <para>This UTF-8 encoded resource must contain the fully qualified name
-      of the Resolver implementation class. The format follows the standard
-      Java Service Provider configuration format: each line contains either a
-      class name or a comment (lines starting with '#'). Space and tab
-      characters, including blank lines, must be ignored.</para>
-
-      <para>For example, if the <code>com.acme.osgi</code> package includes
-      a resolver implementation class <code>com.acme.osgi.ResolverImpl</code>,
-      it should have the following resource:</para>
-
-      <programlisting>META-INF/services/org.osgi.service.resolver.Resolver</programlisting>
-
-      <para>With the contents:</para>
-
-      <programlisting># ACME Resolver Implementation
+    <programlisting># ACME Resolver Implementation
 com.acme.osgi.ResolverImpl</programlisting>
-
-      <para>The Resolver implementation class must have a public, no-argument
-      constructor. Each instance is independent and can be used to perform
-      resolution operations.</para>
-    </section>
-
-    <section>
-      <title>Using ServiceLoader</title>
-
-      <para>Java SE 6 introduced the <code>java.util.ServiceLoader</code>
-      class that simplifies loading service providers. The following example
-      shows how to obtain a resolver using ServiceLoader:</para>
-
-      <programlisting>import java.util.ServiceLoader;
-import org.osgi.service.resolver.Resolver;
-
-ServiceLoader&lt;Resolver&gt; loader = 
-    ServiceLoader.load(Resolver.class);
-
-for (Resolver resolver : loader) {
-    // Use the resolver
-    break; // Use first available
-}</programlisting>
-
-      <para>If multiple resolver implementations are available on the
-      classpath, the application can select a specific one based on
-      implementation-specific criteria, or simply use the first one
-      found.</para>
-    </section>
-
-    <section>
-      <title>Resolver Consistency</title>
-
-      <para>Applications that use resolvers must be aware that different
-      resolver implementations may have different performance characteristics
-      and may make different decisions when multiple valid resolutions exist.
-      However, all conforming resolver implementations must:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Implement the complete OSGi resolution algorithm</para>
-        </listitem>
-
-        <listitem>
-          <para>Support all standard OSGi namespaces</para>
-        </listitem>
-
-        <listitem>
-          <para>Enforce uses constraints correctly</para>
-        </listitem>
-
-        <listitem>
-          <para>Return valid resolutions that satisfy all mandatory
-          requirements</para>
-        </listitem>
-
-        <listitem>
-          <para>Throw <xref
-          linkend="org.osgi.service.resolver.ResolutionException"
-          xrefstyle="hyperlink"/> when no valid resolution exists</para>
-        </listitem>
-      </itemizedlist>
-    </section>
   </section>
 
   <section xml:id="i3331809">
@@ -1596,23 +1515,10 @@ ServicePermission[...Resolver, GET ]
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.resolver-ref.service.repository">
-        <title>Repository Service Specification</title>
-        OSGi Compendium, Chapter 132 Repository Service Specification, see
-        <xref linkend="service.repository"/>
-      </bibliomixed>
-
-      <bibliomixed xml:id="service.resolver-ref.framework.launch">
-        <title>Framework Launching</title>
-        OSGi Core, <xref linkend="framework.lifecycle"/>, Framework launching
-        and FrameworkFactory pattern
-      </bibliomixed>
-
-      <bibliomixed xml:id="service.resolver-ref.service.featurelauncher">
-        <title>Feature Launcher Service Specification</title>
-        OSGi Compendium, Chapter 155 Feature Launcher Service Specification,
-        see <xref linkend="service.featurelauncher"/>
-      </bibliomixed>
+      <bibliomixed
+      xml:id="service.resolver-ref.service.repository"><title>Repository
+      Service Specification</title>OSGi Compendium, Chapter 132 Repository
+      Service Specification</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
