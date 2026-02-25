@@ -1417,7 +1417,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
   </section>
 
   <section>
-    <title>Obtaining Resolvers Using SPI</title>
+    <title>Java Service Provider Configuration Support for Resolvers</title>
 
     <para>While the <xref linkend="org.osgi.service.resolver.Resolver"
     xrefstyle="hyperlink"/> service is typically obtained from the OSGi
