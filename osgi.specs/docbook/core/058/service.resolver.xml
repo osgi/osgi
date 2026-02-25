@@ -1433,7 +1433,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       </listitem>
 
       <listitem>
-        <para><emphasis>IDEs and Development Tools</emphasis> - Integrated
+        <para><emphasis>Development Tools</emphasis> - Integrated
         development environments need to analyze bundle dependencies and
         predict resolution outcomes without running a full OSGi
         framework.</para>
