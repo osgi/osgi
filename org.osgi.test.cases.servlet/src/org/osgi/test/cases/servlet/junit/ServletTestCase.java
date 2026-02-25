@@ -889,13 +889,14 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				invoked.set(true);
 				Object exceptionType = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
-				String exceptionName = "";
-				if (exceptionType instanceof Class) {
-					exceptionName = ((Class<?>) exceptionType).getName();
-				} else if (exceptionType instanceof String) {
-					exceptionName = (String) exceptionType;
+				if (exceptionType != null && !(exceptionType instanceof Class)) {
+					throw new AssertionError(
+							RequestDispatcher.ERROR_EXCEPTION_TYPE
+									+ " must be of type Class but was "
+									+ exceptionType.getClass().getName());
 				}
-				response.getWriter().write(exceptionName);
+				Class<?> exception = (Class<?>) exceptionType;
+				response.getWriter().write((exception == null) ? "" : exception.getName());
 			}
 
 		}
