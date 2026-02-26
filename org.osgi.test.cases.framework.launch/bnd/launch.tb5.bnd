@@ -2,6 +2,7 @@ Bundle-SymbolicName: ${p}.tb5
 Bundle-Name: ${p}.tb5
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb5.Activator
+Import-Package: org.osgi.framework;version="[1.8,2)", *
 -privatepackage						= \
 	${p}.tb5.*
 Require-Capability: extension.test; filter:="(extension.test=tb1)"

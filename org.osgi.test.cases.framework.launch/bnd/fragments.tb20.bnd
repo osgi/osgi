@@ -3,4 +3,5 @@ Bundle-Name: ${p}.fragments.tb20
 Bundle-SymbolicName: ${p}.fragments.tb20
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb20.Activator
+Import-Package: org.osgi.framework;version="[1.8,2)", *
 -privatepackage: ${p}.fragments.tb20

@@ -3,6 +3,7 @@ Bundle-Name: ${p}.dependency.tb1
 Bundle-SymbolicName: ${p}.dependency.tb2
 ExtensionBundle-Activator: ${p}.dependency.tb2.Activator
 Bundle-Version: 1.0
+Import-Package: org.osgi.framework;version="[1.8,2)", *
 -privatepackage: ${p}.dependency.tb2
 Fragment-Host: system.bundle
 Bundle-Description: This is a framework extension with some capabilities
