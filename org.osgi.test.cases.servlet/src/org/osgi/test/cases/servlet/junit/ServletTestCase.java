@@ -70,6 +70,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import junit.framework.TestCase;
 
 public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
@@ -885,11 +886,21 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 			 */
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("deprecation")
 			@Override
 			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				invoked.set(true);
-				Class<?> exception = (Class<?>) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
-				response.getWriter().write((exception == null) ? "" : exception.getName());
+				Object exceptionType = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
+				if (exceptionType == null) {
+					response.getWriter().write("");
+				} else if (exceptionType instanceof Class) {
+					response.getWriter()
+							.write(((Class< ? >) exceptionType).getName());
+				} else {
+					TestCase.fail(RequestDispatcher.ERROR_EXCEPTION_TYPE
+							+ " must be of type Class but was "
+							+ exceptionType.getClass().getName());
+				}
 			}
 
 		}
