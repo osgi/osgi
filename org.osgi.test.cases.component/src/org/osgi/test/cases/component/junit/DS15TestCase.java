@@ -820,4 +820,78 @@ public class DS15TestCase {
 					.containsOnly("(osgi.condition.id=" + testName + ")");
 		});
 	}
+
+	/**
+	 * Tests that components can implement ServiceFactory<S> and 
+	 * PrototypeServiceFactory<S> instead of the service interface directly.
+	 * This tests the enhancement from issue #688.
+	 */
+	@Test
+	public void testServiceFactoryImplementation(
+			@InjectInstalledBundle("tb33.jar") Bundle tb33,
+			@InjectService(filter = "(test.name=singleton)", cardinality = 0) ServiceAware<org.osgi.test.cases.component.service.DataService> singletonService,
+			@InjectService(filter = "(test.name=bundle)", cardinality = 0) ServiceAware<org.osgi.test.cases.component.service.DataService> bundleService,
+			@InjectService(filter = "(test.name=prototype)", cardinality = 0) ServiceAware<org.osgi.test.cases.component.service.DataService> prototypeService) throws Exception {
+		
+		assertThat(tb33).as("tb33 bundle").isNotNull();
+		
+		// Start the bundle
+		tb33.start();
+		Sleep.sleep(SLEEP);
+		
+		// Test singleton-scoped ServiceFactory
+		assertThat(singletonService.getService())
+				.as("singleton DataService")
+				.isNotNull();
+		org.osgi.test.cases.component.service.DataService singleton1 = singletonService.getService();
+		String id1 = singleton1.getInstanceId();
+		assertThat(id1).as("singleton instance ID").isNotNull();
+		assertThat(singleton1.getBundleId()).as("singleton bundle ID")
+				.isEqualTo(context.getBundle().getBundleId());
+		
+		// Get the same service again - should be the same instance from the factory
+		org.osgi.test.cases.component.service.DataService singleton2 = singletonService.getService();
+		// Note: The service object might be different but should have same behavior
+		assertThat(singleton2).as("singleton DataService 2").isNotNull();
+		
+		// Test bundle-scoped ServiceFactory
+		assertThat(bundleService.getService())
+				.as("bundle DataService")
+				.isNotNull();
+		org.osgi.test.cases.component.service.DataService bundle1 = bundleService.getService();
+		String bundleId1 = bundle1.getInstanceId();
+		assertThat(bundleId1).as("bundle instance ID").isNotNull();
+		assertThat(bundle1.getBundleId()).as("bundle service bundle ID")
+				.isEqualTo(context.getBundle().getBundleId());
+		
+		// Test prototype-scoped PrototypeServiceFactory
+		ServiceReference<org.osgi.test.cases.component.service.DataService> prototypeRef = 
+				prototypeService.getServiceReference();
+		assertThat(prototypeRef).as("prototype service reference").isNotNull();
+		
+		org.osgi.framework.ServiceObjects<org.osgi.test.cases.component.service.DataService> serviceObjects = 
+				context.getServiceObjects(prototypeRef);
+		assertThat(serviceObjects).as("service objects").isNotNull();
+		
+		// Get multiple prototype instances
+		org.osgi.test.cases.component.service.DataService proto1 = serviceObjects.getService();
+		assertThat(proto1).as("prototype instance 1").isNotNull();
+		String protoId1 = proto1.getInstanceId();
+		assertThat(protoId1).as("prototype instance 1 ID").isNotNull();
+		
+		org.osgi.test.cases.component.service.DataService proto2 = serviceObjects.getService();
+		assertThat(proto2).as("prototype instance 2").isNotNull();
+		String protoId2 = proto2.getInstanceId();
+		assertThat(protoId2).as("prototype instance 2 ID").isNotNull();
+		
+		// The instance IDs should be different for prototype scope
+		assertThat(protoId1).as("prototype instances should be different")
+				.isNotEqualTo(protoId2);
+		
+		// Clean up
+		serviceObjects.ungetService(proto1);
+		serviceObjects.ungetService(proto2);
+		
+		tb33.stop();
+	}
 }

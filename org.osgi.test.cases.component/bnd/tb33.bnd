@@ -1,0 +1,5 @@
+Bundle-Version: 1
+-privatepackage: ${p}.tb33.*
+Service-Component: org/osgi/test/cases/component/tb33/impl/components.xml
+
+
