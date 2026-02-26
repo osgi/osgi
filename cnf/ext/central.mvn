@@ -188,6 +188,9 @@ org.slf4j:slf4j-nop:1.7.7
 org.slf4j:slf4j-simple:1.7.7
 org.slf4j:log4j-over-slf4j:1.7.7
 
+org.slf4j:slf4j-api:2.0.17
+org.slf4j:slf4j-simple:2.0.17
+
 org.apache.aries.component-dsl:org.apache.aries.component-dsl.component-dsl:1.2.2
 org.apache.aries.typedevent:org.apache.aries.typedevent.bus:1.1.0-SNAPSHOT
 

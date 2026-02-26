@@ -4,5 +4,5 @@ org.apache.commons.commons-fileupload; version=1.6
 org.apache.commons.commons-io; version=2.19
 org.osgi.service.cm; version=latest
 org.osgi.service.event; version=latest
-slf4j.api;version=1.7
-slf4j.simple;version=1.7
+slf4j.api;version=2.0
+slf4j.simple;version=2.0
