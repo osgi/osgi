@@ -2,5 +2,6 @@ Bundle-SymbolicName: ${p}.tb4
 Bundle-Name: ${p}.tb4
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb4.Activator
+Import-Package: org.osgi.framework;version="[1.8,2)", *
 -privatepackage						= \
 	${p}.tb4.*
