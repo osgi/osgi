@@ -6,4 +6,5 @@ Bundle-Version: 1.0
 -privatepackage: ${p}.dependency.tb2
 Fragment-Host: system.bundle
 Bundle-Description: This is a framework extension with some capabilities
+Import-Package: org.osgi.framework;version="[1.10,2)", *
 Provide-Capability: extension.test; extension.test=tb2
