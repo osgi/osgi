@@ -48,8 +48,8 @@ org.objectweb.asm;version=9.3.0
 org.objectweb.asm.util;version=9.3.0
 org.objectweb.asm.tree;version=9.3.0
 org.objectweb.asm.tree.analysis;version=9.3.0
-slf4j.api;version=1.7.36
-slf4j.simple;version=1.7.36
+slf4j.api;version="[1.7,2)"
+slf4j.simple;version="[1.7,2)"
 com.sun.activation.jakarta.activation;version=2.0.1
 com.sun.xml.bind.jaxb-osgi;version=4.0.1
 
