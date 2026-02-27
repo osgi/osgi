@@ -11,5 +11,5 @@ org.eclipse.persistence.jpa.jpql;    version=2.6.0
 
 org.osgi.impl.service.cm; version=latest
 
-slf4j.api;  version=1.7.7
-slf4j.simple;  version=1.7.7
+slf4j.api;  version="[1.7,2)"
+slf4j.simple;  version="[1.7,2)"
