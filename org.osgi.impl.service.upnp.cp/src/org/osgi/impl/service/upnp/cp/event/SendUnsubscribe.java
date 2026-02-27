@@ -48,7 +48,7 @@ public class SendUnsubscribe extends GenaSocket implements Runnable {
 		unsubscribeMessage = GenaConstants.GENA_UNSUBSCRIBE + " "
 				+ subscription.getPublisherPath().trim() + " "
 				+ GenaConstants.GENA_SERVER_VERSION + "\r\n"
-				+ GenaConstants.GENA_HOST + ": " + subscription.getHost()
+				+ GenaConstants.GENA_HOST + ": " + extractHostPort(subscription.getHost())
 				+ "\r\n" + GenaConstants.GENA_SID + ": " + subscriptionId
 				+ "\r\n\r\n";
 	}

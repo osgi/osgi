@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * this service and call one of the event delivery methods.
  * 
  * @ThreadSafe
- * @author $Id: 8c3d712804626b7c14c5ec563fad9ddde3e1d13b $
+ * @author $Id$
  */
 @ProviderType
 public interface TypedEventBus {

@@ -55,7 +55,7 @@ public class SendSubscription extends GenaSocket implements Runnable {
 		subscriptionMessage = GenaConstants.GENA_SUBSCRIBE + " "
 				+ publisherpath.trim() + " "
 				+ GenaConstants.GENA_SERVER_VERSION + "\r\n"
-				+ GenaConstants.GENA_HOST + ": " + hostString + "\r\n"
+				+ GenaConstants.GENA_HOST + ": " + extractHostPort(hostString) + "\r\n"
 				+ GenaConstants.GENA_CALLBACK + ": " + "<"
 				+ GenaConstants.GENA_CALLBACK_URL + ">\r\n"
 				+ GenaConstants.GENA_NT + ": upnp:event\r\n"

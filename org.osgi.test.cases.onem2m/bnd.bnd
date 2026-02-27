@@ -14,12 +14,12 @@ Bundle-Description: Tests the service layer bundle
 	org.osgi.test.support;version=project,\
     org.osgi.framework;maven-scope=provided;version=1.8,\
     org.osgi.dto;maven-scope=provided;version=1.0,\
-	slf4j.api;version=1.7.7,\
+	slf4j.api;version="[1.7,2)",\
 	org.osgi.service.onem2m;version=latest
 
 -runbundles							= \
- 	slf4j.api;version=1.7.7, \
-    slf4j.simple;version=1.7.7, \
+ 	slf4j.api;version="[1.7,2)", \
+    slf4j.simple;version="[1.7,2)", \
 	org.osgi.service.onem2m;version=latest,\
 	org.osgi.impl.service.onem2m;version=latest
 
