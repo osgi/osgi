@@ -50,7 +50,7 @@ public class SendRenewal extends GenaSocket implements Runnable {
 		renewalMessage = GenaConstants.GENA_SUBSCRIBE + " "
 				+ subscription.getPublisherPath().trim() + " "
 				+ GenaConstants.GENA_SERVER_VERSION + "\r\n"
-				+ GenaConstants.GENA_HOST + ": " + subscription.getHost()
+				+ GenaConstants.GENA_HOST + ": " + extractHostPort(subscription.getHost())
 				+ "\r\n" + GenaConstants.GENA_SID + ": " + sid + "\r\n"
 				+ GenaConstants.GENA_TIMEOUT + ": " + timeout + "\r\n\r\n";
 	}
