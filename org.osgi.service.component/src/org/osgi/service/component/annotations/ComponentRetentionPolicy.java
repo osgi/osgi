@@ -16,19 +16,40 @@
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
 
-/**
- * Service Component Annotations Package Version 1.5.
- * <p>
- * This package is not used at runtime. Annotated classes are processed by tools
- * to generate Component Descriptions which are used at runtime.
- *
- * @author $Id$
- */
-
-@Version(COMPONENT_SPECIFICATION_VERSION)
 package org.osgi.service.component.annotations;
 
-import static org.osgi.service.component.ComponentConstants.COMPONENT_SPECIFICATION_VERSION;
+/**
+ * Component Retention Policy for the {@link Component} annotation.
+ * 
+ * <p>
+ * Controls whether a component should be retained (kept activated) or discarded
+ * (deactivated) when its use count drops to zero.
+ * 
+ * @author $Id$
+ * @since 1.5
+ */
+public enum ComponentRetentionPolicy {
+	/**
+	 * Deactivate and discard the component when its use count drops to zero.
+	 * This is the default behavior.
+	 */
+	DISCARD("discard"),
 
-import org.osgi.annotation.versioning.Version;
+	/**
+	 * Keep the component activated even when its use count drops to zero.
+	 * The component will still be deactivated if required services become
+	 * unavailable or if other deactivation conditions occur.
+	 */
+	KEEP("keep");
 
+	private final String	value;
+
+	ComponentRetentionPolicy(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return value;
+	}
+}

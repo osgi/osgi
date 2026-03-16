@@ -309,4 +309,29 @@ public @interface Component {
 	 * @since 1.4
 	 */
 	String[] factoryProperties() default {};
+
+	/**
+	 * The component retention policy for this Component.
+	 * 
+	 * <p>
+	 * Controls whether a component should be retained (kept activated) or
+	 * discarded (deactivated) when its use count drops to zero.
+	 * 
+	 * <p>
+	 * If not specified, the default is {@link ComponentRetentionPolicy#DISCARD}
+	 * which means the component will be deactivated when its use count drops to
+	 * zero. When set to {@link ComponentRetentionPolicy#KEEP}, the component
+	 * will remain activated even when its use count drops to zero, allowing it
+	 * to maintain state and avoid expensive reactivation cycles. The component
+	 * will still be deactivated if required services become unavailable or if
+	 * other deactivation conditions occur.
+	 * 
+	 * <p>
+	 * This element is only meaningful when the component provides a service and
+	 * {@link #immediate()} is {@code false}.
+	 * 
+	 * @see "The retention-policy attribute of the component element of a Component Description."
+	 * @since 1.5
+	 */
+	ComponentRetentionPolicy retentionPolicy() default ComponentRetentionPolicy.DISCARD;
 }

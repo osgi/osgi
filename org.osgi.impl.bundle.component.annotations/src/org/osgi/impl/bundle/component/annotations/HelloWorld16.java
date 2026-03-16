@@ -15,20 +15,37 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
+package org.osgi.impl.bundle.component.annotations;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
 
 /**
- * Service Component Annotations Package Version 1.5.
- * <p>
- * This package is not used at runtime. Annotated classes are processed by tools
- * to generate Component Descriptions which are used at runtime.
  *
- * @author $Id$
+ *
  */
+@Component(name = "testHelloWorld16", xmlns = "http://www.osgi.org/xmlns/scr/v1.6.0")
+public class HelloWorld16 {
+	/**
+	 */
+	@Activate
+	private void activate() {
+		System.out.println("Hello World!");
+	}
 
-@Version(COMPONENT_SPECIFICATION_VERSION)
-package org.osgi.service.component.annotations;
+	/**
+	 */
+	@Deactivate
+	private void deactivate() {
+		System.out.println("Goodbye World!");
+	}
 
-import static org.osgi.service.component.ComponentConstants.COMPONENT_SPECIFICATION_VERSION;
-
-import org.osgi.annotation.versioning.Version;
-
+	/**
+	 */
+	@Modified
+	private void modified() {
+		System.out.println("Modified World!");
+	}
+}
