@@ -185,16 +185,38 @@ public class WSEcho {
    <section xml:id="service.jakartaws.handler.services">
     <title>Registering Web Service Handlers</title>
 
-    <para>Web Service Handlers can be registered with the Jakarta™ XML Web Services Whiteboard by registering them as Whiteboard
-    services. This means that the handler POJO implementations are registered
-    in the Service Registry. Handler Services must be registered using <emphasis>jakarta.xml.ws.handler.Handler</emphasis> 
-    as the service interface but may implement any of the valid handler types defined by the Jakarta™ XML Web Services specification, 
-    such as <code>SOAPHandler</code> or <code>LogicalHandler</code> (see <xref linkend="service.jakartaws-handler-types"/> for more information).
-    Registering any invalid handler will result in an error for the matching endpoints.
-    To be recognized by the whiteboard registrar, the service must be registered with a boolean property of 
-    <emphasis>osgi.jakarta.xml.ws.handler.extension</emphasis> with a value of <emphasis>true</emphasis>.
+    <para>Web Service Handlers can be registered with the Jakarta™ XML Web Services Whiteboard in one of two ways:</para>
     
-    </para>
+    <itemizedlist>
+      <listitem><para>Statically, using metadata in an annotation such as <code>jakarta.jws.HandlerChain</code> or in
+      a provider specific configuration.</para></listitem>
+
+      <listitem><para>Dynamically, by registering the handlers as Whiteboard services in the OSGi Service Registry.</para></listitem>
+    </itemizedlist>
+    
+    <para>At runtime the Handler Chain is determined based on the total set of handlers, regardless of how they were registered.</para>
+    
+    <para>To be identified as a Handler Service by the Jakarta™ XML Web Services Whiteboard the service must be registered in the following way.</para>
+    
+    <itemizedlist>
+      <listitem><para>The service must be registered using <emphasis>jakarta.xml.ws.handler.Handler</emphasis> 
+      as its service interface. The service object may implement any of the valid handler types defined by the Jakarta™ XML
+      Web Services specification, such as <code>SOAPHandler</code> or <code>LogicalHandler</code> (see 
+      <xref linkend="service.jakartaws-handler-types"/> for more information).</para></listitem>
+
+      <listitem><para>The service must be registered with a service property named 
+      <emphasis>osgi.jakarta.xml.ws.handler.extension</emphasis> set to a value of <emphasis>true</emphasis>.</para></listitem>
+    </itemizedlist>
+    
+    <para>A Correctly registered handler will be included in the Handler Chain used when processing requests. It will
+    also result in a <xref linkend="org.osgi.service.webservice.runtime.dto.HandlerDTO" xrefstyle="hyperlink"/> being
+    added to the <code>RuntimeDTO</code> of the <xref linkend="JaxWsWhiteboardRuntimeService" xrefstyle="hyperlink"/>.</para>
+
+    <para>Failing to register the service appropriately will result in it being ignored by the whiteboard runtime.
+    Correctly registering a handler which turns out to be invalid, for example if it is incorrectly annotated and rejected by
+    the Web Services runtime, will result in a <xref linkend="org.osgi.service.webservice.runtime.dto.FailedHandlerDTO"
+    xrefstyle="hyperlink"/> being added to the <code>RuntimeDTO</code> as described in <xref linkend="JaxWsWhiteboardErrorHandling"
+    xrefstyle="hyperlink"/>.</para>
 
     <para>The code below shows an example of a logging handler that wants to intercept incoming and outgoing messages,
     this handler is targeted to any registered <emphasis>Endpoint Implementor</emphasis>:</para>
@@ -221,30 +243,20 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
     }
     
 }</programlisting>
+
 <para>
- Handlers are assembled into a handler chain in service ranking order. This means that Handlers with a higher service ranking will be positioned before those with a lower service ranking in the chain.
- If two handlers have the same ranking they are sorted according to their service id, with handlers registered later being positioned later in the handler chain. 
+ The combination of static and dynamic handlers are assembled into a handler chain according to the natural order of their service references, usually
+ referred to as service ranking order. This means that Handlers with a higher service ranking will be positioned before those with a lower service ranking in the chain.
+ If two handlers have the same ranking they are sorted according to their service id, with handlers registered later being positioned later in the handler chain.
 </para>
 <para>
- This handler chain is then passed to the Jakarta™ XML Web Services implementation. It is important to understand that the Jakarta™ XML Web Services runtime processes the handler chain differently depending on the message direction,
- as specified in <xref linkend="service.jakartaws-handler-execution"/>:
- <itemizedlist>
-   <listitem>
-     <para><emphasis>For outbound messages</emphasis>: Handler processing starts with the first handler in the chain and proceeds in the same order as the handler chain. This means the handler with the highest service ranking is processed first.</para>
-   </listitem>
-   <listitem>
-     <para><emphasis>For inbound messages</emphasis>: The order of processing is reversed. Processing starts with the last handler in the chain and proceeds in the reverse order of the handler chain. This means the handler with the lowest service ranking is processed first.</para>
-   </listitem>
- </itemizedlist>
+ If a static handler chain is provided then these handlers must not be re-ordered relative to one another. Also, as statically handlers have no associated service
+ reference they are treated as though they have a service ranking of <code>0</code> (the default) and a <emphasis>negative</emphasis> service id. This places them
+ <emphasis>before</emphasis> all services with a ranking of <code>0</code> or lower, and <emphasis>after</emphasis> all services with a ranking greater than <code>0</code>. 
 </para>
+
 <para>
- As a result, while handlers are assembled in order of service ranking (highest first), the actual processing order depends on the message direction. Users should be aware of this distinction to avoid confusion about handler execution order.
-</para>
-<para>
- It is also important to note that when different handler types are used (such as <code>LogicalHandler</code> and <code>SOAPHandler</code>), 
- each type executes as a group in different phases of message processing. This means that ordering cannot be controlled between handlers of different types, 
- as they run in separate processing phases. The detailed rules for handler ordering across different handler types are described in the 
- Jakarta™ XML Web Services specification (see <xref linkend="service.jakartaws-handler-ordering"/>).
+ This handler chain is then passed to the Jakarta™ XML Web Services implementation where it is used to process requests.
 </para>
 
 <section xml:id="service.jakartaws.handler.execution.rationale">
@@ -271,6 +283,11 @@ As specified in <xref linkend="service.jakartaws-handler-execution"/>, the Jakar
     <para><emphasis>Inbound messages</emphasis>: The order of processing is reversed - processing starts with the last handler in the chain and proceeds backwards.</para>
   </listitem>
 </itemizedlist>
+
+<para>
+ As a result, while handlers are assembled in order of service ranking (highest first), the actual processing order depends on the message direction.
+ Users should be aware of this distinction to avoid confusion about handler execution order.
+</para>
 
 <para>
 This bidirectional processing model is designed to support the layered nature of SOAP message processing. The key insight is that handlers
@@ -323,6 +340,13 @@ As shown in <xref linkend="service.jakartaws.handler-execution-flow"/>, the hand
 depending on whether the message is inbound or outbound, and whether it is being processed on the client or server side.
 This symmetric execution model ensures that complementary operations (such as encryption/decryption or signing/verification)
 are performed by the same handler in the appropriate order.
+</para>
+
+<para>
+ It is also important to note that when different handler types are used (such as <code>LogicalHandler</code> and <code>SOAPHandler</code>), 
+ each type executes as a group in different phases of message processing. This means that ordering cannot be controlled between handlers of different types, 
+ as they run in separate processing phases. The detailed rules for handler ordering across different handler types are described in the 
+ Jakarta™ XML Web Services specification (see <xref linkend="service.jakartaws-handler-ordering"/>).
 </para>
 </section>
 
@@ -421,7 +445,7 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
             As <emphasis>Endpoint</emphasis> instances can only be registered once with a transport and after publishing cannot change their handler chain, special care must be taken when Endpoints are created and published.
             Because of this, an <emphasis>Endpoint Registrar</emphasis> must ensure that each Endpoint will be refreshed when the Implementor or any Handler changes, which possibly leads to the transport not serving requests for a short amount of time.
         </para>
-        <section>
+        <section xreflabel="Whiteboard Runtime Service" xml:id="JaxWsWhiteboardRuntimeService">
             <title>The WebserviceServiceRuntime</title>
              <para>The <xref
                   linkend="org.osgi.service.webservice.runtime.WebserviceServiceRuntime" xrefstyle="hyperlink"/> service represents the runtime state information
