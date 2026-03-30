@@ -44,6 +44,14 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 
 	/**
 	 * See JPA Service Spec 127.3.4.1
+	 * <p>
+	 * Tests that the EntityManagerFactoryBuilder supports the standard JPA
+	 * property {@code javax.persistence.dataSource} as defined in section 9.7
+	 * of the JPA 2.1 specification. The value of this property is an instance
+	 * of {@link javax.sql.DataSource} (not a string). The JPA Service
+	 * implementation must handle this property and use the provided DataSource
+	 * to configure the persistence unit, even if the underlying Persistence
+	 * Provider does not natively support it as a map entry.
 	 * 
 	 * @throws Exception
 	 */
