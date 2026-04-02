@@ -208,7 +208,7 @@ public class WSEcho {
       <emphasis>osgi.jakarta.xml.ws.handler.extension</emphasis> set to a value of <emphasis>true</emphasis>.</para></listitem>
     </itemizedlist>
     
-    <para>A Correctly registered handler will be included in the Handler Chain used when processing requests. It will
+    <para>A Correctly registered handler will be included in the Handler Chain used when publishing the endpoint. It will
     also result in a <xref linkend="org.osgi.service.webservice.runtime.dto.HandlerDTO" xrefstyle="hyperlink"/> being
     added to the <code>RuntimeDTO</code> of the <xref linkend="JaxWsWhiteboardRuntimeService" xrefstyle="hyperlink"/>.</para>
 
@@ -250,9 +250,8 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
  If two handlers have the same ranking they are sorted according to their service id, with handlers registered later being positioned later in the handler chain.
 </para>
 <para>
- If a static handler chain is provided then these handlers must not be re-ordered relative to one another. Also, as statically handlers have no associated service
- reference they are treated as though they have a service ranking of <code>0</code> (the default) and a <emphasis>negative</emphasis> service id. This places them
- <emphasis>before</emphasis> all services with a ranking of <code>0</code> or lower, and <emphasis>after</emphasis> all services with a ranking greater than <code>0</code>. 
+ If a static handler chain is provided then this is maintained in the configured order and must be placed immediately after all services with a ranking of <code>1</code>
+ or higher and before any services with a ranking of <code>0</code> or lower.
 </para>
 
 <para>
