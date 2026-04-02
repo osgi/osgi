@@ -763,6 +763,42 @@ if ( refs != null ) {
         be accomplished by passing the values directly to the Persistence
         Provider, but in some cases it may require further action from the JPA
         Service implementation.</para>
+
+        <para>In particular, the JPA specification defines the following
+        standard properties whose values are object references rather than
+        strings. The JPA Service implementation must handle these properties
+        and ensure that the provided objects are used to configure the
+        Persistence Provider correctly, even if the Persistence Provider does
+        not natively support them as map entries:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>javax.persistence.dataSource</code> - The value is an
+            instance of <code>javax.sql.DataSource</code>. The JPA Service
+            implementation must use this Data Source for the persistence
+            unit.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>javax.persistence.jtaDataSource</code> - The value
+            may be a string JNDI name or an instance of
+            <code>javax.sql.DataSource</code> to be used as the JTA data
+            source.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>javax.persistence.nonJtaDataSource</code> - The value
+            may be a string JNDI name or an instance of
+            <code>javax.sql.DataSource</code> to be used as the non-JTA data
+            source.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>javax.persistence.validation.factory</code> - The
+            value is an instance of
+            <code>javax.validation.ValidatorFactory</code>.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
   </section>
