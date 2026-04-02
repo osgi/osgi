@@ -25,6 +25,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.spi.PersistenceProvider;
 
+import org.junit.Assume;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -301,13 +302,20 @@ public class JPATestCase extends DefaultTestBundleControl {
 	}
 
 	public void testPersistenceProviderRegistration() throws Exception {
-		// We should already have a provider present in the registry.  Make sure we can grab it.
-		PersistenceProvider provider = getService(PersistenceProvider.class);
-		assertNotNull("The PersistenceProvider service should be registered when the JPA Provider is installed", provider);
-		// The javax.persistence.provider property should have been registered alongside the PersistenceProvider service
-		ServiceReference< ? > providerRef = getServiceReference(provider);
-		String javaxPersistenceProvider = (String) providerRef.getProperty("javax.persistence.provider");
-		assertNotNull("The javax.persistence.provider service property should be registered alongside the PersistenceProvider service", javaxPersistenceProvider);
+		// Registration of PersistenceProvider is optional per §127.7.1
+		// (managed mode, "should" requirement). Skip if not registered.
+		ServiceReference<PersistenceProvider> providerRef = getContext()
+				.getServiceReference(PersistenceProvider.class);
+		Assume.assumeNotNull(providerRef);
+		// If registered, the javax.persistence.provider property is
+		// required per §127.7.1.
+		String javaxPersistenceProvider = (String) providerRef
+				.getProperty("javax.persistence.provider");
+		assertNotNull(
+				"The javax.persistence.provider service property must be "
+						+ "registered alongside the PersistenceProvider "
+						+ "service (§127.7.1 Managed Model)",
+				javaxPersistenceProvider);
 	}
 
 	public <S> S waitForService(Class<S> cls) {
