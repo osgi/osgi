@@ -20,7 +20,6 @@ package org.osgi.test.cases.jdbc.junit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_CONNECTIONPOOLDATASOURCE;
 import static org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_CAPABILITY_DATASOURCE;
@@ -163,23 +162,16 @@ public class JDBCTestCase {
 		DataSourceFactory dsf = bundleContext.getService(reference);
 		try {
 			if (bundleContext.createFilter(String.format("(%s=%s)", OSGI_JDBC_CAPABILITY, capability.capability)).match(reference)) {
-				//if the source declares the support, it should work to create items without an exception
-				assertThatNoException()
-					.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must not throw any exception when invoking %s with a null argument",
-							capability.capability, capability.functionName)
-					.isThrownBy(() -> capability.apply(dsf, null));
-				assertThat(capability.apply(dsf, null))
-					.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must not return null when invoking %s with a null argument",
-						capability.capability, capability.functionName)
-					.isNotNull();
-				assertThatNoException()
-					.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must not throw any exception when invoking %s with a properties object containing the properties %s",
-						capability.capability, capability.functionName, capability.standardPropertiesProvider.get())
-					.isThrownBy(() -> capability.apply(dsf, capability.standardPropertiesProvider.get()));
-				assertThat(capability.apply(dsf, capability.standardPropertiesProvider.get()))
-					.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must not return null when invoking %s with a properties object containing the properties %s",
-						capability.capability, capability.functionName, capability.standardPropertiesProvider.get())
-					.isNotNull();
+				// If the factory declares the capability, invoking the method
+				// must either succeed (return non-null) or throw SQLException.
+				// The spec allows SQLException when a property cannot be set
+				// or the object cannot be created.
+				assertDeclaredCapability(dsf, capability, null,
+						"a null argument");
+				assertDeclaredCapability(dsf, capability,
+						capability.standardPropertiesProvider.get(),
+						"a properties object containing the properties "
+								+ capability.standardPropertiesProvider.get());
 				return true;
 			} else {
 				//it is required to throw an exception here
@@ -197,6 +189,28 @@ public class JDBCTestCase {
 			if (dsf != null) {
 				bundleContext.ungetService(reference);
 			}
+		}
+	}
+
+	private <T> void assertDeclaredCapability(DataSourceFactory dsf,
+			JdbcCapability<T> capability, Properties props,
+			String propsDescription) {
+		try {
+			T result = capability.apply(dsf, props);
+			assertThat(result)
+				.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must not return null when invoking %s with %s",
+					capability.capability, capability.functionName,
+					propsDescription)
+				.isNotNull();
+		} catch (SQLException e) {
+			// The spec allows SQLException to be thrown if a property
+			// cannot be set or the object cannot be created.
+		} catch (Exception e) {
+			assertThat(e)
+				.as("According to '125.2 Database Driver' a DataSourceFactory declaring the capability %s must only throw SQLException (not %s) when invoking %s with %s",
+					capability.capability, e.getClass().getName(),
+					capability.functionName, propsDescription)
+				.isInstanceOf(SQLException.class);
 		}
 	}
 	
