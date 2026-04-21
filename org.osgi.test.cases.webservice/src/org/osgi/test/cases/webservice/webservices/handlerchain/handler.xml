@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jws:handler-chains xmlns:jws="https://jakarta.ee/xml/ns/jakartaee">
+    <jws:handler-chain>
+        <jws:handler>
+            <jws:handler-class>org.osgi.test.cases.webservice.webservices.CaseChangingHandler</jws:handler-class>
+        </jws:handler>
+        <jws:handler>
+            <jws:handler-class>org.osgi.test.cases.webservice.webservices.DoublingHandler</jws:handler-class>
+        </jws:handler>
+    </jws:handler-chain>
+</jws:handler-chains>
