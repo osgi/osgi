@@ -35,7 +35,7 @@ import jakarta.xml.ws.handler.LogicalHandler;
 import jakarta.xml.ws.handler.LogicalMessageContext;
 import jakarta.xml.ws.handler.MessageContext;
 
-public class ReversingHandler implements LogicalHandler<LogicalMessageContext> {
+public class DoublingHandler implements LogicalHandler<LogicalMessageContext> {
 
     @Override
     public boolean handleMessage(LogicalMessageContext context) {
@@ -58,8 +58,8 @@ public class ReversingHandler implements LogicalHandler<LogicalMessageContext> {
 			while(reader.hasNext()) {
 				XMLEvent nextEvent = reader.nextEvent();
 				if(nextEvent.isCharacters()) {
-					StringBuilder sb = new StringBuilder(nextEvent.asCharacters().getData()); 
-					nextEvent = eventFactory.createCharacters(sb.reverse().toString());
+					String raw = nextEvent.asCharacters().getData();
+					nextEvent = eventFactory.createCharacters(raw + "_" + raw);
 				}
 				writer.add(nextEvent);
 			}
