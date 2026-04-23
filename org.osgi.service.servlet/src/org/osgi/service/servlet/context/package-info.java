@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Http Context Package Version 2.0.
+ * Http Context Package Version 3.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,13 +26,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.context; version="[2.0,3.0)"}
+ * {@code  Import-Package: org.osgi.service.servlet.context; version="[3.0,4.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.context; version="[2.0,2.1)"}
+ * {@code  Import-Package: org.osgi.service.servlet.context; version="[3.0,3.1)"}
  * 
- * @author $Id$
+ * @author $Id: c0f95eca0af798efe3c7bf76e2576d2fc17cdb55 $
  */
 
 @Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")
