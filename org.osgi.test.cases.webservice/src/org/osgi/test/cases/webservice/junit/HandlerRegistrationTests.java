@@ -58,6 +58,7 @@ import org.osgi.test.cases.webservice.webservices.HttpBoundWSEcho;
 import org.osgi.test.cases.webservice.webservices.Reflect;
 import org.osgi.test.cases.webservice.webservices.ReversingHandler;
 import org.osgi.test.cases.webservice.webservices.WSEcho;
+import org.osgi.test.cases.webservice.webservices.WSEchoEcho;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.service.ServiceAware;
@@ -397,7 +398,7 @@ public class HandlerRegistrationTests {
 	 */
 	@Test
 	public void testHandlersOrdering() throws Exception {
-		
+		// Register Case Change then Reverse
 		Callable<List<ServiceRegistration<?>>> action = () -> {
 			List<ServiceRegistration<?>> regs = new ArrayList<ServiceRegistration<?>>();
 			
@@ -422,6 +423,7 @@ public class HandlerRegistrationTests {
 					for(EndpointDTO e : dto.endpoints) {
 						if(id.equals(e.implementor.id)) {
 							if(e.handlers.length == 2) {
+								// The handlers should be in natural service order
 								assertEquals(getServiceId(regs.get(1)), e.handlers[0].serviceReference.id, "Wrong handler order in DTO");
 								assertEquals(getServiceId(regs.get(2)), e.handlers[1].serviceReference.id, "Wrong handler order in DTO");
 								found = true;
@@ -435,12 +437,15 @@ public class HandlerRegistrationTests {
 				6, TimeUnit.SECONDS);
 		
 		String soapRequest = WebServiceHelper.createSOAPMessage(ECHO_NS, "echoAction", Maps.mapOf("textIn", "BANG"));
-		
+		// Handler Chain is Case then Reverse, so:
+		// INBOUND -> Reverse, Case 1 
+		// OUTBOUND -> Case 0, Reverse 
 		String soapResponse = WebServiceHelper.getSoapResponse(ECHO_URI, soapRequest);
 
-		assertEquals("gNaB", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
+		assertEquals("BAng", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
 				"The Web Service and Handler did not respond correctly");
 		
+		// Update the service ranking to re-order them
 		webServiceRuntimeTracker.waitForChange(
 				() -> {
 					Hashtable<String, Object> props = new Hashtable<>();
@@ -455,8 +460,97 @@ public class HandlerRegistrationTests {
 					for(EndpointDTO e : dto.endpoints) {
 						if(id.equals(e.implementor.id)) {
 							if(e.handlers.length == 2) {
-								assertEquals(getServiceId(regs.get(1)), e.handlers[1].serviceReference.id, "Wrong handler order in DTO after ranking change");
+								// The handler chain should now be in the opposite order
 								assertEquals(getServiceId(regs.get(2)), e.handlers[0].serviceReference.id, "Wrong handler order in DTO after ranking change");
+								assertEquals(getServiceId(regs.get(1)), e.handlers[1].serviceReference.id, "Wrong handler order in DTO after ranking change");
+								found = true;
+							}
+							break;
+						}
+					}
+					return found;
+				},
+				(regs,dto) -> "Unable to find both handlers set for the endpoint in the dto: " + dto,
+				6, TimeUnit.SECONDS);
+		// Handler Chain is Reverse then Case, so:
+		// INBOUND -> Case 1, Reverse 
+		// OUTBOUND -> Reverse, Case 0 
+		soapResponse = WebServiceHelper.getSoapResponse(ECHO_URI, soapRequest);
+
+		assertEquals("baNG", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
+				"The Web Service and Handlers did not respond correctly");
+	}
+	
+	/**
+	 * A test that uses a static handler chain and validates how it orders 
+	 * relative to handler services as described in 161.1.4
+	 * 
+	 * This handler is registered <em>after</em> the endpoint that it is applied to
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testStaticHandlersOrdering() throws Exception {
+		// Register Case Change then Reverse
+		Callable<List<ServiceRegistration<?>>> action = () -> {
+			List<ServiceRegistration<?>> regs = new ArrayList<ServiceRegistration<?>>();
+			
+			Hashtable<String, Object> props = new Hashtable<>();
+			props.put(WEBSERVICE_ENDPOINT_IMPLEMENTOR, Boolean.TRUE);
+			props.put(WEBSERVICE_ENDPOINT_ADDRESS, ECHO_URI);
+			
+			regs.add(ctx.registerService(WSEchoEcho.class, new WSEchoEcho(), props));
+			
+			return regs;
+		};
+		
+		Object endpointServiceId = getServiceId(webServiceRuntimeTracker.waitForChange(
+				action, (regs,dto) -> {
+					boolean found = false;
+					Object id = regs.get(0).getReference().getProperty(SERVICE_ID);
+					for(EndpointDTO e : dto.endpoints) {
+						if(id.equals(e.implementor.id)) {
+							if(e.handlers.length == 0) {
+								found = true;
+							}
+							break;
+						}
+					}
+					return found;
+				},
+				(regs,dto) -> "Unable to find both handlers set for the endpoint in the dto: " + dto,
+				6, TimeUnit.SECONDS).get(0));
+		
+		String soapRequest = WebServiceHelper.createSOAPMessage(ECHO_NS, "echoAction", Maps.mapOf("textIn", "BANG"));
+		// Handler Chain is Case then Double, so:
+		// INBOUND -> Double, Case 1 
+		// OUTBOUND -> Case 0, Double 
+		String soapResponse = WebServiceHelper.getSoapResponse(ECHO_URI, soapRequest);
+		
+		assertEquals("baNG_BANG_baNG_BANG", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
+				"The Web Service and Handler did not respond correctly");
+		
+		// Now register whiteboard handlers
+		action = () -> {
+			List<ServiceRegistration<?>> regs = new ArrayList<ServiceRegistration<?>>();
+			
+			Hashtable<String, Object> props = new Hashtable<>();
+			props.put(WEBSERVICE_HANDLER_EXTENSION, Boolean.TRUE);
+			
+			regs.add(ctx.registerService(Handler.class, new CaseChangingHandler(), props));
+			regs.add(ctx.registerService(Handler.class, new ReversingHandler(), props));
+			return regs;
+		};
+		
+		List<ServiceRegistration<?>> registered = webServiceRuntimeTracker.waitForChange(
+				action, (regs,dto) -> {
+					boolean found = false;
+					for(EndpointDTO e : dto.endpoints) {
+						if(endpointServiceId.equals(e.implementor.id)) {
+							if(e.handlers.length == 2) {
+								// The handlers should be in natural service order
+								assertEquals(getServiceId(regs.get(0)), e.handlers[0].serviceReference.id, "Wrong handler order in DTO");
+								assertEquals(getServiceId(regs.get(1)), e.handlers[1].serviceReference.id, "Wrong handler order in DTO");
 								found = true;
 							}
 							break;
@@ -467,9 +561,50 @@ public class HandlerRegistrationTests {
 				(regs,dto) -> "Unable to find both handlers set for the endpoint in the dto: " + dto,
 				6, TimeUnit.SECONDS);
 		
+		soapRequest = WebServiceHelper.createSOAPMessage(ECHO_NS, "echoAction", Maps.mapOf("textIn", "BANG"));
+		// Handler Chain is Case then Double then Case then Reverse, so:
+		// INBOUND -> Reverse, Case 1, Double, Case 1
+		// OUTBOUND -> Case 0, Double, Case 0, Reverse
 		soapResponse = WebServiceHelper.getSoapResponse(ECHO_URI, soapRequest);
+		
+		assertEquals("BAnG_BA@g_BAnG_BA@@", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
+				"The Web Service and Handlers did not respond correctly");
+				
 
-		assertEquals("gnAB", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
+		// Update the service ranking to re-order them relative to the static chain
+		webServiceRuntimeTracker.waitForChange(
+				() -> {
+					Hashtable<String, Object> props = new Hashtable<>();
+					props.put(WEBSERVICE_HANDLER_EXTENSION, Boolean.TRUE);
+					props.put(SERVICE_RANKING, 5);
+					registered.get(0).setProperties(props);
+					
+					return registered;
+				}, (regs,dto) -> {
+					boolean found = false;
+					for(EndpointDTO e : dto.endpoints) {
+						if(endpointServiceId.equals(e.implementor.id)) {
+							if(e.handlers.length == 2) {
+								// The reported handler chain should be in the same order
+								assertEquals(getServiceId(regs.get(0)), e.handlers[0].serviceReference.id, "Wrong handler order in DTO after ranking change");
+								assertEquals(getServiceId(regs.get(1)), e.handlers[1].serviceReference.id, "Wrong handler order in DTO after ranking change");
+								found = true;
+							}
+							break;
+						}
+					}
+					return found;
+				},
+				(regs,dto) -> "Unable to find both handlers set for the endpoint in the dto: " + dto,
+				6, TimeUnit.SECONDS);
+		
+		soapRequest = WebServiceHelper.createSOAPMessage(ECHO_NS, "echoAction", Maps.mapOf("textIn", "BANG"));
+		// Handler Chain is Case then Case then Double then Reverse, so:
+		// INBOUND -> Reverse, Double, Case 1, Case 1
+		// OUTBOUND -> Case 0, Case 0, Double, Reverse
+		soapResponse = WebServiceHelper.getSoapResponse(ECHO_URI, soapRequest);
+		
+		assertEquals("BANG_BA@@_BANG_BA@@", WebServiceHelper.extractResponse("echoActionResponse", soapResponse),
 				"The Web Service and Handlers did not respond correctly");
 	}
 	
