@@ -527,11 +527,12 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 			boolean exportFailed = false;
 			if ("org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION".equals(event.getTopic())) {
+				assertNull(event.getProperty("exception"));
 				assertNull(event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.EXPORT_REGISTRATION, rsaevent.getType());
 			} else if ("org/osgi/service/remoteserviceadmin/EXPORT_ERROR".equals(event.getTopic())) {
 				exportFailed = true;
-				assertNotNull(event.getProperty("cause"));
+				assertNotNull(event.getProperty("exception"));
 				assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, rsaevent.getType());
 			}
 
