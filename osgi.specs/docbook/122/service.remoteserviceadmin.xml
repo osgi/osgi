@@ -2034,7 +2034,7 @@ st.open();</programlisting>
       <itemizedlist>
         <listitem>
           <para><code>bundle</code> - <code>(Bundle)</code> The Remote Service
-          Admin bundle</para>
+          Admin bundle.</para>
         </listitem>
 
         <listitem>
@@ -2044,18 +2044,21 @@ st.open();</programlisting>
 
         <listitem>
           <para><code>bundle.symbolicname</code> - (<code>String</code>) The
-          Bundle Symbolic Name of the Remote Service Admin
-          <code>bundle.version</code> - (<code>Version</code>) The version of
+          Bundle Symbolic Name of the Remote Service Admin.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.version</code> - (<code>Version</code>) The version of
           the Remote Service Admin bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.signer</code> - (<code>String[]</code>) Signer of
-          the Remote Service Admin bundle</para>
+          <para><code>bundle.signer</code> - (<code>String[]</code>) The signer of
+          the Remote Service Admin bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception</code> - (Throwable) The Exception, if
+          <para><code>exception</code> - (<code>Throwable</code>) The Exception, if
           present. Also reported on the <code>cause</code> property for
           backward compatibility.</para>
         </listitem>
@@ -2066,39 +2069,39 @@ st.open();</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> -( <code>String)</code> The
+          <para><code>exception.message</code> - (<code>String)</code> The
           message of the attached exception. Only set if the Exception message
           is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
           <para><code>endpoint.service.id</code> - (<code>Long</code>) Remote
-          service id, if present</para>
+          service id, if present.</para>
         </listitem>
 
         <listitem>
           <para><code>endpoint.framework.uuid</code> - (<code>String</code>)
-          Remote service's Framework UUID, if present</para>
+          Remote service's Framework UUID, if present.</para>
         </listitem>
 
         <listitem>
           <para><code>endpoint.id</code> - (<code>String</code>) The id of the
-          Endpoint, if present</para>
+          Endpoint, if present.</para>
         </listitem>
 
         <listitem>
-          <para><code>objectClass</code> - <code>(String[])</code> The
-          interface names, if present</para>
+          <para><code>objectClass</code> - (<code>String[]</code>) The
+          interface names, if present.</para>
         </listitem>
 
         <listitem>
           <para><code>service.imported.configs</code> - (<code>String+</code>)
-          The configuration types of the imported services, if present</para>
+          The configuration types of the imported service, if present.</para>
         </listitem>
 
         <listitem>
           <para><code>timestamp</code> - (<code>Long</code>) The time when the
-          event occurred</para>
+          event occurred.</para>
         </listitem>
 
         <listitem>
