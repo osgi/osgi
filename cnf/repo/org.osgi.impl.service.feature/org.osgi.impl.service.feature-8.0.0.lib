@@ -1,6 +1,8 @@
 org.osgi.service.feature;version=latest
+org.osgi.impl.bundle.serviceloader;version=latest
 org.apache.felix.feature;version=latest
 org.json;version=1.0.0
 org.apache.geronimo.specs.geronimo-json_1.1_spec;version=1.5.0
 org.apache.johnzon.core;version=1.2.14
 org.apache.felix.cm.json;version=1.0.6
+org.osgi.util.converter; version=latest
