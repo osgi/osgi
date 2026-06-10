@@ -2069,7 +2069,7 @@ st.open();</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> - (<code>String)</code> The
+          <para><code>exception.message</code> - (<code>String</code>) The
           message of the attached exception. Only set if the Exception message
           is not <code>null</code>.</para>
         </listitem>
