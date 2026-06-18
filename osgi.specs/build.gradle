@@ -34,15 +34,55 @@ ext.fop_home = file("${licensed}/fop")
 ext.fop_classpath = files(fileTree("dir": new File(fop_home, "lib"), "include": "*.jar"),
 fileTree("dir": new File(fop_home, "build"), "includes": ["fop.jar", "fop-hyph.jar"]))
 
+/*
+ * Exclude the XmlDoclet from the main (Java 8) compilation.
+ * It is compiled separately with Java 21 via the compileDoclet task.
+ */
+tasks.named("compileJava") {
+	exclude "org/osgi/tools/xmldoclet/**"
+}
+
+/*
+ * Compile the XmlDoclet separately with Java 21 since it uses
+ * jdk.javadoc.doclet API (Java 9+). The rest of osgi.specs stays at Java 8.
+ */
+/*
+ * Compile the XmlDoclet directly with javac from JDK 21.
+ * Uses Exec instead of JavaCompile to avoid bnd overriding source/target to 8.
+ * The doclet uses jdk.javadoc.doclet API which requires Java 9+.
+ */
+def docletOutputDir = layout.getBuildDirectory().dir("doclet-classes")
+def compileDoclet = tasks.register("compileDoclet", Exec) {
+	description = "Compile the XmlDoclet with Java 21 (doclet API requires 9+)"
+	group = "documentation"
+	def javac = javaToolchains.compilerFor {
+		languageVersion = JavaLanguageVersion.of(21)
+	}.get().executablePath
+	def srcDir = file("src/org/osgi/tools/xmldoclet")
+	def outDir = docletOutputDir.get().getAsFile()
+	inputs.dir(srcDir)
+	outputs.dir(outDir)
+	doFirst { outDir.mkdirs() }
+	commandLine javac,
+		"-d", outDir,
+		"-source", "21", "-target", "21",
+		"--add-exports", "jdk.javadoc/jdk.javadoc.doclet=ALL-UNNAMED",
+		"--add-exports", "jdk.compiler/com.sun.source.doctree=ALL-UNNAMED",
+		"--add-exports", "jdk.compiler/com.sun.source.util=ALL-UNNAMED"
+	args fileTree(srcDir).matching { include "*.java" }.files
+}
+
 def javadoc = tasks.named("javadoc") {
 	description = "Build the docbook flavored javadoc."
 	group = "documentation"
+	dependsOn compileDoclet
 
 	/*
-	 * Our doclet is based upon the pre-Java 9 doclet api
+	 * Our doclet uses the JDK 9+ doclet api (jdk.javadoc.doclet),
+	 * compiled separately with Java 21.
 	 */
 	javadocTool = javaToolchains.javadocToolFor {
-		languageVersion = JavaLanguageVersion.of(8)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 
 	def destinationDirectory = objects.directoryProperty().convention(layout.getBuildDirectory().dir("javadoc"))
@@ -60,9 +100,9 @@ def javadoc = tasks.named("javadoc") {
 	options.encoding = "UTF-8"
 	options.noTimestamp = false
 	options.doclet = "org.osgi.tools.xmldoclet.XmlDoclet"
-	options.docletpath = sourceSets.main.output.files as List
+	options.docletpath = [docletOutputDir.get().getAsFile()]
 
-	inputs.files(sourceSets.main.output).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("docletpath")
+	inputs.files(compileDoclet).withPropertyName("docletpath")
 	inputs.file(stylesheet).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("stylesheet")
 
 	doLast("xslt") { t ->
