@@ -41,7 +41,7 @@
     the <xref linkend="service.event"/> was created as one of the earliest
     specifications defined by the OSGi Compendium. The design and usage of the
     Event Admin specification, however, makes certain trade-offs that do not
-    fit well with modern application design:</para>
+    fit well with modern application design.</para>
 
     <itemizedlist>
       <listitem>
@@ -168,7 +168,7 @@
       schema - event data uses field names in the class as the keys, and each
       field definition defines the permitted type of the value.</para>
 
-      <para>Type Safe Event classes are expected to either:</para>
+      <para>Type Safe Event classes are expected to either</para>
       <itemizedlist>
         <listitem>
           <para>Conform to OSGi DTO rules - the architecture of OSGi DTOs is described in <xref
@@ -304,9 +304,9 @@ public class ExampleEventSource {
         publication or receipt.</para>
 
         <para>If an Event Handler does need to make changes to an incoming
-        event then it must copy the event data into a new DTO instance. Note
-        that any nested DTO values in the event data must also be copied if
-        they are to be mutated.</para>
+        event, then it must copy the event data into a new DTO instance. Note
+        that the same rule applies to nested DTO values, which must also be
+        copied if they are to be mutated.</para>
       </section>
 
       <section>
@@ -314,7 +314,7 @@ public class ExampleEventSource {
 
         <para>When an event source publishes untyped event data, it passes a
         Map instance to the Typed Event Bus. The Typed Event Bus is not
-        required to take a copy of this Map, and therefore the event source
+        required to make a copy of this Map; therefore the event source
         must not change the Map, or any data structures within the Map, after
         the call to <xref
         linkend="org.osgi.service.typedevent.TypedEventBus.deliverUntyped-String-Map-"
@@ -379,7 +379,7 @@ public class ExampleEventSource {
       <para>Topics are arranged in a hierarchical namespace. Each level is
       defined by a token and levels are separated by solidi (<code>'/'
       \u002F</code>). More precisely, the topic must conform to the following
-      grammar:</para>
+      grammar.</para>
 
       <programlisting>// For further information see General Syntax Definitions in Core
 
@@ -389,7 +389,7 @@ topic       ::= topictoken ( '/' topictoken ) *</programlisting>
 
       <para>Topics should be designed to become more specific when going from
       left to right. Consumers can provide a prefix that matches a topic,
-      using the preferred order allows a handler to minimize the number of
+      using the preferred order enables a handler to minimize the number of
       prefixes it needs to register.</para>
 
       <para>Topics are case-sensitive. As a convention, topics should follow
@@ -536,7 +536,7 @@ public class ExampleEventSource {
 }</programlisting>
       
       <para>Because the topic for a <code>TypedEventPublisher</code> is defined
-      at creation time the implementation may only validate it once. Also, the 
+      at creation time the implementation is only required to validate it once. Also, the 
       <code>TypedEventBus</code> implementation must check the
       caller's permission to publish to the topic during the call to 
       <code>createPublisher</code>, but should not check it again for each delivery.
@@ -578,7 +578,7 @@ public class ExampleEventSource {
       their own adaptation mechanism, however it must guarantee at least the
       same functionality as <xref linkend="util.converter"/>.</para>
 
-      <para>A simple example of receiving a typed event follows:</para>
+      <para>A simple example of receiving a typed event follows.</para>
 
       <programlisting>public class ExampleEvent {
     public String message;
@@ -623,9 +623,9 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
     }
 }</programlisting>
 
-      <para>By default the reified type of the TypedEventHandler will be used
+      <para>By default, the reified type of the TypedEventHandler will be used
       as the target topic for the Event Handler. If the
-      <code>event.type</code> property is set then this is used as the default
+      <code>event.type</code> property is set, then this is used as the default
       topic instead of the reified type. To use a specific named topic the
       Typed Event Handler service may be registered with an
       <code>event.topics</code> service property specifying the topic(s) as a
@@ -656,7 +656,7 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
       implementation must be registered as a service in the service registry
       using the <code>UntypedEventHandler</code> interface.</para>
 
-      <para>When delivering an event to an Untyped Event Handler the Typed
+      <para>When delivering an event to an Untyped Event Handler, the Typed
       Event Service must, if necessary, convert the event data to a nested map
       structure.</para>
 
@@ -695,8 +695,10 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
         </para>
         
         <para>Using a single-level wildcard means that the Event Handler must
-        be called Events sent to topics matching the rest of the topic String.
-        For example the component:</para>
+        be called for Events sent to topics matching the rest of the topic String.
+        In the following example, the component would receive events sent to the topics
+        <code>foo/bar/foobar</code> and <code>foo/baz/foobar</code>, but not the topics
+        <code>foo/foobar</code> or <code>foo/bar/foobar/baz</code>.</para>
         <programlisting>@Component
 @EventTopics("foo/+/foobar")
 public class ExampleUntypedConsumer implements UntypedEventHandler {
@@ -707,10 +709,6 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
     }
 }</programlisting>
 
-        <para>would receive events sent to the topics <code>foo/bar/foobar</code>
-        and <code>foo/baz/foobar</code>, but not the topics <code>foo/foobar</code> or
-        <code>foo/bar/foobar/baz</code>.</para>
-        
         <para>The <code>+</code> character in a wildcard topic must always
         be the only character in the topic token that it matches, meaning 
         that topic names such as <code>foo+/bar</code> and <code>foo/+bar</code> 
@@ -724,7 +722,10 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
         <para>The multi-level wildcard is used to match all topics which
         share a given prefix. This is done by appending “/*”. to the prefix.
         This value means that the Event Handler must be called for Events
-        sent to sub-topics of the named topic. For example the component:</para>
+        sent to sub-topics of the named topic. In the following example the
+        component would receive events sent to the topics <code>foo/bar</code>
+        and <code>foo/baz</code>, but not the topics <code>foo</code> or
+        <code>foobar/fizzbuzz</code>.</para>
         
         <programlisting>@Component
 @EventTopics("foo/*")
@@ -735,10 +736,6 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
                 + " with message: " + event.get("message"));
     }
 }</programlisting>
-          
-        <para>would receive events sent to the topics <code>foo/bar</code> and
-        <code>foo/baz</code>, but not the topics <code>foo</code> or
-        <code>foobar/fizzbuzz</code>.</para>
 
         <para>The <code>*</code> character in a wildcard topic must always
         follow a solidus <code>/</code> character, and must be the final
@@ -764,7 +761,7 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       linkend="org.osgi.service.typedevent.UnhandledEventHandler"
       xrefstyle="hyperlink"/>.</para>
 
-      <para>If any services are found then the Typed Event implementation will
+      <para>If any services are found, then the Typed Event implementation will
       call the <code>notifyUnhandled</code> method passing the topic name and
       event data to all of the registered Unhandled Event Handler
       services.</para>
@@ -786,7 +783,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Filtering Events</title>
 
       <para>Sometimes the use of a topic is insufficient to restrict the
-      events received by an event consumer. In these cases the consumer can
+      events received by an event consumer. In these cases, the consumer can
       further restrict the events that they receive by using a filter. The
       filter is supplied using the <code>event.filter</code> service property,
       the value of which is an LDAP filter string. This filter is applied to
@@ -798,7 +795,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
         <para>Complex events may contain nested data structures, such as DTOs,
         as values in the event data. As LDAP filtering is only designed to
-        match against simple data this means that some event properties cannot
+        match against simple data, some event properties cannot
         be filtered using the <code>event.filter</code> property. The event
         filter is therefore only suitable for use in matching top-level event
         properties.</para>
@@ -809,7 +806,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
         <para>Note that the use of a filter is different from receiving an
         event and choosing to ignore it based on its data. If an event fails
-        to match the filter supplied by an event handler service then it is
+        to match the filter supplied by an event handler service, then it is
         <emphasis>not delivered</emphasis> to that event handler. This means
         that the event data remains eligible to be sent to an
         <code>UnhandledEventHandler</code> unless another event handler does
@@ -824,15 +821,15 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Failing Event Handlers</title>
 
       <para>Event Handler implementations are called by the Typed Event Bus
-      implementation, and are expected:</para>
+      implementation, and are expected to</para>
 
       <itemizedlist>
         <listitem>
-          <para>Not to throw exceptions from their callback method</para>
+          <para>not to throw exceptions from their callback method</para>
         </listitem>
 
         <listitem>
-          <para>To return quickly - any long running tasks should be moved to
+          <para>return quickly. Any long running tasks should be moved to
           another thread</para>
         </listitem>
       </itemizedlist>
