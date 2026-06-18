@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.common;
 
 import static junit.framework.TestCase.assertEquals;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.ServiceReference;
@@ -34,13 +34,11 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
  * allows to request the events
  * */
 public class TestEventHandler implements EventHandler {
-	private final LinkedList<Event> eventlist = new LinkedList<Event>();
-	private final Semaphore sem = new Semaphore(0);
-
-	private final long m_timeout;
+	private final LinkedList<Event> events = new LinkedList<Event>();
+	private final long timeout;
 
 	public TestEventHandler(long timeout) {
-		m_timeout = timeout;
+		this.timeout = timeout;
 	}
 
 	/**
@@ -48,42 +46,32 @@ public class TestEventHandler implements EventHandler {
 	 */
 	@Override
 	public void handleEvent(Event event) {
-		// System.out
-		// .println("########################### TestEventHandler::handleEvent "
-		// + event.getTopic()
-		// + "  "
-		// + " ( "
-		// + Arrays.asList(event.getPropertyNames()) + "  )");
-
-		synchronized (eventlist) {
-			eventlist.add(event);
-			sem.release();
+		synchronized (events) {
+			events.add(event);
+			events.notifyAll();
 		}
-
 	}
 
 	public Event getNextEventForTopic(String... topics) {
-		if (topics.length == 0) {
-			throw new IllegalArgumentException(
-					"at least one topic must be provided");
-		}
 		try {
-			int waited = 0;
+			long end = System.currentTimeMillis() + timeout;
 			while (true) {
-				synchronized (eventlist) {
-					for (Event e : eventlist) {
+				synchronized (events) {
+					for (Iterator<Event> it = events.iterator(); it.hasNext(); ) {
+						Event event = it.next();
 						for (String topic : topics) {
-							if (topic.equals(e.getTopic())) {
-								eventlist.remove(e);
-								return e;
+							if (topic.equals(event.getTopic())) {
+								it.remove();
+								return event;
 							}
 						}
 					}
+					long remaining = end - System.currentTimeMillis();
+					if (remaining <= 0) {
+						return null;
+					}
+					events.wait(remaining);
 				}
-				sem.tryAcquire(m_timeout / 10, TimeUnit.MILLISECONDS);
-				++waited;
-				if (waited >= 10)
-					return null;
 			}
 		} catch (InterruptedException e1) {
 			return null;
@@ -112,8 +100,8 @@ public class TestEventHandler implements EventHandler {
 	}
 
 	public int getEventCount() {
-		synchronized (eventlist) {
-			return eventlist.size();
+		synchronized (events) {
+			return events.size();
 		}
 	}
 }
