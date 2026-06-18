@@ -260,7 +260,11 @@ public class SOAPLoggingHandler implements SOAPHandler&lt;SOAPMessageContext&gt;
 
 <section xml:id="service.jakartaws.handler.execution.rationale">
 <title>Understanding Handler Execution Order</title>
-
+<para>
+This specification follows the Jakarta™ XML Web Services execution model as defined in
+<xref linkend="service.jakartaws-handler-execution"/>. When working across multiple Jakarta specifications, developers should
+understand these execution model differences to avoid incorrect assumptions about handler or filter ordering.
+</para>
 <para>
 The Jakarta™ XML Web Services specification defines a specific handler execution model that may initially seem counterintuitive.
 Understanding the rationale behind this design is important for correctly implementing handler chains, especially when working with
@@ -391,12 +395,6 @@ directly, whereas Jakarta XML Web Services handlers must work with messages wher
 outbound processing.
 </para>
 </section>
-
-<para>
-This specification follows the Jakarta™ XML Web Services execution model as defined in
-<xref linkend="service.jakartaws-handler-execution"/>. When working across multiple Jakarta specifications, developers should
-understand these execution model differences to avoid incorrect assumptions about handler or filter ordering.
-</para>
 </section>
 </section>
 
