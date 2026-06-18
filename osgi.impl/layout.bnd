@@ -36,4 +36,5 @@ jar.cmpn.impls: \
 	org.osgi.impl.service.transaction.control,\
 	org.osgi.impl.service.transaction.control.jdbc,\
 	org.osgi.impl.service.transaction.control.jpa,\
+	org.osgi.impl.service.webservice,\
 	org.osgi.impl.service.wireadmin

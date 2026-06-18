@@ -1,0 +1,29 @@
+# Jakarta API Dependencies
+jakarta.activation-api;version=2.1.3
+jakarta.annotation-api;version=3.0.0
+jakarta.xml.bind-api;version=4.0.2
+jakarta.xml.soap-api;version=3.0.2
+jakarta.xml.ws-api;version=4.0.2
+
+# Glassfish dependencies
+org.glassfish.external.management-api;version=3.2.3
+org.glassfish.ha.ha-api;version=3.1.13
+org.glassfish.gmbal.gmbal-api-only;version=4.0.3
+org.glassfish.hk2.osgi-resource-locator;version=2.4.0
+
+# OSGi dependencies
+org.osgi.impl.service.component;version=latest
+
+# Other dependencies
+com.fasterxml.woodstox.woodstox-core;version=7.0.0
+stax2-api;version=4.2.2
+com.sun.xml.bind.jaxb-core;version=4.0.5
+com.sun.xml.bind.jaxb-impl;version=4.0.5
+com.sun.xml.stream.buffer.streambuffer;version=2.1.0
+org.jvnet.mimepull;version=1.10.0
+org.jvnet.staxex.stax-ex;version=2.1.0
+com.sun.xml.fastinfoset.FastInfoset;version=2.1.1
+
+# Impl
+com.sun.xml.ws.jaxws-rt;version=4.0.3
+org.eclipse.osgi-technology.webservices.org.eclipse.osgi.technology.webservices.runtime.registrar;version=1.0.0

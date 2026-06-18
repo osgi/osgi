@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Handler Execution Flow Diagram for Jakarta XML Web Services -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     version="1.1" id="Layer_1" x="0px" y="0px" width="600px" height="500px" 
+     viewBox="0 0 600 500" style="enable-background:new 0 0 600 500;" xml:space="preserve">
+<style type="text/css">
+    .st0{fill:#FFFFFF;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+    .st1{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+    .st2{fill:#E6F2FF;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+    .st3{fill:#FFE6E6;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+    .st4{font-family:'ProductusSemibold', Arial, sans-serif;}
+    .st5{font-size:12px;}
+    .st6{font-family:'ProductusBook', Arial, sans-serif;}
+    .st7{font-size:10px;}
+    .st8{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;marker-end:url(#arrowhead);}
+    .st9{fill:#666666;}
+    .st10{font-size:11px;}
+</style>
+
+<!-- Arrow marker definition -->
+<defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <polygon points="0 0, 10 3, 0 6" fill="#000000" />
+    </marker>
+</defs>
+
+<!-- Title -->
+<text transform="matrix(1 0 0 1 150 25)" class="st4 st5">Handler Execution Flow: Request-Response Cycle</text>
+
+<!-- Client box -->
+<rect x="50" y="50" class="st0" width="100" height="60"/>
+<text transform="matrix(1 0 0 1 80 75)" class="st4 st10">Client</text>
+<text transform="matrix(1 0 0 1 65 90)" class="st6 st7">Service</text>
+<text transform="matrix(1 0 0 1 75 102)" class="st6 st7">Proxy</text>
+
+<!-- Server box -->
+<rect x="450" y="50" class="st0" width="100" height="60"/>
+<text transform="matrix(1 0 0 1 480 75)" class="st4 st10">Server</text>
+<text transform="matrix(1 0 0 1 465 90)" class="st6 st7">Endpoint</text>
+<text transform="matrix(1 0 0 1 455 102)" class="st6 st7">Implementation</text>
+
+<!-- Handler Chain label on client side -->
+<text transform="matrix(1 0 0 1 160 65)" class="st6 st7">Handler Chain: A, B, C</text>
+
+<!-- Handler Chain label on server side -->
+<text transform="matrix(1 0 0 1 310 65)" class="st6 st7">Handler Chain: A, B, C</text>
+
+<!-- Step 1: Client OUTBOUND (A, B, C) -->
+<rect x="50" y="150" class="st2" width="150" height="50"/>
+<text transform="matrix(1 0 0 1 60 165)" class="st4 st10">Step 1: Client Request</text>
+<text transform="matrix(1 0 0 1 60 178)" class="st6 st7">OUTBOUND</text>
+<text transform="matrix(1 0 0 1 60 190)" class="st6 st7">Handlers: A → B → C</text>
+
+<!-- Arrow from client to step 1 -->
+<line class="st8" x1="100" y1="110" x2="100" y2="145"/>
+
+<!-- Step 2: Server INBOUND (C, B, A) - reversed -->
+<rect x="400" y="150" class="st3" width="150" height="50"/>
+<text transform="matrix(1 0 0 1 410 165)" class="st4 st10">Step 2: Server Receives</text>
+<text transform="matrix(1 0 0 1 410 178)" class="st6 st7">INBOUND</text>
+<text transform="matrix(1 0 0 1 410 190)" class="st6 st7">Handlers: C → B → A</text>
+
+<!-- Arrow from step 1 to step 2 -->
+<line class="st8" x1="200" y1="175" x2="395" y2="175"/>
+<text transform="matrix(1 0 0 1 270 170)" class="st9 st7">network</text>
+
+<!-- Step 3: Server OUTBOUND (A, B, C) -->
+<rect x="400" y="250" class="st2" width="150" height="50"/>
+<text transform="matrix(1 0 0 1 410 265)" class="st4 st10">Step 3: Server Response</text>
+<text transform="matrix(1 0 0 1 410 278)" class="st6 st7">OUTBOUND</text>
+<text transform="matrix(1 0 0 1 410 290)" class="st6 st7">Handlers: A → B → C</text>
+
+<!-- Arrow from step 2 to step 3 -->
+<line class="st8" x1="475" y1="200" x2="475" y2="245"/>
+
+<!-- Step 4: Client INBOUND (C, B, A) - reversed -->
+<rect x="50" y="250" class="st3" width="150" height="50"/>
+<text transform="matrix(1 0 0 1 60 265)" class="st4 st10">Step 4: Client Receives</text>
+<text transform="matrix(1 0 0 1 60 278)" class="st6 st7">INBOUND</text>
+<text transform="matrix(1 0 0 1 60 290)" class="st6 st7">Handlers: C → B → A</text>
+
+<!-- Arrow from step 3 to step 4 -->
+<line class="st8" x1="400" y1="275" x2="205" y2="275"/>
+<text transform="matrix(1 0 0 1 270 270)" class="st9 st7">network</text>
+
+<!-- Completion arrow -->
+<line class="st8" x1="100" y1="300" x2="100" y2="340"/>
+
+<!-- Legend -->
+<rect x="50" y="360" class="st0" width="500" height="120"/>
+<text transform="matrix(1 0 0 1 60 380)" class="st4 st10">Key Points:</text>
+
+<rect x="70" y="390" class="st2" width="15" height="15"/>
+<text transform="matrix(1 0 0 1 95 402)" class="st6 st7">OUTBOUND: Handlers execute in chain order (A, B, C)</text>
+
+<rect x="70" y="415" class="st3" width="15" height="15"/>
+<text transform="matrix(1 0 0 1 95 427)" class="st6 st7">INBOUND: Handlers execute in reverse order (C, B, A)</text>
+
+<text transform="matrix(1 0 0 1 70 450)" class="st6 st7">• Handler chain is defined by service ranking: highest ranking first (A has highest rank)</text>
+<text transform="matrix(1 0 0 1 70 465)" class="st6 st7">• Same handler chain is used on both client and server sides</text>
+
+</svg>

@@ -574,6 +574,15 @@
               endterm="org.osgi.service.jakartars.whiteboard-version"
               linkend="service.jakartars"/></code></entry>
             </row>
+            
+            <row>
+              <entry><xref linkend="service.jakartaws"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.jakartaws.whiteboard-version"
+              linkend="service.jakartaws"/></code></entry>
+            </row>
 
             <row>
               <entry><xref linkend="service.cdi"
