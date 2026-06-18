@@ -73,7 +73,16 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		super.setUp();
 		timeout = getLongProperty("rsa.tck.timeout", 300000L);
 	}
-	
+
+	/**
+	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
+	 */
+	@Override
+	protected void tearDown() throws Exception {
+		unregisterAllServices();
+		super.tearDown();
+	}
+
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
