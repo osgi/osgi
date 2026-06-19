@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 
@@ -36,6 +37,7 @@ import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
 import org.osgi.resource.Wire;
 import org.osgi.resource.Wiring;
+import org.osgi.service.log.FormatterLogger;
 
 /**
  * A resolve context provides resources, options and constraints to the
@@ -253,6 +255,57 @@ public abstract class ResolveContext {
 	 */
 	public void onCancel(Runnable callback) {
 		// do nothing by default
+	}
+
+	/**
+	 * Returns an optional {@link FormatterLogger} that can be used during the
+	 * resolve operation to emit log messages.
+	 * <p>
+	 * The resolver may call this method to obtain a logger for emitting
+	 * diagnostic and informational messages during the resolve operation. This
+	 * allows the resolve context to provide visibility into the resolution
+	 * process, which can be useful for debugging complex dependency scenarios.
+	 * <p>
+	 * If a logger is provided, the resolver may use it to log:
+	 * <ul>
+	 * <li>Progress information about which resources are being processed</li>
+	 * <li>Details about capability matching and selection</li>
+	 * <li>Information about why certain resolution paths were rejected</li>
+	 * <li>Performance metrics about the resolution process</li>
+	 * </ul>
+	 * <p>
+	 * The default implementation returns an empty {@link Optional}, indicating
+	 * that no logger is available. Implementations that wish to receive log
+	 * messages from the resolver should override this method to return a
+	 * non-empty Optional containing a FormatterLogger instance.
+	 * <p>
+	 * The resolver is not required to use the logger even if one is provided.
+	 * Implementations should not assume that providing a logger will result in
+	 * any specific log output.
+	 * <p>
+	 * <b>Import Range Considerations:</b> Resolve context implementations must
+	 * carefully consider their import range for the {@code org.osgi.service.log}
+	 * package:
+	 * <ul>
+	 * <li>If the resolve context only creates loggers using a
+	 * {@code LoggerFactory}, it can use the standard consumer import range
+	 * (e.g., {@code [1.4,2.0)})</li>
+	 * <li>If the resolve context provides its own {@code FormatterLogger}
+	 * implementation, it must use a provider import range (e.g.,
+	 * {@code [1.4,1.5)}) to ensure the resolver and the resolve context use a
+	 * consistent class space for the logger API</li>
+	 * </ul>
+	 * <p>
+	 * For non-OSGi usage, users must ensure that the logger API used by both the
+	 * resolver and the resolve context comes from a compatible class space.
+	 * 
+	 * @return An {@link Optional} containing a {@link FormatterLogger} to be
+	 *         used during the resolve operation, or an empty Optional if no
+	 *         logger is available. Must not be {@code null}.
+	 * @since 1.2
+	 */
+	public Optional<FormatterLogger> getLogger() {
+		return Optional.empty();
 	}
 
 	/**
