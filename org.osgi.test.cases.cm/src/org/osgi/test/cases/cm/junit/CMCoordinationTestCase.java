@@ -401,10 +401,13 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 
 				}, msProps);
 
-		// start a coordination
+		sleep();
+		assertEquals("Initial ManagedService#updated call missing", 1,
+				events.size());
+		assertFalse("properties must be null",
+				events.get(0));
 		final Coordinator c = this.getService(Coordinator.class);
 		final Coordination coord = c.begin("cm-test2", 0);
-
 		try {
 
 			// create the configuration
@@ -415,29 +418,36 @@ public class CMCoordinationTestCase extends DefaultTestBundleControl {
 			conf.update(props);
 
 			sleep();
-			assertEquals(1, events.size());// update with null because
-											// registered before coordination
+			assertEquals(
+					"Event was delivered during coordination after creation of configuration",
+					1, events.size());
 
 			// update configuration
 			props.put("key2", "value2");
 			conf.update(props);
 
 			sleep();
-			assertEquals(1, events.size());
+			assertEquals(
+					"Event was delivered during coordination after updating configuration",
+					1, events.size());
 
 			// delete configuration
 			conf.delete();
 
 			sleep();
-			assertEquals(1, events.size());
+			assertEquals(
+					"Event was delivered during coordination after delete configuration",
+					1, events.size());
 		} finally {
 			coord.end();
 		}
 
 		// wait and verify listener
 		sleep();
-		assertEquals(1, events.size());
-		assertFalse(events.get(0));
+		assertEquals("Collapsed event from coordination is missing", 2,
+				events.size());
+		// all events must be 'null' updates
+		assertFalse("properties must be null", events.get(1));
 	}
 
 	/**
