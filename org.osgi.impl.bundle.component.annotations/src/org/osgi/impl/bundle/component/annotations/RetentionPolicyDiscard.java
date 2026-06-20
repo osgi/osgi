@@ -15,20 +15,23 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  *******************************************************************************/
+package org.osgi.impl.bundle.component.annotations;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ComponentRetentionPolicy;
 
 /**
- * Service Component Annotations Package Version 1.5.
- * <p>
- * This package is not used at runtime. Annotated classes are processed by tools
- * to generate Component Descriptions which are used at runtime.
- *
- * @author $Id$
+ * Test component with retention policy set to DISCARD
  */
-
-@Version(COMPONENT_SPECIFICATION_VERSION)
-package org.osgi.service.component.annotations;
-
-import static org.osgi.service.component.ComponentConstants.COMPONENT_SPECIFICATION_VERSION;
-
-import org.osgi.annotation.versioning.Version;
-
+@Component(
+	name = "testRetentionPolicyDiscard",
+	service = RetentionPolicyDiscard.class,
+	immediate = false,
+	retentionPolicy = ComponentRetentionPolicy.DISCARD
+)
+public class RetentionPolicyDiscard {
+	
+	public String getMessage() {
+		return "Component with DISCARD retention policy";
+	}
+}
