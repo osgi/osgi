@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.tb1;
 
@@ -24,22 +24,17 @@ import static junit.framework.TestCase.assertTrue;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
+import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -51,25 +46,20 @@ public class Activator implements BundleActivator, A, B {
 	BundleContext       context;
 	EndpointDescription endpoint;
 
-	Semaphore																													semaphore	= new Semaphore(
-			0);
-
-	ServiceTracker<org.osgi.service.remoteserviceadmin.EndpointListener,org.osgi.service.remoteserviceadmin.EndpointListener>	tracker;
-
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		
+
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
-		
+
 		test();
 	}
 
@@ -79,11 +69,8 @@ public class Activator implements BundleActivator, A, B {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
-		
-		stoptest();
 
-		if (tracker != null)
-			tracker.close();
+		stoptest();
 	}
 
 	/**
@@ -101,7 +88,7 @@ public class Activator implements BundleActivator, A, B {
 	public String getB() {
 		return "this is B";
 	}
-	
+
 	private void test() throws Exception {
 		//
 		// create an EndpointDescription
@@ -116,82 +103,34 @@ public class Activator implements BundleActivator, A, B {
 		properties.put(RemoteConstants.ENDPOINT_ID, "someURI"); // mandatory
 		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "A"); // mandatory
 		endpoint = new EndpointDescription(registration.getReference(), properties);
-		
+
 		assertNotNull(endpoint);
 		assertEquals("Endpoint properties are supposed to trump service properties", "has been overridden", endpoint.getProperties().get("mykey"));
 
-		// 
+		//
 		// find the EndpointListeners and call them with the endpoint description
 		//
-		String filter = "(&(" + Constants.OBJECTCLASS + "="
-				+ org.osgi.service.remoteserviceadmin.EndpointListener.class
-						.getName()
-				+ ")("
-				+ org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE
-				+ "=*))"; // see
-																		// 122.6.1
+		String timeoutString = context.getProperty("rsa.tck.timeout");
+		long timeout = timeoutString != null ? Long.parseLong(timeoutString) : 30000;
+		boolean notified = Utils.notifyMatchingListeners(context, EndpointListener.class, endpoint, timeout,
+			(matchedFilter, listener) -> listener.endpointAdded(endpoint, matchedFilter));
 
-		tracker = new ServiceTracker<org.osgi.service.remoteserviceadmin.EndpointListener,org.osgi.service.remoteserviceadmin.EndpointListener>(
-				context, FrameworkUtil.createFilter(filter), null) {
-
-			@Override
-			public org.osgi.service.remoteserviceadmin.EndpointListener addingService(
-					ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener> reference) {
-				org.osgi.service.remoteserviceadmin.EndpointListener listener = super.addingService(
-						reference);
-
-				Object scope = reference
-						.getProperty(
-								org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE);
-
-				String matchedFilter = Utils.isInterested(scope, endpoint);
-
-				if (matchedFilter != null) {
-					listener.endpointAdded(endpoint, matchedFilter);
-					semaphore.release();
-				}
-
-				return listener;
-			}
-		};
-
-		tracker.open();
-		
-		String timeout = context.getProperty("rsa.tck.timeout");
-		
-		assertTrue("no interested EndpointListener found", semaphore
-				.tryAcquire(Long.parseLong(timeout != null ? timeout
-						: "30000"), TimeUnit.MILLISECONDS));
+		assertTrue("no interested EndpointListener found", notified);
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void stoptest() throws Exception {
-		// 
+		//
 		// find the EndpointListeners and call them with the endpoint description
 		//
-		ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener>[] listeners = tracker
-				.getServiceReferences();
-		assertNotNull("no EndpointListeners found", listeners);
-		
-		boolean foundListener = false;
-		for (ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener> sr : listeners) {
-			org.osgi.service.remoteserviceadmin.EndpointListener listener = context
-					.getService(sr);
-			Object scope = sr.getProperty(
-					org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE);
-			
-			String matchedFilter = Utils.isInterested(scope, endpoint);
-			
-			if (matchedFilter != null) {
-				foundListener = true;
-				listener.endpointRemoved(endpoint, matchedFilter);
-			}
-		}
-		assertTrue("no interested EndpointListener found", foundListener);
+		boolean notified = Utils.notifyMatchingListeners(context, EndpointListener.class, endpoint, 0,
+			(matchedFilter, listener) -> listener.endpointRemoved(endpoint, matchedFilter));
+
+		assertTrue("no interested EndpointListener found", notified);
 	}
-	
+
 
 
 }
