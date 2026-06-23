@@ -27,16 +27,22 @@
         index=${.}/baseline.mvn;\
         readOnly=true
 
+# Retained for dependency *resolution* only: this repo's default index is
+# cnf/ossrh.mvn, the sole index listing the org.eclipse.osgi-technology
+# webservices runtime registrar SNAPSHOT that the build needs. Publishing no
+# longer uses OSSRH: it now writes to the local 'Release' repo, which
+# .github/scripts/sonatype-upload.sh uploads to the Sonatype Central Portal —
+# so the OSSRH staging releaseUrl has been dropped. Do not rename: the name
+# 'OSSRH' is tied to the cnf/ossrh.mvn index filename.
 -plugin.repositories.ossrh: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name='OSSRH'; \
         snapshotUrl="${first;${env;OSSRH_SNAPSHOT};https://central.sonatype.com/repository/maven-snapshots/}"; \
-        releaseUrl="${first;${env;OSSRH_RELEASE};https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/}"; \
         noupdateOnRelease=true
 
-publishrepo: ${if;${env;OSSRH_USERNAME};OSSRH}
+# Release to the local 'Release' file repo (uploaded to Central by sonatype-upload.sh).
+publishrepo: Release
 gpg: ${if;${env;GPG_PASSPHRASE};gpg --pinentry-mode=loopback;gpg}
--connection-settings.publish: ${if;${publishrepo};${.}/ossrh-settings.xml}
 
 -buildrepo: Local
 -releaserepo: Release
