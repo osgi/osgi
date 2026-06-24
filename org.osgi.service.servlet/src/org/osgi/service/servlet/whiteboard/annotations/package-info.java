@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Servlet Whiteboard Annotations Package Version 2.0.
+ * Servlet Whiteboard Annotations Package Version 3.0.
  * <p>
  * This package contains annotations that can be used to require the Servlet
  * Whiteboard implementation.
@@ -26,7 +26,7 @@
  * are only used at build-time.
  * <p>
  * 
- * @author $Id$
+ * @author $Id: 7a2ede6d6a39e24de4ae917b6c15d44c42279fe9 $
  */
 
 @Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")

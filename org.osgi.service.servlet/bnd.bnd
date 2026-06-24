@@ -11,5 +11,5 @@ Export-Package: ${p}.*;-split-package:=first
 	org.osgi.framework;maven-scope=provided;version=1.8,\
 	org.osgi.dto;maven-scope=provided;version=1.0,\
 	org.osgi.service.component.annotations;maven-scope=provided;version=1.4,\
-	jakarta.servlet-api;maven-scope=provided;version=5.0,\
+	jakarta.servlet-api;maven-scope=provided;version=6.0,\
 	org.osgi.namespace.implementation;version=1.0

@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Servlet Whiteboard Property Types Package Version 2.0.
+ * Servlet Whiteboard Property Types Package Version 3.0.
  * <p>
  * When used as annotations, component property types are processed by tools to
  * generate Component Descriptions which are used at runtime.
@@ -27,9 +27,9 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.whiteboard.propertytypes; version="[2.0,3.0)"}
+ * {@code  Import-Package: org.osgi.service.servlet.whiteboard.propertytypes; version="[3.0,4.0)"}
  *
- * @author $Id$
+ * @author $Id: 7e9e0f0504729eb0029a8e3a23720822df82bc4b $
  */
 
 @Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")

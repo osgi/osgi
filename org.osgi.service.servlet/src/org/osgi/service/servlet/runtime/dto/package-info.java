@@ -17,7 +17,7 @@
  *******************************************************************************/
 
 /**
- * Http Runtime DTO Package Version 2.0.
+ * Http Runtime DTO Package Version 3.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,13 +26,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.runtime.dto; version="[2.0,3.0)"}
+ * {@code  Import-Package: org.osgi.service.servlet.runtime.dto; version="[3.0,4.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.servlet.runtime.dto; version="[2.0,3.1)"}
+ * {@code  Import-Package: org.osgi.service.servlet.runtime.dto; version="[3.0,3.1)"}
  * 
- * @author $Id$
+ * @author $Id: f2bf99409b188c36f7363fd2cfc6471cca178ccc $
  */
 
 @Version(HTTP_WHITEBOARD_SPECIFICATION_VERSION + ".0")
