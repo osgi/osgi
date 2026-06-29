@@ -40,8 +40,21 @@
         snapshotUrl="${first;${env;OSSRH_SNAPSHOT};https://central.sonatype.com/repository/maven-snapshots/}"; \
         noupdateOnRelease=true
 
-# Release to the local 'Release' file repo (uploaded to Central by sonatype-upload.sh).
-publishrepo: Release
+# Publish target for CI deploys to the Sonatype Central Portal. bnd routes by version:
+#   - SNAPSHOT versions  -> snapshotUrl (Central snapshot repo, HTTP, token auth)
+#   - release versions   -> releaseUrl  (local 'Release' file repo, then uploaded to
+#                           Central by .github/scripts/sonatype-upload.sh)
+-plugin.repositories.centralpublish: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        name='CentralPublish'; \
+        snapshotUrl="${ossrhrepo}"; \
+        releaseUrl="${fileuri;${releaserepo}}"; \
+        noupdateOnRelease=true
+
+# Route publishing to Central only when the Central token is present (CI); otherwise
+# publish to the local 'Release' file repo so local release builds keep working offline.
+publishrepo: ${if;${env;CENTRAL_SONATYPE_TOKEN_USERNAME};CentralPublish;Release}
+-connection-settings.publish: ${if;${env;CENTRAL_SONATYPE_TOKEN_USERNAME};${.}/central-settings.xml}
 gpg: ${if;${env;GPG_PASSPHRASE};gpg --pinentry-mode=loopback;gpg}
 
 -buildrepo: Local

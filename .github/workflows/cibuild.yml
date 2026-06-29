@@ -90,16 +90,13 @@ jobs:
         path: |
           osgi.tck/generated/osgi.tck.*/
           !osgi.tck/generated/osgi.tck.*.jar
-    - name: Configure settings.xml for Publish
+    - name: Import GPG signing key
       if: ${{ fromJSON(env.canonical) }}
       uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
-        server-id: ossrh
-        server-username: OSSRH_USERNAME
-        server-password: OSSRH_PASSWORD
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
         gpg-passphrase: GPG_PASSPHRASE
     - name: Publish
       id: publish
@@ -109,12 +106,22 @@ jobs:
         cache-read-only: ${{ github.ref != 'refs/heads/main' }}
         arguments: :publish
       env:
-        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-    - name: Complete Maven Publish
-      if: ${{ fromJSON(env.canonical) }}
-      run: curl -X POST -u $OSSRH_USERNAME:$OSSRH_PASSWORD https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.osgi?publishing_type=automatic
+        GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+    # Snapshot builds are deployed straight to the Central snapshot repo by :publish above.
+    # Release builds deploy to the local 'Release' file repo (cnf/generated/repo); upload that
+    # bundle to the Central Portal. USER_MANAGED = a deliberate manual step finalises the release.
+    - name: Upload release bundle to Central Portal
+      if: ${{ fromJSON(env.canonical) && github.ref == 'refs/heads/release' }}
+      env:
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+      run: |
+        SONATYPE_BEARER=$(printf '%s:%s' "${CENTRAL_SONATYPE_TOKEN_USERNAME}" "${CENTRAL_SONATYPE_TOKEN_PASSWORD}" | base64 -w0)
+        echo "::add-mask::${SONATYPE_BEARER}"
+        export SONATYPE_BEARER
+        ./.github/scripts/sonatype-upload.sh --publishing-type USER_MANAGED cnf/generated/repo
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
