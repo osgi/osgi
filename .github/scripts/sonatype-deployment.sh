@@ -33,7 +33,18 @@ while [[ $# -gt 0 ]]; do
 done
 : "${SONATYPE_BEARER:?SONATYPE_BEARER not set}"
 : "${DEPLOYMENT_ID:?deployment id required}"
-AUTH=(-H "Authorization: Bearer ${SONATYPE_BEARER}")
+# Validate the deployment id (Central uses UUIDs) before interpolating it into a
+# URL, to reject path/query-injection in a passed-in value.
+if [[ ! "${DEPLOYMENT_ID}" =~ ^[0-9a-fA-F-]{8,64}$ ]]; then
+  echo "Error: deployment id has unexpected format: ${DEPLOYMENT_ID}" >&2
+  exit 1
+fi
+# Keep the bearer token off the command line (process list / logs): pass it via
+# a curl config file created with restrictive (0600) permissions by mktemp.
+CURL_CONFIG=$(mktemp "${TMPDIR:-/tmp}/sonatype-curlcfg-XXXXXX")
+printf 'header = "Authorization: Bearer %s"\n' "${SONATYPE_BEARER}" > "${CURL_CONFIG}"
+trap 'rm -f "${CURL_CONFIG}"' EXIT
+AUTH=(--config "${CURL_CONFIG}")
 case "$ACTION" in
   status)  curl -fsS -X POST   "${AUTH[@]}" "${API}/status?id=${DEPLOYMENT_ID}"; echo ;;
   publish) curl -fsS -X POST   "${AUTH[@]}" "${API}/deployment/${DEPLOYMENT_ID}"; echo "published ${DEPLOYMENT_ID}" ;;

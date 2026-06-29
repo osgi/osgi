@@ -116,8 +116,9 @@ fi
 
 
 # ---- release deployment: create bundle zip ------------------------------
-BUNDLE_ZIP="${TMPDIR:-/tmp}/sonatype-bundle-$$.zip"
-rm -f "${BUNDLE_ZIP}"
+# Use mktemp (unpredictable name, 0600) instead of a PID-based name in a
+# world-writable dir to avoid symlink/TOCTOU races on shared hosts.
+BUNDLE_ZIP=$(mktemp "${TMPDIR:-/tmp}/sonatype-bundle-XXXXXX.zip")
 trap 'rm -f "${BUNDLE_ZIP}"' EXIT
 
 echo "Creating Sonatype Central bundle from ${RELEASE_DIR} ..."
@@ -141,11 +142,16 @@ echo "  URL: ${UPLOAD_URL}"
 echo "  Publishing type: ${PUBLISHING_TYPE}"
 echo "  Name: ${DEPLOYMENT_NAME}"
 
-HTTP_RESPONSE="${TMPDIR:-/tmp}/sonatype-response-$$.txt"
-trap 'rm -f "${BUNDLE_ZIP}" "${HTTP_RESPONSE}"' EXIT
+HTTP_RESPONSE=$(mktemp "${TMPDIR:-/tmp}/sonatype-response-XXXXXX.txt")
+# Keep the bearer token off the command line (process list / logs): pass it via
+# a curl config file created with restrictive (0600) permissions by mktemp,
+# instead of -H "Authorization: Bearer ...". (See script-hardening notes.)
+CURL_CONFIG=$(mktemp "${TMPDIR:-/tmp}/sonatype-curlcfg-XXXXXX")
+printf 'header = "Authorization: Bearer %s"\n' "${SONATYPE_BEARER}" > "${CURL_CONFIG}"
+trap 'rm -f "${BUNDLE_ZIP}" "${HTTP_RESPONSE}" "${CURL_CONFIG}"' EXIT
 
 HTTP_CODE=$(curl -sS -w '%{http_code}' -o "${HTTP_RESPONSE}" \
-	-H "Authorization: Bearer ${SONATYPE_BEARER}" \
+	--config "${CURL_CONFIG}" \
 	-F "bundle=@${BUNDLE_ZIP}" \
 	"${UPLOAD_URL}?${QUERY}")
 

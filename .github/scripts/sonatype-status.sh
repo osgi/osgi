@@ -81,8 +81,14 @@ echo "Checking release deployment status ..."
 echo "  Deployment ID: ${DEPLOYMENT_ID}"
 echo "  Status URL: ${STATUS_URL}"
 
+# Keep the bearer token off the command line (process list / logs): pass it via
+# a curl config file created with restrictive (0600) permissions by mktemp.
+CURL_CONFIG=$(mktemp "${TMPDIR:-/tmp}/sonatype-curlcfg-XXXXXX")
+printf 'header = "Authorization: Bearer %s"\n' "${SONATYPE_BEARER}" > "${CURL_CONFIG}"
+trap 'rm -f "${CURL_CONFIG}"' EXIT
+
 STATUS_RESPONSE=$(curl -sS \
-	-H "Authorization: Bearer ${SONATYPE_BEARER}" \
+	--config "${CURL_CONFIG}" \
 	"${STATUS_URL}?id=${DEPLOYMENT_ID}" 2>&1) || true
 
 # Extract deploymentState from JSON response (portable, no grep -P)
