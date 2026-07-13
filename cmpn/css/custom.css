@@ -1,0 +1,516 @@
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body, html, #fullbody {
+	height: 100%;
+}
+
+body {
+	color: #333;
+	font: 16px/1.5 Ubuntu, Arial, Helvetica, sans-serif;
+	margin: 0;
+}
+
+a {
+	color: #3D97C2;
+}
+
+a:hover, a:visited, a:link, a:active {
+	text-decoration: none;
+}
+
+a.navLinkPrevious {
+	padding-left: 1em;
+}
+
+a.navLinkNext {
+	padding-right: 1em;
+}
+
+a.permalink {
+	color: rgba(0,0,0,.4);
+	border-bottom: none !important;
+	display: block;
+	float: right;
+	font-weight: normal;
+	font-family: monospace;
+	text-align: right;
+	text-decoration: none !important;
+	width: 1.4em;
+}
+
+div.toc > p, .title {
+	font-weight: bold;
+}
+
+h1.title {
+	color: rgba(0, 67, 112, 1);
+	font-size: 3em;
+}
+
+h2.title {
+	font-size: 2.25em;
+}
+
+h3.title {
+	font-size: 1.75em;
+}
+
+h4.title,
+h5.title,
+h6.title {
+	font-size: 1.125em;
+}
+
+img {
+	width: auto;
+}
+
+hr {
+  border-bottom: 1px solid rgb(0,0,0,0.1);
+  border-top: none;
+}
+
+table.navLinks {
+	margin-right: 20px;
+}
+
+table.navLinks td a {
+	color: #000;
+	font-size: 11px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+div.table-contents table {
+	border-color: rgb(0,0,0,0.1) !important;
+	width: 100%;
+}
+
+div.table-contents th,
+div.table-contents td,
+div.table-contents tr {
+	border-bottom: none !important;
+	border-top: none !important;
+	border-left-color: rgba(0,0,0,0.1) !important;
+	border-right-color: rgba(0,0,0,0.1) !important;
+}
+
+div.table-contents th {
+	background-color: rgba(0,0,0,0.1)
+}
+
+td {
+	padding: 4px;
+}
+
+td > p {
+	margin: 0;
+}
+
+div.table-contents td {
+	vertical-align: top;
+}
+
+#content, #header, #sidebar {
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	background-color: #FFF;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#header {
+	height: 120px;
+	width: inherit;
+	position: relative;
+	top: 0;
+}
+
+#header .menu-top-container {
+	background-color: rgba(128, 128, 128, 0.7);
+	height: 18px;
+}
+
+#header .logo {
+	display: block;
+}
+
+#header h1, #header img {
+	display: inline-block;
+	line-height: 100px;
+}
+
+#header h1 {
+	color: rgba(0, 67, 112, 1);
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+	font-size: 3em;
+}
+
+#header img {
+	height: 100px;
+	margin-right: 20px;
+}
+
+#column-two {
+	bottom: 0;
+	top: 120px;
+}
+
+#content {
+	bottom: 0;
+	margin-left: 22%;
+	overflow: auto;
+	padding: 0 1em 0.4em;
+	position: absolute;
+	top: 122px;
+	width: 78vw;
+}
+
+#content a:hover {
+	text-decoration: underline;
+}
+
+#fullbody {
+	margin: 0 auto;
+	position: relative;
+}
+
+#mobile-menu-icon {
+	display: none;
+}
+
+#sidebar {
+	bottom: 0px;
+	max-height: 100%;
+	overflow-y: scroll;
+	position: fixed;
+	top: 122px;
+	overflow-x: hidden;
+	max-width: 22vw;
+}
+
+#sidebar a:hover {
+	color: rgba(241, 138, 0, 1);
+}
+
+#sidebar ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+#sidebar li {
+	word-wrap: break-word;
+}
+
+#tree,
+#tree li {
+	width: 100%;
+}
+
+.bibliomixed .title, .figure .title, .table .title {
+	font-style: italic;
+}
+
+.figure .title {
+	padding: 0.5em 0 1em;
+}
+
+.internal {
+	color : #00C;
+}
+
+.legal, .legal * {
+	color: #555;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+.releaseinfo {
+	font-size: 2em;
+	font-style: italic;
+	font-weight: 300;
+}
+
+.table-contents {
+	overflow-x: auto;
+}
+
+.writeronly {
+	color : red;
+}
+
+span.remark {
+	color: red;
+	background-color: rgba(255,0,0,0.1);
+}
+
+/* JAVADOC Styles - all must be prefixed by div.section.package */
+
+div.section.package div.section.class h3.title,
+div.section.package div.section.class div.section.field h4.title,
+div.section.package div.section.class div.section.method h4.title,
+div.section.package div.section.summary h3.title {
+	color: #000;
+	display: block;
+	font-size: 1em;
+	margin-bottom: 0.5em;
+	padding: 0.25em;
+}
+
+div.section.package h2.title {
+	font-size: 2.25em;
+}
+
+
+div.section.package div.section.class h3.title,
+div.section.package div.section.summary h3.title,
+div.section.package div.section.class div.section.field h4.title,
+div.section.package div.section.class div.section.method h4.title {
+	background-color: rgba(0, 67, 112, 0.33);
+}
+
+.title > span.number,
+#tree span.file span.number,
+div.toc dt span.number,
+div.list-of-figures dt,
+div.list-of-tables dt {
+	color: rgba(0,0,0,.5);
+}
+
+#tree ul li .file .innertitle {
+	margin-left: 5.2em;
+}
+
+#tree li ul li span.file span.number {
+	width: 5em;
+	float: left;
+	overflow: hidden;
+	white-space: nowrap;
+	padding-right: 6px;
+}
+
+#tree li ul li span.file span.number:after {
+	content: "..................................................................................";
+	text-overflow: clip;
+}
+
+#tree > li > span.file > a > span.number {
+	display: block;
+	width: 2em;
+	float: left;
+}
+
+#tree .file .innertitle {
+	display: block;
+	margin-left: 2em;
+}
+
+#toc_2 span.file span.innertitle {
+	margin-left: 0;
+}
+
+p.parameter > label,
+p.description > label {
+	float: left;
+	display: block;
+	width: 10em;
+	text-align: right;
+	padding-right: 1em;
+	font-style: italic;
+}
+
+p.parameter > span,
+p.description > span {
+	display: block;
+	margin-left: 10em;
+}
+
+div.section.class > div.itemizedlist,
+div.section.field > div.itemizedlist,
+div.section.method > div.itemizedlist,
+div.section.class > div.orderedlist,
+div.section.field > div.orderedlist,
+div.section.method > div.orderedlist,
+div.section.class > pre.programlisting,
+div.section.field > pre.programlisting,
+div.section.method > pre.programlisting,
+div.section.class > p:not(.description):not(.parameter),
+div.section.field > p:not(.description):not(.parameter),
+div.section.method > p:not(.description):not(.parameter) {
+	margin-left: 10em;
+}
+
+p.bibliomixed span.title {
+	margin-left: .4em;
+}
+
+p.bibliomixed span.title::after {
+	content: "\000A";
+	white-space: pre;
+}
+
+#tree > li > ul {
+	-moz-box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
+	-webkit-box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
+	background-color: rgb(243, 243, 243);
+	box-shadow: inset 0 -4px 10px -10px #000000, inset 0 4px 10px -10px #000000;
+	max-height: 0;
+	overflow: hidden;
+	padding-left: 1.2em;
+	transition: max-height 0.2s ease-out;
+	width: 100%;
+}
+
+#tree > li > ul.active {
+	max-height: 100%;
+}
+
+#tree > li > span.file {
+	display: block;
+	margin-left: 1.2em;
+}
+
+#tree > li > span.handle {
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 1.2em;
+	color: #3D97C2;
+	cursor: pointer;
+	display: block;
+	float: left;
+	width: 1em;
+	margin-left: .2em;
+	line-height: 1em;
+	border-radius: 3px;
+	background-color: #ececec;
+	text-align: center;
+	line-height: 16px;
+	margin-top: 4px;
+}
+
+@media (max-width: 991px) {
+	#content, #sidebar {
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+
+	#header {
+		height: 76px;
+		position: fixed;
+		z-index: 1;
+	}
+
+	#header img, #header h1 {
+		line-height: 72px;
+	}
+
+	#header h1 {
+		font-size: 4vw;
+		white-space: normal;
+		word-wrap: break-word;
+	}
+
+	#header img {
+		height: 72px;
+		width: 100px;
+	}
+
+	#header .menu-top-container {
+		height: 4px;
+	}
+
+	h1.title {
+		font-size: 2em;
+	}
+
+	h2.title {
+		font-size: 1.625em;
+	}
+
+	h3.title {
+		font-size: 1.375em;
+	}
+
+	div.section.package h2.title {
+		font-size: 1.375em;
+	}
+
+	#content, #fullbody {
+		width: 100%;
+	}
+
+	#content, #mobile-menu-icon {
+		position: fixed;
+	}
+
+	#column-two {
+		top: 0;
+	}
+
+	#content {
+		margin-left: 0;
+		padding: 10px;
+		position: fixed;
+		top: 76px;
+		overflow-x: hidden;
+	}
+
+	.code {
+		text-overflow: clip;
+		white-space: nowrap;
+		display: inline-block;
+		max-width: 100%;
+		line-height: 25px;
+		overflow-x: auto;
+		vertical-align: top;
+	}
+
+	#mobile-menu-icon {
+		background-color: rgba(0, 67, 112, 0.1);
+		color: rgba(0, 67, 112, 1);
+		cursor: pointer;
+		display: block;
+		font-size: 2em;
+		line-height: 72px;
+		right: 0em;
+		width: 1em;
+		text-align: center;
+		top: 4px;
+		z-index: 1;
+	}
+
+	#mobile-menu-icon:hover, #mobile-menu-icon:active {
+		background-color: rgba(0, 67, 112, 0.1);
+	}
+
+	#sidebar {
+		top: 76px;
+		max-height: 0;
+		max-width: 100%;
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+
+	.section.package div.itemizedlist {
+		max-width: 94vw;
+		padding: 0;
+	}
+
+	.section.package div.itemizedlist > ul.itemizedlist {
+		margin: 0px;
+		padding-left: 20px;
+		width: 100%;
+	}
+
+	.section.package div.itemizedlist > ul.itemizedlist > li.listitem > p:first-child {
+		display: inline;
+	}
+}
