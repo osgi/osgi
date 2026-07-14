@@ -97,7 +97,7 @@
         <listitem>
           <para><emphasis>Remote versus Local Management</emphasis> - The
           Configuration Admin service must allow for a remotely managed OSGi
-          framework, and must not assume that con-figuration information is
+          framework, and must not assume that configuration information is
           stored locally. Nor should it assume that the Configuration Admin
           service is always done remotely. Both implementation approaches
           should be viable.</para>
@@ -2464,6 +2464,30 @@ ConfigurationPermission[?application,<xref
     fails or terminates regularly. Registered synchronous listeners will be
     informed immediately when the change happens regardless of a
     coordination.</para>
+    <para>The intent of this integration is that multiple events are collapsed
+    into one, as updating a Managed Service or Managed Service Factory might result
+    in services being updated or unregistered which could then trigger additional service changes.
+    This may be a costly operation and therefore result in an unwanted intermediate
+    state until the system has settled again. Collapsing here means that multiple
+    updates inside a coordination are combined into exactly one update that reflects
+    the final outcome. The following list gives some examples for clarification:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>A configuration exists and it has the configuration value <code>{key: value}</code>.
+         If a coordination starts and first updates this configuration to <code>{key: something else}</code>
+         and later again to <code>{key: value}</code>, then after the coordination terminates
+         one update is delivered with <code>{key: value}</code> even though the configuration has
+         not changed, see <xref linkend="service.cm-updating.configuration" />.
+         </para>
+         <para>If no configuration exists and a coordination starts where it is created with a property
+         <code>{key: something else}</code> and later is deleted, then after the coordination
+         terminates one update is delivered with <code>null</code> even though the Managed Service
+         or Managed Service Factory has not changed. This is a special case of the blindly update
+         case described in <xref linkend="service.cm-updating.configuration" />.
+         </para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="service.cm-capabilities">
