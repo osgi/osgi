@@ -33,6 +33,26 @@ import org.osgi.resource.Wiring;
  * A resolver service resolves the specified resources in the context supplied
  * by the caller.
  * 
+ * <p>
+ * A resolver implementation jar must contain the following resource:
+ * 
+ * <pre>
+ * /META-INF/services/org.osgi.service.resolver.Resolver
+ * </pre>
+ * 
+ * This UTF-8 encoded resource must contain the name of the resolver
+ * implementation class. Space and tab characters, including blank lines, in
+ * the resource must be ignored. The number sign ({@code '#'} &#92;u0023) and
+ * all characters following it on each line are a comment and must be ignored.
+ * 
+ * <p>
+ * Applications can find the name of the Resolver implementation class in the
+ * resource and then load and construct a Resolver object for the resolver
+ * implementation. The Resolver implementation class must have a public,
+ * no-argument constructor. Java&#8482; SE 6 introduced the
+ * {@code ServiceLoader} class which can create a Resolver instance from the
+ * resource.
+ * 
  * @ThreadSafe
  * @author $Id$
  */
