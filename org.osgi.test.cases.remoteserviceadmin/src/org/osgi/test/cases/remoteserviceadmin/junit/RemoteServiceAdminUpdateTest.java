@@ -140,6 +140,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				// check event type
 				@SuppressWarnings("unused")
 				String topic = event.getTopic();
+				assertNull("exception in event", event.getProperty("exception"));
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION,
 						rsaevent.getType());
@@ -222,6 +223,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				// check event type
 				@SuppressWarnings("unused")
 				String topic = event.getTopic();
+				assertNull("exception in event", event.getProperty("exception"));
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.IMPORT_UPDATE,
 						rsaevent.getType());

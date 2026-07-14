@@ -199,6 +199,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				// check event type
 				@SuppressWarnings("unused")
 				String topic = event.getTopic();
+				assertNull("exception in event", event.getProperty("exception"));
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(
 						RemoteServiceAdminEvent.EXPORT_REGISTRATION,
@@ -275,6 +276,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				// check event type
 				@SuppressWarnings("unused")
 				String topic = event.getTopic();
+				assertNull("exception in event", event.getProperty("exception"));
 				assertNull("cause in event", event.getProperty("cause"));
 				assertEquals(RemoteServiceAdminEvent.EXPORT_UPDATE,
 						rsaevent.getType());

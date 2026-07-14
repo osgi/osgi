@@ -260,6 +260,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			// check event type
 			String topic = event.getTopic();
 			assertEquals("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION", topic);
+			assertNull("exception in event", event.getProperty("exception"));
 			assertNull("cause in event", event.getProperty("cause"));
 			assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION, rsaevent.getType());
 
@@ -296,6 +297,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
 			assertEquals("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION", topic);
+			assertNull("exception in event", event.getProperty("exception"));
 			assertNull("cause in event", event.getProperty("cause"));
 
 			// invoke service
@@ -362,6 +364,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
 			assertEquals("122.4.8: wrong event topic", "org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION", topic);
+			assertNull("exception in event", event.getProperty("exception"));
 			assertNull("cause in event", event.getProperty("cause"));
 
 			//
@@ -393,6 +396,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
 			assertEquals("122.4.8: wrong event topic", "org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION", topic);
+			assertNull("exception in event", event.getProperty("exception"));
 			assertNull("cause in event", event.getProperty("cause"));
 
 		} finally {
