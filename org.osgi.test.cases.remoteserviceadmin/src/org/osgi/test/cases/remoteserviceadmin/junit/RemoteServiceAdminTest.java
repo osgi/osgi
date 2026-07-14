@@ -23,14 +23,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -50,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
+import org.osgi.test.cases.remoteserviceadmin.common.TestRemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 
 /**
@@ -158,7 +155,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			// register a RemoteServiceAdminListener to receive the import
 			// notification
 			//
-			TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+			TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener(timeout);
 			registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
 
 			//
@@ -537,48 +534,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		public String getB() {
 			return "this is B";
 		}
-		
+
 	}
-
-	/**
-	 * RemoteServiceAdminListener implementation, which collects and returns the
-	 * received events in order.
-	 * 
-	 * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
-	 * 
-	 */
-	class TestRemoteServiceAdminListener implements RemoteServiceAdminListener {
-		private final LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
-		private final Semaphore sem = new Semaphore(0);
-
-		/**
-		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
-		 */
-		@Override
-		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
-			eventlist.add(event);
-			sem.release();
-		}
-
-		RemoteServiceAdminEvent getNextEvent() {
-			try {
-				sem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
-	
-
 
 }
