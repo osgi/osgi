@@ -42,6 +42,15 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 	private static final String SYSTEM_PACKAGES_EXTRA = "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 	private long m_timeout;
 
+	/**
+	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
+	 */
+	@Override
+	protected void tearDown() throws Exception {
+		unregisterAllServices();
+		super.tearDown();
+	}
+
 	@Override
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();

@@ -98,6 +98,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		super.tearDown();
 		ungetAllServices();
+		unregisterAllServices();
 
 		// wait until all remaining exports / imports are gone
 		remoteServiceAdmin = getService(RemoteServiceAdmin.class);
@@ -923,6 +924,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				},
 				                                                        service, dictionary);
 		assertNotNull(registration);
+		ServiceRegistration< ? > registration2 = null;
 
 		try {
 			//
@@ -1018,8 +1020,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 			// register the service again
 			dictionary.remove(RemoteConstants.SERVICE_EXPORTED_CONFIGS);
-			registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+			registration2 = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
 					service, dictionary);
+			assertNotNull(registration2);
 
 			// manipulate the config property
 			// by putting garbage in them
@@ -1031,7 +1034,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=2591
 			try {
 				exportRegistrations = remoteServiceAdmin.exportService(
-						registration.getReference(), properties);
+						registration2.getReference(), properties);
 				fail("Expected an illegal argumnet exception for garbage input");
 			} catch (IllegalArgumentException e) {
 				// as expected
@@ -1044,6 +1047,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		} finally {
 			try {
                 registration.unregister();
+				if (registration2 != null) {
+					registration2.unregister();
+				}
             } catch (Exception e) {
                 // We're just cleaning up here, so ignore the exception, if any
             }
