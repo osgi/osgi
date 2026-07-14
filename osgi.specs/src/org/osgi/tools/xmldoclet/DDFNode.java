@@ -27,8 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.sun.javadoc.AnnotationDesc;
-import com.sun.javadoc.ClassDoc;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 
 @SuppressWarnings("javadoc")
 public class DDFNode {
@@ -176,23 +179,25 @@ public class DDFNode {
 	}
 
 	/**
-	 * @param clazz
-	 * @return if this ClassDoc represents a DDF node
+	 * @param clazz the type element to check
+	 * @param elementUtils the Elements utility
+	 * @return if this TypeElement represents a DDF node
 	 */
-	public static boolean isDDF(ClassDoc clazz) {
-		if (isDDF(clazz.containingPackage().annotations()))
+	public static boolean isDDF(TypeElement clazz, Elements elementUtils) {
+		PackageElement pkg = elementUtils.getPackageOf(clazz);
+		if (isDDF(pkg.getAnnotationMirrors()))
 			return true;
-		while (clazz != null) {
-			if (isDDF(clazz.annotations()))
+		Element current = clazz;
+		while (current instanceof TypeElement te) {
+			if (isDDF(te.getAnnotationMirrors()))
 				return true;
-
-			clazz = clazz.containingClass();
+			current = te.getEnclosingElement();
 		}
 		return false;
 	}
 
-	private static boolean isDDF(AnnotationDesc[] annotations) {
-		for (AnnotationDesc ad : annotations) {
+	private static boolean isDDF(List<? extends AnnotationMirror> annotations) {
+		for (AnnotationMirror ad : annotations) {
 			if (ad.toString().equals("@org.osgi.dmt.ddf.DDF"))
 				return true;
 		}
