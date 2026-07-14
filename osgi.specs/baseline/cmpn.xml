@@ -31007,8 +31007,8 @@ public class MyComponent implements AcmeService {}</programlisting>
   <section xreflabel="org.osgi.service.component" version="5" role="package" xml:id="org.osgi.service.component" xml:base="../../generated/javadoc/docbook/org.osgi.service.component.xml">
    <title>org.osgi.service.component</title>
    <info>
-      <releaseinfo xml:id="org.osgi.service.component-version">Version 1.5</releaseinfo>
-      <edition xml:id="org.osgi.service.component-version.number">1.5</edition>
+      <releaseinfo xml:id="org.osgi.service.component-version">Version 1.6</releaseinfo>
+      <edition xml:id="org.osgi.service.component-version.number">1.6</edition>
    </info>
    <para>
 Service Component Package Version 1.5.
