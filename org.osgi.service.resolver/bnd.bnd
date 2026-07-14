@@ -6,4 +6,5 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath = \
     ${osgi.annotation.buildpath}, \
     org.osgi.framework;maven-scope=provided;version=1.8,\
-    org.osgi.resource;maven-scope=provided;version=1.0
+    org.osgi.resource;maven-scope=provided;version=1.0,\
+    org.osgi.service.log;maven-scope=provided;version=1.4
