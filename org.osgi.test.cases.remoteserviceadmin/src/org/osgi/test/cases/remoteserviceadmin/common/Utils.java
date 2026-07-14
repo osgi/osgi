@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 package org.osgi.test.cases.remoteserviceadmin.common;
 
@@ -31,9 +31,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
+import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.test.support.OSGiTestCase;
 
 public class Utils {
@@ -48,7 +54,7 @@ public class Utils {
 	 * @param scopeobj
 	 * @param description
 	 * @return
-	 * 
+	 *
 	 * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
 	 */
 	public static String isInterested(Object scopeobj,
@@ -81,7 +87,7 @@ public class Utils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param testCase
 	 * @return EndpointDescription reconstructed from a HEX string passed by the
@@ -133,11 +139,11 @@ public class Utils {
 
 		return new EndpointDescription(props);
 	}
-	
+
 	/**
 	 * Write the contents of the EndpointDescription into System properties for
 	 * the parent framework to read and then import.
-	 * 
+	 *
 	 * @param ed
 	 * @throws IOException
 	 */
@@ -222,5 +228,43 @@ public class Utils {
 		return properties;
 	}
 
+	/**
+	 * Notify endpoint listeners of the given class whose scope matches
+	 * the given endpoint by invoking the given action with it. If no
+	 * listener is available that matches the scope, waits until the given
+	 * timeout for one to be registered and then invokes it.
+	 *
+	 * @param context the bundle context
+	 * @param clazz the listener class
+	 * @param endpoint the endpoint to match against the scopes
+	 * @param timeout the max time to wait for a matching listener
+	 * @param action the action to invoke on matched listeners
+	 *        (given the matched filter and listener instance)
+	 * @return true if at least one listener matched, false if none matched
+	 * @param <S> the listener type
+	 * @throws InvalidSyntaxException if an error occurred while preparing the registration filter
+	 * @throws InterruptedException if the thread is interrupted while waiting
+	 */
+	public static <S> boolean notifyMatchingListeners(BundleContext context, Class<S> clazz,
+			EndpointDescription endpoint, long timeout,
+			BiConsumer<String, S> action) throws InvalidSyntaxException, InterruptedException {
+		String filter = "(&(" + Constants.OBJECTCLASS + "=" + clazz.getName()
+			+ ")(" + EndpointEventListener.ENDPOINT_LISTENER_SCOPE + "=*))";
+		MatchedServiceTracker<S> tracker = new MatchedServiceTracker<>(context, FrameworkUtil.createFilter(filter),
+			reference -> {
+				Object scope = reference.getProperty(EndpointEventListener.ENDPOINT_LISTENER_SCOPE);
+				return isInterested(scope, endpoint) != null;
+			}, (reference, listener) -> {
+			Object scope = reference.getProperty(EndpointEventListener.ENDPOINT_LISTENER_SCOPE);
+			String matchedFilter = isInterested(scope, endpoint);
+			action.accept(matchedFilter, listener);
+		});
+		tracker.open();
+		try {
+			return tracker.awaitMatch(timeout, TimeUnit.MILLISECONDS) != null;
+		} finally {
+			tracker.close();
+		}
+	}
 
 }

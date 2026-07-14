@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * SPDX-License-Identifier: Apache-2.0 
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 package org.osgi.test.cases.remoteserviceadmin.tb7;
@@ -24,38 +24,30 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.remoteserviceadmin.EndpointDescription;
-import org.osgi.service.remoteserviceadmin.EndpointEvent;
-import org.osgi.service.remoteserviceadmin.EndpointEventListener;
-import org.osgi.service.remoteserviceadmin.RemoteConstants;
+import org.osgi.service.remoteserviceadmin.*;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * 
+ *
  * Test bundle that registers a service to be exported and manually notifies any
  * discovery implementation that it should publish an endpoint for this service.
  * The bundle is very similar to tb1 but uses the RSA 1.1 EndpointEventListener
  * instead of the deprecated EndpointListener.
- * 
+ *
  * The bundle further provides an implementation of the ModifiableService
  * allowing to remotely change the service registration to cause a service
  * modified event.
- * 
+ *
  * @author <a href="mailto:marc@marc-schaaf.de">Marc Schaaf</a>
- * 
+ *
  */
 public class Activator implements BundleActivator, ModifiableService, B {
 
@@ -66,8 +58,6 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 	Semaphore													semaphore	= new Semaphore(
 			0);
-
-	ServiceTracker<EndpointEventListener, EndpointEventListener> tracker;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -136,9 +126,6 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		stoptest();
-		if (tracker != null) {
-			tracker.close();
-		}
 	}
 
 	@Override
@@ -198,69 +185,16 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 		// FIXME: should I also filter for framework UUID == my UUID as
 		// suggested in 122.6.1?
-		if (tracker == null) {
-			createTracker(context, endpointEvent);
-		} else {
-			ServiceReference<EndpointEventListener>[] refs = tracker
-					.getServiceReferences();
-			if (refs != null) {
-				for (ServiceReference<EndpointEventListener> ref : refs) {
-					sendEventIfMatches(endpointEvent, context, ref);
-				}
-			}
-		}
 
-		String timeout = context.getProperty("rsa.tck.timeout");
-
+		String timeoutString = context.getProperty("rsa.tck.timeout");
+		long timeout = timeoutString != null ? Long.parseLong(timeoutString) : 30000;
 		try {
-			assertTrue("no interested EndpointEventListener found",
-					semaphore.tryAcquire(Long
-							.parseLong(timeout != null ? timeout : "30000"),
-							TimeUnit.MILLISECONDS));
+			boolean notified = Utils.notifyMatchingListeners(context, EndpointEventListener.class, endpoint, timeout,
+				(matchedFilter, listener) -> listener.endpointChanged(endpointEvent, matchedFilter));
+			assertTrue("no interested EndpointEventListener found", notified);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	EndpointEventListener sendEventIfMatches(
-			final EndpointEvent endpointEvent, BundleContext context,
-			ServiceReference<EndpointEventListener> reference) {
-		EndpointEventListener listener = context.getService(reference);
-
-		Object scope = reference
-				.getProperty(EndpointEventListener.ENDPOINT_LISTENER_SCOPE);
-
-		String matchedFilter = Utils.isInterested(scope, endpoint);
-
-		if (matchedFilter != null) {
-			listener.endpointChanged(endpointEvent, matchedFilter);
-			System.out
-					.println("TestBundle7: ******************** Propagated EndpointChanged Event to endpointEventListener: "
-							+ listener + " <<  " + endpointEvent.getType());
-			semaphore.release();
-		}
-
-		return listener;
-	}
-
-	private void createTracker(final BundleContext context,
-			final EndpointEvent endpointEvent) throws InvalidSyntaxException {
-		String filter = "(&(" + Constants.OBJECTCLASS + "="
-				+ EndpointEventListener.class.getName() + ")("
-				+ EndpointEventListener.ENDPOINT_LISTENER_SCOPE + "=*))"; // see
-																			// 122.6.1
-
-		tracker = new ServiceTracker<EndpointEventListener, EndpointEventListener>(
-				context, FrameworkUtil.createFilter(filter), null) {
-
-			@Override
-			public EndpointEventListener addingService(
-					ServiceReference<EndpointEventListener> reference) {
-				return sendEventIfMatches(endpointEvent, context, reference);
-			}
-		};
-
-		tracker.open();
 	}
 
 }
