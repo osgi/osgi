@@ -41,7 +41,7 @@
     the <xref linkend="service.event"/> was created as one of the earliest
     specifications defined by the OSGi Compendium. The design and usage of the
     Event Admin specification, however, makes certain trade-offs that do not
-    fit well with modern application design:</para>
+    fit well with modern application design.</para>
 
     <itemizedlist>
       <listitem>
@@ -168,7 +168,7 @@
       schema - event data uses field names in the class as the keys, and each
       field definition defines the permitted type of the value.</para>
 
-      <para>Type Safe Event classes are expected to either:</para>
+      <para>Type Safe Event classes are expected to either</para>
       <itemizedlist>
         <listitem>
           <para>Conform to OSGi DTO rules - the architecture of OSGi DTOs is described in <xref
@@ -304,9 +304,9 @@ public class ExampleEventSource {
         publication or receipt.</para>
 
         <para>If an Event Handler does need to make changes to an incoming
-        event then it must copy the event data into a new DTO instance. Note
-        that any nested DTO values in the event data must also be copied if
-        they are to be mutated.</para>
+        event, then it must copy the event data into a new DTO instance. Note
+        that the same rule applies to nested DTO values, which must also be
+        copied if they are to be mutated.</para>
       </section>
 
       <section>
@@ -314,7 +314,7 @@ public class ExampleEventSource {
 
         <para>When an event source publishes untyped event data, it passes a
         Map instance to the Typed Event Bus. The Typed Event Bus is not
-        required to take a copy of this Map, and therefore the event source
+        required to make a copy of this Map; therefore the event source
         must not change the Map, or any data structures within the Map, after
         the call to <xref
         linkend="org.osgi.service.typedevent.TypedEventBus.deliverUntyped-String-Map-"
@@ -379,7 +379,7 @@ public class ExampleEventSource {
       <para>Topics are arranged in a hierarchical namespace. Each level is
       defined by a token and levels are separated by solidi (<code>'/'
       \u002F</code>). More precisely, the topic must conform to the following
-      grammar:</para>
+      grammar.</para>
 
       <programlisting>// For further information see General Syntax Definitions in Core
 
@@ -389,7 +389,7 @@ topic       ::= topictoken ( '/' topictoken ) *</programlisting>
 
       <para>Topics should be designed to become more specific when going from
       left to right. Consumers can provide a prefix that matches a topic,
-      using the preferred order allows a handler to minimize the number of
+      using the preferred order enables a handler to minimize the number of
       prefixes it needs to register.</para>
 
       <para>Topics are case-sensitive. As a convention, topics should follow
@@ -451,7 +451,7 @@ public class ExampleEventSource {
 }</programlisting>
     </section>
 
-    <section>
+    <section xml:id="typedevent.thread.safety">
       <title>Thread Safety</title>
 
       <para>The <code>TypedEventBus</code> implementation must be thread safe
@@ -536,7 +536,7 @@ public class ExampleEventSource {
 }</programlisting>
       
       <para>Because the topic for a <code>TypedEventPublisher</code> is defined
-      at creation time the implementation may only validate it once. Also, the 
+      at creation time the implementation is only required to validate it once. Also, the 
       <code>TypedEventBus</code> implementation must check the
       caller's permission to publish to the topic during the call to 
       <code>createPublisher</code>, but should not check it again for each delivery.
@@ -578,7 +578,7 @@ public class ExampleEventSource {
       their own adaptation mechanism, however it must guarantee at least the
       same functionality as <xref linkend="util.converter"/>.</para>
 
-      <para>A simple example of receiving a typed event follows:</para>
+      <para>A simple example of receiving a typed event follows.</para>
 
       <programlisting>public class ExampleEvent {
     public String message;
@@ -623,9 +623,9 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
     }
 }</programlisting>
 
-      <para>By default the reified type of the TypedEventHandler will be used
+      <para>By default, the reified type of the TypedEventHandler will be used
       as the target topic for the Event Handler. If the
-      <code>event.type</code> property is set then this is used as the default
+      <code>event.type</code> property is set, then this is used as the default
       topic instead of the reified type. To use a specific named topic the
       Typed Event Handler service may be registered with an
       <code>event.topics</code> service property specifying the topic(s) as a
@@ -656,7 +656,7 @@ public class ExampleTypedConsumer implements TypedEventHandler&lt;ExampleEvent&g
       implementation must be registered as a service in the service registry
       using the <code>UntypedEventHandler</code> interface.</para>
 
-      <para>When delivering an event to an Untyped Event Handler the Typed
+      <para>When delivering an event to an Untyped Event Handler, the Typed
       Event Service must, if necessary, convert the event data to a nested map
       structure.</para>
 
@@ -695,8 +695,10 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
         </para>
         
         <para>Using a single-level wildcard means that the Event Handler must
-        be called Events sent to topics matching the rest of the topic String.
-        For example the component:</para>
+        be called for Events sent to topics matching the rest of the topic String.
+        In the following example, the component would receive events sent to the topics
+        <code>foo/bar/foobar</code> and <code>foo/baz/foobar</code>, but not the topics
+        <code>foo/foobar</code> or <code>foo/bar/foobar/baz</code>.</para>
         <programlisting>@Component
 @EventTopics("foo/+/foobar")
 public class ExampleUntypedConsumer implements UntypedEventHandler {
@@ -707,10 +709,6 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
     }
 }</programlisting>
 
-        <para>would receive events sent to the topics <code>foo/bar/foobar</code>
-        and <code>foo/baz/foobar</code>, but not the topics <code>foo/foobar</code> or
-        <code>foo/bar/foobar/baz</code>.</para>
-        
         <para>The <code>+</code> character in a wildcard topic must always
         be the only character in the topic token that it matches, meaning 
         that topic names such as <code>foo+/bar</code> and <code>foo/+bar</code> 
@@ -724,7 +722,10 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
         <para>The multi-level wildcard is used to match all topics which
         share a given prefix. This is done by appending “/*”. to the prefix.
         This value means that the Event Handler must be called for Events
-        sent to sub-topics of the named topic. For example the component:</para>
+        sent to sub-topics of the named topic. In the following example the
+        component would receive events sent to the topics <code>foo/bar</code>
+        and <code>foo/baz</code>, but not the topics <code>foo</code> or
+        <code>foobar/fizzbuzz</code>.</para>
         
         <programlisting>@Component
 @EventTopics("foo/*")
@@ -735,10 +736,6 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
                 + " with message: " + event.get("message"));
     }
 }</programlisting>
-          
-        <para>would receive events sent to the topics <code>foo/bar</code> and
-        <code>foo/baz</code>, but not the topics <code>foo</code> or
-        <code>foobar/fizzbuzz</code>.</para>
 
         <para>The <code>*</code> character in a wildcard topic must always
         follow a solidus <code>/</code> character, and must be the final
@@ -764,7 +761,7 @@ public class ExampleUntypedConsumer implements UntypedEventHandler {
       linkend="org.osgi.service.typedevent.UnhandledEventHandler"
       xrefstyle="hyperlink"/>.</para>
 
-      <para>If any services are found then the Typed Event implementation will
+      <para>If any services are found, then the Typed Event implementation will
       call the <code>notifyUnhandled</code> method passing the topic name and
       event data to all of the registered Unhandled Event Handler
       services.</para>
@@ -786,7 +783,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Filtering Events</title>
 
       <para>Sometimes the use of a topic is insufficient to restrict the
-      events received by an event consumer. In these cases the consumer can
+      events received by an event consumer. In these cases, the consumer can
       further restrict the events that they receive by using a filter. The
       filter is supplied using the <code>event.filter</code> service property,
       the value of which is an LDAP filter string. This filter is applied to
@@ -798,7 +795,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
         <para>Complex events may contain nested data structures, such as DTOs,
         as values in the event data. As LDAP filtering is only designed to
-        match against simple data this means that some event properties cannot
+        match against simple data, some event properties cannot
         be filtered using the <code>event.filter</code> property. The event
         filter is therefore only suitable for use in matching top-level event
         properties.</para>
@@ -809,7 +806,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
         <para>Note that the use of a filter is different from receiving an
         event and choosing to ignore it based on its data. If an event fails
-        to match the filter supplied by an event handler service then it is
+        to match the filter supplied by an event handler service, then it is
         <emphasis>not delivered</emphasis> to that event handler. This means
         that the event data remains eligible to be sent to an
         <code>UnhandledEventHandler</code> unless another event handler does
@@ -824,15 +821,15 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Failing Event Handlers</title>
 
       <para>Event Handler implementations are called by the Typed Event Bus
-      implementation, and are expected:</para>
+      implementation, and are expected to</para>
 
       <itemizedlist>
         <listitem>
-          <para>Not to throw exceptions from their callback method</para>
+          <para>not to throw exceptions from their callback method</para>
         </listitem>
 
         <listitem>
-          <para>To return quickly - any long running tasks should be moved to
+          <para>return quickly. Any long running tasks should be moved to
           another thread</para>
         </listitem>
       </itemizedlist>
@@ -855,14 +852,11 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <para>Event Handlers may be registered at any time, which can lead to 
 	  ordering problems with respect to Event Sources publishing their first 
 	  events. Specifically a late arriving Event Handler may miss the first
-	  message(s) from an early registering Event Source.</para>
-	    
-	  <para>While this situation can be detected by the Event Source (for
+	  message(s) from an early registering Event Source.
+      While this situation can be detected by the Event Source (for
       example by using an Unhandled Event Handler) or by the Event Handler 
 	  (for example by using the TypedEventMonitor) doing so is relatively 
-	  verbose.</para>
-		
-	  <para>In simple situations, such as watching the value of an irregularly
+	  verbose In simple situations, such as watching the value of an irregularly
 	  updating Event Source, it is much easier for the Event Handler to have
 	  the last event(s) replayed to it before it starts receiving newly 
 	  published events. This behaviour can be enabled using the
@@ -905,8 +899,10 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         </listitem>
       </orderedlist>
 	  
-	  <para>The above algorithm is intended to be illustrative rather than normative 
-      and it is expected that implementations will optimise their approaches.</para>
+	  <para>The above algorithm is intended to be illustrative rather than prescriptive. 
+      An implementation is permitted to optimise its delivery approach subject to the
+      rules defined in the <xref linkend="typedevent.thread.safety" xrefstyle="hyperlink"/>
+      section.</para>
       
       <para>As retaining history is an optional feature of the Type Safe Events
 	  implementation, and even where history is retained there may not be any history
@@ -1017,14 +1013,14 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Error Handling</title>
 
       <para>There are several possible error scenarios for Event
-      Handlers:</para>
+      Handlers.</para>
 
       <itemizedlist>
         <listitem>
           <para><code>TypedEventHandler</code> - If the target event type is
           not discoverable, that is there is no reified type information, nor
           is there an <code>event.type</code> property, then the target type
-          for the event is not known. In this situation there is no way for
+          for the event is not known. In this situation, there is no way for
           the Typed Event implementation to correctly target an event schema,
           and the <code>TypedEventHandler</code> must be ignored. The
           implementation must write a message to the log indicating which
@@ -1091,23 +1087,23 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <para>It is not possible to know that an Event cannot be delivered until
       delivery is attempted. It is therefore not possible (or acceptable,
       given the asynchronous nature of delivery) to throw an exception to the
-      sender of an event if there are problems delivering the event. The Event
+      sender of an event when there are problems delivering the event. The Event
       Bus service should not throw exceptions from any publication methods
-      except:</para>
+      except for the following cases:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>NullPointerException</code> if the event data is
+          <para><code>NullPointerException</code> when the event data is
           <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>NullPointerException</code> if the topic is
+          <para><code>NullPointerException</code> when the topic is
           <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>IllegalArgumentException</code> if a topic name is
+          <para><code>IllegalArgumentException</code> when a topic name is
           supplied and it violates the topic name syntax.</para>
         </listitem>
       </itemizedlist>
@@ -1119,7 +1115,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
 
     <para>An important part of a software system is the ability to monitor it
     appropriately to determine whether it is functioning correctly, without
-    having the measurements disrupt the system. To this end the Typed Event
+    having the measurements disrupt the system. To this end, the Typed Event
     implementation must register a <xref
     linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor"
     xrefstyle="hyperlink"/> service which can be used to monitor the flow of
@@ -1139,9 +1135,9 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Event History</title>
 
       <para>In a running system it is often useful for monitoring tools to
-      replay recent data immediately after a problem has occurred. For that
-      reason Typed Event Monitor instances may store past events so that they
-      can be replayed if requested. There are four <code>monitorEvents</code>
+      replay recent data immediately after a problem has occurred. For this
+      reason Typed Event Monitor instances may store past events so that the
+      stored events can be replayed if requested. There are four <code>monitorEvents</code>
       methods capable of replaying history:</para>
 
       <itemizedlist>
@@ -1193,10 +1189,14 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     <section>
       <title>Configuring Event History</title>
       
-      <para>It is not usually the case that the history for every event topic is
-      equally important. In fact for many topics history is unimportant, while
+      <para>Usually, event topics do not require the same level of history support.
+      In fact, for many topics history is unimportant, while
       for others it is highly desirable to keep a small number of historical
-      messages indefinitely. To support this the Typed Event Service implementation
+      messages indefinitely. In particular, keeping the last event sent to a
+      control channel can mitigate coordination problems at startup, and simplify
+      startup when a new consumer comes online.</para>
+      
+      <para>To support this the Typed Event Service implementation
       allows for history storage to be configured on a per-topic basis, with
       a <xref linkend="org.osgi.service.typedevent.monitor.RangePolicy"
         xrefstyle="hyperlink"/> which defines both a minimum and maximum event 
@@ -1209,7 +1209,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       minimum and maximum requirements at any time to manage its storage 
       efficiently</para>
       
-      <para>As the primary means of accessing historical events the Typed Event
+      <para>As the primary means of accessing historical events, the Typed Event
       Monitor service also provides the ability to introspect and customise the 
       historical event storage.</para>
       
@@ -1235,10 +1235,10 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         where defining the minimum and maximum number of retained events.
         </para>
 
-        <para>Configuration entries use topic filters rather than topic names, and are
-        therefore permitted to use wildcards. This can therefore mean that more than
-        one configuration matches a given topic name. To ensure consistency between
-        implementations the following disambiguation algorithm applies:</para>
+        <para>Configuration entries use topic filters, rather than topic names, and are
+        therefore permitted to use wildcards. As a result more than
+        one configuration can match a given topic name. To ensure consistency between
+        implementations the following disambiguation algorithm must be used.</para>
         
         <orderedlist>
           <listitem><para>Identify the set of matching topic filters from the configuration</para></listitem>
@@ -1255,8 +1255,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
           second step.</para></listitem>
         </orderedlist>
         
-        <para>When obtaining the global configuration it is returned as a <code>Map</code>
-        with the configured topic filters used as keys. Furthermore the keys in the
+        <para>When obtaining the global configuration, it is returned as a <code>Map</code>
+        with the configured topic filters used as keys. Furthermore, the keys in the
         map are <emphasis>ordered</emphasis> such that the most specific match for
         a given topic will <emphasis>always</emphasis> be encountered first. This
         can be used in conjunction with the <xref 
@@ -1266,8 +1266,8 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         xrefstyle="hyperlink"/> to easily identify which policy would apply to a
         given topic.</para>
         
-        <para>In addition to determining the global history configuration it is
-        also possible to introspect the specific configuration for event history
+        <para>In addition to viewing the current global history storage configuration,
+        one can introspect the specific configuration for event history
         retention. For example, to find the policy for a named topic the <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getEffectiveHistoryStorage-String-"
         xrefstyle="hyperlink"/> method will, as for the global configuration, 
@@ -1282,7 +1282,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         <title>Modifying Event History Configuration</title>
         
         <para>In addition to viewing the currently configured history storage
-        configuration users are able to programmatically modify the configuration
+        configuration, users are able to programmatically modify the configuration
         at runtime.</para>
         
         <para>Adding or changing the configuration for a given topic filter is possible
@@ -1295,27 +1295,27 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
         and it is also invalid to set a minimum greater than the maximum. In both cases an 
         <code>IllegalArgumentException</code> is raised.</para>
         
-        <para>When a configuration is added or updated the implementation must ensure
+        <para>When a configuration is added or updated, the implementation must ensure
         that sufficient space exists to be able to hold at least the minimum number
         of events for each configured topic. If the addition or update would breach
         the <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.getMaximumEventStorage--"
         xrefstyle="hyperlink"/> then an <code>IllegalStateException</code> must be
-        thrown by the implementation. For this reason it is also invalid to set a
+        thrown by the implementation. For this reason, it is also invalid to set a
         non zero minimum number of events when using a wildcard topic filter 
-        <emphasis>unless</emphasis> there is no fixed storage limit, as
-        doing so makes it impossible for the implementation to know how many topics
-        the minimum will apply to. Passing a non-zero minimum with a wildcard topic
+        <emphasis>unless</emphasis> there is no fixed storage limit.
+        Doing so would make it impossible for the implementation to know to how many topics
+        the minimum would apply. Passing a non-zero minimum with a wildcard topic
         filter must therefore also trigger an <code>IllegalArgumentException</code>
         if the implementation has a fixed history storage limit.
-        Assuming that sufficient space is available the return value of the
+        Assuming that sufficient space is available, the return value of the
         <code>configureHistoryStorage</code> method indicates the storage space 
         available for this topic filter. This must be at least the minimum
         requirement, and at most the maximum requirement, and is calculated
-        by the implementation taking into account the total available storage,
+        by the implementation, taking into account the total available storage,
         and the pre-existing configuration.</para>
         
-        <para>If no longer required then the configuration for a given topic filter
+        <para>When no longer required then the configuration for a given topic filter
         can be deleted using <xref 
         linkend="org.osgi.service.typedevent.monitor.TypedEventMonitor.removeHistoryStorage-String-"
         xrefstyle="hyperlink"/>. When this method is called it may make zero or more
@@ -1387,7 +1387,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Topic Permission</title>
 
       <para>The <xref linkend="org.osgi.service.typedevent.TopicPermission"
-      xrefstyle="hyperlink"/> class allows fine-grained control over which
+      xrefstyle="hyperlink"/> class enables fine-grained control over which
       bundles may post events to a given topic and which bundles may receive
       those events.</para>
 
@@ -1409,13 +1409,15 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <title>Required Permissions</title>
 
       <para>Bundles that need to consume events must be granted permission to
-      register the appropriate handler service. For Example:
+      register the appropriate handler service. For Example,
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.TypedEventHandler</code>,
-      <code>REGISTER</code>] or
+      <code>REGISTER</code>], or
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UntypedEventHandler</code>,
-      <code>REGISTER</code>] or
+      <code>REGISTER</code>], or
       <code>ServicePermission</code>[<code>org.osgi.service.typedevent.UnhandledEventHandler</code>,
-      <code>REGISTER</code>]. In addition, bundles that consume events require
+      <code>REGISTER</code>] can be used to register, for a given topic, a typed event
+      handler, an untyped event handler, or a unhandled event handler
+      respectively. In addition, bundles that consume events require
       <code>TopicPermission[ &lt;topic&gt;, SUBSCRIBE ]</code> for each topic
       they want to be notified about.</para>
 
@@ -1450,7 +1452,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
       <code>ServicePermission[org.osgi.service.typedevent.TypedEventBus,
       REGISTER]</code> and
       <code>ServicePermission[org.osgi.service.typedevent.monitor.TypedEventMonitor,
-      REGISTER]</code> as these actions are all required to implement the
+      REGISTER]</code>, as these actions are all required to implement the
       specification.</para>
     </section>
 
@@ -1496,7 +1498,7 @@ public class ExampleUnhandledConsumer implements UnhandledEventHandler {
     <itemizedlist>
 		
       <listitem>
-        <para>Event objects may now be <xref linkend="service.typedevent-java.records.ref"/></para>
+        <para>Event objects may now be <xref linkend="service.typedevent-java.records.ref"/>.</para>
       </listitem>
 
       <listitem>
