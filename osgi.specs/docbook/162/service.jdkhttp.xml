@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Contributors to the Eclipse Foundation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+        http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+    SPDX-License-Identifier: Apache-2.0 
+ -->
+
+<chapter label="162" revision="$Id$" version="5.0" xml:id="service.jdkhttp"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>JDK HttpServer Whiteboard Specification</title>
+
+  <titleabbrev>JDK HttpServer Whiteboard</titleabbrev>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.jdkhttp.whiteboard-version"
+    linkend="org.osgi.service.jdkhttp.whiteboard"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Java SE platform has included a small, dependency-free HTTP
+    server implementation, <code>com.sun.net.httpserver.HttpServer</code>,
+    since Java 21, with support for virtual threads and other improvements in
+    more recent releases. This makes it an attractive option for exposing
+    simple HTTP endpoints, such as REST APIs, health checks, and small web
+    applications, without requiring a Servlet container or any additional
+    third-party dependency.</para>
+
+    <para>The JDK HttpServer Whiteboard Specification defines a Whiteboard
+    Pattern, see <xref linkend="service.jdkhttp-whiteboard.pattern.ref"/>, for
+    <code>com.sun.net.httpserver.HttpHandler</code>,
+    <code>com.sun.net.httpserver.Filter</code>, and
+    <code>com.sun.net.httpserver.Authenticator</code> objects, as well as for
+    serving static bundle resources. Bundles register these objects as
+    ordinary services with a small number of service properties, and a JDK
+    HttpServer Whiteboard implementation deploys them to an underlying
+    <code>HttpServer</code>.</para>
+
+    <para>This specification deliberately defines a small API surface. It
+    does not attempt to provide the full range of features defined by the
+    <xref linkend="service.servlet"/>, such as servlet listeners, error
+    pages, multipart upload handling, or pluggable Servlet Context Helpers.
+    Bundle developers who require the full feature set of the Servlet API
+    should use the Servlet Whiteboard instead. This specification aims to be
+    simple to use for common use cases while relying entirely on classes
+    already present in the Java SE platform.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This specification defines the following entities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>HttpHandler service</emphasis> - A
+          <code>com.sun.net.httpserver.HttpHandler</code> registered as a
+          service to process requests for a given context path.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Filter service</emphasis> - A
+          <code>com.sun.net.httpserver.Filter</code> registered as a service
+          to pre- or post-process requests for one or more matching context
+          paths.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Authenticator service</emphasis> - A
+          <code>com.sun.net.httpserver.Authenticator</code> registered as a
+          service to guard one or more matching context paths.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resource registration</emphasis> - Any service
+          registered with the resource pattern and prefix properties defined
+          by this specification, causing the whiteboard to serve entries of
+          the registering bundle at one or more context paths. The service
+          object itself is not used.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JDK HttpServer Whiteboard implementation</emphasis>
+          - An implementation that processes the services described above
+          and deploys them to an underlying <code>HttpServer</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JdkHttpServerRuntime service</emphasis> - A service
+          providing runtime introspection into the JDK HttpServer Whiteboard
+          implementation.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Registering Handlers</title>
+
+    <para>A bundle registers a <code>com.sun.net.httpserver.HttpHandler</code>
+    service to have it deployed at a specific context path. The context path
+    is declared with the <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_CONTEXT_PATH"
+    xrefstyle="hyperlink"/> service property, which is required for the
+    handler to be picked up by the whiteboard.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.handler.properties.table">
+      <title>Service properties for <code>HttpHandler</code> Whiteboard
+      services.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+
+        <colspec colnum="2" colwidth="0.9*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.http.jdk.context.path</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>The context path at which the handler is deployed.
+            Must start with <code>/</code>. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_CONTEXT_PATH"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.context.name</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>A human-readable name for the context. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_CONTEXT_NAME"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>An LDAP filter expression used to target a specific
+            <xref linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+            xrefstyle="hyperlink"/> service. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>A context path must be unique among the active handler and resource
+    registrations of a JDK HttpServer Whiteboard implementation. If more than
+    one <code>HttpHandler</code> service is registered with the same context
+    path, the service that is first in ranking order, as specified by
+    <code>ServiceReference.compareTo</code>, is deployed. The other services
+    registered for that context path are not deployed and are reflected in
+    the failure DTOs, see <xref linkend="service.jdkhttp-error.handling"/>,
+    with the failure reason <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE"
+    xrefstyle="hyperlink"/>.</para>
+
+    <para>When the deployed handler for a context path is unregistered, the
+    JDK HttpServer Whiteboard implementation must deploy the next handler in
+    ranking order that is registered for that context path, if any. This
+    ensures a predictable end result regardless of the order in which
+    handlers are registered or unregistered.</para>
+
+    <para>A handler service without a valid <code>osgi.http.jdk.context.path</code>
+    property is not deployed and is reflected in the failure DTOs with the
+    failure reason <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.DTOConstants.FAILURE_REASON_VALIDATION_FAILED"
+    xrefstyle="hyperlink"/>.</para>
+
+    <para>The following example registers an <code>HttpHandler</code> using
+    the <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.propertytypes.HttpJdkContextPath"
+    xrefstyle="hyperlink"/> Component Property Type annotation:</para>
+
+    <programlisting>@Component
+@HttpJdkContextPath("/hello")
+public class HelloHandler implements HttpHandler {
+
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        byte[] body = "Hello, OSGi!".getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, body.length);
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(body);
+        }
+    }
+}</programlisting>
+
+    <para>The same registration can also be declared using a plain service
+    property:</para>
+
+    <programlisting>@Component(property = "osgi.http.jdk.context.path=/hello")
+public class HelloHandler implements HttpHandler {
+    ...
+}</programlisting>
+  </section>
+
+  <section>
+    <title>Registering Filters</title>
+
+    <para>A bundle registers a <code>com.sun.net.httpserver.Filter</code>
+    service to have it applied to one or more context paths. The context
+    path patterns are declared with the <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_FILTER_PATTERN"
+    xrefstyle="hyperlink"/> service property, which is required.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.filter.properties.table">
+      <title>Service properties for <code>Filter</code> Whiteboard
+      services.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+
+        <colspec colnum="2" colwidth="0.9*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.http.jdk.filter.pattern</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>Context path pattern(s) to which this filter
+            applies. See <xref
+            linkend="service.jdkhttp-pattern.matching"/> below. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_FILTER_PATTERN"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.filter.name</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>A human-readable name for the filter. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_FILTER_NAME"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>An LDAP filter expression used to target a specific
+            <xref linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+            xrefstyle="hyperlink"/> service. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>A filter is applied to a context if at least one of its patterns
+    matches the context path of that handler or resource registration, as
+    defined in <xref linkend="service.jdkhttp-pattern.matching"/>. More than
+    one filter can apply to the same context. Filters must be invoked in
+    order of decreasing service ranking; filters with an equal ranking must
+    be invoked in order of ascending <code>service.id</code>.</para>
+
+    <para>The following example registers a <code>Filter</code> that applies
+    to all context paths below <code>/api</code>:</para>
+
+    <programlisting>@Component
+@HttpJdkFilterPattern("/api/*")
+public class LoggingFilter extends Filter {
+
+    @Override
+    public void doFilter(HttpExchange exchange, Chain chain) throws IOException {
+        System.out.println("Request: " + exchange.getRequestURI());
+        chain.doFilter(exchange);
+    }
+
+    @Override
+    public String description() {
+        return "Logging Filter";
+    }
+}</programlisting>
+
+    <section xml:id="service.jdkhttp-pattern.matching">
+      <title>Pattern Matching</title>
+
+      <para>Filter and Authenticator patterns, as well as resource patterns,
+      use the following matching rules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A pattern consisting of only <code>*</code> matches every
+          context path.</para>
+        </listitem>
+
+        <listitem>
+          <para>A pattern ending with <code>/*</code> matches the string
+          preceding the <code>/*</code> as well as any context path having
+          that string as a proper path prefix. For example,
+          <code>/api/*</code> matches <code>/api</code> and
+          <code>/api/users</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>All other patterns must match a context path
+          exactly.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+
+  <section>
+    <title>Registering Authenticators</title>
+
+    <para>A bundle registers a
+    <code>com.sun.net.httpserver.Authenticator</code> service to have it
+    applied to one or more context paths. The context path patterns are
+    declared with the <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_AUTHENTICATOR_PATTERN"
+    xrefstyle="hyperlink"/> service property, which is required.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.authenticator.properties.table">
+      <title>Service properties for <code>Authenticator</code> Whiteboard
+      services.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+
+        <colspec colnum="2" colwidth="0.9*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.http.jdk.authenticator.pattern</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>Context path pattern(s) to which this authenticator
+            applies. See <xref linkend="service.jdkhttp-pattern.matching"/>.
+            See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_AUTHENTICATOR_PATTERN"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.authenticator.realm</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>The authentication realm. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_AUTHENTICATOR_REALM"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>An LDAP filter expression used to target a specific
+            <xref linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+            xrefstyle="hyperlink"/> service. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>Unlike filters, at most one authenticator can be active for a given
+    context. If more than one registered <code>Authenticator</code> matches
+    a context path, the JDK HttpServer Whiteboard implementation must select
+    the one with the highest service ranking; if more than one has an equal
+    ranking, the one with the lowest <code>service.id</code> must be
+    selected.</para>
+
+    <para>The following example registers an <code>Authenticator</code> that
+    guards all context paths below <code>/admin</code>:</para>
+
+    <programlisting>@Component
+@HttpJdkAuthenticatorPattern("/admin/*")
+@HttpJdkAuthenticatorRealm("admin")
+public class AdminAuthenticator extends BasicAuthenticator {
+
+    public AdminAuthenticator() {
+        super("admin");
+    }
+
+    @Override
+    public boolean checkCredentials(String username, String password) {
+        return "admin".equals(username) &amp;&amp; "secret".equals(password);
+    }
+}</programlisting>
+  </section>
+
+  <section>
+    <title>Registering Resources</title>
+
+    <para>A bundle can make its own entries available as static resources by
+    registering any service with the <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_RESOURCE_PATTERN"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_RESOURCE_PREFIX"
+    xrefstyle="hyperlink"/> service properties. The object registered as the
+    service is not used by the JDK HttpServer Whiteboard implementation; only
+    the service properties and the registering bundle are significant. This
+    allows a resource registration to be combined with, for example, an
+    unrelated marker service or a <code>Condition</code> service.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.resource.properties.table">
+      <title>Service properties for resource registrations.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+
+        <colspec colnum="2" colwidth="0.9*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.http.jdk.resource.pattern</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>Context path pattern(s) at which the resources are
+            served. See <xref linkend="service.jdkhttp-pattern.matching"/>.
+            See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_RESOURCE_PATTERN"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.resource.prefix</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>The bundle entry prefix from which resources are
+            served. Must not end with <code>/</code>, except for
+            <code>"/"</code> which denotes the root of the bundle. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_RESOURCE_PREFIX"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.http.jdk.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>An LDAP filter expression used to target a specific
+            <xref linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+            xrefstyle="hyperlink"/> service. See <xref
+            linkend="org.osgi.service.jdkhttp.whiteboard.JdkHttpWhiteboardConstants.JDK_HTTP_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>A request path matching a resource pattern is mapped to the bundle
+    entry obtained by concatenating the resource prefix and the request path
+    relative to the matched pattern. If the relative path is empty or
+    <code>/</code>, it must be treated as <code>/index.html</code>. If no
+    matching bundle entry exists, the JDK HttpServer Whiteboard implementation
+    must respond with HTTP status <code>404</code> (Not Found).</para>
+
+    <para>Resource patterns share the context path namespace with handler
+    context paths. Unlike handler registrations, resource registrations do
+    not use ranking-based shadowing: the first resource registration
+    successfully activated for a given pattern is used, and any subsequently
+    registered handler or resource registration for the same or an
+    overlapping pattern fails with the reason <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE"
+    xrefstyle="hyperlink"/>. Unregistering the active resource registration
+    for a pattern makes that pattern available again for a subsequent
+    registration, but does not retroactively activate a currently failed
+    registration.</para>
+
+    <para>The following example serves the contents of the
+    <code>/web</code> bundle entry directory below the
+    <code>/static</code> context path:</para>
+
+    <programlisting>@Component
+@HttpJdkResource(pattern = "/static/*", prefix = "/web")
+public class StaticResources {
+    // Marker component; the service object is never used.
+}</programlisting>
+
+    <para>The same registration can also be declared using plain service
+    properties:</para>
+
+    <programlisting>@Component(property = {
+        "osgi.http.jdk.resource.pattern=/static/*",
+        "osgi.http.jdk.resource.prefix=/web"
+})
+public class StaticResources {
+}</programlisting>
+  </section>
+
+  <section>
+    <title>The JdkHttpServerRuntime Service</title>
+
+    <para>The <xref
+    linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+    xrefstyle="hyperlink"/> service represents the runtime state of a JDK
+    HttpServer Whiteboard implementation. Each JDK HttpServer Whiteboard
+    implementation registers exactly one <code>JdkHttpServerRuntime</code>
+    service, which can be used to target Whiteboard services defined in this
+    specification to a specific JDK HttpServer Whiteboard implementation
+    using the <code>osgi.http.jdk.target</code> service property.</para>
+
+    <para>The <code>JdkHttpServerRuntime</code> service must be registered
+    with the <xref
+    linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntimeConstants.JDK_HTTP_ENDPOINT"
+    xrefstyle="hyperlink"/> service property.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.runtime.properties.table">
+      <title>Service properties for the <code>JdkHttpServerRuntime</code>
+      service.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+
+        <colspec colnum="2" colwidth="0.9*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.http.jdk.endpoint</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
+
+            <entry><para>The endpoint(s) on which the JDK HttpServer
+            Whiteboard implementation is listening, for example
+            <code>http://192.168.1.10:8080/</code>. See <xref
+            linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntimeConstants.JDK_HTTP_ENDPOINT"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The runtime state is provided through Data Transfer Objects
+    (DTOs). The architecture of OSGi DTOs is described in <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+
+    <para>The <xref
+    linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime.getRuntimeDTO--"
+    xrefstyle="hyperlink"/> method returns a <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.JdkHttpServerRuntimeDTO"
+    xrefstyle="hyperlink"/> describing all currently active handler, filter,
+    authenticator, and resource registrations, as well as any registrations
+    that failed. See <xref linkend="service.jdkhttp-error.handling"/> for
+    more information about the failure DTOs.</para>
+
+    <para>The <xref
+    linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime.calculateRequestInfoDTO-String-"
+    xrefstyle="hyperlink"/> method calculates how a request to a given path
+    would be processed. The returned <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.RequestInfoDTO"
+    xrefstyle="hyperlink"/> describes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The handler or the resource registration whose context path or
+        pattern, respectively, is the longest match for the given path. A
+        handler context path and a resource pattern are compared as strings;
+        if both a handler and a resource registration match the given path
+        with an equal length, the handler must be selected. If no handler or
+        resource registration matches, both the <code>handlerDTO</code> and
+        the <code>resourceDTO</code> fields of the result are
+        <code>null</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para>All of the filters that apply to the matched handler or
+        resource context, in the order they would be invoked. See <xref
+        linkend="org.osgi.service.jdkhttp.runtime.dto.RequestInfoDTO.filterDTOs"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The authenticator, if any, that applies to the matched handler
+        or resource context. See <xref
+        linkend="org.osgi.service.jdkhttp.runtime.dto.RequestInfoDTO.authenticatorDTO"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="service.jdkhttp-error.handling">
+    <title>Error Handling</title>
+
+    <para>Handler, filter, authenticator, and resource registrations that
+    have the required service properties set but cannot be used are
+    reflected in the <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.FailedHandlerDTO"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.FailedFilterDTO"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.FailedAuthenticatorDTO"
+    xrefstyle="hyperlink"/>, and <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.FailedResourceDTO"
+    xrefstyle="hyperlink"/> respectively, available from the <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.JdkHttpServerRuntimeDTO"
+    xrefstyle="hyperlink"/>. Registrations of the interfaces described in this
+    specification that do not have the required service properties set are
+    ignored and are not reflected in the failure DTOs.</para>
+
+    <para>Each failure DTO extends its corresponding active-state DTO and
+    adds a <code>failureReason</code> field. The <xref
+    linkend="org.osgi.service.jdkhttp.runtime.dto.DTOConstants"
+    xrefstyle="hyperlink"/> class defines the possible values, reusing the
+    numeric values of the identically named constants defined by the
+    <code>org.osgi.service.servlet.runtime.dto.DTOConstants</code> class of
+    the Servlet Whiteboard Specification, so that the same failure reason has
+    the same meaning across whiteboard specifications.</para>
+
+    <table pgwide="1" xml:id="service.jdkhttp.dto.constants.table">
+      <title>Failure reason constants defined by <code>DTOConstants</code>.</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="4*"/>
+
+        <thead>
+          <row>
+            <entry>Constant</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><code>FAILURE_REASON_UNKNOWN</code></para><para>(0)</para></entry>
+
+            <entry><para>The failure reason is unknown.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE</code></para><para>(3)</para></entry>
+
+            <entry><para>The service is shadowed by another service, for
+            example another service with the same context path or an
+            overlapping pattern but a higher service ranking.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>FAILURE_REASON_EXCEPTION_ON_INIT</code></para><para>(4)</para></entry>
+
+            <entry><para>An exception occurred while initializing the
+            handler, filter, authenticator, or resource context.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>FAILURE_REASON_SERVICE_NOT_GETTABLE</code></para><para>(5)</para></entry>
+
+            <entry><para>The service is registered in the service registry
+            but getting the service fails as it returns
+            <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>FAILURE_REASON_VALIDATION_FAILED</code></para><para>(6)</para></entry>
+
+            <entry><para>The service properties are invalid, for example a
+            missing or malformed context path or pattern property.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The JDK HttpServer Whiteboard implementation bundle must provide
+      the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.http.jdk</code>. This capability can be
+      used by provisioning tools and during resolution to ensure that a JDK
+      HttpServer Whiteboard implementation is present to process the
+      Whiteboard services defined in this specification. The capability must
+      also declare a uses constraint for the packages of this specification
+      and provide the version of this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+ osgi.implementation="osgi.http.jdk";
+ uses:="org.osgi.service.jdkhttp.whiteboard,
+        org.osgi.service.jdkhttp.runtime,
+        org.osgi.service.jdkhttp.runtime.dto";
+ version:Version="<xref
+    endterm="org.osgi.service.jdkhttp.whiteboard-version.number"
+    linkend="org.osgi.service.jdkhttp.whiteboard"/>"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+
+      <para>Bundles registering services to be picked up by a JDK HttpServer
+      Whiteboard implementation should require the
+      <code>osgi.implementation</code> capability. For example:</para>
+
+      <programlisting>Require-Capability: osgi.implementation;
+ filter:="(&amp;(osgi.implementation=osgi.http.jdk)
+           (version&gt;=<xref
+    endterm="org.osgi.service.jdkhttp.whiteboard-version.number"
+    linkend="org.osgi.service.jdkhttp.whiteboard"/>)(!(version&gt;=2.0)))"
+      </programlisting>
+
+      <para>To simplify the creation of this requirement, the <xref
+      linkend="org.osgi.service.jdkhttp.whiteboard.annotations.RequireJdkHttpWhiteboard"
+      xrefstyle="hyperlink"/> annotation can be used, either directly or as a
+      meta-annotation on other annotations, such as the Component Property
+      Type annotations defined in <xref
+      linkend="org.osgi.service.jdkhttp.whiteboard.propertytypes"
+      xrefstyle="hyperlink"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the <xref
+      linkend="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime"
+      xrefstyle="hyperlink"/> service must provide a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare
+      a uses constraint for the <code>org.osgi.service.jdkhttp.runtime</code>
+      and <code>org.osgi.service.jdkhttp.runtime.dto</code> packages:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime";
+ uses:="org.osgi.service.jdkhttp.runtime,org.osgi.service.jdkhttp.runtime.dto"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>This section only applies when executing in an OSGi environment
+    which is enforcing Java permissions.</para>
+
+    <para>Bundles that need to register <code>HttpHandler</code>,
+    <code>Filter</code>, <code>Authenticator</code>, or resource Whiteboard
+    services must be granted <code>ServicePermission[interfaceName,
+    REGISTER]</code>, where interface name is the name of the service
+    interface used for the registration, or of the marker service interface
+    in case of a resource registration.</para>
+
+    <para>The JDK HttpServer Whiteboard implementation must be granted
+    <code>ServicePermission[interfaceName, GET]</code> to retrieve these
+    Whiteboard services from the service registry.</para>
+
+    <para>Bundles that need to introspect the runtime state need
+    <code>ServicePermission[org.osgi.service.jdkhttp.runtime.JdkHttpServerRuntime,
+    GET]</code> to obtain the <code>JdkHttpServerRuntime</code> service.</para>
+
+    <para>To serve resources registered by other bundles, the JDK HttpServer
+    Whiteboard implementation must be granted
+    <code>AdminPermission[*,RESOURCE]</code>, since serving resources requires
+    calling <code>Bundle.getEntry</code> on behalf of the registering bundle,
+    and this method requires the caller to have
+    <code>AdminPermission[bundle,RESOURCE]</code>.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdkhttp.whiteboard.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdkhttp.whiteboard.annotations.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdkhttp.whiteboard.propertytypes.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdkhttp.runtime.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdkhttp.runtime.dto.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="service.jdkhttp-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title><biblioid class="uri"><link
+      xlink:href="https://docs.osgi.org/whitepaper/whiteboard-pattern/"/></biblioid></bibliomixed>
+
+      <bibliomixed xml:id="service.jdkhttp-httpserver.ref"><title>JDK
+      HttpServer API</title><biblioid class="uri"><link
+      xlink:href="https://docs.oracle.com/en/java/javase/21/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html"/></biblioid></bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
