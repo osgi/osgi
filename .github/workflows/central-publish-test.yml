@@ -27,27 +27,31 @@
 #   - Only one project is built and published, not the whole workspace, and neither
 #     the specification nor the TCKs run (cibuild.yml is disabled on this branch).
 #
-# mode: snapshot – bnd deploys straight to the Central snapshot repository. Sonatype's
-#                  housekeeping removes a citest snapshot again after a few weeks.
-# mode: release  – uncomments -snapshot: so the build produces release versions, which
-#                  bnd signs and stages into cnf/generated/publish; the bundle is then
-#                  uploaded USER_MANAGED. Nothing becomes public: check it arrived with
-#                  central-deploy-control.yml (status) and remove it again (drop).
+# Snapshot or release comes from -snapshot: in cnf/build.bnd, exactly as in production:
+#
+#   -snapshot: commented out  -> bnd deploys straight to the Central snapshot repository.
+#                                Sonatype housekeeping removes a citest snapshot after weeks.
+#   -snapshot: RC1            -> release versions, which bnd signs and stages into
+#                                cnf/generated/publish; the bundle is uploaded USER_MANAGED.
+#                                Nothing becomes public.
+#
+# So: push once as is to test the snapshot path, then push a commit that uncomments
+# -snapshot: to test the release path.
+#
+# This is push-triggered on purpose. workflow_dispatch only works for workflow files that
+# exist on the *default* branch, so a dispatch-only workflow living on this branch alone
+# could not be started at all.
 #
 # Secrets live in the osgi/osgi repository, so this only works when run there.
 
 name: Central Publish Test (temporary)
 
 on:
+  push:
+    branches:
+    - 'build_sta'
+  # Nominal: only usable once this file is on the default branch.
   workflow_dispatch:
-    inputs:
-      mode:
-        description: 'snapshot = deploy to Central snapshots; release = stage a signed bundle'
-        required: true
-        type: choice
-        options:
-        - snapshot
-        - release
 
 env:
   LC_ALL: en_US.UTF-8
@@ -67,7 +71,7 @@ permissions:
 
 jobs:
   publish-test:
-    name: ${{ inputs.mode }} publish of org.osgi.util.function
+    name: Publish org.osgi.util.function to Central
     runs-on: ubuntu-latest
     steps:
     - name: Git Checkout
@@ -81,16 +85,20 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
-    # Same toggle bnd's release.sh operates on: -snapshot: commented out is a snapshot
-    # build, -snapshot: with a value is a release build using it as the Maven qualifier.
-    - name: Switch to a release build
-      if: ${{ inputs.mode == 'release' }}
-      run: |
-        sed -i 's/^#-snapshot:.*$/-snapshot: RC1/' cnf/build.bnd
-        grep -nE '^-snapshot:' cnf/build.bnd
-    - name: Show effective publishing configuration
+    # Same detection as cibuild.yml and bnd's ci-publish.sh.
+    - name: Detect build type
+      id: buildtype
       run: |
         grep -nE '^-groupid:|^#?-snapshot:' cnf/build.bnd
+        if grep -qE '^-snapshot:' cnf/build.bnd; then
+          echo "Release build -> stage a signed bundle for the Central Portal"
+          echo "release=true" >> "${GITHUB_OUTPUT}"
+          echo "mode=release" >> "${GITHUB_OUTPUT}"
+        else
+          echo "Snapshot build -> deploy to the Central snapshot repository"
+          echo "release=false" >> "${GITHUB_OUTPUT}"
+          echo "mode=snapshot" >> "${GITHUB_OUTPUT}"
+        fi
     - name: Build
       uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
       with:
@@ -123,7 +131,8 @@ jobs:
         echo "--- cnf/generated/publish (staged for Central) ---"
         find cnf/generated/publish -type f 2>/dev/null | sed 's|^|  |' || echo "  (empty)"
     - name: Upload release bundle to Central Portal
-      if: ${{ inputs.mode == 'release' }}
+      id: upload
+      if: ${{ steps.buildtype.outputs.release == 'true' }}
       env:
         CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
         CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
@@ -132,12 +141,36 @@ jobs:
         echo "::add-mask::${SONATYPE_BEARER}"
         export SONATYPE_BEARER
         ./.github/scripts/sonatype-upload.sh --publishing-type USER_MANAGED cnf/generated/publish
-        echo "Now check it with central-deploy-control.yml (status), then drop it."
+        echo "deployment-id=$(cat cnf/generated/publish_DEPLOYMENTID.txt)" >> "${GITHUB_OUTPUT}"
+    # Validation takes a moment, so poll until the deployment leaves PENDING/VALIDATING.
+    # Read-only: this only reports whether the bundle arrived and passed validation.
+    - name: Check deployment status
+      if: ${{ steps.buildtype.outputs.release == 'true' }}
+      env:
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+        DEPLOYMENT_ID: ${{ steps.upload.outputs.deployment-id }}
+      run: |
+        SONATYPE_BEARER=$(printf '%s:%s' "${CENTRAL_SONATYPE_TOKEN_USERNAME}" "${CENTRAL_SONATYPE_TOKEN_PASSWORD}" | base64 -w0)
+        echo "::add-mask::${SONATYPE_BEARER}"
+        export SONATYPE_BEARER
+        for attempt in 1 2 3 4 5 6 7 8 9 10; do
+          status=$(./.github/scripts/sonatype-deployment.sh --status --id "${DEPLOYMENT_ID}")
+          echo "attempt ${attempt}: ${status}"
+          case "${status}" in
+            *PENDING*|*VALIDATING*) sleep 15 ;;
+            *) break ;;
+          esac
+        done
+        echo
+        echo "Deployment ${DEPLOYMENT_ID} is staged and NOT published."
+        echo "Drop it again with:"
+        echo "  SONATYPE_BEARER=... ./.github/scripts/sonatype-deployment.sh --drop --id ${DEPLOYMENT_ID}"
     - name: Upload artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
-        name: central-publish-test-${{ inputs.mode }}
+        name: central-publish-test-${{ steps.buildtype.outputs.mode || 'unknown' }}
         if-no-files-found: warn
         path: |
           cnf/generated/repo/
