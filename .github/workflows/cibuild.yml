@@ -109,11 +109,29 @@ jobs:
         GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
         CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
         CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
-    # Snapshot builds are deployed straight to the Central snapshot repo by :publish above.
-    # Release builds deploy to the local 'Release' file repo (cnf/generated/repo); upload that
-    # bundle to the Central Portal. USER_MANAGED = a deliberate manual step finalises the release.
+    # A snapshot build is already fully published by :publish above — it deploys straight to
+    # the Central snapshot repository. Only a release build needs the bundle upload below.
+    #
+    # Release or snapshot is decided by -snapshot: in cnf/build.bnd, not by the branch:
+    # commented out means SNAPSHOT versions. Gating on the branch would try to upload
+    # SNAPSHOT artifacts to the release endpoint whenever the release branch has not had
+    # -snapshot: enabled. (Same detection as bnd's ci-publish.sh.)
+    - name: Detect build type
+      id: buildtype
+      if: ${{ fromJSON(env.canonical) }}
+      run: |
+        if grep -qE '^-snapshot:' cnf/build.bnd; then
+          echo "Release build (-snapshot: is set in cnf/build.bnd)"
+          echo "release=true" >> "${GITHUB_OUTPUT}"
+        else
+          echo "Snapshot build (-snapshot: is commented out in cnf/build.bnd)"
+          echo "release=false" >> "${GITHUB_OUTPUT}"
+        fi
+    # USER_MANAGED: the deployment is validated but stays unpublished until a deliberate
+    # publish via central-deploy-control.yml, so nothing reaches Maven Central from a CI
+    # run alone. The deployment id is printed by the script and kept with the artifacts.
     - name: Upload release bundle to Central Portal
-      if: ${{ fromJSON(env.canonical) && github.ref == 'refs/heads/release' }}
+      if: ${{ fromJSON(env.canonical) && (steps.buildtype.outputs.release == 'true') }}
       env:
         CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
         CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
@@ -121,7 +139,7 @@ jobs:
         SONATYPE_BEARER=$(printf '%s:%s' "${CENTRAL_SONATYPE_TOKEN_USERNAME}" "${CENTRAL_SONATYPE_TOKEN_PASSWORD}" | base64 -w0)
         echo "::add-mask::${SONATYPE_BEARER}"
         export SONATYPE_BEARER
-        ./.github/scripts/sonatype-upload.sh --publishing-type USER_MANAGED cnf/generated/repo
+        ./.github/scripts/sonatype-upload.sh --publishing-type USER_MANAGED cnf/generated/publish
     - name: Upload Generated Repo
       if: ${{ fromJSON(env.canonical) }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -129,6 +147,8 @@ jobs:
         name: OSGi-Generated-Repo
         path: |
           cnf/generated/repo/
+          cnf/generated/publish/
+          cnf/generated/publish_DEPLOYMENTID.txt
 
   spec:
     name: Specification

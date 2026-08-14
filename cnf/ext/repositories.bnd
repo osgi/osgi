@@ -41,14 +41,23 @@
         noupdateOnRelease=true
 
 # Publish target for CI deploys to the Sonatype Central Portal. bnd routes by version:
-#   - SNAPSHOT versions  -> snapshotUrl (Central snapshot repo, HTTP, token auth)
-#   - release versions   -> releaseUrl  (local 'Release' file repo, then uploaded to
-#                           Central by .github/scripts/sonatype-upload.sh)
+#   - SNAPSHOT versions  -> snapshotUrl (Central snapshot repo, HTTP, token auth). Sonatype
+#                           did not change how snapshots are published, only the URL, so
+#                           this half is unchanged from the previous OSSRH setup.
+#   - release versions   -> releaseUrl  (local staging dir, then uploaded to Central as a
+#                           bundle by .github/scripts/sonatype-upload.sh)
+#
+# The release half deliberately points at ${publishstagerepo} and not at ${releaserepo}.
+# ${releaserepo} is the 'Release' repo, which receives *every* project via -releaserepo,
+# whereas this repo is reached through -releaserepo.publish (cnf/includes/publish.bnd and
+# tck.bnd) and so receives only what passes the baseline gate — the artifacts whose version
+# differs from the last released one. Uploading the staging dir therefore cannot re-submit
+# an already released GAV, which the Central Portal rejects as a duplicate.
 -plugin.repositories.centralpublish: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name='CentralPublish'; \
         snapshotUrl="${ossrhrepo}"; \
-        releaseUrl="${fileuri;${releaserepo}}"; \
+        releaseUrl="${fileuri;${publishstagerepo}}"; \
         noupdateOnRelease=true
 
 # Route publishing to Central only when the Central token is present (CI); otherwise

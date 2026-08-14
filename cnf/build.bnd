@@ -23,6 +23,10 @@ ossrhrepo               = https://central.sonatype.com/repository/maven-snapshot
 apachesnapshotrepo      = https://repository.apache.org/content/repositories/snapshots/
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
+# Staging directory for the release bundle uploaded to the Sonatype Central Portal;
+# see the 'CentralPublish' repo in cnf/ext/repositories.bnd. Unlike ${releaserepo} this
+# holds only what passes the baseline gate. Snapshots never pass through here.
+publishstagerepo        = ${build}/${target-dir}/publish
 workspacepluginpath     = ${build}/${bin}
 includes                = ${build}/includes
 
