@@ -127,12 +127,26 @@ jobs:
       if: ${{ fromJSON(env.canonical) && (steps.buildtype.outputs.release == 'true') }}
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
       run: |
         if [[ -z "${GPG_PASSPHRASE}" ]]; then
           echo "::error::GPG_PASSPHRASE is empty, so this release build would be unsigned and the Central Portal would reject it."
           exit 1
         fi
         gpg --list-secret-keys --keyid-format=long
+        # bnd signs with gpg's default secret key, i.e. whatever GPG_PRIVATE_KEY imported.
+        # Assert that this is the key the project intends to release with, so a stale
+        # GPG_PRIVATE_KEY cannot silently sign a release with the wrong identity.
+        if [[ -n "${GPG_KEY_ID}" ]]; then
+          if gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10}' | grep -qi "${GPG_KEY_ID}\$"; then
+            echo "Signing key matches GPG_KEY_ID (${GPG_KEY_ID})."
+          else
+            echo "::error::The imported signing key is not GPG_KEY_ID (${GPG_KEY_ID}). GPG_PRIVATE_KEY appears to hold different key material, so the release would be signed with the wrong key."
+            exit 1
+          fi
+        else
+          echo "::warning::GPG_KEY_ID is not set - cannot verify which key the release is signed with."
+        fi
     - name: Publish
       id: publish
       if: ${{ fromJSON(env.canonical) }}
