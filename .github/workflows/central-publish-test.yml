@@ -40,7 +40,18 @@
 #
 # This is push-triggered on purpose. workflow_dispatch only works for workflow files that
 # exist on the *default* branch, so a dispatch-only workflow living on this branch alone
-# could not be started at all.
+# could not be started at all — which also rules out central-deploy-control.yml here.
+#
+# The staged release is therefore cleaned up across runs rather than by a manual dispatch:
+#
+#   run N   – uploads the bundle, polls the status, and keeps the deployment id as the
+#             'central-deployment-id' artifact
+#   run N+1 – first step picks that id up via the Actions API, asks Central for the state,
+#             and drops the deployment if it is merely staged (VALIDATED/FAILED). Anything
+#             PUBLISHING or PUBLISHED is left untouched.
+#
+# So the test loop is: push with -snapshot: RC1 -> inspect the run log (and the Portal if you
+# like) -> push again (e.g. reverting -snapshot:) -> the deployment is verified and dropped.
 #
 # Secrets live in the osgi/osgi repository, so this only works when run there.
 
@@ -68,6 +79,8 @@ defaults:
 
 permissions:
   contents: read
+  # To read the deployment id artifact of the previous run of this workflow.
+  actions: read
 
 jobs:
   publish-test:
@@ -76,6 +89,57 @@ jobs:
     steps:
     - name: Git Checkout
       uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+    # central-deploy-control.yml cannot be used from this branch: workflow_dispatch only
+    # works for workflow files that exist on the default branch. So each run cleans up what
+    # the previous one staged — pushing again *is* the deliberate check-and-drop action.
+    # A deployment that is already PUBLISHING/PUBLISHED is never touched.
+    - name: Check and drop the deployment staged by the previous run
+      env:
+        GH_TOKEN: ${{ github.token }}
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+      run: |
+        run_ids=$(gh api \
+          "repos/${GITHUB_REPOSITORY}/actions/workflows/central-publish-test.yml/runs?branch=${GITHUB_REF_NAME}&per_page=20" \
+          --jq '.workflow_runs[].id')
+        artifact_id=""
+        for rid in ${run_ids}; do
+          if [[ "${rid}" == "${GITHUB_RUN_ID}" ]]; then
+            continue
+          fi
+          aid=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${rid}/artifacts" \
+            --jq '.artifacts[] | select(.name == "central-deployment-id") | .id' | head -n1)
+          if [[ -n "${aid}" ]]; then
+            echo "Found deployment id artifact ${aid} from run ${rid}"
+            artifact_id="${aid}"
+            break
+          fi
+        done
+        if [[ -z "${artifact_id}" ]]; then
+          echo "No deployment id from a previous run - nothing staged to check."
+          exit 0
+        fi
+
+        gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${artifact_id}/zip" > deployment-id.zip
+        unzip -o -q deployment-id.zip
+        DEPLOYMENT_ID=$(tr -d '[:space:]' < publish_DEPLOYMENTID.txt)
+        rm -f deployment-id.zip publish_DEPLOYMENTID.txt
+        echo "Previous deployment: ${DEPLOYMENT_ID}"
+
+        SONATYPE_BEARER=$(printf '%s:%s' "${CENTRAL_SONATYPE_TOKEN_USERNAME}" "${CENTRAL_SONATYPE_TOKEN_PASSWORD}" | base64 -w0)
+        echo "::add-mask::${SONATYPE_BEARER}"
+        export SONATYPE_BEARER
+        state=$(./.github/scripts/sonatype-deployment.sh --status --id "${DEPLOYMENT_ID}")
+        echo "${state}"
+        case "${state}" in
+          *PUBLISHING*|*PUBLISHED*)
+            echo "Deployment is being published or is public - leaving it alone." ;;
+          *VALIDATED*|*FAILED*)
+            echo "Deployment is staged and not public - dropping it."
+            ./.github/scripts/sonatype-deployment.sh --drop --id "${DEPLOYMENT_ID}" ;;
+          *)
+            echo "Deployment is not in a final state yet - leaving it alone." ;;
+        esac
     - name: Git Unshallow
       run: |
         git fetch --prune --unshallow
@@ -163,9 +227,18 @@ jobs:
           esac
         done
         echo
+        echo
         echo "Deployment ${DEPLOYMENT_ID} is staged and NOT published."
-        echo "Drop it again with:"
-        echo "  SONATYPE_BEARER=... ./.github/scripts/sonatype-deployment.sh --drop --id ${DEPLOYMENT_ID}"
+        echo "Push again to this branch and the next run will check it and drop it."
+    # Carried to the next run by the check-and-drop step at the top. Its own artifact with
+    # exactly one file, so the path inside the zip is predictable.
+    - name: Upload deployment id
+      if: ${{ steps.buildtype.outputs.release == 'true' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: central-deployment-id
+        if-no-files-found: error
+        path: cnf/generated/publish_DEPLOYMENTID.txt
     - name: Upload artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
