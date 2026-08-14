@@ -1,0 +1,145 @@
+#*******************************************************************************
+# Copyright (c) Contributors to the Eclipse Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#*******************************************************************************
+
+# TEMPORARY (throwaway test commit — delete this file before merge).
+#
+# Verifies the Sonatype Central publishing flow end to end without touching live
+# coordinates and without paying for a full workspace build:
+#
+#   - cnf/build.bnd sets -groupid: org.osgi.citest for this branch, so everything
+#     lands in a test sub-namespace of the registered org.osgi namespace. The token
+#     auth and the namespace authorization are still exercised for real.
+#   - Only one project is built and published, not the whole workspace, and neither
+#     the specification nor the TCKs run (cibuild.yml is disabled on this branch).
+#
+# mode: snapshot – bnd deploys straight to the Central snapshot repository. Sonatype's
+#                  housekeeping removes a citest snapshot again after a few weeks.
+# mode: release  – uncomments -snapshot: so the build produces release versions, which
+#                  bnd signs and stages into cnf/generated/publish; the bundle is then
+#                  uploaded USER_MANAGED. Nothing becomes public: check it arrived with
+#                  central-deploy-control.yml (status) and remove it again (drop).
+#
+# Secrets live in the osgi/osgi repository, so this only works when run there.
+
+name: Central Publish Test (temporary)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'snapshot = deploy to Central snapshots; release = stage a signed bundle'
+        required: true
+        type: choice
+        options:
+        - snapshot
+        - release
+
+env:
+  LC_ALL: en_US.UTF-8
+  GRADLE_OPTS: >-
+    -Dorg.gradle.parallel=true
+    -Dmaven.repo.local=cnf/generated/m2
+  java_version: 17
+  # The single project used for the test.
+  project: org.osgi.util.function
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  publish-test:
+    name: ${{ inputs.mode }} publish of org.osgi.util.function
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+    - name: Git Unshallow
+      run: |
+        git fetch --prune --unshallow
+        git describe --dirty --always --abbrev=9
+    - name: Set up Java
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.java_version }}
+    # Same toggle bnd's release.sh operates on: -snapshot: commented out is a snapshot
+    # build, -snapshot: with a value is a release build using it as the Maven qualifier.
+    - name: Switch to a release build
+      if: ${{ inputs.mode == 'release' }}
+      run: |
+        sed -i 's/^#-snapshot:.*$/-snapshot: RC1/' cnf/build.bnd
+        grep -nE '^-snapshot:' cnf/build.bnd
+    - name: Show effective publishing configuration
+      run: |
+        grep -nE '^-groupid:|^#?-snapshot:' cnf/build.bnd
+    - name: Build
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
+      with:
+        cache-read-only: true
+        arguments: :${{ env.project }}:build
+    # bnd signs release builds only, and only when GPG_PASSPHRASE is set. For mode=release
+    # this is what produces the .asc files the Central Portal requires.
+    - name: Import GPG signing key
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.java_version }}
+        gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
+        gpg-passphrase: GPG_PASSPHRASE
+    # Snapshot: deployed to the Central snapshot repository from here.
+    # Release:   staged into cnf/generated/publish for the bundle upload below.
+    - name: Release
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
+      with:
+        cache-read-only: true
+        arguments: :${{ env.project }}:release
+      env:
+        GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+    - name: Show what was produced
+      run: |
+        echo "--- cnf/generated/repo (all projects, local only) ---"
+        find cnf/generated/repo -type f 2>/dev/null | sed 's|^|  |' || echo "  (empty)"
+        echo "--- cnf/generated/publish (staged for Central) ---"
+        find cnf/generated/publish -type f 2>/dev/null | sed 's|^|  |' || echo "  (empty)"
+    - name: Upload release bundle to Central Portal
+      if: ${{ inputs.mode == 'release' }}
+      env:
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+      run: |
+        SONATYPE_BEARER=$(printf '%s:%s' "${CENTRAL_SONATYPE_TOKEN_USERNAME}" "${CENTRAL_SONATYPE_TOKEN_PASSWORD}" | base64 -w0)
+        echo "::add-mask::${SONATYPE_BEARER}"
+        export SONATYPE_BEARER
+        ./.github/scripts/sonatype-upload.sh --publishing-type USER_MANAGED cnf/generated/publish
+        echo "Now check it with central-deploy-control.yml (status), then drop it."
+    - name: Upload artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: central-publish-test-${{ inputs.mode }}
+        if-no-files-found: warn
+        path: |
+          cnf/generated/repo/
+          cnf/generated/publish/
+          cnf/generated/publish_DEPLOYMENTID.txt

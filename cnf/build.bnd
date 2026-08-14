@@ -81,7 +81,13 @@ osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=8.1.0
 # -snapshot set to the empty string is a release build with no Maven version qualifier. (e.g. 6.0.0)
 #-snapshot:
 
--groupid: org.osgi
+# TEMPORARY (throwaway test commit — revert before merge):
+# Publish under a test namespace so the Central Portal flow can be verified without
+# touching live org.osgi:* coordinates. Sub-namespaces of the registered org.osgi
+# namespace are authorized for the same Sonatype account, so the token auth and the
+# namespace check are still exercised. A citest snapshot is removed by Sonatype's
+# housekeeping after a few weeks; a citest release is staged USER_MANAGED and dropped.
+-groupid: org.osgi.citest
 -pom: version=${if;${def;-snapshot};${versionmask;===;${@version}}-${def;-snapshot};${versionmask;===s;${@version}}}
 Bundle-Name: ${-groupid}:${bsn}
 Bundle-Copyright: ${copyright}

@@ -22,6 +22,10 @@ on:
   push:
     branches-ignore:
     - 'dependabot/**'
+    # TEMPORARY (throwaway test commit — revert before merge): the Central publishing test
+    # runs from central-publish-test.yml and needs neither the full workspace build nor the
+    # specification and TCK jobs.
+    - 'build_sta'
     paths:
     - '**'
     - '!.design/**'
