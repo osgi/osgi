@@ -79,10 +79,7 @@ osgi.annotation.buildpath = osgi.annotation;maven-scope=compile;version=8.1.0
 # -snapshot unset (commented out) is a snapshot build. (e.g. 6.0.0-SNAPSHOT)
 # -snapshot set to a value (e.g. RC1) is a release build with the value as the Maven version qualifier. (e.g. 6.0.0-RC1)
 # -snapshot set to the empty string is a release build with no Maven version qualifier. (e.g. 6.0.0)
-# TEMPORARY (throwaway test commit — revert to '#-snapshot:' before merge):
-# a release build, so the Central Portal bundle upload path is exercised. Produces
-# org.osgi.citest:*:1.2.0-RC1, staged USER_MANAGED and dropped afterwards.
--snapshot: RC1
+#-snapshot:
 
 # TEMPORARY (throwaway test commit — revert before merge):
 # Publish under a test namespace so the Central Portal flow can be verified without
