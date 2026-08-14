@@ -175,8 +175,20 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ env.java_version }}
-        gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg-passphrase: GPG_PASSPHRASE
+    # Without this the first sign of a missing secret is Central rejecting the bundle with
+    # "Missing signature for file: ..." — fail fast and say why instead.
+    - name: Verify a signing key is available
+      if: ${{ steps.buildtype.outputs.release == 'true' }}
+      env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: |
+        if [[ -z "${GPG_PASSPHRASE}" ]]; then
+          echo "::error::GPG_PASSPHRASE is empty. bnd only adds its -maven-release sign clause when this is set, so the release would be unsigned and the Central Portal would reject it."
+          exit 1
+        fi
+        gpg --list-secret-keys --keyid-format=long
     # Snapshot: deployed to the Central snapshot repository from here.
     # Release:   staged into cnf/generated/publish for the bundle upload below.
     - name: Release
@@ -185,7 +197,7 @@ jobs:
         cache-read-only: true
         arguments: :${{ env.project }}:release
       env:
-        GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
         CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
     - name: Show what was produced

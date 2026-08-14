@@ -94,27 +94,8 @@ jobs:
         path: |
           osgi.tck/generated/osgi.tck.*/
           !osgi.tck/generated/osgi.tck.*.jar
-    - name: Import GPG signing key
-      if: ${{ fromJSON(env.canonical) }}
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-      with:
-        distribution: 'temurin'
-        java-version: ${{ env.java_version }}
-        gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
-        gpg-passphrase: GPG_PASSPHRASE
-    - name: Publish
-      id: publish
-      if: ${{ fromJSON(env.canonical) }}
-      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
-      with:
-        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-        arguments: :publish
-      env:
-        GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
-        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
-        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
-    # A snapshot build is already fully published by :publish above — it deploys straight to
-    # the Central snapshot repository. Only a release build needs the bundle upload below.
+    # A snapshot build is fully published by :publish below — it deploys straight to the
+    # Central snapshot repository. Only a release build needs the bundle upload afterwards.
     #
     # Release or snapshot is decided by -snapshot: in cnf/build.bnd, not by the branch:
     # commented out means SNAPSHOT versions. Gating on the branch would try to upload
@@ -131,6 +112,38 @@ jobs:
           echo "Snapshot build (-snapshot: is commented out in cnf/build.bnd)"
           echo "release=false" >> "${GITHUB_OUTPUT}"
         fi
+    - name: Import GPG signing key
+      if: ${{ fromJSON(env.canonical) }}
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.java_version }}
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: GPG_PASSPHRASE
+    # bnd only adds its -maven-release sign clause when GPG_PASSPHRASE is set, and it signs
+    # release builds only. Without this check a missing secret would surface as the Central
+    # Portal rejecting the bundle with "Missing signature for file: ..." — fail fast instead.
+    - name: Verify a signing key is available
+      if: ${{ fromJSON(env.canonical) && (steps.buildtype.outputs.release == 'true') }}
+      env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: |
+        if [[ -z "${GPG_PASSPHRASE}" ]]; then
+          echo "::error::GPG_PASSPHRASE is empty, so this release build would be unsigned and the Central Portal would reject it."
+          exit 1
+        fi
+        gpg --list-secret-keys --keyid-format=long
+    - name: Publish
+      id: publish
+      if: ${{ fromJSON(env.canonical) }}
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+        arguments: :publish
+      env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
     # USER_MANAGED: the deployment is validated but stays unpublished until a deliberate
     # publish via central-deploy-control.yml, so nothing reaches Maven Central from a CI
     # run alone. The deployment id is printed by the script and kept with the artifacts.
