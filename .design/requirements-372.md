@@ -132,6 +132,10 @@ The framework should treat the fragment's resources as part of the host bundle's
 The framework must enable `ServiceLoader` to discover Provider Configuration Files from provider bundles when the consumer bundle and the provider bundle are both wired to the same Service Type package.
 This must work without requiring any OSGi-specific metadata beyond standard `Import-Package` / `Export-Package` declarations.
 
+This is defined purely in terms of observable behavior: once framework-level SPI support is enabled and a wire exists (see R3), any `ClassLoader`-level resource lookup (e.g. `ClassLoader#getResource(s)`) for a Provider Configuration File path from the consumer bundle's class loader must return the aggregated set of matching resources visible across the wire, not merely the consumer bundle's own local content.
+The framework is not required to detect whether the caller is `ServiceLoader` itself as opposed to any other code performing the same kind of lookup; no call-stack inspection or other detection of the calling API is mandated (see R12).
+A consumer bundle that needs the bundle's own, unaggregated resource can instead use `Bundle#getEntry` / `Bundle#findEntries`, which continue to only return the bundle's own local content.
+
 ### R2: Cross-Bundle Class Loading for SPI Implementations
 
 When `ServiceLoader` attempts to instantiate a Service Provider class declared in a Provider Configuration File from another bundle, the framework must enable loading of that class from the provider bundle that declared it.
@@ -202,14 +206,11 @@ The exact set of properties, their names, and their permissible values are left 
 
 ## Open Questions
 
-1. **Scoping activation of SPI aggregation**: Should activation of the framework's SPI aggregation be limited to actual `ServiceLoader` usage (as opposed to normal `getResources("META-INF/services/...")` calls unrelated to SPI)?
-   Per R12, this specification does not mandate *how* an implementation determines this (for example the Equinox POC uses call-stack inspection, while the Felix POC does not); only the resulting observable behavior is subject to future normative requirements, to be worked out in the design phase.
-
-2. **Framework properties**: See R13.
+1. **Framework properties**: See R13.
    The concrete property name(s), granularity (e.g. a single on/off switch vs. finer-grained control over Mediator interoperability), and default values are left to the design phase.
 
-3. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
+2. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
    Per R12, the specific technique used to satisfy R11 (for example class loader delegation vs. bytecode weaving) is left to the design/implementation phase.
 
-4. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
+3. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
    It is not deprecated by this requirements document.
