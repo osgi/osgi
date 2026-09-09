@@ -1,0 +1,208 @@
+# Requirements for Java SPI Support in the OSGi Framework
+
+- **Issue**: [osgi/osgi#372](https://github.com/osgi/osgi/issues/372)
+- **Related**: Service Loader Mediator Specification (Chapter 133)
+- **POC Implementations**:
+  [Apache Felix](https://github.com/apache/felix-dev/pull/455),
+  [Eclipse Equinox](https://github.com/eclipse-equinox/equinox/pull/853)
+
+## Terminology
+
+- **Service Loader** -
+  The `java.util.ServiceLoader` API introduced in Java SE 6 for discovering and loading service provider implementations.
+
+- **Service Type** -
+  The interface or abstract class that a Service Provider implements or extends.
+  Identified by its fully qualified class name.
+
+- **Service Provider** -
+  A concrete implementation of a Service Type.
+  Declared in a Provider Configuration File.
+
+- **Provider Configuration File** -
+  A UTF-8 encoded text resource located at `META-INF/services/<ServiceTypeName>` that lists one or more fully qualified names of Service Provider classes, one per line.
+  Lines beginning with `#` are comments.
+
+- **Consumer Bundle** -
+  A bundle that uses the `ServiceLoader` API to discover and load Service Providers.
+
+- **Provider Bundle** -
+  A bundle that contains one or more Provider Configuration Files and the corresponding Service Provider classes.
+
+- **Wired Bundle** -
+  A bundle that is connected to another bundle through the OSGi wiring model, for example via package imports/exports or Require-Bundle.
+
+## Problem Description
+
+Java's `ServiceLoader` API is the standard mechanism for discovering pluggable service implementations on the Java platform.
+Libraries and frameworks across the Java ecosystem rely on `ServiceLoader` for extensibility, including JDBC drivers, JPA providers, XML parsers, logging backends, and many others.
+
+In a standard Java environment, `ServiceLoader` works by scanning the class loader hierarchy for `META-INF/services/` resources and loading the declared implementation classes.
+This assumes a flat or hierarchical class path where all JARs are mutually visible.
+
+In OSGi, each bundle has its own class loader with controlled visibility.
+A bundle's class loader can only find resources within the bundle itself and packages explicitly imported through the wiring model.
+As a result, `ServiceLoader` calls within an OSGi bundle cannot discover Provider Configuration Files or load Service Provider classes from other bundles.
+The `ServiceLoader` API is effectively broken in OSGi without additional intervention.
+
+### Current Solution: Service Loader Mediator
+
+The existing Service Loader Mediator Specification (Chapter 133) addresses this problem through an extender pattern.
+It requires:
+
+1. Provider bundles to declare `osgi.serviceloader` capabilities in their manifest
+2. Consumer bundles to require the `osgi.serviceloader.processor` extender capability
+3. A mediator bundle to be present that processes these capabilities at runtime
+
+While functional, this approach has significant drawbacks:
+
+- **Metadata overhead** -
+  Both provider and consumer bundles require OSGi-specific manifest headers that are not present in standard Java JARs.
+  This forces modification of third-party libraries.
+- **Extender dependency** -
+  The mediator must be deployed and active, adding a runtime dependency and a potential point of failure.
+- **Adoption barrier** -
+  Library authors who are unaware of OSGi or choose not to support it do not include the required capabilities.
+  This is the common case for the vast majority of Java libraries.
+- **Maintenance burden** -
+  Wrapping or patching third-party JARs to add OSGi metadata is fragile and must be repeated for every library version update.
+- **Incomplete integration** -
+  Some advanced `ServiceLoader` usage patterns are difficult or impossible to support through the mediator approach.
+
+### Impact
+
+The inability of `ServiceLoader` to work transparently in OSGi is one of the most frequently cited pain points by OSGi adopters.
+It causes friction when integrating libraries that rely on `ServiceLoader`, which includes a large and growing portion of the Java ecosystem.
+The JDBC, JPA, JAX-RS, JSON-P, JSON-B, and many other Java specifications use `ServiceLoader` for implementation discovery.
+
+## Use Cases
+
+### UC1: JDBC Driver Discovery
+
+A database application bundle imports `java.sql` and calls `DriverManager.getConnection()` or `ServiceLoader.load(Driver.class)`.
+Multiple JDBC driver bundles are installed, each containing a `META-INF/services/java.sql.Driver` file.
+The application bundle should discover all installed JDBC drivers without OSGi-specific metadata in any bundle.
+
+### UC2: Logging Backend Discovery
+
+A library bundle uses SLF4J, which internally calls `ServiceLoader.load(SLF4JServiceProvider.class)`.
+A logging backend bundle (e.g., Logback) is installed with a standard `META-INF/services/` declaration.
+SLF4J should discover the logging backend through normal `ServiceLoader` usage.
+
+### UC3: Standard Java XML Processing
+
+An application calls `DocumentBuilderFactory.newInstance()`, which internally uses `ServiceLoader` to discover XML parser implementations.
+The framework should provide visibility to XML parser providers in other bundles that export the relevant packages.
+
+### UC4: Mixed Environment
+
+Some provider bundles have OSGi-specific `osgi.serviceloader` capabilities (supporting the Mediator spec) while others only have standard `META-INF/services/` files.
+Both styles of provider should be discoverable.
+The core SPI mechanism and the Service Loader Mediator should coexist without conflicts.
+
+### UC5: Module Boundary Enforcement
+
+A consumer bundle imports package `com.example.api` which contains a Service Type.
+Multiple provider bundles also import `com.example.api` and contain Provider Configuration Files.
+A separate bundle that does *not* import `com.example.api` should *not* have its provider configuration files discovered by the consumer.
+The framework must respect wiring boundaries.
+
+If multiple versions of `com.example.api` are exported by different bundles, the framework must resolve providers using the specific version of the Service Type package that the consumer bundle is wired to, so that only providers wired to the same package version are considered.
+This avoids `ClassCastException`s and similar errors that would otherwise occur when a provider is loaded against an incompatible version of the Service Type.
+
+### UC6: Dynamic Bundle Lifecycle
+
+Provider bundles may be installed, started, stopped, and uninstalled at runtime.
+A subsequent `ServiceLoader.load()` call should reflect the current set of resolved and wired provider bundles.
+Previously cached `ServiceLoader` instances are not required to update dynamically, but fresh calls must reflect current state.
+
+The framework cannot control the internal iteration or caching behavior of a `ServiceLoader` instance, since that is entirely defined by the Java platform.
+The framework can only act at the two points where `ServiceLoader` interacts with it: reading a Provider Configuration File and instantiating a declared Service Provider class.
+If a provider bundle has been uninstalled, stopped, or is otherwise no longer wired at the time a Service Provider class would be instantiated, the framework must cause an appropriate exception to be thrown at that point, so that `ServiceLoader` can skip or fail on that provider according to its own (unmodified) error handling behavior.
+
+### UC7: Fragment Bundles
+
+A fragment bundle attached to a host bundle contains a Provider Configuration File.
+The framework should treat the fragment's resources as part of the host bundle's content and include them in SPI discovery when the host is wired appropriately.
+
+## Requirements
+
+### R1: Transparent SPI Resource Discovery
+
+The framework must enable `ServiceLoader` to discover Provider Configuration Files from provider bundles when the consumer bundle and the provider bundle are both wired to the same Service Type package.
+This must work without requiring any OSGi-specific metadata beyond standard `Import-Package` / `Export-Package` declarations.
+
+This is defined purely in terms of observable behavior: once framework-level SPI support is enabled and a wire exists (see R3), any `ClassLoader`-level resource lookup (e.g. `ClassLoader#getResource(s)`) for a Provider Configuration File path from the consumer bundle's class loader must return the aggregated set of matching resources visible across the wire, not merely the consumer bundle's own local content.
+The framework is not required to detect whether the caller is `ServiceLoader` itself as opposed to any other code performing the same kind of lookup; no call-stack inspection or other detection of the calling API is mandated (see R12).
+A consumer bundle that needs the bundle's own, unaggregated resource can instead use `Bundle#getEntry` / `Bundle#findEntries`, which continue to only return the bundle's own local content.
+
+### R2: Cross-Bundle Class Loading for SPI Implementations
+
+When `ServiceLoader` attempts to instantiate a Service Provider class declared in a Provider Configuration File from another bundle, the framework must enable loading of that class from the provider bundle that declared it.
+This must work even if the consumer bundle does not explicitly import the package containing the Service Provider class, or that package is not exported at all.
+When multiple versions of the Service Type package are wired in the runtime, the provider class must be resolved and loaded consistently with the specific version of the Service Type package that the consumer bundle is wired to.
+
+### R3: Module Boundary Enforcement
+
+SPI discovery must respect the OSGi wiring model.
+A provider bundle must only be considered for SPI discovery if there is an established wire (as defined by the `org.osgi.framework.wiring` API, e.g. a `BundleWire` between the consumer's and the provider's `BundleWiring`) connecting the consumer bundle to the Service Type package exported by the provider bundle.
+This is independent of the manifest header or resolution mechanism (e.g. `Import-Package`, `Require-Bundle`, or `DynamicImport-Package`) that caused the wire to be established; only the resulting wire, once it exists, is relevant.
+Bundles that have no such established wire for a given Service Type package must not contribute SPI resources or classes.
+
+### R4: No Additional Metadata Requirement
+
+Provider bundles and consumer bundles must not be required to include OSGi-specific manifest headers or capabilities to participate in framework-level SPI discovery.
+Standard Java conventions (`META-INF/services/` files and `Import-Package` declarations) must be sufficient.
+
+### R5: Compatibility with Service Loader Mediator
+
+The framework-level SPI support must coexist with the existing Service Loader Mediator Specification (Chapter 133).
+Bundles that already use `osgi.serviceloader` capabilities must continue to work correctly.
+The relationship between the two mechanisms must be clearly defined to avoid duplicate or conflicting service provider discovery.
+
+How mixed scenarios are handled, where only one of a provider/consumer pair uses the Mediator's `osgi.serviceloader` capabilities, is left to the design phase to define.
+See also R13, which requires this relationship to be at least partly configurable.
+
+The Service Loader Mediator Specification (Chapter 133) is not deprecated or replaced by this specification.
+It is expected to remain available and to be superseded over time by framework-level SPI support as adoption grows, but both are intended to remain valid, complementary mechanisms.
+
+### R6: Dynamic Behavior
+
+SPI discovery must reflect the current set of resolved and wired bundles.
+When provider bundles are installed, updated, or uninstalled, subsequent SPI discovery operations must reflect these changes.
+
+### R7: Fragment Support
+
+Provider Configuration Files contained in fragment bundles must be discoverable as part of the host bundle's resources, consistent with existing OSGi fragment semantics.
+
+### R8: Performance
+
+The SPI discovery mechanism must not impose significant overhead on normal class loading or resource loading operations that are unrelated to SPI.
+Implementations should employ caching or lazy evaluation to minimize repeated work.
+
+### R9: Security
+
+The framework must ensure that SPI discovery respects the OSGi security model.
+If a security manager is present, appropriate permission checks must be performed before granting cross-bundle visibility for SPI resources and classes.
+
+### R10: Specification Placement
+
+This specification must be part of the OSGi Core specification as it defines behavior of the framework's module layer class and resource loading mechanisms.
+
+### R11: Explicit Class Loader Behavior
+
+When `ServiceLoader.load(Class, ClassLoader)` (or an equivalent API) is called with a class loader other than a bundle's own class loader, framework-level SPI support must not cause the call to see providers or resources beyond what would be visible in a plain (non-OSGi) Java application using that same class loader.
+This requirement applies regardless of the technique an implementation uses to provide core SPI support (for example, class loader delegation, `ClassLoader` wiring/parenting, or bytecode weaving).
+
+### R12: Implementation Technique Neutrality
+
+This specification must define required, observable behavior only (what a consumer bundle observes when using `ServiceLoader`) and must not mandate the specific technique an implementation uses to achieve that behavior.
+Implementations may use, for example, call-stack inspection (such as `StackWalker`), bytecode weaving, custom `ClassLoader` delegation or parenting, or any other mechanism, provided the behavior required by this specification (including R1-R11) is satisfied.
+This must not be interpreted as relaxing any of the other requirements; it only clarifies that *how* an implementation satisfies them is not constrained by this specification.
+
+### R13: Configurability via Framework Properties
+
+The framework must allow its core SPI support behavior to be configured through framework properties, so that deployers who do not want the feature, or who need different behavior, are not forced to accept the default.
+At a minimum, this must allow disabling framework-level SPI support entirely, for example to support deployment in a strict-modularity mode where the traditional explicit-wiring-only model is preserved.
+It should also allow configuring how framework-level SPI support relates to the Service Loader Mediator (Chapter 133) in mixed scenarios, for example whether Mediator declarations are honored, ignored, or take precedence (see also R5).
+The exact set of properties, their names, and their permissible values are left to the design phase; this requirement only records that such configurability must exist.
