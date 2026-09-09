@@ -107,11 +107,18 @@ Multiple provider bundles also import `com.example.api` and contain Provider Con
 A separate bundle that does *not* import `com.example.api` should *not* have its provider configuration files discovered by the consumer.
 The framework must respect wiring boundaries.
 
+If multiple versions of `com.example.api` are exported by different bundles, the framework must resolve providers using the specific version of the Service Type package that the consumer bundle is wired to, so that only providers wired to the same package version are considered.
+This avoids `ClassCastException`s and similar errors that would otherwise occur when a provider is loaded against an incompatible version of the Service Type.
+
 ### UC6: Dynamic Bundle Lifecycle
 
 Provider bundles may be installed, started, stopped, and uninstalled at runtime.
 A subsequent `ServiceLoader.load()` call should reflect the current set of resolved and wired provider bundles.
 Previously cached `ServiceLoader` instances are not required to update dynamically, but fresh calls must reflect current state.
+
+The framework cannot control the internal iteration or caching behavior of a `ServiceLoader` instance, since that is entirely defined by the Java platform.
+The framework can only act at the two points where `ServiceLoader` interacts with it: reading a Provider Configuration File and instantiating a declared Service Provider class.
+If a provider bundle has been uninstalled, stopped, or is otherwise no longer wired at the time a Service Provider class would be instantiated, the framework must cause an appropriate exception to be thrown at that point, so that `ServiceLoader` can skip or fail on that provider according to its own (unmodified) error handling behavior.
 
 ### UC7: Fragment Bundles
 
@@ -128,7 +135,8 @@ This must work without requiring any OSGi-specific metadata beyond standard `Imp
 ### R2: Cross-Bundle Class Loading for SPI Implementations
 
 When `ServiceLoader` attempts to instantiate a Service Provider class declared in a Provider Configuration File from another bundle, the framework must enable loading of that class from the provider bundle that declared it.
-This must work even though the consumer bundle does not explicitly import the package containing the Service Provider class or it is even not exported at all.
+This must work even if the consumer bundle does not explicitly import the package containing the Service Provider class, or that package is not exported at all.
+When multiple versions of the Service Type package are wired in the runtime, the provider class must be resolved and loaded consistently with the specific version of the Service Type package that the consumer bundle is wired to.
 
 ### R3: Module Boundary Enforcement
 
@@ -146,6 +154,8 @@ Standard Java conventions (`META-INF/services/` files and `Import-Package` decla
 The framework-level SPI support must coexist with the existing Service Loader Mediator Specification (Chapter 133).
 Bundles that already use `osgi.serviceloader` capabilities must continue to work correctly.
 The relationship between the two mechanisms must be clearly defined to avoid duplicate or conflicting service provider discovery.
+
+How mixed scenarios are handled, where only one of a provider/consumer pair uses the Mediator's `osgi.serviceloader` capabilities, is left to the design phase to define.
 
 ### R6: Dynamic Behavior
 
@@ -170,6 +180,11 @@ If a security manager is present, appropriate permission checks must be performe
 
 This specification must be part of the OSGi Core specification as it defines behavior of the framework's module layer class and resource loading mechanisms.
 
+### R11: Explicit Class Loader Behavior
+
+When `ServiceLoader.load(Class, ClassLoader)` (or an equivalent API) is called with a class loader other than a bundle's own class loader, framework-level SPI support must not cause the call to see providers or resources beyond what would be visible in a plain (non-OSGi) Java application using that same class loader.
+This requirement applies regardless of the technique an implementation uses to provide core SPI support (for example, class loader delegation, `ClassLoader` wiring/parenting, or bytecode weaving).
+
 ## Open Questions
 
 1. **Scope of wiring**: Should `Require-Bundle` wires be considered in addition to `Import-Package` wires for determining SPI visibility?
@@ -186,7 +201,8 @@ This specification must be part of the OSGi Core specification as it defines beh
 4. **Interaction with `DynamicImport-Package`**: If a consumer bundle has `DynamicImport-Package: *`, how does this affect SPI discovery scope?
    Should dynamically resolved packages extend the set of considered providers?
 
-5. **`ServiceLoader.load(Class, ClassLoader)` variant**: The `ServiceLoader` API allows specifying a custom class loader.
-   How should the framework behave when a non-bundle class loader is passed?
+5. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
+   Different implementation techniques (for example class loader delegation vs. bytecode weaving) need to be considered when defining how this is achieved in the design phase.
 
-6. **Deprecation of Service Loader Mediator**: Should the Mediator spec (Chapter 133) be deprecated in favor of core SPI support, or should both remain as complementary mechanisms indefinitely?
+6. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
+   It is not deprecated by this requirements document.
