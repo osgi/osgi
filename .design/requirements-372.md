@@ -185,15 +185,20 @@ This specification must be part of the OSGi Core specification as it defines beh
 When `ServiceLoader.load(Class, ClassLoader)` (or an equivalent API) is called with a class loader other than a bundle's own class loader, framework-level SPI support must not cause the call to see providers or resources beyond what would be visible in a plain (non-OSGi) Java application using that same class loader.
 This requirement applies regardless of the technique an implementation uses to provide core SPI support (for example, class loader delegation, `ClassLoader` wiring/parenting, or bytecode weaving).
 
+### R12: Implementation Technique Neutrality
+
+This specification must define required, observable behavior only (what a consumer bundle observes when using `ServiceLoader`) and must not mandate the specific technique an implementation uses to achieve that behavior.
+Implementations may use, for example, call-stack inspection (such as `StackWalker`), bytecode weaving, custom `ClassLoader` delegation or parenting, or any other mechanism, provided the behavior required by this specification (including R1-R11) is satisfied.
+This must not be interpreted as relaxing any of the other requirements; it only clarifies that *how* an implementation satisfies them is not constrained by this specification.
+
 ## Open Questions
 
 1. **Scope of wiring**: Should `Require-Bundle` wires be considered in addition to `Import-Package` wires for determining SPI visibility?
    The POC implementations include both.
    This broadens discovery but may be surprising if a bundle pulls in unintended providers.
 
-2. **Stack inspection**: Should the framework verify that `ServiceLoader` is in the call stack before activating SPI aggregation?
-   This would limit the mechanism to actual `ServiceLoader` usage and prevent unexpected behavior for normal `getResources("META-INF/services/...")` calls.
-   The Equinox POC implements stack inspection; the Felix POC does not.
+2. **Scoping activation of SPI aggregation**: Should activation of the framework's SPI aggregation be limited to actual `ServiceLoader` usage (as opposed to normal `getResources("META-INF/services/...")` calls unrelated to SPI)?
+   Per R12, this specification does not mandate *how* an implementation determines this (for example the Equinox POC uses call-stack inspection, while the Felix POC does not); only the resulting observable behavior is subject to future normative requirements, to be worked out in the design phase.
 
 3. **Framework property to enable/disable**: Should there be a framework launch property to control whether core SPI support is enabled?
    This would allow frameworks to be deployed in strict-modularity mode where the traditional explicit-wiring-only model is preserved.
@@ -202,7 +207,7 @@ This requirement applies regardless of the technique an implementation uses to p
    Should dynamically resolved packages extend the set of considered providers?
 
 5. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
-   Different implementation techniques (for example class loader delegation vs. bytecode weaving) need to be considered when defining how this is achieved in the design phase.
+   Per R12, the specific technique used to satisfy R11 (for example class loader delegation vs. bytecode weaving) is left to the design/implementation phase.
 
 6. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
    It is not deprecated by this requirements document.
