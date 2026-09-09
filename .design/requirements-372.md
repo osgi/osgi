@@ -156,6 +156,7 @@ Bundles that already use `osgi.serviceloader` capabilities must continue to work
 The relationship between the two mechanisms must be clearly defined to avoid duplicate or conflicting service provider discovery.
 
 How mixed scenarios are handled, where only one of a provider/consumer pair uses the Mediator's `osgi.serviceloader` capabilities, is left to the design phase to define.
+See also R13, which requires this relationship to be at least partly configurable.
 
 ### R6: Dynamic Behavior
 
@@ -191,6 +192,13 @@ This specification must define required, observable behavior only (what a consum
 Implementations may use, for example, call-stack inspection (such as `StackWalker`), bytecode weaving, custom `ClassLoader` delegation or parenting, or any other mechanism, provided the behavior required by this specification (including R1-R11) is satisfied.
 This must not be interpreted as relaxing any of the other requirements; it only clarifies that *how* an implementation satisfies them is not constrained by this specification.
 
+### R13: Configurability via Framework Properties
+
+The framework must allow its core SPI support behavior to be configured through framework properties, so that deployers who do not want the feature, or who need different behavior, are not forced to accept the default.
+At a minimum, this must allow disabling framework-level SPI support entirely, for example to support deployment in a strict-modularity mode where the traditional explicit-wiring-only model is preserved (see also Open Question 3).
+It should also allow configuring how framework-level SPI support relates to the Service Loader Mediator (Chapter 133) in mixed scenarios, for example whether Mediator declarations are honored, ignored, or take precedence (see also R5).
+The exact set of properties, their names, and their permissible values are left to the design phase; this requirement only records that such configurability must exist.
+
 ## Open Questions
 
 1. **Scope of wiring**: Should `Require-Bundle` wires be considered in addition to `Import-Package` wires for determining SPI visibility?
@@ -200,8 +208,8 @@ This must not be interpreted as relaxing any of the other requirements; it only 
 2. **Scoping activation of SPI aggregation**: Should activation of the framework's SPI aggregation be limited to actual `ServiceLoader` usage (as opposed to normal `getResources("META-INF/services/...")` calls unrelated to SPI)?
    Per R12, this specification does not mandate *how* an implementation determines this (for example the Equinox POC uses call-stack inspection, while the Felix POC does not); only the resulting observable behavior is subject to future normative requirements, to be worked out in the design phase.
 
-3. **Framework property to enable/disable**: Should there be a framework launch property to control whether core SPI support is enabled?
-   This would allow frameworks to be deployed in strict-modularity mode where the traditional explicit-wiring-only model is preserved.
+3. **Framework properties**: See R13.
+   The concrete property name(s), granularity (e.g. a single on/off switch vs. finer-grained control over Mediator interoperability), and default values are left to the design phase.
 
 4. **Interaction with `DynamicImport-Package`**: If a consumer bundle has `DynamicImport-Package: *`, how does this affect SPI discovery scope?
    Should dynamically resolved packages extend the set of considered providers?
