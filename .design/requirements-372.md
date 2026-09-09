@@ -141,8 +141,9 @@ When multiple versions of the Service Type package are wired in the runtime, the
 ### R3: Module Boundary Enforcement
 
 SPI discovery must respect the OSGi wiring model.
-A provider bundle must only be considered for SPI discovery if it is wired to the same Service Type package as the consumer bundle.
-Bundles that do not participate in the wiring for a given Service Type package must not contribute SPI resources or classes.
+A provider bundle must only be considered for SPI discovery if there is an established wire (as defined by the `org.osgi.framework.wiring` API, e.g. a `BundleWire` between the consumer's and the provider's `BundleWiring`) connecting the consumer bundle to the Service Type package exported by the provider bundle.
+This is independent of the manifest header or resolution mechanism (e.g. `Import-Package`, `Require-Bundle`, or `DynamicImport-Package`) that caused the wire to be established; only the resulting wire, once it exists, is relevant.
+Bundles that have no such established wire for a given Service Type package must not contribute SPI resources or classes.
 
 ### R4: No Additional Metadata Requirement
 
@@ -201,21 +202,14 @@ The exact set of properties, their names, and their permissible values are left 
 
 ## Open Questions
 
-1. **Scope of wiring**: Should `Require-Bundle` wires be considered in addition to `Import-Package` wires for determining SPI visibility?
-   The POC implementations include both.
-   This broadens discovery but may be surprising if a bundle pulls in unintended providers.
-
-2. **Scoping activation of SPI aggregation**: Should activation of the framework's SPI aggregation be limited to actual `ServiceLoader` usage (as opposed to normal `getResources("META-INF/services/...")` calls unrelated to SPI)?
+1. **Scoping activation of SPI aggregation**: Should activation of the framework's SPI aggregation be limited to actual `ServiceLoader` usage (as opposed to normal `getResources("META-INF/services/...")` calls unrelated to SPI)?
    Per R12, this specification does not mandate *how* an implementation determines this (for example the Equinox POC uses call-stack inspection, while the Felix POC does not); only the resulting observable behavior is subject to future normative requirements, to be worked out in the design phase.
 
-3. **Framework properties**: See R13.
+2. **Framework properties**: See R13.
    The concrete property name(s), granularity (e.g. a single on/off switch vs. finer-grained control over Mediator interoperability), and default values are left to the design phase.
 
-4. **Interaction with `DynamicImport-Package`**: If a consumer bundle has `DynamicImport-Package: *`, how does this affect SPI discovery scope?
-   Should dynamically resolved packages extend the set of considered providers?
-
-5. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
+3. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
    Per R12, the specific technique used to satisfy R11 (for example class loader delegation vs. bytecode weaving) is left to the design/implementation phase.
 
-6. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
+4. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
    It is not deprecated by this requirements document.
