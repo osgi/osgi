@@ -163,6 +163,9 @@ The relationship between the two mechanisms must be clearly defined to avoid dup
 How mixed scenarios are handled, where only one of a provider/consumer pair uses the Mediator's `osgi.serviceloader` capabilities, is left to the design phase to define.
 See also R13, which requires this relationship to be at least partly configurable.
 
+The Service Loader Mediator Specification (Chapter 133) is not deprecated or replaced by this specification.
+It is expected to remain available and to be superseded over time by framework-level SPI support as adoption grows, but both are intended to remain valid, complementary mechanisms.
+
 ### R6: Dynamic Behavior
 
 SPI discovery must reflect the current set of resolved and wired bundles.
@@ -200,17 +203,6 @@ This must not be interpreted as relaxing any of the other requirements; it only 
 ### R13: Configurability via Framework Properties
 
 The framework must allow its core SPI support behavior to be configured through framework properties, so that deployers who do not want the feature, or who need different behavior, are not forced to accept the default.
-At a minimum, this must allow disabling framework-level SPI support entirely, for example to support deployment in a strict-modularity mode where the traditional explicit-wiring-only model is preserved (see also Open Question 3).
+At a minimum, this must allow disabling framework-level SPI support entirely, for example to support deployment in a strict-modularity mode where the traditional explicit-wiring-only model is preserved.
 It should also allow configuring how framework-level SPI support relates to the Service Loader Mediator (Chapter 133) in mixed scenarios, for example whether Mediator declarations are honored, ignored, or take precedence (see also R5).
 The exact set of properties, their names, and their permissible values are left to the design phase; this requirement only records that such configurability must exist.
-
-## Open Questions
-
-1. **Framework properties**: See R13.
-   The concrete property name(s), granularity (e.g. a single on/off switch vs. finer-grained control over Mediator interoperability), and default values are left to the design phase.
-
-2. **`ServiceLoader.load(Class, ClassLoader)` variant**: See R11.
-   Per R12, the specific technique used to satisfy R11 (for example class loader delegation vs. bytecode weaving) is left to the design/implementation phase.
-
-3. **Deprecation of Service Loader Mediator**: The Mediator spec (Chapter 133) is expected to remain available but to be superseded over time by core SPI support.
-   It is not deprecated by this requirements document.
