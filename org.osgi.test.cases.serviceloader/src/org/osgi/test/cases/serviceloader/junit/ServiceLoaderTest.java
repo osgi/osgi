@@ -18,6 +18,8 @@
 
 package org.osgi.test.cases.serviceloader.junit;
 
+import static org.junit.Assume.assumeTrue;
+
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -206,6 +208,15 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			assertEquals("public property must be registered with the service", "TCK", refs[1].getProperty("provider"));
 			assertNull("private properties must not be registered with the service", refs[0].getProperty(".hint"));
 			assertNull("private properties must not be registered with the service", refs[1].getProperty(".hint"));
+
+			// If the mediator is implemented as a framework extension bundle
+			// (Fragment-Host: ...;extension:=framework), its osgi.extender
+			// capability is attributed to the system bundle (id 0) in the wiring
+			// graph. Stopping the system bundle stops the whole framework -
+			// including the test engine running inside it - so this part of the
+			// test cannot be exercised for such mediator implementations.
+			assumeTrue("mediator bundle is the system bundle; stopping it would stop the running test engine",
+					mediatorBundle.getBundleId() != 0);
 
 			mediatorBundle.stop();
 			refs = mediatorBundle.getRegisteredServices();
