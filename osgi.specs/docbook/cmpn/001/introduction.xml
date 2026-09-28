@@ -370,6 +370,7 @@
               <entry><para><code><xref
               linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
               linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.feature"/></code></para><para><code><xref
               linkend="org.osgi.namespace.implementation"/></code></para><para><code><xref
               linkend="org.osgi.namespace.service"/></code></para><para><code><xref
               linkend="org.osgi.namespace.unresolvable"/></code></para></entry>

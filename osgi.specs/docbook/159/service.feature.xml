@@ -841,6 +841,41 @@ Feature f = builder.build();</programlisting>
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
     </section>
+
+    <section>
+      <title>osgi.feature Namespace</title>
+
+      <para>A Feature, as modeled by <xref
+      linkend="org.osgi.service.feature.Feature"
+      xrefstyle="hyperlink"/>, can be represented as an OSGi Resource using
+      the <link
+      linkend="service.namespaces-osgi.feature.namespace"><code>osgi.feature</code></link>
+      Namespace defined by the <emphasis>Common Namespaces
+      Specification</emphasis>. Such a Resource declares an
+      <code>osgi.feature</code> capability for the Feature itself, an
+      <code>osgi.identity</code> capability of <code>type</code>
+      <code>osgi.feature</code>, and an <code>osgi.feature</code> requirement
+      for every other Feature listed in the Feature's <link
+      linkend="service.feature-identifiers">requirements</link>. Bundles
+      contained in the Feature can similarly be represented by a Resource
+      that declares an <code>osgi.wiring.bundle</code> requirement, or,
+      simpler, by a Requirement in the <code>osgi.identity</code> Namespace
+      naming the bundle's symbolic name and version.</para>
+
+      <para>Representing a Feature this way allows generic tooling, such as
+      an implementation of the <emphasis>Repository Service
+      Specification</emphasis> or the <emphasis>Resolver Service
+      Specification</emphasis>, to reason about Features and their
+      dependencies together with plain bundles, without needing to
+      understand the Feature JSON model itself. This is useful, for example,
+      to resolve a consistent, installable set of Features and bundles
+      before invoking a <emphasis>Feature Launcher</emphasis>.</para>
+
+      <para>This specification does not mandate that a Feature Service
+      implementation produce such a Resource; it is an optional
+      representation intended for interoperability with generic Repository
+      and Resolver tooling.</para>
+    </section>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.feature.xml"/>

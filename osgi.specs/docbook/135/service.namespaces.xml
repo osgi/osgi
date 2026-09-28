@@ -729,6 +729,124 @@ DynamicImport-Package:
     </table>
   </section>
 
+  <section xml:id="service.namespaces-osgi.feature.namespace">
+    <title>osgi.feature Namespace</title>
+
+    <para>A <emphasis>Feature</emphasis>, as defined by the <emphasis>Feature
+    Service Specification</emphasis>, is a higher level construct that groups
+    a set of bundles, configurations and other artifacts into a single,
+    reusable unit. A Feature can itself depend on other Features as well as
+    on plain bundles. The <code>osgi.feature</code> Namespace can be used to
+    represent a Feature as an OSGi <xref linkend="i1777721"/> so that it can
+    be used with generic OSGi tooling such as the <emphasis>Repository
+    Service Specification</emphasis> and the <emphasis>Resolver Service
+    Specification</emphasis>, the same way the <code>osgi.identity</code> and
+    <code>osgi.wiring.bundle</code> Namespaces, defined by the <xref
+    linkend="i1777761"/>, are used to represent a bundle.</para>
+
+    <para>A Resource that represents a Feature provides exactly one
+    <code>osgi.feature</code> capability describing itself, in addition to
+    an <code>osgi.identity</code> capability whose <code>type</code>
+    attribute is <code>osgi.feature</code>. For example, a Feature with id
+    <code>com.acme.pool</code> and version <code>1.2.3</code> could be
+    represented with the following capabilities:</para>
+
+    <programlisting>Provide-Capability: osgi.identity;
+    osgi.identity="com.acme.pool";
+    type="osgi.feature";
+    version:Version="1.2.3"
+Provide-Capability: osgi.feature;
+    osgi.feature="com.acme.pool";
+    version:Version="1.2.3"</programlisting>
+
+    <para>Other Features, or Bundles, can then depend on this Feature the
+    same way an <code>osgi.wiring.bundle</code> requirement is used to depend
+    on a bundle:</para>
+
+    <programlisting>Require-Capability: osgi.feature;
+  filter:="(&amp;(osgi.feature=com.acme.pool)(version&gt;=1.2.3)(!(version&gt;=2.0.0)))"</programlisting>
+
+    <para>See the following table and the <xref
+    linkend="org.osgi.namespace.feature.FeatureNamespace"
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
+
+    <table pgwide="1">
+      <title>osgi.feature Namespace</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="3*"/>
+
+        <colspec colnum="6" colwidth="7*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.feature</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>symbolic-name</code></entry>
+
+            <entry><para>The id of the Feature, as defined by the
+            <emphasis>Feature Service Specification</emphasis>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>version</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>Version</code></entry>
+
+            <entry><code>version</code></entry>
+
+            <entry><para>The version of the Feature. If the Feature does not
+            specify a version, <code>0.0.0</code> must be used.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>This Namespace does not correspond to a live wiring concept managed
+    by the Framework - unlike the <code>osgi.wiring.*</code> Namespaces
+    defined by the <xref linkend="i1777761"/>, a Feature is not installed or
+    wired by a Framework itself. It is intended to be used by tooling (build
+    tools, provisioning tools, repositories) that already model Features as
+    Resources and need a standard, implementation neutral way to express
+    Feature identity and Feature-to-Feature/Feature-to-bundle dependencies,
+    for example so that a <emphasis>Resolver Service</emphasis> can be used to
+    compute a consistent, resolvable set of Features and bundles.</para>
+  </section>
+
   <section xml:id="service.namespaces-osgi.unresolvable.namespace">
     <title>osgi.unresolvable Namespace</title>
 
@@ -770,6 +888,8 @@ DynamicImport-Package:
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.implementation.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.unresolvable.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.feature.xml"/>
 
   <section>
     <title>References</title>
