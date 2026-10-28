@@ -59,6 +59,10 @@ public class ZigBeeProfiles {
 	public void loadProfile(InputStream is) throws SAXException, IOException, ParserConfigurationException {
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
+		// The profile file never carries a DTD, so disallowing DOCTYPE
+		// declarations blocks XML external entity (XXE) processing without
+		// affecting valid input.
+		factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 		SAXParser saxParser = factory.newSAXParser();
 		saxParser.parse(is, new Parser());
 	}

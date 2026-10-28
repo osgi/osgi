@@ -95,6 +95,10 @@ public class ConfigurationFileReader {
 		profiles = ZigBeeProfiles.getInstance(new FileInputStream(zclFilename));
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		// The configuration file never carries a DTD, so disallowing DOCTYPE
+		// declarations blocks XML external entity (XXE) processing without
+		// affecting valid input.
+		dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 		DocumentBuilder dBuilder;
 
 		dBuilder = dbFactory.newDocumentBuilder();
