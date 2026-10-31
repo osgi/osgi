@@ -1,8 +1,0 @@
-Bundle-Name:                             ${p}.tbimporter.noperm
-Bundle-Version:                          1.0
--conditionalpackage					= org.osgi.test.support.*
--privatepackage:                         ${p}.tb.importer*, \
- ${p}.common 
-Import-Package:                          *,${p}.common;version="1.0.0"
-Bundle-Activator: 						 ${p}.tb.importer.Activator
--includeresource: {OSGI-INF/permissions.perm=perms/importer_noperm.perm}

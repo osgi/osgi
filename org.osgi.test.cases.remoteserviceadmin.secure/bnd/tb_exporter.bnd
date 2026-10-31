@@ -1,8 +1,0 @@
-Bundle-Name:                             ${p}.tbexporter
-Bundle-Version:                          1.0
--conditionalpackage					= org.osgi.test.support.*
--privatepackage:                         ${p}.tb.exporter*, \
- ${p}.common 
-Export-Package:                          ${p}.common;version="1.0.0"
-Bundle-Activator: 						 ${p}.tb.exporter.Activator
--includeresource: {OSGI-INF/permissions.perm=perms/exporter.perm}

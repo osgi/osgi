@@ -1,3 +1,0 @@
-Bundle-Description: Test Bundle Service Tracker
-Bundle-Activator: ${p}.tb6.TB6Activator
--privatepackage: ${p}.tb6

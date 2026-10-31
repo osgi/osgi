@@ -1,4 +1,0 @@
-Bundle-Version: 1
--privatepackage: ${p}.tb12.*
-Bundle-ActivationPolicy: lazy
-Service-Component: org/osgi/test/cases/component/tb12/components.xml

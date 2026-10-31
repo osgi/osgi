@@ -1,7 +1,0 @@
-t = ${p}.drv4
-Bundle-SymbolicName:                    ${t}
-Bundle-Name:                            ${t}
-Bundle-Activator: 						${t}.WinnerDriver
-Bundle-Version:                         4.2
--privatepackage:                        ${t}.*
-Bundle-Description: A driver that will win the bidding (through selector)

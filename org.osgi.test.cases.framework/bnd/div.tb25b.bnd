@@ -1,6 +1,0 @@
-Bundle-Name: ${p}.div.tb25b
-Bundle-SymbolicName: ${p}.div.tb25b
-Bundle-Version: 4.3
--includeresource: \
-	resources/all.txt = resources/div.tb25/b.all.txt, \
-	resources/b.txt = resources/div.tb25/b.txt

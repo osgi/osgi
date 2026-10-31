@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.classloading.tb9c
-Bundle-SymbolicName:                     ${p}.classloading.tb9c
-Bundle-Version:                          4
--privatepackage:                         ${p}.classloading.tb9c
-
-Import-Package: resources
-Bundle-ClassPath: .
--includeresource = resources/tb9a-resource.txt=resources/classloading.tb9c/tb9a-resource.txt

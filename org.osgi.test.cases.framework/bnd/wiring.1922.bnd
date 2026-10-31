@@ -1,3 +1,0 @@
--nomanifest=true
--includeresource: {META-INF/MANIFEST.MF = resources/wiring.1922/MANIFEST.MF}
--pom=false

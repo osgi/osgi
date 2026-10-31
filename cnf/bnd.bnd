@@ -1,8 +1,0 @@
-# Set javac settings from JDT prefs
--include: ${includes}/jdt.bnd
--nobundles = true
--buildpath = \
-    org.osgi.dto;version=1.0,\
-    org.osgi.resource;version=1.0,\
-    org.osgi.framework;version=1.8,\
-    biz.aQute.bndlib;version=latest;packages=**

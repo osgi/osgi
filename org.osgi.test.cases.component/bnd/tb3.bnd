@@ -1,5 +1,0 @@
-Bundle-Version: 4
--privatepackage: ${p}.tb3.*
-Service-Component: org/osgi/test/cases/component/tb3/impl/serviceconsumerevent.xml
-
-

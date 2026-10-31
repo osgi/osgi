@@ -1,9 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb1a
-Bundle-SymbolicName: ${p}.fragments.tb1a
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.fragments.tb1a.Activator
--privatepackage: ${p}.fragments.tb1a
-
--includeresource: \
-	resources/resource.txt = resources/fragments.tb1a/resource.txt

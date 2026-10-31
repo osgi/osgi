@@ -1,7 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.resources.tb2
-Bundle-SymbolicName: ${p}.resources.tb2
-Bundle-Version: 1.0
-Fragment-Host: ${p}.resources.tb1
--includeresource: \
-	resources/ = resources/resources.tb1/

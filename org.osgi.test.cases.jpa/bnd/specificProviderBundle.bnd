@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.specificProviderBundle
-Bundle-Version:                          4.2.0.${project.build}
-Meta-Persistence: <<EMPTY>>
-
--includeresource = \
-	META-INF/persistence.xml = resources/specificProviderBundle/META-INF/persistence.xml

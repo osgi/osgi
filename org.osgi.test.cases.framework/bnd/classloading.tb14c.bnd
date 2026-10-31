@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.classloading.tb14c
-Bundle-SymbolicName: ${p}.classloading.tb14c
-Bundle-Version: 1
-Bundle-Activator: ${p}.classloading.tb14a.Activator
-Import-Package: org.osgi.framework, org.osgi.service.packageadmin, org.osgi.service.packageadmin
--privatepackage:                         ${p}.classloading.tb14a

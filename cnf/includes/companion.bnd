@@ -1,9 +1,0 @@
-# Bnd instructions for companion code projects
--include: ${includes}/publish.bnd
-companion.code = true
-
-spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}
-spec.version = ${versionmask;===;${first;${spec.package.versionattr};0}}
-build.version = ${build.versionmask;${spec.version}}.${project.build}
-Automatic-Module-Name: ${bsn}
-Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}

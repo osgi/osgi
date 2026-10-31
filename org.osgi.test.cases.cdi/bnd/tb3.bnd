@@ -1,2 +1,0 @@
-Export-Package: ${p}.tb3.*;-split-package:=first
--cdiannotations: *;discover=annotated

@@ -1,5 +1,0 @@
--nouses=true
--nomanifest=true
--includeresource = {META-INF/MANIFEST.MF=resources/div.tb11/MANIFEST.MF}
--privatepackage:                         ${p}.div.tb11
--pom=false

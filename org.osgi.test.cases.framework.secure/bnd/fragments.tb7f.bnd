@@ -1,9 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb7f
-Bundle-SymbolicName: ${p}.fragments.tb7f
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.fragments.tb7f.Activator
--privatepackage: ${p}.fragments.tb7f
-
--includeresource: \
-	{OSGI-INF/permissions.perm=perms/fragments.tb7f.perm}

@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.classloading.tb15c
-Bundle-SymbolicName: ${p}.classloading.tb15c
-Bundle-Version: 1
-Import-Package: ${p}.classloading.exports.service;resolution:="mandatory"
--privatepackage:                         ${p}.classloading.tb15c

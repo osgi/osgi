@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.activationpolicy.tblazy2
-Bundle-Version:                          4.2
-Export-Package:                          ${p}.activationpolicy.tblazy2
-Bundle-ActivationPolicy:                 lazy
-

@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.adaptMissingPerms
-Bundle-SymbolicName:                     ${p}.adaptMissingPerms
-Bundle-Version:                          4
--privatepackage:                         ${p}.adapt
-Bundle-Activator:                        ${p}.adapt.Activator
-
--includeresource: {OSGI-INF/permissions.perm=perms/adaptMissingPerms.perm}

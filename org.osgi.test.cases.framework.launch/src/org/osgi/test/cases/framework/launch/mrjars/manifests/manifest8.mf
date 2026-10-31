@@ -1,3 +1,0 @@
-Import-Package: pkg8
-Require-Capability: cap8
-

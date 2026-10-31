@@ -1,3 +1,0 @@
-Bundle-Version: 1
--privatepackage: ${p}.tb6.*
-Service-Component: org/osgi/test/cases/component/tb6/components.xml

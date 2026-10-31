@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.nestedJarPersistenceLocation
-Bundle-Version:                          4.2.0.${project.build}
-Meta-Persistence: 						 jpa/nestedJar.jar!/persistence/jpa.xml
-
--includeresource = \
-	jpa/nestedJar.jar = nestedJar.jar

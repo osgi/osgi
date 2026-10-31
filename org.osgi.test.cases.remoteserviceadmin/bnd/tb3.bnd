@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.tb3
-Bundle-SymbolicName:                     ${p}.tb3
-Bundle-Version:                          1.0
--conditionalpackage					= org.osgi.test.support.*
--privatepackage:                         ${p}.tb3.*
-Bundle-Activator:                        ${p}.tb3.Activator

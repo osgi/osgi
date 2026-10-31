@@ -1,4 +1,0 @@
-Bundle-Description: TB3 for service tracker test case
-Bundle-Activator: $(p).tb3.TB3Activator
--privatepackage: ${p}.tb3
-

@@ -1,6 +1,0 @@
-Bundle-Version: 1.0.0
-Bundle-Name: Feature Launcher Test Bundle 2
-Bundle-Description: Second test bundle for Feature Launcher TCK
-Bundle-Activator: ${p}.tb2.Activator
--privatepackage: ${p}.tb2.*
-Import-Package: org.osgi.framework, *

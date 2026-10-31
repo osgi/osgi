@@ -1,3 +1,0 @@
-Bundle-Version: 1
--privatepackage: ${p}.tb7.*
-Service-Component: org/osgi/test/cases/component/tb7/components.xml

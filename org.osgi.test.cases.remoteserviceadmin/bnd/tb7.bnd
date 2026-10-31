@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.tb7
-Bundle-Version:                          1.0
--privatepackage:                         ${p}.tb7.*
-Export-Package:                          ${p}.common;-noimport:=true
-Bundle-Activator: 											${p}.tb7.Activator

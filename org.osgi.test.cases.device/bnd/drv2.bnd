@@ -1,7 +1,0 @@
-t = ${p}.drv2
-Bundle-SymbolicName:                    ${t}
-Bundle-Name:                            ${t}
-Bundle-Activator: 						${t}.CommonDriver
-Bundle-Version:                         4.2
--privatepackage:                        ${t}.*
-Bundle-Description: A driver that will lose the bidding (through selector)

@@ -1,6 +1,0 @@
-Bundle-Description: Installs WireAdmin Producer
-Bundle-Activator: ${p}.tb4.ProducerImpl
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).tb4
-
--privatepackage	: $(p).tb4

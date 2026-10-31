@@ -1,7 +1,0 @@
-t = ${p}.drv6
-Bundle-SymbolicName:                    ${t}
-Bundle-Name:                            ${t}
-Bundle-Activator: 						${t}.RedirectingDriver
-Bundle-Version:                         4.2
--privatepackage:                        ${t}.*
-Bundle-Description: A driver that will redirect the device manager to another driver

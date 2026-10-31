@@ -1,9 +1,0 @@
-Bundle-SymbolicName: ${p}.permissions.registerPlural
-Bundle-Name: ${p}.permissions.registerPlural
-Bundle-Description: Filtered ServicePermissiont Test R4 - Service register plural permission test
-Bundle-Activator: ${p}.permissions.registerPlural.registerPluralActivator
-Bundle-Category: osgi,test
-
--privatepackage	= \
-	${p}.permissions.registerPlural
-	

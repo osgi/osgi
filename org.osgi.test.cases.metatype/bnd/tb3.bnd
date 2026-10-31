@@ -1,5 +1,0 @@
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).tb3
-
--includeresource					= \
- resources/tb3

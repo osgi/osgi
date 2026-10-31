@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.incompletePersistenceUnitBundle
-Bundle-Version:                          4.2.0.${project.build}
-Meta-Persistence: <<EMPTY>>
-
--includeresource = \
-	META-INF/persistence.xml = resources/incompletePersistenceUnitBundle/META-INF/persistence.xml
