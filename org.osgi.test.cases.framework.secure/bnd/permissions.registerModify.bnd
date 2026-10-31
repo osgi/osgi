@@ -1,9 +1,0 @@
-Bundle-SymbolicName: ${p}.permissions.registerModify
-Bundle-Name: ${p}.permissions.registerModify
-Bundle-Description: Filtered ServicePermissiont Test R4 - Service properties modify permission test
-Bundle-Activator: ${p}.permissions.registerModify.RegisterModifyActivator
-Bundle-Category: osgi,test
-
--privatepackage	= \
-	${p}.permissions.registerModify
-	

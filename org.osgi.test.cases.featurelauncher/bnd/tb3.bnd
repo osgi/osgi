@@ -1,6 +1,0 @@
-Bundle-Version: 1.0.0
-Bundle-Name: Feature Launcher Test Bundle 3
-Bundle-Description: Third test bundle for Feature Launcher TCK
-Bundle-Activator: ${p}.tb3.Activator
--privatepackage: ${p}.tb3.*
-Import-Package: org.osgi.framework, *

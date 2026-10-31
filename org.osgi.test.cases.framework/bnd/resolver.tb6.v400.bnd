@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.resolver.tb6
-Bundle-SymbolicName:                     ${p}.resolver.tb6; singleton:=true
-Bundle-Version:                          4.0.0
--fixupmessages.empty: The JAR is empty

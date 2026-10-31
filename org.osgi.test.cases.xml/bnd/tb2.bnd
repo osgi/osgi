@@ -1,6 +1,0 @@
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).tb2
-Bundle-Activator: org.osgi.util.xml.XMLParserActivator
-
--privatepackage	: $(p).tb2
--includeresource = resources/tb2

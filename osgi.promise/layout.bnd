@@ -1,7 +1,0 @@
-osgi.promise.projects: ${sort;${filterout;${projectswhere;packaging;*promise*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
-
-osgi.promise.specs: ${osgi.promise.projects}
-
-osgi.promise.packages: ${template;osgi.promise.specs;${@}.*}
-
-osgi.promise.resources:

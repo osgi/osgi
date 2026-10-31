@@ -1,3 +1,0 @@
-Import-Package: pkg101
-Require-Capability: cap101
-

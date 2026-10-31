@@ -1,4 +1,0 @@
-Bundle-Description: Test Bundle Service Tracker
-Bundle-Activator: $(p).tb5.TB5Activator
--privatepackage: ${p}.tb5
-Export-Package: ${p}.service;-noimport:=true

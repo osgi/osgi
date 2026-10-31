@@ -1,2 +1,0 @@
-Export-Package: ${p}.tb4.*;-split-package:=first
--includeresource: {OSGI-INF/permissions.perm=perms/tb4.perm}

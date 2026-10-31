@@ -1,5 +1,0 @@
-Bundle-SymbolicName: ${p}.tb2
-Bundle-Version: 1.0.1
-Bundle-Description: Test Bundle Rest Service
-Bundle-Activator: $(p).tb21.TBActivator
--privatepackage: ${p}.tb21

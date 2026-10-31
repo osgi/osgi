@@ -1,5 +1,0 @@
--include : ${includes}/jdt.bnd
-
--nobundles = true
-
--dependson = osgi.companion, osgi.impl, osgi.tck

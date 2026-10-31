@@ -1,6 +1,0 @@
-Bundle-Version: 1.0.0
-Bundle-Name: Feature Launcher Test Bundle 4
-Bundle-Description: Test bundle whose activator throws on start
-Bundle-Activator: ${p}.tb4.Activator
--privatepackage: ${p}.tb4.*
-Import-Package: org.osgi.framework, *

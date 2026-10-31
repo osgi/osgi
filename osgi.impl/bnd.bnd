@@ -1,8 +1,0 @@
--include            : ${includes}/jdt.bnd, ${.}/layout.bnd
--dependson          : osgi.companion, ${build.impls}
--resourceonly       : true
-
-# Build the osgi spec files
--sub       = !layout.bnd, *.bnd
--buildpath = \
-    ${osgi.annotation.buildpath}

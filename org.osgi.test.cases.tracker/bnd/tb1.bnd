@@ -1,3 +1,0 @@
-Bundle-Description: Test Bundle Service Tracker
-Bundle-Activator: $(p).tb1.TB1Activator
--privatepackage: ${p}.tb1

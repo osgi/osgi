@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.classloading.tb15h
-Bundle-SymbolicName: ${p}.classloading.tb15h
-Bundle-Version: 1
-Import-Package: ${p}.classloading.exports.service,${p}.classloading.exports.service
--privatepackage:                         ${p}.classloading.tb15h

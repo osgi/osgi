@@ -1,7 +1,0 @@
-Bundle-Description: Tests removal of exported package.
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).classpath.tb4b
-Bundle-Activator: $(p).classpath.tb4b.ImportGone
-
--privatepackage	: $(p).classpath.tb4b
-

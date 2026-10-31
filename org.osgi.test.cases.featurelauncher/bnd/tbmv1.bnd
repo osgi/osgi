@@ -1,6 +1,0 @@
-Bundle-SymbolicName: org.osgi.test.cases.featurelauncher.tbm
-Bundle-Version: 1.0.0
-Bundle-Name: Feature Launcher Merge Test Bundle (1.0.0)
-Bundle-Description: Same symbolic name as tbmv2, lower version, for merge tests
--privatepackage: ${p}.tb1.*
-Import-Package: org.osgi.framework, *

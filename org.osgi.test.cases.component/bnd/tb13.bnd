@@ -1,3 +1,0 @@
-Bundle-Version: 1
--privatepackage: ${p}.tb13.*
-Service-Component: org/osgi/test/cases/component/tb13/components.xml

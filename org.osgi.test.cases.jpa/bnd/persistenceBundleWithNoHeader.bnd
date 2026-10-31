@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.persistenceBundleWithNoHeader
-Bundle-Version:                          4.2.0.${project.build}
-
--includeresource = \
-	META-INF/persistence.xml = resources/persistenceBundleWithNoHeader/META-INF/persistence.xml

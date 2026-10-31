@@ -1,5 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.classloading.tb10a
-Bundle-SymbolicName:                     ${p}.classloading.tb1
--privatepackage:                         ${p}.classloading.tb10a
-Bundle-Version: 5

@@ -1,8 +1,0 @@
-Bundle-Description: Tests reinstallation of the same bundle
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).classpath.tb3
-Bundle-Activator: $(p).classpath.tb3.Reinstall
-
--privatepackage	: $(p).classpath.tb3
-
-

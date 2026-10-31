@@ -1,8 +1,0 @@
--include: ${includes}/cmpn.bnd
-
-Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Technology Compatibility Kit
-
--resourceonly: true
-
--tckpack: ${build.cmpn.tests},\
-    ${uniq;${map;repo;${template;jar.cmpn.tests;${@};latest}}}

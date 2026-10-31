@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.activationpolicy.tblazy6
-Bundle-Version:                          4.2
-Bundle-Activator:                        ${p}.activationpolicy.tblazy6.Activator
-Export-Package:                          ${p}.activationpolicy.tblazy6
-Bundle-ActivationPolicy:                 lazy
-

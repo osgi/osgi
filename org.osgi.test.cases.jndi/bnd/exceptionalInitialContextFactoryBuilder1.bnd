@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.exceptionalInitialContextFactoryBuilder1
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.exceptionalInitialContextFactoryBuilder1.ExceptionalInitialContextFactoryBuilder1Activator
--privatepackage =						 ${p}.exceptionalInitialContextFactoryBuilder1.*

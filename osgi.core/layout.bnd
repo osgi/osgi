@@ -1,7 +1,0 @@
-osgi.core.projects: ${sort;${filterout;${projectswhere;packaging;*core*};org\\.osgi\\.(impl|test)\\..*|osgi\\..*}}
-
-osgi.core.specs: ${osgi.core.projects}
-
-osgi.core.packages: ${template;osgi.core.specs;${@}.*}
-
-osgi.core.resources:

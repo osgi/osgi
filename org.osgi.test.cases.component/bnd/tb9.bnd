@@ -1,3 +1,0 @@
-Bundle-Version: 1
--privatepackage: ${p}.tb9.*
-Service-Component: org/osgi/test/cases/component/tb9/*.xml

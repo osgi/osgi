@@ -1,5 +1,0 @@
-Bundle-Version: 1.0
-Bundle-Activator: $(p).tb1.LogBundle1
-Bundle-Description: Test Bundle for LoggerFactory tests
-
--privatepackage	: $(p).tb1.*

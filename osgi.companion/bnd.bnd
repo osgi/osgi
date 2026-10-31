@@ -1,6 +1,0 @@
--include = ${includes}/jdt.bnd, ${.}/layout.bnd
-
--nobundles = true
-
--dependson = \
-    ${osgi.companion.jars}

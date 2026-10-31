@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}
-Bundle-Version:                          1.0
--privatepackage:                          ${p}.spi
-
-Export-Package: ${p}.spi

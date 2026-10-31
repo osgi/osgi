@@ -1,6 +1,0 @@
-Bundle-SymbolicName: ${p}.serviceregistry.tb1
-Bundle-Name: ${p}.serviceregistry.tb1
-Bundle-Activator: ${p}.serviceregistry.tb1.Activator
-
--privatepackage = ${p}.serviceregistry.tb1.*
--includeresource: {OSGI-INF/permissions.perm=perms/serviceregistry.tb1.perm}

@@ -1,5 +1,0 @@
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).startlevel.tb3
-Bundle-Activator: $(p).startlevel.tb3.Activator
-
--privatepackage	: $(p).startlevel.tb3

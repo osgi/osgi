@@ -1,3 +1,0 @@
-Bundle-SymbolicName:                     ${p}.weaving.testclasses
-Bundle-Version:                          1.0.0
-Export-Package:	                         ${p}.weaving.tb1

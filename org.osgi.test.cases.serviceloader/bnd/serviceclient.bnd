@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.serviceclient
-Bundle-Version:                          1.0.0
--privatepackage:                          ${p}.serviceclient
-
-Bundle-Activator: ${p}.serviceclient.ColorProviderClient
-
-Require-Capability: osgi.extender; filter:="(osgi.extender=serviceloader)"; effective:=active

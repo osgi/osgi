@@ -1,7 +1,0 @@
-t = ${p}.drv1
-Bundle-SymbolicName:                    ${t}
-Bundle-Name:                            ${t}
-Bundle-Activator: 						${t}.DeviceDetectionTestDriver
-Bundle-Version:                         4.2
--privatepackage:                        ${t}.*
-Bundle-Description: A basic driver implementation

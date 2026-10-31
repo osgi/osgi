@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.client
-Bundle-Version:                          1.0.0
--privatepackage:                          ${p}.client
-
-Bundle-Activator: ${p}.client.ColorProviderClient

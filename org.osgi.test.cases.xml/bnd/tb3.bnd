@@ -1,6 +1,0 @@
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).tb1
-Bundle-Activator: $(p).tb3.CustomXMLParserActivator
-
--privatepackage	: $(p).tb3
--includeresource = resources/tb3

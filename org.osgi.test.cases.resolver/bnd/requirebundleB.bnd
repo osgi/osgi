@@ -1,4 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Version: 1.0.0
-Bundle-SymbolicName: requirebundleB
-Export-Package: resources

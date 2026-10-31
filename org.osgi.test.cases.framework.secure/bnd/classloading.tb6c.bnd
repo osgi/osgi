@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.classloading.tb6c
-Bundle-SymbolicName:                     ${p}.classloading.tb6c
-Bundle-Version:                          4
--privatepackage:                         ${p}.classloading.tb6c
-
-Bundle-Activator: ${p}.classloading.tb6c.Activator
-Import-Package: ${p}.classloading.exports.service, ${p}.classloading.exports.security;version="1.0.0", org.osgi.framework

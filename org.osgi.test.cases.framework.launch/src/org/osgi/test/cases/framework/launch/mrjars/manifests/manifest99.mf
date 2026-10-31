@@ -1,3 +1,0 @@
-Import-Package: pkg99
-Require-Capability: cap99
-

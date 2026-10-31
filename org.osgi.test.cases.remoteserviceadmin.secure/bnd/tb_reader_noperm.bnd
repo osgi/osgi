@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.tbreader.noperm
-Bundle-Version:                          1.0
--conditionalpackage					= org.osgi.test.support.*
--privatepackage:                         ${p}.tb.reader_noperm
-Export-Package:                          ${p}.common;version="1.0.0"
-Bundle-Activator: 						 ${p}.tb.reader_noperm.Activator
--includeresource: {OSGI-INF/permissions.perm=perms/importer_noperm.perm}

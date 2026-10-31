@@ -1,5 +1,0 @@
--nouses=true
--nomanifest=true
--includeresource = {META-INF/MANIFEST.MF=resources/classloading.tb11a/MANIFEST.MF}
--privatepackage:                         ${p}.classloading.tb11a
--pom=false

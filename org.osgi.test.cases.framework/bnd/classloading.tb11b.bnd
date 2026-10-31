@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.classloading.tb11b
-Bundle-SymbolicName:                     ${p}.classloading.tb11b;singleton:=true
-Bundle-Version: 						 1
--privatepackage:                         ${p}.classloading.tb11b
-

@@ -1,6 +1,0 @@
-org.osgi.test.cases.xml.tb2.A
-# Comment line
-org.osgi.test.cases.xml.tb2.B 	# Trailing comment
-	    org.osgi.test.cases.xml.tb2.C
-
-org.osgi.test.cases.xml.tb2.D

@@ -1,8 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.wiring.tb5
-Bundle-SymbolicName: ${p}.wiring.tb5
-Bundle-Version: 1.0
-
-DynamicImport-Package: *
-
--fixupmessages.empty: The JAR is empty

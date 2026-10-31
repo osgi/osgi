@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.objectFactory3
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.objectFactory3.ObjectFactory3Activator
--privatepackage =						 ${p}.objectFactory3

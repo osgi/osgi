@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.hooks.tb2
-Bundle-SymbolicName:                     ${p}.hooks.tb2
-Bundle-Version:                          4
-
-Export-Package: ${p}.hooks.tb;version="1.0.0";-noimport:=true
--fixupmessages.empty: The JAR is empty
